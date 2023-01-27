@@ -797,9 +797,7 @@ Class Master extends DBConnection {
 				$check2 = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lid);
 			}
 			endwhile;
-/* 
-		$update = $this->conn->query("UPDATE t_approval_csr SET c_amount_paid -= $amt_paid , c_reserve_status = '$stat' where ra_no = ".$ra_no);
-		$update2 = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid = ".$lid); */
+
 		if($del && $check && $check2){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Payment successfully deleted.");
@@ -820,7 +818,6 @@ Class Master extends DBConnection {
 		$pname = $_POST['getFileName'];
 		$save = $this->conn->query("INSERT into tbl_attachments(c_csr_no,title,name) VALUES('$getID','$title','".$pname."')");
 		
-		#$sql = "INSERT into tbl_attachments(c_csr_no,title,name) VALUES('$getID','$title','$pname')";
 		if($save){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"File successfully uploaded.");
@@ -867,6 +864,29 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 	
+	function ca_approval(){
+		extract($_POST);
+		$data = " c_ca_status = '$value' ";
+		if ($value == 1):
+			$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
+		elseif ($value == 2):
+			$save = $this->conn->query("UPDATE t_csr SET c_verify = 2 where c_csr_no = ".$id);
+			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
+			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
+		elseif ($value == 3):
+			/* $save = $this->conn->query("UPDATE t_csr SET c_verify = 0, coo_approval = 0, c_revised = 1 where c_csr_no = ".$id); */
+			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
+		endif;
+
+		if($save){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"RA successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
 
 	
 }
@@ -931,6 +951,9 @@ switch ($action) {
 	break;
 	case 'delete_upload':
 		echo $Master->delete_upload();
+	break;
+	case 'ca_approval':
+		echo $Master->ca_approval();
 	break;
 	
 	default:
