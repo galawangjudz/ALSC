@@ -59,8 +59,10 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-				                  </div>
+				                    <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> Evaluation</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item ca_approval" data-id="<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-check text-success"></span> CA Approval</a>
+								  </div>
 							</td>
 						</tr>
 					<?php endwhile; ?>
@@ -71,12 +73,16 @@
 	</div>
 </div>
 <script>
+	$('.ca_approval').click(function(){
+		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
+		uni_modal("<i class='fa fa-check'></i> Approval",'credit_assestment/manage_ca.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
 	$(document).ready(function(){
-		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this invoice permanently?","delete_csr",[$(this).attr('data-id')])
-		})
+		
 		$('.table').dataTable();
 		
 	})
-	
+
 </script>
