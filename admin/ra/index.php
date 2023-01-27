@@ -1,0 +1,291 @@
+<?php if($_settings->chk_flashdata('success')): ?>
+<script>
+	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
+</script>
+<?php endif;?>
+<div class="card card-outline rounded-0 card-maroon">
+	<div class="card-header">
+		<h3 class="card-title">RA List</h3>
+		
+	</div>
+	<div class="card-body">
+	
+        <div class="container-fluid">
+			<table class="table table-bordered table-stripped " >
+			<!-- 	<colgroup>
+					<col width="5%">
+					<col width="15%">
+					<col width="15%">
+					<col width="20%">
+					<col width="30%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+				</colgroup> -->
+				<thead>
+					<tr>
+					<th>RA No.</th>
+                    <th>Ref. No.</th>
+                    <th>Location </th>
+                    <th>Buyer Name </th>
+                    <th>Approval Status</th>
+                    <th>Reserve Status</th>
+                    <th>CA Status</th>
+                    <th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+					$i = 1;
+						$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no ORDER BY c_date_approved");
+						while($row = $qry->fetch_assoc()):
+							$i ++;
+                            $ra_id = $row["ra_id"];
+                            $status=$row["c_csr_status"];
+                            $date_created=$row["c_date_created"];
+                            $id=$row["c_csr_no"];
+                            $lid = $row["c_lot_lid"];
+
+
+                            $exp_date=new DateTime($row["c_duration"]);
+                            $exp_date_str=$row["c_duration"];
+                            $exp_date_only=date("Y-m-d",strtotime($exp_date_str));
+                            //echo $exp_date_only;
+
+                            $today_date=date('Y/m/d H:i:s');
+                            $today_date_only=date("Y-m-d",strtotime($today_date));
+                            //echo $today_date_only;
+
+                            $exp=strtotime($exp_date_str);
+                            $td=strtotime($today_date);
+					?>
+						<tr>
+                        <td class="text-center"><?php echo $row["ra_id"] ?></td>
+						<td class="text-center"><?php echo $row["ref_no"] ?></td>
+						<td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
+						<td class="text-center"><?php echo $row["last_name"]. ','  .$row["first_name"] .' ' .$row["middle_name"]?></td>
+
+
+
+					
+						<?php if($row['c_csr_status'] == 1 && ($row['c_reserve_status'] != 1)): ?>
+							<td><span class="badge badge-success">COO Approved</span>
+							<span class="badge badge-info"><b id="demo<?php echo $id ?>"></b></span></td>
+						<?php elseif (($row['c_csr_status'] == 1) && ($row['c_reserve_status'] == 1)): ?>
+							<td><span class="badge badge-success">COO Approved </span>
+						<?php elseif ($row['c_csr_status'] == 2): ?>
+							<td><span class="badge badge-danger">Cancelled</span>
+							<span class="badge badge-danger"><b id="demo<?php echo $id ?>"></b></span></td>
+						<?php elseif ($row['c_csr_status'] == 3): ?>
+							<td><span class="badge badge-danger">Disapproved</span>
+						<?php else: ?>
+							<td><span class="badge badge-warning">Pending</span>
+							<!-- <span class="badge badge-warning"><b id="demo<?php echo $id ?>"></b></span> --></td>
+						<?php endif; ?>
+							
+						
+						<script>
+
+						
+						// Set the date we're counting down to
+						var countDownDate<?php echo $id ?> = new Date("<?php echo $row["c_duration"]?>").getTime();
+
+						// Update the count down every 1 second
+						var x<?php echo $id ?> = setInterval(function() {
+
+						// Get today's date and time
+						var now<?php echo $id ?> = new Date().getTime();
+						
+						// Find the distance between now and the count down date
+						var distance<?php echo $id ?> = countDownDate<?php echo $id ?> - now<?php echo $id ?>;
+						
+						// Time calculations for hours, minutes and seconds
+						var days<?php echo $id ?> = Math.floor(distance<?php echo $id ?> / (1000 * 60 * 60 * 24));
+						var hours<?php echo $id ?> = Math.floor((distance<?php echo $id ?> % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+						var minutes<?php echo $id ?> = Math.floor((distance<?php echo $id ?> % (1000 * 60 * 60)) / (1000 * 60));
+						var seconds<?php echo $id ?> = Math.floor((distance<?php echo $id ?> % (1000 * 60)) / 1000);
+							
+						
+						// Display the result in the element with id="demo"
+						document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
+						
+						// If the count down is finished, write some text
+						if (distance<?php echo $id ?> < 0) {
+							clearInterval(x<?php echo $id ?>);
+							document.getElementById("demo<?php echo $id ?>").innerHTML = " Expired";
+						
+						}
+						}, 1000);
+
+						
+						</script>
+					 	
+						<?php 
+						 		
+								
+
+
+							$exp_date=new DateTime($row["c_duration"]);
+							$exp_date_str=$row["c_duration"];
+							$exp_date_only=date("Y-m-d",strtotime($exp_date_str));
+							//echo $exp_date_only;
+	
+							$today_date=date('Y/m/d H:i:s');
+							$today_date_only=date("Y-m-d",strtotime($today_date));
+							//echo $today_date_only;
+	
+							$exp=strtotime($exp_date_str);
+							$td=strtotime($today_date);		
+	
+							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
+								$update_csr = $conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
+								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
+							}
+						?> 
+							
+
+						
+						<?php if($row['c_reserve_status'] == 1): ?>
+							<td><span class="badge badge-success">Paid</span></td>
+						<?php elseif($row['c_reserve_status'] == 0): ?>
+							<td><span class="badge badge-warning">Unpaid</span></td>
+						<?php elseif($row['c_reserve_status'] == 3): ?>
+							<td><span class="badge badge-info">Partial Paid</span></td>
+						<?php endif; ?>
+
+
+						<?php if($row['c_ca_status'] == 1): ?>
+							<td><span class="badge badge-success">CA Approved</span></td>
+						<?php elseif ($row['c_ca_status'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['c_ca_status'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved</span></td>
+							<?php elseif ($row['c_ca_status'] == 3): ?>
+							<td><span class="badge badge-info">For Revision</span></td>
+						<?php else: ?>
+							<td><span class="badge badge-danger"> --- </span></td>
+						<?php endif; ?>
+						<!-- <td class="actions">	
+						<li class="dropdown user user-menu">
+
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+							<span class="btn btn-info" target="_blank">Actions&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+							</a>
+							<ul class="dropdown-menu">
+
+							<li><a class="dropdown-item" href="?page=ra-view&id=<?php echo $row['c_csr_no'] ?>&ref=<?php echo $row['ref_no'] ?>" >View RA</a>
+							<?php if ($status == 1 && ($row["c_duration"] > $row["c_date_approved"])) { ?>
+							<li><a class="dropdown-item extend-approval" extend=1 data-csr-id=<?php echo $row['c_csr_no'] ?> >Extend Approval Time</a>
+							<?php } ?>
+							<li><a class="dropdown-item" href="print_agreement.php?id=<?php echo $getID; ?>">Cancelled</a>
+							</ul>
+						</li>		
+						</td> -->
+					
+							<td align="center">
+								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+				                  		Action
+				                    <span class="sr-only">Toggle Dropdown</span>
+				                  </button>
+				                  <div class="dropdown-menu" role="menu">
+				                    <a class="dropdown-item view_data" href="./?page=ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+				                    <div class="dropdown-divider"></div>
+									<a class="dropdown-item extend_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-hourglass text-success"></span> Extend</a>
+				                    <div class="dropdown-divider"></div>
+									<a class="dropdown-item cancel_data"  href="javascript:void(0)" lid="<?php echo $row['c_lot_lid']?>" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-stop-circle text-danger"></span> Cancelled</a>
+				                   <!--  <div class="dropdown-divider"></div>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                  </div> -->
+							</td>
+						</tr>
+					<?php endwhile; ?>
+				</tbody>
+			</table>
+		</div>
+		
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+	$('.delete_data').click(function(){
+		_conf("Are you sure to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
+	})
+	$('.table').dataTable();
+	$('#uni_modal').on('shown.bs.modal', function() {
+		$('.select2').select2({width:'resolve'})
+		$('.summernote').summernote({
+			height: 200,
+			toolbar: [
+				[ 'style', [ 'style' ] ],
+				[ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+				[ 'fontname', [ 'fontname' ] ],
+				[ 'fontsize', [ 'fontsize' ] ],
+				[ 'color', [ 'color' ] ],
+				[ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+				[ 'table', [ 'table' ] ],
+				[ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+			]
+		})
+	})
+	})
+
+
+	$('.extend_data').click(function(){
+        uni_modal("<i class='fa fa-clock'></i> Extend Approval Time",'ra/extend_approval.php?id='+$(this).attr('data-id'),"mid-small")
+    })
+
+	$('.cancel_data').click(function(){
+        _conf("Are you sure to cancel this Approval?","cancel_approval",[$(this).attr('data-id'),$(this).attr('lid')])
+    }) 
+	
+	function extend_approval($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=extend_coo_approval",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+
+	function cancel_approval($id,$lid){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=cancel_approval",
+			method:"POST",
+			data:{id:$id,lid:$lid},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+</script>
