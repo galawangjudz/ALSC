@@ -203,27 +203,21 @@ if(isset($_GET['id'])){
 
          <!--    <button class="btn btn-primary btn-xs compute-pmt">Compute</button>
             -->
-
+        </form>        
         <br>
-   
-
-    
-
 
 
     <div class="row-xs-3"> 
-    <button type="button"  class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
-   
-    <button type="button"  class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
+        <button type="button"  class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
     
-    <button type="button"  class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
+        <button type="button"  class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
+        
+        <button type="button"  class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
+
+        <button type="button" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
     </div>
 
-  <!--   <div class="col-md-5">
-        <button type="button" class="btn btn-secondary btn-s ca_approved" data-dismiss="modal">Close</button>
 
-    </div>
-		 -->
 
     </div>
 	</div>

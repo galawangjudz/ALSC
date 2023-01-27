@@ -888,6 +888,53 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function save_ca(){
+		extract($_POST);
+	
+		
+		$doc_req1=  isset($_POST['doc_req1']) ? $doc_req1 : 0; 
+		$doc_req2=  isset($_POST['doc_req2']) ? $doc_req2 : 0; 
+		$doc_req3=  isset($_POST['doc_req3']) ? $doc_req3 : 0; 
+		$ver_doc1=  isset($_POST['ver_doc1']) ? $ver_doc1 : 0; 
+		$ver_doc2=  isset($_POST['ver_doc2']) ? $ver_doc2 : 0; 
+
+
+		$data = " c_csr_no = '$csr_no'";
+		$data .= ", loan_amt = '$loan_amt'";
+		$data .= ", terms = '$loan_term'";
+		$data .= ", gross_income = '$gross_income'"; 
+		$data .= ", co_borrower = '$co_borrower'";
+		$data .= ", total = '$total' ";
+		$data .= ", income_req = '$income_req'";
+		$data .= ", interest = '$interest' ";
+		$data .= ", terms_month = '$numOfMonths' ";
+		$data .= ", doc_req1 = $doc_req1";
+		$data .= ", doc_req2 = $doc_req2";
+		$data .= ", doc_req3 = $doc_req3";
+		$data .= ", ver_doc1 = '$ver_doc1'";
+		$data .= ", ver_doc2 = '$ver_doc2'";
+		$data .= ", doc_req_remarks = '$remark_doc' ";
+		$data .= ", ver_doc_remarks = '$remark_ver' ";
+
+		if(empty($id)){
+		
+			$save = $this->conn->query("INSERT INTO t_ca_requirement set ".$data);
+		}else{
+		
+			$save = $this->conn->query("UPDATE t_ca_requirement set ".$data." WHERE id =".$id);
+		}
+		
+
+		if($save){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Evaluation successfully saved.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
 	
 }
 
@@ -954,6 +1001,9 @@ switch ($action) {
 	break;
 	case 'ca_approval':
 		echo $Master->ca_approval();
+	break;
+	case 'save_ca':
+		echo $Master->save_ca();
 	break;
 	
 	default:
