@@ -24,7 +24,9 @@
                         <th>Lot Area</th>
                         <th>Price SQM</th>
                         <th>Status</th>
+                        <?php if ($usertype == 'IT Admin'): ?>
 				        <th>Actions</th>
+                        <?php endif?>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +61,7 @@
                         <?php elseif($row['c_status'] == "Sold"): ?>
                            <td class="text-center"><span class=" badge badge-danger">Sold</span></td>
                         <?php endif; ?>
+                        <?php if ($usertype == 'IT Admin'): ?>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
@@ -70,7 +73,7 @@
                                 <a class="dropdown-item delete-lot" data-lot-id="<?php echo $row['c_lid'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                 </div>
                         </td>
-                        
+                        <?php endif; ?>
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>

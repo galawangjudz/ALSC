@@ -27,7 +27,9 @@
                         <th>Zip</th>
                         <th>Rate</th>
                         <th>Reservation</th>
+                        <?php if ($usertype == 'IT Admin'): ?>
                         <th>Actions</th>
+                        <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +49,7 @@
                         <td><?php echo $row["c_zip"] ?></td>
                         <td><?php echo $row["c_rate"] ?></td>
                         <td><?php echo number_format($row["c_reservation"],2) ?></td>
+                        <?php if ($usertype == 'IT Admin'): ?>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
@@ -58,7 +61,7 @@
                                 <a class="dropdown-item delete_data" data-id="<?php echo $row['c_code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                 </div>
                         </td>
-                        
+                        <?php endif; ?>
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>

@@ -34,6 +34,7 @@
                     <th>Reserve Status</th>
                     <th>CA Status</th>
                     <th>Actions</th>
+				
 					</tr>
 				</thead>
 				<tbody>
@@ -168,39 +169,24 @@
 						<?php else: ?>
 							<td><span class="badge badge-danger"> --- </span></td>
 						<?php endif; ?>
-						<!-- <td class="actions">	
-						<li class="dropdown user user-menu">
-
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-
-							<span class="btn btn-info" target="_blank">Actions&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-							</a>
-							<ul class="dropdown-menu">
-
-							<li><a class="dropdown-item" href="?page=ra-view&id=<?php echo $row['c_csr_no'] ?>&ref=<?php echo $row['ref_no'] ?>" >View RA</a>
-							<?php if ($status == 1 && ($row["c_duration"] > $row["c_date_approved"])) { ?>
-							<li><a class="dropdown-item extend-approval" extend=1 data-csr-id=<?php echo $row['c_csr_no'] ?> >Extend Approval Time</a>
-							<?php } ?>
-							<li><a class="dropdown-item" href="print_agreement.php?id=<?php echo $getID; ?>">Cancelled</a>
-							</ul>
-						</li>		
-						</td> -->
+				
 					
-							<td align="center">
-								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-				                  		Action
-				                    <span class="sr-only">Toggle Dropdown</span>
-				                  </button>
-				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="./?page=ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-				                    <div class="dropdown-divider"></div>
+						<td align="center">
+								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+									Action
+								<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item view_data" href="./?page=ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+								<?php if ($usertype == 'IT Admin' || $usertype == 'COO'): ?>	
+									<div class="dropdown-divider"></div>
 									<a class="dropdown-item extend_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-hourglass text-success"></span> Extend</a>
-				                    <div class="dropdown-divider"></div>
+									<div class="dropdown-divider"></div>
 									<a class="dropdown-item cancel_data"  href="javascript:void(0)" lid="<?php echo $row['c_lot_lid']?>" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-stop-circle text-danger"></span> Cancelled</a>
-				                   <!--  <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-				                  </div> -->
-							</td>
+									
+								<?php endif ; ?>
+						</td>
+						
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

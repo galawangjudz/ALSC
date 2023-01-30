@@ -18,7 +18,7 @@
 </div>
 <div class="card-body">
 	<div class="container-fluid">
-		<table class="table table-bordered table-stripped">
+		<table class="table table-bordered table-stripped" id="data-table">
 			<thead>
 				<tr>
 					<th>No</th>
