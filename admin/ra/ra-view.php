@@ -299,9 +299,9 @@ if(isset($_GET['id'])){
                             <div class="dropdown-menu" role="menu">   
                                 <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                                <a class="dropdown-item" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                                <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
                             </div>
                             
                             <a attachment-id="<?php echo $getID; ?>" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload_file">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
