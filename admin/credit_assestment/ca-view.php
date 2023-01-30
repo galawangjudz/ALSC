@@ -253,4 +253,32 @@ if(isset($_GET['id'])){
         $('#total').val(l_total.toFixed(2));
 
     }
+
+    function computeIncomeReq(){
+		let int_rate = document.getElementById('int_rate').value;
+		let int_terms = document.getElementById('term_rate').value;
+
+		let n = int_terms;
+
+		let i = (int_rate/100)/12;
+
+		
+		let fv = 0;
+		let pv = document.getElementById('loan_amt').value;
+		let type = 0;
+		let ans = 0;
+		let PMT = 0;
+		let income_req = 0;
+		if (int_terms != 0 || i != 0){
+			ans = ((pv - fv) * i)/(1 - Math.pow((1 + i), (-n)));
+			PMT = ans.toFixed(2);
+			income_req = ans / 0.4;
+			income_req = income_req.toFixed(2);
+		}else{ 
+			PMT = 0;
+			income_req = 0;
+		}   
+		document.getElementById('income_req').value = income_req;
+		document.getElementById('monthly').value = PMT;
+	}
 </script>

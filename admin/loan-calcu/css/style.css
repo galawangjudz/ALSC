@@ -85,3 +85,18 @@ li {
 .ie h1 {
   color: #4a5d48;
 }
+
+.container-fluid p{
+  margin: unset
+}
+ #uni_modal .modal-footer{
+  display: none;
+} 
+.result{
+  text-align:center;
+}
+table tr td{
+  border:solid 1px black;
+  width:100%;
+  font-size:15px;
+}

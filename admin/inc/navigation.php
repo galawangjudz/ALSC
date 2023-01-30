@@ -93,7 +93,7 @@
                       <a href="<?php echo base_url ?>admin/?page=credit_assestment" class="nav-link nav-credit_assestment">
                         <i class="nav-icon fas fa-hands-helping"></i>
                         <p>
-                          Credit Assestment List
+                          Credit Assessment List
                         </p>
                       </a>
                     </li>
@@ -146,6 +146,14 @@
                         <i class="nav-icon fas fa-calculator"></i>
                         <p>
                           Loan Calculator
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=agents" class="nav-link nav-agent_list">
+                        <i class="nav-icon fa fa-id-card"></i>
+                        <p>
+                          Agent List
                         </p>
                       </a>
                     </li>

@@ -5,7 +5,7 @@
 <?php endif;?>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">Credit Assestment List</h3>
+		<h3 class="card-title">Credit Assessment List</h3>
 		
 	</div>
 	<div class="card-body">
@@ -78,5 +78,4 @@
 		$('.table').dataTable();
 		
 	})
-	
 </script>
