@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
 }
 
 $ca = $conn->query("SELECT *,CONCAT_WS(' ',x.first_name, x.last_name)as full_name ,y.ra_id, y.c_csr_status, y.c_reserve_status, 
-y.c_ca_status, y.c_duration, y.c_csr_no as csr_num  FROM t_csr_view x , t_approval_csr y where md5(y.c_csr_no) = '{$_GET['id']}'");
+y.c_ca_status, y.c_duration, y.c_csr_no, z.age as csr_num  FROM t_csr_view x , t_approval_csr y, t_csr_buyers z where c_buyer_count = 1 and md5(y.c_csr_no) = '{$_GET['id']}'");
 foreach($ca->fetch_array() as $k =>$v){
     $meta[$k] = $v;
 }
@@ -57,8 +57,10 @@ if(isset($id)){
             <form method="post" id="save_ca">
              <input type="hidden" name="id" value="<?php echo isset($id) ? $id: '' ;?>" >
              <input type="hidden" name="csr_no" value="<?php echo isset($meta['c_csr_no']) ? $meta['c_csr_no']: '' ;?>" >
-             <input type="text" name="interest" value="<?php echo isset($interest) ? $interest: 0 ;?>" >
-             <input type="text" name="terms_month" value="<?php echo isset($numOfMonths) ? $numOfMonths: 0 ;?>" >
+             <input type="text" name="age" value="<?php echo isset($meta['age']) ? $meta['age']: 0 ;?>" >
+             <input type="text" name="downpayment" value="<?php echo isset($meta['c_no_payments']) ? $meta['c_no_payments']: 0 ;?>" >
+        <!--      <input type="text" name="interest" value="<?php echo isset($interest) ? $interest: 0 ;?>" >
+             <input type="text" name="terms_month" value="<?php echo isset($numOfMonths) ? $numOfMonths: 0 ;?>" > -->
                      
                 <div class="row">
                     <div class="col-md-6">
@@ -161,13 +163,33 @@ if(isset($id)){
                                 <label for="buyer_name" class="control-label">LOAN AMOUNT APPLIED FOR :</label>
                                 <input type="text" name="loan_amt" id="loan_amt" value="<?php echo isset($loan_amt) ? $loan_amt : $meta['c_amt_financed'] ; ?>" class="form-control form-control-sm">
                             </div>
+                            <?php 
+                            $x = 20;
+                            $y = 15;
+                            $age = $meta['age'];
+                            $dp = $meta['c_no_payments'];
+
+                            if ($age >= 65){
+                                $max = 0;
+                                $max_terms_month = 0;
+                               
+                            }
+                            else{
+                                $max_loan_age = (65 - $age ) - ($dp/12);
+                                if ($max_loan_age >= 20){
+                                    $max = 20;
+                                    $max_terms_month = $max * 12;
+                                   
+                                }else{
+                                    $max = $max_loan_age;
+                                    $max_terms_month = $max * 12;
+                                   
+                                }  
+                            }
+                            ?> 
                             <div class="form-group">
                                 <label for="buyer_name" class="control-label">MAX LOAN TERM PER AGE:(Years)</label>
-                                <input type="text" name="max_year" id="max_year" maxlength="2" value="20" class="form-control form-control-sm max-loan">
-                            </div>
-                            <div class="form-group">
-                                <label for="buyer_name" class="control-label">LOAN TERM APPLIED FOR:</label>
-                                <input type="text" name="loan_term" id="loan_term"  maxlength="2" value="<?php echo isset($terms) ? $terms : 0 ; ?>" class="form-control form-control-sm loan-term">
+                                <input type="text" name="max_term" id="max_term" value="<?php echo isset($terms) ? $terms: $max ;?>" class="form-control form-control-sm max-loan" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="buyer_name" class="control-label">GROSS INCOME APPLICANT:</label>
@@ -181,40 +203,30 @@ if(isset($id)){
                                 <label for="buyer_name" class="control-label">TOTAL :</label>
                                 <input type="text" name="total" id="total" value="<?php echo isset($total) ? $total: 0 ; ?>" class="form-control form-control-sm">
                             </div>
+                         
                             <div class="form-group">
-                                <label for="buyer_name" class="control-label">INCOME REQ. PER CALCULATOR :</label>
-                                <input type="text" name="income_req" id="income_req" value="<?php echo isset($income_req) ? $income_req: 0; ?>" class="form-control form-control-sm">
+                                <label class="control-label">Interest Rate: </label>
+                                <input type="text" class="form-control margin-bottom int-rate required" name="int_rate" id="int_rate" value="<?php echo isset($interest_rate) ? $interest_rate: 0 ?>" onkeyup="computeIncomeReq();">
                             </div>
+                            <div class="form-group">
+                                <label class="control-label">Terms: </label>
+                                <input type="text" class="form-control margin-bottom term-rate equired" name="term_rate" id="term_rate" maxlength="3" value="<?php echo isset($terms_month) ? $term_month: $max_terms_month ; ?>" onkeyup="computeIncomeReq();">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Monthly : </label>
+                                <input type="text" class="form-control margin-bottom required" name="monthly" id="monthly" value="<?php echo isset($PMT) ? $PMT: 0 ?>" onkeyup="computeIncomeReq();">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Income Requirement: </label>
+                                <input type="text" class="form-control margin-bottom required" name="income_req" id="income_req" value="<?php echo isset($income_req) ? $income_req: 0 ?>" onkeyup="computeIncomeReq();">
+                            </div>
+                                 
                             
                         </div>
                     </div> 
             </form>
                     <hr>
-                    <form method="post" id="loanCalcForm" role="">
-                        <fieldset>
-                            <legend>Loan Calculator</legend>
-                                    <div class="col-md-6">
-                                        <label for="loanAmount">Loan Amount</label>
-                                        <input type="text" size="8" name="loanAmount" id="loanAmount" value="<?php echo isset($loan_amt) ? $loan_amt : $meta['c_amt_financed'] ; ?>" />
-                                        <?php if (isset($errorArray[0])) { echo $errorArray[0]; } ?>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="interest">Interest</label>
-                                        <input type="text" class="interest" size="8" name="interest" id="interest" value="<?php echo isset($interest) ? $interest: 0; ?>" />
-                                        <?php if (isset($errorArray[1])) { echo $errorArray[1]; } ?>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="numOfMonths">Number of Months</label>
-                                        <input type="text" size="8" name="numOfMonths" id="numOfMonths" value="<?php echo isset($numOfMonths) ? $numOfMonths: 0; ?>" />
-                                        <?php if (isset($errorArray[2])) { echo $errorArray[2]; } ?>
-                                    </div>
-                       <!--          <input type="submit" name="submit" value="Submit" class="button" /> -->
-                        </fieldset>
-			        </form>
-                    <div id="result" class="result">
-                        <?php if (isset($result)) { echo $result; 
-                            } ?>
-                    </div>
+           
 
                     </div>
                 </div>
@@ -281,23 +293,16 @@ if(isset($id)){
     });
 
 
-    $(document).on('keyup', ".interest", function(e) {
-        e.preventDefault();
-        $Calculation->init();
-         
-    });
-
-
     $(document).on('keyup', ".gross-inc", function(e) {
         e.preventDefault();
         total_gross();
          
     });
+
     $(document).on('keyup', ".loan-term", function(e) {
         e.preventDefault();
-        var l_a = $('.loan-term').val();
-        l_mo = l_a * 12;
-        $('#numOfMonths').val(parseInt(l_mo));
+
+        computeIncomeReq();
          
     });
     $(document).on('keyup', ".co-borrow", function(e) {
@@ -312,32 +317,60 @@ if(isset($id)){
         $('#total').val(l_total.toFixed(2));
 
     }
-
     function computeIncomeReq(){
-		let int_rate = document.getElementById('int_rate').value;
-		let int_terms = document.getElementById('term_rate').value;
+        
+        let int_rate = document.getElementById('int_rate').value;
+        let int_terms = document.getElementById('term_rate').value;
+        
+        let n = int_terms;
 
-		let n = int_terms;
+        let i = (int_rate/100)/12;
 
-		let i = (int_rate/100)/12;
+        
+        let fv = 0;
+        let pv = document.getElementById('loan_amt').value;
+        let type = 0;
+        let ans = 0;
+        let PMT = 0;
+        let income_req = 0;
+        if (int_terms != 0 || i != 0){
+            ans = ((pv - fv) * i)/(1 - Math.pow((1 + i), (-n)));
+            PMT = ans.toFixed(2);
+            income_req = ans / 0.4;
+            income_req = income_req.toFixed(2);
+        }else{ 
+            PMT = 0;
+            income_req = 0;
+        }   
+        document.getElementById('income_req').value = income_req;
+        document.getElementById('monthly').value = PMT;
+    }
 
-		
-		let fv = 0;
-		let pv = document.getElementById('loan_amt').value;
-		let type = 0;
-		let ans = 0;
-		let PMT = 0;
-		let income_req = 0;
-		if (int_terms != 0 || i != 0){
-			ans = ((pv - fv) * i)/(1 - Math.pow((1 + i), (-n)));
-			PMT = ans.toFixed(2);
-			income_req = ans / 0.4;
-			income_req = income_req.toFixed(2);
-		}else{ 
-			PMT = 0;
-			income_req = 0;
-		}   
-		document.getElementById('income_req').value = income_req;
-		document.getElementById('monthly').value = PMT;
-	}
+    function maxterm(){
+        let x = 20;
+        let y = 15;
+        let age = document.getElementById('age').value;
+        let dp = document.getElementById('downpayment').value;
+
+        if (age >= 65){
+            max = 0;
+            document.getElementById('max_term').value =  max;
+            $('#max_term').val(max);
+        }
+        else{
+            max_loan_age = (65 - age ) - (dp/12);
+            if (max_loan_age >= 20){
+                max = 20;
+                document.getElementById('max_term').value =  max;
+                $('#max_term').val(max);
+            }else{
+                max = max_loan_age;
+                document.getElementById('max_term').value =  max;
+                $('#max_term').val(max);
+            }
+        }
+        
+
+    }
+
 </script>
