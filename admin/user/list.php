@@ -7,9 +7,9 @@
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h5 class="card-title">User List</h5>
-			<!-- <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
-			</div> -->
+			<div class="card-tools">
+				<a class="btn btn-flat btn-default bg-maroon" id="new_user" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
+			</div>
 		</div>
 		<div class="card-body">
             <div class="container-fluid">
@@ -99,4 +99,18 @@
 		        ]
 		    })
 	})
+
+
+
+    $('#new_user').click(function(){
+	    uni_modal('New User','manage_user.php')
+    })
+
+    $('.edit-user').click(function(){
+        uni_modal('Edit User','manage_user.php?id='+$(this).attr('data-id'))
+    })
+
+    $('.delete-user').click(function(){
+            _conf("Are you sure to delete this user?","delete_user",[$(this).attr('data-id')])
+    })
 </script>

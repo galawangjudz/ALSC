@@ -20,7 +20,9 @@
                     <th>Location </th>
                     <th>Buyer Name </th>
                     <th>CA Status</th>
+					<?php if ($usertype == "IT Admin" || $usertype == 'CA'): ?>	
                     <th>Actions</th>
+					<?php endif; ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -52,7 +54,7 @@
                             <?php else: ?>
                                 <td><span class="badge badge-danger"> --- </span></td>
                             <?php endif; ?>
-
+							<?php if ($usertype == "IT Admin" || $usertype == 'CA'): ?>	
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 				                  		Action
@@ -64,6 +66,7 @@
 									<a class="dropdown-item ca_approval" data-id="<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-check text-success"></span> CA Approval</a>
 								  </div>
 							</td>
+							<?php endif; ?>	
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

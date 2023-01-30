@@ -6,8 +6,8 @@
 <?php endif;?>
 
 <?php 
-$usertype = "IT Admin";
-$type = isset($_GET['type']) ? $_GET['type'] : "IT Admin" ;
+
+
 if(isset($_GET['id'])){
     
     $csr = $conn->query("SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, 
@@ -641,7 +641,9 @@ if(isset($_GET['id'])){
                                                         <th style="text-align:center;">File Name</th>
                                                         <th style="text-align:center;">Date Uploaded</th>
                                                         <th style="text-align:center;">Revision Approval</th>
+                                                        <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
                                                         <th style="text-align:center;">Action</th>
+                                                        <?php endif; ?>
                                         <?php
                                            
                                             $query1 = "SELECT * FROM tbl_attachments WHERE c_csr_no = '".$getID."' ORDER BY date_uploaded DESC";
@@ -666,18 +668,23 @@ if(isset($_GET['id'])){
                                                         <td>
                                                                 <?php echo $row1["date_uploaded"]; ?></div>
                                                         </td>
-                                                        <?php if($row1['approval_status'] == 1): ?>
-                                                            <td><span class="badge badge-success">SM Approved</span></td>
-                                                            <td class="actions">--- </td>
-                                                        <?php else: ?>    
-                                                            <td><span class="badge badge-warning"> Pending </span></td>
-                                                            <td class="actions">
-                                                            <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-info btn-xs approved-upload">
-                                                            <span class="glyphicon glyphicon-check" aria-hidden="true">Approved</span></a> 
-                                            
-                                                            <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs delete-upload">
-                                                            <span class="glyphicon glyphicon-trash" aria-hidden="true">Delete</span></a>
-                                                            </td>
+                                                       
+                                                            <?php if($row1['approval_status'] == 1): ?>
+                                                                <td><span class="badge badge-success">SM Approved</span></td>
+                                                            <?php else: ?>    
+                            
+                                                                <td><span class="badge badge-warning"> Pending </span></td>
+                                                            
+                                                            <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
+                                                                <td class="actions">
+                                                                
+                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-info btn-xs approved-upload">
+                                                                <span class="glyphicon glyphicon-check" aria-hidden="true">Approved</span></a> 
+                                                
+                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs delete-upload">
+                                                                <span class="glyphicon glyphicon-trash" aria-hidden="true">Delete</span></a>
+                                                                </td>
+                                                            <?php endif; ?>
                                                         <?php endif; ?>
                                                     
                                                             </tr>
