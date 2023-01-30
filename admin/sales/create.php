@@ -945,10 +945,22 @@ input{
 										<div class="col-md-6">		
 											<div class="form-group">
 												<label class="control-label">House Model: </label>
-												<input type="text" class="form-control margin-bottom house-model" name="house_model" id="house_model" value = "" tabindex="31">
+													<select class="form-control" name= "house_model">
+														<option value="None" selected >None</option>
+													<?php 
+														
+														$qry = $conn->query("SELECT * FROM t_model_house ORDER BY c_acronym ASC");
+														while($row = $qry->fetch_assoc()):
+															
+													?>		
+															<option value="<?php echo $row['c_model'] ?>" <?php echo isset($house_model) && $house_model == $row['c_model'] ? 'selected' : '' ?> ><?php echo $row["c_model"] ?></option>
+													
+													<?php endwhile; ?>
+													
 												</select>
 											</div>
 										</div>
+										
 										<!-- <div class="col-md-3">
 											<div class="form-group">
 												<br>
@@ -1154,7 +1166,7 @@ input{
 								<div class="payment_box2" id="p2">	
 									<div class="col-md-12">
 										<label class="control-label" id='loan_text'>Amount to be Financed:</label>
-										<input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_financed) ? $amt_financed : ''; ?>">
+										<input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_financed) ? $amt_financed : 0; ?>">
 										<div class="form-group monthly-frm" id = "monthly_frm">
 											<label class="control-label">Terms: </label>
 											<input type="text" class="form-control margin-bottom required terms-count" name="terms" id="terms" value="<?php echo isset($terms) ? $terms : 1; ?>">
