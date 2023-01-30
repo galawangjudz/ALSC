@@ -1,14 +1,4 @@
 
-<?php
-	include_once('loan-calcu/classes/Calculation.php');
-	$Calculation = new Calculation();
-	
-	if (isset($_POST['submit'])) {
-		$Calculation->init();
-	}
-?>
-
-
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -17,15 +7,6 @@
 
 <?php 
 
-if (isset($_POST['submit'])) {
-    $Calculation->init();
-}
-
-$ca = $conn->query("SELECT *,CONCAT_WS(' ',x.first_name, x.last_name)as full_name ,y.ra_id, y.c_csr_status, y.c_reserve_status, 
-y.c_ca_status, y.c_duration, y.c_csr_no, z.age as csr_num  FROM t_csr_view x , t_approval_csr y, t_csr_buyers z where c_buyer_count = 1 and md5(y.c_csr_no) = '{$_GET['id']}'");
-foreach($ca->fetch_array() as $k =>$v){
-    $meta[$k] = $v;
-}
 
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from t_ca_requirement where md5(c_csr_no) = '{$_GET['id']}'");
@@ -34,18 +15,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         $$k = $v;
         }
     }
+    $ca = $conn->query("SELECT *,CONCAT_WS(' ',x.first_name, x.last_name)as full_name ,y.ra_id, y.c_csr_status, y.c_reserve_status, 
+    y.c_ca_status, y.c_duration, y.c_csr_no, z.age as csr_num  FROM t_csr_view x , t_approval_csr y, t_csr_buyers z where c_buyer_count = 1 and md5(y.c_csr_no) = '{$_GET['id']}'");
+    foreach($ca->fetch_array() as $k =>$v){
+        $meta[$k] = $v;
+    }
 }
-
-
-
-if(isset($id)){
-   
-
-  
-}
-
 ?>
-
 
 <div class="card card-outline rounded-0 card-maroon">
     <div class="card-header">
@@ -55,14 +31,9 @@ if(isset($id)){
         <div class="container-fluid">
         <div class="container-fluid">
             <form method="post" id="save_ca">
-             <input type="hidden" name="id" value="<?php echo isset($id) ? $id: '' ;?>" >
-             <input type="hidden" name="csr_no" value="<?php echo isset($meta['c_csr_no']) ? $meta['c_csr_no']: '' ;?>" >
-             <input type="text" name="age" value="<?php echo isset($meta['age']) ? $meta['age']: 0 ;?>" >
-             <input type="text" name="downpayment" value="<?php echo isset($meta['c_no_payments']) ? $meta['c_no_payments']: 0 ;?>" >
-        <!--      <input type="text" name="interest" value="<?php echo isset($interest) ? $interest: 0 ;?>" >
-             <input type="text" name="terms_month" value="<?php echo isset($numOfMonths) ? $numOfMonths: 0 ;?>" > -->
-                     
-                <div class="row">
+                <input type="hidden" name="id" value="<?php echo isset($id) ? $id: '' ;?>" >
+                <input type="hidden" name="csr_no" value="<?php echo isset($meta['c_csr_no']) ? $meta['c_csr_no']: '' ;?>" >
+               <div class="row">
                     <div class="col-md-6">
                             <div class="form-group">
                                 <label for="buyer_name" class="control-label">Applicant's Full Name</label>
@@ -122,7 +93,7 @@ if(isset($id)){
 
                         <div class="form-group">
                             <label for="buyer_name" class="control-label">Remarks if fail:</label>
-                            <input type="text" name="remark_doc" value="<?php echo isset($remark_doc) ? $remark_doc: ''; ?>" class="form-control form-control-sm">
+                            <input type="text" name="remark_doc" value="<?php echo isset($doc_req_remarks) ? $doc_req_remarks: ''; ?>" class="form-control form-control-sm">
                         </div>
 
                         </ul>
@@ -142,7 +113,7 @@ if(isset($id)){
                            
                     <div class="form-group">
                             <label for="buyer_name" class="control-label">Remarks if fail:</label>
-                            <input type="text" name="remark_ver" value="<?php echo isset($remark_ver) ? $remark_ver: ''; ?>" class="form-control form-control-sm">
+                            <input type="text" name="remark_ver" value="<?php echo isset($ver_doc_remarks) ? $ver_doc_remarks: ''; ?>" class="form-control form-control-sm">
                     </div>
                     </ul>
                     </div>
@@ -206,15 +177,15 @@ if(isset($id)){
                          
                             <div class="form-group">
                                 <label class="control-label">Interest Rate: </label>
-                                <input type="text" class="form-control margin-bottom int-rate required" name="int_rate" id="int_rate" value="<?php echo isset($interest_rate) ? $interest_rate: 0 ?>" onkeyup="computeIncomeReq();">
+                                <input type="text" class="form-control margin-bottom int-rate required" name="int_rate" id="int_rate" value="<?php echo isset($interest) ? $interest: $meta['c_interest_rate'] ?>" onkeyup="computeIncomeReq();">
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Terms: </label>
-                                <input type="text" class="form-control margin-bottom term-rate equired" name="term_rate" id="term_rate" maxlength="3" value="<?php echo isset($terms_month) ? $term_month: $max_terms_month ; ?>" onkeyup="computeIncomeReq();">
+                                <input type="text" class="form-control margin-bottom term-rate equired" name="term_rate" id="term_rate" maxlength="3" value="<?php echo isset($terms_month) ? $terms_month: $max_terms_month ; ?>" onkeyup="computeIncomeReq();">
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Monthly : </label>
-                                <input type="text" class="form-control margin-bottom required" name="monthly" id="monthly" value="<?php echo isset($PMT) ? $PMT: 0 ?>" onkeyup="computeIncomeReq();">
+                                <input type="text" class="form-control margin-bottom required" name="monthly" id="monthly" value="<?php echo isset($monthly) ? $monthly: 0 ?>" onkeyup="computeIncomeReq();">
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Income Requirement: </label>
@@ -274,7 +245,15 @@ if(isset($id)){
                 },
                 success:function(resp){
                     if(typeof resp =='object' && resp.status == 'success'){
-                        location.reload();
+                        var nw = window.open("./credit_assestment/print.php?id="+resp.id,"_blank","width=700,height=500")
+							setTimeout(()=>{
+								nw.print()
+								setTimeout(()=>{
+									nw.close()
+									end_loader();
+									location.replace('./?page=credit_assestment/ca-view&id='+resp.id_encrypt)
+								},500)
+							},500)
                     }else if(resp.status == 'failed' && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)

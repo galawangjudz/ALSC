@@ -35,7 +35,7 @@ header("Access-Control-Allow-Origin: *");
 </head>
 <!DOCTYPE html>
 <html lang="en">
-<?php include "../inc/header.php";?>
+<?php include "../inc/header2.php";?>
   <?php
 
     $query = "SELECT * from `t_csr` where c_csr_no = '{$_GET['id']}' ";
@@ -145,7 +145,7 @@ Property. Should I decide to change the selected payment manner, such change wil
 Purchase Price and amendment of necessary documents.<br><br>
 I understand and agree that my reservation for the property is subject to the following Terms and Conditions:<br>
 
-1.&#8195;That &nbsp;the &nbsp;Reservation &nbsp;for &nbsp;the &nbsp;property &nbsp;specified &nbsp;above&nbsp; is good&nbsp;&nbsp; only &nbsp;&nbsp;for &nbsp;&nbsp;a &nbsp;&nbsp;period of &nbsp;&nbsp;forty-five (45) &nbsp;&nbsp;calendar &nbsp;&nbsp;days &nbsp;&nbsp;from the &nbsp;&nbsp;payment of the &nbsp;&nbsp;reservation money &#8195;&#8195;and I
+1.&#8195;That the Reservation for the property specified above is good only for a period of forty-five (45) calendar days from the payment of the reservation money &#8195;&#8195;and I
 understand that Seller reserves the right to approve or deny my offer for reservation.<br>
 2.&#8195;Reservation Money/Check shall not produce the effect of payment until proceeds thereof have been actually received by ALSC and issued with a Collection Receipt /
 Sales &#8195;&#8195;Invoice for the application.<br>
@@ -167,23 +167,23 @@ payment due &#8195;&#8195;&#8195;&#8195;under the agreed payment scheme. I under
 5.&#8195;Should I decide to cancel the reservation, or if unable to settle the amount due on the date stipulated, it is understood that the reservation shall lapse and the
 reservation &#8195;&#8195;money shall be forfeited. I agree that any failure by me to make the necessary payments forty-five (45) days from the date of payment of the reservation
 shall cause the &#8195;&#8195;full forfeiture in favor of the Seller and that the latter shall have the right to automatically cancel the reservation without further notice as liquidated
-damages. It is &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;understood that in any event of cancellation of this Reservation Agreement, the Seller shall be free to dispose of the Property as if this Reservation
+damages. It is understood that in any event of cancellation of this Reservation Agreement, the Seller shall be free to dispose of the Property as if this Reservation
 Agreement had not &#8195;&#8195;been executed.<br>
-6.&nbsp;&#8195;In the event that I fail to pay any amounts due under my payment scheme in relation to my purchase of the property, or fail to comply with my undertakings herein, or
+6.&#8195;In the event that I fail to pay any amounts due under my payment scheme in relation to my purchase of the property, or fail to comply with my undertakings herein, or
 fail &#8195;&#8195;to execute the relevant Contract to Sell and/or Deed of Absolute Sale for the property, or comply with the terms of my purchase, then the Seller shall have the
 option to &#8195;&#8195;cancel the sale and refund all payments less: (i) The Reservation Fee, which shall be forfeited in favor of the Seller as liquidated damage; (ii) Broker’s
 commission; (iii) &#8195;&#8195;Any unpaid charges and dues on the Property ; (iv) Taxes and expenses paid by the Seller to the government or third parties in connection herewith;
 (v) Construction bond &#8195;&#8195;for my construction works, if applicable; (vi) any amount determined by the Seller to be necessary to restore the Property to the same physical
 condition it was found &#8195;&#8195;at the time of acceptance of the Property. I understand that remittance to the Bureau of Internal Revenue of the applicable creditable
-withholding tax (CWT) on my &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payments is required under applicable rules and regulations. Should a delay in the remittance of the CWT arise by the reason of the
-information I provide herein, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;including information on whether I am engaged in business, I undertake to pay and not to hold the Seller liable for any penalty and/or
+withholding tax (CWT) on my payments is required under applicable rules and regulations. Should a delay in the remittance of the CWT arise by the reason of the
+information I provide herein, including information on whether I am engaged in business, I undertake to pay and not to hold the Seller liable for any penalty and/or
 surcharge, costs, and expenses &#8195;&#8195;which may be incurred in connection with such delay.<br>
 7.&#8195;It is agreed that this Reservation is transferable only to immediate family members, and any third party transfer made by me shall be void and shall cause for the
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cancellation of the Reservation and forfeiture of my reservation money and other payment.<br>
+cancellation of the Reservation and forfeiture of my reservation money and other payment.<br>
 8.&#8195;That I certify that I have personally inspected the Property subject of this reservation and I have found the same to be satisfactory.
-<br>9.&nbsp;&#8195;In the event the subject property is unavailable for sale to me due to a prior sale commitment, the same having been offered to me by mistake or inadvertence, I agree
+<br>9.&#8195;In the event the subject property is unavailable for sale to me due to a prior sale commitment, the same having been offered to me by mistake or inadvertence, I agree
 to &#8195;&#8195;have the subject property exchanged with a property of equal value, or to the cancellation of the reservation agreement, subject to the reimbursement of all my
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payments previously made by me by reason of this reservation.<br>
+payments previously made by me by reason of this reservation.<br>
 10.&#8195;Any provision to the contrary withstanding, I hereby agree and acknowledge that the Seller has the right to cancel and rescind this reservation for any cause
 whatsoever &#8195;&#8195;at any time before issuance of my Contract to Sell by giving written notice of its intention and refunding to me all payments made by virtue thereof.
 <br>11.&#8195;I hereby undertake to execute the Contract to Sell with the seller upon payment of the down payment, and the Deed of Absolute Sale with the Seller upon full payment
@@ -195,9 +195,9 @@ not &#8195;&#8195;delay the commencement of the payment of the monthly installme
 &#8195;&#8195;expenses shall be for my account.<br>
 13.&#8195;I agree that the purchase of the property is subject to the covenants and restrictions as specified in the project’s Deed of Restrictions, and that I undertake to faithfully
 &#8195;&#8195;comply with. That compliance herein is an essential consideration of the sale by the Seller of the Property to me and all other agreements executed in connection
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;herewith.<br>
+herewith.<br>
 14.&#8195;I warrant that the information provided are true and correct as of the date hereof and agree to inform the Seller of any changes in my personal data such as name,
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address and contact details. I also warrant that the funds used for the purchase of the property is obtained through legitimate means and do not constitute all or part
+address and contact details. I also warrant that the funds used for the purchase of the property is obtained through legitimate means and do not constitute all or part
 of &#8195;&#8195;proceeds of any unlawful activity under applicable laws. I hereby hold Seller free and harmless from any incident, claim, action or liability arising from the breach of
 my &#8195;&#8195;warranty herein, and hereby authorize the Seller to disclose to any government body or agency any information pertaining to this sale and purchase transaction if
 so &#8195;&#8195;warranted and required under existing laws.<br>
@@ -206,7 +206,7 @@ so &#8195;&#8195;warranted and required under existing laws.<br>
 my &#8195;&#8195;contact information yearly.<br>
 16.&#8195;This Reservation Agreement constitutes the complete understanding between parties with respect to the subject matter and supersedes any prior expression of intent,
 &#8195;&#8195;representation or warranty with respect to this transaction. ALSC is not and shall not be bound by stipulations, representations, agreements, or promises, oral or
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;otherwise not contained in this agreement. That any representation to me by the agent who handled this sale not embodied herein shall not be binding on the Seller
+otherwise not contained in this agreement. That any representation to me by the agent who handled this sale not embodied herein shall not be binding on the Seller
 &#8195;&#8195;unless reduced into writing and confirmed by the President of ALSC and this contract shall not be considered as changed, modified, altered or in any way amended by
 &#8195;&#8195;acts of tolerance of ALSC, unless such changes, modification or amendments are made in writing and signed by the aforementioned officer. Only duly authorized
 officers &#8195;&#8195;of the company are allowed to make commitments for and in behalf of ALSC.<br>
@@ -216,10 +216,10 @@ of &#8195;&#8195;purchase of the Property.<br><br><br>
 
 &#8195;&#8195;&#8195;&#8195;&#8195;I conform to the foregoing and certify that all information provided herein are true and correct.<br><br><br>
 &#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________<br>
-&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&nbsp;Client’s Signature over Printed Name/Date Purchase&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase<br><br>
+&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase<br><br>
 <br>&#8195;&#8195;&#8195;&#8195;&#8195;Witnessed by:<br><br>
 &#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________<br><br>
-&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Authorized Signature over Printed Name/Date
+&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Authorized Signature over Printed Name/Date
     </div>
 </div>
 </div>
