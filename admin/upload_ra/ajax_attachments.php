@@ -43,16 +43,21 @@ while( $row = mysqli_fetch_array($result) ){
     $a_name=$row['name'];
     $res = substr($a_name, -4);
     
-   
-    $path = './admin/upload_ra/uploads/'+$a_name;
-
-    header('Content-Type: application/pdf');
-    header('Content-Disposition: inline; filename='.$path);
-    header('Content-Transfer-Encoding: binary');
-    header('Accept-Ranges: bytes');
-
-    readfile($path);  
-
-
-}
+    if($res == ".jpg" || $res == "jpeg" || $res == ".png"){
+        ?>
+        <div class="container">
+            <img src="upload_ra/uploads/<?php echo $row['name']; ?>" class="main_content">
+        </div>
+    <?php
+    }else{
+        ?>
+        <div class="container1">
+            <embed type="application/pdf" src="upload_ra/uploads/<?php echo $row['name']; ?>" class="main_content1">
+        </div>
+    <?php
+    }
 ?>
+    
+        <!-- <td width="100"><embed type="application/pdf" src="attachments/<php echo $row['name']; ?>" style="height:150px;width:150px;"></td> -->
+
+<?php } ?>

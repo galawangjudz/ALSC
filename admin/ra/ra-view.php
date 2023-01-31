@@ -637,6 +637,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     <div id="space1" class="space"></div>
                                     <div class="view_box" style="padding:20px;">
                                     <table style="text-align:center;" class="table table-striped">
+                                                        <th style="text-align:center;">ID</th>
                                                         <th style="text-align:center;">File Name</th>
                                                         <th style="text-align:center;">Date Uploaded</th>
                                                         <th style="text-align:center;">Revision Approval</th>
@@ -661,29 +662,29 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                         
                                                     
                                                             <tr>
-                                                                <td style="width:50%;">
+                                                            <td style="width:10%;">
+                                                                <div data-id='<?php echo $row1["id"]; ?>'><?php echo $row1["id"]; ?>
+                                                        </td>
+                                                        <td style="width:50%;">
                                                                 <div data-id='<?php echo $row1["id"]; ?>' class="attachment_name btn-link"><?php echo $row1["title"]; ?>
                                                         </td>
                                                         <td>
                                                                 <?php echo $row1["date_uploaded"]; ?></div>
                                                         </td>
-                                                       
-                                                            <?php if($row1['approval_status'] == 1): ?>
-                                                                <td><span class="badge badge-success">SM Approved</span></td>
-                                                            <?php else: ?>    
-                            
-                                                                <td><span class="badge badge-warning"> Pending </span></td>
-                                                            
-                                                            <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
-                                                                <td class="actions">
-                                                                
-                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-info btn-xs approved-upload">
-                                                                <span class="glyphicon glyphicon-check" aria-hidden="true">Approved</span></a> 
-                                                
-                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs delete-upload">
-                                                                <span class="glyphicon glyphicon-trash" aria-hidden="true">Delete</span></a>
-                                                                </td>
-                                                            <?php endif; ?>
+
+                                                        <?php if($row1['approval_status'] == 1): ?>
+                                                            <td><span class="badge badge-success">SM Approved</span></td>
+                                                            <td class="actions">--- </td>
+                                                        <?php else: ?>    
+                                                            <td><span class="badge badge-warning"> Pending </span></td>
+                                                            <td class="actions">
+                                                            <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-info btn-xs approved-upload">
+                                                            <span class="fa fa-check" aria-hidden="true">Approved</span></a> 
+                                            
+                                                            <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs"  id="delete_upload">Delete <span class="fa fa-trash"></a>
+
+                                                            </td>
+
                                                         <?php endif; ?>
                                                     
                                                             </tr>
@@ -955,7 +956,42 @@ function showReplyForm(self) {
 			})
 		});
 	});
-    $(document).ready(function(){
+    $('#delete_upload').click(function(){
+        _conf("Are you sure to delete this file?","delete_upload",[$(this).attr('data-upload-id')])
+    }) 
+
+    function delete_upload($id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=delete_upload",
+            method:"POST",
+            data:{id: $id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(resp.status == 'success'){
+                    $(".modal").removeClass("visible");
+                    $(".modal").modal('hide');
+                    location.replace('./?page=upload_ra/deletefile&name='+resp.name)
+                }else if(resp.status == 'failed' && !!resp.msg){
+                        $(".modal").removeClass("visible");
+                        $(".modal").modal('hide');
+                        alert_toast(resp.msg,'error');
+                        end_loader();
+                }else{
+                    alert_toast("An error occured",'error');
+                    end_loader();
+                    console.log(resp)
+                }
+            }
+        })
+    }
+
+   /*  $(document).ready(function(){
 		$('.delete-upload').click(function(){
             $.ajax({
                 url:_base_url_+"classes/Master.php?f=delete_upload",
@@ -986,13 +1022,13 @@ function showReplyForm(self) {
 				
 			})
 		});
-	});
+	}); */
     
 	$(document).ready(function(){
 		$('.attachment_name').click(function(){
 			var csrno=$(this).data('id');
             $.ajax({
-                url:_base_url_+"upload_ra/ajax_attachments.php",
+                url:'upload_ra/ajax_attachments.php',
 				type:'post',
 				data:{csrno:csrno},
 				success:function(response){
@@ -1018,8 +1054,6 @@ function showReplyForm(self) {
 
 
 <script>
-
-    
 
     $('.coo-disapproval').click(function(){
 		_conf("Are you sure to disapproved this csr?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])

@@ -848,13 +848,18 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+
 	function delete_upload(){
 		extract($_POST);
 		$id =  $_POST['id'];
-	
-		$save = $this->conn->query("DELETE FROM tbl_attachments where id=" .$id);
 		
+		$sql = $this->conn->query("SELECT * FROM tbl_attachments where id=" .$id);
+		while($row = $sql->fetch_assoc()){
+			$name = $row['name'];
+		}
+		$save = $this->conn->query("DELETE FROM tbl_attachments where id=" .$id);
 		if($save){
+			$resp['name'] = $name;
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"File successfully deleted.");
 		}else{

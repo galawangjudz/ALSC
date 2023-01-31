@@ -63,7 +63,7 @@ $getID = $_GET['id'];
         data: form_data,                         
         type: 'post',
         success: function(resp){
-            alert("yes"); // <-- display response from the PHP script, if any
+           
         }
      });
 	});

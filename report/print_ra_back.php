@@ -175,7 +175,7 @@ B. BANK - TO - BANK<br>
     </tr>
 </table>
 <table style="margin-top:18px;margin-left:15px;">
-    <input type="text" class="form-control" style="position:absolute;width:170px;margin-left:255px;margin-top:-8px;padding-top:-5px;">
+    <input type="text" class="form-control" style="position:absolute;width:170px;margin-left:255px;margin-top:-8px;padding-top:-5px;"> 
     <tr>
         <td class="tdwidth1">
             <div style="float:left;margin-right:2px">
@@ -215,12 +215,14 @@ B. BANK - TO - BANK<br>
         </td>
     </tr>
 </table>
-<div style="margin-right:50px;position:absolute">
-    <input id="chkOption1" type="radio" name="chkOption1" />
-</div>
-<div>
-    <label class="label_notb">A Partnership</label>
-</div>
+<!-- <div style="margin-right:50px;position:absolute">
+    <input id="chkOption1" type="radio" name="chkOption1" style="position:absolute;margin-top:-70px;margin-left:470px;"/>
+</div> -->
+<!-- <div>
+    <label class="label_notb" style="position:absolute;margin-top:-71px;margin-left:485px;">A Partnership</label>
+</div> -->
+<!-- <input id="chkOption1" type="radio" name="chkOption1" style="position:absolute;margin-top:-70px;margin-left:470px;"/> -->
+
 <div class="doc_title1">SOURCE OF FUNDING (Kindly check one)</div>
 <table>
     <tr>
