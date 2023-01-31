@@ -1,157 +1,140 @@
 <?php 
-include '../../config.php';
-if($_settings->chk_flashdata('success')): ?>
+
+if(isset($_GET['id'])){
+$user = $conn->query("SELECT * FROM users where id ='{$_GET['id']}'");
+foreach($user->fetch_array() as $k =>$v){
+	$meta[$k] = $v;
+
+}
+}
+?>
+<?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-
-<?php 
-include('includes/config.php');
-if(isset($_GET['id'])){
-$user = $mysqli->query("SELECT * FROM users where user_id =".$_GET['id']);
-foreach($user->fetch_array() as $k =>$v){
-	$meta[$k] = $v;
-}
-}
-?>
-<div class="container-fluid">
-	<form action="" id="manage-user">
-		<input type="hidden" name="user_id" value="<?php echo isset($meta['user_id']) ? $meta['user_id']: '' ?>">
-		<div class="form-group">
-			<label for="name">Last Name</label>
-			<input type="text" name="last_name" id="last_name" class="form-control required" value="<?php echo isset($meta['last_name']) ? $meta['last_name']: '' ?>" required>
+<div class="card card-outline rounded-0 card-maroon">
+	<div class="card-body">
+		<div class="container-fluid">
+			<div id="msg"></div>
+			<form action="" id="manage-user">	
+				<input type="hidden" name="id" value="<?php echo isset($meta['id']) ? $meta['id']: '' ?>">
+				<div class="form-group">
+					<label for="name">First Name</label>
+					<input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo isset($meta['firstname']) ? $meta['firstname']: '' ?>" required>
+				</div>
+				<div class="form-group">
+					<label for="name">Last Name</label>
+					<input type="text" name="lastname" id="lastname" class="form-control" value="<?php echo isset($meta['lastname']) ? $meta['lastname']: '' ?>" required>
+				</div>
+				<div class="form-group">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" class="form-control" value="<?php echo isset($meta['username']) ? $meta['username']: '' ?>" required  autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label for="username">Email</label>
+					<input type="text" name="email" id="email" class="form-control" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>" required  autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label for="username">Contact No</label>
+					<input type="text" name="phone" id="phone" class="form-control" value="<?php echo isset($meta['phone']) ? $meta['phone']: '' ?>" required  autocomplete="off">
+				</div>
+				<div class="form-group">
+					<style>
+						select:invalid { color: gray; }
+					</style>
+					<label class="control-label">Positiob: </label>
+					<select name="type" id="type" class="form-control required">
+						<option value="1" <?php echo isset($meta['type']) && $meta['type'] == "1" ? 'selected': '' ?>>Admin</option>
+						<option value="2"<?php echo isset($meta['type']) && $meta['type'] == "2" ? 'selected': '' ?>> COO</option>
+						<option value="3"<?php echo isset($meta['type']) && $meta['type'] == "3" ? 'selected': '' ?>>Manager</option>
+						<option value="4" <?php echo isset($meta['type']) && $meta['type'] == "4" ? 'selected': '' ?>>Supervisor</option>
+						<option value="5" <?php echo isset($meta['type']) && $meta['type'] == "5" ? 'selected': '' ?>>Employee</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<style>
+						select:invalid { color: gray; }
+					</style>
+					<label class="control-label">User Type: </label>
+					<select name="user_type" id="user_type" class="form-control required">
+						<option value="SOS" <?php echo isset($meta['user_type']) && $meta['user_type'] == "IT Admin" ? 'selected': '' ?>>Sales Operation Supervisor</option>
+						<option value="COO"<?php echo isset($meta['user_type']) && $meta['user_type'] == "COO" ? 'selected': '' ?>> COO</option>
+						<option value="IT Admin"<?php echo isset($meta['user_type']) && $meta['user_type'] == "IT Admin" ? 'selected': '' ?>>IT Admin</option>
+						<option value="Agent" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Agent" ? 'selected': '' ?>>Agent</option>
+						<option value="Broker" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Broker" ? 'selected': '' ?>>Broker</option>
+						<option value="CA" <?php echo isset($meta['user_type']) && $meta['user_type'] == "CA Supervisor" ? 'selected': '' ?>>CA Supervisor</option>
+						<option value="Cashier" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Cashier" ? 'selected': '' ?>>Cashier</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" name="password" id="password" class="form-control" value="" autocomplete="off">
+					<?php if(isset($_GET['id'])){?>
+					<small><i>Leave this blank if you dont want to change the password.</i></small>
+					
+					<?php }?>
+				</div>
+				<div class="form-group">
+					<label for="" class="control-label">Avatar</label>
+					<div class="custom-file">
+		              <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
+		              <label class="custom-file-label" for="customFile">Choose file</label>
+		            </div>
+				</div>
+				<div class="form-group d-flex justify-content-center">
+					<img src="<?php echo validate_image(isset($meta['avatar']) ? $meta['avatar'] :'') ?>" alt="" id="cimg" class="img-fluid img-thumbnail">
+				</div>
+			</form>
 		</div>
-		<div class="form-group">
-			<label for="name">First Name</label>
-			<input type="text" name="first_name" id="first_name" class="form-control required" value="<?php echo isset($meta['first_name']) ? $meta['first_name']: '' ?>" required>
+	</div>
+	<div class="card-footer">
+			<div class="col-md-12">
+				<div class="row">
+					<button class="btn btn-sm btn-default bg-maroon" form="manage-user">Save</button>
+				</div>
+			</div>
 		</div>
-		<div class="form-group">
-			<label for="name">Middle Name</label>
-			<input type="text" name="middle_name" id="middle_name" class="form-control" value="<?php echo isset($meta['middle_name']) ? $meta['middle_name']: '' ?>" required>
-		</div>
-		<div class="form-group">
-			<label for="name">Email Address</label>
-			<input type="text" name="email" id="email" class="form-control required" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>" required>
-		</div>
-		<div class="form-group">
-			<label for="name">Contact Number</label>
-			<input type="text" name="phone" id="phone" class="form-control required" value="<?php echo isset($meta['phone']) ? $meta['phone']: '' ?>" required>
-		</div>
-		<div class="form-group">
-			<label for="name">Date Hired</label>
-			<div class="input-group date margin-bottom" id="hire_date" required>
-				<input type="text" class="form-control hire_date required" value="<?php echo isset($meta['date_hired']) ? $meta['date_hired']: '' ?>" name="date_hired" id = "date_hired" placeholder="YYYY-MM-DD" data-date-format="<?php echo DATE_FORMAT ?>" >		
-				<span class="input-group-addon">
-					<span class="glyphicon glyphicon-calendar"></span>
-				</span>
-			</div>	
-		</div>
-		<div class="form-group">
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username" class="form-control required" value="<?php echo isset($meta['username']) ? $meta['username']: '' ?>" required>
-		</div>
-		<div class="form-group">
-			<label for="password">Password</label>
-			<input type="password" name="password" id="password" class="form-control required" value="<?php echo isset($meta['password']) ? $meta['password']: '' ?>" required>
-		</div>
-		<div class="form-group">
-			<style>
-				select:invalid { color: gray; }
-			</style>
-			<label class="control-label">User Type: </label>
-			<select name="user_type" id="user_type" class="form-control required">
-				<option value="SOS" <?php echo isset($meta['user_type']) && $meta['user_type'] == "IT Admin" ? 'selected': '' ?>>Sales Operation Supervisor</option>
-				<option value="COO"<?php echo isset($meta['user_type']) && $meta['user_type'] == "COO" ? 'selected': '' ?>> COO</option>
-				<option value="IT Admin"<?php echo isset($meta['user_type']) && $meta['user_type'] == "IT Admin" ? 'selected': '' ?>>IT Admin</option>
-				<option value="Agent" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Agent" ? 'selected': '' ?>>Agent</option>
-				<option value="Broker" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Broker" ? 'selected': '' ?>>Broker</option>
-				<option value="CA" <?php echo isset($meta['user_type']) && $meta['user_type'] == "CA Supervisor" ? 'selected': '' ?>>CA Supervisor</option>
-				<option value="Cashier" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Cashier" ? 'selected': '' ?>>Cashier</option>
-			</select>
-		</div>
-	</form>
 </div>
+<style>
+	img#cimg{
+		height: 15vh;
+		width: 15vh;
+		object-fit: cover;
+		border-radius: 100% 100%;
+	}
+</style>
 <script>
-
-	$('#hire_date').datetimepicker({
-		showClose: false,
-		format : "YYYY-MM-DD"
-	});
-
-
-	function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
-
-	    $(".required").each(function(i, obj) {
-
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
+	function displayImg(input,_this) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+	        reader.onload = function (e) {
+	        	$('#cimg').attr('src', e.target.result);
 	        }
 
-	    });
-		
-	    return errorCounter;
-
+	        reader.readAsDataURL(input.files[0]);
+	    }
 	}
-
 	$('#manage-user').submit(function(e){
 		e.preventDefault();
-	 	start_load() 
-		var errorCounter = validateForm();
-		if (errorCounter > 0) {
-			alert("It appear's you have forgotten to complete something!","warning")	
-			end_load()  
-		}else{
-
-			$(".required").parent().removeClass("has-error")
-			
-			$.ajax({
-				url:'ajax.php?action=save_user',
-				method:'POST',
-				data:$(this).serialize(),
-				success:function(resp){
-					if(resp == 1){
-						/* $("#response .message").html("<strong>" + "Success" + "</strong>: " + "Data successfully saved");
-						$("#response").removeClass("alert-warning").addClass("alert-success").fadeIn();
-						$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000); */
-						alert("Data successfully saved",'success')
-						setTimeout(function(){
-							$(".modal").removeClass("visible");
-							$(".modal").modal('hide');
-							end_load()
-						},1500)
-
-						setTimeout(function(){
-							location.reload()
-						},3000)
-					}
-					else{
-						console.log()
-						$("#response .message").html("<strong> Error  </strong>: ");
-						$("#response").removeClass("alert-success").addClass("alert-danger").fadeIn();
-						$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-						setTimeout(function(){
-							$(".modal").removeClass("visible");
-							$(".modal").modal('hide');
-							end_load()
-						},1500)
-
-						setTimeout(function(){
-							location.reload()
-						},3000)
+		start_loader()
+		$.ajax({
+			url:_base_url_+'classes/Users.php?f=asave',
+			data: new FormData($(this)[0]),
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    method: 'POST',
+		    type: 'POST',
+			success:function(resp){
+				if(resp ==1){
+					location.reload()
+				}else{
+					$('#msg').html('<div class="alert alert-danger">Username already exist</div>')
+					end_loader()
 				}
-			},
-			error:err=>{
-				console.log()
-				alert("An error occured")
 			}
-			})
-		}
+		})
 	})
 
 </script>
