@@ -1,4 +1,5 @@
 </style>
+<?php $usertype = $_settings->userdata('user_type'); ?>
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
@@ -81,6 +82,7 @@
                         </p>
                       </a>
                     </li>
+                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=reservation" class="nav-link nav-reservation">
                         <i class="nav-icon fas fa-box"></i>
@@ -89,6 +91,8 @@
                         </p>
                       </a>
                     </li>
+                    <?php endif ; ?>
+                
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=credit_assestment" class="nav-link nav-credit_assestment">
                         <i class="nav-icon fas fa-hands-helping"></i>
@@ -97,6 +101,7 @@
                         </p>
                       </a>
                     </li>
+                
                    <!--  <li class="nav-header">Report</li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=report" class="nav-link nav-report">
@@ -115,7 +120,7 @@
                         </p>
                       </a>
                     </li>
-                    <li class="nav-item dropdown">
+                   <!--  <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=inventory/houses" class="nav-link">
                         <i class="nav-icon fas fa-home"></i>
                         <p>
@@ -123,7 +128,7 @@
                           
                         </p>
                       </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="nav-link">
                         <i class="nav-icon fas fa-th-large"></i>
@@ -149,6 +154,8 @@
                         </p>
                       </a>
                     </li>
+                  
+                    <?php if ($usertype == "IT Admin"): ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=agents" class="nav-link nav-agent_list">
                         <i class="nav-icon fa fa-id-card"></i>
@@ -173,6 +180,7 @@
                         </p>
                       </a>
                     </li>
+                    <?php endif ?>
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

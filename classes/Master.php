@@ -896,23 +896,23 @@ Class Master extends DBConnection {
 	function save_ca(){
 		extract($_POST);
 	
-		
+		$data = "";
 		$doc_req1=  isset($_POST['doc_req1']) ? $doc_req1 : 0; 
 		$doc_req2=  isset($_POST['doc_req2']) ? $doc_req2 : 0; 
 		$doc_req3=  isset($_POST['doc_req3']) ? $doc_req3 : 0; 
 		$ver_doc1=  isset($_POST['ver_doc1']) ? $ver_doc1 : 0; 
 		$ver_doc2=  isset($_POST['ver_doc2']) ? $ver_doc2 : 0; 
 
-
-		$data = " c_csr_no = '$csr_no'";
+		$data .= " c_csr_no = '$csr_no'";
 		$data .= ", loan_amt = '$loan_amt'";
-		$data .= ", terms = '$loan_term'";
+		$data .= ", terms = '$max_term'";
 		$data .= ", gross_income = '$gross_income'"; 
 		$data .= ", co_borrower = '$co_borrower'";
 		$data .= ", total = '$total' ";
 		$data .= ", income_req = '$income_req'";
-		$data .= ", interest = '$interest' ";
-		$data .= ", terms_month = '$numOfMonths' ";
+		$data .= ", interest = '$int_rate' ";
+		$data .= ", terms_month = '$term_rate' ";
+		$data .= ", monthly = '$monthly' ";
 		$data .= ", doc_req1 = $doc_req1";
 		$data .= ", doc_req2 = $doc_req2";
 		$data .= ", doc_req3 = $doc_req3";
@@ -925,18 +925,14 @@ Class Master extends DBConnection {
 		
 			$save = $this->conn->query("INSERT INTO t_ca_requirement set ".$data);
 		}else{
-		
 			$save = $this->conn->query("UPDATE t_ca_requirement set ".$data." WHERE id =".$id);
 		}
-		
-
-		if($save){
-			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Evaluation successfully saved.");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
-		}
+		$id = !empty($id) ? $id : $this->conn->insert_id;
+		$resp['status'] = 'success';
+		$resp['id'] = $id;
+		$resp['id_encrypt'] = md5($csr_no);
+		$this->settings->set_flashdata('success',"Evaluation successfully saved.");
+	
 		return json_encode($resp);
 	}
 

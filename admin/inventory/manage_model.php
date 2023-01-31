@@ -6,7 +6,7 @@ if($_settings->chk_flashdata('success')): ?>
 </script>
 <?php endif;?>
 <?php
-$type = isset($_GET['type']) ? $_GET['type'] : 1 ;
+
 if(isset($_GET['id'])){
     $user = $conn->query("SELECT * FROM t_model_house where c_code =".$_GET['id']);
     foreach($user->fetch_array() as $k =>$v){

@@ -22,7 +22,9 @@
                         <th>Code</th>
                         <th>Model</th>
                         <th>Acronym</th>
+                        <?php if ($usertype == 'IT Admin'): ?>
                         <th>Actions</th>
+                        <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,6 +39,7 @@
                         <td><?php echo $row["c_code"] ?></td>
                         <td><?php echo $row["c_model"] ?></td>
                         <td><?php echo $row["c_acronym"] ?></td>
+                        <?php if ($usertype == 'IT Admin'): ?>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
@@ -48,7 +51,7 @@
                                 <a class="dropdown-item delete_data" data-id="<?php echo $row['c_code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                 </div>
                         </td>
-                        
+                        <?php endif; ?>
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>

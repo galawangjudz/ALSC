@@ -13,12 +13,12 @@
 	<div class="card-header">
 	<h3 class="card-title">Agent List</h3>
 	<div class="card-tools">
-		<a href="./?page=sales/create" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Create New</a>
+		<a href="" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Create New</a>
 	</div>
 </div>
 <div class="card-body">
 	<div class="container-fluid">
-		<table class="table table-bordered table-stripped">
+		<table class="table table-bordered table-stripped" id="data-table">
 			<thead>
 				<tr>
 					<th>No</th>

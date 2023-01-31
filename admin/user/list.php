@@ -7,9 +7,9 @@
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h5 class="card-title">User List</h5>
-			<!-- <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
-			</div> -->
+			<div class="card-tools">
+				<a class="btn btn-flat btn-default bg-maroon" href="<?php echo base_url.'admin/?page=user/manage_user' ?>"><i class="fa fa-plus"></i> Add New</a>
+			</div>
 		</div>
 		<div class="card-body">
             <div class="container-fluid">
@@ -58,7 +58,7 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item edit_data" href="./?page=user/edit&id=<?php echo md5($row['id']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                <a class="dropdown-item " href="./?page=user/manage_user&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                 </div>
@@ -99,4 +99,11 @@
 		        ]
 		    })
 	})
+
+
+
+
+    $('.delete-user').click(function(){
+            _conf("Are you sure to delete this user?","delete_user",[$(this).attr('data-id')])
+    })
 </script>

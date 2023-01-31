@@ -1,0 +1,26 @@
+select * from t_csr x inner join t_csr_buyers y on x.c_csr_no = y.c_csr_no inner join t_lots z on x.c_lot_lid = z.c
+
+_lid inner join t_projects q on z.c_site = q.c_code where y.c_buyer_count = 1 
+
+
+CREATE VIEW t_csr_view AS
+select q.c_acronym, z.c_block, z.c_lot, y., x.* from t_csr x inner join t_csr_buyers y on x.c_csr_no = y.c_csr_no 
+inner join t_lots z on x.c_lot_lid = z.c_lid 
+inner join t_projects q on z.c_site = q.c_code 
+where y.c_buyer_count = 1 
+
+CREATE VIEW t_csr_view AS
+select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x inner join t_csr_buyers y on x.c_csr_no = y.c_csr_no 
+inner join t_lots z on x.c_lot_lid = z.c_lid 
+inner join t_projects q on z.c_site = q.c_code 
+where y.c_buyer_count = 1 
+
+	
+
+
+ALTER TABLE `t_approval_csr`
+  ADD CONSTRAINT `fk_c_h_lid` FOREIGN KEY (`c_house_lid`) REFERENCES `t_house` (`c_house_lid`);
+
+
+ALTER TABLE `t_lots`
+  ADD CONSTRAINT `fk_c_h_lid` FOREIGN KEY (`c_house_lid`) REFERENCES `t_house` (`c_house_lid`);	
