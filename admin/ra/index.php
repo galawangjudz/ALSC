@@ -99,8 +99,6 @@
 							
 						
 						<script>
-
-						
 						// Set the date we're counting down to
 						var countDownDate<?php echo $id ?> = new Date("<?php echo $row["c_duration"]?>").getTime();
 
@@ -121,6 +119,7 @@
 							
 						
 						// Display the result in the element with id="demo"
+						
 						document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
 						
 						// If the count down is finished, write some text

@@ -1529,17 +1529,6 @@ input{
 
 <script>
 		
-	$(document).ready(function (){
-        $('#data-table').DataTable({
-      
-        });
-
-        $('#data-table2').DataTable({
-      
-        });
-        
-    });
-
 	
 
 	function redirectToMail() {
