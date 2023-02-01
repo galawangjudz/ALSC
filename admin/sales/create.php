@@ -1293,7 +1293,7 @@ input{
 											</td>
 											<td class="text-right">
 												<div class="form-group form-group-sm  no-margin-bottom">
-													<input type="number" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
+													<input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
 												</div>
 											</td>
 											<td class="text-right">

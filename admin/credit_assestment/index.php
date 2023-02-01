@@ -54,6 +54,10 @@
                             <?php else: ?>
                                 <td><span class="badge badge-danger"> --- </span></td>
                             <?php endif; ?>
+							
+
+
+
 							<?php if ($usertype == "IT Admin" || $usertype == 'CA'): ?>	
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">

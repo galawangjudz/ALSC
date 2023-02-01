@@ -665,7 +665,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                             <td style="width:10%;">
                                                                 <div data-id='<?php echo $row1["id"]; ?>'><?php echo $row1["id"]; ?>
                                                         </td>
-                                                        <td style="width:50%;">
+                                                        <td style="width:30%;">
                                                                 <div data-id='<?php echo $row1["id"]; ?>' class="attachment_name btn-link"><?php echo $row1["title"]; ?>
                                                         </td>
                                                         <td>
@@ -677,15 +677,16 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                             <td class="actions">--- </td>
                                                         <?php else: ?>    
                                                             <td><span class="badge badge-warning"> Pending </span></td>
-                                                            <td class="actions">
-                                                            <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-info btn-xs approved-upload">
-                                                            <span class="fa fa-check" aria-hidden="true">Approved</span></a> 
-                                            
-                                                            <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs"  id="delete_upload">Delete <span class="fa fa-trash"></a>
-
-                                                            </td>
-
+                                                            <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
+                                                                <td class="actions">
+                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs approved-upload">Approved<span class="fa fa-check"></a> 
+                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs" id="delete_upload">Delete<span class="fa fa-trash"></a>
+                                                                </td>
+                                                                <?php endif; ?>
                                                         <?php endif; ?>
+                                                       
+                                                         
+                                                       
                                                     
                                                             </tr>
                                                         
@@ -698,8 +699,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                         ?>
                                         
                                     </div>
-                                
-
                                 <!--     add comment form here  -->
                                     <div class="commentDiv">
                                         <form  method="POST" id="add_comment">
@@ -715,7 +714,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                         <?php
         
                         // Connect to the database
-                       
                         // the query
                         $query = "SELECT * FROM t_csr_comments WHERE c_csr_no = '" . $conn->real_escape_string($getID) . "'";
                         //print $query;

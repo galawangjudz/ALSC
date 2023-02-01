@@ -43,6 +43,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
+						
 						$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
 											t_lots z,  t_projects q
 											where c_revised = 0 and  x.c_csr_no = y.c_csr_no 
