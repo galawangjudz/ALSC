@@ -747,16 +747,22 @@ Class Master extends DBConnection {
 		$chk_pay = $this->conn->query("SELECT sum(c_amount_paid) as total_reservation FROM t_reservation where c_csr_no =".$csr_no);				
 		while($row = $chk_pay->fetch_assoc()):
 			$total = $row['total_reservation'];
-		
+				
+			$data2 = ", c_amount_paid = '$total'";
+			$data2 .= ",c_date_reserved = CURRENT_TIMESTAMP()";
+			$data2 .= ", c_reserved_duration = DATE_ADD(CURRENT_TIMESTAMP(),INTERVAL 30 DAY)";
+			$data2 .= ", c_ca_status = 0";
+
+
 			if($total_res == $total){
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 1 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 1 ".$data2."  where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Reserved' where c_lid =".$lot_lid);
 				
 			}else if($total_res > $total && $total != 0){
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 ".$data2." where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lot_lid);
 			}else{
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 ".$data2." where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lot_lid);
 			}
 			endwhile;

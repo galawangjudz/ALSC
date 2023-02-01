@@ -73,17 +73,18 @@
                             <?php } ?>
                              
                             
-                            <?php if($row['coo_approval'] == 0){ ?> 
+							<?php if($row['coo_approval'] == 0){ ?> 
                                 <td class="text-center"><span class="badge badge-warning">Pending</span></td>
                             <?php }elseif($row['coo_approval'] == 3){ ?>
-                                <td class="text-center"><span class="badge badge-danger">Disapproved</span></td>
+                                <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
                             
                             <?php }elseif($row['coo_approval'] == 1){ ?>
                                 <td class="text-center"><span class="badge badge-success">Approved</span></td>
                             <?php }
                             elseif($row['coo_approval'] == 2){ ?> 
-                                <td class="text-center"><span class="badge badge-default">Cancelled</span></td>
+                                <td class="text-center"><span class="badge badge-danger">Lapsed</span></td>
                             <?php } ?>
+
 
 <!-- 
                             <td class="actions"><a href="?page=csr-view&id=<?php echo $row["c_csr_no"] ?>&ref=<?php echo $row["ref_no"] ?>" class="btn btn-info btn-xs">

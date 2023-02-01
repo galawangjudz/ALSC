@@ -75,15 +75,15 @@
 							<td><span class="badge badge-success">COO Approved</span>
 							<span class="badge badge-info"><b id="demo<?php echo $id ?>"></b></span></td>
 						<?php elseif (($row['c_csr_status'] == 1) && ($row['c_reserve_status'] == 1)): ?>
-							<td><span class="badge badge-success">COO Approved </span>
+							<td><span class="badge badge-success">COO Approved </span></td>
 						<?php elseif ($row['c_csr_status'] == 2): ?>
-							<td><span class="badge badge-danger">Cancelled</span>
+							<td><span class="badge badge-danger">Lapsed</span>
 							<span class="badge badge-danger"><b id="demo<?php echo $id ?>"></b></span></td>
 						<?php elseif ($row['c_csr_status'] == 3): ?>
-							<td><span class="badge badge-danger">Disapproved</span>
+							<td><span class="badge badge-danger">Cancelled</span></td>
 						<?php else: ?>
 							<td><span class="badge badge-warning">Pending</span>
-							<!-- <span class="badge badge-warning"><b id="demo<?php echo $id ?>"></b></span> --></td>
+							</td>
 						<?php endif; ?>
 							
 						
@@ -167,7 +167,7 @@
 							<?php elseif ($row['c_ca_status'] == 3): ?>
 							<td><span class="badge badge-info">For Revision</span></td>
 						<?php else: ?>
-							<td><span class="badge badge-danger"> --- </span></td>
+							<td><span class="badge badge-danger">Expired </span></td>
 						<?php endif; ?>
 				
 					
