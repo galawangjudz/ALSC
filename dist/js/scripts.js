@@ -3,7 +3,12 @@ $(document).ready(function() {
 
 
 	let dt = new Date().toISOString().slice(0, 10);
-	
+
+	$('#first_dp_date').val(new Date().toDateInputValue());
+	$('.first-dp-date').val(new Date().toDateInputValue());
+
+
+
     $(document).ready(function (){
         $('#data-table').DataTable({
       
@@ -1124,13 +1129,6 @@ function updateTotals(elem) {
 	
 
 	}
-
-		
-	$(document).on('click', ".tablinks", function(e) {
-		e.preventDefault();
-		opentab(evt, tabName);
-	});
-
 
 	$(document).on('click', "#compute-pmt", function(e) {
 		e.preventDefault();

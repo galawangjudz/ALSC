@@ -40,7 +40,18 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no ORDER BY c_date_approved");
+						$type = $_settings->userdata('type');
+						$username = $_settings->userdata('username');
+						$where = "c_created_by = '$username'";
+						if ($type < 5 ){
+
+							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
+												ORDER BY c_date_approved");
+						}else{
+							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
+												and ".$where." ORDER BY c_date_approved");
+						}
+						
 						while($row = $qry->fetch_assoc()):
 							$i ++;
                             $ra_id = $row["ra_id"];
@@ -141,7 +152,9 @@
 							$td=strtotime($today_date);		
 	
 							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-								$update_csr = $conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+								/* $update_csr = $conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+								 */
+								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'");	
 								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 							}

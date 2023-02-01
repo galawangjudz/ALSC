@@ -301,6 +301,8 @@ input{
 </style>
 
 <script type="text/javascript">
+		
+	
 	function opentab(evt, tabName) {
 		// Declare all variables
 		var i, tabcontent, tablinks;
@@ -363,11 +365,11 @@ input{
 				$('#p1').show();
 				document.getElementById('p2').style.width='49%';
 				document.getElementById('p2').style.marginLeft='2%';
-				compute_net_dp();
+			/* 	compute_net_dp();
 				compute_no_payment();
 				compute_rate();
 				compute_monthly_payments();
-				
+				 */
 				
 			} else if(l_payment_type1 == "No DownPayment"){
 				$('#down_text').hide();
@@ -389,19 +391,19 @@ input{
 				$("#net_dp").val(0);
 				$("#no_payment").val(0);
 				$("#monthly_down").val(0);
-				compute_net_dp();
+				/* compute_net_dp();
 				compute_no_payment();
 				compute_rate();
-				compute_monthly_payments();
+				compute_monthly_payments(); */
 				
 			}else{
 				$('#p1').show();
 				document.getElementById('p2').style.width='49%';
 				document.getElementById('p2').style.marginLeft='2%';
-				compute_net_dp();
+			/* 	compute_net_dp();
 				compute_no_payment();
 				compute_rate();
-				compute_monthly_payments();
+				compute_monthly_payments(); */
 				
 			}
 	
@@ -1397,7 +1399,17 @@ input{
 					</thead>
 					<tbody>
 					<?php
-					$query =$conn->query("SELECT * FROM t_client_info ORDER BY last_name ASC");
+					$type = $_settings->userdata('type');
+					$username = $_settings->userdata('username');
+					$where = "c_created_by = '$username'";
+					if ($type < 5 ){
+	
+						$query =$conn->query("SELECT * FROM t_client_info ORDER BY last_name ASC");
+					}else{
+						$query = $conn->query("SELECT * FROM t_client_info where ".$where." ORDER BY last_name ASC");
+					}
+	
+					//$query =$conn->query("SELECT * FROM t_client_info ORDER BY last_name ASC");
 
 					while($row = $query->fetch_assoc()): ?>
 
@@ -1423,13 +1435,15 @@ input{
 
 <div id="insert_lot" class="modal fade">
 	<div class="modal-dialog modal-lg">
+	
+
 		<div class="modal-content">
 		<div class="modal-header">
 			<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			 --><h4 class="modal-title">Select Lot</h4>
 		</div>
 		<div class="modal-body">			
-			<table class="table table-bordered table-stripped" id="data-table">
+			<table class="table table-bordered table-stripped" id="data-table2">
 				<thead>
 					<tr>
 
@@ -1515,9 +1529,8 @@ input{
 
 <script>
 		
-
-
-
+	
+	
 
 	function redirectToMail() {
         window.location.href = "./mail.php";
@@ -1537,6 +1550,10 @@ input{
 		document.getElementById('onlink4').style.backgroundColor="#f1f1f1";
 	}
 	function tabclicked3(){
+		
+		//$('.full_down_date').val(dt);
+		//$('.first_dp_date').val(dt);
+
 		document.getElementById('activation_text').value='0';
 		document.getElementById('onlink1').style.backgroundColor="#f1f1f1";
 		document.getElementById('onlink2').style.backgroundColor="#f1f1f1";

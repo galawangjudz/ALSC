@@ -30,6 +30,7 @@
 					<tr>
 					<th>No.</th>
 					<th>Ref. No.</th>
+					<th>Status</th>
 					<th>Prepared by </th>	
 					<th>Location </th>		
 					<th>Buyers Name</th>
@@ -42,20 +43,39 @@
 				</thead>
 				<tbody>
 					<?php 
-					$i = 1;
-						
-						$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
+						$i = 1;
+						$type = $_settings->userdata('type');
+						$username = $_settings->userdata('username');
+						$where = "c_created_by = '$username'";
+
+						if ($type < 5 ){
+							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
 											t_lots z,  t_projects q
 											where c_revised = 0 and  x.c_csr_no = y.c_csr_no 
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
-											and y.c_buyer_count = 1");
+											and y.c_buyer_count = 1 order by c_date_updated DESC");
+						}else{
+
+							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
+											t_lots z,  t_projects q
+											where c_revised = 0 and  x.c_csr_no = y.c_csr_no 
+											and x.c_lot_lid = z.c_lid 
+											and z.c_site = q.c_code 
+											and y.c_buyer_count = 1 and ".$where."  order by c_date_updated DESC");
+						}
 						while($row = $qry->fetch_assoc()):
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
 					?>
 						<tr>
                                 <td><?php echo $i++ ?></td>
                                 <td><?php echo $row['ref_no'] ?></td>
+								<?php if($row['c_active'] == 0): ?>
+									<td class="text-center"><span class="badge badge-warning">Inactive</span></td>
+								<?php else: ?>
+									<td class="text-center"><span class="badge badge-success">Active</span></td>
+								<?php endif;?>
+
                                 <td class="text-center"><?php echo $row["c_created_by"] ?></td>
                                 <td><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                                 <td class="text-center"><?php echo $row["last_name"]. ' ' .$row["suffix_name"]. ','  .$row["first_name"] .' ' .$row["middle_name"]?></td>

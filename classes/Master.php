@@ -566,7 +566,7 @@ Class Master extends DBConnection {
 
 	function sm_verification(){
 		extract($_POST);
-	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_lot_lid ='{$lid}'")->num_rows;
+	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_active = 1 and c_lot_lid ='{$lid}'")->num_rows;
 		if($this->capture_err())
 		 	return $this->capture_err();
 		if($check > 0){
@@ -576,6 +576,9 @@ Class Master extends DBConnection {
 			exit;
 		} 
 		if($check == 0){
+			if ($value == 2){
+				$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
+			}
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
 			}
 		if($save){
@@ -688,9 +691,9 @@ Class Master extends DBConnection {
 		$check = $this->conn->query("SELECT * FROM t_approval_csr where c_csr_no =".$id)->num_rows;
 		if($check > 0){
 			$dis = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
-			$dis = $this->conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = ".$value." where c_csr_no = ".$id);
+			$dis = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = ".$value." where c_csr_no = ".$id);
 		}else{
-			$dis = $this->conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = ".$value." where c_csr_no = ".$id);
+			$dis = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = ".$value." where c_csr_no = ".$id);
 		}
 
 		if($dis){
@@ -711,7 +714,7 @@ Class Master extends DBConnection {
 		$check = $this->conn->query("SELECT * FROM t_approval_csr where c_csr_no =".$id)->num_rows;
 		if($check > 0){
 			$dis = $this->conn->query("UPDATE t_approval_csr set c_csr_status = 3 where c_csr_no =".$id);
-			$dis2 = $this->conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 3 where c_csr_no = ".$id);
+			$dis2 = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = 3 where c_csr_no = ".$id);
 			$update = $this->conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = ".$lid);
 		}
 
@@ -881,7 +884,7 @@ Class Master extends DBConnection {
 		if ($value == 1):
 			$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
 		elseif ($value == 2):
-			$save = $this->conn->query("UPDATE t_csr SET c_verify = 2 where c_csr_no = ".$id);
+			$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
 		elseif ($value == 3):
