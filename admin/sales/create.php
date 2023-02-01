@@ -1443,7 +1443,7 @@ input{
 			 --><h4 class="modal-title">Select Lot</h4>
 		</div>
 		<div class="modal-body">			
-			<table class="table table-bordered table-stripped" id="data-table2">
+			<table class="table table-bordered table-stripped" id="data-table">
 				<thead>
 					<tr>
 
@@ -1529,7 +1529,17 @@ input{
 
 <script>
 		
-	
+	$(document).ready(function (){
+        $('#data-table').DataTable({
+      
+        });
+
+        $('#data-table2').DataTable({
+      
+        });
+        
+    });
+
 	
 
 	function redirectToMail() {

@@ -4,10 +4,6 @@ $(document).ready(function() {
 
 	let dt = new Date().toISOString().slice(0, 10);
 
-	$('#first_dp_date').val(new Date().toDateInputValue());
-	$('.first-dp-date').val(new Date().toDateInputValue());
-
-
 
     $(document).ready(function (){
         $('#data-table').DataTable({
