@@ -38,7 +38,7 @@
                             <td><?php echo $row["ra_no"] ?></td>
                             <td><?php echo $row["c_reserve_date"] ?></td>
                             <td><?php echo $row["c_or_no"] ?></td>
-                            <td><?php echo $row["c_amount_paid"] ?></td>
+                            <td><?php echo number_format($row["c_amount_paid"],2) ?></td>
                         
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">

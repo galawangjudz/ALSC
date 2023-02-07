@@ -96,16 +96,19 @@
                             
                             <?php if($row['coo_approval'] == 0){ ?> 
                                 <td class="text-center"><span class="badge badge-warning">Pending</span></td>
-                            <?php }elseif($row['coo_approval'] == 3){ ?>
-                                <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
-                            
+                           
                             <?php }elseif($row['coo_approval'] == 1){ ?>
                                 <td class="text-center"><span class="badge badge-success">Approved</span></td>
                             <?php }
                             elseif($row['coo_approval'] == 2){ ?> 
                                 <td class="text-center"><span class="badge badge-danger">Lapsed</span></td>
-                            <?php } ?>
-
+                            <?php }
+							 elseif($row['coo_approval'] == 3){ ?>
+                                <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
+							<?php } 
+							elseif($row['coo_approval'] == 4){ ?> 
+							 	<td class="text-center"><span class="badge badge-danger">Disapproved</span></td>
+							<?php } ?>
 
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">

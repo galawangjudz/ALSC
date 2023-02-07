@@ -275,7 +275,7 @@ if(isset($_GET['id'])){
                         <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "COO" or $usertype == "IT Admin" )){ ?>
                             <button type="button" data-csr-id =<?php echo $getID; ?> class="btn btn-success btn-lg btn-block new-coo-approval">COO Approved <span class="fa fa-check" aria-hidden="true"> </button>
                             
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="3" class="btn btn-danger btn-lg btn-block coo-disapproval">COO DisApproved <span class="fa fa-times" aria-hidden="true"> </button>
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-lg btn-block coo-disapproval">COO DisApproved <span class="fa fa-times" aria-hidden="true"> </button>
                             
                         <?php } ?>    
                     </div>
