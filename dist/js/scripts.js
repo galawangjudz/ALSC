@@ -3,16 +3,12 @@ $(document).ready(function() {
 
 
 	let dt = new Date().toISOString().slice(0, 10);
-	
+
+
     $(document).ready(function (){
         $('#data-table').DataTable({
       
-        });
-
-        $('#data-table2').DataTable({
-      
-        });
-        
+        }); 
     });
 
 
@@ -1124,13 +1120,6 @@ function updateTotals(elem) {
 	
 
 	}
-
-		
-	$(document).on('click', ".tablinks", function(e) {
-		e.preventDefault();
-		opentab(evt, tabName);
-	});
-
 
 	$(document).on('click', "#compute-pmt", function(e) {
 		e.preventDefault();

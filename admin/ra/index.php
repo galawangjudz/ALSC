@@ -40,7 +40,18 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no ORDER BY c_date_approved");
+						$type = $_settings->userdata('type');
+						$username = $_settings->userdata('username');
+						$where = "c_created_by = '$username'";
+						if ($type < 5 ){
+
+							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
+												ORDER BY c_date_approved");
+						}else{
+							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
+												and ".$where." ORDER BY c_date_approved");
+						}
+						
 						while($row = $qry->fetch_assoc()):
 							$i ++;
                             $ra_id = $row["ra_id"];
@@ -75,21 +86,19 @@
 							<td><span class="badge badge-success">COO Approved</span>
 							<span class="badge badge-info"><b id="demo<?php echo $id ?>"></b></span></td>
 						<?php elseif (($row['c_csr_status'] == 1) && ($row['c_reserve_status'] == 1)): ?>
-							<td><span class="badge badge-success">COO Approved </span>
+							<td><span class="badge badge-success">COO Approved </span></td>
 						<?php elseif ($row['c_csr_status'] == 2): ?>
-							<td><span class="badge badge-danger">Cancelled</span>
+							<td><span class="badge badge-danger">Lapsed</span>
 							<span class="badge badge-danger"><b id="demo<?php echo $id ?>"></b></span></td>
 						<?php elseif ($row['c_csr_status'] == 3): ?>
-							<td><span class="badge badge-danger">Disapproved</span>
+							<td><span class="badge badge-danger">Cancelled</span></td>
 						<?php else: ?>
 							<td><span class="badge badge-warning">Pending</span>
-							<!-- <span class="badge badge-warning"><b id="demo<?php echo $id ?>"></b></span> --></td>
+							</td>
 						<?php endif; ?>
 							
 						
 						<script>
-
-						
 						// Set the date we're counting down to
 						var countDownDate<?php echo $id ?> = new Date("<?php echo $row["c_duration"]?>").getTime();
 
@@ -110,6 +119,7 @@
 							
 						
 						// Display the result in the element with id="demo"
+						
 						document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
 						
 						// If the count down is finished, write some text
@@ -141,7 +151,9 @@
 							$td=strtotime($today_date);		
 	
 							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-								$update_csr = $conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+								/* $update_csr = $conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+								 */
+								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'");	
 								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 							}
@@ -167,7 +179,7 @@
 							<?php elseif ($row['c_ca_status'] == 3): ?>
 							<td><span class="badge badge-info">For Revision</span></td>
 						<?php else: ?>
-							<td><span class="badge badge-danger"> --- </span></td>
+							<td><span class="badge badge-danger">Expired </span></td>
 						<?php endif; ?>
 				
 					

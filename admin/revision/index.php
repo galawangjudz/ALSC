@@ -6,9 +6,9 @@
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title">List of For Revison</h3>
-		<div class="card-tools">
+		<!-- <div class="card-tools">
 			<a href="./?page=sales/create" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Create New</a>
-		</div>
+		</div> -->
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -43,12 +43,26 @@
 				<tbody>
 					<?php 
 					$i = 1;
+					$type = $_settings->userdata('type');
+					$username = $_settings->userdata('username');
+					$where = "c_created_by = '$username'";
+
+					if ($type < 5 ){
 						$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
-											t_lots z,  t_projects q
-											where c_revised = 1 and  x.c_csr_no = y.c_csr_no 
-											and x.c_lot_lid = z.c_lid 
-											and z.c_site = q.c_code 
-											and y.c_buyer_count = 1");
+										t_lots z,  t_projects q
+										where c_revised = 1 and  x.c_csr_no = y.c_csr_no 
+										and x.c_lot_lid = z.c_lid 
+										and z.c_site = q.c_code 
+										and y.c_buyer_count = 1 order by c_date_updated DESC");
+					}else{
+
+						$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
+										t_lots z,  t_projects q
+										where c_revised = 1 and  x.c_csr_no = y.c_csr_no 
+										and x.c_lot_lid = z.c_lid 
+										and z.c_site = q.c_code 
+										and y.c_buyer_count = 1 and ".$where."  order by c_date_updated DESC");
+					}
 						while($row = $qry->fetch_assoc()):
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
 					?>
@@ -73,17 +87,18 @@
                             <?php } ?>
                              
                             
-                            <?php if($row['coo_approval'] == 0){ ?> 
+							<?php if($row['coo_approval'] == 0){ ?> 
                                 <td class="text-center"><span class="badge badge-warning">Pending</span></td>
                             <?php }elseif($row['coo_approval'] == 3){ ?>
-                                <td class="text-center"><span class="badge badge-danger">Disapproved</span></td>
+                                <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
                             
                             <?php }elseif($row['coo_approval'] == 1){ ?>
                                 <td class="text-center"><span class="badge badge-success">Approved</span></td>
                             <?php }
                             elseif($row['coo_approval'] == 2){ ?> 
-                                <td class="text-center"><span class="badge badge-default">Cancelled</span></td>
+                                <td class="text-center"><span class="badge badge-danger">Lapsed</span></td>
                             <?php } ?>
+
 
 <!-- 
                             <td class="actions"><a href="?page=csr-view&id=<?php echo $row["c_csr_no"] ?>&ref=<?php echo $row["ref_no"] ?>" class="btn btn-info btn-xs">

@@ -179,6 +179,7 @@ foreach($res->fetch_array() as $k =>$v){
 					<tr>
 
 						<th>RA No.</th>
+						<th>Ref No</th>
 						<th>Phase</th>
 						<th>Block</th>
 						<th>Lot</th>
@@ -200,6 +201,7 @@ foreach($res->fetch_array() as $k =>$v){
 
 					<tr>
 						<td><?php echo $row["ra_id"] ?></td>
+						<td><?php echo $row["ref_no"] ?></td>
 						<td><?php echo $row["c_acronym"] ?></td>
 						<td><?php echo $row["c_block"] ?></td>
 						<td><?php echo $row["c_lot"] ?></td>
@@ -227,6 +229,12 @@ foreach($res->fetch_array() as $k =>$v){
 
 
 <script>
+	$(document).ready(function(){
+		
+		$('.table').dataTable();
+		
+	})
+	
 	$(document).on('click', ".select-ra", function(e) {
 
 		e.preventDefault;

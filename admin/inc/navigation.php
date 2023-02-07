@@ -101,6 +101,15 @@
                         </p>
                       </a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=final_approval" class="nav-link nav-final_approval">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          CFO Approval List
+                        </p>
+                      </a>
+                    </li>
                 
                    <!--  <li class="nav-header">Report</li>
                     <li class="nav-item dropdown">

@@ -566,7 +566,7 @@ Class Master extends DBConnection {
 
 	function sm_verification(){
 		extract($_POST);
-	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_lot_lid ='{$lid}'")->num_rows;
+	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_active = 1 and c_lot_lid ='{$lid}'")->num_rows;
 		if($this->capture_err())
 		 	return $this->capture_err();
 		if($check > 0){
@@ -576,6 +576,9 @@ Class Master extends DBConnection {
 			exit;
 		} 
 		if($check == 0){
+			if ($value == 2){
+				$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
+			}
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
 			}
 		if($save){
@@ -688,9 +691,9 @@ Class Master extends DBConnection {
 		$check = $this->conn->query("SELECT * FROM t_approval_csr where c_csr_no =".$id)->num_rows;
 		if($check > 0){
 			$dis = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
-			$dis = $this->conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = ".$value." where c_csr_no = ".$id);
+			$dis = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = ".$value." where c_csr_no = ".$id);
 		}else{
-			$dis = $this->conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = ".$value." where c_csr_no = ".$id);
+			$dis = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = ".$value." where c_csr_no = ".$id);
 		}
 
 		if($dis){
@@ -711,7 +714,7 @@ Class Master extends DBConnection {
 		$check = $this->conn->query("SELECT * FROM t_approval_csr where c_csr_no =".$id)->num_rows;
 		if($check > 0){
 			$dis = $this->conn->query("UPDATE t_approval_csr set c_csr_status = 3 where c_csr_no =".$id);
-			$dis2 = $this->conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 3 where c_csr_no = ".$id);
+			$dis2 = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = 3 where c_csr_no = ".$id);
 			$update = $this->conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = ".$lid);
 		}
 
@@ -747,16 +750,22 @@ Class Master extends DBConnection {
 		$chk_pay = $this->conn->query("SELECT sum(c_amount_paid) as total_reservation FROM t_reservation where c_csr_no =".$csr_no);				
 		while($row = $chk_pay->fetch_assoc()):
 			$total = $row['total_reservation'];
-		
+				
+			$data2 = ", c_amount_paid = '$total'";
+			$data2 .= ",c_date_reserved = CURRENT_TIMESTAMP()";
+			$data2 .= ", c_reserved_duration = DATE_ADD(CURRENT_TIMESTAMP(),INTERVAL 30 DAY)";
+			$data2 .= ", c_ca_status = 0";
+
+
 			if($total_res == $total){
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 1 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 1 ".$data2."  where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Reserved' where c_lid =".$lot_lid);
 				
 			}else if($total_res > $total && $total != 0){
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 ".$data2." where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lot_lid);
 			}else{
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 ".$data2." where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lot_lid);
 			}
 			endwhile;
@@ -875,7 +884,7 @@ Class Master extends DBConnection {
 		if ($value == 1):
 			$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
 		elseif ($value == 2):
-			$save = $this->conn->query("UPDATE t_csr SET c_verify = 2 where c_csr_no = ".$id);
+			$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
 		elseif ($value == 3):
