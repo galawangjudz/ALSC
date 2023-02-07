@@ -945,6 +945,15 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+
+	function cfo_booked(){
+		extract($_POST);
+		
+
+
+
+
+	}
 	
 }
 
@@ -1014,6 +1023,9 @@ switch ($action) {
 	break;
 	case 'save_ca':
 		echo $Master->save_ca();
+	break;
+	case 'cfo_booked':
+		echo $Master->cfo_booked();
 	break;
 	
 	default:

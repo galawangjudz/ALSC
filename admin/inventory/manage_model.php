@@ -15,6 +15,23 @@ if(isset($_GET['id'])){
 }
 
 ?>
+
+<?php
+
+$usertype = $_settings->userdata('user_type');
+if (!isset($usertype)) {
+    include '404.html';
+  exit;
+}
+
+$user_role = $usertype;
+
+if ($user_role != 'IT Admin') {
+    include '404.html';
+  exit;
+}
+
+?>
 <style>
 #item-list th, #item-list td{
 	padding:5px 3px!important;

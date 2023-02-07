@@ -60,7 +60,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item approve_data" href="#"><span class="fa fa-check text-primary"></span> Approved</a>
+				                    <a class="dropdown-item booked_data" ra-id = "<?php echo $row['ra_id']?>" csr_id = "<?php echo $row['c_csr_no']?>" data-lot-id="<?php echo $row['c_lot_lid'] ?>"><span class="fa fa-check text-primary"></span> Approved</a>
 								 </div>
 							</td>
 							<?php endif; ?>	
@@ -73,11 +73,44 @@
 	</div>
 </div>
 <script>
-	$('.ca_approval').click(function(){
-		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
-		uni_modal("<i class='fa fa-check'></i> Approval",'credit_assestment/manage_ca.php?id='+$(this).attr('data-id'),"mid-large")
 
-	})
+	$('.booked_data').click(function(){
+        _conf("Are you sure to booked this RA?","booked_ra",[$(this).attr('ra_id'),$(this).attr('c_csr_no'),$(this).attr('c_lot_lid')])
+    }) 
+
+	function sm_verification($ra_id,$csr_no,$lid){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=cfo_booked",
+			method:'POST',
+			data:{ra_id:$ra_id,csr_no:$csr_no,lid:$lid},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured",'error');
+                end_loader();
+			},
+			success:function(resp){
+				if(resp.status == 'success'){
+                    $(".modal").removeClass("visible");
+					$(".modal").modal('hide');
+                    location.reload();
+				}else if(resp.status == 'failed' && !!resp.msg){
+                        $(".modal").removeClass("visible");
+                        $(".modal").modal('hide');
+                        alert_toast(resp.msg,'error');
+                        end_loader();
+                }else{
+                    alert_toast("An error occured",'error');
+                    end_loader();
+                    console.log(resp)
+                }
+			}
+		})
+	}
+
+
+
 
 	$(document).ready(function(){
 		

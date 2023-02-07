@@ -159,6 +159,9 @@
 
 $usertype = $_settings->userdata('user_type');
 
+
+
+
 /* $usertype = isset($_settings->userdata('type')== 1) ? "IT Admin" : "" ; */
 if(isset($_GET['id'])){
     $csr = $conn->query("SELECT * FROM t_csr where md5(c_csr_no) = '{$_GET['id']}' ");
