@@ -25,7 +25,7 @@ body{
     font-size:12px;
     margin-top:1px;
 }
-.form-control{
+/* .form-control{
     background-color:#E0E0E0;
     border-radius: 0px;
     margin-bottom:-12px;
@@ -34,7 +34,7 @@ body{
     padding-bottom:0px!important;
     text-transform: uppercase!important;
     font-size:10px!important;
-}
+} */
 .light{
     font-size:12px;
     margin-top:-2px;
@@ -70,7 +70,7 @@ body{
     font-size:12px;
 }
 #bottom_space{
-    margin-bottom:3px;
+    margin-bottom:10px;
 }
 .control-label{
     display: inline-block;
@@ -83,12 +83,11 @@ body{
 .form-control{
     background-color:#E0E0E0;
     border-radius: 0px;
-    margin-bottom:-12px;
-    height:auto!important;
-    padding-top:0px!important;
-    padding-bottom:0px!important;
+    height:20px;
     text-transform: uppercase!important;
-    font-size:12px!important;
+    font-size:10px!important;
+    padding-top:6px;
+    margin-bottom:-10px;
 }
 #tcp_coverage{
 	background-color:black;
@@ -125,6 +124,15 @@ body{
     margin-bottom:7px;
     padding-left:7px;
 }
+#rdo20meter{
+    font-weight:normal!important;
+    margin-bottom:12px;
+}
+#rdolight{
+    font-weight:normal!important;
+    font-size:9px;
+    margin-top:-5px;
+}
 #lbl2{
     margin-top:-11px;
     padding-left:7px;
@@ -136,10 +144,10 @@ body{
     font-size:8px!important;
 }
 #lbl_units{
-    width:12%;
+    width:10%;
     height:auto;
     float:left;
-    margin-top:15px;
+    margin-top:13px;
     font-size:8px!important;
 }
 #lbl_units_line{
@@ -160,14 +168,15 @@ body{
     float:left;
     margin-top:0px;
     margin-left:45px;
-    margin-right:80px;
+    margin-right:70px;
     font-size:10px!important;
 }
 #add_cost_txtbox{
     margin-bottom:5px;
+    font-size:9px;
 }
 .lbl_div_others_txtbox{
-    width:23.5%;
+    width:22.3%;
     height:auto;
     float:left;
     font-size:8px!important;
@@ -195,7 +204,7 @@ body{
     margin-top:-1px;
 	display:inline-block;
 	margin-left:3px;
-    height:305px;
+    height:290px;
     padding-top:0px!important;
 }
 .titles{
@@ -228,8 +237,9 @@ body{
 	border:solid 1px black;
 	display:inline-block;
 	margin-left:3px;
-    height:305px;
+    height:290px;
     padding-top:0px!important;
+    border-radius:0px!important;
 }
 .ma_sub{
 	background-color:black;
@@ -487,7 +497,7 @@ body{
 }
 #payment_details{
     border-right:none!important;
-    height:305px;
+    height:290px;
     margin-top:30px;
 }
 #withbd{

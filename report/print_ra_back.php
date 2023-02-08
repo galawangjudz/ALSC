@@ -156,20 +156,12 @@ B. BANK - TO - BANK<br>
                 <label class="label_notb">Individual</label>
             </div>
         </td>
-        <td class="tdwidth1">
+        <td style="float:left;margin-right:70px;">
             <div style="float:left;margin-right:2px">
                 <input id="chkOption1" type="radio" name="chkOption1" />
             </div>
             <div style="float:left">
                 <label class="label_notb">Spouses</label>
-            </div>
-        </td>
-        <td class="tdwidth1">
-            <div style="float:left;margin-right:2px">
-                <input id="chkOption1" type="radio" name="chkOption1" />
-            </div>
-            <div style="float:left">
-                <label class="label_notb">A Corporate</label>
             </div>
         </td>
     </tr>
@@ -185,7 +177,7 @@ B. BANK - TO - BANK<br>
                 <label class="label_notb">Married to</label>
             </div>
         </td>
-        <td class="tdwidth1">
+        <td class="tdwidth" style="position:absolute;margin-left:-515px;">
             <div style="float:left;margin-right:2px">
                 <input id="chkOption1" type="radio" name="chkOption1" />
             </div>
@@ -193,14 +185,7 @@ B. BANK - TO - BANK<br>
                 <label class="label_notb">Co-owners</label>
             </div>
         </td>
-        <td class="tdwidth1">
-            &nbsp;<div style="float:left;margin-right:2px">
-                <input id="chkOption1" type="radio" name="chkOption1" />
-            </div>
-            <div style="float:left">
-                <label class="label_notb">Trust Account</label>
-            </div>
-        </td>
+
     </tr>
 </table>
 <table style="margin-top:-10px;margin-left:5px;">
@@ -209,20 +194,47 @@ B. BANK - TO - BANK<br>
             <input type="text" class="form-control" style="margin-left:20px;width:170px;margin-bottom:5px;margin-top:3px;padding-top:-5px;">
         </td>
         <td class="tdwidth1">
-            <input type="text" class="form-control" style="margin-left:-200px;width:170px;margin-bottom:5px;margin-top:3px;padding-top:-5px;">
-        </td>
-        <td class="tdwidth1">
+            <input type="text" class="form-control" style="margin-left:-425px;width:170px;margin-bottom:5px;margin-top:3px;padding-top:-5px;">
         </td>
     </tr>
 </table>
-<!-- <div style="margin-right:50px;position:absolute">
-    <input id="chkOption1" type="radio" name="chkOption1" style="position:absolute;margin-top:-70px;margin-left:470px;"/>
-</div> -->
-<!-- <div>
-    <label class="label_notb" style="position:absolute;margin-top:-71px;margin-left:485px;">A Partnership</label>
-</div> -->
-<!-- <input id="chkOption1" type="radio" name="chkOption1" style="position:absolute;margin-top:-70px;margin-left:470px;"/> -->
-
+<div class="rightside_part" style="float:left;margin-left:68%;height:auto;margin-top:-87px;">
+    <table>
+        <tr>
+            <td>
+                <div style="float:left;margin-right:2px;">
+                    <input id="chkOption1" type="radio" name="chkOption1" />
+                </div>
+                <div style="float:left;margin-right:2px;">
+                    <label class="label_notb">A Corporate</label>
+                </div>
+                <input type="text" class="form-control" style="width:145px; padding-left:3px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="margin-top:5px;position:absolute;">
+                <div style="float:left;margin-right:2px;">
+                    <input id="chkOption1" type="radio" name="chkOption1" />
+                </div>
+                <div style="float:left;margin-right:2px;">
+                    <label class="label_notb">A Partnership</label>
+                </div>
+                <input type="text" class="form-control" style="width:140px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="margin-top:35px;position:absolute;">
+                <div style="float:left;margin-right:2px;">
+                    <input id="chkOption1" type="radio" name="chkOption1" />
+                </div>
+                <div style="float:left;margin-right:2px;">
+                    <label class="label_notb">Trust Account</label>
+                </div>
+                <input type="text" class="form-control" style="width:140px;">
+            </td>
+        </tr>
+    </table>
+</div>
 <div class="doc_title1">SOURCE OF FUNDING (Kindly check one)</div>
 <table>
     <tr>
@@ -581,17 +593,15 @@ In compliance with the Data Privacy Act (DPA) of 2012, and its implementing Rule
 Asian Land Strategies Corporation (ALSC) to provide me certain services declared in relation to this closed sales report. As such, I agree and authorize
 ALSC to:<br><br>
 
-&#8195;&#8195;&#8195;1.&nbsp;&nbsp;Retain my information for a period of three (3) years for the date of cancellation of my account, or at such time that I submit to ALSC a
-written cancellation &#8195;&#8195;&#8195;of this consent, whichever is earlier. I agree that my information will be deleted/destroyed after this period.<br><br>
-&#8195;&#8195;&#8195;2.&nbsp;&nbsp;Share my information to affiliates and necessary third parties for any legitimate business purpose. I am assured that security systems are
-employed to &#8195;&#8195;&#8195;protect my information.<br><br>
+&#8195;&#8195;&#8195;1.&nbsp;&nbsp;Retain  my  information for a period  of three (3)  years for the  date of cancellation of my account, or at such time that I submit to ALSC a written <br>&#8195;&#8195;&#8195;&#8195; cancellation of this consent, whichever is earlier. I agree that my information will be deleted/destroyed after this period.<br>
+&#8195;&#8195;&#8195;2.&nbsp;&nbsp;Share my  information to  affiliates and  necessary third parties for any  legitimate  business  purpose. I am assured that security systems are <br>&#8195;&#8195;&#8195;&#8195; employed to protect my information.<br>
 &#8195;&#8195;&#8195;3.&nbsp;&nbsp;Inform me of future customer campaigns, billing notifications and updates using the personal information I shared with the company. I
-have read this &#8195;&#8195;&#8195;form, understood its contents and consent to the processing of my personal data. I understand that my consent does not
-preclude the existence of other &#8195;&#8195;&#8195;criteria for the lawful processing of personal data, and does not waive any rights under the Data Privacy Act of
-2012 and other applicable laws.<br><br><br><br>
+have <br>&#8195;&#8195;&#8195;&#8195; read this form, understood its contents and consent to the processing of my personal data. I understand that my consent does not
+preclude the <br>&#8195;&#8195;&#8195;&#8195; existence of other criteria for the lawful processing of personal data, and does not waive any rights under the Data Privacy Act of
+2012 and other <br>&#8195;&#8195;&#8195;&#8195; applicable laws.<br><br><br>
 
-&#8195;&#8195;&#8195;&#8195;___________________________________________&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195; ___________________________________________<br>
-&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client Signature over Printed Name/Date&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client Signature over Printed Name/Date
+&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;___________________________________________&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195; ___________________________________________<br>
+&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client Signature over Printed Name/Date&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client Signature over Printed Name/Date
     </div>
 
 </div>

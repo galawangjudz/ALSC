@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="css/print_ra_b1_with_add_cost.css">
     </head>
     <body onload="loadAll()">
-        <div class="card-body" style="margin-top:3px;">
+        <div class="card-body" style="margin-top:-2px;">
         <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>
         <div class="container-fluid">
             <div class="row">
@@ -43,27 +43,27 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label class="control-label" id="small_title">Civil Status:</label>
+                    <label class="control-label" id="small_title">Civil Status:</label>
                         <div class="chkboxes">
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             <input id="single" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">SINGLE<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="married" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">MARRIED<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="widowed" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">WIDOWED<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="separated" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
@@ -75,15 +75,15 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label class="control-label" id="small_title1" style="text-align:left;">Gender:</label>
+                        <label class="control-label" id="small_title1" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gender:</label>
                         <div class="chkboxes">
-                            <div style="float:left;margin-left:2px;">
+                            <div style="float:left;margin-left:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="male" type="radio" name="gender1" />
                             </div>
                             <div style="float:left">
                                 <label class="light">&nbsp;M<label>
                             </div>
-                            <div style="float:left;margin-left:2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div style="float:left;margin-left:2px;margin-top:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input id="female" type="radio" name="gender1" />
                             </div>
                             <div style="float:left">
@@ -168,25 +168,25 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                     <input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                     <label style="font-weight:normal;margin-bottom:-5px;">And<label>
                 </div>
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                     <label style="font-weight:normal;margin-bottom:-5px;">Spouses<label>
                 </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">Married To<label>
                 </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
@@ -235,46 +235,47 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label class="control-label" id="small_title">Civil Status:</label>
+                    <label class="control-label" id="small_title">Civil Status:</label>
                         <div class="chkboxes">
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             <input id="single" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">SINGLE<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="married" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">MARRIED<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="widowed" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">WIDOWED<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="separated" type="radio" name="chkOption1">
                             </div>
                             <div style="float:left">
                                 <label class="light">SEPARATED<label>
                             </div>
+                            <input type="hidden" id="civil_status" value="<?php echo $c_civil_status; ?>">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label class="control-label" id="small_title1" style="text-align:left;">Gender:</label>
+                        <label class="control-label" id="small_title1" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gender:</label>
                         <div class="chkboxes">
-                            <div style="float:left;margin-left:2px;">
+                            <div style="float:left;margin-left:2px;margin-top:3px;">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="radio" name="chkOption1" />
                             </div>
                             <div style="float:left">
                                 <label class="light">&nbsp;M<label>
                             </div>
-                            <div style="float:left;margin-left:2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div style="float:left;margin-left:2px;margin-top:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input id="chkOption1" type="radio" name="chkOption1" />
                             </div>
                             <div style="float:left">
@@ -358,32 +359,31 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                     <input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                     <label style="font-weight:normal;margin-bottom:-5px;">And<label>
                 </div>
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                     <label style="font-weight:normal;margin-bottom:-5px;">Spouses<label>
                 </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">Married To<label>
                 </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <div style="float:left;margin-right:2px">
+                <div style="float:left;margin-right:2px;margin-top:3px;">
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                 </div>
                 <div style="float:left">
                     <label style="font-weight:normal;margin-bottom:-5px;">Minor/Represented by Legal Guardian<label>
                 </div>
             </div>
-                
             </div>
         </div>
         </div>
@@ -432,37 +432,35 @@
                         <input type="text" class="form-control form-control-sm" value="<?php echo $l_lot; ?>">
                     </div>
                 </div>
-
-
                 <div class="col-md-6">
                     <div class="form-group">
-                        <div class="control-label" id="options">
-                            <div style="float:left;margin-right:2px;">
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="lotonly" type="checkbox" name="chkOption3" />
+                        <div class="control-label" id="options" style="margin-top:-5px;">
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
+                                <input id="lotonly" type="checkbox" name="chkOption3" />
                             </div>
                             <div style="float:left">
                                 <label class="light" style="font-weight:normal;">Lot Only<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="houseonly" type="checkbox" name="chkOption3" />
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="houseonly" type="checkbox" name="chkOption3" />
                             </div>
                             <div style="float:left">
                                 <label class="light" style="font-weight:normal;">House Only<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="houseandlot" type="checkbox" name="chkOption3" />
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="houseandlot" type="checkbox" name="chkOption3" />
                             </div>
                             <div style="float:left">
                                 <label class="light" style="font-weight:normal;">House & Lot<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="fenceonly" type="checkbox" name="chkOption3" />
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="fenceonly" type="checkbox" name="chkOption3" />
                             </div>
                             <div style="float:left">
                                 <label class="light" style="font-weight:normal;">Fence<label>
                             </div>
-                            <div style="float:left;margin-right:2px;">
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="addcost" type="checkbox" name="chkOption3" />
+                            <div style="float:left;margin-right:2px;margin-top:3px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="addcost" type="checkbox" name="chkOption3" />
                             </div>
                             <div style="float:left">
                                 <label class="light" style="font-weight:normal;">Add Cost<label>
@@ -471,14 +469,15 @@
                         </div>
                     </div>
                 </div>
+                <br>
             </div>
         </div>
-        <div class="container-fluid" style="margin-top:-20px;">
+        <div class="container-fluid" style="margin-top:-15px;">
             <div class="row">
                 <div class="col-md-1" id="tcp_coverage">
-                    <label class="control-label" style="margin-bottom:1px;">LOT</label><br>
-                    <label class="control-label" style="margin-bottom:1px;">HOUSE</label><br>
-                    <label class="control-label" style="margin-bottom:1px;">FENCE</label><br>
+                    <label class="control-label" style="margin-bottom:8px;padding-top:3px;">LOT</label><br>
+                    <label class="control-label" style="margin-bottom:8px;">HOUSE</label><br>
+                    <label class="control-label">FENCE</label><br>
                 </div>
                 <div class="col-md-4">
                     <div class="row">
@@ -486,7 +485,7 @@
                             <label class="control-label2" style="font-weight:normal;">Lot Area:</label>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" id="c_lot_area" name="c_lot_area" value="<?php echo $c_lot_area; ?>" class="form-control form-control-sm">
+                            <input type="text" id="c_lot_area" name="c_lot_area" value="<?php echo $c_lot_area; ?>" class="form-control form-control-sm" style="margin-bottom:5px;">
                         </div>
                     </div>
                     <div class="row">
@@ -494,7 +493,7 @@
                             <label class="control-label2" style="font-weight:normal;">Model:</label>
                         </div>
                         <div class="col-md-6">
-                            <input type="text"  id="c_mod" value="<?php echo $c_house; ?>" class="form-control form-control-sm">
+                            <input type="text"  id="c_mod" value="<?php echo $c_house; ?>" class="form-control form-control-sm" style="margin-bottom:5px;">
                         </div>
                     </div>
                     <div class="row">
@@ -502,7 +501,7 @@
                             <label class="control-label2" id="lbliv" style="font-weight:normal;">Linear Meter:</label>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" id="c_linear" value="<?php echo $c_linear; ?>" class="form-control form-control-sm">
+                            <input type="text" id="c_linear" value="<?php echo $c_linear; ?>" class="form-control form-control-sm" style="margin-bottom:5px;">
                         </div>
                     </div>
                 </div>
@@ -561,426 +560,425 @@
                 </div>
             </div>
         </div>
-        </div>
         <div class="card-body" id="forAddCost">
-        <div class="others_title" id="bottom_space" style="margin-top:1px;margin-bottom:5px;">Details on Additional Cost</div>
-        <div class="container-fluid" id="lbl_div_others">
-            <div class="row">
-                <label class="control-label2" id="lbl_add_cost">Floor Elevation: </label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_add_cost">Aircon Outlets: </label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_add_cost">Aircon Grill: </label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl2">(for window-type) </label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_add_cost" style="margin-bottom:6px;">Convenience Outlet: </label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_add_cost" style="margin-bottom:8px;">Service Area: </label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_add_cost">Others (specify): </label>
-            </div>
-        </div>
-        <div class="container-fluid" id="lbl_units">
-            <div class="row">
-                <label class="control-label2" id="lbl_units_line"></label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_units_line">______Unit/s</label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;">______Unit/s</label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_units_line" style="margin-bottom:6px;">______Unit/s</label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;">______Unit/s</label>
-            </div>
-            <div class="row">
-                <label class="control-label2" id="lbl_units_line">______Unit/s</label>
-            </div>
-        </div>
-        <div class="rdo_buttons">
-            <div class="row">
-                <input type="radio" id="rdo20meter" value="1">
-                <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdo20meter" value="1">
-                <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdo20meter" value="1">
-                <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
-            </div>
-            <div class="row">
-                <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox">
-            </div>
-            <div class="row">
-                <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox">
-            </div>
-            <div class="row">
-                <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox">
-            </div>
-            <div class="row">
-                <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox">
-            </div>
-            <div class="row">
-                <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox">
-            </div>
-            <div class="row">
-                <label class="control-label" style="margin-left:5px;padding-left:170px;margin-bottom:-8px;font-size:9px;">Additional Cost/s</label>
-            </div>
-        </div>
-        <div class="lbl_div_others_txtbox">
-            <div class="row" id="right_txtbox">
-                <input type="text" value="" class="form-control form-control-sm">
-            </div>
-            <div class="row" id="right_txtbox">
-                <input type="text" value="" class="form-control form-control-sm">
-            </div>
-            <div class="row" id="right_txtbox">
-                <input type="text" value="" class="form-control form-control-sm">
-            </div>
-            <div class="row" id="right_txtbox">
-                <input type="text" value="" class="form-control form-control-sm">
-            </div>
-            <div class="row" id="right_txtbox">
-                <input type="text" value="" class="form-control form-control-sm">
-            </div>
-            <div class="row" id="right_txtbox">
-                <input type="text" value="" class="form-control form-control-sm">
-            </div>
-            <div class="row">
-                <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-3px;">
-            </div>
-        </div>
-        </div>
-        <div class="card-body" style="margin-top:-1px; padding-top:3px; padding-bottom:0px;">
-        <table>
-            <tr>
-            <!-- <div style="margin-top:10px;"></div> -->
-            <div class="row">
-                <div class="col-md-2">
-                    <label class="control-label" style="margin-left:8px;font-size:10px;margin-bottom:-5px;">PROCESSING FEE:</label>
+            <div class="others_title" id="bottom_space" style="margin-top:1px;margin-bottom:10px;">Details on Additional Cost</div>
+                <div class="container-fluid" id="lbl_div_others">
+                    <div class="row">
+                        <label class="control-label2" id="lbl_add_cost">Floor Elevation: </label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_add_cost">Aircon Outlets: </label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_add_cost">Aircon Grill: </label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl2">(for window-type) </label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_add_cost" style="margin-bottom:6px;">Convenience Outlet: </label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_add_cost" style="margin-bottom:8px;">Service Area: </label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_add_cost">Others (specify): </label>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <input type="text" id="c_processing_fee" name="c_processing_fee" value="<?php echo $c_processing_fee; ?>" class="form-control form-control-sm" style="margin-bottom:-5px;">
+                <div class="container-fluid" id="lbl_units">
+                    <div class="row">
+                        <label class="control-label2" id="lbl_units_line"></label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_units_line">______Unit/s</label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;">______Unit/s</label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_units_line" style="margin-bottom:6px;">______Unit/s</label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;">______Unit/s</label>
+                    </div>
+                    <div class="row">
+                        <label class="control-label2" id="lbl_units_line">______Unit/s</label>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <label class="control-label" style="font-size:10px;">PF/mo.:</label>
+                <div class="rdo_buttons">
+                    <div class="row">
+                        <input type="radio" id="rdo20meter" value="1">
+                        <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdo20meter" value="1">
+                        <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdo20meter" value="1">
+                        <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox">
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox" style="margin-top:-8px;">
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox" style="margin-top:-8px;">
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox" style="margin-top:-8px;">
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" class="form-control form-control-sm" id="add_cost_txtbox" style="margin-top:-8px;">
+                    </div>
+                    <div class="row">
+                        <label class="control-label" style="margin-left:5px;padding-left:200px;margin-bottom:-8px;font-size:9px;">Additional Cost/s</label>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <input type="text" id="c_pf_mo" name="c_pf_mo" value="<?php echo $c_pf_mo; ?>" class="form-control form-control-sm" style="margin-right:25px;padding-left:10px;width:242px;">
+                <div class="lbl_div_others_txtbox">
+                    <div class="row" id="right_txtbox">
+                        <input type="text" value="" class="form-control form-control-sm">
+                    </div>
+                    <div class="row" id="right_txtbox">
+                        <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;">
+                    </div>
+                    <div class="row" id="right_txtbox">
+                        <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;">
+                    </div>
+                    <div class="row" id="right_txtbox">
+                        <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;">
+                    </div>
+                    <div class="row" id="right_txtbox">
+                        <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;">
+                    </div>
+                    <div class="row" id="right_txtbox">
+                        <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;">
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;">
+                    </div>
                 </div>
             </div>
-            <div class="row" style="margin-top:5px;margin-bottom:-5px;">
-                <div class="col-md-2.5">
-                    <label class="control-label" style="margin-left:16px;font-size:10px;margin-right:35px;">LESS: Applied Disc:</label>
+        <div class="card-body" style="padding-top:10px;">
+            <table>
+                <tr>
+                <!-- <div style="margin-top:10px;"></div> -->
+                <div class="row">
+                    <br><br>
+                    <div class="col-md-2">
+                        <label class="control-label" style="margin-left:8px;font-size:10px;">PROCESSING FEE:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" id="c_processing_fee" name="c_processing_fee" value="<?php echo $c_processing_fee; ?>" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label" style="font-size:10px;">PF/mo.:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" id="c_pf_mo" name="c_pf_mo" value="<?php echo $c_pf_mo; ?>" class="form-control form-control-sm" style="margin-right:25px;padding-left:10px;width:242px;">
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <input type="text" id="c_less" name="c_less" value="<?php echo $c_less; ?>" class="form-control form-control-sm">
+                <div class="row" style="margin-top:5px;margin-bottom:-5px;">
+                    <div class="col-md-2.5">
+                        <label class="control-label" style="margin-left:16px;font-size:10px;margin-right:28px;">LESS: Applied Disc:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" id="c_less" name="c_less" value="<?php echo $c_less; ?>" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" style="font-size:10px;">TOTAL CONTRACT PRICE: </label>
+                        <div class="vatlbl1" style="font-style:italic;margin-top:-5px;margin-left:25px;font-size:9px;">VAT Inclusive</div>
+                    </div>
+                    <div class="col-md-3" style="margin-left:-4px;">
+                        <input type="text" id="c_tcp" name="c_tcp" value="<?php echo $c_tcp; ?>" class="form-control form-control-sm" style="padding-left:10px;width:180px;">
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="control-label" style="font-size:10px;">TOTAL CONTRACT PRICE: </label>
-                    <div class="vatlbl1" style="font-style:italic;margin-top:-5px;margin-left:25px;font-size:9px;">VAT Inclusive</div>
-                </div>
-                <div class="col-md-3" style="margin-left:-4px;">
-                    <input type="text" id="c_tcp" name="c_tcp" value="<?php echo $c_tcp; ?>" class="form-control form-control-sm" style="padding-left:10px;width:180px;">
-                </div>
-            </div>
-            </tr>
-        </table>
+                </tr>
+            </table>
         </div>
         <div class="card-body" id="payment_details">
-        <div class="row">
-            <div class="dp_sched">
-                <div class="titles">DOWN PAYMENT SCHEDULE</div>
-                <div class="dp_container">
-                    <div class="row">
-                        <input type="hidden" value="<?php echo $down_percent; ?>" id="down_percent">
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_20" type="checkbox" name="chkOption4"/>
+            <div class="row">
+                <div class="dp_sched">
+                    <div class="titles" style="margin-top:-1px;">DOWN PAYMENT SCHEDULE</div>
+                    <div class="dp_container">
+                        <div class="row">
+                            <input type="hidden" value="<?php echo $down_percent; ?>" id="down_percent">
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_20" type="checkbox" name="chkOption4"/>
+                            </div>
+                            <div style="float:left">
+                                <label class="light">20%</label>
+                            </div>
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_30" type="checkbox" name="chkOption4"/>
+                            </div>
+                            <div style="float:left">
+                                <label class="light">30%<label>
+                            </div>
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="fdp" type="checkbox" name="chkOption4"/>
+                            </div>
+                            <div style="float:left">
+                                <label class="light">FDP<label>
+                            </div>
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="others" type="checkbox" name="chkOption4"/>
+                            </div>
+                            <div style="float:left">
+                                <label class="light"><input type="text" id="txtothers" class="form-control form-control-sm" style="margin-bottom:-18px;"><label>
+                            </div>
                         </div>
-                        <div style="float:left">
-                            <label class="light">20%</label>
+                        <div class="row" style="margin-top:-5px;">
+                            <div class="col-md-12">
+                                <label class="control-label2" style="margin-bottom:5px;margin-top:-1px;">Down Payment Amount:</label>
+                                <input type="text" id="dp_amt" name="dp_amt" value="<?php echo $c_net_dp; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_30" type="checkbox" name="chkOption4"/>
+                        <div class="row" style="margin-top:-2px;">
+                            <div class="col-md-6">
+                                <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Less: Res. Money:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Payable in (mos):</label>
+                            </div>
                         </div>
-                        <div style="float:left">
-                            <label class="light">30%<label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" value="<?php echo $c_reservation; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" value="<?php echo $c_no_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="fdp" type="checkbox" name="chkOption4"/>
+                        <div class="row" style="margin-top:-3px;">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Monthly Down Payment:</label>
+                                <input type="text" value="<?php echo $c_monthly_down; ?>" class="form-control form-control-sm">
+                            </div>
                         </div>
-                        <div style="float:left">
-                            <label class="light">FDP<label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="title_sub">Monthly Down Payments</label>
+                            </div>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="others" type="checkbox" name="chkOption4"/>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">PF/mo:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">GCF/mo:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">STL/mo:</label>
+                            </div>
                         </div>
-                        <div style="float:left">
-                            <label class="light"><input type="text" id="txtothers" class="form-control form-control-sm" style="margin-bottom:-18px;"><label>
-                        </div>  
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" style="margin-bottom:-5px;margin-top:-55px;">Down Payment Amount:</label>
-                            <input type="text" id="dp_amt" name="dp_amt" value="<?php echo $c_net_dp; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-7">
-                            <label class="control-label2" id="lbl_dp">Less: Reservation Money:</label>
+                        <div class="row" style="margin-top:-4px;">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Total Monthly Payment:</label>
+                                <input type="text" value="<?php echo $c_monthly_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                            </div>
                         </div>
-                        <div class="col-md-5">
-                            <label class="control-label2" id="lbl_dp">Payable in (mos):</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-7">
-                            <input type="text" value="<?php echo $c_reservation; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
-                        </div>
-                        <div class="col-md-5">
-                            <input type="text" value="<?php echo $c_no_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="lbl_dp">Monthly Down Payment:</label>
-                            <input type="text" value="<?php echo $c_monthly_down; ?>" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="title_sub">Monthly Down Payments</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:5px;">PF/mo:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:5px;">GCF/mo:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:5px;">STL/mo:</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-18px;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-18px;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" value="" class="form-control form-control-sm" style="margin-bottom:-18px;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="lbl_dp">Total Monthly Payment:</label>
-                            <input type="text" value="<?php echo $c_monthly_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="lbl_dp">Commencing Date:</label>
-                            <input type="text" value="" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ma">
-            <div class="titles2">MONTHLY AMORTIZATION</div>
-            <div class="ma_sub"> *Based on In-House Financing pending Bank approval of Housing Loan</div>
-                <div class="dp_container2">
-                    <div class="row">
-                    <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
-                        </div>
-                        <div style="float:left">
-                            <label class="light">MDP-BF<label>
-                        </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
-                        </div>
-                        <div style="float:left">
-                            <label class="light">FULL DP-DFC<label>
-                        </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
-                        </div>
-                        <div style="float:left">
-                            <label class="light">CASH<label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8" >
-                            <label class="control-label2" style="margin-top:-5px;"> &nbsp;Amount to be financed:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label2" style="margin-top:-12px;margin-bottom:12px;">In Years:</label>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:-12px;margin-bottom:6px;">
-                        <div class="col-md-8">
-                            <input type="text" value="<?php echo $amt_fnanced; ?>" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" value="<?php echo $c_terms; ?>" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom:1px;">
-                        <div class="col-md-5">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:7px;"> Interest Rate:</label>
-                        </div>
-                        <div class="col-md-7">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:7px;">Fixed Factor:</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <input type="text" value="<?php echo $interest_rate; ?>" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-md-7">
-                            <input type="text" value="<?php echo $c_fixed_factor; ?>" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:15px;">Monthly Amortization:</label>
-                            <input type="text" value="" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="title_sub">Monthly Amortization</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:5px;">PF/mo:</label>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:5px;">STL/mo:</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" value="" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="text" value="" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:15px;">Total Monthly Amortization:</label>
-                            <input type="text" value="" class="form-control form-control-sm">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label2" id="lbl_dp" style="margin-top:14px;">Commencing Date:</label>
-                            <input type="text" value="" id="monthly_due" class="form-control form-control-sm" style="margin-bottom:-5px;">
+                        <div class="row" style="margin-top:-2px;">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Commencing Date:</label>
+                                <input type="text" value="" class="form-control form-control-sm">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="sales" style="font-weight:normal;">
-            <div class="titles3">SALES</div>
-                <div class="first_table">
-                <?php
-                $mysqli = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
+                <div class="ma">
+                <div class="titles2">MONTHLY AMORTIZATION</div>
+                <div class="ma_sub"> *Based on In-House Financing pending Bank approval of Housing Loan</div>
+                    <div class="dp_container2">
+                        <div class="row">
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                            </div>
+                            <div style="float:left">
+                                <label class="light">MDP-BF<label>
+                            </div>
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                            </div>
+                            <div style="float:left">
+                                <label class="light">FULL DP-DFC<label>
+                            </div>
+                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                            </div>
+                            <div style="float:left">
+                                <label class="light">CASH<label>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:-5px;">
+                            <div class="col-md-8" >
+                            <label class="control-label2" style="margin-top:-10px;margin-bottom:17px;"> &nbsp;Amount to be financed:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label2" style="margin-top:-12px;margin-bottom:12px;">In Years:</label>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:-12px;margin-bottom:6px;">
+                            <div class="col-md-8">
+                                <input type="text" value="<?php echo $amt_fnanced; ?>" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" value="<?php echo $c_terms; ?>" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:7px;margin-bottom:5px;"> Interest Rate:</label>
+                            </div>
+                            <div class="col-md-7">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:7px;margin-bottom:5px;">Fixed Factor:</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <input type="text" value="<?php echo $interest_rate; ?>" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" value="<?php echo $c_fixed_factor; ?>" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:15px;margin-bottom:5px;">Monthly Amortization:</label>
+                                <input type="text" value="" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="title_sub">Monthly Amortization</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">PF/mo:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">STL/mo:</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" value="" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" value="" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:14px;margin-bottom:5px;">Total Monthly Amortization:</label>
+                                <input type="text" value="" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label2" id="lbl_dp" style="margin-top:13px;margin-bottom:5px;">Commencing Date:</label>
+                                <input type="text" value="" id="monthly_due" class="form-control form-control-sm" style="margin-bottom:-5px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sales" style="font-weight:normal;">
+                <div class="titles3">SALES</div>
+                    <div class="first_table">
+                    <?php
 
-                // output any connection error
-                if ($mysqli->connect_error) {
-                    die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
-                }
+                    // output any connection error
+                    if ($conn->connect_error) {
+                        die('Error : ('. $conn->connect_errno .') '. $conn->connect_error);
+                    }
 
-                // the query
-                $query = "SELECT * FROM t_csr_commission WHERE c_csr_no = $c_csr_no";
+                    // the query
+                    $query = "SELECT * FROM t_csr_commission WHERE c_csr_no = $c_csr_no";
 
-                // mysqli select query
-                $results = $mysqli->query($query);
+                    // mysqli select query
+                    $results = $conn->query($query);
 
-                if($results) {
+                    if($results) {
 
-                    print '<table class="table-bordered" id="table-bordered1"><thead><tr>
-                            <th class="agent_position2">POSITION</th>
-                            <th>AGENT</th>
-                            <th class="signature_width2">SIGNATURE</th>
-                        </tr></thead><tbody>';
+                        print '<table class="table-bordered" id="table-bordered1"><thead><tr>
+                                <th class="agent_position2">POSITION</th>
+                                <th>AGENT</th>
+                                <th class="signature_width2">SIGNATURE</th>
+                            </tr></thead><tbody>';
 
-                    while($row = $results->fetch_assoc()) {
+                        while($row = $results->fetch_assoc()) {
 
-                        print '
+                            print '
+                                <tr>
+                                    <td>'.$row["c_position"].'</td>
+                                    <td>'.$row["c_agent"].'</td>
+                                    <td id="border_right_none"></td>
+                                </tr>
+                            ';
+                        }
+                        print '</tr></tbody></table>';
+                    } else {
+                        echo "<p>There are no project sites to display.</p>";
+                    }
+                    $results->free();
+                    // $conn->close();
+                    ?>
+                    </div>
+                    <div class="second_table">
+                        <table class="table-bordered">
+                        <tbody>
                             <tr>
-                                <td>'.$row["c_position"].'</td>
-                                <td>'.$row["c_agent"].'</td>
+                                <td style="width:100px;">
+                                    <div class="row" id="sales_checkbox">
+                                        <div style="float:left;margin-right:2px;margin-top:6px;">
+                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
+                                        </div>
+                                        <div style="float:left;margin-top:3px;">
+                                            <label style="font-weight:normal">REB<label>
+                                        </div>
+                                        <div style="float:left;margin-right:2px;margin-top:6px;">
+                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
+                                        </div>
+                                        <div style="float:left;margin-top:3px;">
+                                            <label style="font-weight:normal">PC<label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width:171px;"></td>
                                 <td id="border_right_none"></td>
                             </tr>
-                        ';
-                    }
-                    print '</tr></tbody></table>';
-                } else {
-                    echo "<p>There are no project sites to display.</p>";
-                }
-                $results->free();
-                $mysqli->close();
-                ?>
+                            <tr>
+                                <td>Employee Referral</td>
+                                <td></td>
+                                <td id="border_right_none"></td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    <table width="100%" id="tblborder">
+                        <tr><td><div class="notes">I have read and understood the Guidelines and Policies for In-House Financing and Data Privacy Consent at the back page. I certify that all information given are true and correct.</div></td></tr>
+                        <tr><td><div class="client_conforme" style="font-weight:normal;font-size:9px;margin-bottom:12px;">Conforme:</div><td></tr>
+                        <tr><td>
+                                <br>
+                                <!-- <input type="text" class="buyers_name" value="<?php echo $c_b1_last_name; ?>, <?php echo $c_b1_first_name; ?> <?php echo $c_b1_middle_name; ?>"> -->
+                                <input type="text" class="txtSignature" value="Client's Signature Over Printed Name">
+                        </td></tr>
+                        <tr><td><div class="rec_app" style="font-weight:normal;font-size:9px;">Recommending Approval:</div><td></tr>
+                        <tr><td><div class="coo_name" style="margin-top:10px;">PIA MARIE ISABELLE B. MADRID</div></td></tr>
+                        <tr><td class="txtSignature" style="font-weight:bold;margin-top:-5px;height:19px;line-height:10px;">Chief Operating Officer</td></tr>
+                    </table>      
                 </div>
-                <div class="second_table">
-                    <table class="table-bordered">
-                    <tbody>
-                        <tr>
-                            <td style="width:100px;">
-                                <div class="row" id="sales_checkbox">
-                                    <div style="float:left;margin-right:2px;">
-                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
-                                    </div>
-                                    <div style="float:left">
-                                        <label style="font-weight:normal">REB<label>
-                                    </div>
-                                    <div style="float:left;margin-right:2px;">
-                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
-                                    </div>
-                                    <div style="float:left">
-                                        <label style="font-weight:normal">PC<label>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="width:171px;"></td>
-                            <td id="border_right_none"></td>
-                        </tr>
-                        <tr>
-                            <td>Employee Referral</td>
-                            <td></td>
-                            <td id="border_right_none"></td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </div>
-                <table width="100%" id="tblborder">
-                    <tr><td><div class="notes">I have read and understood the Guidelines and Policies for In-House Financing and Data Privacy Consent at the back page. I certify that all information given are true and correct.</div></td></tr>
-                    <tr><td><div class="client_conforme" style="font-weight:normal;font-size:9px;margin-bottom:8px;">Conforme:</div><td></tr>
-                    <tr><td>
-                            <br>
-                            <!-- <input type="text" class="buyers_name" value="<?php echo $c_b1_last_name; ?>, <?php echo $c_b1_first_name; ?> <?php echo $c_b1_middle_name; ?>"> -->
-                            <input type="text" class="txtSignature" value="Client's Signature Over Printed Name">
-                    </td></tr>
-                    <tr><td><div class="rec_app" style="font-weight:normal;font-size:9px;">Recommending Approval:</div><td></tr>
-                    <tr><td><div class="coo_name" style="margin-top:10px;">PIA MARIE ISABELLE B. MADRID</div></td></tr>
-                    <tr><td class="txtSignature" style="font-weight:bold;margin-top:-5px;height:19px;line-height:10px;">Chief Operating Officer</td></tr>
-                </table>      
             </div>
-        </div>
         </div>
         <div class="row">
         <table class="rem">

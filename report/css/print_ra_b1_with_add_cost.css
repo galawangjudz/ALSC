@@ -18,23 +18,6 @@ body{
     font-weight:bold;
     font-size:10px;
 }
-.control-label{
-    display: inline-block;
-    width: auto;
-    font-style:italic;
-    font-size:10px;
-    margin-top:1px;
-}
-.form-control{
-    background-color:#E0E0E0;
-    border-radius: 0px;
-    margin-bottom:-12px;
-    height:auto!important;
-    padding-top:0px!important;
-    padding-bottom:0px!important;
-    text-transform: uppercase!important;
-    font-size:10px!important;
-}
 .light{
     font-size:10px;
 }
@@ -66,18 +49,24 @@ body{
     font-size:10px;
 }
 #bottom_space{
-    margin-bottom:3px;
+    margin-bottom:10px;
 }
-
 .form-control{
     background-color:#E0E0E0;
     border-radius: 0px;
-    margin-bottom:-12px;
-    height:auto!important;
-    padding-top:0px!important;
-    padding-bottom:0px!important;
+    height:20px;
     text-transform: uppercase!important;
     font-size:10px!important;
+    padding-top:6px;
+    margin-bottom:-13px;
+}
+.control-label{
+    display: inline-block;
+    width: auto;
+    font-style:italic;
+    font-size:10px;
+    margin-top:-2px;
+    margin-bottom:5px;
 }
 #tcp_coverage{
 	background-color:black;
@@ -88,12 +77,12 @@ body{
     display: inline-block;
     width: auto;
     font-style:italic;
-    margin-bottom:3px;
-    font-size:10px;
+    margin-bottom:8px;
+    font-size:8px!important;
     margin-top:2px;
 }
 #card-payment{
-    height:105px;
+    height:120px;
     float:left;
 }
 .others_title{
@@ -104,6 +93,7 @@ body{
     display:inline-block;
     padding-left:7px;
     height:auto;
+    margin-top:-5px;
 }
 #lbl_div_others{
     width:15%;
@@ -111,7 +101,7 @@ body{
     float:left;
 }
 #lbl_add_cost{
-    margin-bottom:5px;
+    margin-bottom:6px;
     padding-left:7px;
     font-size:9px;
 }
@@ -126,25 +116,25 @@ body{
     font-size:7px!important;
 }
 #lbl_units{
-    width:12%;
+    width:10%;
     height:auto;
     float:left;
     margin-top:13px;
     font-size:8px!important;
 }
 #lbl_units_line{
-    margin-bottom:5px;
+    margin-bottom:7px;
     font-weight:normal;
     font-size:9px;
 }
 #rdolight{
     font-weight:normal!important;
-    margin-bottom:5px;
     font-size:9px;
+    margin-top:-5px;
 }
 #rdo20meter{
     font-weight:normal!important;
-    margin-bottom:5px;
+    margin-bottom:12px;
 }
 .rdo_buttons{
     width:auto;
@@ -156,11 +146,11 @@ body{
     font-size:10px!important;
 }
 #add_cost_txtbox{
-    margin-bottom:5px;
+    margin-bottom:10px;
     font-size:9px;
 }
 .lbl_div_others_txtbox{
-    width:25.9%;
+    width:22.3%;
     height:auto;
     float:left;
     font-size:8px!important;
@@ -179,7 +169,7 @@ body{
     margin-top:-1px;
 	display:inline-block;
 	margin-left:3px;
-    height:288px;
+    height:270px;
     padding-top:0px!important;
 }
 .titles{
@@ -192,7 +182,7 @@ body{
     padding-bottom: 3px;
     height:30px;
     line-height: 20px;
-    font-size:10px;
+    font-size:12px;
 }
 .titles2{
 	background-color:black;
@@ -212,8 +202,9 @@ body{
 	border:solid 1px black;
 	display:inline-block;
 	margin-left:3px;
-    height:288px;
+    height:270px;
     padding-top:0px!important;
+    border-radius:0px;
 }
 .ma_sub{
 	background-color:black;
@@ -471,7 +462,7 @@ body{
 }
 #payment_details{
     border-right:none!important;
-    height:288px;
+    height:270px;
 }
 #withbd{
     border:1px solid black!important;
