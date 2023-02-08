@@ -17,23 +17,17 @@ body{
     padding-left:8px;
     font-weight:bold;
     font-size:12px;
-}
-.control-label{
-    display: inline-block;
-    width: auto;
-    font-style:italic;
-    font-size:12px;
-    margin-top:1px;
+    padding-top:-3px;
+    padding-bottom: 2px;
 }
 .form-control{
     background-color:#E0E0E0;
     border-radius: 0px;
-    margin-bottom:-12px;
-    height:auto!important;
-    padding-top:0px!important;
-    padding-bottom:0px!important;
+    height:20px;
     text-transform: uppercase!important;
     font-size:10px!important;
+    padding-top:6px;
+    margin-bottom:-10px;
 }
 .light{
     font-size:12px;
@@ -70,41 +64,32 @@ body{
     font-size:12px;
 }
 #bottom_space{
-    margin-bottom:3px;
+    margin-bottom:10px;
 }
 .control-label{
     display: inline-block;
     width: auto;
     font-style:italic;
-    margin-bottom:0px;
-    font-size:11.5px;
-}
-.form-control{
-    background-color:#E0E0E0;
-    border-radius: 0px;
-    margin-bottom:-12px;
-    height:auto!important;
-    padding-top:0px!important;
-    padding-bottom:0px!important;
-    text-transform: uppercase!important;
-    font-size:12px!important;
+    font-size:11px;
+    margin-top:1px;
+    margin-bottom:5px!important;
 }
 #tcp_coverage{
 	background-color:black;
     color:white;
-
 }
 .control-label2{
     display: inline-block;
     width: auto;
     font-style:italic;
     margin-bottom:8px;
-    font-size:10px;
+    font-size:8px!important;
     margin-top:2px;
 }
 #card-payment{
     height:123px;
     float:left;
+    margin-bottom:5px;
 }
 .others_title{
     width:100%;
@@ -194,7 +179,7 @@ body{
     margin-top:-1px;
 	display:inline-block;
 	margin-left:3px;
-    height:305px;
+    height:285px;
     padding-top:0px!important;
 }
 .titles{
@@ -227,8 +212,9 @@ body{
 	border:solid 1px black;
 	display:inline-block;
 	margin-left:3px;
-    height:305px;
+    height:285px;
     padding-top:0px!important;
+    border-radius:0px !important;
 }
 .ma_sub{
 	background-color:black;
@@ -340,6 +326,7 @@ body{
     border-bottom: black 1px solid!important;
     margin-top:-5px;
     margin-left:1px;
+    margin-bottom:5px;
 }
 .notes{
     font-style:italic;
@@ -423,22 +410,22 @@ body{
     border:1px solid black;
     margin-left:7px;
     margin-top:-2px;
-    height:120px;
+    height:101px;
     width:49.1%;
 }
 .tablerem_checked_verfied{
-    height:120px;
+    height:82px;
     border:1px solid black;
     width:30%;
     margin-left:-1px;
     margin-top:-2px;
 }
 .tablerem_cashier{
-    height:120px;
+    height:104px;
     border:1px solid black;
     width:19.5%;
     margin-left:-1px;
-    margin-top:-2px;
+    margin-top:-5px;
 }
 .rightbdarch2{
     border-right:none;
@@ -486,7 +473,7 @@ body{
 }
 #payment_details{
     border-right:none!important;
-    height:305px;
+    height:285px;
 }
 #withbd{
     border:1px solid black!important;

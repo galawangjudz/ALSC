@@ -8,7 +8,21 @@ if($_settings->chk_flashdata('success')): ?>
 <?php 
 $getID = $_GET['id'];
 ?>
-
+<!-- <?php
+	function test(){
+		$fileName = "falls-06.jpg";
+		$filePath = "uploads/";
+		$myFile = $filePath.$fileName;
+		
+		if(file_exists($myFile)){
+			echo "$fileName exists!!!";
+			echo $myFile;
+		}else{
+			echo "$fileName does not exist!!!";
+			echo $myFile;
+		}
+	}
+?> -->
 
 
 <style>
@@ -28,7 +42,7 @@ $getID = $_GET['id'];
         <!-- Modal -->
 		<form action="" method="post" enctype="multipart/form-data" id="upload-file">
 		<input id="id" type="hidden" name="id" value= "<?php echo $getID ?>" />
-		<input type="hidden" name="getFileName" id="getFileName" class="form-control required">	
+		<input type="text" name="getFileName" id="getFileName" class="form-control required">	
 		<table>
 			<tr>
 				<td>
@@ -46,6 +60,7 @@ $getID = $_GET['id'];
 
     </body>
 </html>
+
 
 <script>
 	$('#upload').on('click', function() {
@@ -106,6 +121,7 @@ $getID = $_GET['id'];
 </script>
 <script>
 	function moveToFolder(){
+
 		var filename=document.getElementById('file').files[0].name;
 
 		document.getElementById('getFileName').value=filename;

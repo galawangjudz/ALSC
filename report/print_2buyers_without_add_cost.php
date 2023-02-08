@@ -2,57 +2,57 @@
 <link rel="stylesheet" href="css/print_ra_b1_without_add_cost.css">
 <script src="../build/js/print.js" type="text/javascript"></script>
 <?php $query2 = "SELECT x.*, y.*, y.c_csr_no as csr_num FROM t_csr_buyers y inner join t_csr x on x.c_csr_no = y.c_csr_no WHERE y.c_csr_no = '{$_GET['id']}' ";
-        $result2 = mysqli_query($mysqli, $query2);
+        $result2 = mysqli_query($conn, $query2);
         $count = 0;
         if($result2) {
-                            while ($row = mysqli_fetch_assoc($result2)) { 
-                                $c_date_created = $row['c_date_created'];
-        $c_csr_no = $row['c_csr_no']; 
-        $c_b1_last_name = $row['last_name']; 
-        $c_b1_first_name = $row['first_name']; 
-        $c_b1_middle_name = $row['middle_name']; 
-        $c_suffix = $row['suffix_name']; 
-        $c_citizenship = $row['citizenship']; 
-        $c_address = $row['address']; 
-        $c_mobile_no = $row['contact_no']; 
-        $c_viber_no = $row['viber']; 
-        $c_address_abroad = $row['address_abroad']; 
-        $c_mobile_abroad = $row['contact_abroad']; 
-        
-        $c_lid = $row['c_lot_lid']; 
-        $c_birthday = $row['birthdate'];  
-        $c_age = $row['age'];  
-        $c_tin = $row['tin_no'];  
-        $c_zip = $row['zip_code'];  
-        $c_id_presented = $row['id_presented'];
-        $c_sex = $row['gender']; 
-        $c_civil_status = $row['civil_status'];  
-        $c_email = $row['email'];  
-        $c_lot_area = $row['c_lot_area'];
-        $c_price_sqm = $row['c_price_sqm'];
-        $c_lot_discount_amt = $row['c_lot_discount_amt'];
-        $c_lot_discount = $row['c_lot_discount'];
-        $c_house = $row['c_house_model'];
-        $c_date_created = $row['c_date_created'];
-        $c_floor_area = $row['c_floor_area'];
-        $c_house_discount = $row['c_house_discount'];
-        $c_house_discount_amt = $row['c_house_discount_amt'];
-        $c_house_price_sqm = $row['c_house_price_sqm'];
-        $c_tcp = $row['c_tcp'];
-        $remarks = $row['c_remarks'];
-        // $c_employment_status = $row['c_employment_status'];
-        $c_lot_discount_percentage = $row['c_lot_discount'];
+        while ($row = mysqli_fetch_assoc($result2)) { 
+            $c_date_created = $row['c_date_created'];
+            $c_csr_no = $row['c_csr_no']; 
+            $c_b1_last_name = $row['last_name']; 
+            $c_b1_first_name = $row['first_name']; 
+            $c_b1_middle_name = $row['middle_name']; 
+            $c_suffix = $row['suffix_name']; 
+            $c_citizenship = $row['citizenship']; 
+            $c_address = $row['address']; 
+            $c_mobile_no = $row['contact_no']; 
+            $c_viber_no = $row['viber']; 
+            $c_address_abroad = $row['address_abroad']; 
+            $c_mobile_abroad = $row['contact_abroad']; 
+            
+            $c_lid = $row['c_lot_lid']; 
+            $c_birthday = $row['birthdate'];  
+            $c_age = $row['age'];  
+            $c_tin = $row['tin_no'];  
+            $c_zip = $row['zip_code'];  
+            $c_id_presented = $row['id_presented'];
+            $c_sex = $row['gender']; 
+            $c_civil_status = $row['civil_status'];  
+            $c_email = $row['email'];  
+            $c_lot_area = $row['c_lot_area'];
+            $c_price_sqm = $row['c_price_sqm'];
+            $c_lot_discount_amt = $row['c_lot_discount_amt'];
+            $c_lot_discount = $row['c_lot_discount'];
+            $c_house = $row['c_house_model'];
+            $c_date_created = $row['c_date_created'];
+            $c_floor_area = $row['c_floor_area'];
+            $c_house_discount = $row['c_house_discount'];
+            $c_house_discount_amt = $row['c_house_discount_amt'];
+            $c_house_price_sqm = $row['c_house_price_sqm'];
+            $c_tcp = $row['c_tcp'];
+            $remarks = $row['c_remarks'];
+            // $c_employment_status = $row['c_employment_status'];
+            $c_lot_discount_percentage = $row['c_lot_discount'];
 
-        $c_reservation = $row['c_reservation'];
-        $c_terms = $row['c_terms'];
-        $c_monthly_payment = $row['c_monthly_payment'];
-        $amt_fnanced = $row['c_amt_financed'];
-        $interest_rate = $row['c_interest_rate'];
-        $down_percent = $row['c_down_percent'];
-        $c_relation = $row['relationship'];
-        $count = $count + 1;
+            $c_reservation = $row['c_reservation'];
+            $c_terms = $row['c_terms'];
+            $c_monthly_payment = $row['c_monthly_payment'];
+            $amt_fnanced = $row['c_amt_financed'];
+            $interest_rate = $row['c_interest_rate'];
+            $down_percent = $row['c_down_percent'];
+            $c_relation = $row['relationship'];
+            $count = $count + 1;
 
-    ?>
+        ?>
                     
 <body onload="getRelation()">
 <div class="card-body">
@@ -95,25 +95,25 @@
                 <div class="form-group">
                     <label class="control-label" id="small_title">Civil Status:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         <input id="single<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">SINGLE<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="married<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">MARRIED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="widowed<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">WIDOWED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="separated<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
@@ -125,15 +125,15 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label" id="small_title1" style="text-align:left;">Gender:</label>
+                    <label class="control-label" id="small_title1" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gender:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-left:2px;">
+                        <div style="float:left;margin-left:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="male<?php echo $count; ?>" type="checkbox" name="gender" />
                         </div>
                         <div style="float:left">
                             <label class="light">&nbsp;M<label>
                         </div>
-                        <div style="float:left;margin-left:2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div style="float:left;margin-left:2px;margin-top:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <input id="female<?php echo $count; ?>" type="checkbox" name="gender" />
                         </div>
                         <div style="float:left">
@@ -218,25 +218,25 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
                 <input id="and<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">And<label>
             </div>
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="spouses<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">Spouses<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="marriedto<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
             <label style="font-weight:normal;margin-bottom:-5px;">Married To<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="minor<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
@@ -621,5 +621,5 @@ function getRelationship2(){
 </body>
 <?php
 }} 
-$mysqli->close();?>
+// $conn->close();?>
 

@@ -43,25 +43,25 @@
                 <div class="form-group">
                     <label class="control-label" id="small_title">Civil Status:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         <input id="single" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">SINGLE<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="married" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">MARRIED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="widowed" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">WIDOWED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="separated" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
@@ -73,15 +73,15 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label" id="small_title1" style="text-align:left;">Gender:</label>
+                    <label class="control-label" id="small_title1" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gender:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-left:2px;">
+                        <div style="float:left;margin-left:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="male" type="radio" name="gender1" />
                         </div>
                         <div style="float:left">
                             <label class="light">&nbsp;M<label>
                         </div>
-                        <div style="float:left;margin-left:2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div style="float:left;margin-left:2px;margin-top:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <input id="female" type="radio" name="gender1" />
                         </div>
                         <div style="float:left">
@@ -165,33 +165,32 @@
                 <input type="text" value="<?php echo $c_mobile_abroad; ?>"  class="form-control form-control-sm" style="margin-bottom:-10px;"> 
             </div>
         </div>
-        <div class="col-md-12">
-            <div style="float:left;margin-right:2px">
+        <div class="col-md-12" style="margin-bottom:5px; margin-top:3px;">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
                 <input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-                <label style="font-weight:normal;margin-bottom:-5px;">And<label>
+                <label style="font-weight:normal;margin-bottom:5px;">And<label>
             </div>
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-                <label style="font-weight:normal;margin-bottom:-5px;">Spouses<label>
+                <label style="font-weight:normal;margin-bottom:5px;">Spouses<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-            <label style="font-weight:normal;margin-bottom:-5px;">Married To<label>
+            <label style="font-weight:normal;margin-bottom:5px;">Married To<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-                <label style="font-weight:normal;margin-bottom:-5px;">Minor/Represented by Legal Guardian<label>
+                <label style="font-weight:normal;margin-bottom:5px;">Minor/Represented by Legal Guardian<label>
             </div>
         </div>
-            
         </div>
     </div>
 </div>
@@ -235,49 +234,51 @@
                 <div class="form-group">
                     <label class="control-label" id="small_title">Civil Status:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-right:2px;">
-                        <input id="chkOption1" type="checkbox" name="chkOption1" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        <input id="single" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">SINGLE<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="married" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">MARRIED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="widowed" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">WIDOWED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="separated" type="radio" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">SEPARATED<label>
                         </div>
+                        <input type="hidden" id="civil_status" value="<?php echo $c_civil_status; ?>">
                     </div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label" id="small_title1" style="text-align:left;">Gender:</label>
+                    <label class="control-label" id="small_title1" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gender:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-left:2px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                        <div style="float:left;margin-left:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="male" type="radio" name="gender1" />
                         </div>
                         <div style="float:left">
                             <label class="light">&nbsp;M<label>
                         </div>
-                        <div style="float:left;margin-left:2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input id="chkOption1" type="checkbox" name="chkOption1" />
+                        <div style="float:left;margin-left:2px;margin-top:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input id="female" type="radio" name="gender1" />
                         </div>
                         <div style="float:left">
                             <label class="light">&nbsp;F<label>
-                        </div> 
+                        </div>
+                        <input type="hidden" id="gender" value="<?php echo $c_sex; ?>"> 
                     </div> 
                 </div>
             </div>
@@ -355,44 +356,43 @@
                 <input type="text" value=""  class="form-control form-control-sm" style="margin-bottom:-10px;"> 
             </div>
         </div>
-        <div class="col-md-12">
-            <div style="float:left;margin-right:2px">
+        <div class="col-md-12" style="margin-bottom:5px; margin-top:3px;">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
                 <input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-                <label style="font-weight:normal;margin-bottom:-5px;">And<label>
+                <label style="font-weight:normal;margin-bottom:5px;">And<label>
             </div>
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-                <label style="font-weight:normal;margin-bottom:-5px;">Spouses<label>
+                <label style="font-weight:normal;margin-bottom:5px;">Spouses<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-            <label style="font-weight:normal;margin-bottom:-5px;">Married To<label>
+            <label style="font-weight:normal;margin-bottom:5px;">Married To<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
-                <label style="font-weight:normal;margin-bottom:-5px;">Minor/Represented by Legal Guardian<label>
+                <label style="font-weight:normal;margin-bottom:5px;">Minor/Represented by Legal Guardian<label>
             </div>
-        </div>   
+        </div>
         </div>
     </div>
 </div>
 <div class="card-body" id="card-payment">
     <input type="hidden" value="<?php echo $c_lid; ?>" id="lid">
     <?php
-                $l_lid=$c_lid;
-                $l_phase = intval(substr($l_lid, 0,3));
-                $l_block = intval(substr($l_lid, 3,3));
-                $l_lot = intval(substr($l_lid, 6,8));
-            ?>
-    
+        $l_lid=$c_lid;
+        $l_phase = intval(substr($l_lid, 0,3));
+        $l_block = intval(substr($l_lid, 3,3));
+        $l_lot = intval(substr($l_lid, 6,8));
+    ?>
 
     <input type="hidden" value="<?php echo $l_phase; ?>" id="txtPhase">
 
@@ -401,7 +401,7 @@
         <div class="row">
             <div class="col-md-0.5">
                 <div class="form-group">
-                &nbsp&nbsp&nbsp&nbsp<label class="control-label">Project:</label>
+                &nbsp&nbsp&nbsp&nbsp<label class="control-label" style="margin-top:-10px;">Project:</label>
                 </div>
             </div>
             <div class="col-md-2">
@@ -411,7 +411,7 @@
             </div>
             <div class="col-md-0.5">
                 <div class="form-group">
-                &nbsp&nbsp&nbsp&nbsp<label class="control-label">Block:</label>
+                &nbsp&nbsp&nbsp&nbsp<label class="control-label" style="margin-top:-10px;">Block:</label>
                 </div>
             </div>
             <div class="col-md-1">
@@ -421,7 +421,7 @@
             </div>
             <div class="col-md-0.5">
                 <div class="form-group">
-                &nbsp&nbsp&nbsp&nbsp<label class="control-label">Lot:</label>
+                &nbsp&nbsp&nbsp&nbsp<label class="control-label" style="margin-top:-10px;">Lot:</label>
                 </div>
             </div>
             <div class="col-md-1">
@@ -431,33 +431,33 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="control-label" id="options">
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="lotonly" type="checkbox" name="chkOption3" />
+                    <div class="control-label" id="options" style="margin-top:-5px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                            <input id="lotonly" type="checkbox" name="chkOption3" />
                         </div>
                         <div style="float:left">
                             <label class="light" style="font-weight:normal;">Lot Only<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="houseonly" type="checkbox" name="chkOption3" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="houseonly" type="checkbox" name="chkOption3" />
                         </div>
                         <div style="float:left">
                             <label class="light" style="font-weight:normal;">House Only<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="houseandlot" type="checkbox" name="chkOption3" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="houseandlot" type="checkbox" name="chkOption3" />
                         </div>
                         <div style="float:left">
                             <label class="light" style="font-weight:normal;">House & Lot<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="fenceonly" type="checkbox" name="chkOption3" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="fenceonly" type="checkbox" name="chkOption3" />
                         </div>
                         <div style="float:left">
                             <label class="light" style="font-weight:normal;">Fence<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
-                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="addcost" type="checkbox" name="chkOption3" />
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="addcost" type="checkbox" name="chkOption3" />
                         </div>
                         <div style="float:left">
                             <label class="light" style="font-weight:normal;">Add Cost<label>
@@ -468,7 +468,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid" style="margin-top:-20px;">
+    <div class="container-fluid" style="margin-top:-18px;">
         <div class="row">
             <div class="col-md-1" id="tcp_coverage">
                 <label class="control-label" style="margin-bottom:5px;">LOT</label><br>
@@ -577,7 +577,7 @@
         </div>
         <div class="row" style="margin-top:5px;margin-bottom:-5px;padding-top:5px;">
             <div class="col-md-2.5">
-                <label class="control-label" style="margin-left:16px;font-size:10px;margin-right:35px;">LESS: Applied Disc:</label>
+                <label class="control-label" style="margin-left:16px;font-size:10px;margin-right:28px;">LESS: Applied Disc:</label>
             </div>
             <div class="col-md-4">
                 <input type="text" id="c_less" name="c_less" value="<?php echo $c_less; ?>" class="form-control form-control-sm">
@@ -596,60 +596,60 @@
 <div class="card-body" id="payment_details">
     <div class="row">
         <div class="dp_sched">
-            <div class="titles">DOWN PAYMENT SCHEDULE</div>
+            <div class="titles" style="margin-top:0px;">DOWN PAYMENT SCHEDULE</div>
             <div class="dp_container">
                 <div class="row">
                     <input type="hidden" value="<?php echo $down_percent; ?>" id="down_percent">
-                    <div style="float:left;margin-right:2px;">
+                    <div style="float:left;margin-right:2px;margin-top:2px;">
                     &nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_20" type="checkbox" name="chkOption4"/>
                     </div>
                     <div style="float:left">
                         <label class="light">20%</label>
                     </div>
-                    <div style="float:left;margin-right:2px;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_30" type="checkbox" name="chkOption4"/>
+                    <div style="float:left;margin-right:2px;margin-top:2px;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="dp_30" type="checkbox" name="chkOption4"/>
                     </div>
                     <div style="float:left">
                         <label class="light">30%<label>
                     </div>
-                    <div style="float:left;margin-right:2px;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="fdp" type="checkbox" name="chkOption4"/>
+                    <div style="float:left;margin-right:2px;margin-top:2px;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="fdp" type="checkbox" name="chkOption4"/>
                     </div>
                     <div style="float:left">
                         <label class="light">FDP<label>
                     </div>
-                    <div style="float:left;margin-right:2px;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="others" type="checkbox" name="chkOption4"/>
+                    <div style="float:left;margin-right:2px;margin-top:2px;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="others" type="checkbox" name="chkOption4"/>
                     </div>
                     <div style="float:left">
                         <label class="light"><input type="text" id="txtothers" class="form-control form-control-sm" style="margin-bottom:-18px;"><label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="margin-top:-5px;">
                     <div class="col-md-12">
-                        <label class="control-label2" style="margin-bottom:-5px;margin-top:-55px;">Down Payment Amount:</label>
+                        <label class="control-label2" style="margin-bottom:5px;margin-top:0px;">Down Payment Amount:</label>
                         <input type="text" id="dp_amt" name="dp_amt" value="<?php echo $c_net_dp; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7">
-                        <label class="control-label2" id="lbl_dp">Less: Reservation Money:</label>
+                    <div class="col-md-6">
+                        <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Less: Res. Money:</label>
                     </div>
-                    <div class="col-md-5">
-                        <label class="control-label2" id="lbl_dp">Payable in (mos):</label>
+                    <div class="col-md-6">
+                        <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Payable in (mos):</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <input type="text" value="<?php echo $c_reservation; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <input type="text" value="<?php echo $c_no_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp">Monthly Down Payment:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Monthly Down Payment:</label>
                         <input type="text" value="<?php echo $c_monthly_down; ?>" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -660,13 +660,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:5px;">PF/mo:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">PF/mo:</label>
                     </div>
                     <div class="col-md-4">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:5px;">GCF/mo:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">GCF/mo:</label>
                     </div>
                     <div class="col-md-4">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:5px;">STL/mo:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">STL/mo:</label>
                     </div>
                 </div>
                 <div class="row">
@@ -682,13 +682,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp">Total Monthly Payment:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Total Monthly Payment:</label>
                         <input type="text" value="<?php echo $c_monthly_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp">Commencing Date:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Commencing Date:</label>
                         <input type="text" value="" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -699,28 +699,28 @@
         <div class="ma_sub"> *Based on In-House Financing pending Bank approval of Housing Loan</div>
             <div class="dp_container2">
                 <div class="row">
-                <div style="float:left;margin-right:2px;">
+                <div style="float:left;margin-right:2px;margin-top:2px;">
                     &nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
                     </div>
                     <div style="float:left">
                         <label class="light">MDP-BF<label>
                     </div>
-                    <div style="float:left;margin-right:2px;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                    <div style="float:left;margin-right:2px;margin-top:2px;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
                     </div>
                     <div style="float:left">
                         <label class="light">FULL DP-DFC<label>
                     </div>
-                    <div style="float:left;margin-right:2px;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
+                    <div style="float:left;margin-right:2px;margin-top:2px;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="chkOption1" type="checkbox" name="chkOption1" />
                     </div>
                     <div style="float:left">
                         <label class="light">CASH<label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="margin-top:-5px;">
                     <div class="col-md-8" >
-                    <label class="control-label2" style="margin-top:-5px;"> &nbsp;Amount to be financed:</label>
+                    <label class="control-label2" style="margin-top:-10px;margin-bottom:17px;"> &nbsp;Amount to be financed:</label>
                     </div>
                     <div class="col-md-4">
                         <label class="control-label2" style="margin-top:-12px;margin-bottom:12px;">In Years:</label>
@@ -736,10 +736,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:8px;"> Interest Rate:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:7px;margin-bottom:5px;"> Interest Rate:</label>
                     </div>
                     <div class="col-md-7">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:8px;">Fixed Factor:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:7px;margin-bottom:5px;">Fixed Factor:</label>
                     </div>
                 </div>
                 <div class="row">
@@ -752,7 +752,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:15px;">Monthly Amortization:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:15px;margin-bottom:5px;">Monthly Amortization:</label>
                         <input type="text" value="" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -763,10 +763,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:5px;">PF/mo:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">PF/mo:</label>
                     </div>
                     <div class="col-md-6">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:5px;">STL/mo:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:3px;margin-bottom:5px;">STL/mo:</label>
                     </div>
                 </div>
                 <div class="row">
@@ -779,13 +779,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:14px;">Total Monthly Amortization:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:14px;margin-bottom:5px;">Total Monthly Amortization:</label>
                         <input type="text" value="" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:14px;">Commencing Date:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:13px;margin-bottom:4px;">Commencing Date:</label>
                         <input type="text" value="" id="monthly_due" class="form-control form-control-sm" style="margin-bottom:-5px;">
                     </div>
                 </div>
@@ -841,16 +841,16 @@
                         <tr>
                             <td style="width:100px;">
                                 <div class="row" id="sales_checkbox">
-                                    <div style="float:left;margin-right:2px;">
+                                    <div style="float:left;margin-right:2px;margin-top:6px;">
                                     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                                     </div>
-                                    <div style="float:left">
+                                    <div style="float:left;margin-top:3px;">
                                         <label style="font-weight:normal">REB<label>
                                     </div>
-                                    <div style="float:left;margin-right:2px;">
+                                    <div style="float:left;margin-right:2px;margin-top:6px;">
                                     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="chkOption1" type="checkbox" name="chkOption1" />
                                     </div>
-                                    <div style="float:left">
+                                    <div style="float:left;margin-top:3px;">
                                         <label style="font-weight:normal">PC<label>
                                     </div>
                                 </div>
@@ -906,7 +906,7 @@
         <tr>
             <td width="30%" class="withbd" style="border-top:1px solid black;padding-left:5px;">
                 <label class="control-label" style="font-style:normal;font-size:12px;">SMO</label><br>
-                <label class="control-label" style="font-style:normal;font-weight:normal;">Date:</label>
+                <label class="control-label" style="font-style:normal;font-weight:normal;padding-bottom:1.5px;">Date:</label>
             </td>
         </tr>
     </table>

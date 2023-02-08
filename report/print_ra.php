@@ -17,7 +17,7 @@ header("Access-Control-Allow-Origin: *");
 ?>
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" href="css/print_payment.css">
+    <!-- <link rel="stylesheet" href="css/print_payment.css"> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
@@ -60,12 +60,11 @@ header("Access-Control-Allow-Origin: *");
     <img src="images/Header.jpg" class="img-thumbnail" style="height:80px;width:500px;margin-left:130px;border:none;margin-bottom:-5px;z-index:-1;position: relative;" alt="">
     <h6 class="text-center" style="position:absolute;margin-top:-40px;margin-left:330px;"><b>RESERVATION APPLICATION</b></h6>
     <?php
-    $mysqli = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
     $query = "SELECT x.*, y.*, y.c_csr_no as csr_num FROM t_csr_buyers y inner join t_csr x on x.c_csr_no = y.c_csr_no WHERE y.c_csr_no = '{$_GET['id']}' ";
-    $result = mysqli_query($mysqli, $query);
+    $result = mysqli_query($conn, $query);
     $count=$result->num_rows;
     // mysqli select query
-    echo $count;
+    // echo $count;
     while ($row = mysqli_fetch_assoc($result)) {
         $c_date_created = $row['c_date_created'];
         $c_csr_no = $row['c_csr_no']; 
@@ -120,7 +119,7 @@ header("Access-Control-Allow-Origin: *");
         $c_pf_mo = $row['pf_mo'];
         $c_no_payment = $row['c_no_payments'];
         ?>
-        <div class="text-center" id="dateofsale" style="margin-top:-22px;margin-bottom:-5px;margin-left:65px;"><b>Date of Sale:</b> <?php echo date("F d, Y",strtotime($c_date_created)) ?></div>
+        <div class="text-center" id="dateofsale" style="margin-top:-22px;margin-bottom:-5px;margin-left:85px;"><b>Date of Sale:</b> <?php echo date("F d, Y",strtotime($c_date_created)) ?></div>
         <br>
         <div class="watermark_sample"></div>
         <?php

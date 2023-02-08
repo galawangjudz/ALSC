@@ -35,7 +35,7 @@ header("Access-Control-Allow-Origin: *");
 </head>
 <!DOCTYPE html>
 <html lang="en">
-<?php include "../inc/header2.php";?>
+<?php include "../inc/header.php";?>
   <?php
 
     $query = "SELECT * from `t_csr` where c_csr_no = '{$_GET['id']}' ";
@@ -92,27 +92,30 @@ $conn->close();
     width:65px;
     max-width:65px;
     height:auto;
-    font-size:10.5px;
+    font-size:10.5px!important;
     border:none;
     text-decoration: underline;
     text-align:center;
+    margin-top:0px;
 }
 .hiddentxt1{
     width:20px;
     height:auto;
-    font-size:10.5px;
+    font-size:10.5px!important;
     border:none;
     text-decoration: underline;
     text-align:center;
+    margin-top:0px;
 }
 #numtowords{
-    width:400px;
+    width:300px;
     height:auto;
-    font-size:10.5px;
+    font-size:10.5px!important;
     border:none;
     text-decoration: underline;
     text-align:center;
     text-transform:uppercase;
+    margin-top:0px;
 }
 </style>
 
@@ -145,86 +148,90 @@ Property. Should I decide to change the selected payment manner, such change wil
 Purchase Price and amendment of necessary documents.<br><br>
 I understand and agree that my reservation for the property is subject to the following Terms and Conditions:<br>
 
-1.&#8195;That the Reservation for the property specified above is good only for a period of forty-five (45) calendar days from the payment of the reservation money &#8195;&#8195;and I
-understand that Seller reserves the right to approve or deny my offer for reservation.<br>
-2.&#8195;Reservation Money/Check shall not produce the effect of payment until proceeds thereof have been actually received by ALSC and issued with a Collection Receipt /
-Sales &#8195;&#8195;Invoice for the application.<br>
-3.&#8195;I undertake to submit to the Seller a completely filled out Reservation Application with all the information, requirements and documentation required in connection
-with &#8195;&#8195;the sale and that I understand that this RA shall be deemed cancelled in case I fail to submit all requirements, documents and information within fifteen (15) days
-from &#8195;&#8195;the date of reservation. I also understand that an additional house account shall be treated as a separate account and shall be subject to the terms and conditions
-and &#8195;&#8195;documentation distinct from the lot account. I undertake to submit to full credit assessment which may be conducted by the Seller in connection to the purchase
-of the &#8195;&#8195;Property.<br>
-4.&#8195;It is further agreed that my Reservation is valid and binding only when approved by the Seller and my payments will be forfeited in favor of the Seller, if my application
-is &#8195;&#8195;not approved.<br>
-&#8195;&#8195;A.&#8195;If my purchase of the Property is approved by the Seller, I agree to comply with all the conditions for purchase which are or may be prescribed by the Seller for
-the &#8195;&#8195;&#8195;&#8195;purchase of the Property, including but not limited to (i) obtaining a Credit Life Insurance plus Fire Insurance from a reputable insurance provider acceptable
-to the &#8195;&#8195;&#8195;&#8195;Seller in an amount sufficient to cover the value of the Property or, subject to the acceptance of the Seller, assigning to the Seller, as beneficiary to the
-extent of the &#8195;&#8195;&#8195;&#8195;unpaid balance of the Purchase Price of the Property, my existing life insurance policy, and (ii) submitting post dated checks covering the installment
-payment due &#8195;&#8195;&#8195;&#8195;under the agreed payment scheme. I understand that a penalty will be charged to me upon my failure to fund said checks.
-<br>&#8195;&#8195;B.&#8195;If the purchase of the Property is disapproved, I understand that I may still purchase the Property only under any of the following payment schemes which may be
-&#8195;&#8195;&#8195;&#8195;prescribed by the Seller: (i) cash scheme, where I agree to pay the Purchase Price, taxes and other costs in full; or (ii) deferred cash payment scheme (refer to
-&#8195;&#8195;&#8195;&#8195;Reservation Application).<br>
-5.&#8195;Should I decide to cancel the reservation, or if unable to settle the amount due on the date stipulated, it is understood that the reservation shall lapse and the
-reservation &#8195;&#8195;money shall be forfeited. I agree that any failure by me to make the necessary payments forty-five (45) days from the date of payment of the reservation
-shall cause the &#8195;&#8195;full forfeiture in favor of the Seller and that the latter shall have the right to automatically cancel the reservation without further notice as liquidated
-damages. It is understood that in any event of cancellation of this Reservation Agreement, the Seller shall be free to dispose of the Property as if this Reservation
-Agreement had not &#8195;&#8195;been executed.<br>
-6.&#8195;In the event that I fail to pay any amounts due under my payment scheme in relation to my purchase of the property, or fail to comply with my undertakings herein, or
-fail &#8195;&#8195;to execute the relevant Contract to Sell and/or Deed of Absolute Sale for the property, or comply with the terms of my purchase, then the Seller shall have the
-option to &#8195;&#8195;cancel the sale and refund all payments less: (i) The Reservation Fee, which shall be forfeited in favor of the Seller as liquidated damage; (ii) Broker’s
-commission; (iii) &#8195;&#8195;Any unpaid charges and dues on the Property ; (iv) Taxes and expenses paid by the Seller to the government or third parties in connection herewith;
-(v) Construction bond &#8195;&#8195;for my construction works, if applicable; (vi) any amount determined by the Seller to be necessary to restore the Property to the same physical
-condition it was found &#8195;&#8195;at the time of acceptance of the Property. I understand that remittance to the Bureau of Internal Revenue of the applicable creditable
-withholding tax (CWT) on my payments is required under applicable rules and regulations. Should a delay in the remittance of the CWT arise by the reason of the
-information I provide herein, including information on whether I am engaged in business, I undertake to pay and not to hold the Seller liable for any penalty and/or
-surcharge, costs, and expenses &#8195;&#8195;which may be incurred in connection with such delay.<br>
-7.&#8195;It is agreed that this Reservation is transferable only to immediate family members, and any third party transfer made by me shall be void and shall cause for the
-cancellation of the Reservation and forfeiture of my reservation money and other payment.<br>
-8.&#8195;That I certify that I have personally inspected the Property subject of this reservation and I have found the same to be satisfactory.
-<br>9.&#8195;In the event the subject property is unavailable for sale to me due to a prior sale commitment, the same having been offered to me by mistake or inadvertence, I agree
-to &#8195;&#8195;have the subject property exchanged with a property of equal value, or to the cancellation of the reservation agreement, subject to the reimbursement of all my
-payments previously made by me by reason of this reservation.<br>
+1.&#8195;&nbsp;That &nbsp;the &nbsp;Reservation for &nbsp;the property &nbsp;specified above is good &nbsp;only for a &nbsp;period of forty-five &nbsp;(45) calendar days from the &nbsp;payment of the reservation money <br>&#8195;&#8195;and I understand that Seller reserves the right to approve or deny my offer for reservation.<br>
+2.&#8195;&nbsp;Reservation &nbsp;Money/Check shall &nbsp;not produce the effect of &nbsp;payment &nbsp;until proceeds &nbsp;thereof have &nbsp;been actually received by &nbsp;ALSC and issued with a &nbsp;Collection <br>&#8195;&#8195;Receipt /
+Sales Invoice for the application.<br>
+3.&#8195;&nbsp;I undertake &nbsp;to submit &nbsp;to the &nbsp;Seller a &nbsp;completely &nbsp;filled out &nbsp;Reservation &nbsp;Application &nbsp;with all the &nbsp;information, &nbsp;requirements &nbsp;and &nbsp;documentation &nbsp;required in <br>&#8195;&#8195;connection
+with the &nbsp;sale and that I &nbsp;understand that this RA &nbsp;shall be deemed &nbsp;cancelled in case I &nbsp;fail to submit &nbsp;all requirements, &nbsp;documents &nbsp;and &nbsp;information 
+<br>&#8195;&#8195;within &nbsp;fifteen &nbsp;(15) days &nbsp;from the date of &nbsp;reservation. I also &nbsp;understand that &nbsp;an additional &nbsp;house account shall be treated as &nbsp;a separate account and shall be<br>&#8195;&#8195;subject to the terms and &nbsp;conditions
+and &nbsp;documentation distinct &nbsp;from the lot account. I undertake &nbsp;to submit to full credit assessment which may be  <br>&#8195;&#8195;conducted by the Seller in connection to the purchase of the Property.<br>
+4.&#8195;&nbsp;It is further &nbsp;agreed &nbsp;that my &nbsp;Reservation is &nbsp;valid and &nbsp;binding &nbsp;only when &nbsp;approved by&nbsp; the &nbsp;Seller and my &nbsp;payments &nbsp;will &nbsp;be forfeited &nbsp;in favor of the Seller, if <br>&#8195;&#8195;my application is not approved.<br>
+&#8195;&#8195;A.&nbsp;&#8195;If my purchase &nbsp;of &nbsp;the Property &nbsp;is approved &nbsp;by the Seller, I &nbsp;agree to &nbsp;comply with all &nbsp;the conditions &nbsp;for &nbsp;purchase &nbsp;which &nbsp;are or &nbsp;may be &nbsp;prescribed &nbsp;by 
+<br>&#8195;&#8195;&#8195;&#8195;the Seller &nbsp;for &nbsp;the &nbsp;purchase &nbsp;of &nbsp;the &nbsp;Property, &nbsp;including &nbsp;but &nbsp;not &nbsp;limited to (i) &nbsp;obtaining a &nbsp;Credit &nbsp;Life &nbsp;Insurance &nbsp;plus &nbsp;Fire &nbsp;Insurance &nbsp;from a reputable 
+<br>&#8195;&#8195;&#8195;&#8195;insurance provider &nbsp;acceptable to the &nbsp;Seller &nbsp;in &nbsp;an &nbsp;amount &nbsp;sufficient &nbsp;to &nbsp;cover &nbsp;the &nbsp;value of the &nbsp;Property &nbsp;or, &nbsp;subject &nbsp;to &nbsp;the &nbsp;acceptance &nbsp;of &nbsp;the &nbsp;Seller, 
+<br>&#8195;&#8195;&#8195;&#8195;assigning to the &nbsp;Seller, as &nbsp;beneficiary to the &nbsp;extent of &nbsp;the unpaid &nbsp;balance of &nbsp;the &nbsp;Purchase &nbsp;Price of the &nbsp;Property, my existing life &nbsp;insurance policy, and 
+<br>&#8195;&#8195;&#8195;&#8195;(ii) submitting post dated checks covering the installment payment due under the agreed payment scheme. I understand that a penalty will be charged to 
+<br>&#8195;&#8195;&#8195;&#8195;me upon my failure to fund said checks.
+<br>&#8195;&#8195;B.&nbsp;&#8195;If the purchase of&nbsp; the Property is disapproved, I understand that I may still purchase the Property only under any of the following payment schemes which 
+<br>&#8195;&#8195;&#8195;&#8195;may be prescribed by the Seller: (i) cash scheme, where I agree to pay the Purchase Price, taxes and other costs in full; or (ii) deferred cash payment scheme 
+&#8195;&#8195;&#8195;&#8195;(refer to Reservation Application).<br>
+5.&#8195;&nbsp;Should I decide to cancel the &nbsp;reservation, or if &nbsp;unable to settle the &nbsp;amount due on the date stipulated, it is understood that the reservation shall lapse and the
+<br>&#8195;&#8195;reservation &nbsp;money &nbsp;shall be &nbsp;forfeited. I agree &nbsp;that any &nbsp;failure by me to make the &nbsp;necessary &nbsp;payments &nbsp;forty-five &nbsp;(45) days from &nbsp;the date of &nbsp;payment of the 
+<br>&#8195;&#8195;reservation &nbsp;shall &nbsp;cause the full &nbsp;forfeiture in &nbsp;favor of the &nbsp;Seller and that the &nbsp;latter shall have the right to &nbsp;automatically cancel &nbsp;the reservation without further 
+<br>&#8195;&#8195;notice as liquidated damages. It is understood that in any event of cancellation of this Reservation Agreement, the Seller shall be free to dispose of the Property 
+<br>&#8195;&#8195;as if this Reservation Agreement had not been executed.<br>
+
+
+6.&#8195;&nbsp;In the event that I fail to pay any amounts due under my &nbsp;payment scheme in &nbsp;relation to my purchase &nbsp;of the property, or fail &nbsp;to comply &nbsp;with my undertakings 
+<br>&#8195;&#8195;herein, or fail to execute the relevant Contract to Sell and/or Deed of &nbsp;Absolute Sale for the &nbsp;property, or comply with &nbsp;the terms of my purchase, then the Seller 
+<br>&#8195;&#8195;shall have the option to cancel the sale and refund all payments less: (i) The Reservation Fee, which shall be forfeited in favor of the Seller as liquidated damage; 
+<br>&#8195;&#8195;(ii) &nbsp;Broker’s commission; (iii) Any unpaid &nbsp;charges and dues on the &nbsp;Property ; (iv) &nbsp;Taxes and expenses &nbsp;paid by the &nbsp;Seller to the &nbsp;government or &nbsp;third parties in 
+<br>&#8195;&#8195;connection herewith; (v) Construction bond for my  &nbsp;construction works,  &nbsp;if applicable;  &nbsp;(vi) any amount determined by the  &nbsp;Seller to be  &nbsp;necessary to &nbsp;restore the 
+<br>&#8195;&#8195;Property to the same physical condition it was found at  &nbsp;the time of acceptance of the Property. I understand that remittance to the Bureau of Internal &nbsp;Revenue 
+<br>&#8195;&#8195;of the applicable creditable withholding tax (CWT) on  &nbsp;my payments is required under applicable rules and regulations. Should a delay in the remittance &nbsp;of the 
+<br>&#8195;&#8195;CWT arise by the reason of the information I provide herein, including &nbsp;information on  &nbsp;whether I am engaged in business,  &nbsp;I undertake to pay and &nbsp; not to hold 
+<br>&#8195;&#8195;the Seller liable for any penalty and/or surcharge, costs, and &nbsp;expenses which may be incurred in connection with such delay.<br>
+
+7.&#8195;&nbsp;It is agreed that this &nbsp;Reservation is &nbsp;transferable only to &nbsp;immediate family &nbsp;members, and &nbsp;any third party transfer made by me shall be void and shall cause 
+for <br>&#8195;&#8195;the cancellation of the Reservation and forfeiture of my reservation money and other payment.<br>
+8.&#8195;&nbsp;That I certify that I have personally inspected the Property subject of this reservation and I have found the same to be satisfactory.
+<br>9.&#8195;&nbsp;&nbsp;In the event the subject property is unavailable for sale to me due to a prior sale commitment, the same having been offered to me by mistake or 
+<br>&#8195;&#8195;&nbsp;inadvertence, I agree to have the subject property exchanged with a property of equal value, or to the cancellation of the reservation agreement, subject to the 
+<br>&#8195;&#8195;&nbsp;reimbursement of all my payments previously made by me by reason of this reservation.<br>
 10.&#8195;Any provision to the contrary withstanding, I hereby agree and acknowledge that the Seller has the right to cancel and rescind this reservation for any cause
-whatsoever &#8195;&#8195;at any time before issuance of my Contract to Sell by giving written notice of its intention and refunding to me all payments made by virtue thereof.
-<br>11.&#8195;I hereby undertake to execute the Contract to Sell with the seller upon payment of the down payment, and the Deed of Absolute Sale with the Seller upon full payment
-of &#8195;&#8195;the Purchase Price and all amounts due on the purchase of the property. The contracts will be in the form and under the terms prescribed by the Seller. I confirm
-that &#8195;&#8195;upon full payment, the Seller shall have the right to execute a Deed of Absolute Sale in my favor. I understand that non delivery of the copy of Contract to Sell shall
-not &#8195;&#8195;delay the commencement of the payment of the monthly installment due.<br>
-12.&#8195;I agree that all taxes, fees and expenses which are imposed or incurred in connection with the sale of the Property, execution of documents with the Registry of Deeds,
-&#8195;&#8195;and the transfer in my favor of the certificates of title covering the property, and any increase in the rates prevailing of the date of this reservation of all taxes, fees and
-&#8195;&#8195;expenses shall be for my account.<br>
-13.&#8195;I agree that the purchase of the property is subject to the covenants and restrictions as specified in the project’s Deed of Restrictions, and that I undertake to faithfully
-&#8195;&#8195;comply with. That compliance herein is an essential consideration of the sale by the Seller of the Property to me and all other agreements executed in connection
-herewith.<br>
-14.&#8195;I warrant that the information provided are true and correct as of the date hereof and agree to inform the Seller of any changes in my personal data such as name,
-address and contact details. I also warrant that the funds used for the purchase of the property is obtained through legitimate means and do not constitute all or part
-of &#8195;&#8195;proceeds of any unlawful activity under applicable laws. I hereby hold Seller free and harmless from any incident, claim, action or liability arising from the breach of
-my &#8195;&#8195;warranty herein, and hereby authorize the Seller to disclose to any government body or agency any information pertaining to this sale and purchase transaction if
-so &#8195;&#8195;warranted and required under existing laws.<br>
-15.&#8195;To facilitate continuous vital and crucial communication between the Seller, I agree to join the Viber Contact and Channel of Seller, whose main number is 0917-523-
-&#8195;&#8195;7373. I commit not to leave the said Viber Channel to assure that I always receive and send any communication required under the herein Contract. I agree to update
-my &#8195;&#8195;contact information yearly.<br>
-16.&#8195;This Reservation Agreement constitutes the complete understanding between parties with respect to the subject matter and supersedes any prior expression of intent,
-&#8195;&#8195;representation or warranty with respect to this transaction. ALSC is not and shall not be bound by stipulations, representations, agreements, or promises, oral or
-otherwise not contained in this agreement. That any representation to me by the agent who handled this sale not embodied herein shall not be binding on the Seller
-&#8195;&#8195;unless reduced into writing and confirmed by the President of ALSC and this contract shall not be considered as changed, modified, altered or in any way amended by
-&#8195;&#8195;acts of tolerance of ALSC, unless such changes, modification or amendments are made in writing and signed by the aforementioned officer. Only duly authorized
-officers &#8195;&#8195;of the company are allowed to make commitments for and in behalf of ALSC.<br>
-17.&#8195;I understand and agree that this Reservation Agreement only gives me the right to purchase the property and that no other right, title or ownership is vested upon me
-by &#8195;&#8195;the execution of the Reservation Agreement. The Seller retains title and ownership of the property until my full payment of all amounts due to the Seller by reason
-of &#8195;&#8195;purchase of the Property.<br><br><br>
+<br>&#8195;&#8195;&nbsp;whatsoever at any time before issuance of my Contract to Sell by giving written notice of its intention and refunding to me all payments made by virtue 
+<br>&#8195;&#8195;&nbsp;thereof.
+<br>11.&#8195;I hereby undertake to execute the Contract to Sell with the seller upon payment of the down payment, and the Deed of Absolute Sale with the Seller upon full 
+<br>&#8195;&#8195;&nbsp;payment of the Purchase Price and all amounts due on the purchase of the property. The contracts will be in the form and under the terms prescribed by the 
+<br>&#8195;&#8195;&nbsp;Seller. I confirm that upon full payment, the Seller shall have the right to execute a Deed of Absolute Sale in my favor. I understand that non delivery of the 
+<br>&#8195;&#8195;&nbsp;copy of Contract to Sell shall not delay the commencement of the payment of the monthly installment due.<br>
+12.&#8195;I agree that all taxes, fees and expenses which are imposed or incurred in connection with the sale of the Property, execution of documents with the Registry of 
+<br>&#8195;&#8195;&nbsp;Deeds, and the transfer in my favor of the certificates of title covering the property, and any increase in the rates prevailing of the date of this reservation of all 
+<br>&#8195;&#8195;&nbsp;taxes, fees and expenses shall be for my account.<br>
+13.&#8195;I agree that the purchase of the property is subject to the covenants and restrictions as specified in the project’s Deed of Restrictions, and that I undertake to 
+<br>&#8195;&#8195;&nbsp;faithfully comply with. That compliance herein is an essential consideration of the sale by the Seller of the Property to me and all other agreements executed in 
+<br>&#8195;&#8195;&nbsp;connection herewith.<br>
+14.&#8195;I warrant that the information provided are true and correct as of the date hereof and agree to inform the Seller of any changes in my personal data such as 
+<br>&#8195;&#8195;&nbsp;name, &nbsp;address and contact details. &nbsp;I also warrant that the  &nbsp;funds used for  &nbsp;the  &nbsp;purchase of  &nbsp;the property is  &nbsp;obtained through  &nbsp;legitimate means and do not 
+<br>&#8195;&#8195;&nbsp;constitute all or &nbsp;part of proceeds of any unlawful activity under  &nbsp;applicable  &nbsp;laws. I hereby  &nbsp;hold Seller free and  &nbsp;harmless from any  &nbsp;incident, claim,  &nbsp;action or 
+<br>&#8195;&#8195;&nbsp;liability &nbsp;arising from the breach of my warranty herein, and hereby authorize the Seller to disclose to any government body or agency any information 
+<br>&#8195;&#8195;&nbsp;pertaining to this sale &nbsp;and purchase transaction if so warranted and required under existing laws.<br>
+15.&#8195;To facilitate continuous &nbsp;vital and &nbsp;crucial communication between the&nbsp; Seller, I agree &nbsp;to join the Viber &nbsp;Contact and Channel of Seller, &nbsp;whose main &nbsp;number is 
+<br>&#8195;&#8195;&nbsp;0917-523-7373. I commit not to leave the said Viber Channel to assure that I always receive and send any communication required under the herein Contract. I 
+<br>&#8195;&#8195;&nbsp;agree to update my contact information yearly.<br>
+16.&#8195;This Reservation Agreement constitutes the complete understanding between parties with respect to the subject matter and &nbsp;supersedes any &nbsp;prior expression 
+<br>&#8195;&#8195;&nbsp;of intent, &nbsp;representation or &nbsp;warranty with &nbsp;respect to this &nbsp;transaction. ALSC is not &nbsp;and shall &nbsp;not be &nbsp;bound by &nbsp;stipulations, representations, agreements, or 
+<br>&#8195;&#8195;&nbsp;promises, oral or otherwise not contained in this agreement. That any representation to me by the agent who handled this sale not embodied herein shall not 
+<br>&#8195;&#8195;&nbsp;be binding on the Seller unless reduced into writing and confirmed by the President of ALSC and this contract shall not be considered as changed, modified, 
+<br>&#8195;&#8195;&nbsp;altered or in any way &nbsp;amended by &nbsp;acts of &nbsp;tolerance of ALSC, &nbsp;unless such changes, &nbsp;modification or amendments are made in writing and signed by the 
+<br>&#8195;&#8195;&nbsp;aforementioned officer. Only duly authorized
+officers of the company are allowed to make commitments for and in behalf of ALSC.<br>
+17.&#8195;I understand and agree that this Reservation &nbsp;Agreement only gives me the &nbsp;right to purchase the property and that no other right, title or ownership is vested 
+<br>&#8195;&#8195;&nbsp;upon me by the execution of the Reservation Agreement. The Seller retains title and ownership of the property until my full payment of all amounts due to the 
+<br>&#8195;&#8195;&nbsp;Seller by reason of purchase of the Property.<br><br><br>
 
 &#8195;&#8195;&#8195;&#8195;&#8195;I conform to the foregoing and certify that all information provided herein are true and correct.<br><br><br>
-&#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________<br>
-&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase<br><br>
+&#8195;&#8195;&#8195;&#8195;&#8195;_______________________________________________________&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________<br>
+&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Client’s Signature over Printed Name/Date Purchase<br><br>
 <br>&#8195;&#8195;&#8195;&#8195;&#8195;Witnessed by:<br><br>
-&#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________<br><br>
-&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Authorized Signature over Printed Name/Date
+&#8195;&#8195;&#8195;&#8195;&#8195;______________________________________________________<br>
+&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;Authorized Signature over Printed Name/Date
     </div>
 </div>
 </div>
 </body>
 </html>
+
 
 <script type="text/javascript">
 function per() {

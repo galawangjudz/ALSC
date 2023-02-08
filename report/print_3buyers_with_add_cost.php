@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="css/print_ra_b3_with_add_cost.css">
 <script src="../build/js/print.js" type="text/javascript"></script>
 <?php $query2 = "SELECT x.*, y.*, y.c_csr_no as csr_num FROM t_csr_buyers y inner join t_csr x on x.c_csr_no = y.c_csr_no WHERE y.c_csr_no = '{$_GET['id']}' ";
-$result2 = mysqli_query($mysqli, $query2);
+$result2 = mysqli_query($conn, $query2);
 $count = 0;
 if($result2) {
     while ($row = mysqli_fetch_assoc($result2)) { 
@@ -94,25 +94,25 @@ if($result2) {
                 <div class="form-group">
                     <label class="control-label" id="small_title">Civil Status:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         <input id="single<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">SINGLE<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="married<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">MARRIED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="widowed<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
                             <label class="light">WIDOWED<label>
                         </div>
-                        <div style="float:left;margin-right:2px;">
+                        <div style="float:left;margin-right:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="separated<?php echo $count; ?>" type="checkbox" name="chkOption1">
                         </div>
                         <div style="float:left">
@@ -124,15 +124,15 @@ if($result2) {
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label" id="small_title1" style="text-align:left;">Gender:</label>
+                    <label class="control-label" id="small_title1" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gender:</label>
                     <div class="chkboxes">
-                        <div style="float:left;margin-left:2px;">
+                        <div style="float:left;margin-left:2px;margin-top:3px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="male<?php echo $count; ?>" type="checkbox" name="gender" />
                         </div>
                         <div style="float:left">
                             <label class="light">&nbsp;M<label>
                         </div>
-                        <div style="float:left;margin-left:2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div style="float:left;margin-left:2px;margin-top:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <input id="female<?php echo $count; ?>" type="checkbox" name="gender" />
                         </div>
                         <div style="float:left">
@@ -217,30 +217,31 @@ if($result2) {
             </div>
         </div>
         <div class="col-md-12">
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
                 <input id="and<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">And<label>
             </div>
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="spouses<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">Spouses<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="marriedto<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
             <label style="font-weight:normal;margin-bottom:-5px;">Married To<label>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <div style="float:left;margin-right:2px">
+            <div style="float:left;margin-right:2px;margin-top:3px;">
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="minor<?php echo $count; ?>" type="checkbox" name="chkOption1" />
             </div>
             <div style="float:left">
                 <label style="font-weight:normal;margin-bottom:-5px;">Minor/Represented by Legal Guardian<label>
             </div>
+            <br><br>
             <input type="hidden" value="<?php echo $c_relation; ?>" id="rel<?php echo $count; ?>"> 
         </div>
         </div>
@@ -660,4 +661,3 @@ function getRelationship3(){
 </body>
 <?php
 }} 
-$mysqli->close();?>
