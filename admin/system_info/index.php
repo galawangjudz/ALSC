@@ -4,6 +4,22 @@
 </script>
 <?php endif;?>
 
+<?php
+
+$usertype = $_settings->userdata('user_type');
+if (!isset($usertype)) {
+    include '404.html';
+  exit;
+}
+
+$user_role = $usertype;
+
+if ($user_role != 'IT Admin') {
+    include '404.html';
+  exit;
+}
+
+?>
 <style>
 	img#cimg{
 		height: 15vh;

@@ -4,6 +4,8 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+
+
 <style>
 .titles{
 	color:black;
@@ -158,6 +160,9 @@
 <?php 
 
 $usertype = $_settings->userdata('user_type');
+
+
+
 
 /* $usertype = isset($_settings->userdata('type')== 1) ? "IT Admin" : "" ; */
 if(isset($_GET['id'])){

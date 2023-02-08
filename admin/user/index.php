@@ -9,6 +9,23 @@ foreach($user->fetch_array() as $k =>$v){
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+
+<?php
+
+$usertype = $_settings->userdata('user_type');
+if (!isset($usertype)) {
+    include '404.html';
+  exit;
+}
+
+$user_role = $usertype;
+
+if ($user_role != 'IT Admin') {
+    include '404.html';
+  exit;
+}
+
+?>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-body">
 		<div class="container-fluid">

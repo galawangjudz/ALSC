@@ -4,6 +4,24 @@
 </script>
 <?php endif;?>
 
+<?php
+
+$usertype = $_settings->userdata('user_type');
+if (!isset($usertype)) {
+    include '404.html';
+  exit;
+}
+
+$user_role = $usertype;
+
+if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
+    include '404.html';
+  exit;
+}
+
+?>
+
+
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title">Reservation List</h3>

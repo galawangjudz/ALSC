@@ -713,7 +713,7 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$check = $this->conn->query("SELECT * FROM t_approval_csr where c_csr_no =".$id)->num_rows;
 		if($check > 0){
-			$dis = $this->conn->query("UPDATE t_approval_csr set c_csr_status = 3 where c_csr_no =".$id);
+			$dis = $this->conn->query("UPDATE t_approval_csr set c_csr_status = 3, c_duration = CURRENT_TIMESTAMP() where c_csr_no =".$id);
 			$dis2 = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = 3 where c_csr_no = ".$id);
 			$update = $this->conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = ".$lid);
 		}
@@ -945,6 +945,15 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+
+	function cfo_booked(){
+		extract($_POST);
+		
+
+
+
+
+	}
 	
 }
 
@@ -1014,6 +1023,9 @@ switch ($action) {
 	break;
 	case 'save_ca':
 		echo $Master->save_ca();
+	break;
+	case 'cfo_booked':
+		echo $Master->cfo_booked();
 	break;
 	
 	default:
