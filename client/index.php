@@ -122,7 +122,8 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <b><?php echo $_settings->info('short_name') ?> (<a href="asianland.ph" target="blank">asianland.ph</a> )</b> v1.0
+    <strong>Copyright &copy; 2023 <a href="#">LAND/PROPERTY RATES SYSTEM. By Charles Kapiya Mukupa</a>.</strong>
+    All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b><?php echo $_SESSION['system']['name'] ?></b>
     </div>

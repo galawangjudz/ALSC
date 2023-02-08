@@ -14,7 +14,7 @@ if (!isset($usertype)) {
 
 $user_role = $usertype;
 
-if ($user_role != 'IT Admin' || $user_role != 'Cashier') {
+if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
     include '404.html';
   exit;
 }
