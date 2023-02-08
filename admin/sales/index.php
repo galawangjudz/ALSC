@@ -36,8 +36,8 @@
 					<th>Buyers Name</th>
 					<th>Net TCP</th>
 					<th>Prepared Date</th>
-					<th>SM Approval</th>
-					<th>Coo Approval</th>
+					<th>SOS Approval</th>
+					<th>COO Approval</th>
 					<th>Actions</th>
 					</tr>
 				</thead>
@@ -71,7 +71,7 @@
                                 <td><?php echo $i++ ?></td>
                                 <td><?php echo $row['ref_no'] ?></td>
 								<?php if($row['c_active'] == 0): ?>
-									<td class="text-center"><span class="badge badge-warning">Inactive</span></td>
+									<td class="text-center"><span class="badge badge-danger">Inactive</span></td>
 								<?php else: ?>
 									<td class="text-center"><span class="badge badge-success">Active</span></td>
 								<?php endif;?>
@@ -101,7 +101,7 @@
                                 <td class="text-center"><span class="badge badge-success">Approved</span></td>
                             <?php }
                             elseif($row['coo_approval'] == 2){ ?> 
-                                <td class="text-center"><span class="badge badge-danger">Lapsed</span></td>
+                                <td class="text-center"><span class="badge badge-danger">Expired</span></td>
                             <?php }
 							 elseif($row['coo_approval'] == 3){ ?>
                                 <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
