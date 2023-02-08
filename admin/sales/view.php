@@ -4,6 +4,8 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+
+
 <style>
 .titles{
 	color:black;

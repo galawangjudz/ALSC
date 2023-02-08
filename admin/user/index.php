@@ -11,6 +11,8 @@ foreach($user->fetch_array() as $k =>$v){
 <?php endif;?>
 
 <?php
+
+$usertype = $_settings->userdata('user_type');
 if (!isset($usertype)) {
     include '404.html';
   exit;
