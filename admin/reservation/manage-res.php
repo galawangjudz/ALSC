@@ -174,7 +174,7 @@ foreach($res->fetch_array() as $k =>$v){
 
 
 
-			<table class="table table-bordered table-stripped" id="data-table">
+			<table class="table table-bordered table-stripped">
 				<thead>
 					<tr>
 

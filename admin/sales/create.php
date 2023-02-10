@@ -1404,12 +1404,12 @@ input{
 					$where = "c_created_by = '$username'";
 					if ($type < 5 ){
 	
-						$query =$conn->query("SELECT * FROM t_client_info ORDER BY last_name ASC");
+						$query =$conn->query("SELECT * FROM t_buyer_info ORDER BY last_name ASC");
 					}else{
-						$query = $conn->query("SELECT * FROM t_client_info where ".$where." ORDER BY last_name ASC");
+						$query = $conn->query("SELECT * FROM t_buyer_info where ".$where." ORDER BY last_name ASC");
 					}
 	
-					//$query =$conn->query("SELECT * FROM t_client_info ORDER BY last_name ASC");
+					//$query =$conn->query("SELECT * FROM t_buyer_info ORDER BY last_name ASC");
 
 					while($row = $query->fetch_assoc()): ?>
 

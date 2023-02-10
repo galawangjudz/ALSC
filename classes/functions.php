@@ -415,7 +415,7 @@ function popLotsList() {
 		}
 	
 		// the query
-		$query = "SELECT * FROM t_client_info ORDER BY last_name ASC";
+		$query = "SELECT * FROM t_buyer_info ORDER BY last_name ASC";
 	
 		//echo $query;
 		// mysqli select query
@@ -757,7 +757,7 @@ function getCustomers() {
 	}
 
 	// the query
-	$query = "SELECT * FROM t_client_info ORDER BY last_name ASC";
+	$query = "SELECT * FROM t_buyer_info ORDER BY last_name ASC";
 
 	// mysqli select query
 	$results = $mysqli->query($query);

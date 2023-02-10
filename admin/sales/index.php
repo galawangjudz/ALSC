@@ -28,14 +28,13 @@
 				</colgroup> -->
 				<thead>
 					<tr>
-					<th>No.</th>
+					<th>Prepared Date</th>
+					<th>Prepared by </th>	
 					<th>Ref. No.</th>
 					<th>Status</th>
-					<th>Prepared by </th>	
 					<th>Location </th>		
 					<th>Buyers Name</th>
 					<th>Net TCP</th>
-					<th>Prepared Date</th>
 					<th>SOS Approval</th>
 					<th>COO Approval</th>
 					<th>Actions</th>
@@ -68,7 +67,8 @@
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
 					?>
 						<tr>
-                                <td><?php echo $i++ ?></td>
+								<td class="text-center"><?php echo $timeStamp ?> </td>
+								<td class="text-center"><?php echo $row["c_created_by"] ?></td>
                                 <td><?php echo $row['ref_no'] ?></td>
 								<?php if($row['c_active'] == 0): ?>
 									<td class="text-center"><span class="badge badge-danger">Inactive</span></td>
@@ -76,12 +76,12 @@
 									<td class="text-center"><span class="badge badge-success">Active</span></td>
 								<?php endif;?>
 
-                                <td class="text-center"><?php echo $row["c_created_by"] ?></td>
+                             
                                 <td><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                                 <td class="text-center"><?php echo $row["last_name"]. ' ' .$row["suffix_name"]. ','  .$row["first_name"] .' ' .$row["middle_name"]?></td>
 
                                 <td class="text-right"><?php echo "P".number_format($row["c_net_tcp"], 2) ?></td>
-                                <td class="text-center"><?php echo $timeStamp ?> </td>
+                                
                                 
                         
                         

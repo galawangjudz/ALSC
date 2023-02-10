@@ -73,38 +73,30 @@
 	</div>
 </div>
 <script>
-
-	$('.booked_data').click(function(){
-        _conf("Are you sure to booked this RA?","booked_ra",[$(this).attr('ra_id'),$(this).attr('c_csr_no'),$(this).attr('c_lot_lid')])
-    }) 
-
-	function sm_verification($ra_id,$csr_no,$lid){
+	$(document).ready(function(){
+		$('.booked_data').click(function(){
+			_conf("Are you sure to booked this RA?","cfo_approval",[$(this).attr('ra-id'),$(this).attr('csr_id'),$(this).attr('data-lot-id')])
+		}) 
+	})	
+	function cfo_approval($ra_id,$csr_no,$lid){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=cfo_booked",
-			method:'POST',
+			method:"POST",
 			data:{ra_id:$ra_id,csr_no:$csr_no,lid:$lid},
 			dataType:"json",
 			error:err=>{
 				console.log(err)
-				alert_toast("An error occured",'error');
-                end_loader();
+				alert_toast("An error occured.",'error');
+				end_loader();
 			},
 			success:function(resp){
-				if(resp.status == 'success'){
-                    $(".modal").removeClass("visible");
-					$(".modal").modal('hide');
-                    location.reload();
-				}else if(resp.status == 'failed' && !!resp.msg){
-                        $(".modal").removeClass("visible");
-                        $(".modal").modal('hide');
-                        alert_toast(resp.msg,'error');
-                        end_loader();
-                }else{
-                    alert_toast("An error occured",'error');
-                    end_loader();
-                    console.log(resp)
-                }
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
 			}
 		})
 	}

@@ -16,7 +16,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         }
     }
     $ca = $conn->query("SELECT *,CONCAT_WS(' ',x.first_name, x.last_name)as full_name ,y.ra_id, y.c_csr_status, y.c_reserve_status, 
-    y.c_ca_status, y.c_duration, y.c_csr_no, z.age as csr_num  FROM t_csr_view x , t_approval_csr y, t_csr_buyers z where c_buyer_count = 1 and md5(y.c_csr_no) = '{$_GET['id']}'");
+    y.c_ca_status, y.c_duration, z.age as csr_num  FROM t_csr_view x LEFT JOIN t_approval_csr y ON x.c_csr_no = y.c_csr_no 
+    LEFT JOIN t_csr_buyers z ON z.c_csr_no = x.c_csr_no where z.c_buyer_count = 1 and md5(y.c_csr_no) = '{$_GET['id']}'");
     foreach($ca->fetch_array() as $k =>$v){
         $meta[$k] = $v;
     }

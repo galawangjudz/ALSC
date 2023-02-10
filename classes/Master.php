@@ -532,31 +532,31 @@ Class Master extends DBConnection {
 		$data .= ", contact_no = '$contact_no' ";
 
 		
-		$check = $this->conn->query("SELECT * FROM `t_client_info` where `last_name` = '{$customer_last_name}' and
+		$check = $this->conn->query("SELECT * FROM `t_buyer_info` where `last_name` = '{$customer_last_name}' and
 		 `first_name` = '{$customer_first_name}' and `middle_name` = '{$customer_middle_name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Client already exist.";
+			$resp['msg'] = "Buyer already exist.";
 			return json_encode($resp);
 			exit;
 		} 
 		if(empty($id)){
-			/* $sql = "SELECT * FROM t_client_info"; */
-			$sql = "INSERT INTO t_client_info set ".$data;
+			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$sql = "INSERT INTO t_buyer_info set ".$data;
 			$save = $this->conn->query($sql);
 		}else{
-			/* $sql = "SELECT * FROM t_client_info"; */
-			$sql = "UPDATE t_client_info set ".$data." where id = ".$id;
+			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$sql = "UPDATE t_buyer_info set ".$data." where id = ".$id;
 			$save = $this->conn->query($sql);
 		}
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($id))
-				$this->settings->set_flashdata('success',"New Client successfully saved.");
+				$this->settings->set_flashdata('success',"New Buyer successfully saved.");
 			else
-				$this->settings->set_flashdata('success',"Client successfully updated.");
+				$this->settings->set_flashdata('success',"Buyer successfully updated.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
@@ -947,10 +947,194 @@ Class Master extends DBConnection {
 
 
 	function cfo_booked(){
+
 		extract($_POST);
+		$sql = $this->conn->query("SELECT * FROM t_csr where c_csr_no =".$csr_no);
+		while($row = $sql->fetch_array()):
+			//lot computation
+			$lot_lid = $row['c_lot_lid'];
+			$lot_area = $row['c_lot_area'];
+			$price_sqm = $row['c_price_sqm'];
+			$lot_disc = $row['c_lot_discount'];
+			$lot_disc_amt = $row['c_lot_discount_amt'];
+			$house_model = $row['c_house_model'];
+			$floor_area = $row['c_floor_area'];
+			$h_price_per_sqm = $row['c_house_price_sqm'];
+			$house_disc = $row['c_house_discount'];
+			$house_disc_amt = $row['c_house_discount_amt'];
+			$total_tcp = $row['c_tcp'];
+			$tcp_disc = $row['c_tcp_discount'];
+			$tcp_disc_amt = $row['c_tcp_discount_amt'];
+			$vat_amt = $row['c_vat_amount'];
+			$net_tcp = $row['c_net_tcp'];
+
+			// Payment Details
+			$reservation = $row['c_reservation'];
+			$payment_type1 = $row['c_payment_type1'];
+			$payment_type2 = $row['c_payment_type2'];
+			$down_percent = $row['c_down_percent'];
+			$net_dp = $row['c_net_dp'];
+			$no_payment = $row['c_no_payments'];
+			$monthly_down = $row['c_monthly_down'];
+			$first_dp_date = $row['c_first_dp'];
+			$full_down_date = $row['c_full_down'];
+			$amt_to_be_financed = $row['c_amt_financed'];
+			$terms= $row['c_terms'];
+			$interest_rate = $row['c_interest_rate'];
+			$fixed_factor = $row['c_fixed_factor'];
+			$monthly_amortization = $row['c_monthly_payment'];
+			$start_date = $row['c_start_date'];
+			$remarks = $row['c_remarks'];
+			$active = $row['c_active'];
+
+			
+			$data = " c_csr_no = '$csr_no' ";
+			$data .= ", project_id = '12' ";
+			$data .= ", c_type = '4' ";
+			$data .= ", c_lot_lid = '$lot_lid' ";
+			$data .= ", c_lot_area = '$lot_area' ";
+			$data .= ", c_price_sqm = '$price_sqm' ";
+			$data .= ", c_lot_discount= '$lot_disc' ";
+			$data .= ", c_lot_discount_amt = '$lot_disc_amt' ";
+			$data .= ", c_house_model = '$house_model' ";
+			$data .= ", c_floor_area= '$floor_area' ";
+			$data .= ", c_house_price_sqm= '$h_price_per_sqm' ";
+			$data .= ", c_house_discount = '$house_disc' ";
+			$data .= ", c_house_discount_amt = '$house_disc_amt' ";
+			$data .= ", c_tcp_discount = '$tcp_disc' ";
+			$data .= ", c_tcp_discount_amt = '$tcp_disc_amt' ";
+			$data .= ", c_tcp = '$total_tcp' ";
+			$data .= ", c_vat_amount = '$vat_amt' ";
+			$data .= ", c_net_tcp = '$net_tcp' ";
+			$data .= ", c_reservation = '$reservation' ";
+			$data .= ", c_payment_type1 = '$payment_type1' ";
+			$data .= ", c_payment_type2 = '$payment_type2' ";
+			$data .= ", c_down_percent = '$down_percent' ";
+			$data .= ", c_net_dp = '$net_dp' ";
+			$data .= ", c_no_payments = '$no_payment' ";
+			$data .= ", c_monthly_down = '$monthly_down' ";
+			$data .= ", c_first_dp = '$first_dp_date' ";
+			$data .= ", c_full_down = '$full_down_date' ";
+			$data .= ", c_amt_financed = '$amt_to_be_financed' ";
+			$data .= ", c_terms = '$terms' ";
+			$data .= ", c_interest_rate = '$interest_rate' ";
+			$data .= ", c_fixed_factor = '$fixed_factor' ";
+			$data .= ", c_monthly_payment = '$monthly_amortization' ";
+			$data .= ", c_start_date = '$start_date' ";
+			$data .= ", c_remarks = '$remarks' ";
+			$data .= ", c_active = '$active' ";
+
+			endwhile;
+
+
+		$save = $this->conn->query("INSERT INTO properties set ".$data);
+
+		$find =  $this->conn->query("SELECT property_id FROM properties where c_csr_no =".$csr_no);
+		$row3 = $find->fetch_assoc();
+		$new_property_id = $row3["property_id"];
+	
+
+		//echo $new_property_id;
+		//save to client
+		$sql2 = $this->conn->query("SELECT * FROM t_csr_buyers where c_csr_no =".$csr_no." order by c_buyer_count");
+		while($row2 = $sql2->fetch_array()):
+			$lastname = $row2['last_name'];
+			$firstname = $row2['first_name'];
+			$middlename = $row2['middle_name'];
+			$suffixname = $row2['suffix_name']; 
+			$address = $row2['address'];
+			$zip_code = $row2['zip_code'];
+			$address_abroad = $row2['address_abroad'];
+			$birthdate = $row2['birthdate'];
+			$age = $row2['age'];
+			$viber = $row2['viber'];
+			$gender = $row2['gender'];
+			$civil_status = $row2['civil_status'];
+			$citizenship = $row2['citizenship'];
+			$id_presented = $row2['id_presented'];
+			$tin_no = $row2['tin_no'];
+			$email = $row2['email'];
+			$contact_no = $row2['contact_no'];
+			$contact_abroad = $row2['contact_abroad'];
+			$relationship = $row2['relationship'];
+			$buyer_count = $row2['c_buyer_count'];
 		
+		
+			if ($buyer_count == 1):
+				$i = 1;
+				while($i== 1){
+					$year = date("y");
+					$birthdate = date("ymd", strtotime($birthdate));
+					$random = sprintf("%05d", mt_rand(0, 99999));
+					$client_id = $year . $birthdate . $random;
+					if($this->conn->query("SELECT * FROM property_clients where client_id ='$client_id'")->num_rows <= 0)
+						$i=0;
+				}
+				$data = " client_id= '$client_id'";
+				$data .= ",property_id = '$new_property_id' ";
+				$data .= ",c_buyer_count = '$buyer_count' ";
+				$data .= ", last_name = '$lastname' ";
+				$data .= ", first_name = '$firstname' ";
+				$data .= ", middle_name = '$middlename' ";
+				$data .= ", suffix_name = '$suffixname' ";
+				$data .= ", address = '$address' ";
+				$data .= ", zip_code = '$zip_code' ";
+				$data .= ", address_abroad = '$address_abroad ' ";
+				$data .= ", birthdate = '$birthdate ' ";
+				$data .= ", age = '$age ' ";
+				$data .= ", viber = '$viber ' ";
+				$data .= ", gender = '$gender' ";
+				$data .= ", civil_status = '$civil_status' "; 
+				$data .= ", citizenship = '$citizenship' ";
+				$data .= ", id_presented = '$id_presented' "; 
+				$data .= ", tin_no = '$tin_no' "; 
+				$data .= ", email = '$email' "; 
+				$data .= ", contact_no = '$contact_no' "; 
+				$data .= ", contact_abroad = '$contact_abroad' "; 
+				$data .= ", relationship = '$relationship' ";
+				
+				$save2 = $this->conn->query("INSERT INTO property_clients set ".$data);
 
+			elseif($buyer_count >= 2):
 
+				$data = "client_id = '$client_id' ";
+				$data .= ",c_buyer_count = '$buyer_count' ";
+				$data .= ", last_name = '$lastname' ";
+				$data .= ", first_name = '$firstname' ";
+				$data .= ", middle_name = '$middlename' ";
+				$data .= ", suffix_name = '$suffixname' ";
+				$data .= ", address = '$address' ";
+				$data .= ", zip_code = '$zip_code' ";
+				$data .= ", address_abroad = '$address_abroad ' ";
+				$data .= ", birthdate = '$birthdate ' ";
+				$data .= ", age = '$age ' ";
+				$data .= ", viber = '$viber ' ";
+				$data .= ", gender = '$gender' ";
+				$data .= ", civil_status = '$civil_status' "; 
+				$data .= ", citizenship = '$citizenship' ";
+				$data .= ", id_presented = '$id_presented' "; 
+				$data .= ", tin_no = '$tin_no' "; 
+				$data .= ", email = '$email' "; 
+				$data .= ", contact_no = '$contact_no' "; 
+				$data .= ", contact_abroad = '$contact_abroad' "; 
+				$data .= ", relationship = '$relationship' ";
+
+				$save3 = $this->conn->query("INSERT INTO family_members set ".$data);
+			endif;
+
+			endwhile;
+
+		
+		if($save){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"New Property successfully saved.");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		
+		return json_encode($resp);
 
 
 	}
@@ -1029,6 +1213,5 @@ switch ($action) {
 	break;
 	
 	default:
-		// echo $sysset->index();
 		break;
 }

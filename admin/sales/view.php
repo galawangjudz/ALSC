@@ -287,10 +287,10 @@ if(isset($_GET['id'])){
                     
                     <div class="titles"> Buyer's Profile</div>
                         <br>
-                        <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'";
+                        <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
                         $result2 = mysqli_query($conn, $query2);
-                      
-                        while ($row = mysqli_fetch_assoc($result2)):
+                        if($result2) {
+                            while ($row = mysqli_fetch_assoc($result2)) { 
                                 $buyer_count = $row['c_buyer_count']; // customer buyers no
                                 $customer_last_name_1 = $row['last_name']; // customer last name
                                 $customer_suffix_name_1 = $row['suffix_name']; // customer suffix name
@@ -309,7 +309,7 @@ if(isset($_GET['id'])){
                                 $customer_viber= $row['viber']; // customer viber
                                 $customer_gender = $row['gender']; // customer phone number
                                 $civil_status = $row['civil_status']; // customer civil status
-                            endwhile;
+
                         ?>
                         <div class="view_box">
                             <div class="float-left col-md-12">
@@ -322,11 +322,12 @@ if(isset($_GET['id'])){
                                         <td><b>Buyer's Full Name:</b></td>
                                         <td><?php echo $cust_fullname1 ?></td>
                                     </tr>
-                                 
+                                
                                     <tr>
                                         <td><b>Address 1:</b></td>
                                         <td><?php echo $customer_address_1 ?></td>
                                     </tr>
+                                
                                     <tr>
                                         <td><b>Zipcode : </b></td>
                                         <td><?php echo $customer_zip_code?></td>
@@ -363,17 +364,18 @@ if(isset($_GET['id'])){
                                         <td><b>Civil Status:</b></td>
                                         <td><?php echo $civil_status ?></td>
                                     </tr>
-                                  
+                                
+                        
+                            
                                 </table> 
-                               
                             </div>       
                         </div>
                         <br>
                         <div class="space"></div>
                         <?php 
-                               
-                        
-                        ?>
+                            
+                            }} 
+                            ?>
                        
                         <div class="space"></div>
                         <div class="space"></div>

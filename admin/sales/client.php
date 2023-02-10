@@ -6,7 +6,7 @@
 <?php 
 
 if(isset($_GET['id'])){
-$client = $mysqli->query("SELECT * FROM t_client_info where id =".$_GET['id']);
+$client = $mysqli->query("SELECT * FROM t_buyer_info where id =".$_GET['id']);
 foreach($client->fetch_array() as $k =>$v){
 	$meta[$k] = $v;
 }
