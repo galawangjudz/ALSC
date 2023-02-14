@@ -261,6 +261,7 @@ function getCivilStatus(){
 	}
     getCivilStatus2();
     getCivilStatus3();
+    getCivilStatus4();
 }
 function getCivilStatus2(){
 	var civil=document.getElementById("civil_status2").value;
@@ -286,6 +287,18 @@ function getCivilStatus3(){
 		document.getElementById('widowed3').checked=true;
 	}
 }
+function getCivilStatus4(){
+	var civil=document.getElementById("civil_status4").value;
+	if(civil=="Married"){
+		document.getElementById('married4').checked=true;
+	}else if(civil=="Separated"){
+		document.getElementById('separated4').checked=true;
+	}else if(civil=="Single"){
+		document.getElementById('single4').checked=true;
+	}else{
+		document.getElementById('widowed4').checked=true;
+	}
+}
 function getGender(){
     var sex=document.getElementById("gender_txt1").value;
     if(sex=="M"){
@@ -295,6 +308,7 @@ function getGender(){
     }
     getGender2();
     getGender3();
+    getGender4();
 }
 function getGender2(){
     var sex=document.getElementById("gender_txt2").value;
@@ -310,6 +324,14 @@ function getGender3(){
         document.getElementById('male3').checked=true;
     }else{
         document.getElementById('female3').checked=true;
+    }
+}
+function getGender4(){
+    var sex=document.getElementById("gender_txt4").value;
+    if(sex=="M"){
+        document.getElementById('male4').checked=true;
+    }else{
+        document.getElementById('female4').checked=true;
     }
 }
 
@@ -621,6 +643,7 @@ function getRelationship(){
     }
     getRelationship2();
     getRelationship3();
+    getRelationship4();
 }
 function getRelationship2(){
     var rel = document.getElementById('rel2').value;
@@ -656,8 +679,24 @@ function getRelationship3(){
         document.getElementById('minor3').checked=false;
     }
 }
+function getRelationship4(){
+    var rel = document.getElementById('rel4').value;
+    if(rel==1){
+        document.getElementById('and4').checked=true;
+    }else if(rel==2){
+        document.getElementById('spouses4').checked=true;
+    }else if(rel==3){
+        document.getElementById('marriedto4').checked=true;
+    }else if(rel==4){
+        document.getElementById('minor4').checked=true;
+    }else{
+        document.getElementById('and4').checked=false;
+        document.getElementById('spouses4').checked=false;
+        document.getElementById('marriedto4').checked=false;
+        document.getElementById('minor4').checked=false;
+    }
+}
 </script>
-
 </body>
 <?php
 }} 
