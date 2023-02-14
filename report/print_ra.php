@@ -145,7 +145,7 @@ header("Access-Control-Allow-Origin: *");
         <!-- <p style="page-break-after:always;"></p> -->
     <?php
         // include('print_payment_without_add_cost.php');
-    }else if($count == 3 && $c_floor_area =! 0){
+    }else if($count == 3 && $c_floor_area != 0){
         ?>
         <br>
         <?php
@@ -156,24 +156,31 @@ header("Access-Control-Allow-Origin: *");
     <?php
         
         
-    }else if($count == 4 && $c_floor_area =! 0){
+    }else if($count == 4 && $c_floor_area != 0){
         ?>
         <br>
         <?php
         include('print_4buyers_with_add_cost.php');
-        include('print3_payment_with_add_cost.php');
+        ?>
+        <p style="page-break-after:always;"></p>
+        <?php
+            include('print4_payment_with_add_cost.php');
         ?>
         <!-- <p style="page-break-after:always;"></p> -->
     <?php
         
         
     }else if($count == 4 && $c_floor_area == 0){
-        include('print_4buyers_without_add_cost.php');
-        include('print3_payment_without_add_cost.php');
-    ?>
-        <!-- <p style="page-break-after:always;"></p> -->
-    <?php
-        // include('print_payment_without_add_cost.php');
+        ?>
+        <br>
+        <?php
+        include('print_4buyers_with_add_cost.php');
+        ?>
+        <p style="page-break-after:always;"></p>
+        <?php
+            include('print4_payment_without_add_cost.php');
+        ?>
+        <?php
     }
 ?>
 </body>

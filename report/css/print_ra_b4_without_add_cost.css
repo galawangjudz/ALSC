@@ -191,7 +191,7 @@ body{
     margin-top:-1px;
 	display:inline-block;
 	margin-left:3px;
-    height:293px;
+    height:305px;
     padding-top:0px!important;
 }
 .titles{
@@ -224,7 +224,7 @@ body{
 	border:solid 1px black;
 	display:inline-block;
 	margin-left:3px;
-    height:293px;
+    height:305px;
     padding-top:0px!important;
     border-radius:0px!important;
 }
@@ -390,7 +390,7 @@ body{
     height:auto;
     margin-top:10px;
     text-align:center;
-    font-size:10px;
+    font-size:9px;
     font-weight:bold;
     margin-bottom:-5px;
 }
