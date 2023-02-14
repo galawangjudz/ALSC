@@ -95,13 +95,7 @@ body{
     display: inline-block;
     width: auto;
     font-style:italic;
-    margin-bottom:3px;
     font-size:10px;
-    margin-top:2px;
-}
-#card-payment{
-    height:136px;
-    float:left;
 }
 .others_title{
     width:100%;
@@ -163,7 +157,7 @@ body{
     margin-bottom:5px;
 }
 .lbl_div_others_txtbox{
-    width:23.5%;
+    width:22%;
     height:auto;
     float:left;
     font-size:8px!important;
