@@ -14,18 +14,7 @@
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped">
-			<!-- 	<colgroup>
-					<col width="5%">
-					<col width="15%">
-					<col width="15%">
-					<col width="20%">
-					<col width="30%">
-					<col width="15%">
-					<col width="15%">
-					<col width="15%">
-					<col width="15%">
-					<col width="15%">
-				</colgroup> -->
+		
 				<thead>
 					<tr>
 					<th>Prepared Date</th>
@@ -50,9 +39,9 @@
 						if ($type < 5 ){
 							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
 											t_lots z,  t_projects q
-											where c_revised = 0 and  x.c_csr_no = y.c_csr_no 
-											and x.c_lot_lid = z.c_lid 
-											and z.c_site = q.c_code 
+												where c_revised = 0 and  x.c_csr_no = y.c_csr_no 
+												and x.c_lot_lid = z.c_lid 
+												and z.c_site = q.c_code 
 											and y.c_buyer_count = 1 order by c_date_updated DESC");
 						}else{
 

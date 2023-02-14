@@ -1026,7 +1026,6 @@ Class Master extends DBConnection {
 
 			endwhile;
 
-
 		$save = $this->conn->query("INSERT INTO properties set ".$data);
 
 		$find =  $this->conn->query("SELECT property_id FROM properties where c_csr_no =".$csr_no);
@@ -1092,7 +1091,7 @@ Class Master extends DBConnection {
 				$data .= ", contact_no = '$contact_no' "; 
 				$data .= ", contact_abroad = '$contact_abroad' "; 
 				$data .= ", relationship = '$relationship' ";
-				
+
 				$save2 = $this->conn->query("INSERT INTO property_clients set ".$data);
 
 			elseif($buyer_count >= 2):
@@ -1125,7 +1124,9 @@ Class Master extends DBConnection {
 			endwhile;
 
 		
-		if($save){
+		$save4 = $this->conn->query("UPDATE t_approval_csr set cfo_status = 1 where c_csr_no =".$csr_no);
+
+		if($save && $save2 && $save3 && $save4){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"New Property successfully saved.");
 
