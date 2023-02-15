@@ -101,9 +101,9 @@ color: white;
 
             <div id="tab-1" class="tab-content current">
               <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
-                if($qry2->num_rows <= 0){
-                    echo "No Details founds";
-                }else{ ?> 
+              if($qry2->num_rows <= 0){ ?>
+                    <td><?php echo "No Details founds" ?> </td>
+               <?php }else{ ?> 
                 <table class="table table-bordered table-stripped">
                     <colgroup>
                       <col width="10%">
@@ -151,7 +151,8 @@ color: white;
                         <?php }elseif($row['relationship'] == 4){ ?>
                             <td class="text-center"><span class="badge badge-primary">Minor/Represented by Legal Guardian</span></td>
                         <?php }
-                      endwhile; }?>
+                      endwhile; 
+                    }?>
 
                       </tr>
 
@@ -287,12 +288,6 @@ color: white;
 <script>
 $(document).ready(function() {
 
-
-  
-
-  $('#data-table').dataTable({
-
-  }); 
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');

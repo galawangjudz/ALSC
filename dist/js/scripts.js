@@ -364,13 +364,7 @@ function updateTotals(elem) {
 		updateRes();
 	});
 
-	
 
-	var dateFormat = $(this).attr('data-vat-rate');
-	$('#down_start_date, #down_end_date, #mo_start_date').datetimepicker({
-		showClose: false,
-		format: dateFormat
-	});
 
 	$('#birth_date').datetimepicker({
 		showClose: false,
