@@ -1032,6 +1032,35 @@ Class Master extends DBConnection {
 		$row3 = $find->fetch_assoc();
 		$new_property_id = $row3["property_id"];
 	
+		$payment_count = 1;
+		$new_balance = $net_tcp;
+		$qry_pay = $this->conn->query("SELECT * FROM t_reservation where c_csr_no =".$csr_no." order by c_reserve_date");
+		while($pay_row = $qry_pay->fetch_array()):
+			$pay_date = date("Y-m-d", strtotime($pay_row['c_reserve_date'])); 
+			$due_date = date("Y-m-d", strtotime($pay_row['c_reserve_date'])); 
+			$or_no = $pay_row['c_or_no'];
+			$amount_paid =  $pay_row['c_amount_paid'];
+
+			$new_balance -= $amount_paid;
+
+			$data = " property_id = '$new_property_id' "; 
+			$data .= ", payment_date = '$pay_date' "; 
+			$data .= ", due_date = '$due_date' ";
+			$data .= ", or_no = '$or_no' "; 
+			$data .= ", amount_due = 0 "; 
+			$data .= ", payment_amount = '$amount_paid' "; 
+			$data .= ", rebate = 0 "; 
+			$data .= ", surcharge = 0 "; 
+			$data .= ", interest = 0 ";
+			$data .= ", principal = '$amount_paid' ";
+			$data .= ", status = 'RES' ";
+			$data .= ", remaining_balance = '$new_balance' ";
+			$data .= ", payment_count = '$payment_count' ";
+
+			$save5 = $this->conn->query("INSERT INTO property_payments set ".$data);
+			$payment_count += 1;
+			
+		endwhile;
 
 		//echo $new_property_id;
 		//save to client
@@ -1126,7 +1155,7 @@ Class Master extends DBConnection {
 		
 		$save4 = $this->conn->query("UPDATE t_approval_csr set cfo_status = 1 where c_csr_no =".$csr_no);
 
-		if($save && $save2 && $save3 && $save4){
+		if($save && $save2 && $save5 && $save4){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"New Property successfully saved.");
 

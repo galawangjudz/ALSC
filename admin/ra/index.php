@@ -190,7 +190,9 @@
 								</button>
 								<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item view_data" href="./?page=ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-								<?php if ($usertype == 'IT Admin' || $usertype == 'COO'): ?>	
+								
+								
+								<?php if (($usertype == 'IT Admin' || $usertype == 'COO')): ?>	
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item extend_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-hourglass text-success"></span> Extend</a>
 									<div class="dropdown-divider"></div>
