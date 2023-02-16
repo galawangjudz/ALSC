@@ -997,6 +997,7 @@ Class Master extends DBConnection {
 			$tcp_disc_amt = $row['c_tcp_discount_amt'];
 			$vat_amt = $row['c_vat_amount'];
 			$net_tcp = $row['c_net_tcp'];
+			$type = $row['c_type'];
 
 			// Payment Details
 			$reservation = $row['c_reservation'];
@@ -1025,7 +1026,7 @@ Class Master extends DBConnection {
 			
 			$data = " c_csr_no = '$csr_no' ";
 			$data .= ", project_id = '$proj_id' ";
-			$data .= ", c_type = '4' ";
+			$data .= ", c_type = '$type' ";
 			$data .= ", c_lot_lid = '$lot_lid' ";
 			$data .= ", c_lot_area = '$lot_area' ";
 			$data .= ", c_price_sqm = '$price_sqm' ";

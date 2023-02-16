@@ -1742,7 +1742,6 @@ input{
 </div><!-- /.modal -->
 </body>
 <script>
-<<<<<<< HEAD
 		
 	$(document).ready(function(){
 		
@@ -1752,8 +1751,6 @@ input{
 		
 	})
 
-=======
->>>>>>> 03061167908460997d7b15e9e4f0e7563abed2c4
 	function redirectToMail() {
         window.location.href = "./mail.php";
     }
