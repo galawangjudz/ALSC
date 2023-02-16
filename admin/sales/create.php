@@ -9,8 +9,7 @@ $username = $_settings->userdata('username');
 
 /* $type = isset($_GET['type']) ? $_GET['type'] : 1 ; */
 if(isset($_GET['id']) && $_GET['id'] > 0){
-
-	$csr = $conn->query("SELECT * FROM t_csr where md5(c_csr_no) = '{$_GET['id']}' ");
+	$csr = $conn->query("SELECT x.*, y.* FROM t_csr x inner join t_additional_cost y on x.c_csr_no = y.c_csr_no where md5(x.c_csr_no) = '{$_GET['id']}' ");
 
 	if($csr->num_rows > 0){
 		while($row = $csr->fetch_assoc()):
@@ -49,6 +48,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$remarks = $row['c_remarks'];
 			$date_created = $row['c_date_created'];
 			$date_updated = $row['c_date_updated'];
+			$c_floor = $row['floor_elevation'];
+			$aircon_outlets = $row['aircon_outlets'];
+			$aircon_grill = $row['aircon_grill'];
+			$service_area = $row['service_area'];
+			$others = $row['others'];
+			$aircon_outlet_price = $row['aircon_outlet_price'];
+			$aircon_grill_price = $row['aircon_grill_price'];
+			$conv_outlet_price = $row['conv_outlet_price'];
+			$service_area_price = $row['service_area_price'];
+			$others_price = $row['others_price'];
+			$floor_elev_price = $row['floor_elev_price'];
 			
 			$lcp =($lot_area * $price_sqm) - $lot_discount_amt;
 			$amount = $lot_area * $price_sqm;
@@ -61,9 +71,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				
 			}
 		endwhile;
-
-
-
 	}
 
 	$qry = $conn->query("SELECT x.*, y.c_acronym FROM t_lots x LEFT join t_projects y on x.c_site = y.c_code WHERE c_lid ='" . $conn->real_escape_string($lot_id) ."'");
@@ -71,9 +78,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		$phase = $rows['c_acronym'];
 		$block = $rows['c_block'];
 		$lot = $rows['c_lot'];
-
 	endwhile;
-
 }
 
 ?>
@@ -97,23 +102,19 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
 }
-
 .has-error .form-control:focus {
     border-color: #843534;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483
 }
-
 .has-error .input-group-addon {
     color: #a94442;
     background-color: #f2dede;
     border-color: #a94442
 }
-
 .has-error .form-control-feedback {
     color: #a94442
 }
-
 /* Style the tab */
 .tab {
   overflow: hidden;
@@ -121,7 +122,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
   background-color: #f1f1f1;
   font-weight:bold;
 }
-
 /* Style the buttons that are used to open the tab content */
 .tab button {
   background-color: inherit;
@@ -160,8 +160,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
   padding-bottom:15px;
   border-radius:5px;
 }
-
-
 .payment_box{
   width:49%;
   height:auto;
@@ -184,6 +182,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
   padding-top:15px;
   border-radius:5px;
   margin-left:2%;
+}
+.add_cost_box{
+  width:100%;
+  height:auto;
+  float:left;
+  border: solid #36454F 1px;
+  padding-left:15px;
+  padding-right:15px;
+  padding-bottom:15px;
+  border-radius:5px;
+  margin-top:15px;
 }
 .house_box{
   width:49%;
@@ -298,11 +307,11 @@ input{
   padding: 10px;
   resize: none;
 }
+.type-title{
+	float:left;
+}
 </style>
-
 <script type="text/javascript">
-		
-	
 	function opentab(evt, tabName) {
 		// Declare all variables
 		var i, tabcontent, tablinks;
@@ -320,15 +329,11 @@ input{
 		document.getElementById(tabName).style.display = "block";
 		evt.currentTarget.className += " active";
 	  }
-
 	  function showTab(){
 		document.getElementById('Buyer').style.display="block";
 	  }
-
 	  function showTab(){
-			
 			document.getElementById('Buyer').style.display="block";
-			
 			var l_payment_type1 = $('.payment-type1').val();
 		/* 	$('#payment_type2').removeAttr('disabled'); */
 			$('#loan_text').text("Amount to be financed :");
@@ -404,13 +409,8 @@ input{
 				compute_no_payment();
 				compute_rate();
 				compute_monthly_payments(); */
-				
 			}
-	
-		
-	
 		var l_payment_type2 = $('.payment-type2').val();
-	
 		if (l_payment_type2 == "Deferred Cash Payment"){
 		$('#loan_text').text("Amount to be financed :");
 		$('#interest_rate').show();
@@ -419,7 +419,6 @@ input{
 		$('#rate_text').show()
 		$('#factor_text').show()
 		$('#ma_text').text("Monthly Amortization ");
-		
 		}else if (l_payment_type2 == "Deferred Cash Payment"){
 			$('#ma_text').text("Deferred Cash Payment ");
 			$('#loan_text').text("Deferred Amount:");
@@ -429,16 +428,10 @@ input{
 			$('#factor_text').hide()
 			$('#interest_rate').hide();
 			$('#fixed_factor').hide();
-		
 		}
-	
 	}	  
-
-
-
 </script>
 <body onload="showTab()">
-
 <div class="card card-outline rounded-0 card-blue">
 	<div class="card-header">
 			<!-- <h3 class="card-title"><?php echo !isset($_GET['id']) ? "New Invoice" :"Edit Invoice" ?></h3> -->
@@ -461,13 +454,11 @@ input{
 			<div id="Buyer" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="panel panel-default">
-								
+						<div class="panel panel-default">	
 							<div class="panel-body form-group form-group-sm">
 								<table class="table table-bordered table-stripped" id="buyer_table">
 									<thead>
 										<tr>
-											
 											<th>
 											<div class="panel-heading">
 												<a href="#" class="btn btn-primary float-left btn-md add-buyer-row"><span class="fa fa-plus" aria-hidden="true"></span></a>
@@ -506,24 +497,17 @@ input{
 													$civil_status = $row['civil_status']; // customer civil status
 
 													$civil_status = $row['civil_status']; // customer civil status
-													$relationship = $row['relationship'];
-
-												
+													$relationship = $row['relationship'];		
 										?>
-									
-
 										<tr>
-											
 											<td>
 												<div class="form-group form-group-sm  no-margin-bottom">
 													<div class="card-tools">
 													<a href="#" class="btn btn-danger float-right btn-md delete-buyer-row"><span class="fa fa-times" aria-hidden="true"></span></a>
 													</div>
 													<p class="select-customer"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-plus" aria-hidden="true"></span> Select Existing Client</a></p>
-										
 												</div>
 												<div class="main_box">
-												
 													<div class="row">
 														<div class="col-md-3">		
 															<div class="form-group">
@@ -891,7 +875,47 @@ input{
 						<div class="panel panel-default">
 								<div class="panel-heading">
 									<div class="titles"></a><center><h4>Investment Value<h4></center></div>
+									<div class="lot_box" style="width:100%;padding-top:10px;height:45px;"><div class="type-title" style="margin-left:60px;"><b>Type: </b></div>
+										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+										<div style="float:left;margin-right:2px;margin-top:3px;">
+											<input id="lotonly" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										</div>
+										<div style="float:left">
+											<label class="light" style="font-weight:normal;">Lot Only<label>
+										</div>
+										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+										<div style="float:left;margin-right:2px;margin-top:3px;">
+											<input id="houseonly" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										</div>
+										<div style="float:left">
+											<label class="light" style="font-weight:normal;">House Only<label>
+										</div>
+										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+										<div style="float:left;margin-right:2px;margin-top:3px;">
+											<input id="packaged" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										</div>
+										<div style="float:left">
+											<label class="light" style="font-weight:normal;">Packaged<label>
+										</div>
+										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+										<div style="float:left;margin-right:2px;margin-top:3px;">
+											<input id="fence" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										</div>
+										<div style="float:left">
+											<label class="light" style="font-weight:normal;">Fence<label>
+										</div>
+										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+										<div style="float:left;margin-right:2px;margin-top:3px;">
+											<input id="add_cost" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										</div>
+										<div style="float:left">
+											<label class="light" style="font-weight:normal;">Add Cost<label>
+										</div>
+									</div>
+									<input type="hidden" id="type_text" name="type_text">
+									<br><br><br></hr>
 									<!-- <a href="#" class="float-right select-customer"><b>OR</b> Select Existing Customer</a>  -->
+									
 									<div class="clear"></div>
 								</div>
 							<div class="panel-body form-group form-group-sm">
@@ -979,7 +1003,7 @@ input{
 									<hr>
 									<div class="row">
 										<input type="hidden" class="form-control margin-bottom copy-input" name="l_house_lid" id="l_house_lid" >
-										<div class="col-md-6">		
+										<div class="col-md-12">		
 											<div class="form-group">
 												<label class="control-label">House Model: </label>
 													<select class="form-control" name= "house_model">
@@ -1044,6 +1068,212 @@ input{
 										</div>	
 									</div>		
 								</div>
+								
+
+								<div class="space"></div>
+								<div class="main_box">
+								<div class="titles">Add Cost</div>
+									<hr>
+									<div class="row">
+									
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label">Floor Elevation: </label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"></label>
+											</div>
+										</div>
+										<div class="col-md-4" >
+											<div class="form-group">
+												<input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											</div>
+												<input type="hidden" name="flrelev_text" id="flrelev_text" onchange="getFlrElev(this);"/>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="flrelev_price" name="flrelev_price">
+											</div>
+										</div>
+										
+									</div>
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label">Aircon Outlets: </label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"><input type="text" class="form-control margin-bottom tcp-disc" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" onchange = "getAcSubtotal();"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label">Unit/s</label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>" onchange = "getAcSubtotal();">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="ac_outlet_subtotal" name="ac_outlet_subtotal" onkeyup = "getAddCost();" disabled>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label">Aircon Grill: </label>
+												<label class="control-label"><i>(for window-type):</i></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"><input type="text" class="form-control margin-bottom tcp-disc" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>" onchange="getAcGrillSubtotal();"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label">Unit/s</label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="ac_grill_price" name="ac_grill_price" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" onchange="getAcGrillSubtotal();">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="ac_grill_subtotal" name="ac_grill_subtotal" onkeyup = "getAddCost();" disabled>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label">Convenience Outlet: </label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"><input type="text" class="form-control margin-bottom tcp-disc" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>" onchange="getConvSubtotal();"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label">Unit/s</label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="conv_outlet_price" name="conv_outlet_price" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" onchange="getConvSubtotal();">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="conv_outlet_subtotal" name="conv_outlet_subtotal" onkeyup = "getAddCost();" disabled>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label">Service Area: </label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"><input type="text" class="form-control margin-bottom tcp-disc" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>" onchange="getServiceSubtotal();"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label">Unit/s</label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="service_area_price" name="service_area_price" value="<?php echo isset($service_area_price) ? $service_area_price : 0; ?>" onchange="getServiceSubtotal();">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="service_subtotal" name="service_subtotal" onkeyup = "getAddCost();" disabled>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label">Other(specify): </label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"><input type="text" class="form-control margin-bottom tcp-disc" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" onchange="getOthersSubtotal()"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label">Unit/s</label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="others_price" name="others_price" value="<?php echo isset($others_price) ? $others_price : 0; ?>" onchange="getOthersSubtotal()">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="others_subtotal" name="others_subtotal" onkeyup = "getAddCost()" disabled>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label class="control-label"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"></label>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<label class="control-label"></label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label" style="align-items:right;">Additional Cost/s: </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" id="addcost_total" name="addcost_total">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
 								<div class="space"></div>
 								<div class="main_box">
 									<div class="row">
@@ -1424,7 +1654,6 @@ input{
 					<?php endwhile; ?>
 					</tbody>
 				</table>
-
 			</div>
 		<div class="modal-footer">
 			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
@@ -1432,11 +1661,8 @@ input{
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 <div id="insert_lot" class="modal fade">
 	<div class="modal-dialog modal-lg">
-	
-
 		<div class="modal-content">
 		<div class="modal-header">
 			<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1446,14 +1672,12 @@ input{
 			<table class="table table-bordered table-stripped">
 				<thead>
 					<tr>
-
 						<th>Lot ID</th>
 						<th>Project</th>
 						<th>Block</th>
 						<th>Lot</th>
 						<th>Status </th>
 						<th>Actions</th>
-
 					</tr>
 				</thead>
 				<tbody>
@@ -1469,7 +1693,6 @@ input{
 				ORDER BY c.c_acronym, i.c_block, i.c_lot");
 
 				while($row = $query->fetch_assoc()): ?>
-
 					<tr>
 						<td><?php echo $row["c_lid"] ?></td>
 						<td><?php echo $row["c_acronym"] ?></td>
@@ -1477,12 +1700,10 @@ input{
 						<td><?php echo $row["c_lot"] ?></td>
 						<td><?php echo $row["c_status"] ?></td>
 						<td><a href="#" class="btn btn-primary btn-md lot-select" data-lot-lid="<?php echo $row['c_lid'] ?>" data-house-lid="<?php echo $row['c_house_lid'] ?>" data-floor-area="<?php echo $row['c_floor_area'] ?>" data-house-price="<?php echo $row['c_h_price_sqm'] ?>" data-house-model="<?php echo $row['c_house_model'] ?>" data-lot-site="<?php echo $row['c_acronym'] ?>" data-lot-block="<?php echo $row['c_block'] ?>" data-lot-lot="<?php echo $row['c_lot'] ?>" data-lot-lot-area="<?php echo $row['c_lot_area'] ?>" data-lot-per-sqm="<?php echo $row['c_price_sqm'] ?>"><center>Select</center></a></td>
-				
 					</tr>
 				<?php endwhile; ?>
 				</tbody>
 			</table>
-			
 		</div>
 		<div class="modal-footer">
 			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
@@ -1490,8 +1711,6 @@ input{
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->	
 </div><!-- /.modal -->
-
-
 <div id="insert" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -1500,7 +1719,6 @@ input{
 			<h4 class="modal-title">Select Agent</h4>
 			</div>
 			<div class="modal-body">
-			
 				<div class="form-group">
 				<label for="agent_name" class="control-label">Agents</label>
 					<select class="form-control item-select">
@@ -1511,11 +1729,9 @@ input{
 							$i++;
 						?>
 						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> "><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> </option>
-						
 						<?php endwhile; ?>
 					</select>
 				</div>
-			
 			</div>
 			<div class="modal-footer">
 			<button type="button" data-dismiss="modal" class="btn btn-primary" id="selected">Add</button>
@@ -1524,10 +1740,9 @@ input{
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 </body>
-
 <script>
+<<<<<<< HEAD
 		
 	$(document).ready(function(){
 		
@@ -1537,6 +1752,8 @@ input{
 		
 	})
 
+=======
+>>>>>>> 03061167908460997d7b15e9e4f0e7563abed2c4
 	function redirectToMail() {
         window.location.href = "./mail.php";
     }
@@ -1585,7 +1802,6 @@ input{
 		//calculateTotal();
 	});
 
-
 	function updateTotals(elem) {
 	net_tcp = $('.total-tcp').val()
 	var tr = $(elem).closest('tr'),
@@ -1598,8 +1814,6 @@ input{
 	$('.comm-amt', tr).val(subtotal.toFixed(2));
 	
 	}
-
-	
 
 	function validateForm() {
 	    // error handling
@@ -1669,24 +1883,12 @@ input{
 			$(customer).closest('tr').find('.buyer-civl').val(customer_civil);
 			$(customer).closest('tr').find('.buyer-ctzn').val(customer_ctzn);
 
-
-
-
 			$('#insert_customer').modal('hide');
 
 		});
-
-
-
-
-
 		return false;
-
 		});
-
-
 	$(document).ready(function(){
-
 		$('#save_csr').submit(function(e){
 			e.preventDefault();
 			var _this = $(this)
@@ -1734,13 +1936,82 @@ input{
 
 	})
 
+	function getCtype(){
+		if(document.getElementById("lotonly").checked==true){
+			document.getElementById("type_text").value='1';
+		}else if(document.getElementById("houseonly").checked==true){
+			document.getElementById("type_text").value='2';
+		}else if(document.getElementById("packaged").checked==true){
+			document.getElementById("type_text").value='3';
+		}else if(document.getElementById("fence").checked==true){
+			document.getElementById("type_text").value='4';
+		}else{
+			document.getElementById("type_text").value='4';
+		}
+	}
+	function getFlrElev(){
+		if(document.getElementById("id20").checked==true){
+			document.getElementById("flrelev_text").value='0.20';
+		}else if(document.getElementById("id40").checked==true){
+			document.getElementById("flrelev_text").value='0.40';
+		}else if(document.getElementById("id60").checked==true){
+			document.getElementById("flrelev_text").value='0.60';
+		}else{
+			document.getElementById("flrelev_text").value='0';
+		}
+	}
+	function getAcSubtotal(){
+		var ac_unit = document.getElementById('aircon_outlets').value;
+		var ac_unit_price = document.getElementById('aircon_outlet_price').value;
 
+		var res = ac_unit * ac_unit_price;
 
+		document.getElementById('ac_outlet_subtotal').value = res;
+	}
+	function getAcGrillSubtotal(){
+		var ac_grill = document.getElementById('ac_grill').value;
+		var ac_grill_price = document.getElementById('ac_grill_price').value;
 
+		var res = ac_grill * ac_grill_price;
 
+		document.getElementById('ac_grill_subtotal').value = res;
+	}
+	function getServiceSubtotal(){
+		var service = document.getElementById('service_area').value;
+		var service_price = document.getElementById('service_area_price').value;
 
+		var res = service * service_price;
 
+		document.getElementById('service_subtotal').value = res;
+	}
+	function getOthersSubtotal(){
+		var others = document.getElementById('others').value;
+		var others_price = document.getElementById('others_price').value;
 
+		var res = others * others_price;
+
+		document.getElementById('others_subtotal').value = res;
+	}
+	function getConvSubtotal(){
+		var conv = document.getElementById('conv_outlet').value;
+		var conv_price = document.getElementById('conv_outlet_price').value;
+
+		var res = conv * conv_price;
+
+		document.getElementById('conv_outlet_subtotal').value = res;
+	}
+	function getAddCost(){
+		let others = document.getElementById('others_subtotal').value;
+		let service = document.getElementById('service_subtotal').value;
+		let ac_grill = document.getElementById('ac_grill_subtotal').value;
+		let ac_outlet = document.getElementById('ac_outlet_subtotal').value;
+		let flr_elev = document.getElementById('flrelev_price').value;
+		let conv_outlet = document.getElementById('conv_outlet_subtotal').value;
+
+		let res = parseInt(others) + parseInt(service) + parseInt(ac_grill) + parseInt(ac_outlet) + parseInt(flr_elev) + parseInt(conv_outlet);
+
+		document.getElementById('addcost_total').value = res;
+	}
 </script>
 
 

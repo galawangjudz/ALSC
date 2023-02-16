@@ -4,6 +4,7 @@
     <head>
         <link rel="stylesheet" href="css/print_ra_b1_with_add_cost.css">
     </head>
+    <div class="ref_no">Reference No. : <?php echo $ref_no; ?></div>
     <body onload="loadAll()">
         <div class="card-body" style="margin-top:-2px;">
         <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>

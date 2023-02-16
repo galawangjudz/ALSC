@@ -145,12 +145,10 @@ Class Master extends DBConnection {
 			$resp['error'] = $this->conn->error;
 		}
 		return json_encode($resp);
-			
 	}
-
-
 	function save_csr(){
 		extract($_POST);
+			
 		if(empty($c_csr_no)){
 
 			//lot computation
@@ -188,9 +186,11 @@ Class Master extends DBConnection {
 			$monthly_amortization = $_POST['monthly_amortization'];
 			$start_date = $_POST['start_date'];
 			$invoice_notes = $_POST['invoice_notes'];
+			$type = $_POST['type_text'];
 
 			$data = " c_lot_lid = '$lot_lid' ";
 			
+			$data .= ", c_type = '$type' ";
 			$data .= ", c_lot_area = '$lot_area' ";
 			$data .= ", c_price_sqm = '$price_sqm' ";
 			$data .= ", c_lot_discount= '$lot_disc' ";
@@ -238,6 +238,37 @@ Class Master extends DBConnection {
 
 			// get last insert id
 			$last_id = $this->conn->insert_id;
+
+			$ac_outlets =  $_POST['aircon_outlets'];
+			$ac_grill = $_POST['ac_grill'];
+			$service_area = $_POST['service_area'];
+			$others = $_POST['others'];
+			$conv_outlet = $_POST['conv_outlet'];
+			$flr_elev = $_POST['flrelev_text'];
+			$service_area_price = $_POST['service_area_price'];
+			$ac_outlet_price = $_POST['aircon_outlet_price'];
+			$ac_grill_price = $_POST['ac_grill_price'];
+			$flr_elev_price = $_POST['flrelev_text_price'];
+			$conv_price = $_POST['conv_outlet_price'];
+
+			$data = " c_csr_no = '$last_id' ";
+
+			$data .= ", aircon_outlets = '$ac_outlets' ";
+			$data .= ", aircon_grill = '$ac_grill' ";
+			$data .= ", service_area = '$service_area' ";
+			$data .= ", others = '$others' ";
+			$data .= ", conv_outlet = '$conv_outlet' ";
+			$data .= ", floor_elevation = '$flr_elev' ";
+			$data .= ", service_area_price = '$service_area_price' ";
+			$data .= ", aircon_outlet_price = '$ac_outlet_price' ";
+			$data .= ", aircon_grill_price = '$ac_grill_price' ";
+			$data .= ", floor_elev_price = '$flr_elev_price' ";
+			$data .= ", conv_outlet_price = '$conv_outlet_price' ";
+
+
+			$save = $this->conn->query("INSERT INTO t_additional_cost set ".$data);
+			
+			
 
 			foreach($_POST['agent_name'] as $key => $value) {
 
@@ -312,7 +343,6 @@ Class Master extends DBConnection {
 				}
 			
 		}
-
 
 		if(!empty($c_csr_no)){
 			$c_csr_no =  $_POST['c_csr_no'];
@@ -401,6 +431,7 @@ Class Master extends DBConnection {
 			$data .= ", c_created_by = '$username' ";
 			$data .= ", c_verify = 0 ";
 			$data .= ", coo_approval = 0";
+			
 
 		
 		
@@ -482,7 +513,6 @@ Class Master extends DBConnection {
 				}
 		}
 		
-
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($c_csr_no))

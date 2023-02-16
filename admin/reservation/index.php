@@ -82,7 +82,9 @@ if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete this payment permanently?","delete_reservation",[$(this).attr('data-id'),$(this).attr('ra_no'),$(this).attr('lid')])
 		})
-		$('.table').dataTable();
+		$('.table').dataTable(
+			{"ordering":false}
+		);
 		
 	})
 	function delete_reservation($id,$ra_no,$lid){

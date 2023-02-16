@@ -222,7 +222,9 @@
 	$('.delete_data').click(function(){
 		_conf("Are you sure to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
 	})
-	$('.table').dataTable();
+	$('.table').dataTable(
+		{"ordering":false}
+	);
 	$('#uni_modal').on('shown.bs.modal', function() {
 		$('.select2').select2({width:'resolve'})
 		$('.summernote').summernote({
