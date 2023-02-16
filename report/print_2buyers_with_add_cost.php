@@ -61,7 +61,7 @@
             $c_no_payment = $row['c_no_payments'];
             $count = $count + 1;
     ?>
-                    
+<div class="ref_no">Reference No. : <?php echo $ref_no; ?></div>                  
 <body onload="loadAll()">
 <div class="card-body">
     <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>

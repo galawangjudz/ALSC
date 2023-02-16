@@ -231,7 +231,9 @@ foreach($res->fetch_array() as $k =>$v){
 <script>
 	$(document).ready(function(){
 		
-		$('.table').dataTable();
+		$('.table').dataTable(
+			{"ordering":false}
+		);
 		
 	})
 	
