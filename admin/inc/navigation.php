@@ -110,6 +110,15 @@
                         </p>
                       </a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=clients/property_list" class="nav-link nav-property_list">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Property Accounts
+                        </p>
+                      </a>
+                    </li>
                 
                    <!--  <li class="nav-header">Report</li>
                     <li class="nav-item dropdown">

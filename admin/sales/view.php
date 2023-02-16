@@ -263,12 +263,13 @@ if(isset($_GET['id'])){
                         <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu" role="menu">   
-                        <a class="dropdown-item" href="print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                            <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
                         </div>
+           
 
                         <hr>
                         <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 

@@ -5,12 +5,6 @@ $(document).ready(function() {
 	let dt = new Date().toISOString().slice(0, 10);
 
 
-    $(document).ready(function (){
-        $('#data-table').DataTable({
-      
-        }); 
-    });
-
 
 	$("#action_add_comment").click(function(e) {
 		e.preventDefault();
