@@ -52,7 +52,7 @@ if($result2) {
         $c_relation = $row['relationship'];
         $count = $count + 1;
         ?>
-                    
+<div class="ref_no">Reference No. : <?php echo $ref_no; ?></div>                          
 <body onload="getRelation()">
 <div class="card-body">
     <div class="doc_title" style="padding-bottom:3px;padding-top:3px;">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>

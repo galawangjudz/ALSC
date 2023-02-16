@@ -53,7 +53,7 @@ if($result2) {
         $count = $count + 1;
 
         ?>
-                    
+<div class="ref_no">Reference No. : <?php echo $ref_no; ?></div>                        
 <body>
 <div class="card-body">
     <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>

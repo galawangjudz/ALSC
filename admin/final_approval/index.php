@@ -106,7 +106,9 @@
 
 	$(document).ready(function(){
 		
-		$('.table').dataTable();
+		$('.table').dataTable(
+			{"ordering":false}
+		);
 		
 	})
 

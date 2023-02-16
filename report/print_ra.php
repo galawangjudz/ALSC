@@ -34,6 +34,12 @@ header("Access-Control-Allow-Origin: *");
         margin-left:375px;
         opacity:0.1;
     }
+    .ref_no{
+        float:left;
+        margin-top:-12px;
+        margin-left:642px;
+        font-size:11px;
+    }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,6 +85,7 @@ header("Access-Control-Allow-Origin: *");
         $c_address_abroad = $row['address_abroad']; 
         $c_mobile_abroad = $row['contact_abroad']; 
         
+        $ref_no = $row['ref_no'];
         $c_lid = $row['c_lot_lid']; 
         $c_birthday = $row['birthdate'];  
         $c_age = $row['age'];  
