@@ -46,10 +46,10 @@
 						if ($type < 5 ){
 
 							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
-												ORDER BY c_date_approved");
+												ORDER BY c_date_approved DESC");
 						}else{
 							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
-												and ".$where." ORDER BY c_date_approved");
+												and ".$where." ORDER BY c_date_approved DESC");
 						}
 						
 						while($row = $qry->fetch_assoc()):
@@ -166,7 +166,7 @@
 						<?php elseif($row['c_reserve_status'] == 0): ?>
 							<td><span class="badge badge-warning">Unpaid</span></td>
 						<?php elseif($row['c_reserve_status'] == 3): ?>
-							<td><span class="badge badge-info">Partial Paid</span></td>
+							<td><span class="badge badge-info">Partially Paid</span></td>
 						<?php endif; ?>
 
 
@@ -212,6 +212,13 @@
 
 <script>
 	$(document).ready(function(){
+	$('.table').dataTable(
+		{
+			"ordering": false
+		}
+	);	
+
+
 	$('.delete_data').click(function(){
 		_conf("Are you sure to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
 	})

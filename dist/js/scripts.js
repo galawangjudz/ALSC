@@ -366,7 +366,7 @@ function updateTotals(elem) {
 
 
 
-	$('#birth_date').datetimepicker({
+	/* $('#birth_date').datetimepicker({
 		showClose: false,
 		format : "YYYY-MM-DD"
 	});
@@ -384,7 +384,7 @@ function updateTotals(elem) {
 	$('#reserve_date').datetimepicker({
 		showClose: false,
 		format: "YYYY-MM-DD"
-	});
+	}); */
 	
 	
 	$(document).on('blur', ".date-of-sale", function(e) {

@@ -66,7 +66,7 @@
         <div class="modal-header">
         <h5 class="modal-title"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span class="fa fa-arrow-right"></span>
+          <span class="fa fa-times"></span>
         </button>
       </div>
       <div class="modal-body">

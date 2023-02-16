@@ -101,22 +101,11 @@ color: white;
 
             <div id="tab-1" class="tab-content current">
               <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
-              if($qry2->num_rows <= 0){ ?>
-                    <td><?php echo "No Details founds" ?> </td>
-               <?php }else{ ?> 
+                if($qry2->num_rows <= 0){
+                    echo "No Details founds";
+                }else{ ?> 
                 <table class="table table-bordered table-stripped">
-                    <colgroup>
-                      <col width="10%">
-                      <col width="15%">
-                      <col width="15%">
-                      <col width="15%">
-                      <col width="15%">
-                      <col width="15%">
-                      <col width="15%">
-                      <col width="15%">
-                      <col width="15%">
-                  
-                    </colgroup>
+                 
                     <thead>
                         <tr>
                         <th>Last Name</th>
@@ -151,8 +140,7 @@ color: white;
                         <?php }elseif($row['relationship'] == 4){ ?>
                             <td class="text-center"><span class="badge badge-primary">Minor/Represented by Legal Guardian</span></td>
                         <?php }
-                      endwhile; 
-                    }?>
+                      endwhile; }?>
 
                       </tr>
 
@@ -163,81 +151,83 @@ color: white;
 
             <div id="tab-2" class="tab-content">
                 <table class="table table-bordered table-stripped">
-                        
+                    <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");
+                    if($qry3->num_rows <= 0){
+                        echo "No Details founds";
+                    }else{ ?>     
                     <thead>
                      
                         <tr>
-                        <th>Property ID</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Net TCP</th>
-                        
-                    
-                
+                          <th>Property ID</th>
+                          <th>Location</th>
+                          <th>Type</th>
+                          <th>Net TCP</th>  
+                          <th>Action</th>          
                         </tr>
                     </thead>
                     <tbody>
-                      <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");
-                        while($row = $qry3->fetch_assoc()):
-                      
-                        $property_id = $row["property_id"];
-                        $property_id_part1 = substr($property_id, 0, 2);
-                        $property_id_part2 = substr($property_id, 2, 6);
-                        $property_id_part3 = substr($property_id, 8, 5);
+                      <?php 
+                         while($row = $qry3->fetch_assoc()):
+                              $property_id = $row["property_id"];
+                              $property_id_part1 = substr($property_id, 0, 2);
+                              $property_id_part2 = substr($property_id, 2, 6);
+                              $property_id_part3 = substr($property_id, 8, 5);
                       ?>
-                      <tr>
-                      <td class="text-center"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
-                      <td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
-                      <?php if($row['c_type'] == 1){ ?>
-                          <td class="text-center"><span class="badge badge-primary">Lot Only</span></td>
-                      <?php }elseif($row['c_type'] == 2){ ?>
-                          <td class="text-center"><span class="badge badge-primary">House Only</span></td>
-                      <?php }elseif($row['c_type'] == 3){ ?>
-                          <td class="text-center"><span class="badge badge-primary">Packaged</span></td>         
-                      <?php }elseif($row['c_type'] == 4){ ?>
-                          <td class="text-center"><span class="badge badge-primary">Fence</span></td>
-                      <?php }elseif($row['c_type'] == 5){ ?>
-                          <td class="text-center"><span class="badge badge-primary">Add Cost</span></td>
-                      <?php } ?>        
-                      <td class="text-center"><?php echo number_format($row['c_net_tcp'],2) ?></td>
+                           <tr>
+                            <td class="text-center"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
+                            <td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
+                            <?php if($row['c_type'] == 1){ ?>
+                                <td class="text-center"><span class="badge badge-primary">Lot Only</span></td>
+                            <?php }elseif($row['c_type'] == 2){ ?>
+                                <td class="text-center"><span class="badge badge-primary">House Only</span></td>
+                            <?php }elseif($row['c_type'] == 3){ ?>
+                                <td class="text-center"><span class="badge badge-primary">Packaged</span></td>         
+                            <?php }elseif($row['c_type'] == 4){ ?>
+                                <td class="text-center"><span class="badge badge-primary">Fence</span></td>
+                            <?php }elseif($row['c_type'] == 5){ ?>
+                                <td class="text-center"><span class="badge badge-primary">Add Cost</span></td>
+                            <?php } ?>        
+                            <td class="text-center"><?php echo number_format($row['c_net_tcp'],2) ?></td>
+                            <td> <a class="btn btn-success btn-s view_data" data-id="<?php echo md5($row['property_id'])  ?>"><span class="fa fa-eye text-success"></span> View</a> </td>
+                            <?php endwhile; }?>
+                          </tr>
 
-                      </tr>
-                      <?php  endwhile; ?> 
                     </tbody>
                 </table>
             </div>
 
-            <div id="tab-3" class="tab-content">
-                      
-                <table class="table table-bordered table-stripped">
-              
-                    <thead>
-                      
-                        <tr>
-                        <th>Payment ID</th>
-                        <th>Property ID</th>
-                        <th>Due Date</th>
-                        <th>Pay Date</th>
-                        <th>Or No</th>
-                        <th>Amount Paid</th>
-                        <th>Interest</th>
-                        <th>Principal</th>
-                        <th>Surcharge</th>
-                        <th>Rebate</th>
-                        <th>Period</th>
-                        <th>Balance</th>
-                        </tr>
-                    </thead>
+            <div id="tab-3" class="tab-content">  
+                    <table class="table table-bordered table-stripped">
+                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
+                     if($qry4->num_rows <= 0){
+                           echo "No Payment Records";
+                     }else{  ?>      
+   
+                      <thead> 
+                          <tr>
+                              <th >Property ID</th>
+                              <th>Due Date</th>
+                              <th>Pay Date</th>
+                              <th>Or No</th>
+                              <th>Amount Paid</th>
+                              <th>Interest</th>
+                              <th>Principal</th>
+                              <th>Surcharge</th>
+                              <th>Rebate</th>
+                              <th>Period</th>
+                              <th>Balance</th>
+                          </tr>
+                      </thead>
                     <tbody>
-                      <?php $qry4 = $conn->query("SELECT * from t_propety_payments where md5(property_id) = '{$_GET['id']}' ");
-                        while($row = $qry4->fetch_assoc()):
-                        
+                        <?php
+                        while($row= $qry4->fetch_assoc()): 
+                 
                           $property_id = $row["property_id"];
                           $property_id_part1 = substr($property_id, 0, 2);
                           $property_id_part2 = substr($property_id, 2, 6);
                           $property_id_part3 = substr($property_id, 8, 5);
 
-                          $id = $row['payment_id'];
+                          $payment_id = $row['payment_id'];
                           $due_dte = $row['due_date'];
                           $pay_dte = $row['payment_date'];
                           $or_no = $row['or_no'];
@@ -251,7 +241,7 @@ color: white;
 
                       ?>
                       <tr>
-                        <td class="text-center"><?php echo $payment_id ?> </td>
+                       
                         <td class="text-center"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
                         <td class="text-center"><?php echo $due_dte ?> </td> 
                         <td class="text-center"><?php echo $pay_dte ?> </td> 
@@ -261,11 +251,10 @@ color: white;
                         <td class="text-center"><?php echo $principal ?> </td> 
                         <td class="text-center"><?php echo $surcharge ?> </td> 
                         <td class="text-center"><?php echo $rebate ?> </td> 
-                        <td class="text-center"><?php echo $status ?> </td> 
+                        <td class="text-center"><?php echo $period ?> </td> 
                         <td class="text-center"><?php echo $balance ?> </td>  
-
-                        <?php endwhile ; ?>
                       </tr>
+                        <?php endwhile ; } ?>
                     </tbody>
                 </table>
             </div>
@@ -288,6 +277,16 @@ color: white;
 <script>
 $(document).ready(function() {
 
+  $('.view_data').click(function(){
+		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
+	  uni_modal_right("<i class='fa fa-info'></i> Property Details",'clients/property_details.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+  
+
+  $('#data-table').dataTable({
+
+  }); 
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');

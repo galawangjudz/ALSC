@@ -53,7 +53,7 @@
                                 <td><span class="badge badge-success">Booked</span></td>
                             <?php endif; ?>
 						
-							<?php if ($usertype == "IT Admin" || $usertype == 'CFO'): ?>	
+							<?php if (($usertype == "IT Admin" || $usertype == 'CFO') && $row['cfo_status'] == 0 ): ?>	
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 				                  		Action
@@ -63,6 +63,10 @@
 				                    <a class="dropdown-item booked_data" ra-id = "<?php echo $row['ra_id']?>" csr_id = "<?php echo $row['c_csr_no']?>" data-lot-id="<?php echo $row['c_lot_lid'] ?>"><span class="fa fa-check text-primary"></span> Approved</a>
 								 </div>
 							</td>
+							<?php else: ?>
+								<td align="center">
+									---
+								</td>	
 							<?php endif; ?>	
 						</tr>
 					<?php endwhile; ?>

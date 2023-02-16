@@ -18,7 +18,7 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">Clients</h5>
+			<h5 class="card-title">Properties</h5>
 			<!-- <div class="card-tools">
 				<a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_lot" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
 			</div> -->
@@ -67,13 +67,13 @@
                         <?php 
                         $property_id = $row["property_id"];
                         $property_id_part1 = substr($property_id, 0, 2);
-                        $property_id_part2 = substr($property_id, 2, 6);
-                        $property_id_part3 = substr($property_id, 8, 5);
+                        $property_id_part2 = substr($property_id, 2, 8);
+                        $property_id_part3 = substr($property_id, 10, 3);
                         ?>
                         <td><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?></td>
                         <td><?php echo $row["full_name"] ?></td>
                         <td><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
-                        <td><?php echo $row["c_net_tcp"] ?></td>
+                        <td><?php echo number_format($row["c_net_tcp"],2) ?></td>
                     
                     
                         </tr>

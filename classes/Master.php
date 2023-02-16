@@ -986,10 +986,15 @@ Class Master extends DBConnection {
 			$start_date = $row['c_start_date'];
 			$remarks = $row['c_remarks'];
 			$active = $row['c_active'];
+			$code = substr($lot_lid, 0, 3);
 
+			$qry = $this->conn->query("SELECT c_project_code FROM t_projects where c_code =".$code);
+			$proj_code = $qry->fetch_array();
+
+			$proj_id = $proj_code['c_project_code'];
 			
 			$data = " c_csr_no = '$csr_no' ";
-			$data .= ", project_id = '12' ";
+			$data .= ", project_id = '$proj_id' ";
 			$data .= ", c_type = '4' ";
 			$data .= ", c_lot_lid = '$lot_lid' ";
 			$data .= ", c_lot_area = '$lot_area' ";
