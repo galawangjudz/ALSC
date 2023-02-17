@@ -87,7 +87,11 @@
 <script>
   $(document).ready(function() {
 
-$('.table').dataTable();
+$('.table').dataTable(
+    {
+			"ordering": false
+	}
+);
  
 });
 </script>

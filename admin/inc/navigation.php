@@ -47,14 +47,7 @@
                         </p>
                       </a>
                     </li>
-                   <!--  <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=sales/create" class="nav-link">
-                        <i class="nav-icon fas fa-plus"></i>
-                        <p>
-                          New Sale
-                        </p>
-                      </a>
-                    </li> -->
+                   
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-file-invoice"></i>

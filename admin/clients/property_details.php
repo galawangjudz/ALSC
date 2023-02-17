@@ -112,67 +112,6 @@ if(isset($_GET['id'])){
 </div>
 <script>
 
-	$(document).ready(function(){
 
-
-	$('.ca_approved').click(function(){
-		start_loader();
-		$.ajax({
-            url:_base_url_+'classes/Master.php?f=ca_approval',
-			method:'POST',
-			data:{ra_id:'<?php echo $ra_id ?>',id:'<?php echo $csr_no ?>',lot_id:'<?php echo $lot_id ?>',value:$(this).attr('value')},
-			dataType:"json",
-			error:err=>{
-                console.log(err)
-                alert_toast("An error occured",'error');
-                end_loader();
-                },
-            success:function(resp){
-                if(typeof resp =='object' && resp.status == 'success'){
-                    location.reload();
-                }else if(resp.status == 'failed' && !!resp.msg){
-                    var el = $('<div>')
-                        el.addClass("alert alert-danger err-msg").text(resp.msg)
-                        _this.prepend(el)
-                        el.show('slow')
-                        end_loader()
-                }else{
-                    alert_toast("An error occured",'error');
-                    end_loader();
-                    console.log(resp)
-                }
-                }
-			
-		    })
-	    })
-		
-	})
-
-    function computeIncomeReq(){
-        let int_rate = document.getElementById('int_rate').value;
-        let int_terms = document.getElementById('term_rate').value;
-
-        let n = int_terms;
-
-        let i = (int_rate/100)/12;
-
-        
-        let fv = 0;
-        let pv = document.getElementById('loan_amt').value;
-        let type = 0;
-        let ans = 0;
-        let PMT = 0;
-        let income_req = 0;
-        if (int_terms != 0 || i != 0){
-            ans = ((pv - fv) * i)/(1 - Math.pow((1 + i), (-n)));
-            PMT = ans.toFixed(2);
-            income_req = ans / 0.4;
-            income_req = income_req.toFixed(2);
-        }else{ 
-            PMT = 0;
-            income_req = 0;
-        }   
-        document.getElementById('income_req').value = income_req;
-        document.getElementById('monthly').value = PMT;
-    }
+	
 </script>

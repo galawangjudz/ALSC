@@ -246,13 +246,13 @@ color: white;
                         <td class="text-center"><?php echo $due_dte ?> </td> 
                         <td class="text-center"><?php echo $pay_dte ?> </td> 
                         <td class="text-center"><?php echo $or_no ?> </td> 
-                        <td class="text-center"><?php echo $amt_paid ?> </td> 
-                        <td class="text-center"><?php echo $interest ?> </td> 
-                        <td class="text-center"><?php echo $principal ?> </td> 
-                        <td class="text-center"><?php echo $surcharge ?> </td> 
-                        <td class="text-center"><?php echo $rebate ?> </td> 
+                        <td class="text-center"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($interest,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($principal,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($surcharge,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($rebate,2) ?> </td> 
                         <td class="text-center"><?php echo $period ?> </td> 
-                        <td class="text-center"><?php echo $balance ?> </td>  
+                        <td class="text-center"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
                     </tbody>
