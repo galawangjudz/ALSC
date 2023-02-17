@@ -123,4 +123,10 @@ if ($user_role != 'IT Admin') {
         })
     }
 
+    $(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
 </script>

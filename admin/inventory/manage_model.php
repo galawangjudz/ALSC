@@ -75,6 +75,13 @@ if ($user_role != 'IT Admin') {
 	</div>
 </div>
 <script>
+	 $(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
+
 
 	function validateForm() {
 	    // error handling

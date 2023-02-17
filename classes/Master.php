@@ -248,8 +248,8 @@ Class Master extends DBConnection {
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
-			$flr_elev_price = $_POST['flrelev_text_price'];
-			$conv_price = $_POST['conv_outlet_price'];
+			$flr_elev_price = $_POST['flrelev_price'];
+			$conv_outlet_price = $_POST['conv_outlet_price'];
 
 			$data = " c_csr_no = '$last_id' ";
 

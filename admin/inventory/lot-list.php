@@ -83,6 +83,12 @@
 
 	</div>
 <script>
+    $(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
   
     $('.new_lot').click(function(){
         uni_modal("<i class='fa fa-plus'></i> New Lot",'inventory/manage_lot.php',"mid-large")
