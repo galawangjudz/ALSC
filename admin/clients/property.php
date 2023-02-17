@@ -197,6 +197,8 @@ color: white;
             </div>
 
             <div id="tab-3" class="tab-content">  
+            <button type="button" class="btn btn-success add_payment" data-id="<?php echo md5($property_id)  ?>" ><span class="fa fa-plus"> Add Payments </span></button>          
+
                     <table class="table table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
                      if($qry4->num_rows <= 0){
@@ -283,6 +285,11 @@ $(document).ready(function() {
 
 	})
   
+  $('.add_payment').click(function(){
+		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
+	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
 
   $('#data-table').dataTable({
 

@@ -780,7 +780,9 @@ function updateTotals(elem) {
 		
 		
 		fd_dte = new Date(l_start_date);
-
+		if(l_no_pay == 0){
+			l_no_pay = 1
+		}
 		fd_dte.setMonth(fd_dte.getMonth()+ parseFloat(l_no_pay - 1));
 		
 		var fd_dte = fd_dte.toISOString().slice(0, 10);

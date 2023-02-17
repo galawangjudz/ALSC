@@ -56,7 +56,7 @@
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
 					?>
 						<tr>
-								<td class="text-center"><?php echo $row["c_date_updated"] ?> </td>
+								<td class="text-center"><?php echo $timeStamp; ?> </td>
 								<td class="text-center"><?php echo $row["c_created_by"] ?></td>
                                 <td><?php echo $row['ref_no'] ?></td>
 								<?php if($row['c_active'] == 0): ?>
