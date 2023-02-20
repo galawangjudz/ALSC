@@ -55,10 +55,7 @@ if(isset($_GET['id'])){
         $net_dp = $row['c_net_dp'];
         $down_percent = $row['c_down_percent'];
         $start_date = $row['c_start_date'];
-      /*   
-        $acronym = $row['c_acronym'];
-        $block = $row['c_block'];
-        $lot = $row['c_lot']; */
+
         }
 
     }
@@ -82,29 +79,16 @@ if(isset($_GET['id'])){
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
-  
-        <table class="table table-striped table-hover table-bordered" style="width: 100%">
+        <form action="" method="POST">
+            <label for="amount_paid">Amount Paid:</label>
+            <input type="number" id="amount_paid" name="amount_paid" required><br>
 
-           
-            <tr><th>Property Type</th><td><?php echo $type;?></td></tr>
-            <tr><th>Lot Area</th><td><?php echo $lot_area;?> SQM</td></tr>
-            <tr><th>Price/SQM</th><td><?php echo number_format($price_sqm,2);?></td></tr>
-            <tr><th>Amount</th><td><?php echo number_format($lres,2)?></td></tr>
-            <tr><th>Discount (%)</th><td><?php echo number_format($lot_disc,2);?></td></tr>
-            <tr><th>Discount Amount</th><td><?php echo number_format($lot_disc_amt,2);?></td></tr>
-            <tr><th>Lot Contract Price</th><td><?php echo number_format($lcp,2);?></td></tr>
-     
-      
-            <tr><th>House Model</th><td><?php echo $house_model;?></td></tr>
-            <tr><th>Floor Area</th><td><?php echo $floor_area;?> SQM</td></tr>
-            <tr><th>House Price/SQM</th><td><?php echo number_format($house_price_sqm,2);?></td></tr>
-            <tr><th>Total </th><td><?php echo number_format($hres,2);?></td></tr>
-            <tr><th>House Discount (%)</th><td><?php echo number_format($house_disc,2)?></td></tr>
-            <tr><th>House Discount Amount</th><td><?php echo number_format($house_disc_amt,2);?></td></tr>
-            <tr><th>House  Contract Price</th><td><?php echo number_format($hcp,2);?></td></tr>
+            <label for="or_no">OR Number:</label>
+            <input type="text" id="or_no" name="or_no" required><br>
 
-        </table>
-
+            <label for="pay_date">Payment Date:</label>
+            <input type="date" id="pay_date" name="pay_date" required><br>
+        </form>
 
 
     </div>

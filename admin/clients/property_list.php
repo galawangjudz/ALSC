@@ -7,14 +7,14 @@
 <?php endif;?>
 
 
-<div class="navbar">
+<!-- <div class="navbar">
     <div class="navbar-menu">
     <a href="#home" id="home-link" onclick="highlightLink('home-link')">Home</a>
     <a href="#about" id="about-link" onclick="highlightLink('about-link')">About</a>
     <a href="#services" id="services-link" onclick="highlightLink('services-link')">Services</a>
     <a href="#contact" id="contact-link" onclick="highlightLink('contact-link')">Contact</a>
 </div>
-</div>
+</div> -->
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
@@ -87,7 +87,11 @@
 <script>
   $(document).ready(function() {
 
-$('.table').dataTable();
+$('.table').dataTable(
+    {
+			"ordering": false
+	}
+);
  
 });
 </script>

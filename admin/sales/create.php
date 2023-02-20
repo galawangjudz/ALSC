@@ -1749,6 +1749,14 @@ input{
 
 		$('.table2').dataTable();
 		
+
+		const today = new Date();
+		const myDateInput = document.getElementById("first_dp_date");
+		const myDateInput2 = document.getElementById("full_down_date");
+		const myDateInput3 = document.getElementById("start_date");
+		myDateInput.value = today.toISOString().substr(0, 10);
+		myDateInput2.value = today.toISOString().substr(0, 10);
+		myDateInput3.value = today.toISOString().substr(0, 10);
 	})
 
 	function redirectToMail() {
