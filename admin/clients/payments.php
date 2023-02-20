@@ -88,7 +88,6 @@ if(isset($_GET['id'])){
 
             <label for="pay_date">Payment Date:</label>
             <input type="date" id="pay_date" name="pay_date" required><br>
-            
         </form>
 
 
