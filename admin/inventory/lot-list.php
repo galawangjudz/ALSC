@@ -3,6 +3,51 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+<style>
+	.main_menu{
+		float:left;
+		width:227px;
+		height:40px;
+		line-height:40px;
+		text-align:center;
+		color:black!important;
+	}
+	.navbar{
+		width:100%;
+		height:auto;
+	}
+	.main_menu:hover{
+		border-bottom: solid 2px blue;
+		background-color:#E8E8E8;
+	}
+	#container{
+		margin-right:auto;
+		margin-left:auto;
+		width:100%;
+		position:relative;
+		padding-left:250px;
+		padding-right:250px;
+		background-color:transparent;
+	}
+	#lot-link{
+		border-bottom: solid 2px blue;
+		background-color:#F5F5F5;
+	}
+</style>
+
+<div class="card" id="container">
+    <div class="navbar-menu">
+		<a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" onclick="highlightLink('lot-link')">Lot Inventory</a>
+		<a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="main_menu" id="ca-link" onclick="highlightLink('ca-link')">House Model List</a>
+		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="fa-link" onclick="highlightLink('fa-link')">Project List</a>
+	</div>
+</div>
+
+
+
+
+
+
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">

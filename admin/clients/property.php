@@ -5,10 +5,20 @@
 <?php endif;?>
 
 <style>
-.table {
+table tr{
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 50%;
+  border:solid 1px;
+  padding-left:10px!important;
+  border:solid 1px gainsboro;
+}
+table td{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+  border:solid 1px gainsboro;
+  padding:5px;
 }
 
 .table td, .table th {
@@ -38,7 +48,7 @@
 }
 
 .tab-link.current {
-  background-color: #fff;
+  background-color: #F0F0F0;
 }
 
 .tab-content {
@@ -46,13 +56,8 @@
   padding: 20px;
   background-color: #fff;
 }
-
 .tab-content.current {
   display: block;
-
-
-
-			
 }
 thead {
 background-color: black;
@@ -62,13 +67,12 @@ color: white;
 .dataTables_wrapper thead th {
     font-family: Arial, sans-serif;
     font-size: 2px;
-}
+} -->
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
   $client_id = $row['client_id'];
 ?>
-
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
@@ -76,30 +80,47 @@ color: white;
 				<a class="btn btn-block btn-sm btn-default btn-flat border-primary update_client" href=""><i class="fa fa-edit"></i> Update Details</a>
 			</div>
 	</div>
+  
+<div class="card-header">
+		<h1 class="card-title" style="font-size:22px;"><b>Client Information</b></h1>
+</div>
 	<div class="card-body">
 		<div class="container-fluid">
 
         
-        <table style="width: 100%">
-        <tr><th>Client ID</th><td><?php echo $row['client_id'];?></td></tr>
-        <tr><th>Client Last Name</th><td><?php echo $row['last_name'];?></td></tr>
-        <tr><th>Client First Name</th><td><?php echo $row['first_name'];?></td></tr>
-        <tr><th>Client Middle Name</th><td><?php echo $row['middle_name'];?></td></tr>
-        <tr><th>Client Physical Address</th><td><?php echo $row['address'];?></td></tr>
-        <tr><th>Clien Contact No</th><td><?php echo $row['contact_no'];?></td></tr>
-        <tr><th>Client Email Address</th><td><?php echo $row['email'];?></td></tr>
+        <table style="width: 100%;">
+        <tr><th style="padding-left:5px;">Client ID: </th><td><b><?php echo $row['client_id'];?></b></td></tr>
+        <tr><th style="padding-left:5px;">Property ID: </th><td><?php echo $row['property_id'];?></td></tr>
+        <tr><th style="padding-left:5px;">Last Name: </th><td><?php echo $row['last_name'];?></td></tr>
+        <tr><th style="padding-left:5px;">First Name: </th><td><?php echo $row['first_name'];?></td></tr>
+        <tr><th style="padding-left:5px;">Middle Name: </th><td><?php echo $row['middle_name'];?></td></tr>
+        <tr><th style="padding-left:5px;">Suffix Name: </th><td><?php echo $row['suffix_name'];?></td></tr>
+        <tr><th style="padding-left:5px;">Physical Address: </th><td><?php echo $row['address'];?></td></tr>
+        <tr><th style="padding-left:5px;">Zip Code: </th><td><?php echo $row['zip_code'];?></td></tr>
+        <tr><th style="padding-left:5px;">Address Abroad: </th><td><?php echo $row['address_abroad'];?></td></tr>
+        <tr><th style="padding-left:5px;">Birthdate: </th><td><?php echo $row['birthdate'];?></td></tr>
+        <tr><th style="padding-left:5px;">Age: </th><td><?php echo $row['age'];?></td></tr>
+        <tr><th style="padding-left:5px;">Viber: </th><td><?php echo $row['viber'];?></td></tr>
+        <tr><th style="padding-left:5px;">Gender: </th><td><?php echo $row['gender'];?></td></tr>
+        <tr><th style="padding-left:5px;">Civil Status: </th><td><?php echo $row['civil_status'];?></td></tr>
+        <tr><th style="padding-left:5px;">Citizenship: </th><td><?php echo $row['citizenship'];?></td></tr>
+        <tr><th style="padding-left:5px;">ID Presented: </th><td><?php echo $row['id_presented'];?></td></tr>
+        <tr><th style="padding-left:5px;">Tin No: </th><td><?php echo $row['tin_no'];?></td></tr>
+        <tr><th style="padding-left:5px;">Contact No: </th><td><?php echo $row['contact_no'];?></td></tr>
+        <tr><th style="padding-left:5px;">Contact Abroad: </th><td><?php echo $row['contact_abroad'];?></td></tr>
+        <tr><th style="padding-left:5px;">Email Address: </th><td><?php echo $row['email'];?></td></tr>
         </table>
 
         <hr>
 
         <ul class="tabs">
-        <li class="tab-link current" data-tab="tab-1">Family Member</li>
-        <li class="tab-link" data-tab="tab-2">Properties</li>
-        <li class="tab-link" data-tab="tab-3">Payments</li>
+        <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
+        <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
+        <li class="tab-link" data-tab="tab-3"><b>Payments</b></li>
       <!--     <li class="tab-link" data-tab="tab-4">Tab 4</li> -->
         </ul>
 
-            <div id="tab-1" class="tab-content current">
+            <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
               <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
                 if($qry2->num_rows <= 0){
                     echo "No Details founds";
@@ -149,7 +170,7 @@ color: white;
 
             </div>
 
-            <div id="tab-2" class="tab-content">
+            <div id="tab-2" class="tab-content" style="border:solid 1px gainsboro;">
                 <table class="table table-bordered table-stripped">
                     <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");
                     if($qry3->num_rows <= 0){
@@ -158,11 +179,11 @@ color: white;
                     <thead>
                      
                         <tr>
-                          <th>Property ID</th>
-                          <th>Location</th>
-                          <th>Type</th>
-                          <th>Net TCP</th>  
-                          <th>Action</th>          
+                          <th style="text-align:center;">Property ID</th>
+                          <th style="text-align:center;">Location</th>
+                          <th style="text-align:center;">Type</th>
+                          <th style="text-align:center;">Net TCP</th>  
+                          <th style="text-align:center;">Action</th>          
                         </tr>
                     </thead>
                     <tbody>
@@ -174,21 +195,21 @@ color: white;
                               $property_id_part3 = substr($property_id, 8, 5);
                       ?>
                            <tr>
-                            <td class="text-center"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
-                            <td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
+                            <td class="text-center" style="width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
+                            <td class="text-center" style="width:30%;"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                             <?php if($row['c_type'] == 1){ ?>
-                                <td class="text-center"><span class="badge badge-primary">Lot Only</span></td>
+                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Lot Only</span></td>
                             <?php }elseif($row['c_type'] == 2){ ?>
-                                <td class="text-center"><span class="badge badge-primary">House Only</span></td>
+                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">House Only</span></td>
                             <?php }elseif($row['c_type'] == 3){ ?>
-                                <td class="text-center"><span class="badge badge-primary">Packaged</span></td>         
+                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Packaged</span></td>         
                             <?php }elseif($row['c_type'] == 4){ ?>
-                                <td class="text-center"><span class="badge badge-primary">Fence</span></td>
+                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Fence</span></td>
                             <?php }elseif($row['c_type'] == 5){ ?>
-                                <td class="text-center"><span class="badge badge-primary">Add Cost</span></td>
+                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Add Cost</span></td>
                             <?php } ?>        
-                            <td class="text-center"><?php echo number_format($row['c_net_tcp'],2) ?></td>
-                            <td> <a class="btn btn-success btn-s view_data" data-id="<?php echo md5($row['property_id'])  ?>"><span class="fa fa-eye text-success"></span> View</a> </td>
+                            <td class="text-center" style="width:30%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
+                            <td class="text-center" style="width:10%;"> <a class="btn btn-success btn-s view_data" data-id="<?php echo md5($row['property_id'])  ?>">View</a> </td>
                             <?php endwhile; }?>
                           </tr>
 
@@ -196,7 +217,7 @@ color: white;
                 </table>
             </div>
 
-            <div id="tab-3" class="tab-content">  
+            <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
             <button type="button" class="btn btn-success add_payment" data-id="<?php echo md5($property_id)  ?>" ><span class="fa fa-plus"> Add Payments </span></button>          
 
                     <table class="table table-bordered table-stripped">
@@ -264,13 +285,6 @@ color: white;
             <div id="tab-4" class="tab-content">
             <p>This is tab 4 content.</p>
             </div> -->
-
-
-
-
-      
-         
-               
         </div>
     </div>
 </div>
@@ -284,6 +298,7 @@ $(document).ready(function() {
 	  uni_modal_right("<i class='fa fa-info'></i> Property Details",'clients/property_details.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
+
   
   $('.add_payment').click(function(){
 		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */

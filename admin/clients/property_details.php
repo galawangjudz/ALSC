@@ -78,31 +78,68 @@ if(isset($_GET['id'])){
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
-	<h3 class="card-title">Property ID# <?php echo $prop_id ?> </h3>
+	<h3 class="card-title"><b>Property ID# <i><?php echo $prop_id ?></i> </b></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
-  
+    <br>
+        <h5 style="text-align:center;">Lot Details</h5>
+        <hr>
         <table class="table table-striped table-hover table-bordered" style="width: 100%">
-
-           
-            <tr><th>Property Type</th><td><?php echo $type;?></td></tr>
-            <tr><th>Lot Area</th><td><?php echo $lot_area;?> SQM</td></tr>
-            <tr><th>Price/SQM</th><td><?php echo number_format($price_sqm,2);?></td></tr>
-            <tr><th>Amount</th><td><?php echo number_format($lres,2)?></td></tr>
-            <tr><th>Discount (%)</th><td><?php echo number_format($lot_disc,2);?></td></tr>
-            <tr><th>Discount Amount</th><td><?php echo number_format($lot_disc_amt,2);?></td></tr>
-            <tr><th>Lot Contract Price</th><td><?php echo number_format($lcp,2);?></td></tr>
-     
-      
-            <tr><th>House Model</th><td><?php echo $house_model;?></td></tr>
-            <tr><th>Floor Area</th><td><?php echo $floor_area;?> SQM</td></tr>
-            <tr><th>House Price/SQM</th><td><?php echo number_format($house_price_sqm,2);?></td></tr>
-            <tr><th>Total </th><td><?php echo number_format($hres,2);?></td></tr>
-            <tr><th>House Discount (%)</th><td><?php echo number_format($house_disc,2)?></td></tr>
-            <tr><th>House Discount Amount</th><td><?php echo number_format($house_disc_amt,2);?></td></tr>
-            <tr><th>House  Contract Price</th><td><?php echo number_format($hcp,2);?></td></tr>
-
+            <tr><th>Property Type</th>
+                <?php if($type == 1){ ?>
+                    <td><span class="badge badge-primary">Lot Only</span></td>
+                <?php }elseif($type == 2){ ?>
+                    <td><span class="badge badge-primary">House Only</span></td>
+                <?php }elseif($type == 3){ ?>
+                    <td><span class="badge badge-primary">Packaged</span></td>         
+                <?php }elseif($type == 4){ ?>
+                    <td><span class="badge badge-primary">Fence</span></td>
+                <?php }elseif($type == 5){ ?>
+                    <td><span class="badge badge-primary">Add Cost</span></td>
+                <?php } ?>        
+            </tr>
+            <tr><th>Lot Area: </th><td><?php echo $lot_area;?> SQM</td></tr>
+            <tr><th>Price/SQM: </th><td><?php echo number_format($price_sqm,2);?></td></tr>
+            <tr><th>Amount: </th><td><?php echo number_format($lres,2)?></td></tr>
+            <tr><th>Discount (%): </th><td><?php echo number_format($lot_disc,2);?></td></tr>
+            <tr><th>Discount Amount: </th><td><?php echo number_format($lot_disc_amt,2);?></td></tr>
+            <tr><th>Lot Contract Price: </th><td><?php echo number_format($lcp,2);?></td></tr>
+        </table>
+        <br>
+        <h5 style="text-align:center;">House Details</h5>
+        <hr>
+        <table class="table table-striped table-hover table-bordered" style="width: 100%">
+            <tr><th>House Model: </th><td><?php echo $house_model;?></td></tr>
+            <tr><th>Floor Area: </th><td><?php echo $floor_area;?> SQM</td></tr>
+            <tr><th>House Price/SQM: </th><td><?php echo number_format($house_price_sqm,2);?></td></tr>
+            <tr><th>Total: </th><td><?php echo number_format($hres,2);?></td></tr>
+            <tr><th>House Discount (%): </th><td><?php echo number_format($house_disc,2)?></td></tr>
+            <tr><th>House Discount Amount: </th><td><?php echo number_format($house_disc_amt,2);?></td></tr>
+            <tr><th>House Contract Price: </th><td><?php echo number_format($hcp,2);?></td></tr>
+        </table>
+        <br>
+        <h5 style="text-align:center;">Payment Details</h5>
+        <hr>
+        <table class="table table-striped table-hover table-bordered" style="width: 100%">
+            <tr><th>Payment Type 1: </th><td><?php echo $p1;?></td></tr>
+            <tr><th>Payment Type 2: </th><td><?php $p2;?></td></tr>
+            <tr><th>Total Contract Price: </th><td><?php echo number_format($tcp,2);?></td></tr>
+            <tr><th>TCP Discount (%): </th><td><?php echo number_format($tcp_discount,2);?></td></tr>
+            <tr><th>TCP Discount Amount: </th><td><?php echo number_format($tcp_discount_amt,2);?></td></tr>
+            <tr><th>VAT (%): </th><td><?php echo number_format($vat,2);?></td></tr>
+            <tr><th>Down Payment (%): </th><td><?php echo number_format($down_percent,2);?></td></tr>
+            <tr><th>VAT Amount: </th><td><?php echo number_format($vat_amt,2);?></td></tr>
+            <tr><th>Reservation Amount: </th><td><?php echo number_format($reservation,2);?></td></tr>
+            <tr><th>Monthly Payment: </th><td><?php echo number_format($monthly_payment,2);?></td></tr>
+            <tr><th>No. of Payment: </th><td><?php echo number_format($no_payments,2);?></td></tr>
+            <tr><th>First Down Payment: </th><td><?php echo $first_dp;?></td></tr>
+            <tr><th>Full Down Payment: </th><td><?php echo $full_down;?></td></tr>
+            <tr><th>Amount Financed: </th><td><?php echo number_format($amt_fnanced,2);?></td></tr>
+            <tr><th>Terms: </th><td><?php echo number_format($terms,2);?></td></tr>
+            <tr><th>Interest Rate: </th><td><?php echo number_format($interest_rate,2);?></td></tr>
+            <tr><th>Fixed Factor: </th><td><?php echo number_format($fixed_factor,2);?></td></tr>
+            <tr><th>Start Date: </th><td><?php echo $start_date;?></td></tr>
         </table>
 
 

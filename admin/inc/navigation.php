@@ -9,7 +9,7 @@
                             height: 30px;
                             max-height: unset;
                             background: white;">
-        <span class="brand-text font-weight-light"><?php echo $_settings->info('short_name') ?></span>
+        <span class="brand-text font-weight-light"><b><?php echo $_settings->info('short_name') ?></b></span>
         </a>
         <!-- Sidebar -->
         <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden">
