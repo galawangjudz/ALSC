@@ -217,7 +217,9 @@ color: white;
                 </table>
             </div>
 
-            <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">   
+            <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
+            <button type="button" class="btn btn-success add_payment" data-id="<?php echo md5($property_id)  ?>" ><span class="fa fa-plus"> Add Payments </span></button>          
+
                     <table class="table table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
                      if($qry4->num_rows <= 0){
@@ -267,13 +269,13 @@ color: white;
                         <td class="text-center"><?php echo $due_dte ?> </td> 
                         <td class="text-center"><?php echo $pay_dte ?> </td> 
                         <td class="text-center"><?php echo $or_no ?> </td> 
-                        <td class="text-center"><?php echo $amt_paid ?> </td> 
-                        <td class="text-center"><?php echo $interest ?> </td> 
-                        <td class="text-center"><?php echo $principal ?> </td> 
-                        <td class="text-center"><?php echo $surcharge ?> </td> 
-                        <td class="text-center"><?php echo $rebate ?> </td> 
+                        <td class="text-center"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($interest,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($principal,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($surcharge,2) ?> </td> 
+                        <td class="text-center"><?php echo number_format($rebate,2) ?> </td> 
                         <td class="text-center"><?php echo $period ?> </td> 
-                        <td class="text-center"><?php echo $balance ?> </td>  
+                        <td class="text-center"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
                     </tbody>
@@ -296,6 +298,14 @@ $(document).ready(function() {
 	  uni_modal_right("<i class='fa fa-info'></i> Property Details",'clients/property_details.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
+
+  
+  $('.add_payment').click(function(){
+		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
+	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
   $('#data-table').dataTable({
 
   }); 

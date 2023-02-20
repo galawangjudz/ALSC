@@ -104,6 +104,7 @@
                     <th>Ref. No.</th>
                     <th>Location </th>
                     <th>Buyer Name </th>
+					<th>Net TCP </th>
                     <th>Approval Status</th>
                     <th>Reserve Status</th>
                     <th>CA Status</th>
@@ -152,7 +153,7 @@
 						<td class="text-center"><?php echo $row["ref_no"] ?></td>
 						<td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
 						<td class="text-center"><?php echo $row["last_name"]. ','  .$row["first_name"] .' ' .$row["middle_name"]?></td>
-
+						<td class="text-center"><?php echo number_format($row["c_net_tcp"],2) ?></td>		
 
 
 					
@@ -296,9 +297,7 @@
 	$('.delete_data').click(function(){
 		_conf("Are you sure to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
 	})
-	$('.table').dataTable(
-		{"ordering":false}
-	);
+
 	$('#uni_modal').on('shown.bs.modal', function() {
 		$('.select2').select2({width:'resolve'})
 		$('.summernote').summernote({

@@ -456,7 +456,7 @@ input{
 					<div class="col-md-12">
 						<div class="panel panel-default">	
 							<div class="panel-body form-group form-group-sm">
-								<table class="table table-bordered table-stripped" id="buyer_table">
+								<table class="table3 table-bordered table-stripped" id="buyer_table">
 									<thead>
 										<tr>
 											<th>
@@ -1319,7 +1319,7 @@ input{
 										</div>
 										<div class="col-md-3" >
 											<div class="form-group">
-											<input type="text" class="form-control margin-bottom vat-percent" value="<?php echo isset($vat_percent) ? $vat_percent : 0; ?>" name="vat_percent" id="vat_percent" tabindex = '39' onkeyup='getVat()'>
+											<input type="text" class="form-control margin-bottom vat-percent" value="<?php echo isset($vat_percent) ? $vat_percent : 0; ?>" name="vat_percent" id="vat_percent">
 											</div> 
 										</div> 
 										<div class="col-md-2">
@@ -1466,7 +1466,7 @@ input{
 									<div class="clear"></div>
 								</div>
 							<div class="panel-body form-group form-group-sm">
-								<table class="table table-bordered table-hover table-striped" id="comm_table">
+								<table class="table3 table-bordered table-hover table-striped" id="comm_table">
 									<thead>
 										<tr>
 											<th width="20">
@@ -1749,6 +1749,14 @@ input{
 
 		$('.table2').dataTable();
 		
+
+		const today = new Date();
+		const myDateInput = document.getElementById("first_dp_date");
+		const myDateInput2 = document.getElementById("full_down_date");
+		const myDateInput3 = document.getElementById("start_date");
+		myDateInput.value = today.toISOString().substr(0, 10);
+		myDateInput2.value = today.toISOString().substr(0, 10);
+		myDateInput3.value = today.toISOString().substr(0, 10);
 	})
 
 	function redirectToMail() {

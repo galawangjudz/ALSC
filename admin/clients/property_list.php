@@ -62,6 +62,7 @@
 	}
 </style>
 
+
 <div class="card" id="container">
     <div class="navbar-menu">
 		<div class="dropdown">
@@ -78,6 +79,7 @@
 		<a href="<?php echo base_url ?>admin/?page=clients/property_list" class="main_menu" id="pl-link" onclick="highlightLink('pl-link')">Property Accounts</a>
 	</div>
 </div>
+
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
@@ -150,7 +152,11 @@
 <script>
   $(document).ready(function() {
 
-$('.table').dataTable();
+$('.table').dataTable(
+    {
+			"ordering": false
+	}
+);
  
 });
 </script>
