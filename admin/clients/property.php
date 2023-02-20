@@ -252,7 +252,7 @@ color: white;
 
                           $payment_id = $row['payment_id'];
                           $due_dte = $row['due_date'];
-                          $pay_dte = $row['payment_date'];
+                          $pay_dte = $row['pay_date'];
                           $or_no = $row['or_no'];
                           $amt_paid = $row['payment_amount'];
                           $interest = $row['interest'];
