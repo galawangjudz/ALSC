@@ -1,3 +1,9 @@
+<style>
+.nav-home:hover{
+  background-color:#007bff;
+	color:black!important;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
 </style>
 <?php $usertype = $_settings->userdata('user_type'); ?>
 <!-- Main Sidebar Container -->
@@ -5,10 +11,10 @@
         <!-- Brand Logo -->
         <a href="<?php echo base_url ?>admin" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
-                            width: 30px;
-                            height: 30px;
-                            max-height: unset;
-                            background: white;">
+            width: 30px;
+            height: 30px;
+            max-height: unset;
+            background: white;">
         <span class="brand-text font-weight-light"><b><?php echo $_settings->info('short_name') ?></b></span>
         </a>
         <!-- Sidebar -->
@@ -36,19 +42,32 @@
                         </p>
                       </a>
                     </li> 
-                   
-                  
-                    <li class="nav-header">Sales and Marketing</li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=sales/client" class="nav-link">
+                      <a href="<?php echo base_url ?>admin/?page=sales/client" class="nav-link nav-client">
                         <i class="nav-icon fas fa-plus"></i>
                         <p>
                           New Client
                         </p>
                       </a>
-                    </li>
-                   
+                    </li> 
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=ra" class="nav-link nav-ra">
+                      <i class="nav-icon fas fa-th-list"></i>
+                        <p>
+                          Master List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="nav-link nav-inventory">
+                      <i class="nav-icon fas fa-cube"></i>
+                        <p>
+                          Inventory
+                        </p>
+                      </a>
+                    </li> 
+                   
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
@@ -63,11 +82,8 @@
                           RA List (Revision)
                         </p>
                       </a>
-                    </li>
-                    
-                    <li class="nav-header">Master List</li>
-                    
-                    <li class="nav-item dropdown">
+                    </li> -->
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=ra" class="nav-link nav-ra">
                         <i class="nav-icon fas fa-th-list"></i>
                         <p>
@@ -111,7 +127,7 @@
                           Property Accounts
                         </p>
                       </a>
-                    </li>
+                    </li> -->
                 
                    <!--  <li class="nav-header">Report</li>
                     <li class="nav-item dropdown">
@@ -122,15 +138,14 @@
                         </p>
                       </a>
                     </li> -->
-                    <li class="nav-header">Inventory</li>
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="nav-link">
                         <i class="nav-icon fas fa-cube"></i>
                         <p>
                           Lot Inventory
                         </p>
                       </a>
-                    </li>
+                    </li> -->
                    <!--  <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=inventory/houses" class="nav-link">
                         <i class="nav-icon fas fa-home"></i>
@@ -140,7 +155,7 @@
                         </p>
                       </a>
                     </li> -->
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="nav-link">
                         <i class="nav-icon fas fa-th-large"></i>
                         <p>
@@ -155,7 +170,7 @@
                           Projects List
                         </p>
                       </a>
-                    </li>
+                    </li> -->
                     <li class="nav-header">Others</li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=loan-calcu" class="nav-link nav-loan-calcu">
@@ -168,7 +183,7 @@
                   
                     <?php if ($usertype == "IT Admin"): ?>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=agents" class="nav-link nav-agent_list">
+                      <a href="<?php echo base_url ?>admin/?page=agents" class="nav-link nav-agents">
                         <i class="nav-icon fa fa-id-card"></i>
                         <p>
                           Agent List
@@ -176,8 +191,8 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
-                        <i class="nav-icon fas fa-list"></i>
+                      <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user">
+                        <i class="nav-icon fas fa-user-circle"></i>
                         <p>
                           User List
                         </p>

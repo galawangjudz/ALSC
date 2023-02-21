@@ -11,10 +11,7 @@
 		line-height:40px;
 		text-align:center;
 		color:black!important;
-	}
-	.navbar{
-		width:100%;
-		height:auto;
+        border-right:solid 3px white;
 	}
 	.main_menu:hover{
 		border-bottom: solid 2px blue;
@@ -31,15 +28,15 @@
 	}
 	#proj-link{
 		border-bottom: solid 2px blue;
-		background-color:#F5F5F5;
+        background-color:#E8E8E8;
 	}
 </style>
 
 <div class="card" id="container">
     <div class="navbar-menu">
-		<a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" onclick="highlightLink('lot-link')">Lot Inventory</a>
-		<a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="main_menu" id="model-link" onclick="highlightLink('model-link')">House Model List</a>
-		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="proj-link" onclick="highlightLink('proj-link')">Project List</a>
+    <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" style="border-left:solid 3px white;"><i class="nav-icon fas fa-square"></i>&nbsp;&nbsp;&nbsp;Lot Inventory</a>
+		<a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="main_menu" id="ca-link"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;House Model List</a>
+		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="proj-link"><i class="nav-icon fas fa-map"></i>&nbsp;&nbsp;&nbsp;Project List</a>
 	</div>
 </div>
 

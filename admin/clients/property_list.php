@@ -5,7 +5,18 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+
 <style>
+	.nav-ra{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	}
+	.nav-ra:hover{
+		background-color:#007bff!important;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+	}
 	.main_menu{
 		float:left;
 		width:227px;
@@ -13,10 +24,7 @@
 		line-height:40px;
 		text-align:center;
 		color:black!important;
-	}
-	.navbar{
-		width:100%;
-		height:auto;
+		border-right:solid 3px white;
 	}
 	.main_menu:hover{
 		border-bottom: solid 2px blue;
@@ -33,7 +41,7 @@
 	}
 	#pl-link{
 		border-bottom: solid 2px blue;
-		background-color:#F5F5F5;
+		background-color:#E8E8E8;
 	}
 	.dropdown:hover .dropdown-menu {
 		display: block;
@@ -60,26 +68,37 @@
 		line-height:40px;
 		background-color:#E8E8E8;
 	}
+	#res-link1{
+		color: currentColor;
+		cursor: not-allowed;
+		opacity: 0.5;
+		text-decoration: none;
+		pointer-events: none;
+	}
+
 </style>
-
-
 <div class="card" id="container">
     <div class="navbar-menu">
 		<div class="dropdown">
-			<a href="#" class="main_menu dropdown-toggle" id="ra-link" onclick="highlightLink('ralink')">RA List</a>
+			<a href="#" class="main_menu dropdown-toggle" id="ra-link" style="border-left:solid 3px white;" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-list"></i>&nbsp;&nbsp;&nbsp;RA List</a>
 				<ul class="dropdown-menu">
-					<li><a href="<?php echo base_url ?>admin/?page=sales">Pending</a></li>
-					<li><a href="<?php echo base_url ?>admin/?page=revision">Revision</a></li>
-					<li><a href="<?php echo base_url ?>admin/?page=ra">Approved</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=sales"><i class="nav-icon fas fa-clock"></i>&nbsp;&nbsp;&nbsp;Pending</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=revision"><i class="nav-icon fa fa-pen"></i>&nbsp;&nbsp;&nbsp;Revision</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=ra"><i class="nav-icon fas fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Approved</a></li>
 				</ul>
 		</div>
-		<a href="<?php echo base_url ?>admin/?page=reservation" class="main_menu" id="res-link" onclick="highlightLink('res-link')">Reservation List</a>
-		<a href="<?php echo base_url ?>admin/?page=credit_assestment" class="main_menu" id="ca-link" onclick="highlightLink('ca-link')">Credit Assessment List</a>
-		<a href="<?php echo base_url ?>admin/?page=final_approval" class="main_menu" id="fa-link" onclick="highlightLink('fa-link')">CFO Approval List</a>
-		<a href="<?php echo base_url ?>admin/?page=clients/property_list" class="main_menu" id="pl-link" onclick="highlightLink('pl-link')">Property Accounts</a>
+		<?php if ($usertype == "IT Admin" || $usertype == 'Cashier'){ ?>
+		<a href="<?php echo base_url ?>admin/?page=reservation" class="main_menu" id="res-link" onclick="highlightLink('res-link')"><i class="nav-icon fas fa-calendar"></i>&nbsp;&nbsp;&nbsp;Reservation List</a>
+		
+		<?php }else{ ?>
+		<a href="<?php echo base_url ?>admin/?page=reservation" class="main_menu" id="res-link1" onclick="highlightLink('res-link')"><i class="nav-icon fas fa-calendar"></i>&nbsp;&nbsp;&nbsp;Reservation List</a>
+		<?php } ?>
+		
+		<a href="<?php echo base_url ?>admin/?page=credit_assestment" class="main_menu" id="ca-link" onclick="highlightLink('ca-link')"><i class="nav-icon fas fa-hands-helping"></i>&nbsp;&nbsp;&nbsp;Credit Assessment List</a>
+		<a href="<?php echo base_url ?>admin/?page=final_approval" class="main_menu" id="fa-link" onclick="highlightLink('fa-link')"><i class="nav-icon fas fa-file"></i>&nbsp;&nbsp;&nbsp;CFO Approval List</a>
+		<a href="<?php echo base_url ?>admin/?page=clients/property_list" class="main_menu" id="pl-link" onclick="highlightLink('pl-link')"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;Property Accounts</a>
 	</div>
 </div>
-
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
