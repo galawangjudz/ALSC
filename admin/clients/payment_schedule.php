@@ -46,24 +46,25 @@ if(isset($_GET['id'])){
 
 
     $payments = $conn->query("SELECT remaining_balance, due_date, payment_amount, amount_due, status, status_count, pay_date, surcharge, principal, interest, or_no, rebate, payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+    $l_last = $payments->num_rows - 1;
     if($payments->num_rows <= 0){
         echo ('No Payment Records for this Account!');
-    }    
-    while($row=$payments->fetch_assoc()):
+    } 
     
-        $l_bal = $row['remaining_balance'];
-        $l_last_due_date = $row['due_date'];
-        $l_last_pay_date = $row['pay_date'];
-        $l_last_amt_paid = $row['payment_amount']; 
-        $l_last_amt_due = $row['amount_due'];
-        $l_last_sur = $row['surcharge'];
-        $l_last_int = $row['interest'];
-        $l_last_status = $row['status'];
-        $l_last_stat_cnt = $row['status_count'];
-        $l_last_rebate = $row['rebate'];
-        $l_last_prin = $row['principal']; 
-        $l_last_or_no = $row['or_no'];
-        $l_last_pay_cnt = $row['payment_count'];
+    while($row=$payments->fetch_assoc()):
+        $l_bal = $row[$l_last][0];
+        $l_last_due_date = $row[$l_last][1];
+        $l_last_pay_date = $row[$l_last][6];
+        $l_last_amt_paid = $row[$l_last][2];
+        $l_last_amt_due = $row[$l_last][3];
+        $l_last_sur = $row[$l_last][7];
+        $l_last_int = $row[$l_last][9];
+        $l_last_status = $row[$l_last][4];
+        $l_last_stat_cnt = $row[$l_last][5];
+        $l_last_rebate = $row[$l_last][11];
+        $l_last_prin = $row[$l_last][8];
+        $l_last_or_no = $row[$l_last][10];
+        $l_last_pay_cnt = $row[$l_last][12];
 
         for ($x = 0; $x < num_rows($payments); $x++){
             if ($l_last_pay_date == $row[$x][6]){
