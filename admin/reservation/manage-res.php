@@ -190,7 +190,7 @@ foreach($res->fetch_array() as $k =>$v){
 				</thead>
 				<tbody>
 				<?php
-				$query =$conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no where (i.c_csr_status = 1 and (i.c_reserve_status = 0 or i.c_reserve_status = 3)) 
+				$query =$conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no where (i.c_csr_status = 1 and (i.c_reserve_status = 0 or i.c_reserve_status = 2)) 
 				ORDER BY c_date_approved");
 
 				while($row = $query->fetch_assoc()): 

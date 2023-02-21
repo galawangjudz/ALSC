@@ -1080,7 +1080,7 @@ Class Master extends DBConnection {
 			$new_balance -= $amount_paid;
 
 			$data = " property_id = '$new_property_id' "; 
-			$data .= ", payment_date = '$pay_date' "; 
+			$data .= ", pay_date = '$pay_date' "; 
 			$data .= ", due_date = '$due_date' ";
 			$data .= ", or_no = '$or_no' "; 
 			$data .= ", amount_due = 0 "; 
