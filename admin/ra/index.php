@@ -157,10 +157,11 @@
 
 
 					
-						<?php if($row['c_csr_status'] == 1 && ($row['c_reserve_status'] != 1)): ?>
+						
+						<?php if($row['c_csr_status'] == 1 && ($row['c_reserve_status'] == 0)): ?>
 							<td><span class="badge badge-success">COO Approved</span>
 							<span class="badge badge-info"><b id="demo<?php echo $id ?>"></b></span></td>
-						<?php elseif (($row['c_csr_status'] == 1) && ($row['c_reserve_status'] == 1)): ?>
+						<?php elseif (($row['c_csr_status'] == 1) && ($row['c_reserve_status'] != 0)): ?>
 							<td><span class="badge badge-success">COO Approved </span></td>
 						<?php elseif ($row['c_csr_status'] == 2): ?>
 							<td><span class="badge badge-danger">Lapsed</span>
@@ -216,18 +217,15 @@
 							$exp_date=new DateTime($row["c_duration"]);
 							$exp_date_str=$row["c_duration"];
 							$exp_date_only=date("Y-m-d",strtotime($exp_date_str));
-							//echo $exp_date_only;
-	
+					
 							$today_date=date('Y/m/d H:i:s');
 							$today_date_only=date("Y-m-d",strtotime($today_date));
-							//echo $today_date_only;
+						
 	
 							$exp=strtotime($exp_date_str);
 							$td=strtotime($today_date);		
 	
 							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-								/* $update_csr = $conn->query("UPDATE t_csr SET c_verify = 2, coo_approval = 2 WHERE c_csr_no = '".$id."'");	
-								 */
 								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'");	
 								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
@@ -240,7 +238,7 @@
 							<td><span class="badge badge-success">Paid</span></td>
 						<?php elseif($row['c_reserve_status'] == 0): ?>
 							<td><span class="badge badge-warning">Unpaid</span></td>
-						<?php elseif($row['c_reserve_status'] == 3): ?>
+						<?php elseif($row['c_reserve_status'] == 2): ?>
 							<td><span class="badge badge-info">Partially Paid</span></td>
 						<?php endif; ?>
 

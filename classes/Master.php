@@ -374,7 +374,7 @@ Class Master extends DBConnection {
 					if($reservation == $total){
 						$save = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 1 , c_amount_paid = '$total', c_ca_status = 0 where c_csr_no = '$c_csr_no'");
 					}else if (($reservation > $total) && ($total != 0)) {
-						$save = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 , c_amount_paid = '$total', c_ca_status = 0 where c_csr_no= '$c_csr_no'");
+						$save = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 2 , c_amount_paid = '$total', c_ca_status = 0 where c_csr_no= '$c_csr_no'");
 						
 					}else if ($total == 0) {
 						$save = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 , c_amount_paid = '$total', c_ca_status = 0 where c_csr_no= '$c_csr_no'");
@@ -792,7 +792,7 @@ Class Master extends DBConnection {
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Reserved' where c_lid =".$lot_lid);
 				
 			}else if($total_res > $total && $total != 0){
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 ".$data2." where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 2 ".$data2." where ra_id =".$ra_no);
 				$check = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lot_lid);
 			}else{
 				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 ".$data2." where ra_id =".$ra_no);
@@ -829,7 +829,7 @@ Class Master extends DBConnection {
 				$check2 = $this->conn->query("UPDATE t_lots SET c_status = 'Reserved' where c_lid =".$lid);
 				
 			}else if($total_res > $total && $total != 0){
-				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 3 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
+				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 2 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);
 				$check2 = $this->conn->query("UPDATE t_lots SET c_status = 'Pre-Reserved' where c_lid =".$lid);
 			}else{
 				$check = $this->conn->query("UPDATE t_approval_csr SET c_reserve_status = 0 , c_amount_paid = '$total', c_ca_status = 0 where ra_id =".$ra_no);

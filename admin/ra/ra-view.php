@@ -67,6 +67,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
             $down_percent = $row['c_down_percent'];
             $start_date = $row['c_start_date'];
             $verify = $row['c_verify'];
+            $c_ca_status = $row['c_ca_status'];
             $duration = $row['c_duration'];
         
         endwhile;
@@ -303,8 +304,9 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                 <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
                             </div>
                             
-                            <a attachment-id="<?php echo $getID; ?>" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload_file">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
-                              
+                            <?php if($c_ca_status == 0){?>
+                                <a attachment-id="<?php echo $getID; ?>" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload_file">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
+                            <?php } ?>
                            
                              </div>
                             <div class="titles"> Buyer's Profile</div>
