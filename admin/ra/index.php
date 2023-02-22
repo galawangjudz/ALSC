@@ -89,7 +89,7 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">RA List (Approved)</h3>
+		<h3 class="card-title">List of Approved RA</h3>
 		
 	</div>
 	<div class="card-body">

@@ -94,6 +94,8 @@ if ($user_role != 'IT Admin') {
 	}
 </style>
 <script>
+
+
 	function displayImg(input,_this) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();
@@ -104,6 +106,14 @@ if ($user_role != 'IT Admin') {
 	        reader.readAsDataURL(input.files[0]);
 	    }
 	}
+
+
+	$(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
 	$('#manage-user').submit(function(e){
 		e.preventDefault();
 		start_loader()

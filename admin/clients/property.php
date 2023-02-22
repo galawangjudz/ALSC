@@ -416,7 +416,7 @@ color: white;
 
                     $l_mode = 1;
                     $l_date_bago = $l_start_date;
-                    while ($l_mode == 1) {
+                  /*   while ($l_mode == 1) {
                       if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
                         $l_date = gmdate(gmmktime(get_date($l_first_dp)));
                         $self->day = date("d", $l_date);
@@ -430,7 +430,7 @@ color: white;
                           $l_fd_mode = 0;
                         }
                       }
-                    }  
+                    }  */ 
                     ?>
                        <?php foreach ($all_payments as $l_data): ?>
                          

@@ -91,6 +91,14 @@ if ($user_role != 'IT Admin') {
 <div>
 
 <script>
+
+$(document).ready(function(){
+		
+	$('.table').dataTable();
+
+	
+})
+
 $('#new_agent').click(function(){
 	uni_modal('New Agent','manage_agent.php')
 })
