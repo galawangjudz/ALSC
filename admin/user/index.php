@@ -107,13 +107,6 @@ if ($user_role != 'IT Admin') {
 	    }
 	}
 
-
-	$(document).ready(function(){
-		
-		$('.table').dataTable();
-
-		
-	})
 	$('#manage-user').submit(function(e){
 		e.preventDefault();
 		start_loader()
