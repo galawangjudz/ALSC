@@ -16,10 +16,27 @@
 <meta name="viewport" content="width=device-width">
 <link href="css/style.css" rel="stylesheet">
 </head>
-<body> 
-
-
-<div class="card card-outline rounded-0 card-maroon">
+<style>
+	table tr td{
+		border:solid 1px black;
+		padding:3px;
+	}
+	.tdwidth{
+		
+	}
+	.result{
+		background-color:gainsboro;
+		text-align:center;
+		margin-top:10px;
+		border-radius:5px;
+		width:810px;
+		margin-right:15%;
+		margin-left:15%;
+		font-weight:bold;
+	}
+</style>
+<body>
+<div class="card card-outline rounded-0 card-maroon" style="height:500px;">
     <div class="card-header">
     <h3 class="card-title">Loan Calculator</h3>
     </div>
@@ -36,26 +53,26 @@
 					do not include the percent sign.</li>
 				<li>The number of months is how many months the loan will be carried out. This is a whole number greater than zero.</li>
 			</ul>
+			<br>
 			<form method="post" id="loanCalcForm" role="">
-				<fieldset>
-					<legend>Loan Calculator</legend>
-							<div class="col-md-6">
-								<label for="loanAmount">Loan Amount</label>
-								<input type="text" size="8" name="loanAmount" id="loanAmount" value="<?php if (isset($loanAmount)) { echo $loanAmount; } ?>" />
-								<?php if (isset($errorArray[0])) { echo $errorArray[0]; } ?>
-							</div>
-							<div class="col-md-6">
-								<label for="interest">Interest</label>
-								<input type="text" size="8" name="interest" id="interest" value="<?php if (isset($interest)) { echo $interest; } ?>" />
-								<?php if (isset($errorArray[1])) { echo $errorArray[1]; } ?>
-							</div>
-							<div class="col-md-6">
-								<label for="numOfMonths">Number of Months</label>
-								<input type="text" size="8" name="numOfMonths" id="numOfMonths" value="<?php if (isset($numOfMonths)) { echo $numOfMonths; } ?>" />
-								<?php if (isset($errorArray[2])) { echo $errorArray[2]; } ?>
-							</div>
-						<input type="submit" name="submit" value="Submit" class="button" />
-				</fieldset>
+				<table style="margin-left:15.5%;margin-right:30%;width:800px;">
+					<tr>
+						<td style="max-width:75%;"><label for="loanAmount">Loan Amount: </label></td>
+						<td><input type="text" size="8" style="width:250px;" name="loanAmount" id="loanAmount" value="<?php if (isset($loanAmount)) { echo $loanAmount; } ?>" />
+							<?php if (isset($errorArray[0])) { echo $errorArray[0]; } ?></td>
+					</tr>
+					<tr>
+						<td style="max-width:75%;"><label for="interest">Interest: </label></td>
+						<td><input type="text" size="8" style="width:250px;" name="interest" id="interest" value="<?php if (isset($interest)) { echo $interest; } ?>" />
+							<?php if (isset($errorArray[1])) { echo $errorArray[1]; } ?></td>
+					</tr>
+					<tr>
+						<td style="max-width:75%;"><label for="numOfMonths">Number of Months: </label></td>
+						<td><input type="text" size="8" style="width:250px;" name="numOfMonths" id="numOfMonths" value="<?php if (isset($numOfMonths)) { echo $numOfMonths; } ?>" />
+							<?php if (isset($errorArray[2])) { echo $errorArray[2]; } ?></td>
+					</tr>
+					<input type="submit" name="submit" value="Submit" class="btn btn-primary" style="width:70%;position:absolute;margin-top:170px;margin-left:12%;margin-right:12%;" />
+				</table>
 			</form>
 			<div id="result" class="result">
 				<?php if (isset($result)) { echo $result; } ?>

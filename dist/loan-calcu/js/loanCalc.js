@@ -173,7 +173,7 @@
             
             income_req = income_req.toFixed(2);
 
-            this.container.innerHTML = 'Your monthly payment is P' + monthlyPayment + 'and Your Income requirement must  be ' + income_req;
+            this.container.innerHTML = 'Your monthly payment is P' + monthlyPayment + 'and your income requirement must  be ' + income_req + '.';
         }
     };
 
