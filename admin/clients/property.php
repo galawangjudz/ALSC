@@ -301,7 +301,23 @@ color: white;
                       </thead>
                     <tbody>
                  
-                  <?php 
+                  <?php
+                  function add($date_str, $months)
+                    {
+                     $date = new DateTime($date_str);
+                     $start_day = $date->format('j');
+                 
+                     $date->modify("+{$months} month");
+                     $end_day = $date->format('j');
+                 
+                     if ($start_day != $end_day)
+                         $date->modify('last day of last month');
+                 
+                     return $date;
+                    }
+
+
+
                   $l_col = "property_id,c_account_type,c_account_type1,c_account_status,c_net_tcp,c_payment_type1,c_payment_type2,c_net_dp,c_no_payments,c_monthly_down,c_first_dp,c_full_down,c_amt_financed,c_terms,c_interest_rate,c_fixed_factor,c_monthly_payment,c_start_date,c_retention,c_change_date,c_restructured,c_date_of_sale";
                   $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
                   $l_qry = $conn->query($l_sql);
@@ -398,17 +414,12 @@ color: white;
 
 
                     if ($l_retention == '1') {
-                      $l_due_date = gmdate(timegm(get_date($l_last_due_date)));
-                      $day = strftime("%d", $l_due_date);
-                      $t_day = strftime("%d", $l_due_date);
-                      $t_year = strftime("%Y", $l_due_date);
-                      $t_month = strftime("%m", $l_due_date);
-                      $l_due_date = ($this->auto_date($t_year, $t_month, $t_day));
-                      $l_due_date = gmdate($l_due_date);
-                      $t_due_date = strftime("%m/%d/%Y", $l_due_date);
-                      $l_data = array($t_due_date,'----------','******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
+                      $l_due_date = date('Y-m-d',strtotime($l_last_due_date));
+                      $t_due_date = add($l_due_date,1);
+                      $t_due_date = $t_due_date->format('m/d/y');
+                
+                      $l_data = array($t_due_date,"----------",'******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
                       array_push($all_payments, $l_data);
-                      return;
                     } else {
                       $l_mode = 1;
                       $l_date_bago = $l_start_date;
@@ -416,21 +427,48 @@ color: white;
 
                     $l_mode = 1;
                     $l_date_bago = $l_start_date;
-                  /*   while ($l_mode == 1) {
-                      if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
-                        $l_date = gmdate(gmmktime(get_date($l_first_dp)));
-                        $self->day = date("d", $l_date);
-                        
-                        // check for fulldown
-                        $l_full_down = $l_bal - $l_amt_fin;
-                        $l_monthly_pay = $l_monthly_dp;
-                        if ($l_full_down <= $l_monthly_pay) {
-                          $l_fd_mode = 1;
-                        } else {
-                          $l_fd_mode = 0;
-                        }
+                    while ($l_mode == 1):
+                      $l_amt_due = 0;
+                      $l_interest = 0;
+                      $l_principal = 0;
+                      $l_surcharge = 0;
+                      $l_rebate = 0;
+                      $l_status = 0;
+                      $l_new_bal = 0;  
+                      $l_last_status = 'PD';
+                      $l_last_stat_cnt = 0;
+
+                      $l_data = array($t_due_date,"----------","******",'0.00',$l_amt_due,$l_interest,$l_principal,$l_surcharge,$l_rebate,$l_status,$l_new_bal);
+                      array_push($all_payments, $l_data);
+
+                      $l_tot_amnt_due += floatval($l_amt_due);
+                      $l_tot_surcharge += floatval($l_surcharge);
+                      $l_tot_principal += floatval($l_principal);
+                      $l_tot_interest += floatval($l_interest);
+                      $l_interest = 0.00;
+                      $l_surcharge = 0.00;
+                      $l_rebate = 0.00;
+
+                      $l_last_due_date =$l_new_due_date_val->format('Y-m-d');
+                      $l_last_amt_paid = floatval($l_amt_due);
+                      $l_last_amt_due = floatval($l_amt_due);
+                      $l_last_status = $l_status;
+                      $l_last_stat_cnt = $l_count;
+
+                 
+                      $l_due_date_val = add($last_due_date, 1);
+                      $l_due_date_val = $l_due_date_val->format('Y-m-d');
+
+                      if ($l_mode == 1 and $l_due_date_val > $l_pay_date_val){
+                          if ($l_date_bago != $l_full_dp){
+                              $l_mode = 0;
+                          }
+                              $l_mode = 1;
                       }
-                    }  */ 
+
+                      $l_mode = 0;
+                      endwhile;
+
                     ?>
                        <?php foreach ($all_payments as $l_data): ?>
                          

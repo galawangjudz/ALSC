@@ -5,96 +5,7 @@ if($_settings->chk_flashdata('success')): ?>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-<?php
 
-
-if(isset($_GET['id'])){
-    $l_date1 = gmdate('U', $this->pay_date_dte->get_time() + 86400);
-    $t_year = gmdate('Y', $l_date1);
-    $t_month = gmdate('m', $l_date1);
-    $t_day = gmdate('d', $l_date1);
-    $l_date1 = array(intval($t_year), intval($t_month), intval($t_day), 0, 0, 0);
-    $l_pay_date_val = gmmktime($l_date1[3], $l_date1[4], $l_date1[5], $l_date1[1], $l_date1[2], $l_date1[0]);
-    
-    $l_col = "property_id,c_account_type,c_account_type1,c_account_status,c_net_tcp,c_payment_type1,c_payment_type2,c_net_dp,c_no_payments,c_monthly_down,c_first_dp,c_full_down,c_amt_financed,c_terms,c_interest_rate,c_fixed_factor,c_monthly_payment,c_start_date,c_retention,c_change_date,c_restructured,c_date_of_sale";
-    $l_sql = sprintf("SELECT %s FROM t_properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
-    $l_qry = $this->cnx->query($l_sql);
-    $l_b_rst = pg_fetch_all($l_qry);
-    
-    $l_acc_type = $l_b_rst[0][1];
-    $l_acc_type1 = $l_b_rst[0][2];
-    $l_acc_status = $l_b_rst[0][3];
-    $l_net_tcp = $l_b_rst[0][4];
-    $l_pay_type1 = $l_b_rst[0][5];
-    $l_pay_type2 = $l_b_rst[0][6];
-    $l_net_dp = $l_b_rst[0][7];
-    $l_num_pay = $l_b_rst[0][8];
-    $l_monthly_dp = $l_b_rst[0][9];
-    $l_first_dp = $l_b_rst[0][10];
-    $l_full_dp = $l_b_rst[0][11];
-    $l_amt_fin = $l_b_rst[0][12];
-    $l_ma_terms = $l_b_rst[0][13];
-    $l_int_rate = $l_b_rst[0][14];
-    $l_fixed_factor = $l_b_rst[0][15];
-    $l_monthly_ma = $l_b_rst[0][16];
-    $l_start_date = $l_b_rst[0][17];
-    $l_retention = $l_b_rst[0][18];
-    $l_change_date = $l_b_rst[0][19];
-    $l_restructured = $l_b_rst[0][20];
-    $l_waived_sur = $l_b_rst[0][21];
-    $l_date_of_sale = $l_b_rst[0][22];
-
-
-    $payments = $conn->query("SELECT remaining_balance, due_date, payment_amount, amount_due, status, status_count, pay_date, surcharge, principal, interest, or_no, rebate, payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
-    $l_last = $payments->num_rows - 1;
-    if($payments->num_rows <= 0){
-        echo ('No Payment Records for this Account!');
-    } 
-    
-    while($row=$payments->fetch_assoc()):
-        $l_bal = $row[$l_last][0];
-        $l_last_due_date = $row[$l_last][1];
-        $l_last_pay_date = $row[$l_last][6];
-        $l_last_amt_paid = $row[$l_last][2];
-        $l_last_amt_due = $row[$l_last][3];
-        $l_last_sur = $row[$l_last][7];
-        $l_last_int = $row[$l_last][9];
-        $l_last_status = $row[$l_last][4];
-        $l_last_stat_cnt = $row[$l_last][5];
-        $l_last_rebate = $row[$l_last][11];
-        $l_last_prin = $row[$l_last][8];
-        $l_last_or_no = $row[$l_last][10];
-        $l_last_pay_cnt = $row[$l_last][12];
-
-        for ($x = 0; $x < num_rows($payments); $x++){
-            if ($l_last_pay_date == $row[$x][6]){
-                if ($row[$x][1] != 0){
-                    $l_date = gmdate(timegm(get_date($row[$x][1])));
-                    $l_due_date = strftime("%m/%d/%Y",$l_date);
-                }
-                else{
-                    $l_due_date = '';
-                }
-                if ($row[$x][6] != 0){
-                    $l_date = gmdate(timegm(get_date($row[$x][6])));
-                    $l_last_pay_date1 = strftime("%m/%d/%Y",$l_date);
-                }
-                else{
-                    $l_last_pay_date1 = '';
-                }
-                $l_data = [$l_due_date, $l_last_pay_date1, $$row[$x][10], ftom($row[$x][2]), ftom($row[$x][3]), ftom($row[$x][9]), ftom($row[$x][8]), ftom($row[$x][7]), ftom($row[$x][11]), str_replace(" ", "", $row[$x][4]), ftom($row[$x][0])];
-                $this->payment_cls[] = $l_data;
-            }
-        }
-
-    $l_date = gmdate(timegm(get_date($l_date_of_sale)));
-    $this->day1 = strftime("%d", $l_date);
-
-
-    endwhile;
-
-    }
-?>
 <style>
 #item-list th, #item-list td{
 	padding:5px 3px!important;
@@ -114,16 +25,217 @@ if(isset($_GET['id'])){
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
-        <form action="" method="POST">
-            <label for="amount_paid">Amount Paid:</label>
-            <input type="number" id="amount_paid" name="amount_paid" required><br>
+                <?php 
+                  function add($date_str, $months)
+                    {
+                      $date = new DateTime($date_str);
+                      $start_day = $date->format('j');
+                  
+                      $date->modify("+{$months} month");
+                      $end_day = $date->format('j');
+                  
+                      if ($start_day != $end_day)
+                          $date->modify('last day of last month');
+                  
+                      return $date;
+                  }
 
-            <label for="or_no">OR Number:</label>
-            <input type="text" id="or_no" name="or_no" required><br>
 
-            <label for="pay_date">Payment Date:</label>
-            <input type="date" id="pay_date" name="pay_date" required><br>
-        </form>
+                  $l_col = "property_id,c_account_type,c_account_type1,c_account_status,c_net_tcp,c_payment_type1,c_payment_type2,c_net_dp,c_no_payments,c_monthly_down,c_first_dp,c_full_down,c_amt_financed,c_terms,c_interest_rate,c_fixed_factor,c_monthly_payment,c_start_date,c_retention,c_change_date,c_restructured,c_date_of_sale";
+                  $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
+                  $l_qry = $conn->query($l_sql);
+                 
+                  while($row=$l_qry->fetch_assoc()):
+                    $l_acc_type = $row['c_account_type'];
+                    $l_acc_type1 = $row['c_account_type1'];
+                    $l_acc_status = $row['c_account_status'];
+                    $l_net_tcp = $row['c_net_tcp'];
+                    $l_pay_type1 = $row['c_payment_type1'];
+                    $l_pay_type2 = $row['c_payment_type2'];
+                    $l_net_dp = $row['c_net_dp'];
+                    $l_num_pay = $row['c_no_payments'];
+                    $l_monthly_dp = $row['c_monthly_down'];
+                    $l_first_dp = $row['c_first_dp'];
+                    $l_full_dp = $row['c_full_down'];
+                    $l_amt_fin = $row['c_amt_financed'];
+                    $l_ma_terms = $row['c_terms'];
+                    $l_int_rate = $row['c_interest_rate'];
+                    $l_fixed_factor = $row['c_fixed_factor'];
+                    $l_monthly_ma = $row['c_monthly_payment'];
+                    $l_start_date = $row['c_start_date'];
+                    $l_retention = $row['c_retention'];
+                    $l_change_date = $row['c_change_date'];
+                    $l_restructured = $row['c_restructured'];
+                    $l_date_of_sale = $row['c_date_of_sale'];
+                
+                    endwhile;
+
+
+                  $payments = $conn->query("SELECT remaining_balance, due_date, payment_amount, amount_due, status, status_count, pay_date, surcharge, principal, interest, or_no, rebate, payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+                  $l_last = $payments->num_rows - 1;
+                  if($payments->num_rows <= 0){
+                      echo ('No Payment Records for this Account!');
+                  } 
+                  $l_last = $payments->num_rows - 1;
+
+                  $payments_data = array(); // create an empty array to store the rows
+                  while($row = $payments->fetch_assoc()) {
+                        $payments_data[] = $row; // add the current row to the array
+                       /*  print_r($payments_data[0]['remaining_balance']); */
+                    }
+                    $last_row = $payments_data[$l_last];
+
+                    $l_bal = $last_row['remaining_balance'];
+                    $l_last_due_date = $last_row['due_date'];
+                    $l_last_pay_date = $last_row['pay_date'];
+                    $l_last_amt_paid = $last_row['payment_amount'];
+                    $l_last_amt_due = $last_row['amount_due'];
+                    $l_last_sur = $last_row['surcharge'];
+                    $l_last_int = $last_row['interest'];
+                    $l_last_status = $last_row['status'];
+                    $l_last_stat_cnt = $last_row['status_count'];
+                    $l_last_rebate = $last_row['rebate'];
+                    $l_last_prin = $last_row['principal'];
+                    $l_last_or_no = $last_row['or_no'];
+                    $l_last_pay_cnt = $last_row['payment_count'];
+
+
+                    $all_payments= array();
+                    for ($x = 0; $x < $payments->num_rows; $x++){
+                      if ($l_last_pay_date == $payments_data[$x]['pay_date']):
+                          if ($payments_data[$x]['due_date'] != 0){
+                              $l_date = strtotime($payments_data[$x]['due_date']);
+                              $l_due_date = date('m/d/y', $l_date);
+                             
+                          }
+                          else{
+                              $l_due_date = '';
+                          }
+                          if ($payments_data[$x]['pay_date'] != 0){
+                              $l_date = strtotime($payments_data[$x]['pay_date']);
+                              $l_last_pay_date1 =  date('m/d/y', $l_date);
+                          }
+                          else{
+                              $l_last_pay_date1 = '';
+                          }
+                          $l_data = array($l_due_date, $l_last_pay_date1, $payments_data[$x]['or_no'], number_format($payments_data[$x]['payment_amount'],2), 
+                          number_format($payments_data[$x]['amount_due'],2), number_format($payments_data[$x]['interest'],2), 
+                          number_format($payments_data[$x]['principal'],2), number_format($payments_data[$x]['surcharge'],2), number_format($payments_data[$x]['rebate'],2), 
+                          str_replace(" ", "", $payments_data[$x]['status']), number_format($payments_data[$x]['remaining_balance'],2));
+                          array_push($all_payments, $l_data);
+                        
+                      endif;
+                      }
+                        
+                    if ($l_acc_status == 'Fully Paid'):
+                        return;
+                        endif;
+                    $l_tot_amnt_due = 0;
+                    $l_tot_surcharge = 0;
+                    $l_tot_principal = 0;
+                    $l_tot_interest = 0;
+
+
+                    if ($l_retention == '1') {
+                      $l_due_date = add(date('YYYY-MM-DD',strtotime($l_last_due_date)),1);
+                      $t_due_date = date('m/d/y', $l_due_date);
+                      $l_data = array($t_due_date,"----------",'******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
+                      array_push($all_payments, $l_data);
+                     
+                    } else {
+                      $l_mode = 1;
+                      $l_date_bago = $l_start_date;
+                    }
+
+                    $l_mode = 1;
+                    $l_date_bago = $l_start_date;
+                    while ($l_mode == 1){
+                        if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
+                            $l_date = strtotime($l_first_dp);
+                            $day = date("d", $l_date);
+                            
+                            // check for fulldown
+                            $l_full_down = $l_bal - $l_amt_fin;
+                            $l_monthly_pay = $l_monthly_dp;
+                            if ($l_full_down <= $l_monthly_pay) {
+                              $l_fd_mode = 1;
+                            } else {
+                              $l_fd_mode = 0;
+                            }
+                            if ($l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL') {
+                              if ($l_last_status == 'ADDITIONAL') {
+                                  $l_date = date('Y-m-d',strtotime($l_last_due_date));
+                                  if ($l_change_date == '1') {
+                                      $l_date = date('Y-m-d', strtotime($l_first_dp));
+                                     }
+                                  $t_day = strftime('%d', strtotime($l_date));
+                                  $l_date2 = add($l_date, 1);
+                                  $l_due_date_val = $l_date2;
+                                  $l_date = date('Y-m-d', $l_date2);
+                                  $l_due_date = date('m/d/Y', strtotime($l_date));
+                                  $l_count = $l_last_stat_cnt + 1;
+
+                                } else {
+                                  $l_due_date = date('m/d/Y', $l_date);
+                                  $l_due_date_val = strtotime($l_date);
+                                  $l_count = 1;
+                                }
+                                $l_new_due_date_val = $l_due_date_val;
+                                $l_amt_due = number_format($l_monthly_pay,2);
+                                $l_principal = $l_amt_due;
+                                if ($l_num_pay == $l_count || $l_fd_mode == 1) {
+                                    $l_acc_status = 'Full DownPayment';
+                                    $l_status = 'FD';
+                                    $l_count = 0;
+                                } else {
+                                    $l_status = 'PD-' . strval($l_count);
+                                    $l_acc_status = 'Partial DownPayment';
+                                }
+                            }elseif ($l_acc_status == 'Partial DownPayment') {
+                                  $l_date = date('Y-m-d H:i:s',$l_last_due_date);
+                                  $t_year = strftime("%Y", $l_date);
+                                  $t_month = strftime("%m", $l_date);
+                                  if ($l_change_date == '1') {
+                                      $l_date = date('Y-m-d H:i:s',$l_first_dp);
+                                  }
+                                  $t_day = strftime("%d", $l_date);
+                                  if ($l_last_amt_paid < $l_last_amt_due) {
+                                      // $l_underpay = 1;
+                                      $l_last_tot_surcharge = 0;
+                                      $l_last_tot_prin = 0;
+                                  }
+                              
+
+                                    
+                            
+                                }}
+                              
+                      
+                    } 
+                    ?>
+                       <?php foreach ($all_payments as $l_data): ?>
+                         
+
+                          <tr>
+                            <td class="text-center"><?php echo $l_data[0] ?></td> 
+                            <td class="text-center"><?php echo $l_data[1] ?></td> 
+                            <td class="text-center"><?php echo $l_data[2] ?> </td> 
+                            <td class="text-center"><?php echo $l_data[3] ?> </td> 
+                            <td class="text-center"><?php echo $l_data[4] ?> </td> 
+                            <td class="text-center"><?php echo $l_data[5] ?> </td> 
+                            <td class="text-center"><?php echo $l_data[6] ?> </td> 
+                            <td class="text-center"><?php echo $l_data[7] ?> </td> 
+                            <td class="text-center"><?php echo $l_data[8] ?> </td>  
+                            <td class="text-center"><?php echo $l_data[9] ?> </td>  
+                            <td class="text-center"><?php echo $l_data[10] ?> </td>  
+                          </tr>
+                         
+                         <?php endforeach; ?>
+
+
+                    </tbody>
+                  </table>
+                  
 
 
     </div>

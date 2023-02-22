@@ -1064,10 +1064,10 @@ Class Master extends DBConnection {
 
 			endwhile;
 
-		$check2 = $this->conn->query("SELECT * FROM t_lots where c_status = 'Pre-Reserved' and c_lid =".$lot_lid);
+		$check2 = $this->conn->query("SELECT * FROM t_lots where c_status = 'Sold' and c_lid =".$lot_lid);
 		if($check2->num_rows == 0){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Lot is not Pre-Reserved";
+			$resp['msg'] = "Lot is already Sold";
 			return json_encode($resp);
 			exit;
 		}else{
