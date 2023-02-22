@@ -456,7 +456,7 @@ input{
 					<div class="col-md-12">
 						<div class="panel panel-default">	
 							<div class="panel-body form-group form-group-sm">
-								<table class="table3 table-bordered table-stripped" id="buyer_table">
+								<table class="table3 table-bordered table-stripped" id="buyer_table" style="width:100%;">
 									<thead>
 										<tr>
 											<th>
@@ -540,11 +540,11 @@ input{
 													</div>
 
 													<div class="row">
-														<div class="col-md-3">
-															<div class="form-group">
+														<div class="col-md-2">
+															<!-- <div class="form-group">
 																<label class="control-label">Citizenship: </label>
 																<input type="text" class="form-control margin-bottom buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
-															</div>
+															</div> -->
 														</div>
 														<div class="col-md-2">
 															<label class="control-label">Civil Status: </label>
@@ -576,10 +576,7 @@ input{
 														<div class="col-md-2">
 															<div class="form-group">
 																<label class="control-label">Birthdate: </label>
-														
 																	<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
-																
-															
 															</div>
 														</div>
 														<div class="col-md-1">
@@ -723,7 +720,7 @@ input{
 														</div>
 	
 														<div class="row">
-															<div class="col-md-3">
+															<div class="col-md-2">
 																<div class="form-group">
 																	<label class="control-label">Citizenship: </label>
 																	<input type="text" class="form-control margin-bottom buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
@@ -771,8 +768,26 @@ input{
 																	<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" value="<?php echo isset($customer_age) ? $customer_age : ''; ?>">
 																</div>
 															</div>	
+																	
+															<div class="col-md-3">
+																<div class="form-group">
+																	<style>
+																		select:invalid { color: gray; }
+																	</style>
+																	<label class="control-label">Relationship: </label>
+																	<select name="relationship[]" id="relationship" class="form-control required">
+																			<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
+																			<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
+																			<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
+																			<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
+																			<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
+		
+																	</select>
+																</div>
+															</div>
 														</div>
-	
+
+														
 														<div class="row">
 															<div class="col-md-3">
 																<div class="form-group">
@@ -834,23 +849,7 @@ input{
 																</div>
 															</div>
 														</div>  
-	
-														<div class="col-md-2">
-															<div class="form-group">
-																<style>
-																	select:invalid { color: gray; }
-																</style>
-																<label class="control-label">Relationship: </label>
-																<select name="relationship[]" id="relationship" class="form-control required">
-																		<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
-																		<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
-																		<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
-																		<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
-																		<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
-	
-																</select>
-															</div>
-														</div>
+
 													</div>
 												
 												</td>	
@@ -1350,7 +1349,7 @@ input{
 					</div>		
 				</div>	 
 			</div>
-			<div id="Payment" class="tabcontent">
+			<div id="Payment" class="tabcontent" style="width:1183.5px;margin-left:7px;">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
@@ -1457,7 +1456,7 @@ input{
 					</div>
 				</div>
 			</div>
-			<div id="Agents and Commission" class="tabcontent">
+			<div id="Agents and Commission" class="tabcontent" style="width:1183.5px;margin-left:7px;">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
@@ -1466,26 +1465,26 @@ input{
 									<div class="clear"></div>
 								</div>
 							<div class="panel-body form-group form-group-sm">
-								<table class="table3 table-bordered table-hover table-striped" id="comm_table">
+								<table class="table3 table-bordered table-hover table-striped" id="comm_table" style="width:100%;">
 									<thead>
 										<tr>
 											<th width="20">
 												<a href="#" class="btn btn-success btn-md add-row"><span class="fa fa-plus" aria-hidden="true"></span></a>
 											</th>
 											<th width="500">
-												<h4> Agents</h4>
+												<h4 style="font-size:18px;">&nbsp;Agents</h4>
 											</th>
 											<th  width="90">
-												<h4>Position</h4>
+												<h4 style="font-size:18px;">&nbsp;Position</h4>
 											</th>
 											<th width="90">
-												<h4>Code</h4>
+												<h4 style="font-size:18px;">&nbsp;Code</h4>
 											</th>
 											<th width="150">
-												<h4>Rate</h4>
+												<h4 style="font-size:18px;">&nbsp;Rate</h4>
 											</th>
 											<th width="200">
-												<h4>Amount</h4>
+												<h4 style="font-size:18px;">&nbsp;Amount</h4>
 											</th>
 										</tr>
 									</thead>
@@ -1500,35 +1499,36 @@ input{
 											$rate = $rows['c_rate'];
 											$comm_amt = $rows['c_amount'];
 										?>
-										<tr><td>
+										<tr>
+											<td>
 												<a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" ></span></a>
 											</td>
-											<td>
+											<td style="padding-top:10px;">
 												<!-- <a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" aria-hidden="true"></span></a> -->
 												
-												<div class="form-group form-group-sm no-margin-bottom">
+												<div class="form-group form-group-sm">
 													<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
 													<p class="item-select"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-search" aria-hidden="true"></span> Select Existing Agent</a></p>
 									
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="form-group form-group-sm no-margin-bottom">
+											<td style="padding-top:10px;">
+												<div class="form-group form-group-sm">
 													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="input-group input-group-sm  no-margin-bottom">
+											<td style="padding-top:10px;">
+												<div class="input-group input-group-sm">
 													
 													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" readonly>
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="form-group form-group-sm  no-margin-bottom">
+											<td style="padding-top:10px;">
+												<div class="form-group form-group-sm">
 													<input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
 												</div>
 											</td>
-											<td class="text-right">
+											<td style="padding-top:10px;">
 												<div class="input-group input-group-sm">
 													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
 												</div>
@@ -1540,7 +1540,7 @@ input{
 											<tr><td>
 												<a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" ></span></a>
 											</td>
-											<td>
+											<td style="padding-top:10px;">
 												<!-- <a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" aria-hidden="true"></span></a> -->
 												
 												<div class="form-group form-group-sm no-margin-bottom">
@@ -1549,24 +1549,24 @@ input{
 									
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="form-group form-group-sm no-margin-bottom">
+											<td>
+												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
 													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="input-group input-group-sm  no-margin-bottom">
+											<td>
+												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
 													
 													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" readonly>
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="form-group form-group-sm  no-margin-bottom">
+											<td>
+												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
 													<input type="number" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
 												</div>
 											</td>
-											<td class="text-right">
-												<div class="input-group input-group-sm">
+											<td>
+												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
 													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
 												</div>
 											</td>
@@ -1614,7 +1614,7 @@ input{
 				<h4 class="modal-title">Select An Existing Customer</h4>
 			</div>
 			<div class="modal-body">
-				<table class="table2 table-bordered table-stripped">
+				<table class="table2 table-bordered table-stripped" style="width:100%;">
 					<thead>
 						<tr>
 
@@ -1716,7 +1716,7 @@ input{
 		<div class="modal-content">
 			<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">Select Agent</h4>
+			<!-- <h4 class="modal-title" style="float:left;font-size:16px;">Select Agent</h4> -->
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
