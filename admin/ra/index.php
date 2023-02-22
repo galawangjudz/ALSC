@@ -279,7 +279,7 @@
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item extend_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-hourglass text-success"></span> Extend</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item cancel_data"  href="javascript:void(0)" lid="<?php echo $row['c_lot_lid']?>" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-stop-circle text-danger"></span> Cancelled</a>
+									<a class="dropdown-item cancel_data"  href="javascript:void(0)" lid="<?php echo $row['c_lot_lid']?>" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-stop-circle text-danger"></span> Cancel</a>
 									
 								<?php endif ; ?>
 						</td>

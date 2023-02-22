@@ -100,7 +100,7 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Age: </label>
-                                <input type="text" class="form-control margin-bottom required" name="customer_age" id="customer_age" value="<?php echo isset($meta['age']) ? $meta['age']: '' ?>">
+                                <input type="text" class="form-control margin-bottom required" name="customer_age" id="customer_age" value="<?php echo isset($meta['age']) ? $meta['age']: '' ?>" readonly>
                             </div>
                         </div>	
                     </div>
@@ -109,7 +109,7 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Contact Number: </label>
-                                <input type="text" class="form-control margin-bottom required" name="contact_no" id="contact_no" value="<?php echo isset($meta['contact_no']) ? $meta['contact_no']: '' ?>">
+                                <input type="text" class="form-control margin-bottom required" name="contact_no" id="contact_no" value="<?php echo isset($meta['contact_no']) ? $meta['contact_no']: '' ?>" minlength="11">
                             </div>	
                         </div>
                         <div class="col-md-4">
@@ -122,8 +122,8 @@ foreach($client->fetch_array() as $k =>$v){
                             <div class="form-group">
                                 <label class="control-label">Email Address: </label>
                                 <div class="input-group float-right margin-bottom">
-                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                    <input type="text" class="form-control margin-bottom required" name="customer_email" id="customer_email" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>">
+                                    <span class="input-group-addon"></span>
+                                    <input type="email" class="form-control margin-bottom required" name="customer_email" id="customer_email" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>">
                                 </div>
                             </div>
                         </div>

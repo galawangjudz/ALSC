@@ -28,7 +28,7 @@ class Calculation {
 			$monthlyPayment = round($monthlyPayment, 2);
 			$income_req = round($income_req, 2);
 
-	    	$result = 'Your monthly payment is P' . number_format($monthlyPayment,2). ' and Your Income requirement must  be P' .number_format($income_req,2);
+	    	$result = 'Your monthly payment is P' . number_format($monthlyPayment,2). ' and your income requirement must  be P' .number_format($income_req,2);
 	 
 			
 		}
