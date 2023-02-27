@@ -147,7 +147,7 @@
             $l_date_bago = $l_start_date;
             while ($l_mode == 1):
               if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
-                      $l_date = date('Y-m-d',strtotime($l_first_dp));
+                      $l_date = new Datetime(date('Y-m-d',strtotime($l_first_dp)));
                       
                       // check for fulldown 
                       $l_full_down = $l_bal - $l_amt_fin;
@@ -159,10 +159,10 @@
                       endif;
                       if ($l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL'):
                             if ($l_last_status == 'ADDITIONAL'):
-                                  $l_date = date('Y-m-d',strtotime($l_last_due_date));
+                                  $l_date = new Datetime(date('Y-m-d',strtotime($l_last_due_date)));
                                 
                                   if ($l_change_date == '1'):
-                                      $l_date = date('Y-m-d',strtotime($l_first_dp));
+                                      $l_date = new Datetime(date('Y-m-d',strtotime($l_first_dp)));
                                   endif;
                                 
                                   $l_date2 =add($l_date,1);
@@ -170,7 +170,7 @@
                                   $l_due_date_val = $l_date2;
                                   $l_count = $l_last_stat_cnt + 1;
                             else:
-                                  $l_date = new DateTime($l_date);
+                                 
                                   $t_due_date  = $l_date->format('m/d/y');
                                   $l_due_date_val =$l_date;
                                   $l_count = 1;
@@ -278,8 +278,9 @@
                     
 
               }elseif ($l_pay_type1 == 'Spot Cash' && $l_acc_status == 'Reservation') {
-                    $l_date = date('Y-m-d',strtotime($l_start_date));
-                    $l_due_date = $l_date->format('m/d/y');
+                    $l_date = new Datetime(date('Y-m-d',strtotime($l_start_date)));
+                   
+                    $t_due_date = $l_date->format('m/d/y');
                     $l_due_date_val =  date('Y-m-d',strtotime($l_start_date));
                     $l_new_due_date_val = $l_due_date_val;
                     $l_status = 'FPD';
@@ -296,8 +297,8 @@
                     $l_new_bal = number_format($l_new_bal) ;
 
             }elseif ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Reservation') {
-                    $l_date = date('Y-m-d', strtotime($l_full_dp));
-                    $l_due_date = $l_date->format('m/d/y');
+                    $l_date = new Datetime(date('Y-m-d', strtotime($l_full_dp)));
+                    $t_due_date = $l_date->format('m/d/y');
                     $l_due_date_val =  date('Y-m-d',strtotime($l_full_dp));
                     $l_new_due_date_val = $l_due_date_val;
                     $l_status = 'FD';
@@ -313,7 +314,7 @@
                     $l_new_bal = number_format($l_new_bal) ;
                     $l_date_bago = $l_start_date;
             }elseif (($l_acc_status == 'Full DownPayment' && $l_pay_type2 == 'Deferred Cash Payment') || ($l_pay_type1 == 'No DownPayment' && $l_pay_type2 == 'Deferred Cash Payment') || $l_acc_status == 'Deferred Cash Payment') {
-                    $l_date =  date('Y-m-d', strtotime($l_start_date));
+                    $l_date =  new Datetime(date('Y-m-d', strtotime($l_start_date)));
                     $l_monthly_pay = $l_monthly_ma;  
                     $l_fpd = $l_bal;
                     if ($l_bal <= $l_monthly_pay):
@@ -341,7 +342,7 @@
                                 $t_due_date = $l_date->format('m/d/y');
                                 $l_count = $l_last_stat_cnt + 1;
                           else:
-                                $t_due_date = "2023-03-31";
+                                $t_due_date = $l_date->format('m/d/y');
                                 $l_due_date_val = new Datetime($l_date);
                                 $l_count = 1;
                           endif;
@@ -444,15 +445,265 @@
 
                     $l_principal_amt = floatval(str_replace(',', '',$l_principal));
                     $l_new_bal =  $l_bal - $l_principal_amt;
-                    $l_new_bal = number_format($l_new_bal,2) ;
+                    $l_new_bal = number_format($l_new_bal,2);
+
+
+            }elseif (($l_acc_status == 'Full DownPayment' && $l_pay_type2 == 'Monthly Amortization') || ($l_pay_type1 == 'No DownPayment' && $l_pay_type2 == 'Monthly Amortization') || $l_acc_status == 'Monthly Amortization') {
+                    $l_date = date('Y-m-d', strtotime($l_start_date));
+
+                    $l_monthly_pay = $l_monthly_ma;
+                
+                    if ($l_date_bago == $l_full_dp):
+                     
+                        $l_due_date_val_old = add($l_date,1);
+                        $l_date_old = new Datetime($l_due_date_val_old);
+                        $l_date_bago = $l_date_old->format('m/d/y');
+                    endif;
+
+                    if ($l_acc_status == 'Full DownPayment' || $l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL') {
+                        if ($l_last_status == 'ADDITIONAL' && $l_acc_status != 'Full DownPayment'):
+                              $l_date = date('Y-m-d', strtotime($l_last_due_date));
+                            
+                              if ($l_change_date == '1'):
+                                  $l_date = date('Y-m-d', strtotime($l_start_date));
+                              endif;
+                              
+                              $l_date2 = add($l_date, 1);
+                              $l_due_date_val = $l_date2;
+                              $l_date = new Datetime($l_date2);
+                              $t_due_date = $l_date->format('m/d/y');
+                              $l_count = $l_last_stat_cnt + 1;
+                        else:
+                              $l_due_date = new Datetime($l_date);
+                              $t_due_date = $l_due_date->format('m/d/y');
+                              $l_due_date_val = $l_due_date;
+                              $l_count = 1;
+                         endif;
+                        $l_interest = $l_bal * ($l_int_rate / 1200);
+                        $l_principal = $l_monthly_pay - $l_interest;
+                        if ($l_bal <= $l_principal || $l_ma_terms == $l_count):
+                            $l_monthly_pay = $l_bal + $l_interest;
+                            $l_acc_status = 'Fully Paid';
+                            $l_status = 'FPD';
+                            $l_mode = 0;
+                        
+                        else:
+                            $l_status = 'MA-' . strval($l_count);
+                            $l_acc_status = 'Monthly Amortization';
+                        endif;
+
+                        $l_new_due_date_val = $l_due_date_val;
+                        $l_amt_due = number_format($l_monthly_pay,2);
+                        
+                    }elseif (($l_acc_status == 'Monthly Amortization')) {
+                          $l_date = date('Y-m-d', strtotime($l_last_due_date));
+                        
+                          if ($l_change_date == '1') :
+                              $l_date = date('Y-m-d', strtotime($l_start_date));
+                          endif;
+
+                          if ($l_last_amt_paid < $l_last_amt_due) {
+                                // $l_underpay = 1;
+                                $l_last_tot_surcharge = 0;
+                                $l_last_tot_prin = 0;
+                                $l_last_tot_int = 0;
+                                $x_y = $l_last;
+                                $l_cnt = 0;
+                                $l_tot_int = 0;
+
+
+                                while ($l_last_status == $payments_data[$x]['status']){
+                                        $l_last_interest = $payments_data[$x_y-1]['remaining_balance'] * ($l_int_rate/1200);
+                                        $l_last_tot_prin += $payments_data[$x_y]['principal'];
+                                        $l_tot_int += $payments_data[$x_y]['interest'];
+                                        $x_y -= 1;
+                                        $l_cnt += 1;
+                            
+                                        $l_int_last = $l_last_interest - $l_tot_int;
+
+                                        }
+
+                                if ($l_cnt > 1):
+                                  $l_monthly_pay = $l_monthly_pay - $l_last_tot_prin - $l_last_tot_int;
+                                
+                                else:
+                                    $l_last_tot_prin = 0;
+                                    $l_monthly_pay = $l_monthly_pay - $l_last_tot_int;
+                                endif;
+
+                                if ($l_cnt < 2):
+                                      for ($x = 0; $x <= $l_last; $x++) {
+                                          try {
+                                              if ($l_last_status == $payments_data[$x]['status'] && $l_last_due_date == $payments_data[$x]['remaining balance']) {
+                                                  $l_last_tot_prin += $payments_data[$x]['principal'];
+                                                  $l_last_tot_surcharge += $payments_data[$x]['surcharge'];
+                                                  if ($l_last_amt_paid < $payments_data[$x]['surcharge']):
+                                                      $l_tot_surcharge += ($l_last_tot_surcharge - $l_last_amt_paid);
+                                                  endif;
+                                            
+                                                  $l_last_tot_int += $payments_data[$x]['interest'];
+                                                }
+                                          } catch (Exception $e) {
+                                              // Do nothing
+                                          }
+                                      }
+                                      $l_monthly_pay = $l_monthly_pay - $l_last_tot_prin - $l_last_tot_int;
+
+                                else:
+                                      $l_monthly_pay = $l_last_amt_due - $l_last_amt_paid;
+                                endif;
+
+                                $l_ma_balance = $l_bal + $l_last_tot_prin;
+                                if (strotime($l_last_pay_date) > stortime($l_last_due_date)):
+                                      $l_date =  date('Y-m-d', strtotime($l_last_pay_date));
+                                else:
+                                      $l_date =  date('Y-m-d', strtotime($l_last_due_date));
+                                endif;
+
+
+                                if ($l_cnt >= 1):
+                                  $l_interest = $l_int_last;
+                                else:
+                                    $l_interest = $l_ma_balance * ($l_int_rate / 1200);
+                                endif;
+
+                                
+                                $l_monthly = $l_last_amt_due - $l_last_amt_paid;
+                                if ($l_last_tot_int < $l_last_interest):
+                                    if ($l_last_tot_int > 0):
+                                        $_interest = $l_last_interest - $l_last_tot_int;
+                                    endif;
+                                    if ($l_last_interest == $l_tot_int):
+                                        $_interest = 0.00;
+                                    endif;
+                                else:
+                                    $l_interest = 0.00;
+                                endif;
+
+
+                                if ($l_cnt > 1):
+                                      $l_principal = $l_monthly_ma - $l_last_interest - $l_last_tot_prin;
+                                elseif ($l_cnt == 1):
+                                      if ($l_last_interest >= $l_interest):
+                                            $l_principal = $l_monthly_ma - $l_last_interest - $l_last_tot_prin;
+
+                                            if ($l_last_tot_surcharge == 0 || $l_tot_int > 0):
+                                                  $l_monthly_pay = $l_monthly;
+                                            else:
+                                                  $l_monthly_pay = $l_monthly_ma;
+
+                                            endif;
+
+                                          
+                                      else:
+                                            $l_principal = $l_monthly;
+                                            $l_monthly_pay = $l_monthly;
+                                      endif;
+                                else:
+                                      $l_principal = $l_monthly_pay - $l_interest;
+                                endif;
+                                $l_count = $l_last_stat_cnt;
+                                $l_due_date_val = new Datetime($l_date);
+                                $l_new_due_date_val = new Datetime($l_last_due_date);
+                                $l_amt_due = number_format($l_monthly,2);
+                                if ($l_bal <= $l_principal || $l_ma_terms == $l_count):
+                                    $l_tot_amnt_due += $l_tot_surcharge;
+                                    $l_monthly_pay = $l_bal + $l_interest;
+                                    $l_acc_status = 'Fully Paid';
+                                    $l_status = 'FPD';
+                                    $l_mode = 0;
+                                    $l_amt_due = number_format($l_monthly_pay,2);
+                                    $l_principal = $l_bal;
+                                else:
+                                    $l_status = 'MA-' . strval($l_count);
+                                    $l_acc_status = 'Monthly Amortization';
+                                    $l_amt_due = number_format($l_monthly,2);
+                                endif;
+                      
+                                
+                          }else{
+                            $l_date2 = add($l_date, 1);
+                            $l_due_date_val = $l_date2;
+                            $l_new_due_date_val = $l_due_date_val;
+                            $l_date = $l_date2->format('Y-m-d');
+                            $t_due_date = $l_date;
+                            $l_count = $l_last_stat_cnt + 1;
+                            $l_interest = $l_bal * ($l_int_rate/1200);
+                            $l_principal = $l_monthly_pay - $l_interest;
+                            if ($l_bal <= $l_principal || $l_ma_terms == $l_count):
+                                  $l_monthly_pay = $l_bal + $l_interest;
+                                  $l_acc_status = 'Fully Paid';
+                                  $l_status = 'FPD';
+                                  $l_mode = 0;
+                                  $l_amt_due = number_format($l_monthly_pay,2);
+                                  $l_principal = $l_bal;
+                            else:
+                                  $l_status = 'MA-' . strval($l_count);
+                                  $l_acc_status = 'Monthly Amortization';
+                                  $l_amt_due = number_format($l_monthly_pay,2);
+                            endif;
+                            
+                          }         
+                        }
+                   /*  if ($l_pay_date_val < $l_due_date_val) {
+                          $l_days = ($l_due_date_val - $l_pay_date_val) / 86400;
+                          if ($int_rate == 12) {
+                          $l_rebate_value = 0.015;
+                          } elseif ($int_rate == 14) {
+                          $l_rebate_value = 0.0175;
+                          } elseif ($int_rate == 15) {
+                          $l_rebate_value = 0.0175;
+                          } elseif ($int_rate == 16) {
+                          $l_rebate_value = 0.02;
+                          } elseif ($int_rate == 17) {
+                          $l_rebate_value = 0.02;
+                          } elseif ($int_rate == 18) {
+                          $l_rebate_value = 0.02;
+                          } elseif ($int_rate == 19) {
+                          $l_rebate_value = 0.02;
+                          } elseif ($int_rate == 20) {
+                          $l_rebate_value = 0.0225;
+                          } elseif ($int_rate == 21) {
+                          $l_rebate_value = 0.0225;
+                          } elseif ($int_rate == 22) {
+                          $l_rebate_value = 0.0225;
+                          } elseif ($int_rate == 23) {
+                          $l_rebate_value = 0.025;
+                          } elseif ($int_rate == 24) {
+                          $l_rebate_value = 0.025;
+                          } else {
+                          $l_rebate_value = 0;
+                          }
+                          if ($l_days > 2) {
+                          $l_rebate = ftom($l_monthly_pay * $l_rebate_value);
+                          } else {
+                          $l_rebate = '0.00';
+                          }
+                      }else{ */
+                      $l_rebate = '0.00';
+                     /*  } */
+                      $l_amt_due = number_format(floatval(str_replace(',', '',$l_amt_due)) - floatval(str_replace(',', '',$l_rebate)),2);
+                      $l_principal = number_format($l_principal,2);
+                      $l_interest = number_format($l_interest,2);
+                      $l_new_bal = number_format($l_bal - (floatval(str_replace(',', '',($l_principal))) - floatval(str_replace(',', '',$l_rebate))),2);
+
+
             }else{
               $total_amount_due_ent =($l_tot_amnt_due);
               $total_principal_ent = ($l_tot_principal);
               $total_surcharge_ent = ($l_tot_surcharge);
               $total_interest_ent = ($l_tot_interest);
             }
-            $l_bal = floatval(str_replace(',', '',$l_new_bal));
+/* 
+            if ($l_pay_date_val > $l_due_date_val && floatval($l_rebate) == 0) {
+                  $l_days = ($l_pay_date_val - $l_due_date_val) / 86400;
+                  $l_surcharge = ftom($l_monthly_pay * (0.6/360) * $l_days);
+                  $l_amt_due = ftom(mtof($l_amt_due) + mtof($l_surcharge));
+            } else { */
             $l_surcharge = '0.00';
+          /*   } */
+
+            $l_bal = floatval(str_replace(',', '',$l_new_bal));
             $l_data = array($t_due_date,"----------","******",'0.00',$l_amt_due,$l_interest,$l_principal,$l_surcharge,$l_rebate,$l_status,$l_new_bal);
             array_push($all_payments, $l_data);
 
@@ -466,7 +717,7 @@
 
        
             
-            $l_last_due_date =  '2023-02-17';
+            $l_last_due_date =  $t_due_date;
             $l_last_amt_paid = floatval($l_amt_due);
             $l_last_amt_due = floatval($l_amt_due);
             $l_last_status = $l_status;
