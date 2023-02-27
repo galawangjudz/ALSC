@@ -35,7 +35,7 @@
 
 
 
-          $l_pay_date_val = '2024-12-31';
+          $l_pay_date_val = '2040-12-31';
           $l_col = "property_id,c_account_type,c_account_type1,c_account_status,c_net_tcp,c_payment_type1,c_payment_type2,c_net_dp,c_no_payments,c_monthly_down,c_first_dp,c_full_down,c_amt_financed,c_terms,c_interest_rate,c_fixed_factor,c_monthly_payment,c_start_date,c_retention,c_change_date,c_restructured,c_date_of_sale";
           $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
           $l_qry = $conn->query($l_sql);
@@ -74,7 +74,7 @@
           $l_last = $payments->num_rows - 1;
 
           $payments_data = array(); 
-          $count = 1;
+         /*  $count = 1; */
           while($row = $payments->fetch_assoc()) {
                 $payments_data[] = $row; 
      
@@ -147,7 +147,7 @@
             $l_date_bago = $l_start_date;
             while ($l_mode == 1):
               if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
-                      $l_date = new Datetime(date('Y-m-d',strtotime($l_first_dp)));
+                      $l_date = date('Y-m-d',strtotime($l_first_dp));
                       
                       // check for fulldown 
                       $l_full_down = $l_bal - $l_amt_fin;
@@ -159,10 +159,10 @@
                       endif;
                       if ($l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL'):
                             if ($l_last_status == 'ADDITIONAL'):
-                                  $l_date = new Datetime(date('Y-m-d',strtotime($l_last_due_date)));
+                                  $l_date = date('Y-m-d',strtotime($l_last_due_date));
                                 
                                   if ($l_change_date == '1'):
-                                      $l_date = new Datetime(date('Y-m-d',strtotime($l_first_dp)));
+                                      $l_date = date('Y-m-d',strtotime($l_first_dp));
                                   endif;
                                 
                                   $l_date2 =add($l_date,1);
@@ -170,12 +170,13 @@
                                   $l_due_date_val = $l_date2;
                                   $l_count = $l_last_stat_cnt + 1;
                             else:
-                                 
+                                  $l_date = new DateTime($l_date);
                                   $t_due_date  = $l_date->format('m/d/y');
                                   $l_due_date_val =$l_date;
                                   $l_count = 1;
                             endif;
                             $l_new_due_date_val = $l_due_date_val;
+                           /*  $l_new_due_date_val = $t_due_date; */
                             $l_amt_due = number_format($l_monthly_pay,2);
                             $l_principal = $l_amt_due;
                         
@@ -247,11 +248,12 @@
                                         $l_acc_status = 'Partial DownPayment';
                                       endif;
                             else:  
-                                    $l_date2 = $l_date;
+                                    $l_date2 = add($l_date,1);
+                                     #jude
+                                     $l_date = $l_date2;
                                     $l_due_date_val = $l_date2;
                                     $l_new_due_date_val = $l_due_date_val;
-                                    $l_date = new DateTime($l_date2);
-                                    $l_due_date =  $l_date->format('m/d/y');
+                                    $t_due_date =  $l_date->format('m/d/y');
                                     $l_count = $l_last_stat_cnt + 1;
                                     $l_amt_due = number_format($l_monthly_pay,2);
                                     $l_principal = $l_amt_due;
@@ -316,6 +318,7 @@
             }elseif (($l_acc_status == 'Full DownPayment' && $l_pay_type2 == 'Deferred Cash Payment') || ($l_pay_type1 == 'No DownPayment' && $l_pay_type2 == 'Deferred Cash Payment') || $l_acc_status == 'Deferred Cash Payment') {
                     $l_date =  new Datetime(date('Y-m-d', strtotime($l_start_date)));
                     $l_monthly_pay = $l_monthly_ma;  
+                 
                     $l_fpd = $l_bal;
                     if ($l_bal <= $l_monthly_pay):
                           $l_fp_mode = 1;
@@ -343,7 +346,7 @@
                                 $l_count = $l_last_stat_cnt + 1;
                           else:
                                 $t_due_date = $l_date->format('m/d/y');
-                                $l_due_date_val = new Datetime($l_date);
+                                $l_due_date_val = $l_date;
                                 $l_count = 1;
                           endif;
 
@@ -420,7 +423,7 @@
                                 $l_date2 = add($l_date,1);
                                 $l_due_date_val = $l_date2;
                                 $l_new_due_date_val = $l_due_date_val;
-                                $l_date = '2023-03-03';
+                                $l_date = new Datetime ($l_date);
                                 $t_due_date = $l_date2->format('m/d/y');
                                 $l_count = $l_last_stat_cnt + 1;
                                
@@ -429,7 +432,7 @@
                                 if ($l_ma_terms == $l_count || $l_fp_mode == 1) {
                                       $l_status = 'FPD';
                                       $l_monthly_pay = $l_fpd;
-                                      $l_amt_due = ftom($l_monthly_pay);
+                                      $l_amt_due = number_format($l_monthly_pay,2);
                                       $l_acc_status = 'Fully Paid';
                                       $l_mode = 0;
                                 } else {
@@ -454,9 +457,12 @@
                     $l_monthly_pay = $l_monthly_ma;
                 
                     if ($l_date_bago == $l_full_dp):
+                        $l_date = strftime($l_date);
+                                            
+                        $l_due_date_val_old =  add(strftime($l_date),1);
                      
-                        $l_due_date_val_old = add($l_date,1);
-                        $l_date_old = new Datetime($l_due_date_val_old);
+                        $l_date_old =$l_due_date_val_old;
+                       
                         $l_date_bago = $l_date_old->format('m/d/y');
                     endif;
 
@@ -625,11 +631,14 @@
                             $l_date2 = add($l_date, 1);
                             $l_due_date_val = $l_date2;
                             $l_new_due_date_val = $l_due_date_val;
-                            $l_date = $l_date2->format('Y-m-d');
+                            $l_date = $l_date2->format('m/d/y');
                             $t_due_date = $l_date;
                             $l_count = $l_last_stat_cnt + 1;
                             $l_interest = $l_bal * ($l_int_rate/1200);
                             $l_principal = $l_monthly_pay - $l_interest;
+                          /*   echo $l_monthly_pay;
+                            echo $l_interest; */
+                           /*  echo $l_principal; */
                             if ($l_bal <= $l_principal || $l_ma_terms == $l_count):
                                   $l_monthly_pay = $l_bal + $l_interest;
                                   $l_acc_status = 'Fully Paid';
@@ -727,13 +736,20 @@
             $l_due_date_val = add($l_last_due_date, 1);
             $l_due_date_val = $l_due_date_val->format('Y-m-d');
 
-           
-            if ($count == 15){
+
+            if ($l_mode == 1 and $l_due_date_val > $l_pay_date_val):
+              if ($l_date_bago != $l_full_dp):
+                $l_mode = 0;
+              else:
+                $l_mode = 1;
+              endif;
+            endif;
+          /*   if ($count == 15){
               $l_mode = 0;
             }else{
               $l_mode = 1;
               $count += 1;  
-            }
+            } */
            /*  if ($l_mode == 1 && ($l_due_date_val > $l_pay_date_val)){
                 if ($l_date_bago != $l_full_dp){
                     $l_mode = 0;
