@@ -1,5 +1,99 @@
 
 <?php
+    function is_leap_year($year) {
+      return date('L', strtotime("$year-01-01"));
+    }
+
+
+    function auto_date($last_day,$date)
+      {
+        $date_arr = date_parse($date);
+
+        $year = $date_arr['year'];
+        $month = $date_arr['month'];
+        $day = $date_arr['day'];
+
+/* 
+        $year = date('Y', strtotime($date));
+        $month = date('m', strtotime($date));
+        $day = date('d', strtotime($date)); */
+        $l_leap = is_leap_year($year);
+
+      /*   if($date_of_sale == 31 && $last_day >= 28 && $change_date != 1){
+              $last_day = 31;
+        } */
+        if ($month == 1):
+            if ($last_day < 28):
+                      //add 31 days
+            else:
+                if ($l_leap):
+                      $l_result = $year +'-02-28';
+                else:
+                      $l_result = $year +'-02-29';
+                endif;
+
+            endif;
+        elseif($month == 2):
+            if ($last_day > 28):
+                if($last_day == 29):
+                    $l_result = $year +'-03-29'; 
+                elseif($last_day == 30):
+                    $l_result = $year +'-03-30'; 
+                elseif($last_day == 31):
+                    $l_result = $year +'-03-31';
+                endif;
+            else:
+
+                if($l_leap):
+                    $dt = new DateTime($date);
+                    $dt->modify('+28 days');
+                    $l_result = $dt->format('Y-m-d');
+                else:
+                    $dt = new DateTime($date);
+                    $dt->modify('+29 days');
+                    $l_result = $dt->format('Y-m-d');
+                endif;
+            endif;
+        
+        elseif($month == 3 or $month == 5 or $month == 7 or $month == 8 or $month == 10 or $month == 12):
+            if($month ==7 or $month == 12):
+                  if($last_day >= 30):
+                      $l_date1 = $year +'-' +$month + '-'+ $last_day ; 
+                  else:
+                      $l_date1 = $date ; 
+                  endif;
+                  $dt = new DateTime($l_date1);
+                  $dt->modify('+31 days');
+                  $l_result = $dt->format('Y-m-d');
+
+            else:
+                  if ($last_day <= 30):
+                      $l_date1 = $date ;            
+                  else:
+                      $l_date1 = $year +'-' +$month + '-30';         
+                  endif;     
+                  $dt = new DateTime($l_date1);
+                  $dt->modify('+31 days');
+                  $l_result = $dt->format('Y-m-d');
+            endif;
+
+        elseif($month == 4 or $month == 6 or $month == 9 or $month == 11):
+              if ($last_day == 31):
+                    $dt = new DateTime($date);
+                    $dt->modify('+1 month');
+                    $l_result = $dt->format('Y-m-d');
+              else:
+                    $dt = new DateTime($date);
+                    $dt->modify('+30 days');
+                    $l_result = $dt->format('Y-m-d');
+              endif;
+        endif;
+
+        return $l_result;
+
+
+      }
+
 
     function add($date_str, $months)
       {
@@ -7,6 +101,8 @@
         $start_day = $date->format('j');
     
         $date->modify("+{$months} month");
+      /*   $l_date=  $date->format('Y-m-d  ');
+        echo $l_date; */
         $end_day = $date->format('j');
     
         if ($start_day != $end_day)
@@ -144,7 +240,7 @@
             }
 
             $l_mode = 1;
-            $l_date_bago = $l_start_date;
+            $l_date_bago = $l_start_date; 
             while ($l_mode == 1):
               if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
                       $l_date = date('Y-m-d',strtotime($l_first_dp));
@@ -248,9 +344,9 @@
                                         $l_acc_status = 'Partial DownPayment';
                                       endif;
                             else:  
-                                    $l_date2 = add($l_date,1);
-                                     #jude
-                                     $l_date = $l_date2;
+                                    /* $l_date2 = auto_date($start$l_date); */
+                                    /* $l_date2 = add($l_date,1); */
+                                    $l_date = $l_date2;
                                     $l_due_date_val = $l_date2;
                                     $l_new_due_date_val = $l_due_date_val;
                                     $t_due_date =  $l_date->format('m/d/y');
@@ -744,19 +840,7 @@
                 $l_mode = 1;
               endif;
             endif;
-          /*   if ($count == 15){
-              $l_mode = 0;
-            }else{
-              $l_mode = 1;
-              $count += 1;  
-            } */
-           /*  if ($l_mode == 1 && ($l_due_date_val > $l_pay_date_val)){
-                if ($l_date_bago != $l_full_dp){
-                    $l_mode = 0;
-                }
-                    $l_mode = 1;
-            } */
-
+         
          
             endwhile;	
 
