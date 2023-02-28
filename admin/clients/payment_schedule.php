@@ -12,45 +12,47 @@
         $year = $date_arr['year'];
         $month = $date_arr['month'];
         $day = $date_arr['day'];
-
-/* 
+        $change_date = 0;
+        $date_of_sale = '2023-02-17';
+/*    
         $year = date('Y', strtotime($date));
         $month = date('m', strtotime($date));
         $day = date('d', strtotime($date)); */
         $l_leap = is_leap_year($year);
 
-      /*   if($date_of_sale == 31 && $last_day >= 28 && $change_date != 1){
+        if($date_of_sale == 31 && $last_day >= 28 && $change_date != 1){
               $last_day = 31;
-        } */
+        }
         if ($month == 1):
             if ($last_day < 28):
                       //add 31 days
             else:
                 if ($l_leap):
-                      $l_result = $year +'-02-28';
+                      $l_result = $year .'-02-29';
                 else:
-                      $l_result = $year +'-02-29';
+                      $l_result = $year .'-02-28';
+                   
                 endif;
 
             endif;
         elseif($month == 2):
             if ($last_day > 28):
                 if($last_day == 29):
-                    $l_result = $year +'-03-29'; 
+                    $l_result = $year .'-03-29'; 
                 elseif($last_day == 30):
-                    $l_result = $year +'-03-30'; 
+                    $l_result = $year .'-03-30'; 
                 elseif($last_day == 31):
-                    $l_result = $year +'-03-31';
+                    $l_result = $year .'-03-31';
                 endif;
             else:
 
                 if($l_leap):
                     $dt = new DateTime($date);
-                    $dt->modify('+28 days');
+                    $dt->modify('+29 days');
                     $l_result = $dt->format('Y-m-d');
                 else:
                     $dt = new DateTime($date);
-                    $dt->modify('+29 days');
+                    $dt->modify('+28 days');
                     $l_result = $dt->format('Y-m-d');
                 endif;
             endif;
@@ -58,7 +60,7 @@
         elseif($month == 3 or $month == 5 or $month == 7 or $month == 8 or $month == 10 or $month == 12):
             if($month ==7 or $month == 12):
                   if($last_day >= 30):
-                      $l_date1 = $year +'-' +$month + '-'+ $last_day ; 
+                      $l_date1 = $year .'-' .$month . '-'. $last_day ; 
                   else:
                       $l_date1 = $date ; 
                   endif;
@@ -70,7 +72,7 @@
                   if ($last_day <= 30):
                       $l_date1 = $date ;            
                   else:
-                      $l_date1 = $year +'-' +$month + '-30';         
+                      $l_date1 = $year .'-'.$month . '-'. '30';         
                   endif;     
                   $dt = new DateTime($l_date1);
                   $dt->modify('+31 days');
@@ -229,14 +231,14 @@
 
 
             if ($l_retention == '1') {
-              $l_due_date = date('Y-m-d',strtotime($l_last_due_date));
-              $t_due_date = add($l_due_date,1);
-              $t_due_date = $t_due_date->format('m/d/y');
-        
-              $l_data = array($t_due_date,"----------",'******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
-              array_push($all_payments, $l_data);
+                $l_due_date = date('Y-m-d',strtotime($l_last_due_date));
+                $last_day   = date('d', strtotime($l_last_due_date));
+                $t_due_date = new Datetime(auto_date($last_day,$l_due_date));
+                $t_due_date = $t_due_date->format('m/d/y');
+                $l_data = array($t_due_date,"----------",'******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
+                array_push($all_payments, $l_data);
 
-              return $all_payments;
+                return $all_payments;
             }
 
             $l_mode = 1;
@@ -244,6 +246,8 @@
             while ($l_mode == 1):
               if (($l_pay_type1 == 'Partial DownPayment' && ($l_acc_status == 'Reservation' || $l_acc_status == 'Partial DownPayment')) || ($l_pay_type1 == 'Full DownPayment' && $l_acc_status == 'Partial DownPayment')) {
                       $l_date = date('Y-m-d',strtotime($l_first_dp));
+                      $last_day   = date('d', strtotime($l_date));
+                     
                       
                       // check for fulldown 
                       $l_full_down = $l_bal - $l_amt_fin;
@@ -261,14 +265,16 @@
                                       $l_date = date('Y-m-d',strtotime($l_first_dp));
                                   endif;
                                 
-                                  $l_date2 =add($l_date,1);
+                                 
+                                  //$l_date2 =add($l_date,1);
+                                  $l_date2 = new Datetime(auto_date($last_day,$l_date));
                                   $t_due_date  = $l_date2->format('m/d/y');
                                   $l_due_date_val = $l_date2;
                                   $l_count = $l_last_stat_cnt + 1;
                             else:
-                                  $l_date = new DateTime($l_date);
-                                  $t_due_date  = $l_date->format('m/d/y');
-                                  $l_due_date_val =$l_date;
+                                  $l_date2 = new DateTime($l_date);
+                                  $t_due_date  = $l_date2->format('m/d/y');
+                                  $l_due_date_val = $l_date2;
                                   $l_count = 1;
                             endif;
                             $l_new_due_date_val = $l_due_date_val;
@@ -344,12 +350,11 @@
                                         $l_acc_status = 'Partial DownPayment';
                                       endif;
                             else:  
-                                    /* $l_date2 = auto_date($start$l_date); */
+                                    $l_date2 = new Datetime(auto_date($last_day,$l_date));
                                     /* $l_date2 = add($l_date,1); */
-                                    $l_date = $l_date2;
                                     $l_due_date_val = $l_date2;
                                     $l_new_due_date_val = $l_due_date_val;
-                                    $t_due_date =  $l_date->format('m/d/y');
+                                    $t_due_date =  $l_date2->format('m/d/y');
                                     $l_count = $l_last_stat_cnt + 1;
                                     $l_amt_due = number_format($l_monthly_pay,2);
                                     $l_principal = $l_amt_due;
@@ -411,8 +416,10 @@
                     $l_new_bal =  $l_bal - $l_principal_amt;
                     $l_new_bal = number_format($l_new_bal) ;
                     $l_date_bago = $l_start_date;
+
             }elseif (($l_acc_status == 'Full DownPayment' && $l_pay_type2 == 'Deferred Cash Payment') || ($l_pay_type1 == 'No DownPayment' && $l_pay_type2 == 'Deferred Cash Payment') || $l_acc_status == 'Deferred Cash Payment') {
                     $l_date =  new Datetime(date('Y-m-d', strtotime($l_start_date)));
+                    $last_day = date('d', strtotime($l_date));
                     $l_monthly_pay = $l_monthly_ma;  
                  
                     $l_fpd = $l_bal;
@@ -423,9 +430,12 @@
 
                           if ($l_date_bago == $l_full_dp) {
                           
-                            $l_due_date_val_old = add($l_date,1);
+
+                            
+                            //$l_due_date_val_old = add($l_date,1);
+                            $l_due_date_val_old = new Datetime(auto_date($last_day,$l_date));
                             $l_date_old = $l_due_date_val_old->format('m/d/y');
-                            $l_date_bago = $l_date_old;
+                            $l_date_bago = $l_date_old->format('Y-m-d');
                           }
                     endif;
                     if ($l_acc_status == 'Full DownPayment' || $l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL') {
@@ -435,7 +445,9 @@
                                       $l_date = date('Y-m-d',strtotime($l_start_date));
                                 endif;
                                
-                                $l_date2 = add($l_date,1);
+                                //$l_date2 = add($l_date,1);
+
+                                $l_date2 = new Datetime(auto_date($last_day,$l_date));
                                 $l_due_date_val = $l_date2;
                                 $l_date = $l_date2;
                                 $t_due_date = $l_date->format('m/d/y');
@@ -516,10 +528,11 @@
                               endif;  
                              
                           else:
-                                $l_date2 = add($l_date,1);
+                                $l_date2 = new Datetime(auto_date($last_day,$l_date));
+                                //$l_date2 = add($l_date,1);
                                 $l_due_date_val = $l_date2;
                                 $l_new_due_date_val = $l_due_date_val;
-                                $l_date = new Datetime ($l_date);
+                                //$l_date = new Datetime ($l_date);
                                 $t_due_date = $l_date2->format('m/d/y');
                                 $l_count = $l_last_stat_cnt + 1;
                                
@@ -549,17 +562,14 @@
 
             }elseif (($l_acc_status == 'Full DownPayment' && $l_pay_type2 == 'Monthly Amortization') || ($l_pay_type1 == 'No DownPayment' && $l_pay_type2 == 'Monthly Amortization') || $l_acc_status == 'Monthly Amortization') {
                     $l_date = date('Y-m-d', strtotime($l_start_date));
-
+                    $last_day = date('d', strtotime($l_date));
                     $l_monthly_pay = $l_monthly_ma;
                 
                     if ($l_date_bago == $l_full_dp):
-                        $l_date = strftime($l_date);
-                                            
-                        $l_due_date_val_old =  add(strftime($l_date),1);
-                     
+                        $l_due_date_val_old = new Datetime(auto_date($last_day,$l_date));
                         $l_date_old =$l_due_date_val_old;
                        
-                        $l_date_bago = $l_date_old->format('m/d/y');
+                        $l_date_bago = $l_date_old->format('Y-m-d');
                     endif;
 
                     if ($l_acc_status == 'Full DownPayment' || $l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL') {
@@ -569,11 +579,10 @@
                               if ($l_change_date == '1'):
                                   $l_date = date('Y-m-d', strtotime($l_start_date));
                               endif;
-                              
-                              $l_date2 = add($l_date, 1);
+                              $l_date2 = new Datetime(auto_date($last_day,$l_date));
+                              //$l_date2 = add($l_date, 1);
                               $l_due_date_val = $l_date2;
-                              $l_date = new Datetime($l_date2);
-                              $t_due_date = $l_date->format('m/d/y');
+                              $t_due_date = $l_date2->format('m/d/y');
                               $l_count = $l_last_stat_cnt + 1;
                         else:
                               $l_due_date = new Datetime($l_date);
@@ -724,7 +733,8 @@
                       
                                 
                           }else{
-                            $l_date2 = add($l_date, 1);
+                            $l_date2 = new Datetime(auto_date($last_day,$l_date));
+                            //$l_date2 = add($l_date, 1);
                             $l_due_date_val = $l_date2;
                             $l_new_due_date_val = $l_due_date_val;
                             $l_date = $l_date2->format('m/d/y');
@@ -828,8 +838,9 @@
             $l_last_status = $l_status;
             $l_last_stat_cnt = $l_count;
 
-      
-            $l_due_date_val = add($l_last_due_date, 1);
+           
+            $l_due_date_val =  new Datetime(auto_date($last_day,$l_date));  
+            //$l_due_date_val = add($l_last_due_date, 1);
             $l_due_date_val = $l_due_date_val->format('Y-m-d');
 
 
