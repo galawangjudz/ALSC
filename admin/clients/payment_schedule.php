@@ -632,7 +632,7 @@
                                     $l_tot_int = 0;
 
 
-                                    while ($l_last_status == $payments_data[$x]['status']){
+                                    while ($l_last_status == $payments_data[$x_y]['status']){
                                             $l_last_interest = $payments_data[$x_y-1]['remaining_balance'] * ($l_int_rate/1200);
                                             $l_last_tot_prin += $payments_data[$x_y]['principal'];
                                             $l_tot_int += $payments_data[$x_y]['interest'];
@@ -654,7 +654,7 @@
                                     if ($l_cnt < 2):
                                           for ($x = 0; $x <= $l_last; $x++) {
                                               try {
-                                                  if ($l_last_status == $payments_data[$x]['status'] && $l_last_due_date == $payments_data[$x]['remaining balance']) {
+                                                  if ($l_last_status == $payments_data[$x]['status'] && $l_last_due_date == $payments_data[$x]['remaining_balance']) {
                                                       $l_last_tot_prin += $payments_data[$x]['principal'];
                                                       $l_last_tot_surcharge += $payments_data[$x]['surcharge'];
                                                       if ($l_last_amt_paid < $payments_data[$x]['surcharge']):
@@ -674,7 +674,7 @@
                                     endif;
 
                                     $l_ma_balance = $l_bal + $l_last_tot_prin;
-                                    if (strotime($l_last_pay_date) > stortime($l_last_due_date)):
+                                    if (strtotime($l_last_pay_date) > strtotime($l_last_due_date)):
                                           $l_date =  date('Y-m-d', strtotime($l_last_pay_date));
                                     else:
                                           $l_date =  date('Y-m-d', strtotime($l_last_due_date));
