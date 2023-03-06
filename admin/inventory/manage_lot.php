@@ -47,7 +47,6 @@ if(isset($_GET['id'])){
 #item-list th, #item-list td{
 	padding:5px 3px!important;
 }
-
 .container-fluid p{
     margin: unset
 }
@@ -56,6 +55,7 @@ if(isset($_GET['id'])){
 } 
 
 </style>
+<body onload="lcp()">
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 	<h3 class="card-title"><?php echo !isset($_GET['id']) ? "Add Lot" :"Edit Lot" ?></h3>
@@ -119,7 +119,7 @@ if(isset($_GET['id'])){
                 <div class="form-group">
                     <label class="control-label">Remarks: </label>
                     <div class="input-group form-group-sm textarea no-margin-bottom">
-                        <textarea class="form-control textarea" name="prod_remarks" id="prod_remarks" value="<?php echo isset($meta['c_remarks']) ? $meta['c_remarks']: '' ?>" rows="3"></textarea>
+                        <input type="text" class="form-control" name="prod_remarks" id="prod_remarks" value="<?php echo isset($meta['c_remarks']) ? $meta['c_remarks']: '' ?>">
                     </div>
                 </div>
             </form>
@@ -130,6 +130,7 @@ if(isset($_GET['id'])){
 		</div>
 	</div>
 </div>
+</body>
 <script>
     function lcp(){
 		var lot_area = document.getElementById('prod_lot_area').value;

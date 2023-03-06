@@ -44,5 +44,5 @@
   <script src="assets/plugins/jquery-ui/jquery-ui.min.js"></script>
  <!-- summernote -->
   <link rel="stylesheet" href="assets/plugins/summernote/summernote-bs4.min.css">
-  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"  crossorigin="anonymous"></script>
 </head>

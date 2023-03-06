@@ -50,6 +50,64 @@ Class Master extends DBConnection {
 			
 	}
 
+	///////////////////////
+
+	function save_agent(){
+		extract($_POST);
+		$data = " c_code = '$c_code' ";
+		$data .= ", c_nick_name = '$c_nick_name' ";
+		$data .= ", c_last_name = '$c_last_name' ";
+		$data .= ", c_first_name = '$c_first_name' ";	 
+		$data .= ", c_middle_initial = '$c_middle_initial' ";	 
+		$data .= ", c_sex = '$c_sex' ";	 
+		$data .= ", c_civil_status = '$c_civil_status' ";	 
+		$data .= ", c_birthdate = '$c_birthdate' ";	 
+		$data .= ", c_tel_no = '$c_tel_no' ";	 
+		$data .= ", c_sss_no = '$c_sss_no' ";	
+		$data .= ", c_tin = '$c_tin' ";	
+		$data .= ", c_birth_place = '$c_birth_place' ";	
+		$data .= ", c_address_ln1 = '$c_address_ln1' ";	
+		$data .= ", c_address_ln2 = '$c_address_ln2' ";	
+		$data .= ", c_hire_date = '$c_hire_date' ";	
+		$data .= ", c_status = '$c_status' ";	
+		$data .= ", c_recruited_by = '$c_recruited_by' ";	
+		$data .= ", c_position = '$c_position' ";	
+		$data .= ", c_division = '$category' ";	
+		// $data .= ", c_network = '$subcategory' ";	
+
+		if(empty($id)){
+			$sql = "INSERT INTO t_agents set ".$data;
+			$save = $this->conn->query($sql);
+		}else{
+			$save = $this->conn->query("UPDATE t_agents set ".$data." where id = ".$id);
+		} 
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New agent successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Agent successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	
+	function delete_agent(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM t_agents where c_code = ".$id);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Agent successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
+	}
+	//////////////////
+
 	function delete_lot(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM t_lots where c_lid = ".$id);
@@ -60,9 +118,20 @@ Class Master extends DBConnection {
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
 		}
-		return json_encode($resp);
+		return json_encode($resp);	
+	}
 
-			
+	function delete_user(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM users where id = ".$id);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"User successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
 	}
 
 	function save_house_model(){
@@ -90,7 +159,7 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
-	function delete_model_house(){
+	function delete_model(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM t_model_house where c_code = ".$id);
 		if($del){
@@ -249,7 +318,7 @@ Class Master extends DBConnection {
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
 			$flr_elev_price = $_POST['flrelev_price'];
-			$conv_outlet_price = $_POST['conv_outlet_price'];
+			// $conv_outlet_price = $_POST['conv_outlet_price'];
 
 			$data = " c_csr_no = '$last_id' ";
 
@@ -263,7 +332,7 @@ Class Master extends DBConnection {
 			$data .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data .= ", aircon_grill_price = '$ac_grill_price' ";
 			$data .= ", floor_elev_price = '$flr_elev_price' ";
-			$data .= ", conv_outlet_price = '$conv_outlet_price' ";
+			// $data .= ", conv_outlet_price = '$conv_outlet_price' ";
 
 
 			$save = $this->conn->query("INSERT INTO t_additional_cost set ".$data);
@@ -1217,6 +1286,9 @@ switch ($action) {
 	case 'delete_csr':
 		echo $Master->delete_csr();
 	break;
+	case 'delete_agent':
+		echo $Master->delete_agent();
+	break;
 	case 'save_client':
 		echo $Master->save_client();
 	break;
@@ -1247,8 +1319,14 @@ switch ($action) {
 	case 'delete_model':
 		echo $Master->delete_model();
 	break;
+	case 'delete_user':
+		echo $Master->delete_user();
+	break;
 	case 'save_project':
 		echo $Master->save_project();
+	break;
+	case 'save_agent':
+		echo $Master->save_agent();
 	break;
 	case 'delete_project':
 		echo $Master->delete_project();

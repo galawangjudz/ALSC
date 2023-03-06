@@ -71,14 +71,14 @@ foreach($client->fetch_array() as $k =>$v){
                     <div class="row">
                         <div class="col-md-10">		
                             <div class="form-group">
-                                <label class="control-label">Address: </label>
+                                <label class="control-label">Residential/Billing Address: </label>
                                 <input type="text" class="form-control margin-bottom copy-input required" name="customer_address" id="customer_address" value="<?php echo isset($meta['address']) ? $meta['address']: '' ?>">		
                             </div>
                         </div>
                       
                         <div class="col-md-2">		
                             <div class="form-group">
-                                <label class="control-label">Zip Code: </label>
+                                <label class="control-label">Area Code: </label>
                                 <input type="text" class="form-control copy-input" name="customer_zip_code" id="customer_zip_code" value="<?php echo isset($meta['zip_code']) ? $meta['zip_code']: '' ?>">					
                             </div>
                         </div>

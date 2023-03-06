@@ -55,7 +55,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$others = $row['others'];
 			$aircon_outlet_price = $row['aircon_outlet_price'];
 			$aircon_grill_price = $row['aircon_grill_price'];
-			$conv_outlet_price = $row['conv_outlet_price'];
+			// $conv_outlet_price = $row['conv_outlet_price'];
 			$service_area_price = $row['service_area_price'];
 			$others_price = $row['others_price'];
 			$floor_elev_price = $row['floor_elev_price'];
@@ -514,14 +514,6 @@ input{
 															<label class="control-label">Last Name: </label>
 																<input type="text" class="form-control margin-bottom buyer-last required" name="last_name[]" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>">
 															</div>
-															
-														</div>
-														<div class="col-md-3">		
-															<div class="form-group">
-															<label class="control-label">Suffix Name: </label>
-																<input type="text" class="form-control margin-bottom buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
-															</div>
-															
 														</div>
 														<div class="col-md-3">
 															<div class="form-group">
@@ -535,16 +527,21 @@ input{
 																<label class="control-label">Middle Name: </label>
 																<input type="text" class="form-control margin-bottom buyer-middle" name="middle_name[]" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>">
 															</div>
-															
+														</div>
+														<div class="col-md-3">		
+															<div class="form-group">
+															<label class="control-label">Suffix Name: </label>
+																<input type="text" class="form-control margin-bottom buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
+															</div>
 														</div>
 													</div>
-
+													<hr>
 													<div class="row">
 														<div class="col-md-2">
-															<!-- <div class="form-group">
+															<div class="form-group">
 																<label class="control-label">Citizenship: </label>
 																<input type="text" class="form-control margin-bottom buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
-															</div> -->
+															</div>
 														</div>
 														<div class="col-md-2">
 															<label class="control-label">Civil Status: </label>
@@ -585,6 +582,21 @@ input{
 																<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" value="<?php echo isset($customer_age) ? $customer_age : ''; ?>">
 															</div>
 														</div>	
+														<div class="col-md-3">
+															<div class="form-group">
+																<style>
+																	select:invalid { color: gray; }
+																</style>
+																<label class="control-label">Relationship: </label>
+																<select name="relationship[]" id="relationship" class="form-control required">
+																		<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
+																		<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
+																		<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
+																		<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
+																		<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
+																</select>
+															</div>
+														</div>
 													</div>
 
 													<div class="row">
@@ -648,25 +660,7 @@ input{
 															</div>
 														</div>
 													</div>  
-
-													<div class="col-md-2">
-														<div class="form-group">
-															<style>
-																select:invalid { color: gray; }
-															</style>
-															<label class="control-label">Relationship: </label>
-															<select name="relationship[]" id="relationship" class="form-control required">
-																	<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
-																	<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
-																	<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
-																	<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
-																	<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
-
-															</select>
-														</div>
-													</div>
 												</div>
-											
 											</td>	
 										</tr>
 											<?php 
@@ -694,31 +688,27 @@ input{
 																<label class="control-label">Last Name: </label>
 																	<input type="text" class="form-control margin-bottom buyer-last required" name="last_name[]" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>">
 																</div>
-																
-															</div>
-															<div class="col-md-3">		
-																<div class="form-group">
-																<label class="control-label">Suffix Name: </label>
-																	<input type="text" class="form-control margin-bottom buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
-																</div>
-																
 															</div>
 															<div class="col-md-3">
 																<div class="form-group">
 																	<label class="control-label">First Name: </label>
 																	<input type="text" class="form-control margin-bottom buyer-first required" name="first_name[]" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>">
 																</div>
-																
 															</div>
 															<div class="col-md-3">
 																<div class="form-group">
 																	<label class="control-label">Middle Name: </label>
 																	<input type="text" class="form-control margin-bottom buyer-middle" name="middle_name[]" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>">
 																</div>
-																
+															</div>
+															<div class="col-md-3">		
+																<div class="form-group">
+																<label class="control-label">Suffix Name: </label>
+																	<input type="text" class="form-control margin-bottom buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
+																</div>
 															</div>
 														</div>
-	
+														<hr>
 														<div class="row">
 															<div class="col-md-2">
 																<div class="form-group">
@@ -1100,7 +1090,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price">
+												<input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" placeholder="0">
 											</div>
 										</div>
 										
@@ -1128,7 +1118,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" onkeyup = "getAddCost();" disabled>
+												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" onchange = "getAddCost();" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1156,7 +1146,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal" onkeyup = "getAddCost();" disabled>
+												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal" onchange = "getAddCost();" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1183,7 +1173,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal" onkeyup = "getAddCost();" disabled>
+												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal" onchange = "getAddCost();" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1210,7 +1200,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" onkeyup = "getAddCost();" disabled>
+												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" onchange = "getAddCost();" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1237,7 +1227,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal" onkeyup = "getAddCost()" disabled>
+												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal" onchange = "getAddCost()" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1264,16 +1254,13 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="addcost_total" name="addcost_total">
+												<input type="text" class="form-control margin-bottom" id="addcost_total" name="addcost_total" placeholder="0">
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-
-
-
-								<div class="space"></div>
+							<div class="space"></div>
 								<div class="main_box">
 									<div class="row">
 										<div class="col-md-3">
@@ -1472,19 +1459,19 @@ input{
 												<a href="#" class="btn btn-success btn-md add-row"><span class="fa fa-plus" aria-hidden="true"></span></a>
 											</th>
 											<th width="500">
-												<h4 style="font-size:18px;">&nbsp;Agents</h4>
+												<label class="control-label">&nbsp;Agents</label>
 											</th>
 											<th  width="90">
-												<h4 style="font-size:18px;">&nbsp;Position</h4>
+											<label class="control-label">&nbsp;Position</label>
 											</th>
 											<th width="90">
-												<h4 style="font-size:18px;">&nbsp;Code</h4>
+												<label class="control-label">&nbsp;Code</label>
 											</th>
 											<th width="150">
-												<h4 style="font-size:18px;">&nbsp;Rate</h4>
+												<label class="control-label">&nbsp;Rate</label>
 											</th>
 											<th width="200">
-												<h4 style="font-size:18px;">&nbsp;Amount</h4>
+												<label class="control-label">&nbsp;Amount</label>
 											</th>
 										</tr>
 									</thead>
@@ -2006,16 +1993,16 @@ input{
 		document.getElementById('conv_outlet_subtotal').value = res;
 	}
 	function getAddCost(){
-		let others = document.getElementById('others_subtotal').value;
-		let service = document.getElementById('service_subtotal').value;
-		let ac_grill = document.getElementById('ac_grill_subtotal').value;
-		let ac_outlet = document.getElementById('ac_outlet_subtotal').value;
-		let flr_elev = document.getElementById('flrelev_price').value;
-		let conv_outlet = document.getElementById('conv_outlet_subtotal').value;
+		var others = document.getElementById('others_subtotal').value;
+		var service = document.getElementById('service_subtotal').value;
+		var ac_grill1 = document.getElementById('ac_grill_subtotal').value;
+		var ac_outlet = document.getElementById('ac_outlet_subtotal').value;
+		var flr_elev = document.getElementById('flrelev_price').value;
+		var conv_outlet = document.getElementById('conv_outlet_subtotal').value;
 
-		let res = parseInt(others) + parseInt(service) + parseInt(ac_grill) + parseInt(ac_outlet) + parseInt(flr_elev) + parseInt(conv_outlet);
+		var result = parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(flr_elev)+ parseInt(conv_outlet) + parseInt(ac_grill1);
 
-		document.getElementById('addcost_total').value = res;
+		document.getElementById('addcost_total').value = result;
 	}
 </script>
 

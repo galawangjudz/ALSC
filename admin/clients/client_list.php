@@ -16,7 +16,7 @@
 		<div class="card-body">
             <div class="container-fluid">
             <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
                     <thead>
                         <tr>
                         <?php if ($usertype == 'IT Admin'): ?>

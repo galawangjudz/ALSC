@@ -1,3 +1,21 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -14,7 +32,7 @@
 		<div class="card-body">
             <div class="container-fluid">
             <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
                     <thead>
                         <tr>
                         <th>No.</th>
@@ -100,10 +118,40 @@
 		    })
 	})
 
-
-
-
-    $('.delete-user').click(function(){
+    $('.delete_data').click(function(){
             _conf("Are you sure to delete this user?","delete_user",[$(this).attr('data-id')])
     })
+
+    function delete_user($id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=delete_user",
+            method:"POST",
+            data:{id: $id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured.",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+
+    $(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
 </script>
+
+
+
