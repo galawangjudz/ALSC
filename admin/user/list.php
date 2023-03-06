@@ -84,6 +84,13 @@
 	        reader.readAsDataURL(input.files[0]);
 	    }
 	}
+
+    $(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
 	$(document).ready(function(){
 		 $('.summernote').summernote({
 		        height: 200,
