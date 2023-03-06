@@ -112,8 +112,7 @@ color: white;
         </table>
 
         <hr>
-
-      
+       
 
 
 
@@ -122,7 +121,7 @@ color: white;
         <ul class="tabs">
         <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
         <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
-        <li class="tab-link" data-tab="tab-3"><b>Payments</b></li>
+        <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
         <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
         </ul>
 
@@ -289,54 +288,53 @@ color: white;
             </div>
      
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
-                  <table class="table table-bordered table-stripped">
-                      <thead> 
-                          <tr>
-                              <th>Due Date</th>
-                              <th>Pay Date</th>
-                              <th>Or No</th>
-                              <th>Amount Paid</th> 
-                              <th>Amount Due</th>
-                              <th>Interest</th>
-                              <th>Principal</th>
-                              <th>Surcharge</th>
-                              <th>Rebate</th>
-                              <th>Period</th>
-                              <th>Balance</th>
-                          </tr>
-                      </thead>
-                    <tbody>
-                 
-                       <?php 
-                       include 'payment_schedule.php';
-                       $id = $_GET['id'];   
-                       $all_payments = load_data($id); 
+            <table class="table table-bordered table-stripped">
+                  <thead> 
+                      <tr>
+                          <th>Due Date</th>
+                          <th>Pay Date</th>
+                          <th>Or No</th>
+                          <th>Amount Paid</th> 
+                          <th>Amount Due</th>
+                          <th>Interest</th>
+                          <th>Principal</th>
+                          <th>Surcharge</th>
+                          <th>Rebate</th>
+                          <th>Period</th>
+                          <th>Balance</th>
+                      </tr>
+                  </thead>
+                <tbody>
+              
+                    <?php 
+                    include 'payment_schedule.php';
+                    //include 'payment_record.php';
+                    $id = $_GET['id'];   
+                    $all_payments = load_data($id); 
 
-                       foreach ($all_payments as $l_data): ?>
-                         
+                    foreach ($all_payments as $l_data): ?>
+                      
 
-                          <tr>
-                            <td class="text-center"><?php echo $l_data[0] ?></td> 
-                            <td class="text-center"><?php echo $l_data[1] ?></td> 
-                            <td class="text-center"><?php echo $l_data[2] ?> </td> 
-                            <td class="text-center"><?php echo $l_data[3] ?> </td> 
-                            <td class="text-center"><?php echo $l_data[4] ?> </td> 
-                            <td class="text-center"><?php echo $l_data[5] ?> </td> 
-                            <td class="text-center"><?php echo $l_data[6] ?> </td> 
-                            <td class="text-center"><?php echo $l_data[7] ?> </td> 
-                            <td class="text-center"><?php echo $l_data[8] ?> </td>  
-                            <td class="text-center"><?php echo $l_data[9] ?> </td>  
-                            <td class="text-center"><?php echo $l_data[10] ?> </td>  
-                          </tr>
-                         
-                         <?php endforeach; ?>
-
-
-                    </tbody>
-                  </table>
+                      <tr>
+                        <td class="text-center"><?php echo $l_data[0] ?></td> 
+                        <td class="text-center"><?php echo $l_data[1] ?></td> 
+                        <td class="text-center"><?php echo $l_data[2] ?> </td> 
+                        <td class="text-center"><?php echo $l_data[3] ?> </td> 
+                        <td class="text-center"><?php echo $l_data[4] ?> </td> 
+                        <td class="text-center"><?php echo $l_data[5] ?> </td> 
+                        <td class="text-center"><?php echo $l_data[6] ?> </td> 
+                        <td class="text-center"><?php echo $l_data[7] ?> </td> 
+                        <td class="text-center"><?php echo $l_data[8] ?> </td>  
+                        <td class="text-center"><?php echo $l_data[9] ?> </td>  
+                        <td class="text-center"><?php echo $l_data[10] ?> </td>  
+                      </tr>
+                      
+                      <?php endforeach; ?>
 
 
-         
+                </tbody>
+              </table>
+  
                   
                   
             </div>

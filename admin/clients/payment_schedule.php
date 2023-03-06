@@ -173,6 +173,7 @@
           } 
           $l_last = $payments->num_rows - 1;
 
+
           $payments_data = array(); 
          /*  $count = 1; */
           while($row = $payments->fetch_assoc()) {
@@ -198,6 +199,8 @@
 
             $all_payments= array();
             for ($x = 0; $x < $payments->num_rows; $x++){
+
+
               if ($l_last_pay_date == $payments_data[$x]['pay_date']):
                   if ($payments_data[$x]['due_date'] != 0){
                       $l_date = strtotime($payments_data[$x]['due_date']);
@@ -214,11 +217,11 @@
                   else{
                       $l_last_pay_date1 = '';
                   }
-            $l_data = array($t_due_date, $l_last_pay_date1, $payments_data[$x]['or_no'], number_format($payments_data[$x]['payment_amount'],2), 
-            number_format($payments_data[$x]['amount_due'],2), number_format($payments_data[$x]['interest'],2), 
-            number_format($payments_data[$x]['principal'],2), number_format($payments_data[$x]['surcharge'],2), number_format($payments_data[$x]['rebate'],2), 
-            str_replace(" ", "", $payments_data[$x]['status']), number_format($payments_data[$x]['remaining_balance'],2));
-            array_push($all_payments, $l_data);
+                $l_data = array($t_due_date, $l_last_pay_date1, $payments_data[$x]['or_no'], number_format($payments_data[$x]['payment_amount'],2), 
+                number_format($payments_data[$x]['amount_due'],2), number_format($payments_data[$x]['interest'],2), 
+                number_format($payments_data[$x]['principal'],2), number_format($payments_data[$x]['surcharge'],2), number_format($payments_data[$x]['rebate'],2), 
+                str_replace(" ", "", $payments_data[$x]['status']), number_format($payments_data[$x]['remaining_balance'],2));
+                array_push($all_payments, $l_data);
                 
               endif;
               }
