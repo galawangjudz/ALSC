@@ -128,8 +128,6 @@
               die('Could not connect to database: ' . mysqli_connect_error());
           }
 
-
-
           
           $l_col = "property_id,c_account_type,c_account_type1,c_account_status,c_net_tcp,c_payment_type1,c_payment_type2,c_net_dp,c_no_payments,c_monthly_down,c_first_dp,c_full_down,c_amt_financed,c_terms,c_interest_rate,c_fixed_factor,c_monthly_payment,c_start_date,c_retention,c_change_date,c_restructured,c_date_of_sale";
           $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
@@ -216,11 +214,11 @@
                   else{
                       $l_last_pay_date1 = '';
                   }
-                  $l_data = array($t_due_date, $l_last_pay_date1, $payments_data[$x]['or_no'], number_format($payments_data[$x]['payment_amount'],2), 
-                  number_format($payments_data[$x]['amount_due'],2), number_format($payments_data[$x]['interest'],2), 
-                  number_format($payments_data[$x]['principal'],2), number_format($payments_data[$x]['surcharge'],2), number_format($payments_data[$x]['rebate'],2), 
-                  str_replace(" ", "", $payments_data[$x]['status']), number_format($payments_data[$x]['remaining_balance'],2));
-                  array_push($all_payments, $l_data);
+            $l_data = array($t_due_date, $l_last_pay_date1, $payments_data[$x]['or_no'], number_format($payments_data[$x]['payment_amount'],2), 
+            number_format($payments_data[$x]['amount_due'],2), number_format($payments_data[$x]['interest'],2), 
+            number_format($payments_data[$x]['principal'],2), number_format($payments_data[$x]['surcharge'],2), number_format($payments_data[$x]['rebate'],2), 
+            str_replace(" ", "", $payments_data[$x]['status']), number_format($payments_data[$x]['remaining_balance'],2));
+            array_push($all_payments, $l_data);
                 
               endif;
               }
