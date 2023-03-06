@@ -9,6 +9,17 @@ if($_settings->chk_flashdata('success')): ?>
 
 
 if(isset($_GET['id'])){
+
+    $account_info = [];
+    $last_payment = [];
+    $payment_rec = [];
+    $over_due_mode = 0;
+    $over_pay_mode = 0;
+    $over_due_mode_upay = 0;
+    $excess = -1;
+    $or_no = '';
+
+    
     $prop = $conn->query("SELECT * FROM properties where md5(property_id) = '{$_GET['id']}' ");    
     while($row=$prop->fetch_assoc()){
     
@@ -21,6 +32,9 @@ if(isset($_GET['id'])){
         $lot_disc_amt = $row['c_lot_discount_amt'];
         $lres = $lot_area * $price_sqm;
         $lcp = $lres-($lres*($lot_disc*0.01));
+        $l_acc_type = $row['c_account_type'];
+        $l_acc_type1 = $row['c_account_type1'];
+        $l_acc_status = $row['c_account_status'];
 
         //HOUSE
         $house_model = $row['c_house_model'];
@@ -55,6 +69,45 @@ if(isset($_GET['id'])){
         $net_dp = $row['c_net_dp'];
         $down_percent = $row['c_down_percent'];
         $start_date = $row['c_start_date'];
+        $change_date = $row['c_change_date'];
+
+        $payments = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $l_last = $payments->num_rows - 1;
+        $payments_data = array(); 
+        if($payments->num_rows <= 0){
+            echo ('No Payment Records for this Account!');
+        } 
+        while($row = $payments->fetch_assoc()) {
+          $payments_data[] = $row; 
+
+        }
+       
+        $last_cnt = $l_last;
+        $payment_rec = $payments_data;
+        $last_payment = $payments_data[$l_last];
+       
+        $check_date = 0;
+        $reopen_value = 0;
+        $monthly_pay = 0;
+        $count = 0;
+        $last_sur = 0;
+        $pay_mode = 0;
+        $due_date = 0;
+        $payment_mode = 0;
+        $underpay = 0;
+        $last_principal = 0;
+        $last_interest = 0;
+        $ma_balance = 0;
+        $change_date = $change_date;
+        $l_net_tcp = $net_tcp;
+        $l_30_prcnt = $l_net_tcp * 0.30;
+        $rem_prcnt = $l_net_tcp - $l_30_prcnt;
+        $last_pay_date = strtotime($last_payment['pay_date']);
+        $balance_ent = number_format($last_payment['remaining_balance'],2);
+        $old_balance = $last_payment['remaining_balance'];
+
+        
+        
 
         }
 

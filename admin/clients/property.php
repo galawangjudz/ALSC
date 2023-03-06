@@ -116,8 +116,6 @@ color: white;
 
 
 
-
-
         <ul class="tabs">
         <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
         <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
@@ -307,8 +305,8 @@ color: white;
                 <tbody>
               
                     <?php 
-                    include 'payment_schedule.php';
-                    //include 'payment_record.php';
+                    //include 'payment_schedule.php';
+                    include 'payment_record.php';
                     $id = $_GET['id'];   
                     $all_payments = load_data($id); 
 

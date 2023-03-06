@@ -274,11 +274,13 @@
                                     
                                     
                                       //$l_date2 =add($l_date,1);
+                                    
                                       $l_date2 = new Datetime(auto_date($last_day,$l_date));
                                       $t_due_date  = $l_date2->format('m/d/y');
                                       $l_due_date_val = $l_date2;
                                       $l_count = $l_last_stat_cnt + 1;
                                 else:
+
                                       $l_date2 = new DateTime($l_date);
                                       $t_due_date  = $l_date2->format('m/d/y');
                                       $l_due_date_val = $l_date2;
@@ -357,6 +359,7 @@
                                             $l_acc_status = 'Partial DownPayment';
                                           endif;
                                 else:  
+                                        
                                         $l_date2 = new Datetime(auto_date($last_day,$l_date));
                                         /* $l_date2 = add($l_date,1); */
                                         $l_due_date_val = $l_date2;
@@ -826,6 +829,7 @@
                       $l_surcharge = ftom($l_monthly_pay * (0.6/360) * $l_days);
                       $l_amt_due = ftom(mtof($l_amt_due) + mtof($l_surcharge));
                 } else { */
+                    
                 $l_surcharge = '0.00';
               /*   } */
 
@@ -852,7 +856,6 @@
 
       
              
-        
                 //$l_new_date = date('Y-m-d',strtotime($l_new_due_date_val));
                 $l_due_date_val =  new Datetime(auto_date($last_day,$l_date));  
                 //$l_due_date_val = add($l_last_due_date, 1);

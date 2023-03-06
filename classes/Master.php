@@ -1098,6 +1098,9 @@ Class Master extends DBConnection {
 			$data = " c_csr_no = '$csr_no' ";
 			$data .= ", project_id = '$proj_id' ";
 			$data .= ", c_type = '$type' ";
+			$data .= ", c_account_status = 'Reservation' ";
+			$data .= ", c_account_type = 'LOC' ";
+			$data .= ", c_account_type1 = 'REG' ";
 			$data .= ", c_lot_lid = '$lot_lid' ";
 			$data .= ", c_lot_area = '$lot_area' ";
 			$data .= ", c_price_sqm = '$price_sqm' ";
