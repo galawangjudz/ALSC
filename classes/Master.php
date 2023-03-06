@@ -1133,7 +1133,7 @@ Class Master extends DBConnection {
 
 			endwhile;
 
-		$check2 = $this->conn->query("SELECT * FROM t_lots where c_status = 'Sold' and c_lid =".$lot_lid);
+	/* 	$check2 = $this->conn->query("SELECT * FROM t_lots where c_status = 'Sold' and c_lid =".$lot_lid);
 		if($check2->num_rows == 0){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Lot is already Sold";
@@ -1142,7 +1142,8 @@ Class Master extends DBConnection {
 		}else{
 			$update = $this->conn->query("UPDATE t_lots set c_status = 'Sold' where c_lid =".$check2->fetch_array()['c_lid']);
 		}
-
+ */
+		$update = $this->conn->query("UPDATE t_lots set c_status = 'Sold' where c_lid =".$lot_lid);
 		$save = $this->conn->query("INSERT INTO properties set ".$data);
 
 		$find =  $this->conn->query("SELECT property_id FROM properties where c_csr_no =".$csr_no);
