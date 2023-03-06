@@ -107,7 +107,7 @@
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
-			<table class="table table-bordered table-stripped">
+			<table class="table table-bordered table-stripped" style="text-align:center;">
 			<!-- 	<colgroup>
 					<col width="5%">
 					<col width="15%">

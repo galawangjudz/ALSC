@@ -43,7 +43,7 @@ foreach($user->fetch_array() as $k =>$v){
 					<style>
 						select:invalid { color: gray; }
 					</style>
-					<label class="control-label">Positiob: </label>
+					<label class="control-label">Position: </label>
 					<select name="type" id="type" class="form-control required">
 						<option value="1" <?php echo isset($meta['type']) && $meta['type'] == "1" ? 'selected': '' ?>>Admin</option>
 						<option value="2"<?php echo isset($meta['type']) && $meta['type'] == "2" ? 'selected': '' ?>> COO</option>

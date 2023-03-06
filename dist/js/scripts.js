@@ -841,22 +841,14 @@ function updateTotals(elem) {
 		}
 
 	}
-
-
-
-
 	function compute_monthly_payments(){
-
-		
 		var l_rate = $('.interest-rate').val();
 		l_x = '1200';
 		if (l_rate == 0){
 			l_rate_value = 0;
 		}else{
 			var l_rate_value = parseFloat(l_rate)/ parseFloat(l_x);
-		
 		}
-
 		var l_payment_type1 = $('.payment-type1').val();
 		var l_payment_type2 = $('.payment-type2').val();
 		if (l_payment_type1 =="Spot Cash"){
@@ -1209,7 +1201,6 @@ function redirectToUserList(){
 function redirectToRaList(){
 	window.location.href = "?page=reservation-list";
 }
-
 
 
 

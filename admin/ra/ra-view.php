@@ -80,7 +80,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 ?>
 
 <style>
-
     .timer_box{
     background-color:#F9F6EE;
     width:100%;
@@ -289,26 +288,27 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                     <div class="panel-body form-group form-group-sm">
                       
                             <div class="buttons">
-                          <!-- hide ko muna   <a href="?page=mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-info"> E-mail&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
+                            <!-- hide ko muna   <a href="?page=mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-info"> E-mail&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
  -->
-                                    <!-- Navbar Right Menu -->
-                            <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                Print
-                            <span class="sr-only">Toggle Dropdown</span>
-                            </button>  
-                            <div class="dropdown-menu" role="menu">   
-                                <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                                <!-- Navbar Right Menu -->
+                                <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                    Print
+                                <span class="sr-only">Toggle Dropdown</span>
+                                </button>  
+                                <div class="dropdown-menu" role="menu">   
+                                    <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                                </div>
+                                
+                                <?php if($c_ca_status == 0){?>
+                                    <a attachment-id="<?php echo $getID; ?>" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload_file">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
+                                <?php } ?>
+                                <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-primary"> E-mail&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
                             </div>
                             
-                            <?php if($c_ca_status == 0){?>
-                                <a attachment-id="<?php echo $getID; ?>" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload_file">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
-                            <?php } ?>
-                           
-                             </div>
                             <div class="titles"> Buyer's Profile</div>
                                 <br>
                                 <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
@@ -686,10 +686,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                                 </td>
                                                                 <?php endif; ?>
                                                         <?php endif; ?>
-                                                       
-                                                         
-                                                       
-                                                    
                                                             </tr>
                                                         
 
@@ -702,19 +698,17 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                         
                                     </div>
                                 <!--     add comment form here  -->
-                                    <div class="commentDiv">
-                                        <form  method="POST" id="add_comment">
-                                            <input type="hidden" name="action" value="add_comment">
-                                            <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
-                                            <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
-                                            <div class="title_comment">Comment:</div>
-                                                <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
-                                                <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
-                                        </form>
-                                    </div>  
-
+                                <div class="commentDiv">
+                                    <form  method="POST" id="add_comment">
+                                        <input type="hidden" name="action" value="add_comment">
+                                        <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
+                                        <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
+                                        <div class="title_comment">Comment:</div>
+                                            <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
+                                            <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
+                                    </form>
+                                </div>  
                         <?php
-        
                         // Connect to the database
                         // the query
                         $query = "SELECT * FROM t_csr_comments WHERE c_csr_no = '" . $conn->real_escape_string($getID) . "'";
@@ -777,15 +771,10 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                             </ul>    
                         </div>
                         </div>  
-            </div> 
-        </div>
-    </div>
-</div>      
-
-
-
-
-
+                    </div> 
+                </div>
+            </div>
+        </div>      
         </div>
     </div>
 </div>

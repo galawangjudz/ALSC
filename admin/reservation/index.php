@@ -126,7 +126,7 @@ if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
 	<div class="card-body">
 		
         <div class="container-fluid">
-			<table class="table table-bordered table-stripped">
+			<table class="table table-bordered table-stripped" style="text-align:center;">
 
 				<thead>
 					<tr>

@@ -34,14 +34,11 @@
 
 <div class="card" id="container">
     <div class="navbar-menu">
-    <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" style="border-left:solid 3px white;"><i class="nav-icon fas fa-square"></i>&nbsp;&nbsp;&nbsp;Lot Inventory</a>
+        <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" style="border-left:solid 3px white;"><i class="nav-icon fas fa-square"></i>&nbsp;&nbsp;&nbsp;Lot Inventory</a>
 		<a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="main_menu" id="model-link"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;House Model List</a>
-		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="fa-link"><i class="nav-icon fas fa-map"></i>&nbsp;&nbsp;&nbsp;Project List</a>
+		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="project-link"><i class="nav-icon fas fa-map"></i>&nbsp;&nbsp;&nbsp;Project List</a>
 	</div>
 </div>
-
-
-
 <?php
 
 $usertype = $_settings->userdata('user_type');
@@ -69,7 +66,7 @@ if ($user_role != 'IT Admin') {
 		<div class="card-body">
             <div class="container-fluid">
             <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
                     <thead>
                         <tr>
                         <th>No.</th>
@@ -122,10 +119,8 @@ if ($user_role != 'IT Admin') {
     $('.edit_data').click(function(){
         uni_modal("<i class='fa fa-paint-brush'></i> Edit House Model",'inventory/manage_model.php?id='+$(this).attr('data-id'),"mid-large")
     })
-
-
     $('.delete_data').click(function(){
-        _conf("Are you sure to delete this Lot?","delete_model",[$(this).attr('data-id')])
+        _conf("Are you sure to delete this house model?","delete_model",[$(this).attr('data-id')])
     }) 
 
     function delete_model($id){
