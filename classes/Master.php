@@ -318,24 +318,25 @@ Class Master extends DBConnection {
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
 			$flr_elev_price = $_POST['flrelev_price'];
-			// $conv_outlet_price = $_POST['conv_outlet_price'];
+			$conv_outlet_price = $_POST['conv_outlet_price'];
+			$others_price = $_POST['others_price'];
 
-			$data = " c_csr_no = '$last_id' ";
+			$data2 = " c_csr_no = '$last_id' ";
 
-			$data .= ", aircon_outlets = '$ac_outlets' ";
-			$data .= ", aircon_grill = '$ac_grill' ";
-			$data .= ", service_area = '$service_area' ";
-			$data .= ", others = '$others' ";
-			$data .= ", conv_outlet = '$conv_outlet' ";
-			$data .= ", floor_elevation = '$flr_elev' ";
-			$data .= ", service_area_price = '$service_area_price' ";
-			$data .= ", aircon_outlet_price = '$ac_outlet_price' ";
-			$data .= ", aircon_grill_price = '$ac_grill_price' ";
-			$data .= ", floor_elev_price = '$flr_elev_price' ";
-			// $data .= ", conv_outlet_price = '$conv_outlet_price' ";
+			$data2 .= ", aircon_outlets = '$ac_outlets' ";
+			$data2 .= ", aircon_grill = '$ac_grill' ";
+			$data2 .= ", service_area = '$service_area' ";
+			$data2 .= ", others = '$others' ";
+			$data2 .= ", conv_outlet = '$conv_outlet' ";
+			$data2 .= ", floor_elevation = '$flr_elev' ";
+			$data2 .= ", service_area_price = '$service_area_price' ";
+			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
+			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
+			$data2 .= ", floor_elev_price = '$flr_elev_price' ";
+			$data2 .= ", conv_outlet_price = '$conv_outlet_price' ";
+			$data2 .= ", others_price = '$others_price' ";
 
-
-			$save = $this->conn->query("INSERT INTO t_additional_cost set ".$data);
+			$save = $this->conn->query("INSERT INTO t_additional_cost set ".$data2);
 			
 			
 
@@ -500,6 +501,35 @@ Class Master extends DBConnection {
 			$data .= ", c_created_by = '$username' ";
 			$data .= ", c_verify = 0 ";
 			$data .= ", coo_approval = 0";
+
+			$ac_outlets =  $_POST['aircon_outlets'];
+			$ac_grill = $_POST['ac_grill'];
+			$service_area = $_POST['service_area'];
+			$others = $_POST['others'];
+			$conv_outlet = $_POST['conv_outlet'];
+			$flr_elev = $_POST['flrelev_text'];
+			$service_area_price = $_POST['service_area_price'];
+			$ac_outlet_price = $_POST['aircon_outlet_price'];
+			$ac_grill_price = $_POST['ac_grill_price'];
+			$flr_elev_price = $_POST['flrelev_price'];
+			$conv_outlet_price = $_POST['conv_outlet_price'];
+			$others_price = $_POST['others_price'];
+
+			$data2 = " aircon_outlets = '$ac_outlets' ";
+			$data2 .= ", aircon_grill = '$ac_grill' ";
+			$data2 .= ", service_area = '$service_area' ";
+			$data2 .= ", others = '$others' ";
+			$data2 .= ", conv_outlet = '$conv_outlet' ";
+			$data2 .= ", floor_elevation = '$flr_elev' ";
+			$data2 .= ", service_area_price = '$service_area_price' ";
+			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
+			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
+			$data2 .= ", floor_elev_price = '$flr_elev_price' ";
+			$data2 .= ", conv_outlet_price = '$conv_outlet_price' ";
+			$data2 .= ", others_price = '$others_price' ";
+
+			$this->conn->query("UPDATE t_additional_cost set ".$data2." where c_csr_no = ".$c_csr_no);
+				
 			
 
 		
@@ -509,6 +539,9 @@ Class Master extends DBConnection {
 			$this->conn->query("DELETE FROM t_csr_commission where c_csr_no = ".$c_csr_no);
 			// get last insert id
 			$last_id = $c_csr_no;
+
+
+			
 
 			foreach($_POST['agent_name'] as $key => $value) {
 				$agent = $value;

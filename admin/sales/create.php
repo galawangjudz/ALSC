@@ -51,11 +51,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$c_floor = $row['floor_elevation'];
 			$aircon_outlets = $row['aircon_outlets'];
 			$aircon_grill = $row['aircon_grill'];
+			$conv_outlet = $row['conv_outlet'];
 			$service_area = $row['service_area'];
 			$others = $row['others'];
 			$aircon_outlet_price = $row['aircon_outlet_price'];
 			$aircon_grill_price = $row['aircon_grill_price'];
-			// $conv_outlet_price = $row['conv_outlet_price'];
+			$conv_outlet_price = $row['conv_outlet_price'];
 			$service_area_price = $row['service_area_price'];
 			$others_price = $row['others_price'];
 			$floor_elev_price = $row['floor_elev_price'];
