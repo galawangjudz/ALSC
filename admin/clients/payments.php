@@ -344,7 +344,7 @@ if(isset($_GET['id'])){
                     
                         $over_due_mode_upay = 1;
                     }
-
+ 
                     $monthly_pay = $monthly_payment - $last_principal;
                     echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
                     $l_monthly = $last_payment['amount_due'] - $last_payment['amount_paid'];
