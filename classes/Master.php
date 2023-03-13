@@ -1358,6 +1358,45 @@ Class Master extends DBConnection {
 
 
 	}
+
+	function save_payment(){
+		extract($_POST);
+		$data = " property_id = '$ra_no' ";
+		$data .= ", payment_amount = '$csr_no' ";
+		$data .= ", pay_date = '$lot_lid' ";
+		$data .= ", due_date = '$or_no' ";
+		$data .= ", or_no =  " ;
+		$data .= ", amount_due = '$amount_paid' ";
+		$data .= ", rebate = '$amount_paid' ";
+		$data .= ", surcharge = '$amount_paid' ";
+		$data .= ", interest = '$amount_paid' ";
+		$data .= ", principal = '$amount_paid' ";
+		$data .= ", remaining_balance = '$amount_paid' ";
+		$data .= ", status = '$amount_paid' ";
+		$data .= ", status_count = '$amount_paid' ";
+		$data .= ", payment_count = '$amount_paid' ";
+
+		if(empty($property_id)){
+			$save = $this->conn->query("INSERT INTO t_property_payments set ".$data);
+			
+		}else{
+			$save = $this->conn->query("UPDATE t_property_payments set ".$data." where id = ".$id);
+		}
+
+		
+		
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New payments successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Payments successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
 	
 }
 

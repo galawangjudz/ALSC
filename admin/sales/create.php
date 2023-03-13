@@ -25,7 +25,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$house_discount = $row['c_house_discount'];
 			$house_discount_amt = $row['c_house_discount_amt'];
 			$process_fee = $row['c_processing_fee'];
-			$pf_month = $row['c_pf_month'];
+			$pf_month = $row['pf_mo'];
 			$tcp_discount_amt = $row['c_tcp_discount_amt'];
 			$tcp = $row['c_tcp'];
 			$vat_amt_computed = $row['c_vat_amount'];
@@ -1256,7 +1256,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" placeholder="0" value="<?php echo isset($add_cost) ? $add_cost : 0; ?>">
 											</div>
 										</div>
 									</div>
