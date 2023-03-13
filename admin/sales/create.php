@@ -24,7 +24,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$house_price_sqm = $row['c_house_price_sqm'];
 			$house_discount = $row['c_house_discount'];
 			$house_discount_amt = $row['c_house_discount_amt'];
-			$tcp_discount = $row['c_tcp_discount'];
+			$process_fee = $row['c_processing_fee'];
+			$pf_month = $row['c_pf_month'];
 			$tcp_discount_amt = $row['c_tcp_discount_amt'];
 			$tcp = $row['c_tcp'];
 			$vat_amt_computed = $row['c_vat_amount'];
@@ -1266,15 +1267,25 @@ input{
 									<div class="row">
 										<div class="col-md-3">
 											<div class="form-group">
-												<label class="control-label">TCP Discount:</label>
+												<label class="control-label">Processing Fee:</label>
 											</div>
 										</div>
 										<div class="col-md-3" >
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom tcp-disc"  name="tcp_disc" id="tcp_disc" value="<?php echo isset($tcp_discount) ? $tcp_discount : 0; ?>">
+												<input type="text" class="form-control margin-bottom tcp-disc"  name="process_fee" id="process_fee" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>">
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label">PF/Month:</label>
+											</div>
+										</div>
+										<div class="col-md-3" >
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc"  name="pf_month" id="pf_month" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>">
+											</div>
+										</div>
+										<div class="col-md-3">
 											<div class="form-group">
 												<label class="control-label">TCP Disc. Amount:</label>
 											</div>
