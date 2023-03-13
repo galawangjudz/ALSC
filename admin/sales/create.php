@@ -1229,7 +1229,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  placeholder="0" onkeyup="getAddCost()">
 											</div>
 										</div>
 									</div>
@@ -2015,7 +2015,7 @@ input{
 
 		var result = parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(flr_elev)+ parseInt(conv_outlet) + parseInt(ac_grill1);
 
-		document.getElementById('addcost_total').value = result;
+		document.getElementById('add_cost_total').value = result;
 	}
 </script>
 
