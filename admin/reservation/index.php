@@ -143,7 +143,6 @@ if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
 					$i = 1;
 						$qry = $conn->query("SELECT * FROM t_reservation ORDER BY id");
 						while($row = $qry->fetch_assoc()):
-							
 					?>
 						<tr>
                             <td><?php echo $i++ ?></td>
