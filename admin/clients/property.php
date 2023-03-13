@@ -20,7 +20,6 @@ table td{
   border:solid 1px gainsboro;
   padding:5px;
 }
-
 .table td, .table th {
   border: 1px solid #dddddd;
   text-align: left;
@@ -30,8 +29,6 @@ table td{
 .table tr:nth-child(even) {
   background-color: #dddddd;
 }
-
-
 .tabs {
   list-style: none;
   margin: 0;
@@ -67,13 +64,13 @@ color: white;
 .dataTables_wrapper thead th {
     font-family: Arial, sans-serif;
     font-size: 2px;
-} -->
+}
+
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
   $client_id = $row['client_id'];
 ?>
-
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
       <div class="card-tools">
@@ -86,8 +83,6 @@ color: white;
 </div>
 	<div class="card-body">
 		<div class="container-fluid">
-
-        
         <table style="width: 100%;">
         <tr><th style="padding-left:5px;">Client ID: </th><td><b><?php echo $row['client_id'];?></b></td></tr>
         <tr><th style="padding-left:5px;">Property ID: </th><td><?php echo $row['property_id'];?></td></tr>
@@ -113,9 +108,6 @@ color: white;
 
         <hr>
        
-
-
-
         <ul class="tabs">
         <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
         <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
@@ -130,29 +122,27 @@ color: white;
                 }else{ ?> 
                 <table class="table table-bordered table-stripped">
                  
-                    <thead>
+                    <thead style="text-align:center;"> 
                         <tr>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Address</th>
-                        <th>Contact No</th>
-                        <th>Email Address</th>
-                        <th>Relationship</th>
+                        <th style="text-align:center;font-size:13px;">LAST NAME</th> 
+                        <th style="text-align:center;font-size:13px;">FIRST NAME</th>
+                        <th style="text-align:center;font-size:13px;">ADDRESS</th>
+                        <th style="text-align:center;font-size:13px;">CONTACT NO</th>
+                        <th style="text-align:center;font-size:13px;">EMAIL ADDRESS</th>
+                        <th style="text-align:center;font-size:13px;">RELATIONSHIP</th>
                   
                         </tr>
                     </thead>
                     <tbody>
                     <?php 
                          while($row = $qry2->fetch_assoc()):
-                        
                       ?>
                       <tr>
-
-                        <td class="text-center"><?php echo $row['last_name'] ?> </td>
-                        <td class="text-center"><?php echo $row['first_name'] ?></td>
-                        <td class="text-center"><?php echo $row['address'] ?></td>
-                        <td class="text-center"><?php echo $row['contact_no'] ?></td>
-                        <td class="text-center"><?php echo $row['email'] ?></td>
+                        <td class="text-center" style="font-size:13px;width:20%;"><?php echo $row['last_name'] ?> </td>
+                        <td class="text-center" style="font-size:13px;width:20%;"><?php echo $row['first_name'] ?></td>
+                        <td class="text-center" style="font-size:13px;width:30%;"><?php echo $row['address'] ?></td>
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $row['contact_no'] ?></td>
+                        <td class="text-center" style="font-size:13px;"><?php echo $row['email'] ?></td>
                         <?php if($row['relationship'] == 0){ ?>
                             <td class="text-center"><span class="badge badge-primary">None</span></td>
                         <?php }elseif($row['relationship'] == 1){ ?>
@@ -179,14 +169,13 @@ color: white;
                     if($qry3->num_rows <= 0){
                         echo "No Details founds";
                     }else{ ?>     
-                    <thead>
-                     
+                     <thead> 
                         <tr>
-                          <th style="text-align:center;">Property ID</th>
-                          <th style="text-align:center;">Location</th>
-                          <th style="text-align:center;">Type</th>
-                          <th style="text-align:center;">Net TCP</th>  
-                          <th style="text-align:center;">Action</th>          
+                          <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
+                          <th style="text-align:center;font-size:13px;">LOCATION</th>
+                          <th style="text-align:center;font-size:13px;">TYPE</th>
+                          <th style="text-align:center;font-size:13px;">NET TCP</th>  
+                          <th style="text-align:center;font-size:13px;">ACTION</th>          
                         </tr>
                     </thead>
                     <tbody>
@@ -198,21 +187,21 @@ color: white;
                               $property_id_part3 = substr($property_id, 8, 5);
                       ?>
                            <tr>
-                            <td class="text-center" style="width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
-                            <td class="text-center" style="width:30%;"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
+                            <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
+                            <td class="text-center" style="font-size:13px;width:20%;"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                             <?php if($row['c_type'] == 1){ ?>
-                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Lot Only</span></td>
+                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Lot Only</span></td>
                             <?php }elseif($row['c_type'] == 2){ ?>
-                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">House Only</span></td>
+                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">House Only</span></td>
                             <?php }elseif($row['c_type'] == 3){ ?>
-                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Packaged</span></td>         
+                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Packaged</span></td>         
                             <?php }elseif($row['c_type'] == 4){ ?>
-                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Fence</span></td>
+                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Fence</span></td>
                             <?php }elseif($row['c_type'] == 5){ ?>
-                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Add Cost</span></td>
+                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Add Cost</span></td>
                             <?php } ?>        
-                            <td class="text-center" style="width:30%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
-                            <td class="text-center" style="width:10%;"> <a class="btn btn-success btn-s view_data" data-id="<?php echo md5($row['property_id'])  ?>">View</a> </td>
+                            <td class="text-center" style="font-size:13px;width:20%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
+                            <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-success btn-s view_data" style="font-weight:bold;font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>">View</a></td>
                             <?php endwhile; }?>
                           </tr>
 
@@ -221,8 +210,10 @@ color: white;
             </div>
 
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
-              <button type="button" class="btn btn-success add_payment" data-id="<?php echo md5($property_id)  ?>" ><span class="fa fa-plus"> Add Payments </span></button>          
-
+            <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+              <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
+              <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
+            </div>  
                     <table class="table table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
                      if($qry4->num_rows <= 0){
@@ -231,17 +222,17 @@ color: white;
    
                       <thead> 
                           <tr>
-                              <th >Property ID</th>
-                              <th>Due Date</th>
-                              <th>Pay Date</th>
-                              <th>Or No</th>
-                              <th>Amount Paid</th>
-                              <th>Interest</th>
-                              <th>Principal</th>
-                              <th>Surcharge</th>
-                              <th>Rebate</th>
-                              <th>Period</th>
-                              <th>Balance</th>
+                              <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
+                              <th style="text-align:center;font-size:13px;">DUE DATE</th>
+                              <th style="text-align:center;font-size:13px;">PAY DATE</th>
+                              <th style="text-align:center;font-size:13px;">OR NO</th>
+                              <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                              <th style="text-align:center;font-size:13px;">INTEREST</th>
+                              <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
+                              <th style="text-align:center;font-size:13px;">SURCHARGE</th>
+                              <th style="text-align:center;font-size:13px;">REBATE</th>
+                              <th style="text-align:center;font-size:13px;">PERIOD</th>
+                              <th style="text-align:center;font-size:13px;">BALANCE</th>
                           </tr>
                       </thead>
                     <tbody>
@@ -268,17 +259,17 @@ color: white;
                       ?>
                       <tr>
                        
-                        <td class="text-center"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
-                        <td class="text-center"><?php echo $due_dte ?> </td> 
-                        <td class="text-center"><?php echo $pay_dte ?> </td> 
-                        <td class="text-center"><?php echo $or_no ?> </td> 
-                        <td class="text-center"><?php echo number_format($amt_paid,2) ?> </td> 
-                        <td class="text-center"><?php echo number_format($interest,2) ?> </td> 
-                        <td class="text-center"><?php echo number_format($principal,2) ?> </td> 
-                        <td class="text-center"><?php echo number_format($surcharge,2) ?> </td> 
-                        <td class="text-center"><?php echo number_format($rebate,2) ?> </td> 
-                        <td class="text-center"><?php echo $period ?> </td> 
-                        <td class="text-center"><?php echo number_format($balance,2) ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
+                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($rebate,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $period ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
                     </tbody>
@@ -286,20 +277,23 @@ color: white;
             </div>
      
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
-            <table class="table table-bordered table-stripped">
+            <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+              <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
+            </div>
+              <table class="table table-bordered table-stripped">
                   <thead> 
                       <tr>
-                          <th>Due Date</th>
-                          <th>Pay Date</th>
-                          <th>Or No</th>
-                          <th>Amount Paid</th> 
-                          <th>Amount Due</th>
-                          <th>Interest</th>
-                          <th>Principal</th>
-                          <th>Surcharge</th>
-                          <th>Rebate</th>
-                          <th>Period</th>
-                          <th>Balance</th>
+                          <th class="text-center" style="font-size:13px;">DUE DATE</th>
+                          <th class="text-center" style="font-size:13px;">PAY DATE</th>
+                          <th class="text-center" style="font-size:13px;">OR NO</th>
+                          <th class="text-center" style="font-size:13px;">AMOUNT PAID</th> 
+                          <th class="text-center" style="font-size:13px;">AMOUNT DUE</th>
+                          <th class="text-center" style="font-size:13px;">INTEREST</th>
+                          <th class="text-center" style="font-size:13px;">PRINCIPAL</th>
+                          <th class="text-center" style="font-size:13px;">SURCHARGE</th>
+                          <th class="text-center" style="font-size:13px;">REBATE</th>
+                          <th class="text-center" style="font-size:13px;">PERIOD</th>
+                          <th class="text-center" style="font-size:13px;">BALANCE</th>
                       </tr>
                   </thead>
                 <tbody>
@@ -311,38 +305,78 @@ color: white;
                     $all_payments = load_data($id); 
 
                     foreach ($all_payments as $l_data): ?>
-                      
-
                       <tr>
-                        <td class="text-center"><?php echo $l_data[0] ?></td> 
-                        <td class="text-center"><?php echo $l_data[1] ?></td> 
-                        <td class="text-center"><?php echo $l_data[2] ?> </td> 
-                        <td class="text-center"><?php echo $l_data[3] ?> </td> 
-                        <td class="text-center"><?php echo $l_data[4] ?> </td> 
-                        <td class="text-center"><?php echo $l_data[5] ?> </td> 
-                        <td class="text-center"><?php echo $l_data[6] ?> </td> 
-                        <td class="text-center"><?php echo $l_data[7] ?> </td> 
-                        <td class="text-center"><?php echo $l_data[8] ?> </td>  
-                        <td class="text-center"><?php echo $l_data[9] ?> </td>  
-                        <td class="text-center"><?php echo $l_data[10] ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[0] ?></td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[1] ?></td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[2] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[3] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[6] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[8] ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[9] ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[10] ?> </td>  
                       </tr>
-                      
                       <?php endforeach; ?>
-
-
                 </tbody>
               </table>
-  
-                  
-                  
             </div>
         </div>
     </div>
 </div>
-
 </body>
+
 <script>
 $(document).ready(function() {
+  $('.table').dataTable(
+			{"ordering":false}
+		);
+
+  // $('#print_payment').submit(function(e){
+  //     e.preventDefault();
+  //     var _this = $(this)
+  //     $('.err-msg').remove();
+  //     start_loader();
+  //     $.ajax({
+  //         url:_base_url_+"classes/Master.php?f=print_payment",
+  //         data: new FormData($(this)[0]),
+  //         cache: false,
+  //         contentType: false,
+  //         processData: false,
+  //         method: 'POST',
+  //         type: 'POST',
+  //         dataType: 'json',
+  //         error:err=>{
+  //             console.log(err)
+  //             alert_toast("An error occured",'error');
+  //             end_loader();
+  //         },
+  //         success:function(resp){
+  //             if(typeof resp =='object' && resp.status == 'success'){
+  //                 var nw = window.open("./clients/print.php?id="+resp.id,"_blank","width=700,height=500")
+  //       setTimeout(()=>{
+  //         nw.print()
+  //         setTimeout(()=>{
+  //           nw.close()
+  //           end_loader();
+  //           location.replace('./?page=clients/ca-view&id='+resp.id_encrypt)
+  //         },500)
+  //       },500)
+  //             }else if(resp.status == 'failed' && !!resp.msg){
+  //                 var el = $('<div>')
+  //                     el.addClass("alert alert-danger err-msg").text(resp.msg)
+  //                     _this.prepend(el)
+  //                     el.show('slow')
+  //                     end_loader()
+  //             }else{
+  //                 alert_toast("An error occured",'error');
+  //                 end_loader();
+  //                 console.log(resp)
+  //             }
+  //         }
+  //     })
+  // })
 
   $('.view_data').click(function(){
 		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
