@@ -1119,7 +1119,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1147,7 +1147,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1174,7 +1174,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1201,7 +1201,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1228,7 +1228,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal" onchange = "getAddCost()" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1255,7 +1255,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="addcost_total" name="addcost_total" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1911,7 +1911,8 @@ input{
 				},
 				success:function(resp){
 					if(typeof resp =='object' && resp.status == 'success'){
-						location.reload();
+						window.location.href = "?page=sales/";
+						/* location.reload(); */
 					}else if(resp.status == 'failed' && !!resp.msg){
 						var el = $('<div>')
 							el.addClass("alert alert-danger err-msg").text(resp.msg)

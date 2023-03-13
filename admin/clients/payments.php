@@ -108,6 +108,8 @@ if(isset($_GET['id'])){
         $balance_ent = number_format($last_payment['remaining_balance'],2);
         $old_balance = $last_payment['remaining_balance'];
 
+        }
+
         if($acc_status == 'Fully Paid'):
             return ;
         endif;
@@ -116,7 +118,7 @@ if(isset($_GET['id'])){
             $l_date = $last_pay_date;
 
         elseif(($p1 == 'Partial DownPayment') && ($acc_status == 'Reservation' || $acc_status == 'Partial DownPayment') || ($p1 == 'Full DownPayment' && $acc_status == 'Partial DownPayment')):
-            $this->rebate_ent->set_sensitive(0);
+            //$rebate_ent->set_sensitive(0);
 
             $l_date = date('Y-m-d', strtotime($first_dp));
             $day = date('d', strtotime($l_date));
@@ -127,59 +129,355 @@ if(isset($_GET['id'])){
             } else {
                 $l_fd_mode = 0;
             }
-        elseif ($acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
-            $due_date_ent = (date('m/d/Y', strtotime($first_dp)));
-            $due_date = strtotime(gmdate('Y-m-d', strtotime($first_dp)));
-            $amount_paid_ent = (number_format($monthly_down));
-            $amount_ent = (number_format($monthly_down));
-            $count = 1;
-            if ($this->last_payment[8] == 'ADDITIONAL') {
-                $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
-                $t_year = date('Y', strtotime($l_date));
-                $t_month = date('m', strtotime($l_date));
-                if ($retention == '1') {
-                    $l_date = date('Y-m-d', strtotime(($first_dp)));
-                }
-                $t_day = date('d', strtotime($l_date));
-                $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
-                $due_date = strtotime(gmdate('Y-m-d', $l_date2));
-                $l_date = gmdate('Y-m-d', $l_date2);
-                $due_date_ent = (date('m/d/Y', strtotime($l_date)));
-                $count = $last_payment[9] + 1;
+            if ($acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                $due_date_ent = (date('m/d/Y', strtotime($first_dp)));
+                $due_date = strtotime(gmdate('Y-m-d', strtotime($first_dp)));
+                $amount_paid_ent = (number_format($monthly_down));
+                $amount_ent = (number_format($monthly_down));
+                $count = 1;
+                if ($last_payment['status'] == 'ADDITIONAL'):
+                        $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        $t_year = date('Y', strtotime($l_date));
+                        $t_month = date('m', strtotime($l_date));
+                        if ($retention == '1'):
+                            $l_date = date('Y-m-d', strtotime(($first_dp)));
+                        endif;
+                        $t_day = date('d', strtotime($l_date));
+                        $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
+                        $due_date = strtotime(gmdate('Y-m-d', $l_date2));
+                        $l_date = gmdate('Y-m-d', $l_date2);
+                        $due_date_ent = (date('m/d/Y', strtotime($l_date)));
+                        $count = $last_payment[9] + 1;
 
-            }
-            if ($no_payments == $count || $l_fd_mode == 1) {
-                $l_status = 'FD';
-            } else {
-                $l_status = 'PD - ' . strval($count);
-            }
+                endif;
+                if ($no_payments == $count || $l_fd_mode == 1):
+                    $l_status = 'FD';
+                else:
+                    $l_status = 'PD - ' . strval($count);
+                endif;
 
-        elseif ($last_payment['payment_amount'] < $last_payment['amount_due']) :
-            $l_surcharge = 0;
-            for ($x = 0; $x < $last_payment['payment_count'] + 1; $x++) {
-                try {
-                    if ($this->last_payment[0] == $this->payment_rec[$x][0]) {
-                        $this->last_principal += $this->payment_rec[$x][6];
-                        $l_surcharge += $this->payment_rec[$x][4];
+                $payment_status_ent = $l_status;
+
+            elseif ($acc_status == 'Partial DownPayment'):
+                $l_date = $due_date;
+                if ($retention == 1):
+                    $l_date = '';
+                endif;
+                $due_date_ent = $l_date;
+
+                if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                    $underpay = 1;
+                    $l_surcharge = 0;
+                    for ($x = 0; $x < $last_payment['payment_count'] + 1; $x++) {
+                        try {
+                            if ($last_payment['due_date'] == $payment_rec[$x]['due_date']) {
+                                $last_principal += $payment_rec[$x]['principal'];
+                                $l_surcharge += $payment_rec[$x]['surcharge'];
+                            }
+                        } catch (Exception $e) {
+                            //pass
+                        }
                     }
-                } catch (Exception $e) {
-                    //pass
-                }
+
+                    if ($last_payment['surcharge'] == 0):
+                        $last_sur = 0;
+          
+                    elseif ($last_payment['payment_amount'] < $last_payment['surcharge']):
+                        $last_sur = $last_payment['payment_amount'];
+                            
+                        $over_due_mode_upay = 1;
+                    else:
+                        $last_sur = $last_payment['surcharge'];
+                
+                        $over_due_mode_upay = 1;
+                    endif;
+
+                    $monthly_pay = $monthly_down - $last_principal;
+                    $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                    $count = $last_payment['status_count'];
+                    $due_date = strtotime($l_date);
+                    $amount_paid_ent = (number_format($l_monthly,2));
+                    $amount_ent = (number_format($l_monthly,2));
+                    $total_amount_due_ent = (number_format($l_monthly,2));
+                    if ($no_payments == $count || $l_fd_mode == 1) {
+                        $l_status = 'FD';
+                        $monthly_pay = $l_full_down;
+                        $amount_paid_ent = number_format($monthly_pay,2);
+                        $amount_ent = number_format($monthly_pay,2);
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+                    } else {
+                        $l_status = 'PD - ' . strval($count);
+                    }
+                else:
+                    $l_date2 = $auto_date($due_date, $t_year, $t_month, $t_day);
+                    $due_date = $l_date2;
+                    $l_date = gmdate($l_date2);
+                    $due_date_ent = (date("m/d/Y", $l_date));
+                    $count = $last_payment['status'] + 1;
+                    $amount_paid_ent = (number_format($monthly_pay,2));
+                    $amount_ent = (number_format($monthly_pay,2));
+                    $total_amount_due_ent = (number_format($monthly_pay,2));
+                                
+                    if ($no_payments == $count || $l_fd_mode == 1) {
+                        $l_status = 'FD';
+                        $monthly_pay = $l_full_down;
+                        $amount_paid_ent = (number_format($monthly_pay,2));
+                        $amount_ent = (number_format($monthly_pay,2));
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+                    } else {
+                        $l_status = 'PD - ' . strval($count);
+                    }
+                endif;     
+            endif;    
+            $payment_status_ent = $l_status	;
+
+        elseif ($p1 == 'Spot Cash' && $acc_status == 'Reservation'):
+            $l_date = $start_date;
+            $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+            $payment_status_ent = ('SC');
+            $due_date = $start_date;
+            $amount_paid_ent = (number_format($last_payment['remaining_balance'],2));
+            $amount_ent = (number_format($last_payment['remaining_balance'],2));
+            $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2));
+            $balance_ent = (number_format($last_payment['remaining_balance'],2));
+            
+        elseif ($p1 == 'Full DownPayment' && $acc_status == 'Reservation'):
+          
+            $l_date = $full_down;
+            $day = strftime("%d", $l_date);
+            $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+            $payment_status_ent = 'FD';
+            $due_date = $full_down;
+            if ($last_payment['status_count'] == 'RES') {
+                $monthly_pay = $net_dp;
+            } elseif ($last_payment['status_count'] == 'PFD') {
+                $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                $l_date = ($last_payment['pay_date']);
+                $due_date = timegm($l_date);
             }
-
+            $amount_paid_ent = number_format($monthly_pay,2);
+            $amount_ent = number_format($monthly_pay,2);
+            $total_amount_due_ent = number_format($monthly_pay,2);
+            $count = 1;
+        elseif (($acc_status == 'Full DownPayment' && $p2 == 'Deferred Cash Payment') || ($p1 == 'No DownPayment' && $p2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment'):
+ 
+            $l_date = gmtime(timegm(get_date($full_down)));
+            $day = strftime("%d", $l_date);
+            $monthly_pay = $first_dp;
+            $l_full_payment = 0;
+            // check for fully paid
+            if ($last_payment['remaining_balance'] <= $monthly_pay):
+                $l_fp_mode = 1;
+                $l_full_payment = $last_payment['remaining_balance'];
+            else:
+                $l_fp_mode = 0;
+            endif;
         
+            if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+                $due_date = timegm($l_date);
+                $amount_paid_ent = (number_format($monthly_pay));
+                $amount_ent = (number_format($monthly_pay));
+                $total_amount_due_ent = (number_format($monthly_pay));
+                $count = 1;
+                if ($last_payment['status'] == 'ADDITIONAL'):
+                    $l_date = gmtime(timegm(get_date($last_payment['due_date'])));
+                    $t_year = strftime("%Y", $l_date);
+                    $t_month = strftime("%m", $l_date);
+                    if ($retention == '1') {
+                         $l_date = gmtime(timegm(get_date($rst['first_dp'])));
+                    }
+                endif;
+                $t_day = strftime("%d", $l_date);
+                $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
+                $due_date = $l_date2;
+                $l_date = gmtime($l_date2);
+                $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+                $count = $last_payment['status_count'] + 1;
+                
+                if ($terms == $count || $l_fp_mode == 1):
+                    $l_full_payment = $last_payment['remaining_balance'];
+                    $l_status = 'FPD';
+                    $monthly_pay = $l_full_payment;
+                    $amount_paid_ent = number_format($monthly_pay,2);
+                    $amount_ent = number_format($monthly_pay,2);
+                    $total_amount_due_ent = number_format($monthly_pay,2);
+                else:
+                    $l_status = 'DFC - ' . strval($count);
+                endif;
+                $payment_status_ent = ($l_status);
+                  
+            elseif ($acc_status == 'Deferred Cash Payment'):
+                $l_date = gmdate("Y-m-d", strtotime($last_payment['due_date']));
+                $t_year = date("Y", strtotime($l_date));
+                $t_month = date("m", strtotime($l_date));
+                if ($retention == '1') {
+                    $l_date = date("Y-m-d", strtotime($start_date));
+                }
+                $t_day = $validate_date($t_year, $t_month, date("d", strtotime($l_date)));
+                $due_date_ent = ($t_month . '/' . $t_day . '/' . $t_year);
+            
+                // under_pay
+                if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                    $underpay = 1;
+                    $l_surcharge = 0;
+
+                    for ($x = 0; $x < $last_payment['payment_count'] + 1; $x++) {
+                        try {
+                            if ($last_payment['status'] == $payment_rec[$x]['status'] && $last_payment['due_date'] == $payment_rec[$x]['due_date']) {
+                                $last_principal += $payment_rec[$x]['principal'];
+                                $l_surcharge += $payment_rec[$x]['surcharge'];
+                            }
+                        } catch (Exception $e) {
+                            // pass
+                        }
+                    }
+                    if ($last_payment['amount_due'] == 0) {
+                        $last_sur = 0;
+                   
+                    } elseif ($last_payment['payment_amount'] < $last_payment['amount_due']) {
+                        $last_sur = $last_payment['payment_amount'];
+       
+                        $over_due_mode_upay = 1;
+                    } else {
+                        $last_sur = $last_payment['surcharge'];
+                    
+                        $over_due_mode_upay = 1;
+                    }
+
+                    $monthly_pay = $monthly_payment - $last_principal;
+                    echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
+                    $l_monthly = $last_payment['amount_due'] - $last_payment['amount_paid'];
+                    $count = $last_payment['status_count'];
+                    $due_date = strtotime($l_date);
+                    $amount_paid_ent = (number_format($l_monthly));
+                    $amount_ent = (number_format($l_monthly));
+                    $total_amount_due_ent = (number_format($l_monthly));
+                    if ($terms == $count || $l_fp_mode == 1) {
+                            $l_status = 'FPD';
+                    $monthly_pay = $l_full_payment;
+                    $amount_paid_ent = (number_format($monthly_pay));
+                    $amount_ent = (number_format($monthly_pay));
+                    $total_amount_due_ent = (number_format($monthly_pay));
+                    } else {
+                            $l_status = 'DFC - ' . strval($count);
+                    }
+
+                else:
+
+                    // something nawawala dito//
+                
+          
+                endif;
+        elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
+      /*           $credit_principal_mnu->set_sensitive(1);
+                $revert_interest->set_sensitive(1);
+                $revert_rebate->set_sensitive(1); */
+                $l_date = gmdate(timegm(get_date($start_date)));
+                $day = strftime("%d", $l_date);
+                $monthly_pay = $monthly_payment;
+            
+                 
+                if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                    $due_date = strftime("%m/%d/%Y", $l_date);
+                    $due_date_ent = ($due_date);
+                    $due_date = timegm($l_date);
+                    $amount = number_format($rst[27]);
+                    $amount_paid_ent = ($amount);
+                    $amount_ent = ($amount);
+                    $total_amount_due_ent = ($amount);
+                    $count = 1;
+                    if ($last_payment['status'] == 'ADDITIONAL') {
+                        $l_date = date(get_date($last_payment['due_date']));
+                        $t_year = strftime("%Y", $l_date);
+                        $t_month = strftime("%m", $l_date);
+                        if ($retention == '1') {
+                            $l_date = date(get_date($rst['first_dp']));
+                        }
+                        $t_day = strftime("%d", $l_date);
+                        $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
+                        $due_date = $l_date2;
+                        $l_date = gmdate($l_date2);
+                        $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+                        $count = $last_payment[9] + 1;
+                    }
+                    $l_interest = $last_payment['remaining-balance'] * ($interest_rate / 1200);
+                    $l_principal = $monthly_payment - $l_interest;
+                    if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
+                        $l_status = 'FPD';
+                        $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
+                        $amount_paid_ent = number_format($monthly_pay,2);
+                        $amount_ent = number_format($monthly_pay,2);
+                        $total_amount_due_ent = number_format($monthly_pay,2);
+                    }else {
+                        $l_status = 'MA - ' . strval($count);
+                    }
+                    $payment_status_ent = ($l_status);
 
 
+                elseif ($acc_status == 'Monthly Amortization'):
+                    $l_date = gmtime(timegm(get_date($last_payment['due_date'])));
+                    $t_year = strftime("%Y", $l_date);
+                    $t_month = strftime("%m", $l_date);
+                    if ($retention == '1') {
+                        $l_date = gmtime(timegm(get_date($start_date)));
+                    }
+                    $t_day = $validate_date($t_year, $t_month, strftime("%d", $l_date));
+                    $due_date_ent = ($t_month . '/' . $t_day . '/' . $t_year);
+                    //under_pay
+                    if ($last_payment[2] < $last_payment[3]) {
+                        $l_surcharge = 0;
+                        $underpay = 1;
+                        $x_y = $last_cnt;
+                        $l_cnt = 0;
+                        $l_tot_int = 0;
+                        while ($last_payment[8] == $payment_rec[$x_y][8]) {
+                            $l_last_interest = $payment_rec[$x_y][7] * ($rst[25] / 1200);
+                            $l_tot_int += $payment_rec[$x_y][5];
+                            $x_y -= 1;
+                            $l_cnt += 1;
+                            $l_int_last = $l_last_interest - $l_tot_int;
+                        }
+                        $monthly_pay = $monthly_pay - $last_principal - $last_interest;
+                        if ($l_cnt > 1) {
+                            // implement additional code here   
+                            foreach (range(0, $last_payment[10]) as $x) {
+                                try {
+                                    /*
+                                    Eric Note ito sa sarili mo : Ngayon ay 09-07-12.
+                                    Kung sakali lang naman na may mag-error na negative ang result sa surcharges
+                                    ng mga agesnts na MA ang status, i-uncomment mo yung nasa itaas at i-comment mo
+                                    yung nasa ibaba. Yung nasa ibaba ay gumagana sa DFC.
+                                    */
+                                    if ($last_payment[8] == $payment_rec[$x][8] && $last_payment[0] == $payment_rec[$x][0]) {
+                                        $last_principal += $payment_rec[$x][6];
+                                        $last_interest += $payment_rec[$x][5];
+                                        $l_surcharge += $payment_rec[$x][4];
+                                    }
+                                } catch (\Throwable $th) {
+                                    // do nothing
+                                }
+                            }  
+                            $monthly_pay = $monthly_pay - $last_principal - $last_interest;  
+            
+                        }else {
+                            $monthly_pay = $last_payment[3] - $last_payment[2];
+                            $last_interest = $l_tot_int;
+                            $ma_balance = $last_payment[7] + $last_principal;
+                        }
+                        if ($last_payment[4] == 0) {
+                            $last_sur = 0;
+                        }elseif ($last_payment[2] < $last_payment[4]) {
+                            $last_sur = $last_payment[2];
+                            $over_due_mode_upay = 1;
+                            $monthly_pay = $rst[27];
+                        }else {
+                            $last_sur = $last_payment[4];
+                            $over_due_mode_upay = 1;
+                        }
 
-
-
-        endif;    
-
-
-        
-        
-
-        }
+                endif;
+        endif;
 
     }
 ?>
