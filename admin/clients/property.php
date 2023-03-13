@@ -299,8 +299,8 @@ color: white;
                 <tbody>
               
                     <?php 
-                    include 'payment_schedule.php';
-                    //include 'payment_record.php';
+                    //include 'payment_schedule.php';
+                    include 'payment_record.php';
                     $id = $_GET['id'];   
                     $all_payments = load_data($id); 
 

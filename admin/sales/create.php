@@ -51,11 +51,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$c_floor = $row['floor_elevation'];
 			$aircon_outlets = $row['aircon_outlets'];
 			$aircon_grill = $row['aircon_grill'];
+			$conv_outlet = $row['conv_outlet'];
 			$service_area = $row['service_area'];
 			$others = $row['others'];
 			$aircon_outlet_price = $row['aircon_outlet_price'];
 			$aircon_grill_price = $row['aircon_grill_price'];
-			// $conv_outlet_price = $row['conv_outlet_price'];
+			$conv_outlet_price = $row['conv_outlet_price'];
 			$service_area_price = $row['service_area_price'];
 			$others_price = $row['others_price'];
 			$floor_elev_price = $row['floor_elev_price'];
@@ -1118,7 +1119,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1146,7 +1147,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1173,7 +1174,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1200,7 +1201,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" onchange = "getAddCost();" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1227,7 +1228,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal" onchange = "getAddCost()" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1254,7 +1255,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="addcost_total" name="addcost_total" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" placeholder="0">
 											</div>
 										</div>
 									</div>
@@ -1910,7 +1911,8 @@ input{
 				},
 				success:function(resp){
 					if(typeof resp =='object' && resp.status == 'success'){
-						location.reload();
+						window.location.href = "?page=sales/";
+						/* location.reload(); */
 					}else if(resp.status == 'failed' && !!resp.msg){
 						var el = $('<div>')
 							el.addClass("alert alert-danger err-msg").text(resp.msg)
