@@ -1091,7 +1091,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" value="0">
 											</div>
 										</div>
 										
@@ -1119,7 +1119,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="0">
 											</div>
 										</div>
 									</div>
@@ -1147,7 +1147,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="0">
 											</div>
 										</div>
 									</div>
@@ -1174,7 +1174,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  value="0">
 											</div>
 										</div>
 									</div>
@@ -1201,7 +1201,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" value="0">
 											</div>
 										</div>
 									</div>
@@ -1228,7 +1228,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  placeholder="0" onkeyup="getAddCost()">
+												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  value="0" onkeyup="getAddCost()">
 											</div>
 										</div>
 									</div>
@@ -1255,7 +1255,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" placeholder="0">
+												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" value="0">
 											</div>
 										</div>
 									</div>
@@ -1961,6 +1961,7 @@ input{
 		var res = ac_unit * ac_unit_price;
 
 		document.getElementById('ac_outlet_subtotal').value = res;
+		getAddCost();
 	}
 	function getAcGrillSubtotal(){
 		var ac_grill = document.getElementById('ac_grill').value;
@@ -1969,6 +1970,7 @@ input{
 		var res = ac_grill * ac_grill_price;
 
 		document.getElementById('ac_grill_subtotal').value = res;
+		getAddCost();
 	}
 	function getServiceSubtotal(){
 		var service = document.getElementById('service_area').value;
@@ -1977,6 +1979,7 @@ input{
 		var res = service * service_price;
 
 		document.getElementById('service_subtotal').value = res;
+		getAddCost();
 	}
 	function getOthersSubtotal(){
 		var others = document.getElementById('others').value;
@@ -1985,6 +1988,7 @@ input{
 		var res = others * others_price;
 
 		document.getElementById('others_subtotal').value = res;
+		getAddCost();
 	}
 	function getConvSubtotal(){
 		var conv = document.getElementById('conv_outlet').value;
@@ -1993,6 +1997,7 @@ input{
 		var res = conv * conv_price;
 
 		document.getElementById('conv_outlet_subtotal').value = res;
+		getAddCost();
 	}
 	function getAddCost(){
 		var others = document.getElementById('others_subtotal').value;
