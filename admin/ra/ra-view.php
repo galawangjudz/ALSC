@@ -10,8 +10,7 @@
 $usertype = $_settings->userdata('user_type');
 if(($_GET['id']) && ($_GET['id'] > 0)){
     $csr = $conn->query("SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, 
-                        y.c_ca_status, y.c_duration, z.floor_elevation, z.aircon_outlets, z.aircon_grill,
-                        z.service_area,z.others,y.c_csr_no as csr_num FROM t_approval_csr y 
+                        y.c_ca_status, y.c_duration, z.*,y.c_csr_no as csr_num FROM t_approval_csr y 
                         inner join t_csr x on x.c_csr_no = y.c_csr_no 
                         inner join t_additional_cost z on x.c_csr_no
                         where md5(y.c_csr_no) = '{$_GET['id']}'" );
