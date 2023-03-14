@@ -213,7 +213,7 @@ $(document).ready(function() {
 
 		$('#lot_area').val(prod_lot_area);
 		$('#price_per_sqm').val(prod_price_sqm);
-		subtotal = parsefloat(prod_lot_area) * parseFloat(prod_price_sqm);
+		subtotal = parseInt(prod_lot_area) * parseFloat(prod_price_sqm);
 		$('#amount').val(subtotal.toFixed(2))
 		var lot_discount = 0
 		var lot_disc_amount = 0
@@ -229,7 +229,7 @@ $(document).ready(function() {
 		$('#house_model').val(prod_house_model);
 		$('#floor_area').val(prod_floor_area);
 		$('#h_price_per_sqm').val(prod_h_price_sqm);
-		subtotal2 = parsefloat(prod_floor_area) * parseFloat(prod_h_price_sqm);
+		subtotal2 = parseInt(prod_floor_area) * parseFloat(prod_h_price_sqm);
 		$('#hcp').val(subtotal2.toFixed(2))
 
 
@@ -408,42 +408,49 @@ function updateTotals(elem) {
 		
 	});
 
-	$(document).on('keyup', ".aircon_outlets", function(e) {
+	$(document).on('keyup', ".flrelev-price", function(e) {
+		e.preventDefault();
+		compute_addcost();
+		
+
+	});	
+
+	$(document).on('keyup', ".aircon-outlets", function(e) {
 		e.preventDefault();
 		compute_ac();
 		
 
 	});	
 
-	$(document).on('keyup', ".aircon_outlet_price", function(e) {
+	$(document).on('keyup', ".aircon-outlet-price", function(e) {
 		e.preventDefault();
 		compute_ac();
 	
 
 	});	
 
-	$(document).on('keyup', ".ac_grill", function(e) {
+	$(document).on('keyup', ".ac-grill", function(e) {
 		e.preventDefault();
 		compute_grill();
 		
 	});	
 
 
-	$(document).on('keyup', ".ac_grill_price", function(e) {
+	$(document).on('keyup', ".ac-grill-price", function(e) {
 		e.preventDefault();
 		compute_grill();
 		
 
 	});	
 
-	$(document).on('keyup', ".conv_outlet", function(e) {
+	$(document).on('keyup', ".conv-outlet", function(e) {
 		e.preventDefault();
 		compute_conv();
 		
 
 	});	
 
-	$(document).on('keyup', ".conv_outlet_price", function(e) {
+	$(document).on('keyup', ".conv-outlet-price", function(e) {
 		e.preventDefault();
 		compute_conv();
 	
@@ -451,14 +458,14 @@ function updateTotals(elem) {
 	});	
 
 	
-	$(document).on('keyup', ".service_area", function(e) {
+	$(document).on('keyup', ".service-area", function(e) {
 		e.preventDefault();
 		compute_service();
 
 
 	});	
 
-	$(document).on('keyup', ".service_area_price", function(e) {
+	$(document).on('keyup', ".service-area-price", function(e) {
 		e.preventDefault();
 		compute_service();
 	
@@ -472,7 +479,7 @@ function updateTotals(elem) {
 
 	});	
 	
-	$(document).on('keyup', ".others_price", function(e) {
+	$(document).on('keyup', ".others-price", function(e) {
 		e.preventDefault();
 		compute_others();
 	
@@ -732,8 +739,8 @@ function updateTotals(elem) {
 
 	function compute_ac(){
 
-		var	q = $('.aircon_outlets').val();
-		var p = $('.aircon_outlet_price').val();
+		var	q = $('.aircon-outlets').val();
+		var p = $('.aircon-outlet-price').val();
 		var l_total_amt = q * p;
 		$('#ac_outlet_subtotal').val(l_total_amt.toFixed(2));
 		compute_addcost();
@@ -741,8 +748,8 @@ function updateTotals(elem) {
 
 	function compute_grill(){
 
-		var	q = $('.ac_grill').val();
-		var p = $('.ac_grill_price').val();
+		var	q = $('.ac-grill').val();
+		var p = $('.ac-grill-price').val();
 		var l_total_amt = q * p;
 		$('#ac_grill_subtotal').val(l_total_amt.toFixed(2));
 		compute_addcost();
@@ -750,8 +757,8 @@ function updateTotals(elem) {
 
 	function compute_conv(){
 
-		var	q = $('.conv_outlet').val();
-		var p = $('.conv_outlet_price').val();
+		var	q = $('.conv-outlet').val();
+		var p = $('.conv-outlet-price').val();
 		var l_total_amt = q * p;
 		$('#conv_outlet_subtotal').val(l_total_amt.toFixed(2));
 		compute_addcost();
@@ -759,8 +766,8 @@ function updateTotals(elem) {
 
 	function compute_service(){
 
-		var	q = $('.service_area').val();
-		var p = $('.service_area_price').val();
+		var	q = $('.service-area').val();
+		var p = $('.service-area-price').val();
 		var l_total_amt = q * p;
 		$('#service_subtotal').val(l_total_amt.toFixed(2));
 		compute_addcost();
@@ -769,20 +776,22 @@ function updateTotals(elem) {
 	function compute_others(){
 
 		var	q = $('.others').val();
-		var p = $('.others_price').val();
+		var p = $('.others-price').val();
 		var l_total_amt = q * p;
+		
 		$('#others_subtotal').val(l_total_amt.toFixed(2));
 		compute_addcost();
 	}
 
 	function compute_addcost(){
-
-		var	a = $('.ac_outlet_subtotal').val();
-		var	b = $('.ac_grill_subtotal').val();
-		var	c = $('.conv_outlet_subtotal').val();
-		var	d = $('.service_subtotal').val();
-		var e = $('.others_subtotal').val();
-		var total = parsefloat(a) + parsefloat(b) + parsefloat(c) + parsefloat(d) + parsefloat(e);
+		var	f = $('.flrelev-price').val();
+		var	a = $('.ac-outlet-subtotal').val();
+		var	b = $('.ac-grill-subtotal').val();
+		var	c = $('.conv-outlet-subtotal').val();
+		var	d = $('.service-subtotal').val();
+		var e = $('.others-subtotal').val();
+		/* let total = a + b; */
+		var total =  parseFloat(f) + parseFloat(a) + parseFloat(b) + parseFloat(c) + parseFloat(d) + parseFloat(e);
 		$('#add_cost_total').val(total.toFixed(2));
 	}
 

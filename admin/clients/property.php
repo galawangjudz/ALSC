@@ -120,7 +120,7 @@ color: white;
                 if($qry2->num_rows <= 0){
                     echo "No Details founds";
                 }else{ ?> 
-                <table class="table table-bordered table-stripped">
+                <table class="table2 table-bordered table-stripped">
                  
                     <thead style="text-align:center;"> 
                         <tr>
@@ -164,7 +164,7 @@ color: white;
             </div>
 
             <div id="tab-2" class="tab-content" style="border:solid 1px gainsboro;">
-                <table class="table table-bordered table-stripped">
+                <table class="table2 table-bordered table-stripped">
                     <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");
                     if($qry3->num_rows <= 0){
                         echo "No Details founds";
@@ -214,7 +214,7 @@ color: white;
               <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
               <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
             </div>  
-                    <table class="table table-bordered table-stripped">
+                    <table class="table2 table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
                      if($qry4->num_rows <= 0){
                            echo "No Payment Records";
@@ -222,7 +222,7 @@ color: white;
    
                       <thead> 
                           <tr>
-                              <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
+                            <!--   <th style="text-align:center;font-size:13px;">PROPERTY ID</th> -->
                               <th style="text-align:center;font-size:13px;">DUE DATE</th>
                               <th style="text-align:center;font-size:13px;">PAY DATE</th>
                               <th style="text-align:center;font-size:13px;">OR NO</th>
@@ -232,19 +232,19 @@ color: white;
                               <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                               <th style="text-align:center;font-size:13px;">REBATE</th>
                               <th style="text-align:center;font-size:13px;">PERIOD</th>
-                              <th style="text-align:center;font-size:13px;">BALANCE</th>
+                              <th style="text-align:center;font-size:15px;">BALANCE</th>
                           </tr>
                       </thead>
                     <tbody>
                         <?php
                         while($row= $qry4->fetch_assoc()): 
                  
-                          $property_id = $row["property_id"];
+                       /*    $property_id = $row["property_id"];
                           $property_id_part1 = substr($property_id, 0, 2);
                           $property_id_part2 = substr($property_id, 2, 6);
-                          $property_id_part3 = substr($property_id, 8, 5);
+                          $property_id_part3 = substr($property_id, 8, 5); */
 
-                          $payment_id = $row['payment_id'];
+                         /*  $payment_id = $row['payment_id']; */
                           $due_dte = $row['due_date'];
                           $pay_dte = $row['pay_date'];
                           $or_no = $row['or_no'];
@@ -258,9 +258,9 @@ color: white;
 
                       ?>
                       <tr>
-                       
+                       <!-- 
                         <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
-                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?> </td> 
+                        --> <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td> 
@@ -280,7 +280,7 @@ color: white;
             <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
               <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
             </div>
-              <table class="table table-bordered table-stripped">
+              <table class="table2 table-bordered table-stripped">
                   <thead> 
                       <tr>
                           <th class="text-center" style="font-size:13px;">DUE DATE</th>

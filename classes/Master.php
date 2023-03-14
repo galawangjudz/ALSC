@@ -1358,6 +1358,43 @@ Class Master extends DBConnection {
 
 
 	}
+
+	function save_payment(){
+		extract($_POST);
+		$data = " property_id = '$prop_id' ";
+		$data .= ", payment_amount = '$amount_paid' ";
+		$data .= ", pay_date = '$pay_date' ";
+		$data .= ", due_date = '$due_date' ";
+		$data .= ", or_no = '$or_no' " ;
+		$data .= ", amount_due = '$tot_amt_due' ";
+		$data .= ", rebate = '$rebate' ";
+		$data .= ", surcharge = '$surcharge' ";
+		$data .= ", interest = '$interest' ";
+		$data .= ", principal = '$principal' ";
+		$data .= ", remaining_balance = '$balance' ";
+		$data .= ", status = '$status' ";
+		$data .= ", status_count = '$status_count' ";
+		$data .= ", payment_count = '$payment_count' ";
+
+		if(empty($property_id)){
+			$save = $this->conn->query("INSERT INTO property_payments set ".$data);
+			
+		}else{
+			$save = $this->conn->query("UPDATE property_payments set ".$data." where id = ".$id);
+		}
+		
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New payments successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Payments successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
 	
 }
 
@@ -1442,6 +1479,9 @@ switch ($action) {
 	break;
 	case 'cfo_booked':
 		echo $Master->cfo_booked();
+	break;
+	case 'save_payment':
+		echo $Master->save_payment();
 	break;
 	
 	default:
