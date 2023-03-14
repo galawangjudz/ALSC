@@ -232,7 +232,7 @@ color: white;
                               <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                               <th style="text-align:center;font-size:13px;">REBATE</th>
                               <th style="text-align:center;font-size:13px;">PERIOD</th>
-                              <th style="text-align:center;font-size:13px;">BALANCE</th>
+                              <th style="text-align:center;font-size:15px;">BALANCE</th>
                           </tr>
                       </thead>
                     <tbody>

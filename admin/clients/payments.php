@@ -158,7 +158,7 @@ if(isset($_GET['id'])){
             <input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>"><br>
             
             <label for="due_date">Due Date:</label>
-            <input type="date" id="due_date" name="due_date" value="<?php echo $due_date; ?>"><br>
+            <input type="date" id="due_date" name="due_date" value="<?php echo date('Y-m-d'); ?>"><br>
 
             <label for="pay_date">Pay Date:</label>
             <input type="date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>"><br>
@@ -168,9 +168,16 @@ if(isset($_GET['id'])){
 
             <label for="amount_due">Amount Due:</label>
             <input type="text" id="amount_due" name="amount_due" ><br>
+
+            <label for="principal">Principal:</label>
+            <input type="text" id="principal" name="principal" required><br>
+
             
             <label for="surcharge">Surcharge:</label>
             <input type="text" id="surcharge" name="surcharge" required><br>
+
+            <label for="amount_paid">Interest:</label>
+            <input type="text" id="interest" name="interest" required><br>
 
             <label for="rebate">Rebate:</label>
             <input type="text" id="rebate" name="rebate" required><br>
@@ -186,6 +193,12 @@ if(isset($_GET['id'])){
 
             <label for="or_no">Or #:</label>
             <input type="text" id="or_no" name="or_no" required><br>
+
+            <label for="status_count">Status Count:</label>
+            <input type="text" id="status_count" name="status_count" required><br>
+
+            <label for="payment_count">Payment Count:</label>
+            <input type="text" id="payment_count" name="payment_count" required><br>
         </form>
 
 
@@ -193,7 +206,72 @@ if(isset($_GET['id'])){
 	</div>
 </div>
 <script>
+function validateForm() {
+	    // error handling
+	    var errorCounter = 0;
 
+	    $(".required").each(function(i, obj) {
 
+	        if($(this).val() === ''){
+	            $(this).parent().addClass("has-error");
+	            errorCounter++;
+	        } else{ 
+	            $(this).parent().removeClass("has-error"); 
+	        }
+
+	    });
+		
+	    return errorCounter;
+
+	}
+
+    $(document).ready(function(){
+
+        $('#save_payment').submit(function(e){
+			e.preventDefault();
+            var _this = $(this)
+		 	$('.err-msg').remove();
+			
+             var errorCounter = validateForm();
+             if (errorCounter > 0) {
+                alert_toast("It appear's you have forgotten to complete something!","warning");	  
+                return false;
+            }else{
+                $(".required").parent().removeClass("has-error")
+            }    
+            start_loader();
+			$.ajax({
+				url:_base_url_+"classes/Master.php?f=save_payment",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					alert_toast("An error occured",'error');
+					end_loader();
+				},
+				success:function(resp){
+					if(typeof resp =='object' && resp.status == 'success'){
+                        location.reload();
+					}else if(resp.status == 'failed' && !!resp.msg){
+                        var el = $('<div>')
+                            el.addClass("alert alert-danger err-msg").text(resp.msg)
+                            _this.prepend(el)
+                            el.show('slow')
+                            end_loader()
+                    }else{
+						alert_toast("An error occured",'error');
+						end_loader();
+                        console.log(resp)
+					}
+				}
+			})
+		})
+        
+	})
 	
 </script>

@@ -26,6 +26,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$house_discount_amt = $row['c_house_discount_amt'];
 			$process_fee = $row['c_processing_fee'];
 			$pf_month = $row['pf_mo'];
+			$tcp_discount = $row['c_tcp_discount'];
 			$tcp_discount_amt = $row['c_tcp_discount_amt'];
 			$tcp = $row['c_tcp'];
 			$vat_amt_computed = $row['c_vat_amount'];
@@ -61,6 +62,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$service_area_price = $row['service_area_price'];
 			$others_price = $row['others_price'];
 			$floor_elev_price = $row['floor_elev_price'];
+
+			$ac_outlet_subtotal = $aircon_outlets * $aircon_outlet_price;
+			$ac_grill_subtotal = $aircon_grill * $aircon_grill_price;
+			$conv_outlet_subtotal = $conv_outlet * $conv_outlet_price;
+			$service_subtotal = $service_area * $service_area_price;
+			$others_subtotal = $others * $others_price;
+
+			$add_cost = $floor_elev_price + $ac_outlet_subtotal + $ac_grill_subtotal + $conv_outlet_subtotal + $service_subtotal + $others_subtotal;
+
 			
 			$lcp =($lot_area * $price_sqm) - $lot_discount_amt;
 			$amount = $lot_area * $price_sqm;
@@ -1088,11 +1098,11 @@ input{
 												<input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											</div>
-												<input type="hidden" name="flrelev_text" id="flrelev_text" onchange="getFlrElev(this);"/>
+												<input type="hidden" name="flrelev_text" id="flrelev_text" value="<?php echo isset($c_floor) ? $c_floor : 0; ?>" onchange="getFlrElev(this);"/>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" placeholder="0">
+												<input type="text" class="form-control margin-bottom flrelev-price" id="flrelev_price" name="flrelev_price" value="<?php echo isset($floor_elev_price) ? $floor_elev_price : 0; ?>">
 											</div>
 										</div>
 										
@@ -1105,7 +1115,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" onchange = "getAcSubtotal();"></label>
+												<label class="control-label"><input type="text" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1115,12 +1125,12 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>" onchange = "getAcSubtotal();">
+												<input type="text" class="form-control margin-bottom aircon-outlet-price" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>">
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" placeholder="0">
+												<input type="text" class="form-control margin-bottom ac-outlet-subtotal" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="<?php echo isset($ac_outlet_subtotal) ? $ac_outlet_subtotal : 0; ?>" readonly>
 											</div>
 										</div>
 									</div>
@@ -1133,7 +1143,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>" onchange="getAcGrillSubtotal();"></label>
+												<label class="control-label"><input type="text" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1143,12 +1153,12 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_grill_price" name="ac_grill_price" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" onchange="getAcGrillSubtotal();">
+												<input type="text" class="form-control margin-bottom ac-grill-price" id="ac_grill_price" name="ac_grill_price" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" >
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  placeholder="0">
+												<input type="text" class="form-control margin-bottom ac-grill-subtotal" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="<?php echo isset($ac_grill_subtotal) ? $ac_grill_subtotal : 0; ?>" readonly>
 											</div>
 										</div>
 									</div>
@@ -1160,7 +1170,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>" onchange="getConvSubtotal();"></label>
+												<label class="control-label"><input type="text" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1170,12 +1180,12 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="conv_outlet_price" name="conv_outlet_price" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" onchange="getConvSubtotal();">
+												<input type="text" class="form-control margin-bottom conv-outlet-price" id="conv_outlet_price" name="conv_outlet_price" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" >
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  placeholder="0">
+												<input type="text" class="form-control margin-bottom conv-outlet-subtotal" id="conv_outlet_subtotal" name="conv_outlet_subtotal" value="<?php echo isset($conv_outlet_subtotal) ? $conv_outlet_subtotal : 0; ?>" readonly>
 											</div>
 										</div>
 									</div>
@@ -1187,7 +1197,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>" onchange="getServiceSubtotal();"></label>
+												<label class="control-label"><input type="text" class="form-control margin-bottom service-area" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1197,12 +1207,12 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="service_area_price" name="service_area_price" value="<?php echo isset($service_area_price) ? $service_area_price : 0; ?>" onchange="getServiceSubtotal();">
+												<input type="text" class="form-control margin-bottom service-area-price" id="service_area_price" name="service_area_price" value="<?php echo isset($service_area_price) ? $service_area_price : 0; ?>" >
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" placeholder="0">
+												<input type="text" class="form-control margin-bottom service-subtotal" id="service_subtotal" name="service_subtotal" value="<?php echo isset($service_subtotal) ? $service_subtotal : 0; ?>" readonly>
 											</div>
 										</div>
 									</div>
@@ -1214,7 +1224,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" onchange="getOthersSubtotal()"></label>
+												<label class="control-label"><input type="text" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1224,12 +1234,12 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_price" name="others_price" value="<?php echo isset($others_price) ? $others_price : 0; ?>" onchange="getOthersSubtotal()">
+												<input type="text" class="form-control margin-bottom others-price" id="others_price" name="others_price" value="<?php echo isset($others_price) ? $others_price : 0; ?>">
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  placeholder="0" onkeyup="getAddCost()">
+												<input type="text" class="form-control margin-bottom others-subtotal" id="others_subtotal" name="others_subtotal"  value="<?php echo isset($others_subtotal) ? $others_subtotal : 0; ?>" readonly>
 											</div>
 										</div>
 									</div>
@@ -1256,7 +1266,7 @@ input{
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" placeholder="0" value="<?php echo isset($add_cost) ? $add_cost : 0; ?>">
+												<input type="text" class="form-control margin-bottom add-cost-total" id="add_cost_total" name="add_cost_total" value="<?php echo isset($add_cost) ? $add_cost : 0; ?> " readonly>
 											</div>
 										</div>
 									</div>
@@ -1272,7 +1282,7 @@ input{
 										</div>
 										<div class="col-md-3" >
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom tcp-disc"  name="process_fee" id="process_fee" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>">
+												<input type="text" class="form-control margin-bottom process-fee"  name="process_fee" id="process_fee" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>">
 											</div>
 										</div>
 										<div class="col-md-3">
@@ -1282,7 +1292,17 @@ input{
 										</div>
 										<div class="col-md-3" >
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom tcp-disc"  name="pf_month" id="pf_month" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>">
+												<input type="text" class="form-control margin-bottom pf-month"  name="pf_month" id="pf_month" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>">
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label">TCP Discount</label>
+											</div>
+										</div>
+										<div class="col-md-3" >
+											<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc" name="tcp_disc" id="tcp_disc" value="<?php echo isset($tcp_discount) ? $tcp_discount : 0; ?>">
 											</div>
 										</div>
 										<div class="col-md-3">
@@ -1290,7 +1310,7 @@ input{
 												<label class="control-label">TCP Disc. Amount:</label>
 											</div>
 										</div>
-										<div class="col-md-4" >
+										<div class="col-md-3" >
 											<div class="form-group">
 												<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
 											</div>
