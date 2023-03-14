@@ -50,7 +50,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$remarks = $row['c_remarks'];
 			$date_created = $row['c_date_created'];
 			$date_updated = $row['c_date_updated'];
-			$c_floor = $row['floor_elevation'];
+			$floor_elev = $row['floor_elevation'];
 			$aircon_outlets = $row['aircon_outlets'];
 			$aircon_grill = $row['aircon_grill'];
 			$conv_outlet = $row['conv_outlet'];

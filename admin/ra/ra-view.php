@@ -10,30 +10,40 @@
 $usertype = $_settings->userdata('user_type');
 if(($_GET['id']) && ($_GET['id'] > 0)){
     $csr = $conn->query("SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, 
-                        y.c_ca_status, y.c_duration, z.floor_elevation, z.aircon_outlets, z.aircon_grill,
-                        z.service_area,z.others,y.c_csr_no as csr_num FROM t_approval_csr y 
+                        y.c_ca_status, y.c_duration, z.*,
+                        y.c_csr_no as csr_num FROM t_approval_csr y 
                         inner join t_csr x on x.c_csr_no = y.c_csr_no 
-                        inner join t_additional_cost z on x.c_csr_no
+                        inner join t_additional_cost z on z.c_csr_no = x.c_csr_no
                         where md5(y.c_csr_no) = '{$_GET['id']}'" );
     if($csr->num_rows > 0){
         while ($row = mysqli_fetch_assoc($csr)):
 
             ///ADD COST
-            $floor_elev = $row['floor_elevation'];
-            $aircon_outlets = $row['aircon_outlets'];
-            $aircon_grill = $row['aircon_grill'];
-            $service_area = $row['service_area'];
-            $others = $row['others'];
-            $conv_outlet = $row['conv_outlet'];
+            $floor_elevation = $row['floor_elevation'];
+            // $aircon_outlets = $row['aircon_outlets'];
+            // $aircon_grill = $row['aircon_grill'];
+            // $service_area = $row['service_area'];
+            // $others = $row['others'];
+            // $conv_outlet = $row['conv_outlet'];
 
-            $aircon_outlet_price = $row['aircon_outlet_price'];
-            $aircon_grill_price = $row['aircon_grill_price'];
-            $conv_outlet_price = $row['conv_outlet_price'];
-            $service_area_price = $row['service_area_price'];
-            $others_price = $row['others_price'];
-            $floor_elev_price = $row['floor_elev_price'];
+            // $aircon_outlet_price = $row['aircon_outlet_price'];
+            // $aircon_grill_price = $row['aircon_grill_price'];
+            // $conv_outlet_price = $row['conv_outlet_price'];
+            // $service_area_price = $row['service_area_price'];
+            // $others_price = $row['others_price'];
+            // $floor_elev_price = $row['floor_elev_price'];
 
-
+			$aircon_outlets = $row['aircon_outlets'];
+			$aircon_grill = $row['aircon_grill'];
+			$conv_outlet = $row['conv_outlet'];
+			$service_area = $row['service_area'];
+			$others = $row['others'];
+			$aircon_outlet_price = $row['aircon_outlet_price'];
+			$aircon_grill_price = $row['aircon_grill_price'];
+			$conv_outlet_price = $row['conv_outlet_price'];
+			$service_area_price = $row['service_area_price'];
+			$others_price = $row['others_price'];
+			$floor_elev_price = $row['floor_elev_price'];
 
 
 
@@ -412,9 +422,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                 <td><b>Civil Status:</b></td>
                                                 <td><?php echo $civil_status ?></td>
                                             </tr>
-                                        
-                                
-                                    
                                         </table> 
                                     </div>       
                                 </div>
@@ -515,9 +522,23 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4" >
                                         <div class="form-group">
-                                            <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <!-- <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                                            <?php if($floor_elevation == '0.2'){ ?>
+                                                <input id="id20" type="radio" name="chkOption4" checked="checked"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }elseif($floor_elevation == '0.4'){ ?>
+                                                <input id="id20" type="radio" name="chkOption4"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4" checked="checked"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }elseif($floor_elevation == '0.6'){ ?>
+                                                <input id="id20" type="radio" name="chkOption4"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4" checked="checked"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }
+                                            ?>
                                         </div>
                                             <input type="hidden" name="flrelev_text" id="flrelev_text" onchange="getFlrElev(this);"/>
                                     </div>
@@ -551,7 +572,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -579,7 +600,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="0">
+                                            <input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -606,7 +627,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  value="0">
+                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -633,7 +654,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -660,7 +681,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  value="0" onkeyup="getAddCost()">
+                                            <input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  value="0" onkeyup="getAddCost()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -687,7 +708,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -1451,8 +1472,80 @@ function showReplyForm(self) {
 
     function loadAll(){
         paymentType();
+        getFlrElev();
+        getAcSubtotal();
+        getAcGrillSubtotal();
+        getServiceSubtotal();
+        getOthersSubtotal();
+        getConvSubtotal();
     }
+
+    function getFlrElev(){
+		if(document.getElementById("id20").checked==true){
+			document.getElementById("flrelev_text").value='0.20';
+		}else if(document.getElementById("id40").checked==true){
+			document.getElementById("flrelev_text").value='0.40';
+		}else if(document.getElementById("id60").checked==true){
+			document.getElementById("flrelev_text").value='0.60';
+		}else{
+			document.getElementById("flrelev_text").value='0';
+		}
+	}
+	function getAcSubtotal(){
+		var ac_unit = document.getElementById('aircon_outlets').value;
+		var ac_unit_price = document.getElementById('aircon_outlet_price').value;
+
+		var res = ac_unit * ac_unit_price;
+
+		document.getElementById('ac_outlet_subtotal').value = res;
+		getAddCost();
+	}
+	function getAcGrillSubtotal(){
+		var ac_grill = document.getElementById('ac_grill').value;
+		var ac_grill_price = document.getElementById('ac_grill_price').value;
+
+		var res = ac_grill * ac_grill_price;
+
+		document.getElementById('ac_grill_subtotal').value = res;
+		getAddCost();
+	}
+	function getServiceSubtotal(){
+		var service = document.getElementById('service_area').value;
+		var service_price = document.getElementById('service_area_price').value;
+
+		var res = service * service_price;
+
+		document.getElementById('service_subtotal').value = res;
+		getAddCost();
+	}
+	function getOthersSubtotal(){
+		var others = document.getElementById('others').value;
+		var others_price = document.getElementById('others_price').value;
+
+		var res = others * others_price;
+
+		document.getElementById('others_subtotal').value = res;
+		getAddCost();
+	}
+	function getConvSubtotal(){
+		var conv = document.getElementById('conv_outlet').value;
+		var conv_price = document.getElementById('conv_outlet_price').value;
+
+		var res = conv * conv_price;
+
+		document.getElementById('conv_outlet_subtotal').value = res;
+		getAddCost();
+	}
+	function getAddCost(){
+		var others = document.getElementById('others_subtotal').value;
+		var service = document.getElementById('service_subtotal').value;
+		var ac_grill1 = document.getElementById('ac_grill_subtotal').value;
+		var ac_outlet = document.getElementById('ac_outlet_subtotal').value;
+		var flr_elev = document.getElementById('flrelev_price').value;
+		var conv_outlet = document.getElementById('conv_outlet_subtotal').value;
+
+		var result = parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(flr_elev)+ parseInt(conv_outlet) + parseInt(ac_grill1);
+
+		document.getElementById('add_cost_total').value = result;
+	}
 </script>
-
-
-
