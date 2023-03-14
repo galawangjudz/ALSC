@@ -467,7 +467,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         }
     }
     function ver_doc2(){
-        var verdoc1_req = document.getElementById('verdoc1').value;
+        var verdoc1_req = document.getElementById('verdoc2').value;
         if(verdoc1_req==1){
             document.getElementById('pass5').checked=true;
         }else{

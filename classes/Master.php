@@ -675,6 +675,7 @@ Class Master extends DBConnection {
 		$data .= ", citizenship = '$citizenship' ";
 		$data .= ", email = '$customer_email' ";
 		$data .= ", contact_no = '$contact_no' ";
+		$data .= ", c_created_by = '$username' ";
 
 		
 		$check = $this->conn->query("SELECT * FROM `t_buyer_info` where `last_name` = '{$customer_last_name}' and

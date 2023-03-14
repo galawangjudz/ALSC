@@ -14,7 +14,7 @@ if(isset($_GET['id'])){
         $reservation_date = $row['c_reserve_date'];
         $amount_paid = $row['c_amount_paid'];
     }
-    $query = "SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, y.c_ca_status, y.c_duration, y.c_csr_no as csr_num FROM t_approval_csr y inner join t_csr_view x on x.c_csr_no = y.c_csr_no WHERE md5(y.c_csr_no) = '{$_GET['id']}' ";
+    $query = "SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, y.cfo_status, y.c_ca_status, y.c_duration, y.c_csr_no as csr_num FROM t_approval_csr y inner join t_csr_view x on x.c_csr_no = y.c_csr_no WHERE md5(y.c_csr_no) = '{$_GET['id']}' ";
 
     $result = mysqli_query($conn, $query);
     // mysqli select query
@@ -38,6 +38,7 @@ if(isset($_GET['id'])){
         }else{
             $csr_status = "Disapproved";
         }
+        $cfo_stat = $row['cfo_status'];
         $reserv_status = $row['c_reserve_status'];// status
         if($reserv_status == 1){
             $reserv_status = "Paid";
@@ -164,13 +165,15 @@ if(isset($_GET['id'])){
     
 
     <div class="row-xs-3"> 
-        <button type="button"  class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
-    
-        <button type="button"  class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
+        <?php if ($cfo_stat == 0):?>
+            <button type="button"  class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
         
-        <button type="button"  class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
-
-        <button type="button" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
+            <button type="button"  class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
+            
+            <button type="button"  class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
+        <?php endif;?>
+            <button type="button" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
+      
     </div>
 
 
