@@ -136,7 +136,7 @@
    
 
 
-    function load_data($id,$pay_date){
+    function load_data($id){
             $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
             if (!$conn) {
                 die('Could not connect to database: ' . mysqli_connect_error());
