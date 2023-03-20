@@ -36,7 +36,7 @@ header("Access-Control-Allow-Origin: *");
     }
     .ref_no{
         float:left;
-        margin-top:-12px;
+        margin-top:-20px;
         margin-left:642px;
         font-size:11px;
     }
@@ -65,13 +65,36 @@ header("Access-Control-Allow-Origin: *");
 <div class="container_content" id="container_content" style="margin-top:5px;font-size:9px;">
     <img src="images/Header.jpg" class="img-thumbnail" style="height:80px;width:500px;margin-left:130px;border:none;margin-bottom:-5px;z-index:-1;position: relative;" alt="">
     <h6 class="text-center" style="position:absolute;margin-top:-40px;margin-left:330px;"><b>RESERVATION APPLICATION</b></h6>
+    
+    
+    <!-- "SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, 
+                        y.c_ca_status, y.c_duration, z.*,
+                        y.c_csr_no as csr_num FROM t_approval_csr y 
+                        inner join t_csr x on x.c_csr_no = y.c_csr_no 
+                        inner join t_additional_cost z on z.c_csr_no = x.c_csr_no
+                        where md5(y.c_csr_no) = '{$_GET['id']}'"  -->
+    
     <?php
-    $query = "SELECT x.*, y.*, y.c_csr_no as csr_num FROM t_csr_buyers y inner join t_csr x on x.c_csr_no = y.c_csr_no WHERE y.c_csr_no = '{$_GET['id']}' ";
+    $query = "SELECT w.*,x.*,y.*, w.c_csr_no as csr_num FROM t_csr_buyers w inner join t_additional_cost x on x.c_csr_no = w.c_csr_no inner join t_csr y on y.c_csr_no=w.c_csr_no WHERE y.c_csr_no = '{$_GET['id']}'";
     $result = mysqli_query($conn, $query);
     $count=$result->num_rows;
     // mysqli select query
     // echo $count;
     while ($row = mysqli_fetch_assoc($result)) {
+        $aircon_outlets = $row['aircon_outlets'];
+        $aircon_grill = $row['aircon_grill'];
+        $conv_outlet = $row['conv_outlet'];
+        $service_area = $row['service_area'];
+        $others = $row['others'];
+        $aircon_outlet_price = $row['aircon_outlet_price'];
+        $aircon_grill_price = $row['aircon_grill_price'];
+        $conv_outlet_price = $row['conv_outlet_price'];
+        $service_area_price = $row['service_area_price'];
+        $others_price = $row['others_price'];
+        $floor_elev_price = $row['floor_elev_price'];
+        $floor_elevation =$row['floor_elevation'];
+
+
         $c_date_created = $row['c_date_created'];
         $c_csr_no = $row['c_csr_no']; 
         $c_b1_last_name = $row['last_name']; 
@@ -128,7 +151,7 @@ header("Access-Control-Allow-Origin: *");
         ?>
         <div class="text-center" id="dateofsale" style="margin-top:-22px;margin-bottom:-5px;margin-left:85px;"><b>Date of Sale:</b> <?php echo date("F d, Y",strtotime($c_date_created)) ?></div>
         <br>
-        <div class="watermark_sample"></div>
+        <!-- <div class="watermark_sample"></div> -->
         <?php
      }
     ?>
@@ -178,6 +201,7 @@ header("Access-Control-Allow-Origin: *");
         
         
     }else if($count == 4 && $c_floor_area == 0){
+        
         ?>
         <br>
         <?php

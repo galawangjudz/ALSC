@@ -171,7 +171,7 @@
         </div>
     </div>
 </div>
-<div class="card-body" id="forAddCost">
+<div class="card-body" id="forAddCost" style="height:190px;">
 <div class="others_title" id="bottom_space" style="margin-top:1px;margin-bottom:10px;">Details on Additional Cost</div>
     <div class="container-fluid" id="lbl_div_others">
         <div class="row">
@@ -196,75 +196,103 @@
             <label class="control-label2" id="lbl_add_cost">Others (specify): </label>
         </div>
     </div>
-    <div class="container-fluid" id="lbl_units">
+    <div class="container-fluid" id="lbl_units" style="width:5%">
         <div class="row">
             <label class="control-label2" id="lbl_units_line"></label>
         </div>
         <div class="row">
-            <label class="control-label2" id="lbl_units_line">______Unit/s</label>
+            <label class="control-label2" id="lbl_units_line"><?php echo $aircon_outlets; ?> Unit/s</label>
+            <input type="hidden" value="<?php echo $aircon_outlets; ?>" id="aircon_outlets_val">
         </div>
         <div class="row">
-            <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;">______Unit/s</label>
+            <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;"><?php echo $aircon_grill; ?> Unit/s</label>
+            <input type="hidden" value="<?php echo $aircon_grill; ?>" id="ac_grill_val">
         </div>
         <div class="row">
-            <label class="control-label2" id="lbl_units_line" style="margin-bottom:6px;">______Unit/s</label>
+            <label class="control-label2" id="lbl_units_line" style="margin-bottom:6px;"><?php echo $conv_outlet; ?> Unit/s</label>
+            <input type="hidden" value="<?php echo $conv_outlet; ?>" id="conv_outlet_val">
         </div>
         <div class="row">
-            <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;">______Unit/s</label>
+            <label class="control-label2" id="lbl_units_line" style="margin-bottom:8px;"><?php echo $service_area; ?> Unit/s</label>
+            <input type="hidden" value="<?php echo $service_area; ?>" id="service_area_val">
         </div>
         <div class="row">
-            <label class="control-label2" id="lbl_units_line">______Unit/s</label>
+            <label class="control-label2" id="lbl_units_line"><?php echo $others; ?> Unit/s</label>
+            <input type="hidden" value="<?php echo $others; ?>" id="others_val">
         </div>
     </div>
-    <div class="rdo_buttons" style="margin-left:60px;">
-        <div class="row" style="margin-top:5px;margin-bottom:5px;">
-            <input type="radio" id="rdo20meter" value="1">
-            <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdo20meter" value="1">
-            <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdo20meter" value="1">
-            <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
+    <div class="rdo_buttons" style="margin-left:70px;margin-right:40px;">
+        <div class="row">
+            <?php if($floor_elevation == 0.2){ ?>
+                <input type="radio" id="rdo20meter" value="1" checked="true">
+                <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
+            <?php }elseif($floor_elevation == 0.4){ ?>
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1" checked="true">
+                <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
+            <?php }elseif($floor_elevation == 0.6){ ?>
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1" checked="true">
+                <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
+            <?php }else{ ?>
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.20 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.40 meter</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdo20meter" value="1">
+                <label class="control-label" id="rdolight">&nbsp;0.60 meter</label>
+            <?php } ?>        
         </div>
-        <div class="row" style="margin-bottom:12px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" style="margin-bottom:14px;margin-top:5px;">
+            <input type="text" value="<?php echo ($aircon_outlet_price) ?>" class="form-control form-control-sm" id="aircon_outlet_price">
         </div>
-        <div class="row" style="margin-bottom:12px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" style="margin-bottom:14px;">
+            <input type="text" value="<?php echo ($aircon_grill_price) ?>" class="form-control form-control-sm" id="aircon_grill_price">
         </div>
-        <div class="row" style="margin-bottom:12px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" style="margin-bottom:14px;">
+            <input type="text" value="<?php echo ($conv_outlet_price) ?>" class="form-control form-control-sm" id="conv_outlet_price">
         </div>
-        <div class="row" style="margin-bottom:12px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" style="margin-bottom:14px;">
+            <input type="text" value="<?php echo ($service_area_price) ?>" class="form-control form-control-sm" id="service_area_price">
         </div>
-        <div class="row" style="margin-bottom:12px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" style="margin-bottom:14px;">
+            <input type="text" value="<?php echo ($others_price) ?>" class="form-control form-control-sm" id="others_price">
         </div>
-        <div class="row" style="margin-bottom:12px;">
-            <label class="control-label" style="margin-left:5px;padding-left:100px;font-size:9px;">Additional Cost/s</label>
+        <div class="row" style="margin-bottom:14px;">
+            <label class="control-label" style="margin-left:125px;padding-left:100px;font-size:9px;">Additional Cost/s</label>
         </div>
     </div>
     <div class="lbl_div_others_txtbox" style="margin-top:2px;margin-left:40px;">
-        <div class="row" id="right_txtbox">
-            <input type="text" value="" class="form-control form-control-sm">
-        </div>
         <div class="row" id="right_txtbox" style="margin-top:-5px;">
-            <input type="text" value="" class="form-control form-control-sm">
+            <input type="text" value="<?php echo number_format($floor_elev_price,2) ?>" class="form-control form-control-sm" id="flr_elev_price">
         </div>
-        <div class="row" id="right_txtbox" style="margin-top:-5px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" id="right_txtbox" style="margin-top:-3px;">
+            <input type="text" class="form-control form-control-sm" style="margin-top:-2px;" id="ac_outlet_total">
         </div>
-        <div class="row" id="right_txtbox" style="margin-top:-5px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" id="right_txtbox" style="margin-top:-3px;">
+            <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;" id="aircon_grill_total">
         </div>
-        <div class="row" id="right_txtbox" style="margin-top:-5px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" id="right_txtbox" style="margin-top:-3px;">
+            <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;" id="conv_outlet_total">
         </div>
-        <div class="row" id="right_txtbox" style="margin-top:-5px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" id="right_txtbox" style="margin-top:-3px;">
+            <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;" id="service_total">
         </div>
-        <div class="row" id="right_txtbox" style="margin-top:-5px;">
-            <input type="text" value="" class="form-control form-control-sm">
+        <div class="row" id="right_txtbox" style="margin-top:-3px;">
+            <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;" id="others_total">
+        </div>
+        <div class="row" style="margin-top:-3px;">
+            <input type="text" value="" class="form-control form-control-sm" style="margin-top:-2px;" id="add_cost_total">
         </div>
     </div>
 </div>
@@ -916,7 +944,81 @@ function printRA(){
     window.history.back();
     }, 500);
 }
+function getFlrElev(){
+    if(document.getElementById("id20").checked==true){
+        document.getElementById("flrelev_text").value='0.20';
+    }else if(document.getElementById("id40").checked==true){
+        document.getElementById("flrelev_text").value='0.40';
+    }else if(document.getElementById("id60").checked==true){
+        document.getElementById("flrelev_text").value='0.60';
+    }else{
+        document.getElementById("flrelev_text").value='0';
+    }
+}
+function getAcSubtotal(){
+    var ac_unit = document.getElementById("aircon_outlets_val").value;
+    var ac_unit_price = document.getElementById("aircon_outlet_price").value;
+
+    var res = (ac_unit * ac_unit_price).toFixed(2);
+
+    document.getElementById('ac_outlet_total').value = res;
+    // getAddCost();
+}
+function getAcGrillSubtotal(){
+    var ac_grill = document.getElementById("ac_grill_val").value;
+    var ac_grill_price = document.getElementById("aircon_grill_price").value;
+
+    var res = (ac_grill * ac_grill_price).toFixed(2);
+
+    document.getElementById('aircon_grill_total').value = res;
+    // getAddCost();
+}
+function getServiceSubtotal(){
+    var service = document.getElementById("service_area_val").value;
+    var service_price = document.getElementById("service_area_price").value;
+
+    var res = (service * service_price).toFixed(2);
+
+    document.getElementById('service_total').value = res;
+    // getAddCost();
+}
+function getOthersSubtotal(){
+    var others = document.getElementById("others_val").value;
+    var others_price = document.getElementById("others_price").value;
+
+    var res = (others * others_price).toFixed(2);
+
+    document.getElementById('others_total').value = res;
+    // getAddCost();
+}
+function getConvSubtotal(){
+    var conv = document.getElementById("conv_outlet_val").value;
+    var conv_price = document.getElementById("conv_outlet_price").value;
+
+    var res = (conv * conv_price).toFixed(2);
+
+    document.getElementById('conv_outlet_total').value = res;
+    // getAddCost();
+}
+function getAddCost(){
+    var others = document.getElementById("others_total").value;
+    var service = document.getElementById("service_total").value;
+    var ac_grill1 = document.getElementById("aircon_grill_total").value;
+    var ac_outlet = document.getElementById("ac_outlet_total").value;
+    var flr_elev = document.getElementById("flr_elev_price").value;
+    var conv_outlet = document.getElementById("conv_outlet_total").value;
+
+    var result = (parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(conv_outlet) + parseInt(flr_elev) + parseInt(ac_grill1)).toFixed(2);
+
+    document.getElementById('add_cost_total').value = result;
+}
 function loadAll(){
+    getAcSubtotal();
+    getAcGrillSubtotal();
+    getServiceSubtotal();
+    getOthersSubtotal();
+    getConvSubtotal();
+    getAddCost();
     getCivilStatus();
     getGender();
     getPhase();

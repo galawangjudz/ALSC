@@ -1,4 +1,3 @@
-
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -10,29 +9,40 @@
 $usertype = $_settings->userdata('user_type');
 if(($_GET['id']) && ($_GET['id'] > 0)){
     $csr = $conn->query("SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, 
-                        y.c_ca_status, y.c_duration, z.*,y.c_csr_no as csr_num FROM t_approval_csr y 
+                        y.c_ca_status, y.c_duration, z.*,
+                        y.c_csr_no as csr_num FROM t_approval_csr y 
                         inner join t_csr x on x.c_csr_no = y.c_csr_no 
-                        inner join t_additional_cost z on x.c_csr_no
+                        inner join t_additional_cost z on z.c_csr_no = x.c_csr_no
                         where md5(y.c_csr_no) = '{$_GET['id']}'" );
     if($csr->num_rows > 0){
         while ($row = mysqli_fetch_assoc($csr)):
 
             ///ADD COST
-            $floor_elev = $row['floor_elevation'];
-            $aircon_outlets = $row['aircon_outlets'];
-            $aircon_grill = $row['aircon_grill'];
-            $service_area = $row['service_area'];
-            $others = $row['others'];
-            $conv_outlet = $row['conv_outlet'];
+            $floor_elevation = $row['floor_elevation'];
+            // $aircon_outlets = $row['aircon_outlets'];
+            // $aircon_grill = $row['aircon_grill'];
+            // $service_area = $row['service_area'];
+            // $others = $row['others'];
+            // $conv_outlet = $row['conv_outlet'];
 
-            $aircon_outlet_price = $row['aircon_outlet_price'];
-            $aircon_grill_price = $row['aircon_grill_price'];
-            $conv_outlet_price = $row['conv_outlet_price'];
-            $service_area_price = $row['service_area_price'];
-            $others_price = $row['others_price'];
-            $floor_elev_price = $row['floor_elev_price'];
+            // $aircon_outlet_price = $row['aircon_outlet_price'];
+            // $aircon_grill_price = $row['aircon_grill_price'];
+            // $conv_outlet_price = $row['conv_outlet_price'];
+            // $service_area_price = $row['service_area_price'];
+            // $others_price = $row['others_price'];
+            // $floor_elev_price = $row['floor_elev_price'];
 
-
+			$aircon_outlets = $row['aircon_outlets'];
+			$aircon_grill = $row['aircon_grill'];
+			$conv_outlet = $row['conv_outlet'];
+			$service_area = $row['service_area'];
+			$others = $row['others'];
+			$aircon_outlet_price = $row['aircon_outlet_price'];
+			$aircon_grill_price = $row['aircon_grill_price'];
+			$conv_outlet_price = $row['conv_outlet_price'];
+			$service_area_price = $row['service_area_price'];
+			$others_price = $row['others_price'];
+			$floor_elev_price = $row['floor_elev_price'];
 
 
 
@@ -411,9 +421,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                 <td><b>Civil Status:</b></td>
                                                 <td><?php echo $civil_status ?></td>
                                             </tr>
-                                        
-                                
-                                    
                                         </table> 
                                     </div>       
                                 </div>
@@ -514,9 +521,23 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4" >
                                         <div class="form-group">
-                                            <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <!-- <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                                            <?php if($floor_elevation == '0.2'){ ?>
+                                                <input id="id20" type="radio" name="chkOption4" checked="checked"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }elseif($floor_elevation == '0.4'){ ?>
+                                                <input id="id20" type="radio" name="chkOption4"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4" checked="checked"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }elseif($floor_elevation == '0.6'){ ?>
+                                                <input id="id20" type="radio" name="chkOption4"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4" checked="checked"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }
+                                            ?>
                                         </div>
                                             <input type="hidden" name="flrelev_text" id="flrelev_text" onchange="getFlrElev(this);"/>
                                     </div>
@@ -550,7 +571,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -578,7 +599,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="0">
+                                            <input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -605,7 +626,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  value="0">
+                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -632,7 +653,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -659,7 +680,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  value="0" onkeyup="getAddCost()">
+                                            <input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  value="0" onkeyup="getAddCost()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -686,256 +707,253 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div class="titles">Payment Computation</div>
+                            <div class="view_box">
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>TCP Discount: </b></td>
+                                            <td><?php echo $tcp_discount ?>  %</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>TCP Discount Amount: </b></td>
+                                            <td><?php echo number_format($tcp_discount_amt,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total Contract Price: </b></td>
+                                            <td><?php echo number_format($tcp,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>VAT: </b></td>
+                                            <td><?php echo number_format($vat,2) ?></td>
+                                        </tr>
+                                        <!---<tr>
+                                            <td><b>VAT Amount: </b></td>
+                                            <td><?php echo number_format($vat_amt,2) ?></td>
+                                        </tr>!-->
+                                        <tr>
+                                            <td><b>Net TCP: </b></td>
+                                            <td><?php echo number_format($net_tcp,2) ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div class="view_box">
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Reservation: </b></td>
+                                            <td><?php echo number_format($reservation,2) ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div id="space1" class="space"></div>
+                            <div id="pd" class="pd">
+                                <div class="titles">Partial DownPayment</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Down %:</b></td>
+                                            <td><?php echo $down_percent ?>  %</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Net DP:</b></td>
+                                            <td><?php echo number_format($net_dp,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b># of Payments:</b></td>
+                                            <td><?php echo $no_payments ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Monthly Down:</b></td>
+                                            <td><?php echo number_format($monthly_down,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>First DP:</b></td>
+                                            <td><?php echo $first_dp ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Full Down:</b></td>
+                                            <td><?php echo $full_down ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="fdp" class="fdp" >
+                                <div class="titles">Full Down Payment</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Down %:</b></td>
+                                            <td><?php echo $down_percent ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Net DP:</b></td>
+                                            <td><?php echo number_format($net_dp,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Full Down:</b></td>
+                                            <td><?php echo $full_down ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="space1" class="space"></div>
+                            <div id="ma" class="ma">
+                                <div class="titles">Monthly Amortization</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Amount to be Financed:</b></td>
+                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Terms:</b></td>
+                                            <td><?php echo $terms ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Interest Rate:</b></td>
+                                            <td><?php echo $interest_rate ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Fixed Factor:</b></td>
+                                            <td><?php echo $fixed_factor ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Monthly Payment:</b></td>
+                                            <td><?php echo number_format($monthly_payment,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Start Date:</b></td>
+                                            <td><?php echo $start_date ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="space1" class="space"></div>
+                            <div id="dfc" class="dfc">
+                                <div class="titles">Deferred Cash Payment</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Deferred Amount:</b></td>
+                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Terms:</b></td>
+                                            <td><?php echo $terms ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Monthly Payment:</b></td>
+                                            <td><?php echo number_format($monthly_payment,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Start Date:</b></td>
+                                            <td><?php echo $start_date ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="sc" class="sc">
+                                <div class="titles">Spot Cash</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Amount:</b></td>
+                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Pay Date:</b></td>
+                                            <td><?php echo $start_date ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="space1" class="space"></div>
+                            <div id="space1" class="space"></div>
+                            <div class="view_box" style="padding:20px;">
+                            <table style="text-align:center;" class="table table-striped">
+                                                <th style="text-align:center;">ID</th>
+                                                <th style="text-align:center;">File Name</th>
+                                                <th style="text-align:center;">Date Uploaded</th>
+                                                <th style="text-align:center;">Revision Approval</th>
+                                                <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
+                                                <th style="text-align:center;">Action</th>
+                                                <?php endif; ?>
+                                <?php
+                                    
+                                    $query1 = "SELECT * FROM tbl_attachments WHERE c_csr_no = '".$getID."' ORDER BY date_uploaded DESC";
 
+                                    $results1 = $conn->query($query1);
 
-
-                                    <div class="space"></div>
-                                    <div class="space"></div>
-                                    <div class="titles">Payment Computation</div>
-                                    <div class="view_box">
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>TCP Discount: </b></td>
-                                                    <td><?php echo $tcp_discount ?>  %</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>TCP Discount Amount: </b></td>
-                                                    <td><?php echo number_format($tcp_discount_amt,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Total Contract Price: </b></td>
-                                                    <td><?php echo number_format($tcp,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>VAT: </b></td>
-                                                    <td><?php echo number_format($vat,2) ?></td>
-                                                </tr>
-                                                <!---<tr>
-                                                    <td><b>VAT Amount: </b></td>
-                                                    <td><?php echo number_format($vat_amt,2) ?></td>
-                                                </tr>!-->
-                                                <tr>
-                                                    <td><b>Net TCP: </b></td>
-                                                    <td><?php echo number_format($net_tcp,2) ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="space"></div>
-                                    <div class="space"></div>
-                                    <div class="view_box">
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Reservation: </b></td>
-                                                    <td><?php echo number_format($reservation,2) ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="space"></div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="pd" class="pd">
-                                        <div class="titles">Partial DownPayment</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Down %:</b></td>
-                                                    <td><?php echo $down_percent ?>  %</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Net DP:</b></td>
-                                                    <td><?php echo number_format($net_dp,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b># of Payments:</b></td>
-                                                    <td><?php echo $no_payments ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Monthly Down:</b></td>
-                                                    <td><?php echo number_format($monthly_down,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>First DP:</b></td>
-                                                    <td><?php echo $first_dp ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Full Down:</b></td>
-                                                    <td><?php echo $full_down ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="fdp" class="fdp" >
-                                        <div class="titles">Full Down Payment</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Down %:</b></td>
-                                                    <td><?php echo $down_percent ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Net DP:</b></td>
-                                                    <td><?php echo number_format($net_dp,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Full Down:</b></td>
-                                                    <td><?php echo $full_down ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="ma" class="ma">
-                                        <div class="titles">Monthly Amortization</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Amount to be Financed:</b></td>
-                                                    <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Terms:</b></td>
-                                                    <td><?php echo $terms ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Interest Rate:</b></td>
-                                                    <td><?php echo $interest_rate ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Fixed Factor:</b></td>
-                                                    <td><?php echo $fixed_factor ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Monthly Payment:</b></td>
-                                                    <td><?php echo number_format($monthly_payment,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Start Date:</b></td>
-                                                    <td><?php echo $start_date ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="dfc" class="dfc">
-                                        <div class="titles">Deferred Cash Payment</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Deferred Amount:</b></td>
-                                                    <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Terms:</b></td>
-                                                    <td><?php echo $terms ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Monthly Payment:</b></td>
-                                                    <td><?php echo number_format($monthly_payment,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Start Date:</b></td>
-                                                    <td><?php echo $start_date ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="sc" class="sc">
-                                        <div class="titles">Spot Cash</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Amount:</b></td>
-                                                    <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Pay Date:</b></td>
-                                                    <td><?php echo $start_date ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="space1" class="space"></div>
-                                    <div class="view_box" style="padding:20px;">
-                                    <table style="text-align:center;" class="table table-striped">
-                                                        <th style="text-align:center;">ID</th>
-                                                        <th style="text-align:center;">File Name</th>
-                                                        <th style="text-align:center;">Date Uploaded</th>
-                                                        <th style="text-align:center;">Revision Approval</th>
-                                                        <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
-                                                        <th style="text-align:center;">Action</th>
-                                                        <?php endif; ?>
-                                        <?php
-                                           
-                                            $query1 = "SELECT * FROM tbl_attachments WHERE c_csr_no = '".$getID."' ORDER BY date_uploaded DESC";
-
-                                            $results1 = $conn->query($query1);
-
-                                            if($results1) {
-                                                    
-                                                ?>
-                                                
-                                                        <b>Attachments: </b>
-                                                        <?php
-                                                        while($row1 = $results1->fetch_assoc()):
-                                                            
-                                                            ?>
-                                                        
-                                                    
-                                                            <tr>
-                                                            <td style="width:10%;">
-                                                                <div data-id='<?php echo $row1["id"]; ?>'><?php echo $row1["id"]; ?>
-                                                        </td>
-                                                        <td style="width:30%;">
-                                                                <div data-id='<?php echo $row1["id"]; ?>' class="attachment_name btn-link"><?php echo $row1["title"]; ?>
-                                                        </td>
-                                                        <td>
-                                                                <?php echo $row1["date_uploaded"]; ?></div>
-                                                        </td>
-
-                                                        <?php if($row1['approval_status'] == 1): ?>
-                                                            <td><span class="badge badge-success">SM Approved</span></td>
-                                                            <td class="actions">--- </td>
-                                                        <?php else: ?>    
-                                                            <td><span class="badge badge-warning"> Pending </span></td>
-                                                            <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
-                                                                <td class="actions">
-                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs approved-upload">Approved<span class="fa fa-check"></a> 
-                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs" id="delete_upload">Delete<span class="fa fa-trash"></a>
-                                                                </td>
-                                                                <?php endif; ?>
-                                                        <?php endif; ?>
-                                                            </tr>
-                                                        
-
-                                                        <?php endwhile; ?>
-                                                        </table>
-                                                <?php
-                                                
-                                            }
+                                    if($results1) {
+                                            
                                         ?>
                                         
-                                    </div>
-                                <!--     add comment form here  -->
-                                <div class="commentDiv">
-                                    <form  method="POST" id="add_comment">
-                                        <input type="hidden" name="action" value="add_comment">
-                                        <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
-                                        <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
-                                        <div class="title_comment">Comment:</div>
-                                            <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
-                                            <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
-                                    </form>
-                                </div>  
+                                                <b>Attachments: </b>
+                                                <?php
+                                                while($row1 = $results1->fetch_assoc()):
+                                                    
+                                                    ?>
+                                                
+                                            
+                                                    <tr>
+                                                    <td style="width:10%;">
+                                                        <div data-id='<?php echo $row1["id"]; ?>'><?php echo $row1["id"]; ?>
+                                                </td>
+                                                <td style="width:30%;">
+                                                        <div data-id='<?php echo $row1["id"]; ?>' class="attachment_name btn-link"><?php echo $row1["title"]; ?>
+                                                </td>
+                                                <td>
+                                                        <?php echo $row1["date_uploaded"]; ?></div>
+                                                </td>
+
+                                                <?php if($row1['approval_status'] == 1): ?>
+                                                    <td><span class="badge badge-success">SM Approved</span></td>
+                                                    <td class="actions">--- </td>
+                                                <?php else: ?>    
+                                                    <td><span class="badge badge-warning"> Pending </span></td>
+                                                    <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
+                                                        <td class="actions">
+                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs approved-upload">Approved<span class="fa fa-check"></a> 
+                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs" id="delete_upload">Delete<span class="fa fa-trash"></a>
+                                                        </td>
+                                                        <?php endif; ?>
+                                                <?php endif; ?>
+                                                    </tr>
+                                                
+
+                                                <?php endwhile; ?>
+                                                </table>
+                                        <?php
+                                        
+                                    }
+                                ?>
+                                
+                            </div>
+                        <!--     add comment form here  -->
+                        <div class="commentDiv">
+                            <form  method="POST" id="add_comment">
+                                <input type="hidden" name="action" value="add_comment">
+                                <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
+                                <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
+                                <div class="title_comment">Comment:</div>
+                                    <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
+                                    <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
+                            </form>
+                        </div>  
                         <?php
                         // Connect to the database
                         // the query
@@ -1450,8 +1468,89 @@ function showReplyForm(self) {
 
     function loadAll(){
         paymentType();
+        getFlrElev();
+        getAcSubtotal();
+        getAcGrillSubtotal();
+        getServiceSubtotal();
+        getOthersSubtotal();
+        getConvSubtotal();
     }
+
+    function getFlrElev(){
+		if(document.getElementById("id20").checked==true){
+			document.getElementById("flrelev_text").value='0.20';
+		}else if(document.getElementById("id40").checked==true){
+			document.getElementById("flrelev_text").value='0.40';
+		}else if(document.getElementById("id60").checked==true){
+			document.getElementById("flrelev_text").value='0.60';
+		}else{
+			document.getElementById("flrelev_text").value='0';
+		}
+	}
+	function getAcSubtotal(){
+		var ac_unit = document.getElementById('aircon_outlets').value;
+		var ac_unit_price = document.getElementById('aircon_outlet_price').value;
+
+		var res = ac_unit * ac_unit_price;
+
+		document.getElementById('ac_outlet_subtotal').value = res;
+		getAddCost();
+	}
+	function getAcGrillSubtotal(){
+		var ac_grill = document.getElementById('ac_grill').value;
+		var ac_grill_price = document.getElementById('ac_grill_price').value;
+
+		var res = ac_grill * ac_grill_price;
+
+		document.getElementById('ac_grill_subtotal').value = res;
+		getAddCost();
+	}
+	function getServiceSubtotal(){
+		var service = document.getElementById('service_area').value;
+		var service_price = document.getElementById('service_area_price').value;
+
+		var res = service * service_price;
+
+		document.getElementById('service_subtotal').value = res;
+		getAddCost();
+	}
+	function getOthersSubtotal(){
+		var others = document.getElementById('others').value;
+		var others_price = document.getElementById('others_price').value;
+
+		var res = others * others_price;
+
+		document.getElementById('others_subtotal').value = res;
+		getAddCost();
+	}
+	function getConvSubtotal(){
+		var conv = document.getElementById('conv_outlet').value;
+		var conv_price = document.getElementById('conv_outlet_price').value;
+
+		var res = conv * conv_price;
+
+		document.getElementById('conv_outlet_subtotal').value = res;
+		getAddCost();
+	}
+	function getAddCost(){
+		var others = document.getElementById('others_subtotal').value;
+		var service = document.getElementById('service_subtotal').value;
+		var ac_grill1 = document.getElementById('ac_grill_subtotal').value;
+		var ac_outlet = document.getElementById('ac_outlet_subtotal').value;
+		var flr_elev = document.getElementById('flrelev_price').value;
+		var conv_outlet = document.getElementById('conv_outlet_subtotal').value;
+
+		var result = parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(flr_elev)+ parseInt(conv_outlet) + parseInt(ac_grill1);
+
+		document.getElementById('add_cost_total').value = result;
+	}
 </script>
+
+
+
+
+
+
 
 
 
