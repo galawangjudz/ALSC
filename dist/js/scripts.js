@@ -943,14 +943,14 @@ function updateTotals(elem) {
 
 	function compute_rate(){
 		var l_down = $('.down-percent').val();
-		var l_terms = $('.terms-count').val();
+		var l_terms = parseInt($('.terms-count').val());
 		if (l_down == 20){
-			if(l_terms>"0" && l_terms<="60"){
+			if(l_terms>0 && l_terms<=60){
 				l_rate = 15.0
 				$('#interest_rate').val(l_rate);
 
 			}else if(l_terms >60 && l_terms <= 120 ){
-				l_rate = 17.0
+				l_rate = 16.0
 				$('#interest_rate').val(l_rate);
 			}
 			else if(l_terms > 120 ){
@@ -958,7 +958,7 @@ function updateTotals(elem) {
 				$('#interest_rate').val(l_rate);
 			}
 		}else if(l_down == 30){
-			if(l_terms>"0" && l_terms<="60"){
+			if(l_terms>0 && l_terms<=60){
 				l_rate = 14.0
 				$('#interest_rate').val(l_rate);
 
