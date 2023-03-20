@@ -175,6 +175,18 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 
 if($csr->num_rows > 0){
     while ($row = mysqli_fetch_assoc($csr)):
+        $aircon_outlets = $row['aircon_outlets'];
+        $aircon_grill = $row['aircon_grill'];
+        $conv_outlet = $row['conv_outlet'];
+        $service_area = $row['service_area'];
+        $others = $row['others'];
+        $aircon_outlet_price = $row['aircon_outlet_price'];
+        $aircon_grill_price = $row['aircon_grill_price'];
+        $conv_outlet_price = $row['conv_outlet_price'];
+        $service_area_price = $row['service_area_price'];
+        $others_price = $row['others_price'];
+        $floor_elev_price = $row['floor_elev_price'];
+
         $getID = $row['c_csr_no'];
         $csr_no = $row['c_csr_no'];
         $refno = $row['ref_no'];
@@ -498,7 +510,7 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" value="0">
+                                            <input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" value="<?php echo number_format($floor_elev_price,2) ?>">
                                         </div>
                                     </div>
                                     
@@ -511,7 +523,7 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" onchange = "getAcSubtotal();"></label>
+                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="aircon_outlets" name="aircon_outlets" value="<?php echo ($aircon_outlets) ?>" onchange = "getAcSubtotal();"></label>
                                         </div>
                                     </div>
                                     <div class="col-md-1">
@@ -521,12 +533,12 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>" onchange = "getAcSubtotal();">
+                                            <input type="text" class="form-control margin-bottom" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo ($aircon_outlet_price) ?>" onchange = "getAcSubtotal();">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="0" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="<?php echo number_format($ac_outlet_subtotal,2) ?>" readonly>
                                         </div>
                                     </div>
                                 </div>

@@ -1,4 +1,3 @@
-
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -714,250 +713,247 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                 </div>
                             </div>
                         </div>
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div class="titles">Payment Computation</div>
+                            <div class="view_box">
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>TCP Discount: </b></td>
+                                            <td><?php echo $tcp_discount ?>  %</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>TCP Discount Amount: </b></td>
+                                            <td><?php echo number_format($tcp_discount_amt,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total Contract Price: </b></td>
+                                            <td><?php echo number_format($tcp,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>VAT: </b></td>
+                                            <td><?php echo number_format($vat,2) ?></td>
+                                        </tr>
+                                        <!---<tr>
+                                            <td><b>VAT Amount: </b></td>
+                                            <td><?php echo number_format($vat_amt,2) ?></td>
+                                        </tr>!-->
+                                        <tr>
+                                            <td><b>Net TCP: </b></td>
+                                            <td><?php echo number_format($net_tcp,2) ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div class="view_box">
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Reservation: </b></td>
+                                            <td><?php echo number_format($reservation,2) ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div id="space1" class="space"></div>
+                            <div id="pd" class="pd">
+                                <div class="titles">Partial DownPayment</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Down %:</b></td>
+                                            <td><?php echo $down_percent ?>  %</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Net DP:</b></td>
+                                            <td><?php echo number_format($net_dp,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b># of Payments:</b></td>
+                                            <td><?php echo $no_payments ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Monthly Down:</b></td>
+                                            <td><?php echo number_format($monthly_down,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>First DP:</b></td>
+                                            <td><?php echo $first_dp ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Full Down:</b></td>
+                                            <td><?php echo $full_down ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="fdp" class="fdp" >
+                                <div class="titles">Full Down Payment</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Down %:</b></td>
+                                            <td><?php echo $down_percent ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Net DP:</b></td>
+                                            <td><?php echo number_format($net_dp,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Full Down:</b></td>
+                                            <td><?php echo $full_down ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="space1" class="space"></div>
+                            <div id="ma" class="ma">
+                                <div class="titles">Monthly Amortization</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Amount to be Financed:</b></td>
+                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Terms:</b></td>
+                                            <td><?php echo $terms ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Interest Rate:</b></td>
+                                            <td><?php echo $interest_rate ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Fixed Factor:</b></td>
+                                            <td><?php echo $fixed_factor ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Monthly Payment:</b></td>
+                                            <td><?php echo number_format($monthly_payment,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Start Date:</b></td>
+                                            <td><?php echo $start_date ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="space1" class="space"></div>
+                            <div id="dfc" class="dfc">
+                                <div class="titles">Deferred Cash Payment</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Deferred Amount:</b></td>
+                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Terms:</b></td>
+                                            <td><?php echo $terms ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Monthly Payment:</b></td>
+                                            <td><?php echo number_format($monthly_payment,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Start Date:</b></td>
+                                            <td><?php echo $start_date ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="sc" class="sc">
+                                <div class="titles">Spot Cash</div>
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>Amount:</b></td>
+                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Pay Date:</b></td>
+                                            <td><?php echo $start_date ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="space1" class="space"></div>
+                            <div id="space1" class="space"></div>
+                            <div class="view_box" style="padding:20px;">
+                            <table style="text-align:center;" class="table table-striped">
+                                                <th style="text-align:center;">ID</th>
+                                                <th style="text-align:center;">File Name</th>
+                                                <th style="text-align:center;">Date Uploaded</th>
+                                                <th style="text-align:center;">Revision Approval</th>
+                                                <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
+                                                <th style="text-align:center;">Action</th>
+                                                <?php endif; ?>
+                                <?php
+                                    
+                                    $query1 = "SELECT * FROM tbl_attachments WHERE c_csr_no = '".$getID."' ORDER BY date_uploaded DESC";
 
+                                    $results1 = $conn->query($query1);
 
-
-                                    <div class="space"></div>
-                                    <div class="space"></div>
-                                    <div class="titles">Payment Computation</div>
-                                    <div class="view_box">
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>TCP Discount: </b></td>
-                                                    <td><?php echo $tcp_discount ?>  %</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>TCP Discount Amount: </b></td>
-                                                    <td><?php echo number_format($tcp_discount_amt,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Total Contract Price: </b></td>
-                                                    <td><?php echo number_format($tcp,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>VAT: </b></td>
-                                                    <td><?php echo number_format($vat,2) ?></td>
-                                                </tr>
-                                                <!---<tr>
-                                                    <td><b>VAT Amount: </b></td>
-                                                    <td><?php echo number_format($vat_amt,2) ?></td>
-                                                </tr>!-->
-                                                <tr>
-                                                    <td><b>Net TCP: </b></td>
-                                                    <td><?php echo number_format($net_tcp,2) ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="space"></div>
-                                    <div class="space"></div>
-                                    <div class="view_box">
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Reservation: </b></td>
-                                                    <td><?php echo number_format($reservation,2) ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="space"></div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="pd" class="pd">
-                                        <div class="titles">Partial DownPayment</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Down %:</b></td>
-                                                    <td><?php echo $down_percent ?>  %</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Net DP:</b></td>
-                                                    <td><?php echo number_format($net_dp,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b># of Payments:</b></td>
-                                                    <td><?php echo $no_payments ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Monthly Down:</b></td>
-                                                    <td><?php echo number_format($monthly_down,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>First DP:</b></td>
-                                                    <td><?php echo $first_dp ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Full Down:</b></td>
-                                                    <td><?php echo $full_down ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="fdp" class="fdp" >
-                                        <div class="titles">Full Down Payment</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Down %:</b></td>
-                                                    <td><?php echo $down_percent ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Net DP:</b></td>
-                                                    <td><?php echo number_format($net_dp,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Full Down:</b></td>
-                                                    <td><?php echo $full_down ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="ma" class="ma">
-                                        <div class="titles">Monthly Amortization</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Amount to be Financed:</b></td>
-                                                    <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Terms:</b></td>
-                                                    <td><?php echo $terms ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Interest Rate:</b></td>
-                                                    <td><?php echo $interest_rate ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Fixed Factor:</b></td>
-                                                    <td><?php echo $fixed_factor ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Monthly Payment:</b></td>
-                                                    <td><?php echo number_format($monthly_payment,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Start Date:</b></td>
-                                                    <td><?php echo $start_date ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="dfc" class="dfc">
-                                        <div class="titles">Deferred Cash Payment</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Deferred Amount:</b></td>
-                                                    <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Terms:</b></td>
-                                                    <td><?php echo $terms ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Monthly Payment:</b></td>
-                                                    <td><?php echo number_format($monthly_payment,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Start Date:</b></td>
-                                                    <td><?php echo $start_date ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="sc" class="sc">
-                                        <div class="titles">Spot Cash</div>
-                                        <div class="float-left col-md-12">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td><b>Amount:</b></td>
-                                                    <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Pay Date:</b></td>
-                                                    <td><?php echo $start_date ?></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div id="space1" class="space"></div>
-                                    <div id="space1" class="space"></div>
-                                    <div class="view_box" style="padding:20px;">
-                                    <table style="text-align:center;" class="table table-striped">
-                                                        <th style="text-align:center;">ID</th>
-                                                        <th style="text-align:center;">File Name</th>
-                                                        <th style="text-align:center;">Date Uploaded</th>
-                                                        <th style="text-align:center;">Revision Approval</th>
-                                                        <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
-                                                        <th style="text-align:center;">Action</th>
-                                                        <?php endif; ?>
-                                        <?php
-                                           
-                                            $query1 = "SELECT * FROM tbl_attachments WHERE c_csr_no = '".$getID."' ORDER BY date_uploaded DESC";
-
-                                            $results1 = $conn->query($query1);
-
-                                            if($results1) {
-                                                    
-                                                ?>
-                                                
-                                                        <b>Attachments: </b>
-                                                        <?php
-                                                        while($row1 = $results1->fetch_assoc()):
-                                                            
-                                                            ?>
-                                                        
-                                                    
-                                                            <tr>
-                                                            <td style="width:10%;">
-                                                                <div data-id='<?php echo $row1["id"]; ?>'><?php echo $row1["id"]; ?>
-                                                        </td>
-                                                        <td style="width:30%;">
-                                                                <div data-id='<?php echo $row1["id"]; ?>' class="attachment_name btn-link"><?php echo $row1["title"]; ?>
-                                                        </td>
-                                                        <td>
-                                                                <?php echo $row1["date_uploaded"]; ?></div>
-                                                        </td>
-
-                                                        <?php if($row1['approval_status'] == 1): ?>
-                                                            <td><span class="badge badge-success">SM Approved</span></td>
-                                                            <td class="actions">--- </td>
-                                                        <?php else: ?>    
-                                                            <td><span class="badge badge-warning"> Pending </span></td>
-                                                            <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
-                                                                <td class="actions">
-                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs approved-upload">Approved<span class="fa fa-check"></a> 
-                                                                <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs" id="delete_upload">Delete<span class="fa fa-trash"></a>
-                                                                </td>
-                                                                <?php endif; ?>
-                                                        <?php endif; ?>
-                                                            </tr>
-                                                        
-
-                                                        <?php endwhile; ?>
-                                                        </table>
-                                                <?php
-                                                
-                                            }
+                                    if($results1) {
+                                            
                                         ?>
                                         
-                                    </div>
-                                <!--     add comment form here  -->
-                                <div class="commentDiv">
-                                    <form  method="POST" id="add_comment">
-                                        <input type="hidden" name="action" value="add_comment">
-                                        <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
-                                        <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
-                                        <div class="title_comment">Comment:</div>
-                                            <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
-                                            <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
-                                    </form>
-                                </div>  
+                                                <b>Attachments: </b>
+                                                <?php
+                                                while($row1 = $results1->fetch_assoc()):
+                                                    
+                                                    ?>
+                                                
+                                            
+                                                    <tr>
+                                                    <td style="width:10%;">
+                                                        <div data-id='<?php echo $row1["id"]; ?>'><?php echo $row1["id"]; ?>
+                                                </td>
+                                                <td style="width:30%;">
+                                                        <div data-id='<?php echo $row1["id"]; ?>' class="attachment_name btn-link"><?php echo $row1["title"]; ?>
+                                                </td>
+                                                <td>
+                                                        <?php echo $row1["date_uploaded"]; ?></div>
+                                                </td>
+
+                                                <?php if($row1['approval_status'] == 1): ?>
+                                                    <td><span class="badge badge-success">SM Approved</span></td>
+                                                    <td class="actions">--- </td>
+                                                <?php else: ?>    
+                                                    <td><span class="badge badge-warning"> Pending </span></td>
+                                                    <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
+                                                        <td class="actions">
+                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs approved-upload">Approved<span class="fa fa-check"></a> 
+                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs" id="delete_upload">Delete<span class="fa fa-trash"></a>
+                                                        </td>
+                                                        <?php endif; ?>
+                                                <?php endif; ?>
+                                                    </tr>
+                                                
+
+                                                <?php endwhile; ?>
+                                                </table>
+                                        <?php
+                                        
+                                    }
+                                ?>
+                                
+                            </div>
+                        <!--     add comment form here  -->
+                        <div class="commentDiv">
+                            <form  method="POST" id="add_comment">
+                                <input type="hidden" name="action" value="add_comment">
+                                <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
+                                <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
+                                <div class="title_comment">Comment:</div>
+                                    <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
+                                    <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
+                            </form>
+                        </div>  
                         <?php
                         // Connect to the database
                         // the query
@@ -1549,3 +1545,12 @@ function showReplyForm(self) {
 		document.getElementById('add_cost_total').value = result;
 	}
 </script>
+
+
+
+
+
+
+
+
+
