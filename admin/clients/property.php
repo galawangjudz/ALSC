@@ -107,12 +107,15 @@ color: white;
         </table>
 
         <hr>
+
+            
        
         <ul class="tabs">
         <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
         <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
         <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
         <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
+        <li class="tab-link" data-tab="tab-5"><b>Payment Overdue</b></li>
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
@@ -278,6 +281,48 @@ color: white;
      
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
             <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+          
+              <?php
+               
+                // Check if the form has been submitted
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                // Get the value of the pay_date_input field
+                  $pay_date = $_POST['pay_date_input'];
+                 
+                } else{
+                  $pay_date = date('Y-m-d H:i:s');
+                }
+
+                
+                include 'payment_schedule.php'; 
+                //include 'payment_record.php';
+                $id = $_GET['id'];   
+                $all_payments = load_data($id,$pay_date); 
+
+                ?>
+
+              <label class="control-label">Pay Date: </label>
+              <input type="date" name="pay_date_input" id="pay_date_input">
+              <button id="set_pay_date_button">Set Pay Date</button>
+              <script>
+              // Get the button element
+              var set_pay_date_button = document.getElementById('set_pay_date_button');
+
+              // Listen for clicks on the button
+              set_pay_date_button.addEventListener('click', function() {
+                // Get the value of the pay_date_input field
+              var pay_date_input = document.getElementById('pay_date_input');
+              var pay_date = pay_date_input.value;
+
+              // Set the value of the pay_date variable to the value of the pay_date_input field
+              $pay_date = pay_date_input.value;
+
+              // Do something with the pay_date variable
+              console.log($pay_date);
+              });
+              </script>           
+						 <!--  <input type="date" class="form-control pay-date required" name="pay_date" value="<?php echo date('Y-m-d'); ?>"> -->
+            
               <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
             </div>
               <table class="table2 table-bordered table-stripped">
@@ -298,12 +343,7 @@ color: white;
                   </thead>
                 <tbody>
               
-                    <?php 
-                    //include 'payment_schedule.php';
-                    include 'payment_record.php';
-                    $id = $_GET['id'];   
-                    $all_payments = load_data($id); 
-
+                   <?php 
                     foreach ($all_payments as $l_data): ?>
                       <tr>
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[0] ?></td> 
@@ -322,6 +362,9 @@ color: white;
                 </tbody>
               </table>
             </div>
+
+        
+          
         </div>
     </div>
 </div>

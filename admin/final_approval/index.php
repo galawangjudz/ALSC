@@ -115,9 +115,9 @@
                     <th>Location </th>
                     <th>Buyer Name </th>
                     <th>CFO Status</th>
-					<?php if ($usertype == "IT Admin" || $usertype == 'CFO'): ?>	
+					
                     <th>Actions</th>
-					<?php endif; ?>
+					
 					</tr>
 				</thead>
 				<tbody>

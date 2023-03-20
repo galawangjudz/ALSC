@@ -943,14 +943,14 @@ function updateTotals(elem) {
 
 	function compute_rate(){
 		var l_down = $('.down-percent').val();
-		var l_terms = $('.terms-count').val();
+		var l_terms = parseInt($('.terms-count').val());
 		if (l_down == 20){
-			if(l_terms>"0" && l_terms<="60"){
+			if(l_terms>0 && l_terms<=60){
 				l_rate = 15.0
 				$('#interest_rate').val(l_rate);
 
 			}else if(l_terms >60 && l_terms <= 120 ){
-				l_rate = 17.0
+				l_rate = 16.0
 				$('#interest_rate').val(l_rate);
 			}
 			else if(l_terms > 120 ){
@@ -958,7 +958,7 @@ function updateTotals(elem) {
 				$('#interest_rate').val(l_rate);
 			}
 		}else if(l_down == 30){
-			if(l_terms>"0" && l_terms<="60"){
+			if(l_terms>0 && l_terms<=60){
 				l_rate = 14.0
 				$('#interest_rate').val(l_rate);
 
@@ -1028,111 +1028,7 @@ function updateTotals(elem) {
 
 	}
 
-	function actionSaveRes(){
-
-		var errorCounter = validateForm();
-
-		if (errorCounter > 0) {
-		    $("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-		    $("#response .message").html("<strong>Error</strong>: It appear's you have forgotten to complete something!");
-		    $("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-		} else {
-
-			var $btn = $("#action_save_reservation").button("loading");
-
-			$(".required").parent().removeClass("has-error");
-			$("#save_reservation").find(':input:disabled').removeAttr('disabled');
-
-			$.ajax({
-
-				url: 'response.php',
-				type: 'POST',
-				data: $("#save_reservation").serialize(),
-				dataType: 'json',
-				success: function(data){
-					$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-					$("#response").removeClass("alert-warning").addClass("alert-success").fadeIn();
-					$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-					$("#save_reservation").remove();
-					setInterval(redirectToRaList,2000);
-					$btn.button("reset");
-					
-				},
-				error: function(data){
-					$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-					$("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-					$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-					$btn.button("reset");
-				} 
-
-			});
-		}
-
-
-	}
-
-
-	function deleteReservation(raId) {
-
-        jQuery.ajax({
-
-        	url: 'response.php',
-            type: 'POST', 
-            data: raId,
-            dataType: 'json', 
-            success: function(data){
-				$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-				$("#response").removeClass("alert-warning").addClass("alert-success").fadeIn();
-				$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-				$btn.button("reset");
-			},
-			error: function(data){
-				$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-				$("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-				$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-				$btn.button("reset");
-			} 
-    	});
-
-   	}
-
-
-
-
-	function updateRes() {
-
 	
-		var $btn = $("#action_update_reservation").button("loading");
-   		$("#update_reservation").find(':input:disabled').removeAttr('disabled');
-		//setTimeout(function() {
-        jQuery.ajax({
-
-        	url: 'response.php',
-            type: 'POST', 
-            data: $("#update_reservation").serialize(),
-            dataType: 'json', 
-            success: function(data){
-				//setInterval(function() {
-					$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-					$("#response").removeClass("alert-warning").addClass("alert-success").fadeIn();
-					$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-					$btn.button("reset");
-					setInterval('location.reload()', 4000);
-					//},500);
-			},
-			error: function(data){
-				$("#response .message").html("<strong>" + data.status + "</strong>: " + data.message);
-				$("#response").removeClass("alert-success").addClass("alert-warning").fadeIn();
-				$("html, body").animate({ scrollTop: $('#response').offset().top }, 1000);
-				$btn.button("reset");
-			} 
-    	});
-		//}, 1000); //interval
-
-   	}
-
-
-   
    	function validateForm() {
 	    // error handling
 	    var errorCounter = 0;

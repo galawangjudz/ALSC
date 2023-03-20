@@ -4,7 +4,7 @@
 </script>
 <?php endif;?>
 <?php 
-
+$username = $_settings->userdata('username');
 if(isset($_GET['id'])){
 $client = $mysqli->query("SELECT * FROM t_buyer_info where id =".$_GET['id']);
 foreach($client->fetch_array() as $k =>$v){
@@ -34,6 +34,9 @@ foreach($client->fetch_array() as $k =>$v){
 <div class="container-fluid">
 	<form action="" id="manage-client">
         <input type="hidden" name="id" value="<?php echo isset($meta['id']) ? $meta['id']: '' ?>">
+       
+        <input type="hidden" name="username" value="<?php echo $username ?>">
+      
         <div class="panel panel-default">
             <div class="panel-body form-group form-group-sm">
                <!--  <div class="main_box"> -->
@@ -166,7 +169,8 @@ foreach($client->fetch_array() as $k =>$v){
                   
                 </div>
             </div>
-
+                
+                
 	</form>
 </div>
     <div class="card-footer">
