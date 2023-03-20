@@ -232,6 +232,8 @@ Class Master extends DBConnection {
 			$h_price_per_sqm = $_POST['h_price_per_sqm'];
 			$house_disc = $_POST['house_disc'];
 			$house_disc_amt = $_POST['house_disc_amt'];
+			$process_fee = $_POST['process_fee'];
+			$pf_month = $_POST['pf_month'];
 			$total_tcp = $_POST['total_tcp'];
 			$tcp_disc = $_POST['tcp_disc'];
 			$tcp_disc_amt = $_POST['tcp_disc_amt'];
@@ -255,7 +257,7 @@ Class Master extends DBConnection {
 			$monthly_amortization = $_POST['monthly_amortization'];
 			$start_date = $_POST['start_date'];
 			$invoice_notes = $_POST['invoice_notes'];
-			$type = $_POST['type_text'];
+			$type = $_POST['chkOption3'];
 
 			$data = " c_lot_lid = '$lot_lid' ";
 			
@@ -269,6 +271,8 @@ Class Master extends DBConnection {
 			$data .= ", c_house_price_sqm= '$h_price_per_sqm' ";
 			$data .= ", c_house_discount = '$house_disc' ";
 			$data .= ", c_house_discount_amt = '$house_disc_amt' ";
+			$data .= ", c_processing_fee = '$process_fee' ";
+			$data .= ", pf_mo = '$pf_month' ";
 			$data .= ", c_tcp_discount = '$tcp_disc' ";
 			$data .= ", c_tcp_discount_amt = '$tcp_disc_amt' ";
 			$data .= ", c_tcp = '$total_tcp' ";
@@ -313,7 +317,7 @@ Class Master extends DBConnection {
 			$service_area = $_POST['service_area'];
 			$others = $_POST['others'];
 			$conv_outlet = $_POST['conv_outlet'];
-			$flr_elev = $_POST['flrelev_text'];
+			$flr_elev = $_POST['chkOption4'];
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
@@ -428,6 +432,8 @@ Class Master extends DBConnection {
 			$h_price_per_sqm = $_POST['h_price_per_sqm'];
 			$house_disc = $_POST['house_disc'];
 			$house_disc_amt = $_POST['house_disc_amt'];
+			$process_fee = $_POST['process_fee'];
+			$pf_month = $_POST['pf_month'];
 			$total_tcp = $_POST['total_tcp'];
 			$tcp_disc = $_POST['tcp_disc'];
 			$tcp_disc_amt = $_POST['tcp_disc_amt'];
@@ -466,8 +472,10 @@ Class Master extends DBConnection {
 			$monthly_amortization = $_POST['monthly_amortization'];
 			$start_date = $_POST['start_date'];
 			$invoice_notes = $_POST['invoice_notes'];
+			$type = $_POST['chkOption3'];
 
 			$data = " c_lot_lid = '$lot_lid' ";
+			$data .= ", c_type = '$type' ";
 			$data .= ", c_lot_area = '$lot_area' ";
 			$data .= ", c_price_sqm = '$price_sqm' ";
 			$data .= ", c_lot_discount= '$lot_disc' ";
@@ -477,6 +485,8 @@ Class Master extends DBConnection {
 			$data .= ", c_house_price_sqm= '$h_price_per_sqm' ";
 			$data .= ", c_house_discount = '$house_disc' ";
 			$data .= ", c_house_discount_amt = '$house_disc_amt' ";
+			$data .= ", c_processing_fee = '$process_fee' ";
+			$data .= ", pf_mo = '$pf_month' ";
 			$data .= ", c_tcp_discount = '$tcp_disc' ";
 			$data .= ", c_tcp_discount_amt = '$tcp_disc_amt' ";
 			$data .= ", c_tcp = '$total_tcp' ";
@@ -507,13 +517,16 @@ Class Master extends DBConnection {
 			$service_area = $_POST['service_area'];
 			$others = $_POST['others'];
 			$conv_outlet = $_POST['conv_outlet'];
-			$flr_elev = $_POST['flrelev_text'];
+			$flr_elev = $_POST['chkOption4'];
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
 			$flr_elev_price = $_POST['flrelev_price'];
 			$conv_outlet_price = $_POST['conv_outlet_price'];
 			$others_price = $_POST['others_price'];
+
+			
+
 
 			$data2 = " aircon_outlets = '$ac_outlets' ";
 			$data2 .= ", aircon_grill = '$ac_grill' ";
@@ -662,6 +675,7 @@ Class Master extends DBConnection {
 		$data .= ", citizenship = '$citizenship' ";
 		$data .= ", email = '$customer_email' ";
 		$data .= ", contact_no = '$contact_no' ";
+		$data .= ", c_created_by = '$username' ";
 
 		
 		$check = $this->conn->query("SELECT * FROM `t_buyer_info` where `last_name` = '{$customer_last_name}' and

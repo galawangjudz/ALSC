@@ -15,6 +15,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		while($row = $csr->fetch_assoc()):
 			$c_csr_no =  $row['c_csr_no'];
 			$lot_id = $row['c_lot_lid'];
+			$csr_type = $row['c_type'];
 			$lot_area = $row['c_lot_area'];
 			$price_sqm = $row['c_price_sqm'];
 			$lot_discount = $row['c_lot_discount'];
@@ -879,35 +880,43 @@ input{
 									<div class="lot_box" style="width:100%;padding-top:10px;height:45px;"><div class="type-title" style="margin-left:60px;"><b>Type: </b></div>
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
-											<input id="lotonly" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										<label>
+											
+											<input type="radio" name="chkOption3" value="1" <?php echo isset($csr_type)&&$csr_type == 1 ? 'checked' : ''; ?>>
+											<!-- 	Lot Only -->
+										</label>
+											<!-- <input id="lotonly" type="radio" name="chkOption3" onchange="getCtype(this);"/> -->
 										</div>
 										<div style="float:left">
 											<label class="light" style="font-weight:normal;">Lot Only<label>
 										</div>
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
-											<input id="houseonly" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+											<!-- <input id="houseonly" type="radio" name="chkOption3" onchange="getCtype(this);"/> -->
+											<input type="radio" name="chkOption3" value="2" <?php echo isset($csr_type)&&$csr_type == 2 ? 'checked' : ''; ?>>
 										</div>
 										<div style="float:left">
 											<label class="light" style="font-weight:normal;">House Only<label>
 										</div>
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
-											<input id="packaged" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+										<input type="radio" name="chkOption3" value="3" <?php echo isset($csr_type)&&$csr_type == 3 ? 'checked' : ''; ?>>
+											<!-- <input id="packaged" type="radio" name="chkOption3" onchange="getCtype(this);"/> -->
 										</div>
 										<div style="float:left">
 											<label class="light" style="font-weight:normal;">Packaged<label>
 										</div>
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
-											<input id="fence" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+											<input type="radio" name="chkOption3" value="4" <?php echo isset($csr_type)&&$csr_type == 4 ? 'checked' : ''; ?>>
+											<!-- <input id="fence" type="radio" name="chkOption3" onchange="getCtype(this);"/> -->
 										</div>
 										<div style="float:left">
 											<label class="light" style="font-weight:normal;">Fence<label>
 										</div>
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
-											<input id="add_cost" type="radio" name="chkOption3" onchange="getCtype(this);"/>
+											<input type="radio" name="chkOption3" value="5" <?php echo isset($csr_type)&&$csr_type == 5 ? 'checked' : ''; ?>>
 										</div>
 										<div style="float:left">
 											<label class="light" style="font-weight:normal;">Add Cost<label>
@@ -1094,11 +1103,15 @@ input{
 										</div>
 										<div class="col-md-4" >
 											<div class="form-group">
-												<input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												
+												<!-- <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+												<input id="id20" type="radio" name="chkOption4" value="1" <?php echo isset($c_floor)&&$c_floor == 1 ? 'checked' : ''; ?>/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input id="id40" type="radio" name="chkOption4" value="2" <?php echo isset($c_floor)&&$c_floor == 2 ? 'checked' : ''; ?>/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input id="id60" type="radio" name="chkOption4" value="3" <?php echo isset($c_floor)&&$c_floor ==  3 ? 'checked' : ''; ?>/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											</div>
-												<input type="hidden" name="flrelev_text" id="flrelev_text" value="<?php echo isset($c_floor) ? $c_floor : 0; ?>" onchange="getFlrElev(this);"/>
+												<!-- <input type="hidden" name="flrelev_text" id="flrelev_text" value="<?php echo isset($c_floor) ? $c_floor : 0; ?>" onchange="getFlrElev(this);"/> -->
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
