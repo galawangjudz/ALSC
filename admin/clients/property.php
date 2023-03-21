@@ -280,48 +280,25 @@ color: white;
             </div>
      
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
-            <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+              <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
           
               <?php
-               
-                // Check if the form has been submitted
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                // Get the value of the pay_date_input field
-                  $pay_date = $_POST['pay_date_input'];
-                 
-                } else{
-                  $pay_date = date('Y-m-d H:i:s');
-                }
-
-                
-                include 'payment_schedule.php'; 
+                      
+                //include 'payment_schedule.php'; 
                 //include 'payment_record.php';
-                $id = $_GET['id'];   
-                $all_payments = load_data($id,$pay_date); 
+               // $id = $_GET['id'];
+               //$pay_date =   date('Y-m-d');
+                //$all_payments = load_data($id,$pay_date); 
 
                 ?>
-
+              <form method="" id="set-paydate">
               <label class="control-label">Pay Date: </label>
-              <input type="date" name="pay_date_input" id="pay_date_input">
-              <button id="set_pay_date_button">Set Pay Date</button>
-              <script>
-              // Get the button element
-              var set_pay_date_button = document.getElementById('set_pay_date_button');
+              <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
+                 
+              <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
+              <a class="btn btn-success btn-s set_pay_date_button">Set</a>
+              </form>
 
-              // Listen for clicks on the button
-              set_pay_date_button.addEventListener('click', function() {
-                // Get the value of the pay_date_input field
-              var pay_date_input = document.getElementById('pay_date_input');
-              var pay_date = pay_date_input.value;
-
-              // Set the value of the pay_date variable to the value of the pay_date_input field
-              $pay_date = pay_date_input.value;
-
-              // Do something with the pay_date variable
-              console.log($pay_date);
-              });
-              </script>           
-						 <!--  <input type="date" class="form-control pay-date required" name="pay_date" value="<?php echo date('Y-m-d'); ?>"> -->
             
               <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
             </div>
@@ -376,50 +353,7 @@ $(document).ready(function() {
 			{"ordering":false}
 		);
 
-  // $('#print_payment').submit(function(e){
-  //     e.preventDefault();
-  //     var _this = $(this)
-  //     $('.err-msg').remove();
-  //     start_loader();
-  //     $.ajax({
-  //         url:_base_url_+"classes/Master.php?f=print_payment",
-  //         data: new FormData($(this)[0]),
-  //         cache: false,
-  //         contentType: false,
-  //         processData: false,
-  //         method: 'POST',
-  //         type: 'POST',
-  //         dataType: 'json',
-  //         error:err=>{
-  //             console.log(err)
-  //             alert_toast("An error occured",'error');
-  //             end_loader();
-  //         },
-  //         success:function(resp){
-  //             if(typeof resp =='object' && resp.status == 'success'){
-  //                 var nw = window.open("./clients/print.php?id="+resp.id,"_blank","width=700,height=500")
-  //       setTimeout(()=>{
-  //         nw.print()
-  //         setTimeout(()=>{
-  //           nw.close()
-  //           end_loader();
-  //           location.replace('./?page=clients/ca-view&id='+resp.id_encrypt)
-  //         },500)
-  //       },500)
-  //             }else if(resp.status == 'failed' && !!resp.msg){
-  //                 var el = $('<div>')
-  //                     el.addClass("alert alert-danger err-msg").text(resp.msg)
-  //                     _this.prepend(el)
-  //                     el.show('slow')
-  //                     end_loader()
-  //             }else{
-  //                 alert_toast("An error occured",'error');
-  //                 end_loader();
-  //                 console.log(resp)
-  //             }
-  //         }
-  //     })
-  // })
+
 
   $('.view_data').click(function(){
 		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
@@ -434,9 +368,21 @@ $(document).ready(function() {
 
 	})
 
+
+  $('.set_pay_date_button').click(function(){
+		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
+    var payDateInput = document.getElementById("pay_date_input");
+    var setPayDateButton = document.querySelector(".set_pay_date_button");
+    setPayDateButton.setAttribute("data-date", payDateInput.value);
+	  uni_modal("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date'),"large")
+
+	})
+
   $('#data-table').dataTable({
 
   }); 
+
+  
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');
@@ -448,4 +394,6 @@ $(document).ready(function() {
     $("#"+tab_id).addClass('current');
   })
 });
+
+
 </script>

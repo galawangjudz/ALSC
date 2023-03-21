@@ -1,5 +1,6 @@
 
 <?php
+  
     function is_leap_year($year) {
       return date('L', strtotime("$year-01-01"));
     }
@@ -136,7 +137,7 @@
    
 
 
-    function load_data($id){
+    function load_data($id,$pay_date){
             $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
             if (!$conn) {
                 die('Could not connect to database: ' . mysqli_connect_error());
@@ -172,10 +173,10 @@
             
                 $last_day = 0;
                 $l_x = $l_ma_terms - 1;
-                $end = new DateTime($l_start_date);
-                 $end->modify("+{$l_x} month");
-                $l_pay_date_val = $end->format('Y-m-d'); 
-                /* $l_pay_date_val = '2023-12-31'; */
+                $end = new DateTime($pay_date);
+                /* $end->modify("+{$l_x} month"); */
+                $l_pay_date_val = $end->format('Y-m-d');
+                //$l_pay_date_val = '2023-12-31';
         
 
                 endwhile;
