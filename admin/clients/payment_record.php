@@ -884,8 +884,7 @@
         
             endwhile;	
 
-  return $all_payments;  
-
+  return array($all_payments, number_format($l_tot_amnt_due,2), number_format($l_tot_interest,2), number_format($l_tot_principal,2), number_format($l_tot_surcharge,2));      
 
 
 

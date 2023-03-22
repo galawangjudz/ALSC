@@ -288,6 +288,11 @@ color: white;
                 include 'payment_record.php';
                 $id = $_GET['id'];
                 $all_payments = load_data($id); 
+                $over_due    = $all_payments[0];
+                $total_amt_due = $all_payments[1];
+                $total_interest =  $all_payments[2];
+                $total_principal = $all_payments[3];
+                $total_surcharge = $all_payments[4];
 
                 ?>
             
@@ -312,7 +317,7 @@ color: white;
                 <tbody>
               
                    <?php 
-                    foreach ($all_payments as $l_data): ?>
+                    foreach ($over_due as $l_data): ?>
                       <tr>
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[0] ?></td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[1] ?></td> 
