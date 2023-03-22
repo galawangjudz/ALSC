@@ -59,7 +59,7 @@ if(isset($_GET['id'])){
         
         }
     $pay_date = $_GET['paydate'];
-    echo $pay_date;
+    
         
     }
 ?>
@@ -92,8 +92,14 @@ if(isset($_GET['id'])){
     </form> -->
 
     
-    <?php $all_payments = load_data($prop_id, $pay_date); ?>
-
+    <?php $all_payments = load_data($prop_id, $pay_date);
+           $over_due    = $all_payments[0];
+           $total_amt_due = $all_payments[1];
+           $total_interest =  $all_payments[2];
+           $total_principal = $all_payments[3];
+           $total_surcharge = $all_payments[4];  ?>
+    <label class="control-label"> Over Due Date: <?php echo $pay_date; ?> </label>
+    <a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
     <table class="table2 table-bordered table-stripped">
                   <thead> 
                       <tr>
@@ -113,7 +119,7 @@ if(isset($_GET['id'])){
                 <tbody>
               
                    <?php 
-                    foreach ($all_payments as $l_data): ?>
+                    foreach ($over_due as $l_data): ?>
                       <tr>
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[0] ?></td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[1] ?></td> 
@@ -130,6 +136,28 @@ if(isset($_GET['id'])){
                       <?php endforeach; ?>
                 </tbody>
               </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">         
+        
+                         
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                       <label>Total Principal: </label>
+                       <input type="text" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
+                       <label>Total Surcharge: </label>
+                       <input type="text" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
+                       <label>Total Interest: </label>
+                       <input type="text" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
+                       <label>Total Amount Due: </label>
+                       <input type="text" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
+                    </div>
+                </div>
+            </div>     
+            
+  
     </div>
 	</div>
 </div>

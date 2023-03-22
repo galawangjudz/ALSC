@@ -120,23 +120,6 @@
       }
 
 
-   /*  function add($date_str, $months)
-      {
-        $date = new DateTime($date_str);
-        $start_day = $date->format('j');
-    
-        $date->modify("+{$months} month");
-    
-        $end_day = $date->format('j');
-    
-        if ($start_day != $end_day)
-            $date->modify('last day of last month');
-    
-        return $date;
-      } */
-   
-
-
     function load_data($id,$pay_date){
             $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
             if (!$conn) {
@@ -258,7 +241,6 @@
                 $t_due_date = $t_due_date->format('m/d/y');
                 $l_data = array($t_due_date,"----------",'******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
                 array_push($all_payments, $l_data);
-
                 return $all_payments;
             }
 
@@ -837,6 +819,7 @@
                           $total_principal_ent = ($l_tot_principal);
                           $total_surcharge_ent = ($l_tot_surcharge);
                           $total_interest_ent = ($l_tot_interest);
+                          return;
                 }
                 $l_pay_date_value = new Datetime($l_pay_date_val);
                 //echo $l_pay_date_val;
@@ -860,11 +843,11 @@
                 $l_data = array($t_due_date,"----------","******",'0.00',$l_amt_due,$l_interest,$l_principal,$l_surcharge,$l_rebate,$l_status,$l_new_bal);
                 
                 array_push($all_payments, $l_data);
-        
-                $l_tot_amnt_due += floatval($l_amt_due);
-                $l_tot_surcharge += floatval($l_surcharge);
-                $l_tot_principal += floatval($l_principal);
-                $l_tot_interest += floatval($l_interest);
+               
+                $l_tot_amnt_due += floatval(str_replace(',', '',$l_amt_due));
+                $l_tot_surcharge += floatval(str_replace(',', '',$l_surcharge));
+                $l_tot_principal += floatval(str_replace(',', '',$l_principal));
+                $l_tot_interest += floatval(str_replace(',', '',$l_interest));
                 $l_interest = 0.00;
                 $l_surcharge = 0.00;
                 $l_rebate = 0.00;
@@ -872,8 +855,8 @@
           
                 
                 $l_last_due_date =  $t_due_date;
-                $l_last_amt_paid = floatval($l_amt_due);
-                $l_last_amt_due = floatval($l_amt_due);
+                $l_last_amt_paid = floatval(str_replace(',', '',$l_amt_due));
+                $l_last_amt_due = floatval(str_replace(',', '',$l_amt_due));
                 $l_last_status = $l_status;
                 $l_last_stat_cnt = $l_count;
 
@@ -897,7 +880,7 @@
             
                 endwhile;	
 
-      return $all_payments;      
+      return array($all_payments, number_format($l_tot_amnt_due,2), number_format($l_tot_interest,2), number_format($l_tot_principal,2), number_format($l_tot_surcharge,2));      
 
 
 

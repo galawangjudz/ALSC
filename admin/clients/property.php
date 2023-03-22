@@ -285,20 +285,11 @@ color: white;
               <?php
                       
                 //include 'payment_schedule.php'; 
-                //include 'payment_record.php';
-               // $id = $_GET['id'];
-               //$pay_date =   date('Y-m-d');
-                //$all_payments = load_data($id,$pay_date); 
+                include 'payment_record.php';
+                $id = $_GET['id'];
+                $all_payments = load_data($id); 
 
                 ?>
-              <form method="" id="set-paydate">
-              <label class="control-label">Pay Date: </label>
-              <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
-                 
-              <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
-              <a class="btn btn-success btn-s set_pay_date_button">Set</a>
-              </form>
-
             
               <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
             </div>
@@ -340,8 +331,16 @@ color: white;
               </table>
             </div>
 
-        
-          
+            <div id="tab-5" class="tab-content" style="border:solid 1px gainsboro;">
+             
+                <form method="" id="set-paydate">
+                    <label class="control-label">Pay Date: </label>
+                    <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
+                    <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
+                </form>
+  
+              
+            </div>
         </div>
     </div>
 </div>
@@ -372,9 +371,9 @@ $(document).ready(function() {
   $('.set_pay_date_button').click(function(){
 		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
     var payDateInput = document.getElementById("pay_date_input");
-    var setPayDateButton = document.querySelector(".set_pay_date_button");
+    var setPayDateButton = document.querySelector(".set_pay_date_button");  
     setPayDateButton.setAttribute("data-date", payDateInput.value);
-	  uni_modal("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date'),"large")
+	  uni_modal_right("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date'),"large")
 
 	})
 

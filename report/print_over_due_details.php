@@ -179,13 +179,19 @@
                                 <tbody>
                             
                                     <?php 
-                                    //include '../admin/clients/payment_schedule.php';
-                                    include '../admin/clients/payment_record.php';
+                                    include '../admin/clients/payment_schedule.php';
+                                    //include '../admin/clients/payment_record.php';
                                     //include 'payment_record.php';
-                                    $id = $_GET['id'];   
-                                    $all_payments = load_data($id); 
+                                    $id = $_GET['id'];
+                                    $pay_date = $_GET['date'];     
+                                    $all_payments = load_data($id, $pay_date);
+                                    $over_due    = $all_payments[0];
+                                    $total_amt_due = $all_payments[1];
+                                    $total_interest =  $all_payments[2];
+                                    $total_principal = $all_payments[3];
+                                    $total_surcharge = $all_payments[4]; 
 
-                                    foreach ($all_payments as $l_data): ?>
+                                    foreach ($over_due as $l_data): ?>
                                     
 
                                     <tr>
@@ -224,42 +230,25 @@
                                     </thead>
                                     <tr>
                                         <td style="width:15%;">
-                                            <?php 
-                                                $qry4 =mysqli_query($conn, "SELECT sum(amount_due) as amount_due FROM property_payments where `status` NOT LIKE '%MA%' and md5(property_id) = '{$_GET['id']}'"); 
-                                                while($rows = mysqli_fetch_array($qry4)){?>
-                                                    <?php echo number_format($rows['amount_due'],2);?>
-                                                <?php
-                                                }   
-                                            ?>
+                                            <?php echo $total_amt_due; ?>
                                         </td>
                                         <td style="width:15%;">
-                                            <?php $qry1 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
-                                                $row1 = $qry1->fetch_assoc();
-                                                $interest = $row1['interest'];
-                                                $principal = $row1['principal'];
-                                                $res = (int) $interest + (int) $principal; ?>
-                                                <?php echo number_format($res,2);?>
+                                        
+                                            <?php 
+                                            $basic_amt = floatval(str_replace(',', '',$total_interest)) + floatval(str_replace(',', '',$total_principal));;
+                                            echo number_format($basic_amt,2);?>
                                         </td>
                                         <td style="width:15%;">
-                                            <?php 
-                                                $qry4 =mysqli_query($conn, "SELECT sum(surcharge) as surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
-                                                while($rows = mysqli_fetch_array($qry4)){?>
-                                                    <?php echo number_format($rows['surcharge'],2);?>
-                                                <?php
-                                                }   
-                                            ?>
+                                            <?php  echo $total_surcharge; ?>
                                         </td>
                                         <td style="width:15%;">
-                                            <?php 
-                                                $qry4 =mysqli_query($conn, "SELECT sum(interest) as interest FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
-                                                while($rows = mysqli_fetch_array($qry4)){?>
-                                                    <?php echo number_format($rows['interest'],2);?>
-                                                <?php
-                                                }   
-                                            ?>
+                                            <?php echo $total_interest; ?>
                                         </td>
                                         <td style="width:15%;">
-                                            <?php 
+                                            <?php  echo $total_principal; ?>
+                                        </td>
+                                        <td style="width:15%;">
+                                             <?php 
                                                 $qry4 =mysqli_query($conn, "SELECT sum(principal) as principal FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
                                                 while($rows = mysqli_fetch_array($qry4)){?>
                                                     <?php echo number_format($rows['principal'],2);?>
@@ -269,18 +258,9 @@
                                         </td>
                                         <td style="width:15%;">
                                             <?php 
-                                                $qry4 =mysqli_query($conn, "SELECT sum(surcharge) as surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
+                                                $qry4 =mysqli_query($conn, "SELECT remaining_balance as bal FROM property_payments where md5(property_id) = '{$_GET['id']}' order by payment_count desc limit 1"); 
                                                 while($rows = mysqli_fetch_array($qry4)){?>
-                                                    <?php echo number_format($rows['surcharge'],2);?>
-                                                <?php
-                                                }   
-                                            ?>
-                                        </td>
-                                        <td style="width:15%;">
-                                            <?php 
-                                                $qry4 =mysqli_query($conn, "SELECT sum(interest) as interest FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
-                                                while($rows = mysqli_fetch_array($qry4)){?>
-                                                    <?php echo number_format($rows['interest'],2);?>
+                                                    <?php echo number_format($rows['bal'],2);?>
                                                 <?php
                                                 }   
                                             ?>
