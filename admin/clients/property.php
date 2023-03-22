@@ -334,8 +334,29 @@ color: white;
                       <?php endforeach; ?>
                 </tbody>
               </table>
-            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">         
+        
+                         
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                       <label>Total Principal: </label>
+                       <input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
+                       <label>Total Surcharge: </label>
+                       <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
+                       <label>Total Interest: </label>
+                       <input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
+                       <label>Total Amount Due: </label>
+                       <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
+                    </div>
+                </div>
+            </div>               
 
+            </div>
             <div id="tab-5" class="tab-content" style="border:solid 1px gainsboro;">
              
                 <form method="" id="set-paydate">

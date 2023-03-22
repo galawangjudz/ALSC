@@ -1375,12 +1375,15 @@ Class Master extends DBConnection {
 
 	function save_payment(){
 		extract($_POST);
+
+		$amount_paid = (float) str_replace(",", "", $amount_paid);
+		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
 		$data .= ", pay_date = '$pay_date' ";
 		$data .= ", due_date = '$due_date' ";
 		$data .= ", or_no = '$or_no' " ;
-		$data .= ", amount_due = '$tot_amt_due' ";
+		$data .= ", amount_due = '$tot_amount_due' ";
 		$data .= ", rebate = '$rebate' ";
 		$data .= ", surcharge = '$surcharge' ";
 		$data .= ", interest = '$interest' ";
