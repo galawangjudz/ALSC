@@ -950,7 +950,7 @@ function updateTotals(elem) {
 				$('#interest_rate').val(l_rate);
 
 			}else if(l_terms >60 && l_terms <= 120 ){
-				l_rate = 16.0
+				l_rate = 17.0
 				$('#interest_rate').val(l_rate);
 			}
 			else if(l_terms > 120 ){

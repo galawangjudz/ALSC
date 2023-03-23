@@ -123,7 +123,7 @@ if(isset($_GET['id'])){
         <hr>
         <table class="table table-striped table-hover table-bordered" style="width: 100%">
             <tr><th>Payment Type 1: </th><td><?php echo $p1;?></td></tr>
-            <tr><th>Payment Type 2: </th><td><?php $p2;?></td></tr>
+            <tr><th>Payment Type 2: </th><td><?php echo $p2;?></td></tr>
             <tr><th>Total Contract Price: </th><td><?php echo number_format($tcp,2);?></td></tr>
             <tr><th>TCP Discount (%): </th><td><?php echo number_format($tcp_discount,2);?></td></tr>
             <tr><th>TCP Discount Amount: </th><td><?php echo number_format($tcp_discount_amt,2);?></td></tr>

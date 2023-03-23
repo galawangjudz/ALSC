@@ -179,11 +179,12 @@
                                 <tbody>
                             
                                     <?php 
-                                    //include '../admin/clients/payment_schedule.php';
-                                    include '../admin/clients/payment_record.php';
+                                    include '../admin/clients/payment_schedule.php';
+                                    //include '../admin/clients/payment_record.php';
                                     //include 'payment_record.php';
-                                    $id = $_GET['id'];   
-                                    $all_payments = load_data($id); 
+                                    $id = $_GET['id'];
+                                    $pay_date = $_GET['date'];     
+                                    $all_payments = load_data($id, $pay_date);
                                     $over_due    = $all_payments[0];
                                     $total_amt_due = $all_payments[1];
                                     $total_interest =  $all_payments[2];
@@ -191,6 +192,7 @@
                                     $total_surcharge = $all_payments[4]; 
 
                                     foreach ($over_due as $l_data): ?>
+                                    
 
                                     <tr>
                                         <td class="text-center"><?php echo $l_data[0] ?></td> 
@@ -227,7 +229,7 @@
                                         <th style="width:110px;"><b>PRINCIPAL PAYMT.</b></th>
                                     </thead>
                                     <tr>
-                                    <td style="width:15%;">
+                                        <td style="width:15%;">
                                             <?php echo $total_amt_due; ?>
                                         </td>
                                         <td style="width:15%;">
