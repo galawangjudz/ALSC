@@ -168,7 +168,7 @@ color: white;
             </div>
 
             <div id="tab-2" class="tab-content" style="border:solid 1px gainsboro;">
-                <table class="table2 table-bordered table-stripped">
+                <table class="table2 table-bordered table-stripped" style="width:100%;">
                     <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");
                     if($qry3->num_rows <= 0){
                         echo "No Details founds";

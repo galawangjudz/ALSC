@@ -62,6 +62,7 @@
             $count = $count + 1;
     ?>            
 <body onload="loadAll()">
+
 <div class="card-body">
     <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>
     <div class="container-fluid">
