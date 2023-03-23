@@ -7,6 +7,124 @@ if($_settings->chk_flashdata('success')): ?>
 <?php endif;?>
 <?php
 
+function is_leap_year($year) {
+  return date('L', strtotime("$year-01-01"));
+}
+
+
+function auto_date($last_day,$date)
+  {
+   
+    $date_arr = date_parse($date);
+
+    $year = $date_arr['year'];
+    $month = $date_arr['month'];
+    $day = $date_arr['day'];
+    /* $change_date = 0; */
+    $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
+    if (!$conn) {
+        die('Could not connect to database: ' . mysqli_connect_error());
+    }
+    $l_col = "c_retention,c_change_date,c_restructured,c_date_of_sale";
+    $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
+    $l_qry = $conn->query($l_sql);
+    
+    while($row=$l_qry->fetch_assoc()):
+        $l_retention = $row['c_retention'];
+        $change_date = $row['c_change_date'];
+        $restructured = $row['c_restructured'];
+        $date_of_sale = $row['c_date_of_sale'];
+    endwhile;
+
+    $l_leap = is_leap_year($year);
+
+    if($date_of_sale == 31 && $last_day >= 28 && $change_date != 1){
+          $last_day = 31;
+    }
+
+    
+    if ($month == 1):
+        if ($last_day < 28):
+            $dt = new DateTime($date);
+            $dt->modify('+31 days');
+            $l_result = $dt->format('Y-m-d');     
+        else:
+            if ($l_leap):
+                  $l_result = $year .'-02-29';
+            else:
+                  $l_result = $year .'-02-28';
+               
+            endif;
+
+        endif;
+    elseif($month == 2):
+        if ($last_day > 28):
+            if($last_day == 29):
+                $l_result = $year .'-03-29'; 
+            elseif($last_day == 30):
+                $l_result = $year .'-03-30'; 
+            elseif($last_day == 31):
+                $l_result = $year .'-03-31';
+            endif;
+        else:
+
+            if($l_leap):
+                $dt = new DateTime($date);
+                $dt->modify('+29 days');
+                $l_result = $dt->format('Y-m-d');
+            else:
+                $dt = new DateTime($date);
+                $dt->modify('+28 days');
+                $l_result = $dt->format('Y-m-d');
+            endif;
+        endif;
+    
+    elseif($month == 3 or $month == 5 or $month == 7 or $month == 8 or $month == 10 or $month == 12):
+        if($month ==7 or $month == 12):
+              if($last_day >= 30):
+                  $l_date1 = $year .'-' .$month . '-'. $last_day ; 
+              else:
+                  $l_date1 = $date ; 
+              endif;
+              $dt = new DateTime($l_date1);
+              $dt->modify('+31 days');
+              $l_result = $dt->format('Y-m-d');
+
+        else:
+              if ($last_day <= 30):
+                  $l_date1 = $date ;            
+              else:
+                  $l_date1 = $year .'-'.$month . '-'. '30';         
+              endif;     
+              $dt = new DateTime($l_date1);
+              $dt->modify('+31 days');
+              $l_result = $dt->format('Y-m-d');
+        endif;
+
+    elseif($month == 4 or $month == 6 or $month == 9 or $month == 11):
+          if ($last_day == 31):
+                $dt = new DateTime($date);
+                $dt->modify('+1 month');
+                $l_result = $dt->format('Y-m-d');
+          else:
+                $dt = new DateTime($date);
+                $dt->modify('+30 days');
+                $l_result = $dt->format('Y-m-d');
+          endif;
+    else:
+          
+    endif;
+
+    return $l_result;
+
+
+  }
+
+
+
+
+
+
 
 if(isset($_GET['id'])){
 
@@ -133,23 +251,22 @@ if(isset($_GET['id'])){
             }
             if ($acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
                 $due_date_ent = (date('m/d/Y', strtotime($first_dp)));
-                $due_date = strtotime(gmdate('Y-m-d', strtotime($first_dp)));
+                //$due_date = strtotime(gmdate('Y-m-d', strtotime($first_dp)));
+                $due_date = new DateTime($due_date_ent);
                 $amount_paid_ent = (number_format($monthly_down,2));
                 $amount_ent = (number_format($monthly_down,2));
                 $count = 1;
                 if ($last_payment['status'] == 'ADDITIONAL'):
                         $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
-                        $t_year = date('Y', strtotime($l_date));
-                        $t_month = date('m', strtotime($l_date));
+                        //$t_year = date('Y', strtotime($l_date));
+                        //$t_month = date('m', strtotime($l_date));
                         if ($retention == '1'):
-                            $l_date = date('Y-m-d', strtotime(($first_dp)));
+                            $l_date = new DateTime($first_dp);;
                         endif;
                         $t_day = date('d', strtotime($l_date));
-                        $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
-                        $due_date = strtotime(gmdate('Y-m-d', $l_date2));
-                        $l_date = gmdate('Y-m-d', $l_date2);
-                        $due_date_ent = (date('m/d/Y', strtotime($l_date)));
-                        $count = $last_payment[9] + 1;
+                        $l_date2 =  new Datetime(auto_date($t_day,$l_date));
+                        $due_date_ent = (date('m/d/Y', strtotime($l_date2)));
+                        $count = floatval($last_payment['status_count']) + 1;
 
                 endif;
                 if ($no_payments == $count || $l_fd_mode == 1):
@@ -161,16 +278,15 @@ if(isset($_GET['id'])){
                 $payment_status_ent = $l_status;
 
             elseif ($acc_status == 'Partial DownPayment'):
-                $l_date = $due_date;
+                $l_date = $last_payment['due_date'];
                 if ($retention == 1):
                     $l_date = '';
                 endif;
-                $due_date_ent = $l_date;
-
+                $due_date_ent = date('m/d/Y', strtotime($l_date));
                 if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                     $underpay = 1;
                     $l_surcharge = 0;
-                    for ($x = 0; $x < $last_payment['payment_count'] + 1; $x++) {
+                    for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
                         try {
                             if ($last_payment['due_date'] == $payment_rec[$x]['due_date']) {
                                 $last_principal += $payment_rec[$x]['principal'];
@@ -211,11 +327,12 @@ if(isset($_GET['id'])){
                         $l_status = 'PD - ' . strval($count);
                     }
                 else:
-                    $l_date2 = $auto_date($due_date, $t_year, $t_month, $t_day);
+                    //echo $day;
+                    $l_date2 = new Datetime(auto_date($day,$l_date));
                     $due_date = $l_date2;
-                    $l_date = gmdate($l_date2);
-                    $due_date_ent = (date("m/d/Y", $l_date));
-                    $count = $last_payment['status'] + 1;
+                    $due_date_ent = $due_date->format('m/d/y');
+                    echo $last_payment['status_count'];
+                    $count = floatval($last_payment['status_count']) + 1;
                     $amount_paid_ent = (number_format($monthly_pay,2));
                     $amount_ent = (number_format($monthly_pay,2));
                     $total_amount_due_ent = (number_format($monthly_pay,2));

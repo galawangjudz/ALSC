@@ -335,11 +335,12 @@
                                             $l_monthly_pay = $l_monthly_pay - $l_last_tot_prin;
                                       endif;
                                       $l_count = $l_last_stat_cnt;
-                                      $l_due_date_val = date('Y-m-d',($l_date));
+                                      $l_due_date_val = new Datetime(date('Y-m-d',($l_date)));
                                       $l_new_due_date_val = date('Y-m-d',strtotime($l_last_due_date));
                                       $l_amt_due = number_format($l_monthly,2);
                                       
                                       
+
                                       if ($l_last_tot_prin == 0 && $l_last_tot_surcharge > 0):
                                         $l_principal = number_format($l_monthly_dp,2);
                                       else:
@@ -351,6 +352,7 @@
                                         $l_monthly_pay = $l_full_down;
                                         $l_principal = number_format($l_full_down,2);
                                         $l_amt_due = number_format(($l_monthly_pay + $l_tot_surcharge),2);
+                                        //echo $l_amt_due;
                                         $l_acc_status = 'Full DownPayment';
                                         $l_count = 0;
                                       else:
@@ -828,7 +830,7 @@
             // echo '|';
             /* $l_due_date_val = $t_due_date->format('m/d/y');  */
         
-            if ($l_pay_date_value > $l_due_date_val && floatval($l_rebate) == 0) {
+           /*  if ($l_pay_date_value > $l_due_date_val && floatval($l_rebate) == 0) {
                   
                   $interval = $l_pay_date_value->diff($l_due_date_val);
                   $l_days = $interval->days;
@@ -837,9 +839,9 @@
                   $l_amt_due = floatval(str_replace(',', '',$l_amt_due)) + $l_sur;
                   $l_amt_due = number_format($l_amt_due,2);
             } else {
-                
+                           
                   $l_surcharge = '0.00';
-              }
+              } */
 
             $l_surcharge = '0.00';
 

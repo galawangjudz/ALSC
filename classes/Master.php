@@ -715,7 +715,7 @@ Class Master extends DBConnection {
 	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_active = 1 and c_lot_lid ='{$lid}'")->num_rows;
 		if($this->capture_err())
 		 	return $this->capture_err();
-		if($check > 0){
+		if($check > 0 && $value == 1){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Lot already verified.";
 			return json_encode($resp);
@@ -727,6 +727,12 @@ Class Master extends DBConnection {
 			}
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
 			}
+		else{
+			if ($value == 2){
+				$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
+			}
+			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
+		}
 		if($save){
 			if($value == 1){
 
@@ -734,6 +740,8 @@ Class Master extends DBConnection {
 			
 				$this->settings->set_flashdata('success',"RA successfully verified.");
 			}else{
+
+				
 				$resp['status'] = 'success';
 			
 				$this->settings->set_flashdata('success',"RA successfully void.");
