@@ -317,7 +317,7 @@ Class Master extends DBConnection {
 			$service_area = $_POST['service_area'];
 			$others = $_POST['others'];
 			$conv_outlet = $_POST['conv_outlet'];
-			$flr_elev = $_POST['chkOption4'];
+			// $flr_elev = $_POST['chkOption4'];
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
@@ -332,7 +332,7 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area = '$service_area' ";
 			$data2 .= ", others = '$others' ";
 			$data2 .= ", conv_outlet = '$conv_outlet' ";
-			$data2 .= ", floor_elevation = '$flr_elev' ";
+			// $data2 .= ", floor_elevation = '$flr_elev' ";
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";

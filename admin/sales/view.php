@@ -491,18 +491,18 @@ if($csr->num_rows > 0){
                                             <!-- <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-                                            <?php if($floor_elevation == '0.2'){ ?>
-                                                <input id="id20" type="radio" name="chkOption4" checked="checked"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input id="id40" type="radio" name="chkOption4"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input id="id60" type="radio" name="chkOption4"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <?php }elseif($floor_elevation == '0.4'){ ?>
-                                                <input id="id20" type="radio" name="chkOption4"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input id="id40" type="radio" name="chkOption4" checked="checked"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input id="id60" type="radio" name="chkOption4"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <?php }elseif($floor_elevation == '0.6'){ ?>
-                                                <input id="id20" type="radio" name="chkOption4"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input id="id40" type="radio" name="chkOption4"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input id="id60" type="radio" name="chkOption4" checked="checked"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php if($floor_elevation == 1){ ?>
+                                                <input id="id20" type="radio" name="chkOption4" checked="checked" disabled/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4" disabled/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4" disabled/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }elseif($floor_elevation == 2){ ?>
+                                                <input id="id20" type="radio" name="chkOption4" disabled/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4" checked="checked" disabled/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4" disabled>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <?php }elseif($floor_elevation == 3){ ?>
+                                                <input id="id20" type="radio" name="chkOption4" disabled/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4" disabled/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4" checked="checked" disabled/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <?php }
                                             ?>
                                         </div>
@@ -510,7 +510,7 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" value="<?php echo number_format($floor_elev_price,2) ?>">
+                                            <input type="text" class="form-control margin-bottom" id="flrelev_price" name="flrelev_price" value="<?php echo number_format($floor_elev_price,2) ?>" readonly>
                                         </div>
                                     </div>
                                     
@@ -523,22 +523,24 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="aircon_outlets" name="aircon_outlets" value="<?php echo ($aircon_outlets) ?>" onchange = "getAcSubtotal();"></label>
+                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="aircon_outlets" name="aircon_outlets" value="<?php echo ($aircon_outlets) ?>" onchange = "getAcSubtotal();" readonly></label>
                                         </div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="form-group">
+                                        <div class="form-group" style="margin-top:5px;">
                                             <label class="control-label">Unit/s</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo ($aircon_outlet_price) ?>" onchange = "getAcSubtotal();">
+                                            <input type="hidden" class="form-control margin-bottom" id="aircon_outlet_price" name="aircon_outlet_price" value="<?php echo ($aircon_outlet_price) ?>" onchange = "getAcSubtotal();" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="aircon_outlet_price_disp" name="aircon_outlet_price_disp" value="<?php echo number_format($aircon_outlet_price,2) ?>" onchange = "getAcSubtotal();" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="<?php echo number_format($ac_outlet_subtotal,2) ?>" readonly>
+                                        <div class="form-group"> 
+                                            <input type="hidden" class="form-control margin-bottom" id="ac_outlet_subtotal" name="ac_outlet_subtotal" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="ac_outlet_subtotal_disp" name="ac_outlet_subtotal_disp" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -551,22 +553,24 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>" onchange="getAcGrillSubtotal();"></label>
+                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="ac_grill" name="ac_grill" value="<?php echo ($aircon_grill) ?>" onchange="getAcGrillSubtotal();" readonly></label>
                                         </div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="form-group">
+                                        <div class="form-group" style="margin-top:5px;">
                                             <label class="control-label">Unit/s</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_grill_price" name="ac_grill_price" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" onchange="getAcGrillSubtotal();">
+                                            <input type="hidden" class="form-control margin-bottom" id="ac_grill_price" name="ac_grill_price" value="<?php echo ($aircon_grill_price) ?>" onchange="getAcGrillSubtotal();" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="ac_grill_price_disp" name="ac_grill_price_disp" value="<?php echo number_format($aircon_grill_price,2) ?>" onchange="getAcGrillSubtotal();" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="0" readonly>
+                                            <input type="hidden" class="form-control margin-bottom" id="ac_grill_subtotal" name="ac_grill_subtotal" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="ac_grill_subtotal_disp" name="ac_grill_subtotal_disp" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -578,22 +582,24 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>" onchange="getConvSubtotal();"></label>
+                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="conv_outlet" name="conv_outlet" value="<?php echo ($conv_outlet) ?>" onchange="getConvSubtotal();" readonly></label>
                                         </div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="form-group">
+                                        <div class="form-group" style="margin-top:5px;">
                                             <label class="control-label">Unit/s</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_price" name="conv_outlet_price" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" onchange="getConvSubtotal();">
+                                            <input type="hidden" class="form-control margin-bottom" id="conv_outlet_price" name="conv_outlet_price" value="<?php echo ($conv_outlet_price) ?>" onchange="getConvSubtotal();" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_price_disp" name="conv_outlet_price_disp" value="<?php echo number_format($conv_outlet_price,2) ?>" onchange="getConvSubtotal();" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal"  value="0" readonly>
+                                            <input type="hidden" class="form-control margin-bottom" id="conv_outlet_subtotal" name="conv_outlet_subtotal" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="conv_outlet_subtotal_disp" name="conv_outlet_subtotal_disp" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -605,22 +611,24 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>" onchange="getServiceSubtotal();"></label>
+                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="service_area" name="service_area" value="<?php echo ($service_area) ?>" onchange="getServiceSubtotal();" readonly></label>
                                         </div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="form-group">
+                                        <div class="form-group" style="margin-top:5px;">
                                             <label class="control-label">Unit/s</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="service_area_price" name="service_area_price" value="<?php echo isset($service_area_price) ? $service_area_price : 0; ?>" onchange="getServiceSubtotal();">
+                                            <input type="hidden" class="form-control margin-bottom" id="service_area_price" name="service_area_price" value="<?php echo ($service_area_price) ?>" onchange="getServiceSubtotal();" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="service_area_price_disp" name="service_area_price_disp" value="<?php echo number_format($service_area_price,2) ?>" onchange="getServiceSubtotal();" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" value="0" readonly>
+                                            <input type="hidden" class="form-control margin-bottom" id="service_subtotal" name="service_subtotal" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="service_subtotal_disp" name="service_subtotal_disp" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -632,22 +640,24 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" onchange="getOthersSubtotal()"></label>
+                                            <label class="control-label"><input type="text" class="form-control margin-bottom" id="others" name="others" value="<?php echo ($others) ?>" onchange="getOthersSubtotal()" readonly></label>
                                         </div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="form-group">
+                                        <div class="form-group" style="margin-top:5px;">
                                             <label class="control-label">Unit/s</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="others_price" name="others_price" value="<?php echo isset($others_price) ? $others_price : 0; ?>" onchange="getOthersSubtotal()">
+                                            <input type="hidden" class="form-control margin-bottom" id="others_price" name="others_price" value="<?php echo ($others_price) ?>" onchange="getOthersSubtotal()" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="others_price_disp" name="others_price_disp" value="<?php echo number_format($others_price,2) ?>" onchange="getOthersSubtotal()" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal"  value="0" onkeyup="getAddCost()" readonly>
+                                            <input type="hidden" class="form-control margin-bottom" id="others_subtotal" name="others_subtotal" onkeyup="getAddCost()" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="others_subtotal_disp" name="others_subtotal_disp" onkeyup="getAddCost()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -674,7 +684,7 @@ if($csr->num_rows > 0){
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" value="0" readonly>
+                                            <input type="text" class="form-control margin-bottom" id="add_cost_total" name="add_cost_total" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -1118,13 +1128,14 @@ if($csr->num_rows > 0){
     }
 
     function loadAll(){
-        paymentType();
-        getFlrElev();
         getAcSubtotal();
         getAcGrillSubtotal();
+        getConvSubtotal();
         getServiceSubtotal();
         getOthersSubtotal();
-        getConvSubtotal();
+        getAddCost();
+        paymentType();
+        getFlrElev();
     }
     function getFlrElev(){
 		if(document.getElementById("id20").checked==true){
@@ -1141,58 +1152,70 @@ if($csr->num_rows > 0){
 		var ac_unit = document.getElementById('aircon_outlets').value;
 		var ac_unit_price = document.getElementById('aircon_outlet_price').value;
 
-		var res = ac_unit * ac_unit_price;
+		let res = ac_unit * ac_unit_price;
+        let res_comma = res.toLocaleString();
 
 		document.getElementById('ac_outlet_subtotal').value = res;
-		getAddCost();
+        document.getElementById('ac_outlet_subtotal_disp').value = res_comma + '.00';
+		// getAddCost();
 	}
 	function getAcGrillSubtotal(){
-		var ac_grill = document.getElementById('ac_grill').value;
-		var ac_grill_price = document.getElementById('ac_grill_price').value;
+		var ac_grill = document.getElementById("ac_grill").value;
+		var ac_grill_price = document.getElementById("ac_grill_price").value;
 
-		var res = ac_grill * ac_grill_price;
+		let res = ac_grill * ac_grill_price;
+        let res_comma = res.toLocaleString();
 
 		document.getElementById('ac_grill_subtotal').value = res;
-		getAddCost();
+        document.getElementById('ac_grill_subtotal_disp').value = res_comma + '.00';
+		// getAddCost();
+	}
+    function getConvSubtotal(){
+		var conv = document.getElementById('conv_outlet').value;
+		var conv_price = document.getElementById('conv_outlet_price').value;
+
+		let res = conv * conv_price;
+        let res_comma = res.toLocaleString();
+
+		document.getElementById('conv_outlet_subtotal').value = res;
+        document.getElementById('conv_outlet_subtotal_disp').value = res_comma + '.00'
+		// getAddCost();
 	}
 	function getServiceSubtotal(){
 		var service = document.getElementById('service_area').value;
 		var service_price = document.getElementById('service_area_price').value;
 
 		var res = service * service_price;
+        var res_comma = res.toLocaleString();
 
 		document.getElementById('service_subtotal').value = res;
-		getAddCost();
+        document.getElementById('service_subtotal_disp').value = res_comma + '.00';
+		// getAddCost();
 	}
 	function getOthersSubtotal(){
 		var others = document.getElementById('others').value;
 		var others_price = document.getElementById('others_price').value;
 
 		var res = others * others_price;
+        var res_comma = res.toLocaleString();
 
 		document.getElementById('others_subtotal').value = res;
-		getAddCost();
+        document.getElementById('others_subtotal_disp').value = res_comma + '.00';
+		// getAddCost();
 	}
-	function getConvSubtotal(){
-		var conv = document.getElementById('conv_outlet').value;
-		var conv_price = document.getElementById('conv_outlet_price').value;
 
-		var res = conv * conv_price;
-
-		document.getElementById('conv_outlet_subtotal').value = res;
-		getAddCost();
-	}
 	function getAddCost(){
 		var others = document.getElementById('others_subtotal').value;
 		var service = document.getElementById('service_subtotal').value;
 		var ac_grill1 = document.getElementById('ac_grill_subtotal').value;
 		var ac_outlet = document.getElementById('ac_outlet_subtotal').value;
-		var flr_elev = document.getElementById('flrelev_price').value;
+		// var flr_elev = document.getElementById('flrelev_price').value;
 		var conv_outlet = document.getElementById('conv_outlet_subtotal').value;
 
-		var result = parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(flr_elev)+ parseInt(conv_outlet) + parseInt(ac_grill1);
+		let result = parseInt(others) + parseInt(service) + parseInt(ac_outlet) + parseInt(conv_outlet) + parseInt(ac_grill1);
+        let res_comma = result.toLocaleString();
 
-		document.getElementById('add_cost_total').value = result;
+		document.getElementById('add_cost_total').value = res_comma + '.00';
 	}
 </script>
 

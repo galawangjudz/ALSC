@@ -63,7 +63,7 @@ header("Access-Control-Allow-Origin: *");
 	<input type="button" id="rep" value="Print" class="btn btn-info btn_print">
 </div>
 <div class="container_content" id="container_content" style="margin-top:5px;font-size:9px;">
-    <img src="images/Header.jpg" class="img-thumbnail" style="height:80px;width:500px;margin-left:130px;border:none;margin-bottom:-5px;z-index:-1;position: relative;" alt="">
+    <img src="images/Header.jpg" class="img-thumbnail" style="height:80px;width:500px;margin-left:142px;border:none;margin-bottom:-5px;z-index:-1;position: relative;" alt="">
     <h6 class="text-center" style="position:absolute;margin-top:-40px;margin-left:330px;"><b>RESERVATION APPLICATION</b></h6>
     
     

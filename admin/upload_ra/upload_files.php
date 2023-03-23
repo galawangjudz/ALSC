@@ -27,7 +27,7 @@ $getID = $_GET['id'];
 
 <style>
 	.container-fluid p{
-		margin: unset
+		margin: unset;
 	}
  	#uni_modal .modal-footer{
 		display: none;
@@ -42,7 +42,7 @@ $getID = $_GET['id'];
         <!-- Modal -->
 		<form action="" method="post" enctype="multipart/form-data" id="upload-file">
 		<input id="id" type="hidden" name="id" value= "<?php echo $getID ?>" />
-		<input type="text" name="getFileName" id="getFileName" class="form-control required">	
+		<input type="hidden" name="getFileName" id="getFileName" class="form-control required">	
 		<table>
 			<tr>
 				<td>

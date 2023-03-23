@@ -1,4 +1,10 @@
 <?php require_once('../config.php'); ?>
+<style>
+    .ref_no{
+        float:right;
+        font-size:10px;
+    }
+</style>
 <div class="card-body" id="card-payment">
     <input type="hidden" value="<?php echo $c_lid; ?>" id="lid">
     <?php
@@ -15,7 +21,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-0.5">
-                <div class="form-group">
+                <div class="form-group" style="margin-top:-10px;">
                 &nbsp&nbsp&nbsp&nbsp<label class="control-label">Project:</label>
                 </div>
             </div>
@@ -24,7 +30,7 @@
                     <input type="text" class="form-control form-control-sm" id="final_phase" style="font-size:8px;">
                 </div>
             </div>
-            <div class="col-md-0.5">
+            <div class="col-md-0.5" style="margin-top:-10px;">
                 <div class="form-group">
                 &nbsp&nbsp&nbsp&nbsp<label class="control-label">Block:</label>
                 </div>
@@ -34,7 +40,7 @@
                     <input type="text" class="form-control form-control-sm" value="<?php echo $l_block; ?>">
                 </div>
             </div>
-            <div class="col-md-0.5">
+            <div class="col-md-0.5" style="margin-top:-10px;">
                 <div class="form-group">
                 &nbsp&nbsp&nbsp&nbsp<label class="control-label">Lot:</label>
                 </div>
@@ -96,7 +102,8 @@
                         <label class="control-label2" style="font-weight:normal;">Lot Area:</label>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" id="c_lot_area" name="c_lot_area" value="<?php echo $c_lot_area; ?>" class="form-control form-control-sm">
+                        <input type="hidden" id="c_lot_area" name="c_lot_area" value="<?php echo $c_lot_area; ?>" class="form-control form-control-sm">
+                        <input type="text" id="c_lot_area_disp" name="c_lot_area_disp" value="<?php echo $c_lot_area; ?> SQM" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="row">
@@ -122,7 +129,8 @@
                         <label class="control-label2" id="lbliv" style="font-weight:normal;">Price/SQM:</label>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" id="c_lot_price_sqm" name="c_lot_price_sqm" value="<?php echo $c_price_sqm; ?>" class="form-control form-control-sm">
+                        <input type="hidden" id="c_lot_price_sqm" name="c_lot_price_sqm" value="<?php echo $c_price_sqm; ?>" class="form-control form-control-sm">
+                        <input type="text" id="c_lot_price_sqm_disp" name="c_lot_price_sqm_disp" value="<?php echo number_format($c_price_sqm,2) ?>" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="row">
@@ -149,7 +157,8 @@
                         <label class="control-label2" id="lbliv">Lot Contract Price: </label>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" id="c_lcp" name="c_lcp" class="form-control form-control-sm">
+                        <input type="hidden" id="c_lcp" name="c_lcp" class="form-control form-control-sm">
+                        <input type="text" id="c_lcp_disp" name="c_lcp_disp" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="row">
@@ -172,6 +181,7 @@
         </div>
     </div>
 </div>
+<div class="ref_no" style="margin-top:-1120px;width:250px;float:right;margin-right:-120px;"><b>Reference No. : </b><?php echo $ref_no; ?></div>
 <div class="card-body">
     <table>
         <tr>
@@ -182,13 +192,13 @@
                 <label class="control-label" style="margin-left:8px;font-size:10px;">PROCESSING FEE:</label>
             </div>
             <div class="col-md-4" style="margin-top:10px;">
-                <input type="text" id="c_processing_fee" name="c_processing_fee" value="<?php echo $c_processing_fee; ?>" class="form-control form-control-sm">
+                <input type="text" id="c_processing_fee" name="c_processing_fee" value="<?php echo number_format($c_processing_fee,2) ?>" class="form-control form-control-sm">
             </div>
             <div class="col-md-2">
                 <label class="control-label" style="font-size:10px;">PF/mo.:</label>
             </div>
             <div class="col-md-4" style="margin-top:10px;">
-                <input type="text" id="c_pf_mo" name="c_pf_mo" value="<?php echo $c_pf_mo; ?>" class="form-control form-control-sm" style="margin-right:25px;padding-left:10px;width:242px;">
+                <input type="text" id="c_pf_mo" name="c_pf_mo" value="<?php echo number_format($c_pf_mo,2) ?>" class="form-control form-control-sm" style="margin-right:25px;padding-left:10px;width:242px;">
             </div>
         </div>
         <div class="row" style="margin-top:5px;margin-bottom:-5px;">
@@ -196,14 +206,14 @@
                 <label class="control-label" style="margin-left:16px;font-size:10px;margin-right:28px;">LESS: Applied Disc:</label>
             </div>
             <div class="col-md-4" style="margin-top:10px;">
-                <input type="text" id="c_less" name="c_less" value="<?php echo $c_less; ?>" class="form-control form-control-sm">
+                <input type="text" id="c_less" name="c_less" value="<?php echo number_format($c_less,2) ?>" class="form-control form-control-sm">
             </div>
             <div class="col-md-3">
                 <label class="control-label" style="font-size:10px;">TOTAL CONTRACT PRICE: </label>
                 <div class="vatlbl1" style="font-style:italic;margin-top:-5px;margin-left:25px;font-size:9px;">VAT Inclusive</div>
             </div>
             <div class="col-md-3" style="margin-left:-4px;margin-top:10px;">
-                <input type="text" id="c_tcp" name="c_tcp" value="<?php echo $c_tcp; ?>" class="form-control form-control-sm" style="padding-left:10px;width:180px;">
+                <input type="text" id="c_tcp" name="c_tcp" value="<?php echo number_format($c_tcp,2) ?>" class="form-control form-control-sm" style="padding-left:10px;width:180px;">
             </div>
         </div>
         </tr>
@@ -245,7 +255,7 @@
                 <div class="row" style="margin-top:-5px;">
                     <div class="col-md-12">
                         <label class="control-label2" style="margin-bottom:5px;margin-top:-1px;">Down Payment Amount:</label>
-                        <input type="text" id="dp_amt" name="dp_amt" value="<?php echo $c_net_dp; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                        <input type="text" id="dp_amt" name="dp_amt" value="<?php echo number_format($c_net_dp,2) ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                 </div>
                 <div class="row" style="margin-top:-2px;">
@@ -258,7 +268,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="text" value="<?php echo $c_reservation; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                        <input type="text" value="<?php echo number_format($c_reservation,2) ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                     <div class="col-md-6">
                         <input type="text" value="<?php echo $c_no_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
@@ -267,7 +277,7 @@
                 <div class="row" style="margin-top:-3px;">
                     <div class="col-md-12">
                         <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Monthly Down Payment:</label>
-                        <input type="text" value="<?php echo $c_monthly_down; ?>" class="form-control form-control-sm">
+                        <input type="text" value="<?php echo number_format($c_monthly_down,2) ?>" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="row">
@@ -300,7 +310,7 @@
                 <div class="row" style="margin-top:-4px;">
                     <div class="col-md-12">
                         <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Total Monthly Payment:</label>
-                        <input type="text" value="<?php echo $c_monthly_payment; ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
+                        <input type="text" value="<?php echo number_format($c_monthly_payment,2) ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                 </div>
                 <div class="row" style="margin-top:-1px;">
@@ -345,7 +355,7 @@
                 </div>
                 <div class="row" style="margin-top:-12px;margin-bottom:6px;">
                     <div class="col-md-8">
-                        <input type="text" value="<?php echo $amt_fnanced; ?>" class="form-control form-control-sm">
+                        <input type="text" value="<?php echo number_format($amt_fnanced,2) ?>" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-4">
                         <input type="text" value="<?php echo $c_terms; ?>" class="form-control form-control-sm">
@@ -778,6 +788,7 @@ function getDP(){
 
 ///////////////////////////////COMPUTATIONS////////////////////////////////////////
 
+
 function getHCP(){
     var house_price_sqm = document.getElementById('c_house_price_sqm').value;
     var house_floor_area = document.getElementById('c_house_flr_area').value;
@@ -791,9 +802,12 @@ function getLCP(){
     var lot_price_sqm = document.getElementById('c_lot_price_sqm').value;
     var lot_area = document.getElementById('c_lot_area').value;
 
-    var lcp = lot_price_sqm * lot_area;
+    let lcp = lot_price_sqm * lot_area;
+    let lcp_disp = lcp.toLocaleString();
+    
 
     document.getElementById('c_lcp').value = lcp;
+    document.getElementById('c_lcp_disp').value = lcp_disp + ".00";
 }
 
 function getFCP(){
