@@ -12,6 +12,39 @@ function is_leap_year($year) {
 }
 
 
+
+function validate_date($year,$month,$day){
+    if (($month == 1) || ($month == 6) || ($month == 9) || ($month == 11)):
+        if ($day == 31):
+            $l_new_day = '30';
+        else:
+            $l_new_day = $l_day;
+        endif;
+    elseif ($month == 2):
+        if ($l_day > 28):
+            $l_leap = is_leap_year($year);
+
+            if ($l_leap):
+                $l_new_day = '28';
+            else:
+                $l_new_day = '29';
+            endif;
+
+        else:
+            $l_new_day = $day;
+        endif;
+
+    else:
+        $l_new_day = $day;
+
+
+    endif;
+
+
+    return $l_new_day;
+
+}
+
 function auto_date($last_day,$date)
   {
    
@@ -258,14 +291,13 @@ if(isset($_GET['id'])){
                 $count = 1;
                 if ($last_payment['status'] == 'ADDITIONAL'):
                         $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
-                        //$t_year = date('Y', strtotime($l_date));
-                        //$t_month = date('m', strtotime($l_date));
+                        
                         if ($retention == '1'):
-                            $l_date = new DateTime($first_dp);;
+                            $l_date = new DateTime($first_dp);
                         endif;
                         $t_day = date('d', strtotime($l_date));
                         $l_date2 =  new Datetime(auto_date($t_day,$l_date));
-                        $due_date_ent = (date('m/d/Y', strtotime($l_date2)));
+                        $due_date_ent = $l_date2->format('m/d/y');
                         $count = floatval($last_payment['status_count']) + 1;
 
                 endif;
@@ -279,10 +311,16 @@ if(isset($_GET['id'])){
 
             elseif ($acc_status == 'Partial DownPayment'):
                 $l_date = $last_payment['due_date'];
+                $t_year = date('Y', strtotime($l_date));
+                $t_month = date('m', strtotime($l_date));
+                
                 if ($retention == 1):
-                    $l_date = '';
+                    $l_date = date("Y-m-d", strtotime($full_down));
                 endif;
-                $due_date_ent = date('m/d/Y', strtotime($l_date));
+                $day = date('d', strtotime($l_date));
+                $t_day = validate_date($t_year,$t_month,$day);
+                $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
+                //$due_date_ent = date('m/d/Y', strtotime($l_date));
                 if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                     $underpay = 1;
                     $l_surcharge = 0;
@@ -351,8 +389,9 @@ if(isset($_GET['id'])){
             $payment_status_ent = $l_status	;
 
         elseif ($p1 == 'Spot Cash' && $acc_status == 'Reservation'):
-            $l_date = $start_date;
-            $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+            $l_date = date('Y-m-d', strtotime($start_date));
+            $day = date('d', strtotime($l_date));
+            $due_date_ent = date('m/d/Y', strtotime($l_date));
             $payment_status_ent = ('SC');
             $due_date = $start_date;
             $amount_paid_ent = (number_format($last_payment['remaining_balance'],2));
@@ -361,15 +400,14 @@ if(isset($_GET['id'])){
             $balance_ent = (number_format($last_payment['remaining_balance'],2));
             
         elseif ($p1 == 'Full DownPayment' && $acc_status == 'Reservation'):
-          
-            $l_date = $full_down;
-            $day = strftime("%d", $l_date);
-            $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+            $l_date = date('Y-m-d', strtotime($full_down));
+            $day = date('d', strtotime($l_date));
+            $due_date_ent = date('m/d/Y', strtotime($l_date));
             $payment_status_ent = 'FD';
             $due_date = $full_down;
-            if ($last_payment['status_count'] == 'RES') {
+            if ($last_payment['status'] == 'RES') {
                 $monthly_pay = $net_dp;
-            } elseif ($last_payment['status_count'] == 'PFD') {
+            } elseif ($last_payment['status'] == 'PFD') {
                 $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
                 $l_date = ($last_payment['pay_date']);
                 $due_date = timegm($l_date);
@@ -380,9 +418,9 @@ if(isset($_GET['id'])){
             $count = 1;
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Deferred Cash Payment') || ($p1 == 'No DownPayment' && $p2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment'):
  
-            $l_date = gmtime(timegm(get_date($full_down)));
-            $day = strftime("%d", $l_date);
-            $monthly_pay = $first_dp;
+            $l_date = date('Y-m-d', strtotime($full_down));
+            $day = date('d', strtotime($l_date));
+            $monthly_pay = $monthly_payment;
             $l_full_payment = 0;
             // check for fully paid
             if ($last_payment['remaining_balance'] <= $monthly_pay):
@@ -393,26 +431,25 @@ if(isset($_GET['id'])){
             endif;
         
             if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
-                $due_date_ent = (strftime("%m/%d/%Y", $l_date));
-                $due_date = timegm($l_date);
-                $amount_paid_ent = (number_format($monthly_pay));
-                $amount_ent = (number_format($monthly_pay));
-                $total_amount_due_ent = (number_format($monthly_pay));
+                $due_date_ent = date('Y-m-d', strtotime($l_date));
+                $due_date = new Datetime($due_date_ent);
+                $amount_paid_ent = (number_format($monthly_pay,2));
+                $amount_ent = (number_format($monthly_pay,2));
+                $total_amount_due_ent = (number_format($monthly_pay,2));
                 $count = 1;
                 if ($last_payment['status'] == 'ADDITIONAL'):
-                    $l_date = gmtime(timegm(get_date($last_payment['due_date'])));
-                    $t_year = strftime("%Y", $l_date);
-                    $t_month = strftime("%m", $l_date);
-                    if ($retention == '1') {
-                         $l_date = gmtime(timegm(get_date($rst['first_dp'])));
-                    }
+                    $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        
+                    if ($retention == '1'):
+                        $l_date = new DateTime($first_dp);
+                    endif;
+                    $t_day =  date('d', strtotime($l_date));
+                    $l_date2 = new Datetime(auto_date($day,$due_date_ent));
+                    $due_date = $l_date2;
+                    $due_date_ent = $due_date->format('m/d/y');
+                    $count = $last_payment['status_count'] + 1;
                 endif;
-                $t_day = strftime("%d", $l_date);
-                $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
-                $due_date = $l_date2;
-                $l_date = gmtime($l_date2);
-                $due_date_ent = (strftime("%m/%d/%Y", $l_date));
-                $count = $last_payment['status_count'] + 1;
+               
                 
                 if ($terms == $count || $l_fp_mode == 1):
                     $l_full_payment = $last_payment['remaining_balance'];
@@ -427,15 +464,16 @@ if(isset($_GET['id'])){
                 $payment_status_ent = ($l_status);
                   
             elseif ($acc_status == 'Deferred Cash Payment'):
-                $l_date = gmdate("Y-m-d", strtotime($last_payment['due_date']));
-                $t_year = date("Y", strtotime($l_date));
-                $t_month = date("m", strtotime($l_date));
-                if ($retention == '1') {
+                $l_date = $last_payment['due_date'];
+                $t_year = date('Y', strtotime($l_date));
+                $t_month = date('m', strtotime($l_date));
+                
+                if ($retention == 1):
                     $l_date = date("Y-m-d", strtotime($start_date));
-                }
-                $t_day = $validate_date($t_year, $t_month, date("d", strtotime($l_date)));
-                $due_date_ent = ($t_month . '/' . $t_day . '/' . $t_year);
-            
+                endif;
+                $day = date('d', strtotime($l_date));
+                $t_day = validate_date($t_year,$t_month,$day);
+                $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
                 // under_pay
                 if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                     $underpay = 1;
@@ -474,28 +512,42 @@ if(isset($_GET['id'])){
                     $total_amount_due_ent = (number_format($l_monthly));
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
-                    $monthly_pay = $l_full_payment;
-                    $amount_paid_ent = (number_format($monthly_pay));
-                    $amount_ent = (number_format($monthly_pay));
-                    $total_amount_due_ent = (number_format($monthly_pay));
+                            $monthly_pay = $l_full_payment;
+                            $amount_paid_ent = (number_format($monthly_pay));
+                            $amount_ent = (number_format($monthly_pay));
+                            $total_amount_due_ent = (number_format($monthly_pay));
                     } else {
                             $l_status = 'DFC - ' . strval($count);
                     }
 
                 else:
-
-                    // something nawawala dito//
                 
-          
+                    $l_date2 = new Datetime(auto_date($day,$due_date_ent));
+                    $due_date = $l_date2;
+                    $due_date_ent = $due_date->format('m/d/y');
+                    $count = floatval($last_payment['status_count']) + 1;
+                    $amount_paid_ent = (number_format($monthly_pay,2));
+                    $amount_ent = (number_format($monthly_pay,2));
+                    $total_amount_due_ent = (number_format($monthly_pay,2));
+                    if ($terms == $count || $l_fp_mode == 1) {
+                            $l_status = 'FPD';
+                            $l_full_payment = $last_payment['remaining_balance'];
+                            $monthly_pay = $l_full_payment;
+                            $amount_paid_ent = (number_format($monthly_pay));
+                            $amount_ent = (number_format($monthly_pay));
+                            $total_amount_due_ent = (number_format($monthly_pay));
+                    } else {
+                            $l_status = 'DFC - ' . strval($count);
+                    }
+                   
                 endif;
+                $payment_status_ent = $l_status	;
+
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
-      /*           $credit_principal_mnu->set_sensitive(1);
-                $revert_interest->set_sensitive(1);
-                $revert_rebate->set_sensitive(1); */
                 $l_date = gmdate(timegm(get_date($start_date)));
                 $day = strftime("%d", $l_date);
                 $monthly_pay = $monthly_payment;
-            
+                echo $monthly_pay;
                  
                 if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
                     $due_date = strftime("%m/%d/%Y", $l_date);

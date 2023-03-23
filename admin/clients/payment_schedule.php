@@ -5,6 +5,39 @@
       return date('L', strtotime("$year-01-01"));
     }
 
+    function validate_date($year,$month,$day){
+        if (($month == 1) || ($month == 6) || ($month == 9) || ($month == 11)):
+            if ($day == 31):
+                $l_new_day = '30';
+            else:
+                $l_new_day = $l_day;
+            endif;
+        elseif ($month == 2):
+            if ($l_day > 28):
+                $l_leap = is_leap_year($year);
+
+                if ($l_leap):
+                    $l_new_day = '28';
+                else:
+                    $l_new_day = '29';
+                endif;
+
+            else:
+                $l_new_day = $day;
+            endif;
+
+        else:
+            $l_new_day = $day;
+
+
+        endif;
+
+
+        return $l_new_day;
+
+    }
+
+
 
     function auto_date($last_day,$date)
       {
@@ -396,7 +429,7 @@
                         $l_date2 = new Datetime($l_date);               
                         $t_due_date = $l_date2->format('m/d/y');
                         $l_due_date_val =  new DateTime($l_date);
-                        $l_new_due_date_val = new Datetime($l_due_date_val);
+                        $l_new_due_date_val = $l_due_date_val;
                         $l_status = 'FPD';
                         $l_monthly_pay = $l_bal;
                         $l_amt_due = number_format($l_bal,2);
@@ -480,7 +513,7 @@
                                     $l_status = 'DFC-' . strval($l_count);
                                     $l_acc_status = 'Deferred Cash Payment';
                               endif;
-                            $l_new_due_date_val = new Datetime($l_due_date_val);
+                            $l_new_due_date_val = $l_due_date_val;
                             $l_amt_due = number_format($l_monthly_pay,2);
                             $l_principal = $l_amt_due;
                         }elseif ($l_acc_status == 'Deferred Cash Payment') {

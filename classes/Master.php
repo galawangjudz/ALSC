@@ -260,7 +260,6 @@ Class Master extends DBConnection {
 			$type = $_POST['chkOption3'];
 
 			$data = " c_lot_lid = '$lot_lid' ";
-			
 			$data .= ", c_type = '$type' ";
 			$data .= ", c_lot_area = '$lot_area' ";
 			$data .= ", c_price_sqm = '$price_sqm' ";

@@ -120,13 +120,14 @@
                         <th>Client Name</th>
                         <th>Location</th>
                         <th>Net TCP</th>
+						<th>Account Status</th>
                 
                         </tr>
                     </thead>
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT x.property_id, CONCAT_WS(' ',y.first_name, y.last_name) as full_name, x.c_net_tcp,  q.c_acronym, 
+                            $qry = $conn->query("SELECT x.property_id, CONCAT_WS(' ',y.first_name, y.last_name) as full_name, x.c_net_tcp,x.c_account_status,  q.c_acronym, 
                             z.c_block, z.c_lot FROM properties x, property_clients y , t_lots z, t_projects q WHERE 
                             x.property_id = y.property_id
                             and x.c_lot_lid = z.c_lid 
@@ -158,6 +159,7 @@
                         <td><?php echo $row["full_name"] ?></td>
                         <td><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                         <td><?php echo number_format($row["c_net_tcp"],2) ?></td>
+						<td><?php echo $row["c_account_status"] ?></td>
                     
                     
                         </tr>
