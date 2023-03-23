@@ -4,6 +4,38 @@
       return date('L', strtotime("$year-01-01"));
     }
 
+    function validate_date($year,$month,$day){
+        if (($month == 1) || ($month == 6) || ($month == 9) || ($month == 11)):
+            if ($day == 31):
+                $l_new_day = '30';
+            else:
+                $l_new_day = $l_day;
+            endif;
+        elseif ($month == 2):
+            if ($l_day > 28):
+                $l_leap = is_leap_year($year);
+
+                if ($l_leap):
+                    $l_new_day = '28';
+                else:
+                    $l_new_day = '29';
+                endif;
+
+            else:
+                $l_new_day = $day;
+            endif;
+
+        else:
+            $l_new_day = $day;
+
+
+        endif;
+
+
+        return $l_new_day;
+
+    }
+
 
     function auto_date($last_day,$date)
       {
@@ -335,11 +367,12 @@
                                             $l_monthly_pay = $l_monthly_pay - $l_last_tot_prin;
                                       endif;
                                       $l_count = $l_last_stat_cnt;
-                                      $l_due_date_val = date('Y-m-d',($l_date));
+                                      $l_due_date_val = new Datetime(date('Y-m-d',($l_date)));
                                       $l_new_due_date_val = date('Y-m-d',strtotime($l_last_due_date));
                                       $l_amt_due = number_format($l_monthly,2);
                                       
                                       
+
                                       if ($l_last_tot_prin == 0 && $l_last_tot_surcharge > 0):
                                         $l_principal = number_format($l_monthly_dp,2);
                                       else:
@@ -351,6 +384,7 @@
                                         $l_monthly_pay = $l_full_down;
                                         $l_principal = number_format($l_full_down,2);
                                         $l_amt_due = number_format(($l_monthly_pay + $l_tot_surcharge),2);
+                                        //echo $l_amt_due;
                                         $l_acc_status = 'Full DownPayment';
                                         $l_count = 0;
                                       else:
@@ -395,7 +429,7 @@
                     $l_date2 = new Datetime($l_date);               
                     $t_due_date = $l_date2->format('m/d/y');
                     $l_due_date_val =  new DateTime($l_date);
-                    $l_new_due_date_val = new Datetime($l_due_date_val);
+                    $l_new_due_date_val = $l_due_date_val;
                     $l_status = 'FPD';
                     $l_monthly_pay = $l_bal;
                     $l_amt_due = number_format($l_bal,2);
@@ -479,7 +513,7 @@
                                 $l_status = 'DFC-' . strval($l_count);
                                 $l_acc_status = 'Deferred Cash Payment';
                           endif;
-                        $l_new_due_date_val = new Datetime($l_due_date_val);
+                        $l_new_due_date_val = $l_due_date_val;
                         $l_amt_due = number_format($l_monthly_pay,2);
                         $l_principal = $l_amt_due;
                     }elseif ($l_acc_status == 'Deferred Cash Payment') {
@@ -824,25 +858,7 @@
                       $total_interest_ent = ($l_tot_interest);
             }
             $l_pay_date_value = new Datetime($l_pay_date_val);
-            //echo $l_pay_date_val;
-            // echo '|';
-            /* $l_due_date_val = $t_due_date->format('m/d/y');  */
-        
-            if ($l_pay_date_value > $l_due_date_val && floatval($l_rebate) == 0) {
-                  
-                  $interval = $l_pay_date_value->diff($l_due_date_val);
-                  $l_days = $interval->days;
-                  $l_sur =$l_monthly_pay * (0.6/360) * $l_days;
-                  $l_surcharge =  number_format($l_sur,2);
-                  $l_amt_due = floatval(str_replace(',', '',$l_amt_due)) + $l_sur;
-                  $l_amt_due = number_format($l_amt_due,2);
-            } else {
-                
-                  $l_surcharge = '0.00';
-              }
-
             $l_surcharge = '0.00';
-
             $l_bal = floatval(str_replace(',', '',$l_new_bal));
             $l_data = array($t_due_date,"----------","******",'0.00',$l_amt_due,$l_interest,$l_principal,$l_surcharge,$l_rebate,$l_status,$l_new_bal);
             
@@ -884,8 +900,7 @@
         
             endwhile;	
 
-  return $all_payments;  
-
+  return array($all_payments, number_format($l_tot_amnt_due,2), number_format($l_tot_interest,2), number_format($l_tot_principal,2), number_format($l_tot_surcharge,2));      
 
 
 

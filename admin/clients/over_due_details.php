@@ -146,13 +146,13 @@ if(isset($_GET['id'])){
                 <div class="col-md-12">
                     <div class="form-group">
                        <label>Total Principal: </label>
-                       <input type="text" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
+                       <input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
                        <label>Total Surcharge: </label>
-                       <input type="text" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
+                       <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
                        <label>Total Interest: </label>
-                       <input type="text" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
+                       <input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
                        <label>Total Amount Due: </label>
-                       <input type="text" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
+                       <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
                     </div>
                 </div>
             </div>     

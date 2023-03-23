@@ -108,6 +108,7 @@ color: white;
 
         <hr>
 
+       
             
        
         <ul class="tabs">
@@ -288,6 +289,11 @@ color: white;
                 include 'payment_record.php';
                 $id = $_GET['id'];
                 $all_payments = load_data($id); 
+                $over_due    = $all_payments[0];
+                $total_amt_due = $all_payments[1];
+                $total_interest =  $all_payments[2];
+                $total_principal = $all_payments[3];
+                $total_surcharge = $all_payments[4];
 
                 ?>
             
@@ -312,7 +318,7 @@ color: white;
                 <tbody>
               
                    <?php 
-                    foreach ($all_payments as $l_data): ?>
+                    foreach ($over_due as $l_data): ?>
                       <tr>
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[0] ?></td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[1] ?></td> 
@@ -329,8 +335,29 @@ color: white;
                       <?php endforeach; ?>
                 </tbody>
               </table>
-            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">         
+        
+                         
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                       <label>Total Principal: </label>
+                       <input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
+                       <label>Total Surcharge: </label>
+                       <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
+                       <label>Total Interest: </label>
+                       <input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
+                       <label>Total Amount Due: </label>
+                       <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
+                    </div>
+                </div>
+            </div>               
 
+            </div>
             <div id="tab-5" class="tab-content" style="border:solid 1px gainsboro;">
              
                 <form method="" id="set-paydate">

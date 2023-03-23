@@ -248,15 +248,6 @@
                                             <?php  echo $total_principal; ?>
                                         </td>
                                         <td style="width:15%;">
-                                             <?php 
-                                                $qry4 =mysqli_query($conn, "SELECT sum(principal) as principal FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
-                                                while($rows = mysqli_fetch_array($qry4)){?>
-                                                    <?php echo number_format($rows['principal'],2);?>
-                                                <?php
-                                                }   
-                                            ?>
-                                        </td>
-                                        <td style="width:15%;">
                                             <?php 
                                                 $qry4 =mysqli_query($conn, "SELECT remaining_balance as bal FROM property_payments where md5(property_id) = '{$_GET['id']}' order by payment_count desc limit 1"); 
                                                 while($rows = mysqli_fetch_array($qry4)){?>
@@ -265,6 +256,16 @@
                                                 }   
                                             ?>
                                         </td>
+                                        <td style="width:15%;">
+                                             <?php 
+                                                $qry4 =mysqli_query($conn, "SELECT sum(principal) as principal FROM property_payments where md5(property_id) = '{$_GET['id']}' "); 
+                                                while($rows = mysqli_fetch_array($qry4)){?>
+                                                    <?php echo number_format($rows['principal'],2);?>
+                                                <?php
+                                                }   
+                                            ?>
+                                        </td>
+                                       
                                         <td style="width:15%;">
                                         </td>
                                     </tr>
