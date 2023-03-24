@@ -259,7 +259,7 @@ if(isset($_GET['id'])){
         $balance_ent = number_format($last_payment['remaining_balance'],2);
         $old_balance = $last_payment['remaining_balance'];
 
-
+      
         //code start here 
 
         
@@ -479,7 +479,7 @@ if(isset($_GET['id'])){
                     $underpay = 1;
                     $l_surcharge = 0;
 
-                    for ($x = 0; $x < $last_payment['payment_count'] + 1; $x++) {
+                    for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
                         try {
                             if ($last_payment['status'] == $payment_rec[$x]['status'] && $last_payment['due_date'] == $payment_rec[$x]['due_date']) {
                                 $last_principal += $payment_rec[$x]['principal'];
@@ -504,12 +504,12 @@ if(isset($_GET['id'])){
  
                     $monthly_pay = $monthly_payment - $last_principal;
                     echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
-                    $l_monthly = $last_payment['amount_due'] - $last_payment['amount_paid'];
+                    $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                     $count = $last_payment['status_count'];
                     $due_date = strtotime($l_date);
-                    $amount_paid_ent = (number_format($l_monthly));
-                    $amount_ent = (number_format($l_monthly));
-                    $total_amount_due_ent = (number_format($l_monthly));
+                    $amount_paid_ent = (number_format($l_monthly,2));
+                    $amount_ent = (number_format($l_monthly,2));
+                    $total_amount_due_ent = (number_format($l_monthly,2));
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
                             $monthly_pay = $l_full_payment;
@@ -533,46 +533,46 @@ if(isset($_GET['id'])){
                             $l_status = 'FPD';
                             $l_full_payment = $last_payment['remaining_balance'];
                             $monthly_pay = $l_full_payment;
-                            $amount_paid_ent = (number_format($monthly_pay));
-                            $amount_ent = (number_format($monthly_pay));
-                            $total_amount_due_ent = (number_format($monthly_pay));
+                            $amount_paid_ent = (number_format($monthly_pay,2));
+                            $amount_ent = (number_format($monthly_pay,2));
+                            $total_amount_due_ent = (number_format($monthly_pay,2));
                     } else {
                             $l_status = 'DFC - ' . strval($count);
                     }
                    
                 endif;
-                $payment_status_ent = $l_status	;
-
+            endif;
+            $payment_status_ent = $l_status	;
+                
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
-                $l_date = gmdate(timegm(get_date($start_date)));
-                $day = strftime("%d", $l_date);
+                $l_date = date('Y-m-d', strtotime($start_date));
+                $day = date('d', strtotime($l_date));
                 $monthly_pay = $monthly_payment;
-                echo $monthly_pay;
-                 
+            
+                
                 if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
-                    $due_date = strftime("%m/%d/%Y", $l_date);
-                    $due_date_ent = ($due_date);
-                    $due_date = timegm($l_date);
-                    $amount = number_format($rst[27]);
+                    $due_date = date('m/d/Y', strtotime($l_date));
+                    $due_date_ent = $due_date;
+                    $due_date = $due_date_ent;
+                    $amount = number_format($monthly_payment,2);
                     $amount_paid_ent = ($amount);
-                    $amount_ent = ($amount);
-                    $total_amount_due_ent = ($amount);
+                    $amount_ent = $amount;
+                    $total_amount_due_ent = $amount;
                     $count = 1;
                     if ($last_payment['status'] == 'ADDITIONAL') {
-                        $l_date = date(get_date($last_payment['due_date']));
-                        $t_year = strftime("%Y", $l_date);
-                        $t_month = strftime("%m", $l_date);
+                        $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        $t_year =  date('Y', strtotime($l_date));
+                        $t_month =  date('m', strtotime($l_date));
                         if ($retention == '1') {
-                            $l_date = date(get_date($rst['first_dp']));
+                            $l_date = date('Y-m-d', strtotime($last_payment['first_dp']));
                         }
-                        $t_day = strftime("%d", $l_date);
-                        $l_date2 = auto_date($due_date, $t_year, $t_month, $t_day);
+                        $t_day =  date('d', strtotime($l_date));
+                        $l_date2 = new Datetime(auto_date($t_day,$due_date));
                         $due_date = $l_date2;
-                        $l_date = gmdate($l_date2);
-                        $due_date_ent = (strftime("%m/%d/%Y", $l_date));
+                        $due_date_ent = $due_date->format('m/d/y');
                         $count = $last_payment[9] + 1;
                     }
-                    $l_interest = $last_payment['remaining-balance'] * ($interest_rate / 1200);
+                    $l_interest = $last_payment['remaining_balance'] * ($interest_rate / 1200);
                     $l_principal = $monthly_payment - $l_interest;
                     if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
                         $l_status = 'FPD';
@@ -587,24 +587,25 @@ if(isset($_GET['id'])){
 
 
                 elseif ($acc_status == 'Monthly Amortization'):
-                    $l_date = gmtime(timegm(get_date($last_payment['due_date'])));
-                    $t_year = strftime("%Y", $l_date);
-                    $t_month = strftime("%m", $l_date);
+                    $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                    $t_year =  date('Y', strtotime($l_date));
+                    $t_month =  date('m', strtotime($l_date));
                     if ($retention == '1') {
-                        $l_date = gmtime(timegm(get_date($start_date)));
+                        $l_date = date('Y-m-d', strtotime($start_date));
                     }
-                    $t_day = $validate_date($t_year, $t_month, strftime("%d", $l_date));
-                    $due_date_ent = ($t_month . '/' . $t_day . '/' . $t_year);
+                    $day = date('d', strtotime($l_date));
+                    $t_day = validate_date($t_year,$t_month,$day);
+                    $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
                     //under_pay
-                    if ($last_payment[2] < $last_payment[3]) {
+                    if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                         $l_surcharge = 0;
                         $underpay = 1;
                         $x_y = $last_cnt;
                         $l_cnt = 0;
                         $l_tot_int = 0;
-                        while ($last_payment[8] == $payment_rec[$x_y][8]) {
-                            $l_last_interest = $payment_rec[$x_y][7] * ($rst[25] / 1200);
-                            $l_tot_int += $payment_rec[$x_y][5];
+                        while ($last_payment['status'] == $payment_rec[$x_y]['status']) {
+                            $l_last_interest = $payment_rec[$x_y]['remaining_balance'] * ($interest_rate / 1200);
+                            $l_tot_int += $payment_rec[$x_y]['interest'];
                             $x_y -= 1;
                             $l_cnt += 1;
                             $l_int_last = $l_last_interest - $l_tot_int;
@@ -612,7 +613,7 @@ if(isset($_GET['id'])){
                         $monthly_pay = $monthly_pay - $last_principal - $last_interest;
                         if ($l_cnt > 1) {
                             // implement additional code here   
-                            foreach (range(0, $last_payment[10]) as $x) {
+                            for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
                                 try {
                                     /*
                                     Eric Note ito sa sarili mo : Ngayon ay 09-07-12.
@@ -620,41 +621,106 @@ if(isset($_GET['id'])){
                                     ng mga agesnts na MA ang status, i-uncomment mo yung nasa itaas at i-comment mo
                                     yung nasa ibaba. Yung nasa ibaba ay gumagana sa DFC.
                                     */
-                                    if ($last_payment[8] == $payment_rec[$x][8] && $last_payment[0] == $payment_rec[$x][0]) {
-                                        $last_principal += $payment_rec[$x][6];
-                                        $last_interest += $payment_rec[$x][5];
-                                        $l_surcharge += $payment_rec[$x][4];
+                                    if ($last_payment['status'] == $payment_rec[$x]['status'] && $last_payment['due_date'] == $payment_rec[$x]['due_date']) {
+                                        $last_principal += $payment_rec[$x]['principal'];
+                                        $last_interest += $payment_rec[$x]['interest'];
+                                        $l_surcharge += $payment_rec[$x]['surcharge'];
                                     }
-                                } catch (\Throwable $th) {
-                                    // do nothing
+                                } catch (Exception $e) {
+                                    //pass
                                 }
                             }  
                             $monthly_pay = $monthly_pay - $last_principal - $last_interest;  
             
                         }else {
-                            $monthly_pay = $last_payment[3] - $last_payment[2];
+                            $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
                             $last_interest = $l_tot_int;
-                            $ma_balance = $last_payment[7] + $last_principal;
+                            $ma_balance = $last_payment['remaining_balance'] + $last_principal;
                         }
-                        if ($last_payment[4] == 0) {
+                        if ($last_payment['surcharge'] == 0):
                             $last_sur = 0;
-                        }elseif ($last_payment[2] < $last_payment[4]) {
-                            $last_sur = $last_payment[2];
+                        elseif ($last_payment['payment_amount'] < $last_payment['surcharge']):
+                            $last_sur = $last_payment['payment_amount'];
                             $over_due_mode_upay = 1;
-                            $monthly_pay = $rst[27];
-                        }else {
-                            $last_sur = $last_payment[4];
+                            $monthly_pay = $monthly_payment;
+                        else:
+                            $last_sur = $last_payment['surcharge'];
                             $over_due_mode_upay = 1;
+                        endif;
+                        
+                        if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                                $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        endif;
+
+                        $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                        $count = $last_payment['status_count'];
+                        //$due_date = timegm($l_date);
+                        $amount_paid_ent = (number_format($monthly_pay,2));
+                        $amount_ent = (number_format($monthly_pay,2));
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+
+                        if ($l_cnt > 1) {
+                            $l_interest = $l_int_last;
+                        } else {
+                            $l_interest = $ma_balance * ($interest_rate / 1200);
                         }
-                    }
+                        if ($last_interest < $l_interest) {
+                            $l_interest = $l_interest - $last_interest;
+                        } else {
+                            $l_interest = 0.00;
+                        }
+                        if ($l_cnt > 1) {
+                            $l_principal = $monthly_pay - $l_last_interest;
+                        } else {
+                            $l_principal = $monthly_pay - $l_interest;
+                        }
+                        if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
+                            $l_status = 'FPD';
+                            $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
+                            $amount_paid_ent = (numbe_format($last_payment['remaining_balance'],2));
+                            $amount_ent = (number_format($monthly_pay,2));
+                            $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2 ));
+                        } else {
+                            $l_status = 'MA - ' . strval($count);
+                        }
+                        $payment_status_ent = ($l_status);
+
+
+
+                    else:
+                        $l_date = new Datetime(auto_date($t_day,$due_date_ent));
+                        $due_date = $l_date;
+                        $due_date_ent = $due_date->format('m/d/y');
+                        $count = floatval($last_payment['status_count']) + 1;
+                        $amount_paid_ent = (number_format($monthly_pay,2));
+                        $amount_ent = (number_format($monthly_pay,2));
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+
+                        $l_interest = $last_payment['remaining_balance'] * ($interest_rate /1200);
+                        $l_principal = $monthly_pay - $l_interest;
+                        if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
+                            $interest = $l_interest;
+                            $l_status = 'FPD';
+                            $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
+                            $amount_paid_ent = (number_format($last_payment['remaining_balance'],2));
+                            $amount_ent = (number_format($monthly_pay,2));
+                            $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2));
+                        } else {
+                            $l_status = 'MA - ' . (string)$count;
+                        }
+                        $payment_status_ent = ($l_status);
+                    endif;
+
                 endif;   
             
-    
-
-            endif;
+               
+        else:        
+        
+            echo "Error";
+            
         endif;
 
-        endwhile;
+    endwhile;
 
 }
 /*  */
