@@ -1385,6 +1385,7 @@ Class Master extends DBConnection {
 
 		$amount_paid = (float) str_replace(",", "", $amount_paid);
 		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
+
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
 		$data .= ", pay_date = '$pay_date' ";
@@ -1399,6 +1400,216 @@ Class Master extends DBConnection {
 		$data .= ", status = '$status' ";
 		$data .= ", status_count = '$status_count' ";
 		$data .= ", payment_count = '$payment_count' ";
+
+		//t1 = account 
+		//t2 = due date
+		//t3 = pay date
+		//t4 = or no 
+		//t5 = amount paid
+		//t6 = amount due
+		//t7 = rebate
+		//t8 = surcharge
+		//t9 = interest
+		//t10 = principal
+		//t11 = balance 
+		//t12 = status
+		//t13 = status count
+		//t15 = payment count
+
+
+		$t1 = $prop_id;
+		$t2 = $due_date;
+		$t3 = $pay_date;
+		$t4 = $or_no;
+		$t5 = floatval(str_replace(',', '',$amount_paid));
+		$t6 = floatval(str_replace(',', '',$tot_amount_due));
+		$t7 = $rebate;
+		$t8 = $surcharge;
+		
+
+		$t11 = $balance;
+		$t13 = $status_count;
+		$t14 = $payment_count + 1;
+		$l_due_pay = $amount_paid;
+		
+		if ((($payment_type1 == 'Partial DownPayment') && ($acc_status == 'Reservation') || ($acc_status == 'Partial DownPayment')) || ($payment_type1 == 'Full DownPayment') && ($acc_status == 'Full DownPayment') && ($acc_status == 'Partial DownPayment')){
+			$t7 = 0;
+			$t8 = 0;
+			if (($acc_status == 'Reservation') && (strip($status) != 'FD')) {
+				$t12 = 'PD - ' . stringval($t13);
+				$l_status = 'Partial DownPayment';
+			} elseif ($acc_status == 'Partial DownPayment') {
+				if (strip($status) == 'FD' && ($t5 >= $t6)) {
+					$t12 = 'FD';
+					$l_status = 'Full DownPayment';
+					$l_for_cts = 1;
+				} elseif (strip($payment_status_ent == 'FD' && ($t5) < $t6)) {
+					$t12 = 'PD';
+					$l_for_cts = 0;
+				} else {
+					$t12 = 'PD - ' . stringval($t13);
+				}
+			}
+
+			if ($underpay == 0) {
+				if ($t5 <$t6){
+					if ($t5 <= $t8) {
+						$t10 = '0.00';
+					} else {
+						$t10 = number_format($t5 - $t8,2);
+					}
+					$excess = -1;
+				} elseif ($t5 > $t6) {
+					$excess = $t5 - $t6;
+					$t5 = $t6;
+					$or_no = $or_no_ent;
+					$t10 = number_format($t5 - $t8);
+				} else {
+					$t10 = number_format($t5 - $t8);
+					$excess = -1;
+				}
+			} elseif ($underpay == 1) {
+				if ($t5 < $t6){
+					if ($t5 <= $t8) {
+						$t10 = '0.00';
+					} else {
+						$t10 = number_format($t5 - $t8, 2);
+						$l_surcharge = 0;
+						$l_ampd = 0;
+						// get last total principal
+						for ($x = 0; $x <= $payment_count; $x++) {
+							try {
+								if ($due_date == $payment_rec[$x][0]) {
+									$l_surcharge += $payment_rec[$x][4];
+									$l_ampd += $payment_rec[$x][2];
+								}
+							} catch(Exception $e) {
+							// pass
+							}
+						}
+					}
+					if ($l_ampd < $l_surcharge):
+						$l_sur_credit = $l_surcharge - $l_ampd;
+					else:
+						$l_sur_credit = 0;
+					endif;
+						
+					if ($amount_paid < $surcharge):
+						$t10 = $t5 - $t8 - $l_sur_credit;
+						$t10 = number_format($t10, 2);
+						if ($t10 < 0):
+							$t10 = '0.00';
+						endif;	
+					else:
+						if ($l_ampd < $l_surcharge):
+							$t10 = $t5 - $t8 - $l_sur_credit;
+							$t10 = number_format($t10,2);
+						else:
+							$t10 = $t5 - $t8;
+							$t10 = number_format($t10,2);
+							
+						endif;
+
+					endif;
+
+				}else if($t5 > $t6){
+					$excess = $t5 - $t6;
+					$t5 = $t6;
+					$or_no = $or_no_ent;
+					$t10 = $monthly_amortization;
+				}else{
+					$t10 = 	$monthly_amortization;
+				}
+			}
+
+			$t11 = $t11 - $t10;
+		
+		}elseif ($payment_type1 == 'Spot Cash'){
+			$t7 = '0.00';
+			$t8 = '0.00';
+			$t9 = '0.00';
+			$t10 = $t5;
+			$t11 = number_format((floatval($t11) - floatval($t10)),2);
+			if (floatval($t5) == floatval($t6)) {
+					$t12 = 'FPD';
+					$l_status = 'Fully Paid';
+			} else {
+					$t12 = 'SC';
+			}
+			$excess = -1;
+			if (floatval($t11) <= $rem_prcnt) {
+				$l_for_cts = 1;
+			}
+		}elseif ($payment_type1 == 'Full DownPayment' && $acc_status == 'Reservation'){
+			$t7 = '0.00';
+			$t9 = '0.00';
+			if (floatval($t5) == floatval($t6)) {
+				$t10 = number_format(floatval($t5) - floatval($t8),2);
+				$l_status = 'Full DownPayment';
+				$t12 = 'FD';
+				$l_for_cts = 1;
+				$excess = -1;
+			} elseif (floatval($t5) > floatval($t6)) {
+				$excess = floatval($t5) - floatval($t6);
+				$t5 = $or_no = $or_no_ent;
+				$t10 = number_format(floatval($t5) - floatval($t8),2);
+				$l_status = 'Full DownPayment';
+				$t12 = 'FD';
+				$l_for_cts = 1;
+			} elseif (floatval($t5) < floatval($t6)) {
+				$t10 = number_format(floatval($t5) - floatval($t8),2);
+				$l_status = 'Partial DownPayment';
+				$t12 = 'PFD';
+				$excess = -1;
+			}	
+			$t11 = number_format(floatval($t11) - floatval($t10),2);
+
+		}
+
+		elseif (($status_ent == 'Full DownPayment' && $payment_type2_ent == 'Deferred Cash Payment') || ($payment_type1_ent == 'No DownPayment' && $payment_type2_ent == 'Deferred Cash Payment') || $status_ent == 'Deferred Cash Payment') {
+			$t7 = '0.00';
+			$t9 = '0.00';
+			if ($underpay == 0) {
+				if ($t5 < $t6) {
+					if ($t5 <= $t8) {
+						$t10 = '0.00';
+					} else {
+						$t10 = number_format($t5 - $t8,2);
+					}
+					$excess = -1;
+				} elseif ($t5 > $t6) {
+					if ($payment_status_ent == 'FPD') {
+						$excess = $t5 - $t6;
+						$or_no = $or_no_ent;
+						$t10 = number_format($t5 - $t8,2);
+					} else {
+						$excess = $t5 - $t6;
+						$t5 = $t6;
+						$or_no = $or_no_ent;
+						$t10 = number_format($t5 - $t8,2);
+					}
+				} else {
+					$t10 = number_format($t5 - $t8,2);
+					$excess = -1;
+				}
+			}
+		}
+
+		//t1 = account 
+		//t2 = due date
+		//t3 = pay date
+		//t4 = or no 
+		//t5 = amount paid
+		//t6 = amount due
+		//t7 = rebate
+		//t8 = surcharge
+		//t9 = interest
+		//t10 = principal
+		//t11 = balance 
+		//t12 = status
+		//t13 = status count
+		//t15 = payment count
+
 
 		if(empty($property_id)){
 			$save = $this->conn->query("INSERT INTO property_payments set ".$data);

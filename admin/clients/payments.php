@@ -513,9 +513,9 @@ if(isset($_GET['id'])){
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
                             $monthly_pay = $l_full_payment;
-                            $amount_paid_ent = (number_format($monthly_pay));
+                            $amount_paid_ent = (number_format($monthly_pay,2));
                             $amount_ent = (number_format($monthly_pay));
-                            $total_amount_due_ent = (number_format($monthly_pay));
+                            $total_amount_due_ent = (number_format($monthly_pay,2));
                     } else {
                             $l_status = 'DFC - ' . strval($count);
                     }
@@ -745,6 +745,17 @@ if(isset($_GET['id'])){
 	<div class="card-body">
     <div class="container-fluid">
         <form action="" method="POST" id="save_payment">
+        <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="int-rate" name="int-rate" value="<?php echo $interest_rate; ?>">
+
+        <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>">
+
+        <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_mode" name="over_mode" value="<?php echo $over_due_mode; ?>">
+
+        <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>">
+
+        <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_payment" name="monthly_payment" value="<?php echo $monthly_payment; ?>">
+
+
             <label for="prop_id">Property ID:</label>
             <input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>"><br>
 
@@ -764,10 +775,10 @@ if(isset($_GET['id'])){
             <input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>"><br>
 
             <label for="payment_type1">Payment Type 1:</label>
-            <input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>"><br>
+            <input type="text" class="form-control-sm margin-bottom payment-type1" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>"><br>
 
             <label for="payment_type2">Payment Type 2:</label>
-            <input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>"><br>
+            <input type="text" class="form-control-sm margin-bottom payment-type2" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>"><br>
             
             <label for="due_date">Due Date:</label>
             <input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>"><br>
@@ -776,7 +787,7 @@ if(isset($_GET['id'])){
             <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>"><br>
 
             <label for="status">Status:</label>
-            <input type="text" class="form-control-sm margin-bottom stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>"><br>
+            <input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>"><br>
 
             <label for="amount_due">Amount Due:</label>
             <input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>"><br>
@@ -792,7 +803,7 @@ if(isset($_GET['id'])){
             <input type="text" id="interest" name="interest" required><br> -->
 
             <label for="rebate">Rebate:</label>
-            <input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate" name="rebate" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" required><br>
+            <input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" required><br>
 
             <label for="tot_amt_due">Total Amount Due:</label>
             <input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" required><br>
@@ -818,6 +829,15 @@ if(isset($_GET['id'])){
 	</div>
 </div>
 <script>
+
+  // Wait for the page to finish loading
+  window.onload = function() {
+    // Get a reference to the "paydate" field
+    var paydate = document.getElementById("pay_date");
+    
+    paydate.focus();
+  }
+
 function validateForm() {
 	    // error handling
 	    var errorCounter = 0;
