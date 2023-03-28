@@ -1501,10 +1501,79 @@ Class Master extends DBConnection {
 				}
 			}
 			
-			$principal = floatval(str_replace(',', '',$principal));
-			$balance = floatval(str_replace(',', '',$balance)) - $principal;
-		
+			
+		}elseif ($payment_type1 == 'Spot Cash'){
+			$rebate = '0.00';
+			$surcharge = '0.00';
+			$interest = '0.00';
+			$principal = $amount_paid;
+			$balance = number_format((floatval($balance) - floatval($principal)),2);
+			if (floatval($amount_paid) == floatval($tot_amount_due)) {
+					$status = 'FPD';
+					$l_status = 'Fully Paid';
+			} else {
+					$status = 'SC';
+			}
+			$excess = -1;
+			if (floatval($balance) <= $rem_prcnt) {
+				$l_for_cts = 1;
+			}
+		}elseif ($payment_type1 == 'Full DownPayment' && $acc_status == 'Reservation'){
+			$rebate = '0.00';
+			$interest = '0.00';
+			if (floatval($amount_paid) == floatval($tot_amount_due)) {
+				$principal = number_format(floatval($amount_paid) - floatval($surcharge),2);
+				$l_status = 'Full DownPayment';
+				$status = 'FD';
+				$l_for_cts = 1;
+				$excess = -1;
+			} elseif (floatval($amount_paid) > floatval($tot_amount_due)) {
+				$excess = floatval($amount_paid) - floatval($tot_amount_due);
+				$amount_paid = $or_no = $or_no_ent;
+				$principal = number_format(floatval($amount_paid) - floatval($surcharge),2);
+				$l_status = 'Full DownPayment';
+				$status = 'FD';
+				$l_for_cts = 1;
+			} elseif (floatval($amount_paid) < floatval($tot_amount_due)) {
+				$principal = number_format(floatval($amount_paid) - floatval($surcharge),2);
+				$l_status = 'Partial DownPayment';
+				$status = 'PFD';
+				$excess = -1;
+			}	
+			$balance = number_format(floatval($balance) - floatval($principal),2);
+
+		}elseif (($status_ent == 'Full DownPayment' && $payment_type2_ent == 'Deferred Cash Payment') || ($payment_type1_ent == 'No DownPayment' && $payment_type2_ent == 'Deferred Cash Payment') || $status_ent == 'Deferred Cash Payment') {
+			$rebate = '0.00';
+			$interest = '0.00';
+			if ($underpay == 0) {
+				if ($amount_paid < $tot_amount_due) {
+					if ($amount_paid <= $surcharge) {
+						$principal = '0.00';
+					} else {
+						$principal = number_format($amount_paid - $surcharge,2);
+					}
+					$excess = -1;
+				} elseif ($amount_paid > $tot_amount_due) {
+					if ($payment_status_ent == 'FPD') {
+						$excess = $amount_paid - $tot_amount_due;
+						$or_no = $or_no_ent;
+						$principal = number_format($amount_paid - $surcharge,2);
+					} else {
+						$excess = $amount_paid - $tot_amount_due;
+						$amount_paid = $tot_amount_due;
+						$or_no = $or_no_ent;
+						$principal = number_format($amount_paid - $surcharge,2);
+					}
+				} else {
+					$principal = number_format($amount_paid - $surcharge,2);
+					$excess = -1;
+				}
+			}
 		}
+
+		$principal = floatval(str_replace(',', '',$principal));
+		$balance = floatval(str_replace(',', '',$balance)) - $principal;
+		
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
