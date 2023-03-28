@@ -47,7 +47,12 @@ table td{
 .tab-link.current {
   background-color: #F0F0F0;
 }
-
+.modal-content{
+    width:1200px;
+    margin-left:0px;
+    height:auto;
+    display: block!important; /* remove extra space below image */
+    }
 .tab-content {
   display: none;
   padding: 20px;
@@ -66,6 +71,9 @@ color: white;
     font-size: 2px;
 }
 
+body{
+  font-size:14px;
+}
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
@@ -107,9 +115,6 @@ color: white;
         </table>
 
         <hr>
-
-       
-            
        
         <ul class="tabs">
         <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
@@ -345,14 +350,18 @@ color: white;
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                       <label>Total Principal: </label>
-                       <input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
-                       <label>Total Surcharge: </label>
-                       <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
-                       <label>Total Interest: </label>
-                       <input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
-                       <label>Total Amount Due: </label>
-                       <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
+                      <table>
+                          <tr>
+                              <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label>Total Amount Due: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
+                          </tr>
+                      </table>
                     </div>
                 </div>
             </div>               
