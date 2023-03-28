@@ -744,73 +744,43 @@ if(isset($_GET['id'])){
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
-        <form action="" method="POST" id="save_payment">
-            <label for="prop_id">Property ID:</label>
-            <input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>"><br>
+    <form action="" method="POST" id="save_payment">
+        <table>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>"></td><td style="width:25%;font-size:14px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc" name="acc_status" value="<?php echo $acc_status; ?>"></td>
+            </tr>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>"></td><td style="width:25%;font-size:14px;"><label for="acc_option">Account Option:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>"><br></td>
+            </tr>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td><td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>"></td><td style="width:25%;font-size:14px;"><label for="payment_type1">Payment Type 1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>"></td>
+            </tr>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td><td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;"></td><td style="width:25%;"><label for="payment_type2">Payment Type 2:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>"></td>
+            </tr>
+        </table>
 
-            <label for="acc_type1">Account Type1:</label>
-            <input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>"><br>
-
-            <label for="acc_type2">Account Type2:</label>
-            <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>"><br>
-
-            <label for="date_of_sale">Date of Sale:</label>
-            <input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>"><br>
-
-            <label for="acc_status">Account Status:</label>
-            <input type="text" id="acc" name="acc_status" value="<?php echo $acc_status; ?>"><br>
-
-            <label for="acc_option">Account Option:</label>
-            <input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>"><br>
-
-            <label for="payment_type1">Payment Type 1:</label>
-            <input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>"><br>
-
-            <label for="payment_type2">Payment Type 2:</label>
-            <input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>"><br>
-            
-            <label for="due_date">Due Date:</label>
-            <input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>"><br>
-
-            <label for="pay_date">Pay Date:</label>
-            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>"><br>
-
-            <label for="status">Status:</label>
-            <input type="text" class="form-control-sm margin-bottom stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>"><br>
-
-            <label for="amount_due">Amount Due:</label>
-            <input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>"><br>
-
-           <!--  <label for="principal">Principal:</label>
-            <input type="text" id="principal" name="principal" value=conv-outlet"" required><br>
-
-             -->
-            <label for="surcharge">Surcharge:</label>
-            <input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" required><br>
-
-          <!--   <label for="amount_paid">Interest:</label>
-            <input type="text" id="interest" name="interest" required><br> -->
-
-            <label for="rebate">Rebate:</label>
-            <input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate" name="rebate" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" required><br>
-
-            <label for="tot_amt_due">Total Amount Due:</label>
-            <input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" required><br>
-
-            <label for="balance">Balance:</label>
-            <input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" required><br>
-
-            <label for="amount_paid">Amount Paid:</label>
-            <input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required><br>
-
-            <label for="or_no">Or #:</label>
-            <input type="text" class="form-control-sm margin-bottom or-no"  id="or_no" name="or_no" required><br>
-
-           <!--  <label for="status_count">Status Count:</label>
-            <input type="text" id="status_count" name="status_count" required><br> -->
-
-           <!--  <label for="payment_count">Payment Count:</label>
-            <input type="text" id="payment_count" name="payment_count" required><br> -->
+        <hr>
+        <table>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="due_date">Due Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>" style="width:100%;"></td>
+            </tr>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>"></td><td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" required></td>
+            </tr>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>"></td><td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate" name="rebate" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" required></td>
+            </tr>
+        </table>
+        <br>
+        <table>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="tot_amt_due">Total Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" required></td><td style="width:25%;font-size:14px;"><label for="balance">Balance:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" required></td>
+            </tr>
+            <tr>
+                <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no" name="or_no" required></td>
+            </tr>
+        </table>
         </form>
 
 
