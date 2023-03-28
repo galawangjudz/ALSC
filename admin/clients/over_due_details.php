@@ -78,7 +78,7 @@ if(isset($_GET['id'])){
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
-	<h3 class="card-title"><b> Due/Overdue Details <i><?php echo $prop_id ?></i> </b></h3>
+	<h3 class="card-title"><b> Due/Overdue Details</b></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
@@ -98,8 +98,13 @@ if(isset($_GET['id'])){
            $total_interest =  $all_payments[2];
            $total_principal = $all_payments[3];
            $total_surcharge = $all_payments[4];  ?>
-    <label class="control-label"> Over Due Date: <?php echo $pay_date; ?> </label>
-    <a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
+           <table style="width:60%;float:left;">
+                <tr>
+                    <td style="width:3%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:10%;font-size:14px;"><u><?php echo $pay_date; ?></u></td>
+                    <td style="width:3%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:10%;font-size:14px;"><u><?php echo $prop_id; ?></u></td>
+                </tr>
+            </table>
+    &nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
     <table class="table2 table-bordered table-stripped">
                   <thead> 
                       <tr>
@@ -145,14 +150,18 @@ if(isset($_GET['id'])){
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                       <label>Total Principal: </label>
-                       <input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>">
-                       <label>Total Surcharge: </label>
-                       <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>">
-                       <label>Total Interest: </label>
-                       <input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>">
-                       <label>Total Amount Due: </label>
-                       <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>">
+                        <table>
+                            <tr>
+                                <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
+                                <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
+                                <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
+                                <td style="font-size:14px;"><label>Total Amount Due: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>     

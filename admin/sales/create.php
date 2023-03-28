@@ -959,7 +959,7 @@ input{
 										<div class="col-md-3">
 											<div class="form-group">
 												<br>
-												<input type="submit" class="btn btn-success float-right select-lot" value="Find Lot" data-loading-text="Finding..." id="btnfind" >
+												<input type="submit" class="btn btn-success float-right select-lot" value="Find Lot" data-loading-text="Finding..." id="btnfind" style="margin-top:5px;width:100px;">
 											</div>
 										</div>
 									</div>
@@ -1128,7 +1128,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>"></label>
+												<label class="control-label"><input type="number" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1157,7 +1157,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>"></label>
+												<label class="control-label"><input type="number" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1184,7 +1184,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>"></label>
+												<label class="control-label"><input type="number" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1211,7 +1211,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom service-area" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>"></label>
+												<label class="control-label"><input type="number" class="form-control margin-bottom service-area" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1238,7 +1238,7 @@ input{
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<label class="control-label"><input type="text" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>"></label>
+												<label class="control-label"><input type="number" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>"></label>
 											</div>
 										</div>
 										<div class="col-md-1">
@@ -1546,25 +1546,16 @@ input{
 												</div>
 											</td>
 											<td style="padding-top:10px;">
-												<div class="form-group form-group-sm">
 													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
-												</div>
 											</td>
 											<td style="padding-top:10px;">
-												<div class="input-group input-group-sm">
-													
-													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" readonly>
-												</div>
+													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
 											</td>
 											<td style="padding-top:10px;">
-												<div class="form-group form-group-sm">
 													<input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
-												</div>
 											</td>
 											<td style="padding-top:10px;">
-												<div class="input-group input-group-sm">
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
-												</div>
+													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" >
 											</td>
 										</tr>
 										<?php endwhile; 
@@ -2056,8 +2047,20 @@ input{
 
 		document.getElementById('add_cost_total').value = result;
 	}
+  // Get the input element
+  var input = document.getElementById("myInput");
+
+  // Listen for the "input" event
+  input.addEventListener("input", function(event) {
+    // Get the input value
+    var value = event.target.value;
+
+    // Remove any non-numeric characters except for a period
+    var newValue = value.replace(/[^0-9\.]/g, '');
+
+    // Update the input value
+    if (value !== newValue) {
+      event.target.value = newValue;
+    }
+  });
 </script>
-
-
-
-
