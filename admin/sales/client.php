@@ -82,7 +82,7 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-2">		
                             <div class="form-group">
                                 <label class="control-label">Area Code: </label>
-                                <input type="text" class="form-control copy-input" name="customer_zip_code" id="customer_zip_code" value="<?php echo isset($meta['zip_code']) ? $meta['zip_code']: '' ?>">					
+                                <input type="text" class="form-control copy-input required" name="customer_zip_code" id="customer_zip_code" value="<?php echo isset($meta['zip_code']) ? $meta['zip_code']: '' ?>">					
                             </div>
                         </div>
                     </div>

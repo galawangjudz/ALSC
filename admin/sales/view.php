@@ -1,11 +1,8 @@
-
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-
-
 <style>
 .titles{
 	color:black;
@@ -155,7 +152,9 @@
   font-style: italic;
   font-weight:bold;
 }
-
+#uni_modal{
+    width:500px;
+}
 </style>
 <?php 
 
@@ -278,10 +277,11 @@ if($csr->num_rows > 0){
                         
                        <!-- hide ko muna to  <a href="?page=mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-info"> E-mail <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
                  -->
-                        <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                        &nbsp;<button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Print
                         <span class="sr-only">Toggle Dropdown</span>
                         </button>
+                        
                         <div class="dropdown-menu" role="menu">   
                             <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
                             <div class="dropdown-divider"></div>
@@ -291,7 +291,6 @@ if($csr->num_rows > 0){
                         </div>
            
 
-                        <hr>
                         <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 
                             
                             <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="1" class="btn btn-success btn-lg btn-block sm-verification">Verified <span class="fa fa-check" aria-hidden="true"> </button>                            
@@ -305,7 +304,7 @@ if($csr->num_rows > 0){
                             
                         <?php } ?>    
                     </div>
-                    
+
                     <div class="titles"> Buyer's Profile</div>
                         <br>
                         <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
@@ -336,11 +335,11 @@ if($csr->num_rows > 0){
                             <div class="float-left col-md-12">
                                 <table class="table table-striped">
                                     <tr>
-                                        <td><b>Buyer No: </b></td>
+                                        <td style="width:10%;"><b>Buyer No: </b></td>
                                         <td><?php echo $buyer_count ?></td>
                                     </tr>
                                     <tr>
-                                        <td><b>Buyer's Full Name:</b></td>
+                                        <td style="width:10%;"><b>Buyer's Full Name:</b></td>
                                         <td><?php echo $cust_fullname1 ?></td>
                                     </tr>
                                 
@@ -382,7 +381,7 @@ if($csr->num_rows > 0){
                                         <td><?php echo $customer_gender ?></td>
                                     </tr>
                                     <tr>
-                                        <td><b>Civil Status:</b></td>
+                                        <td style="width:40%;"><b>Civil Status:</b></td>
                                         <td><?php echo $civil_status ?></td>
                                     </tr>
                                 
@@ -880,8 +879,6 @@ if($csr->num_rows > 0){
 
                 <?php
  
-        
-
                 // the query
                 $query = "SELECT * FROM t_csr_comments WHERE md5(c_csr_no) = '{$_GET['id']}'";
                 //print $query;
