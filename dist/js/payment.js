@@ -17,8 +17,8 @@ function check_paydate(){
     const due_date = new Date($('.due-date').val());
     const pay_date = new Date($('.pay-date').val());
     const payment_type2 = $('.payment-type2').val();
-    const pay_status =  $('.pay-stat').val();
-    const pay_stat_acro = pay_status.substr(0, 2);
+    const pay_status = $('.pay-stat').val();
+    const pay_stat_acro = pay_status.substring(0, 2);
     const interest_rate =  $('.int-rate').val();
     const underpay =  $('.under-pay').val();
     const excess =  $('.excess').val();
@@ -28,7 +28,7 @@ function check_paydate(){
     const monthly_pay  = parseFloat(numStr.replace(",", ""));
     
 
-    console.log(pay_stat_acro);
+    //console.log(pay_stat_acro);
     if (pay_date > due_date) {
         const timeDiff = Math.abs(pay_date.getTime() - due_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
@@ -41,7 +41,7 @@ function check_paydate(){
         $('#tot_amount_due').val(tot_amt_due.toFixed(2));
         $('#amount_paid').val(tot_amt_due.toFixed(2));
         //console.log(`${pa_status.substr(0,2)}`);
-        console.log(pay_status);
+        //console.log(pay_status);
         console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
 
       

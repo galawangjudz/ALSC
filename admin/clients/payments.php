@@ -18,10 +18,10 @@ function validate_date($year,$month,$day){
         if ($day == 31):
             $l_new_day = '30';
         else:
-            $l_new_day = $l_day;
+            $l_new_day = $day;
         endif;
     elseif ($month == 2):
-        if ($l_day > 28):
+        if ($day > 28):
             $l_leap = is_leap_year($year);
 
             if ($l_leap):
@@ -259,16 +259,31 @@ if(isset($_GET['id'])){
         $balance_ent = number_format($last_payment['remaining_balance'],2);
         $old_balance = $last_payment['remaining_balance'];
 
-      
+        $last_stat_count = $last_payment['status_count'];
+        $last_pay_count = $last_payment['payment_count'];
         //code start here 
 
         
         if($acc_status == 'Fully Paid'):
+            $amount_ent = '';
+            $amount_paid_ent = '';
+            $surcharge_ent = '';
+            $rebate_ent = '';
+            $total_amount_due_ent = '';
+            $due_date_ent = '';
+            $payment_status_ent = '';
             return ;
         endif;
 
-        if($retention == 'Retention'):
+        if($retention == '1'):
             $l_date = $last_pay_date;
+            $amount_ent = '0.00';
+            $amount_paid_ent = number_format($last_payment['remaining_balance'],2);
+            $surcharge_ent = '0.00';
+            $rebate_ent = '0.00';
+            $total_amount_due_ent = '0.00';
+            $due_date_ent = $l_date;
+            $payment_status_ent = 'RETENTION';
 
         elseif(($p1 == 'Partial DownPayment') && ($acc_status == 'Reservation' || $acc_status == 'Partial DownPayment') || ($p1 == 'Full DownPayment' && $acc_status == 'Partial DownPayment')):
             //$rebate_ent->set_sensitive(0);
@@ -288,6 +303,7 @@ if(isset($_GET['id'])){
                 $due_date = new DateTime($due_date_ent);
                 $amount_paid_ent = (number_format($monthly_down,2));
                 $amount_ent = (number_format($monthly_down,2));
+                $total_amount_due_ent = (number_format($monthly_down,2));
                 $count = 1;
                 if ($last_payment['status'] == 'ADDITIONAL'):
                         $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
@@ -369,7 +385,7 @@ if(isset($_GET['id'])){
                     $l_date2 = new Datetime(auto_date($day,$l_date));
                     $due_date = $l_date2;
                     $due_date_ent = $due_date->format('m/d/y');
-                    echo $last_payment['status_count'];
+                    //echo $last_payment['status_count'];
                     $count = floatval($last_payment['status_count']) + 1;
                     $amount_paid_ent = (number_format($monthly_pay,2));
                     $amount_ent = (number_format($monthly_pay,2));
@@ -706,7 +722,7 @@ if(isset($_GET['id'])){
                             $amount_ent = (number_format($monthly_pay,2));
                             $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2));
                         } else {
-                            $l_status = 'MA - ' . (string)$count;
+                            $l_status = 'MA - ' . strval($count);
                         }
                         $payment_status_ent = ($l_status);
                     endif;
@@ -747,7 +763,7 @@ if(isset($_GET['id'])){
     <form action="" method="POST" id="save_payment">
         <table>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>"></td><td style="width:25%;font-size:14px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc" name="acc_status" value="<?php echo $acc_status; ?>"></td>
+                <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>"></td><td style="width:25%;font-size:14px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>"></td>
             </tr>
             <tr>
                 <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>"></td><td style="width:25%;font-size:14px;"><label for="acc_option">Account Option:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>"><br></td>
@@ -769,7 +785,7 @@ if(isset($_GET['id'])){
                 <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>"></td><td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" required></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>"></td><td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate" name="rebate" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" required></td>
+                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>"></td><td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" required></td>
             </tr>
         </table>
         <br>
@@ -781,6 +797,14 @@ if(isset($_GET['id'])){
                 <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no" name="or_no" required></td>
             </tr>
         </table>
+        <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="int_rate" name="int_rate" value="<?php echo $interest_rate; ?>"> 
+        <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
+        <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
+        <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_pay" name="monthly_pay" value="<?php echo $monthly_pay; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $last_stat_count; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom payment-count"  id="payment_count" name="payment_count" value="<?php echo $last_pay_count; ?>">   
+       
         </form>
 
 
