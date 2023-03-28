@@ -276,7 +276,13 @@
                 $l_data = array($t_due_date,"----------",'******','0.00',number_format($l_bal,2),'0.00',number_format($l_bal,2),'0.00','0.00','RETENTION',number_format($l_bal,2));
                 array_push($all_payments, $l_data);
 
-                return $all_payments;
+                $l_tot_amnt_due = $l_bal;
+                $l_tot_principal = $l_bal;
+                $l_tot_surcharge = ('0.0');
+                $l_tot_interest = ('0.0');
+
+                return array($all_payments, number_format($l_tot_amnt_due,2), number_format($l_tot_interest,2), number_format($l_tot_principal,2), number_format($l_tot_surcharge,2));      
+
             }
 
             $l_mode = 1;
