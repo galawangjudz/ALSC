@@ -631,12 +631,7 @@ if(isset($_GET['id'])){
                             // implement additional code here   
                             for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
                                 try {
-                                    /*
-                                    Eric Note ito sa sarili mo : Ngayon ay 09-07-12.
-                                    Kung sakali lang naman na may mag-error na negative ang result sa surcharges
-                                    ng mga agesnts na MA ang status, i-uncomment mo yung nasa itaas at i-comment mo
-                                    yung nasa ibaba. Yung nasa ibaba ay gumagana sa DFC.
-                                    */
+                                   
                                     if ($last_payment['status'] == $payment_rec[$x]['status'] && $last_payment['due_date'] == $payment_rec[$x]['due_date']) {
                                         $last_principal += $payment_rec[$x]['principal'];
                                         $last_interest += $payment_rec[$x]['interest'];
@@ -794,10 +789,10 @@ if(isset($_GET['id'])){
                 <td style="width:25%;font-size:14px;"><label for="tot_amt_due">Total Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" required></td><td style="width:25%;font-size:14px;"><label for="balance">Balance:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" required></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no" name="or_no" required></td>
+                <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" required></td>
             </tr>
         </table>
-        <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="int_rate" name="int_rate" value="<?php echo $interest_rate; ?>"> 
+        <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest" name="interest" value="<?php echo $interest_rate; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
