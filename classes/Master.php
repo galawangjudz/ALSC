@@ -1506,7 +1506,8 @@ Class Master extends DBConnection {
 				}
 			}
 		$principal = floatval(str_replace(',', '',$principal));
-		$balance = floatval(str_replace(',', '',$balance)) - $principal;	
+		$balance = floatval(str_replace(',', '',$balance)) - $principal;
+		
 			
 		}elseif ($payment_type1 == 'Spot Cash'){
 			$rebate = 0;
@@ -1662,10 +1663,10 @@ Class Master extends DBConnection {
 		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Monthly Amortization') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'){
 			$interest = 0;
 			if ($under_pay == 0){
-				
+				$balance = floatval(str_replace(',', '',$balance));
 				if ($amount_paid < $tot_amount_due) {
 					$rebate = 0;
-					$l_interest = strval(($balance) * ($interest/1200));
+					$l_interest = strval(($balance) * ($interest_rate/1200));
 					if ($amount_paid <= $surcharge):
 						$interest = 0;
 						$principal = 0;
@@ -1680,7 +1681,7 @@ Class Master extends DBConnection {
 				}elseif (($amount_paid) > ($tot_amount_due)){
 					if($over_due == 0 and $to_pricipal_rbtn== 1):
 						$excess = -1;
-						$interest =  ((($balance) * ($account_info[25]/1200)));
+						$l_interest =  ((($balance) * ($interest_rate/1200)));
 						$principal = (($amount_paid) - (t9) - (t8));
 						$principal_new = ($monthly_pay - (t9) - (t8) - (t7));
 						$l_excess_amount = ($amount_paid) - ($tot_amount_due);
@@ -1694,13 +1695,15 @@ Class Master extends DBConnection {
 					if ($status == 'FPD'):
 						$excess = $amount_paid;
 						$or_no = $or_no_ent;
-						$interest = ($balance * ($interest/1200));
+						$interest = ($balance * ($interest_rate/1200));
 						$principal = ($amount_paid - $interest - $rebate);
 					else:
 						$excess = ($amount_paid - $tot_amount_due);
 						$amount_paid = $tot_amount_due;
 						$or_no = $or_no_ent;
-						$interest = ($balance * ($interest/1200));
+						//echo $balance;
+						// echo $interest_rate;
+						$interest = ($balance * ($interest_rate/1200));
 						$principal = ($monthly_pay - $interest - $rebate);
 
 					endif;
@@ -1709,8 +1712,19 @@ Class Master extends DBConnection {
 						$principal = 0;
 					endif;
 				}
+			}else{
+				$interest =  ($balance * ($interest_rate/1200));
+				if ($status == 'FPD'):
+					$principal = ($monthly_pay - $interest - $rebate);
+				else:
+					$principal = ($monthly_pay - $interest - $rebate);
+					if ($principal < 0): 
+						$neg_prin = 1 ;
+						$principal = 0;
+					endif;
+				endif;
+				$excess = 0;
 			}
-					
 		}
 		
 					
