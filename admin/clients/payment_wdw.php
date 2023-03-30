@@ -11,10 +11,10 @@
             <label for="prop_id">Property ID:</label>
             <input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>"><br>
 
-            <label for="acc_type1">Account Type1:</label>
+            <label for="acc_type1">Account Type 1:</label>
             <input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>"><br>
 
-            <label for="acc_type2">Account Type2:</label>
+            <label for="acc_type2">Account Type 2:</label>
             <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>"><br>
 
             <label for="date_of_sale">Date of Sale:</label>

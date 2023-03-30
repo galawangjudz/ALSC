@@ -2047,20 +2047,4 @@ input{
 
 		document.getElementById('add_cost_total').value = result;
 	}
-  // Get the input element
-  var input = document.getElementById("myInput");
-
-  // Listen for the "input" event
-  input.addEventListener("input", function(event) {
-    // Get the input value
-    var value = event.target.value;
-
-    // Remove any non-numeric characters except for a period
-    var newValue = value.replace(/[^0-9\.]/g, '');
-
-    // Update the input value
-    if (value !== newValue) {
-      event.target.value = newValue;
-    }
-  });
 </script>
