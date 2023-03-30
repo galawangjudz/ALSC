@@ -122,6 +122,7 @@ body{
         <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
         <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
         <li class="tab-link" data-tab="tab-5"><b>Payment Overdue</b></li>
+       <!--  <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li> -->
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
@@ -377,6 +378,11 @@ body{
   
               
             </div>
+
+          
+
+           
+         </div>
         </div>
     </div>
 </div>

@@ -1223,6 +1223,9 @@ Class Master extends DBConnection {
 			$data .= ", c_start_date = '$start_date' ";
 			$data .= ", c_remarks = '$remarks' ";
 			$data .= ", c_active = '$active' ";
+			$balance = ($net_tcp - $reservation);
+			$data .= ", c_balance = '$balance' ";
+
 
 			endwhile;
 
@@ -1269,6 +1272,7 @@ Class Master extends DBConnection {
 			$data .= ", payment_count = '$payment_count' ";
 
 			$save5 = $this->conn->query("INSERT INTO property_payments set ".$data);
+			
 			$payment_count += 1;
 			
 		endwhile;
@@ -1383,105 +1387,83 @@ Class Master extends DBConnection {
 	function save_payment(){
 		extract($_POST);
 
+		$payments = $this->conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE property_id = ".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $l_last = $payments->num_rows - 1;
+        $payments_data = array(); 
+        if($payments->num_rows <= 0){
+            echo ('No Payment Records for this Account!');
+        } 
+        while($row = $payments->fetch_assoc()) {
+          $payments_data[] = $row; 
+
+        }
+		
+		$rebate = $rebate_amt;
+        $last_cnt = $l_last;
+        $payment_rec = $payments_data;
+        $last_payment = $payments_data[$l_last];
+
 		$amount_paid = (float) str_replace(",", "", $amount_paid);
 		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
+		$status_count = $status_count ;
+		$payment_count = $payment_count + 1;
 
-		$data = " property_id = '$prop_id' ";
-		$data .= ", payment_amount = '$amount_paid' ";
-		$data .= ", pay_date = '$pay_date' ";
-		$data .= ", due_date = '$due_date' ";
-		$data .= ", or_no = '$or_no' " ;
-		$data .= ", amount_due = '$tot_amount_due' ";
-		$data .= ", rebate = '$rebate' ";
-		$data .= ", surcharge = '$surcharge' ";
-		$data .= ", interest = '$interest' ";
-		$data .= ", principal = '$principal' ";
-		$data .= ", remaining_balance = '$balance' ";
-		$data .= ", status = '$status' ";
-		$data .= ", status_count = '$status_count' ";
-		$data .= ", payment_count = '$payment_count' ";
-
-		//t1 = account 
-		//t2 = due date
-		//t3 = pay date
-		//t4 = or no 
-		//t5 = amount paid
-		//t6 = amount due
-		//t7 = rebate
-		//t8 = surcharge
-		//t9 = interest
-		//t10 = principal
-		//t11 = balance 
-		//t12 = status
-		//t13 = status count
-		//t15 = payment count
-
-
-		$t1 = $prop_id;
-		$t2 = $due_date;
-		$t3 = $pay_date;
-		$t4 = $or_no;
-		$t5 = floatval(str_replace(',', '',$amount_paid));
-		$t6 = floatval(str_replace(',', '',$tot_amount_due));
-		$t7 = $rebate;
-		$t8 = $surcharge;
 		
+		$l_status = '';
+		//rem set to zero for cts
+		$rem_prcnt = 0;
+		//echo $status;
 
-		$t11 = $balance;
-		$t13 = $status_count;
-		$t14 = $payment_count + 1;
-		$l_due_pay = $amount_paid;
-		
 		if ((($payment_type1 == 'Partial DownPayment') && ($acc_status == 'Reservation') || ($acc_status == 'Partial DownPayment')) || ($payment_type1 == 'Full DownPayment') && ($acc_status == 'Full DownPayment') && ($acc_status == 'Partial DownPayment')){
-			$t7 = 0;
-			$t8 = 0;
-			if (($acc_status == 'Reservation') && (strip($status) != 'FD')) {
-				$t12 = 'PD - ' . stringval($t13);
+			$rebate = 0;
+			$interest = 0;
+			if (($acc_status == 'Reservation') && ($status != 'FD')) {
+				$status = 'PD - ' . strval($status_count);
 				$l_status = 'Partial DownPayment';
 			} elseif ($acc_status == 'Partial DownPayment') {
-				if (strip($status) == 'FD' && ($t5 >= $t6)) {
-					$t12 = 'FD';
+				if ($status == 'FD' && ($amount_paid >= $tot_amount_due)) {
+					$status = 'FD';
 					$l_status = 'Full DownPayment';
 					$l_for_cts = 1;
-				} elseif (strip($payment_status_ent == 'FD' && ($t5) < $t6)) {
-					$t12 = 'PD';
+				} elseif ($status == 'FD' && ($amount_paid) < $tot_amount_due) {
+					$status = 'PD';
 					$l_for_cts = 0;
 				} else {
-					$t12 = 'PD - ' . stringval($t13);
+					$status = 'PD - ' . strval($status_count);
 				}
 			}
 
-			if ($underpay == 0) {
-				if ($t5 <$t6){
-					if ($t5 <= $t8) {
-						$t10 = '0.00';
+			if ($under_pay == 0) {
+				if ($amount_paid <$tot_amount_due){
+					if ($amount_paid <= $surcharge) {
+						$principal = 0;
 					} else {
-						$t10 = number_format($t5 - $t8,2);
+						$principal = number_format($amount_paid - $surcharge,2);
 					}
 					$excess = -1;
-				} elseif ($t5 > $t6) {
-					$excess = $t5 - $t6;
-					$t5 = $t6;
-					$or_no = $or_no_ent;
-					$t10 = number_format($t5 - $t8);
+				} elseif ($amount_paid > $tot_amount_due) {
+					$excess = $amount_paid - $tot_amount_due;
+					$amount_paid = $tot_amount_due;
+					$or_no_ent = $or_no_ent;
+					$principal = number_format($amount_paid - $surcharge,2);
 				} else {
-					$t10 = number_format($t5 - $t8);
+					$principal = number_format($amount_paid - $surcharge,2);
 					$excess = -1;
 				}
-			} elseif ($underpay == 1) {
-				if ($t5 < $t6){
-					if ($t5 <= $t8) {
-						$t10 = '0.00';
+			} elseif ($under_pay == 1) {
+				if ($amount_paid < $tot_amount_due){
+					if ($amount_paid <= $surcharge) {
+						$principal = 0;
 					} else {
-						$t10 = number_format($t5 - $t8, 2);
+						$principal = number_format($amount_paid - $surcharge, 2);
 						$l_surcharge = 0;
 						$l_ampd = 0;
 						// get last total principal
 						for ($x = 0; $x <= $payment_count; $x++) {
 							try {
-								if ($due_date == $payment_rec[$x][0]) {
-									$l_surcharge += $payment_rec[$x][4];
-									$l_ampd += $payment_rec[$x][2];
+								if ($due_date == $payment_rec[$x]['due_date']) {
+									$l_surcharge += $payment_rec[$x]['surcharge'];
+									$l_ampd += $payment_rec[$x]['payment_amount'];
 								}
 							} catch(Exception $e) {
 							// pass
@@ -1494,131 +1476,437 @@ Class Master extends DBConnection {
 						$l_sur_credit = 0;
 					endif;
 						
-					if ($amount_paid < $surcharge):
-						$t10 = $t5 - $t8 - $l_sur_credit;
-						$t10 = number_format($t10, 2);
-						if ($t10 < 0):
-							$t10 = '0.00';
+					if ($last_payment['payment_amount'] < $last_payment['surcharge']):
+						$principal = $amount_paid - $surcharge - $l_sur_credit;
+						$principal = number_format($principal, 2);
+						if ($principal < 0):
+							$principal = 0;
 						endif;	
 					else:
 						if ($l_ampd < $l_surcharge):
-							$t10 = $t5 - $t8 - $l_sur_credit;
-							$t10 = number_format($t10,2);
+							$principal = $amount_paid - $surcharge - $l_sur_credit;
+							$principal = number_format($principal,2);
 						else:
-							$t10 = $t5 - $t8;
-							$t10 = number_format($t10,2);
+							$principal = $amount_paid - $surcharge;
+							$principal = number_format($principal,2);
 							
 						endif;
 
 					endif;
 
-				}else if($t5 > $t6){
-					$excess = $t5 - $t6;
-					$t5 = $t6;
-					$or_no = $or_no_ent;
-					$t10 = $monthly_amortization;
+				}else if($amount_paid > $tot_amount_due){
+					$excess = $amount_paid - $tot_amount_due;
+					$amount_paid = $tot_amount_due;
+					$or_no_ent = $or_no_ent;
+					$principal = $monthly_pay;
 				}else{
-					$t10 = 	$monthly_amortization;
+					$principal = $monthly_pay;
 				}
 			}
-
-			$t11 = $t11 - $t10;
+		$principal = floatval(str_replace(',', '',$principal));
+		$balance = floatval(str_replace(',', '',$balance)) - $principal;
 		
+			
 		}elseif ($payment_type1 == 'Spot Cash'){
-			$t7 = '0.00';
-			$t8 = '0.00';
-			$t9 = '0.00';
-			$t10 = $t5;
-			$t11 = number_format((floatval($t11) - floatval($t10)),2);
-			if (floatval($t5) == floatval($t6)) {
-					$t12 = 'FPD';
+			$rebate = 0;
+			$surcharge = 0;
+			$interest = 0;
+			$principal = floatval(str_replace(',', '',$amount_paid));
+			$balance = floatval(str_replace(',', '',$balance));
+			$balance = $balance - $principal;
+			if ($amount_paid == floatval($tot_amount_due)) {
+					$status = 'FPD';
 					$l_status = 'Fully Paid';
 			} else {
-					$t12 = 'SC';
+					$status = 'SC';
 			}
 			$excess = -1;
-			if (floatval($t11) <= $rem_prcnt) {
+			if (floatval($balance) <= $rem_prcnt) {
 				$l_for_cts = 1;
 			}
+	
 		}elseif ($payment_type1 == 'Full DownPayment' && $acc_status == 'Reservation'){
-			$t7 = '0.00';
-			$t9 = '0.00';
-			if (floatval($t5) == floatval($t6)) {
-				$t10 = number_format(floatval($t5) - floatval($t8),2);
+			$rebate = 0;
+			$interest = 0;
+			$principal = floatval(str_replace(',', '',$amount_paid));
+			$balance = floatval(str_replace(',', '',$balance));
+			if ($amount_paid == floatval($tot_amount_due)) {
+				$principal = $amount_paid - floatval($surcharge);
 				$l_status = 'Full DownPayment';
-				$t12 = 'FD';
+				$status = 'FD';
 				$l_for_cts = 1;
 				$excess = -1;
-			} elseif (floatval($t5) > floatval($t6)) {
-				$excess = floatval($t5) - floatval($t6);
-				$t5 = $or_no = $or_no_ent;
-				$t10 = number_format(floatval($t5) - floatval($t8),2);
+			} elseif ($amount_paid > floatval($tot_amount_due)) {
+				$excess = $amount_paid - floatval($tot_amount_due);
+				$amount_paid = $tot_amount_due;
+				$or_no_ent = $or_no_ent;
+				$principal =$amount_paid - floatval($surcharge);
 				$l_status = 'Full DownPayment';
-				$t12 = 'FD';
+				$status = 'FD';
 				$l_for_cts = 1;
-			} elseif (floatval($t5) < floatval($t6)) {
-				$t10 = number_format(floatval($t5) - floatval($t8),2);
+			} elseif ($amount_paid < floatval($tot_amount_due)) {
+				$principal = $amount_paid - floatval($surcharge);
 				$l_status = 'Partial DownPayment';
-				$t12 = 'PFD';
+				$status = 'PFD';
 				$excess = -1;
 			}	
-			$t11 = number_format(floatval($t11) - floatval($t10),2);
+			$balance =$balance - $principal;
+			
 
-		}
-
-		elseif (($status_ent == 'Full DownPayment' && $payment_type2_ent == 'Deferred Cash Payment') || ($payment_type1_ent == 'No DownPayment' && $payment_type2_ent == 'Deferred Cash Payment') || $status_ent == 'Deferred Cash Payment') {
-			$t7 = '0.00';
-			$t9 = '0.00';
-			if ($underpay == 0) {
-				if ($t5 < $t6) {
-					if ($t5 <= $t8) {
-						$t10 = '0.00';
+		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Deferred Cash Payment') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment') {
+			$rebate = 0;
+			$interest = 0;
+			if ($under_pay == 0) {
+				if ($amount_paid < $tot_amount_due) {
+					if ($amount_paid <= $surcharge) {
+						$principal = 0;
 					} else {
-						$t10 = number_format($t5 - $t8,2);
+						$principal = number_format($amount_paid - $surcharge,2);
 					}
 					$excess = -1;
-				} elseif ($t5 > $t6) {
-					if ($payment_status_ent == 'FPD') {
-						$excess = $t5 - $t6;
-						$or_no = $or_no_ent;
-						$t10 = number_format($t5 - $t8,2);
+				} elseif ($amount_paid > $tot_amount_due) {
+					if ($status == 'FPD') {
+						$excess = $amount_paid - $tot_amount_due;
+						$or_no_ent = $or_no_ent;
+						$principal = number_format($amount_paid - $surcharge,2);
 					} else {
-						$excess = $t5 - $t6;
-						$t5 = $t6;
-						$or_no = $or_no_ent;
-						$t10 = number_format($t5 - $t8,2);
+						$excess = $amount_paid - $tot_amount_due;
+						$amount_paid = $tot_amount_due;
+						$or_no_ent = $or_no_ent;
+						$principal = number_format($amount_paid - $surcharge,2);
 					}
 				} else {
-					$t10 = number_format($t5 - $t8,2);
+					$principal = number_format($amount_paid - $surcharge,2);
+					$excess = -1;
+				}
+			}elseif ($under_pay == 1) {
+				if ($amount_paid < $tot_amount_due) {
+					if ($amount_paid <= $surcharge) {
+						$principal = 0;
+					} else {
+						$l_surcharge = 0;
+						$l_ampd = 0;
+						//get last total principal
+						for ($x = 0; $x <= $payment_count; $x++) {
+							try {
+								if ($due_date == $payment_rec[$x]['due_date']) { 
+									$l_surcharge += $payment_rec[$x]['surcharge'];
+									$l_ampd += $payment_rec[$x]['payment_amount'];
+								}
+							} catch (Exception $e) {
+								//pass
+							}
+						}
+						if ($l_ampd < $l_surcharge) {
+							$l_sur_credit = $l_surcharge - $l_ampd;
+						} else {
+							$l_sur_credit = 0;
+						}
+						if ($last_payment['payment_amount'] < $last_payment['surcharge']) {
+							$principal = number_format($amount_paid - $surcharge - $l_sur_credit, 2);
+							if ($principal < 0) {
+								$principal = 0;
+							}
+						} else {
+							$principal = number_format($amount_paid - $surcharge, 2);
+							if ($l_ampd < $l_surcharge) {
+								$principal = number_format($amount_paid - $surcharge - $l_sur_credit, 2);
+							} else {
+								$principal = number_format($amount_paid - $surcharge, 2);
+							}
+						}
+						$excess = -1;
+					}
+				}elseif ($amount_paid > $tot_amount_due) {
+					if ($status == 'FPD') {
+						$excess = $amount_paid - $tot_amount_due;
+						$or_no_ent = $or_no_ent;
+						$principal = number_format($amount_paid- $surcharge, 2);
+					} else {
+						$excess = $amount_paid - $tot_amount_due;
+						$amount_paid = $tot_amount_due;
+						$or_no_ent = $or_no_ent;
+						$principal = number_format($monthly_pay, 2);
+					}
+				} else {
+					$principal = number_format($monthly_pay, 2);
 					$excess = -1;
 				}
 			}
-		}
+			$balance = $balance - $principal;
+		
+			if ($balance <= $rem_prcnt) {
+				if ($old_balance <= $rem_prcnt) {
+					$l_for_cts = 0;
+				} else {
+					$l_for_cts = 1;
+				}
+			}
 
-		//t1 = account 
-		//t2 = due date
-		//t3 = pay date
-		//t4 = or no 
-		//t5 = amount paid
-		//t6 = amount due
-		//t7 = rebate
-		//t8 = surcharge
-		//t9 = interest
-		//t10 = principal
-		//t11 = balance 
-		//t12 = status
-		//t13 = status count
-		//t15 = payment count
+			if ($acc_status == 'Reservation' || $acc_status == 'Full DownPayment') {
+				if (($status == 'FPD' && ($amount_paid >= $tot_amount_due) || $balance <= 0)) {
+					$status = 'FPD';
+					$l_status = 'Fully Paid';
+				} else {
+					$status = 'DFC - ' . strval($status_count);
+					$l_status = 'Deferred Cash Payment';
+				}
+			} elseif ($acc_status == 'Deferred Cash Payment') {
+				if (($status == 'FPD' && ($amount_paid >= $tot_amount_due) || $balance <= 0)) {
+					$status = 'FPD';
+					$l_status = 'Fully Paid';
+				} else {
+					$status = 'DFC - ' . strval($status_count);
+				}
+			}
+		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Monthly Amortization') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'){
+			$interest = 0;
+			$balance = floatval(str_replace(',', '',$balance));
+			if ($under_pay == 0){
+				if ($amount_paid < $tot_amount_due) {
+					$rebate = 0;
+					$l_interest = ($balance * ($interest_rate/1200));
+					if ($amount_paid <= $surcharge):
+						$interest = 0;
+						$principal = 0;
+					elseif (($amount_paid - $surcharge) >= $l_interest):
+						$interest = $l_interest;
+						$principal = $amount_paid - $interest - $surcharge;
+					else:
+						$interest = ($amount_paid) - ($surcharge);
+						$principal = 0;
+					endif;
+					$excess = -1;
+				}elseif (($amount_paid) > ($tot_amount_due)){
+					if($over_due == 0 and $to_pricipal_rbtn== 1):
+						$excess = -1;
+						$interest =  ((($balance) * ($interest_rate/1200)));
+						$principal = (($amount_paid) - ($interest) - ($surcharge));
+						$principal_new = ($monthly_pay - ($interest) - ($surcharge) - ($rebate));
+						$l_excess_amount = ($amount_paid) - ($tot_amount_due);
+						if (($principal_new) < 0): 
+							$neg_prin = 1; 
+							$principal = 0; 
+							$amount_paid = $tot_amount_due;
+						endif;
+					
+					else:
+						if ($status == 'FPD'):
+							$excess = $amount_paid;
+							$or_no_ent = $or_no_ent;
+							$interest = ($balance * ($interest_rate/1200));
+							$principal = ($amount_paid - $interest - $rebate);
+						else:
+							$excess = ($amount_paid - $tot_amount_due);
+							$amount_paid = $tot_amount_due;
+							$or_no_ent = $or_no_ent;
+							//echo $balance;
+							// echo $interest_rate;
+							$interest = ($balance * ($interest_rate/1200));
+							$principal = ($monthly_pay - $interest - $rebate);
+							if (($principal) < 0):
+								$neg_prin = 1;
+								$principal = 0;
+							endif;
+						endif;
+					endif;
+				}else {
+						$interest = $balance * ($interest_rate/1200);
+						if ($status == 'FPD'):
+							$principal = $monthly_pay - $interest - $rebate;
+						else:
+							$principal = $monthly_pay - $interest - $rebate;
+							if ($principal < 0):
+								$neg_prin = 1;
+								$principal = 0;
+							endif;
+						endif;
+						$excess = 0;
+					}
+			}elseif ($under_pay == 1){
+				if ($amount_paid < $tot_amount_due) {
+					$excess = -1;
+					$rebate = 0;
+					$l_interest = $ma_balance * ($interest_rate/1200);
+					$l_surcharge = 0;
+					$l_ampd = 0;
+					// get last total principal
+					for ($x = 0; $x <= $payment_count; $x++) {
+						try {
+							if ($due_date == $payment_rec[$x]['due_date']) { 
+								$l_surcharge += $payment_rec[$x]['surcharge'];
+								$l_ampd += $payment_rec[$x]['payment_amount'];
+							}
+						} catch (Exception $e) {
+							//pass
+						}
+					}
+					if ($l_ampd < $l_surcharge):
+						$l_sur_credit = $l_surcharge - $l_ampd;
+					else:
+						$l_sur_credit = 0;
+					endif;
+					if ($last_interest < $l_interest):
+						if ($amount_paid <= $surcharge):
+							$interest = 0;
+							$principal = 0;
+						else:
+							$l_bal_interest = $l_interest - $last_interest;
+							if ($last_payment['payment_amount'] < $last_payment['surcharge']):
+								if (($tot_amount_due - $surcharge - $l_sur_credit) >= $l_bal_interest):
+									$interest = $l_bal_interest;
+									$principal = $amount_paid - $interest - $surcharge - $l_sur_credit;
+									if ($principal <= 0):
+										$principal = 0;
+									endif;
+								else:
+									$interest = ($amount_paid - $surcharge - $l_sur_credit);
+									$principal = 0;
+									if ($interest < 0) {
+										$interest = 0;
+									}
+								endif;
+							else:
+								if (($amount_paid - $surcharge) >= $l_bal_interest) {
+									$l_rem = $amount_paid - $surcharge - $l_sur_credit;
+									$interest = $l_bal_interest;
+									if ($l_rem < $interest) {
+										$interest = $l_rem;
+									}
+									$principal = $amount_paid - $interest - $surcharge;
+									if ($l_ampd < $l_surcharge) {
+										$principal = $amount_paid - $interest - $surcharge - $l_sur_credit;
+									} else {
+										$principal = $amount_paid - $interest - $surcharge;
+									}
+									if ($principal <= 0) {
+										$principal = 0;
+									}
+									if ($interest < 0) {
+										$interest = 0;
+									}
+								} else {
+									$interest = $amount_paid - $surcharge;
+									$principal = 0;
+								}
+							endif;
+						endif;
+					
+					else:
+						$interest = 0;
+						if ($amount_paid <= $surcharge):
+							$principal = 0;
+						else:
+							if ($l_ampd < $l_surcharge):
+								$principal = $amount_paid - $surcharge - $l_sur_credit;
+								if ($principal <= 0):
+									$principal = 0;
+								else:
+									$principal = ($amount_paid - $surcharge);
+								endif;
+							endif;
+						endif;
+					endif;
 
+				}elseif ($amount_paid > $tot_amount_due) {
+					if (($over_due_mode == 0) && ($to_pricipal_rbt == 1)):
+						$excess = -1;
+						$l_interest = ($ma_balance * ($interest_rate/1200));
+						if ($last_interest < $l_interest):
+							$interest = $l_interest - $last_interest;
+						else:
+							$interest = 0;
+						endif;
+						$principal = $amount_paid - $interest - $surcharge;
+					else:
+						$excess = $amount_paid - $tot_amount_due;
+						$amount_paid = $tot_amount_due;
+						$or_no_ent = $or_no_ent;
+						$l_interest = $ma_balance * ($interest_rate/1200);
+						if ($last_interest < $l_interest):
+							$interest = $l_interest - $last_interest;
+							$principal = $monthly_pay - $interest;
+							if ($status == 'FPD'):
+								$principal = ($amount_paid - $interest - $rebate);
+							endif;
 
-		if(empty($property_id)){
-			$save = $this->conn->query("INSERT INTO property_payments set ".$data);
-			
-		}else{
-			$save = $this->conn->query("UPDATE property_payments set ".$data." where id = ".$id);
+						else:
+							$interest = 0;
+							$principal = $monthly_pay;
+							if ($status == 'FPD'):
+								$principal = ($amount_paid - $interest - $rebate);
+							endif;
+						
+						endif;
+					endif;
+				}else{
+					$l_interest = ($ma_balance * ($interest_rate/1200));
+					if ($last_interest < $l_interest) {
+						$interest = $l_interest - $last_interest;
+					if ($rebate != 0) {
+						$principal = $monthly_pay - $interest - atof($rebate);
+					} else {
+						$principal = $monthly_pay - $interest;
+					}
+					} else {
+						$interest = 0;
+						$principal = $monthly_pay;
+					}
+					$excess = 0;
+				}
+			}
+			$balance = $balance - $principal - $rebate;
+			if (($acc_status == 'Reservation') || ($acc_status == 'Full DownPayment')):
+				if (($status == 'FPD') && ($amount_paid >= $tot_amount_due) || ($balance <= 0)):
+					$status = 'FPD';
+					$l_status = 'Fully Paid';
+				else:
+					$status = 'MA - ' .strval($status_count);
+					$l_status = 'Monthly Amortization';
+				endif;
+			elseif($acc_status == 'Monthly Amortization'):
+				if (($status == 'FPD') && ($amount_paid >= $tot_amount_due) || ($balance <= 0)):
+					$status = 'FPD';
+					$l_status = 'Fully Paid';
+				else:
+					$status = 'MA - ' .strval($status_count);
+				endif;
+			endif;
 		}
 		
-		if($save){
+					
+		$data = " property_id = '$prop_id' ";
+		$data .= ", payment_amount = '$amount_paid' ";
+		$data .= ", pay_date = '$pay_date' ";
+		$data .= ", due_date = '$due_date' ";
+		$data .= ", or_no = '$or_no_ent' " ;
+		$data .= ", amount_due = '$tot_amount_due' ";
+		$data .= ", rebate = '$rebate' ";
+		$data .= ", surcharge = '$surcharge' ";
+		$data .= ", interest = '$interest' ";
+		$data .= ", principal = '$principal' ";
+		$data .= ", remaining_balance = '$balance' ";
+		$data .= ", status = '$status' ";
+		$data .= ", status_count = '$status_count' ";
+		$data .= ", payment_count = '$payment_count' ";
+
+
+		
+		$save = $this->conn->query("INSERT INTO property_payments set ".$data);
+			
+	
+		//$l_sql =  "UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id;
+
+	
+		
+		if ($l_status == ''){
+				$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
+		}else{
+				$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id);
+		}
+
+		
+		if($save && $l_sql){
 			$resp['status'] = 'success';
 			if(empty($id))
 				$this->settings->set_flashdata('success',"New payments successfully saved.");
