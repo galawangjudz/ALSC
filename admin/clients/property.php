@@ -49,6 +49,7 @@ table td{
 }
 .modal-content{
     width:1200px;
+    margin-right:0px;
     margin-left:0px;
     height:auto;
     display: block!important; /* remove extra space below image */
@@ -70,9 +71,13 @@ color: white;
     font-family: Arial, sans-serif;
     font-size: 2px;
 }
-
 body{
   font-size:14px;
+}
+.payment_table_container{
+  float:left;
+  height:auto;
+  width:100%;
 }
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
@@ -219,12 +224,12 @@ body{
             </div>
 
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
-            <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
-              <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
-              <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
-            </div>  
+              <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+                <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
+                <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
+              </div>  
                     <table class="table2 table-bordered table-stripped">
-                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ");
+                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date DESC");
                      if($qry4->num_rows <= 0){
                            echo "No Payment Records";
                      }else{  ?>      
@@ -241,7 +246,7 @@ body{
                               <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                               <th style="text-align:center;font-size:13px;">REBATE</th>
                               <th style="text-align:center;font-size:13px;">PERIOD</th>
-                              <th style="text-align:center;font-size:15px;">BALANCE</th>
+                              <th style="text-align:center;font-size:13px;">BALANCE</th>
                           </tr>
                       </thead>
                     <tbody>
@@ -283,6 +288,95 @@ body{
                         <?php endwhile ; } ?>
                     </tbody>
                 </table>
+
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">         
+        
+                         
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                      <table>
+                          <tr>
+                          <?php $qry_prin = "SELECT SUM(payment_amount) AS p_amnt_total FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+                            $result = mysqli_query($conn, $qry_prin);
+
+                            // Check if the query was successful
+                            if (mysqli_num_rows($result) > 0) {
+                                // Fetch the result as an associative array
+                                $row = mysqli_fetch_assoc($result);
+                                // Get the sum value
+                                $total_prin = $row["p_amnt_total"];
+                                // Display the sum value
+                            } else {
+                                echo "No results found.";
+                            }
+                            ?>
+                            <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+                            $result = mysqli_query($conn, $qry_surcharge);
+
+                            // Check if the query was successful
+                            if (mysqli_num_rows($result) > 0) {
+                                // Fetch the result as an associative array
+                                $row = mysqli_fetch_assoc($result);
+                                // Get the sum value
+                                $total_surcharge = $row["p_surcharge"];
+                                // Display the sum value
+                            } else {
+                                echo "No results found.";
+                            }
+                            ?>
+                            <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+                            $result = mysqli_query($conn, $qry_interest);
+
+                            // Check if the query was successful
+                            if (mysqli_num_rows($result) > 0) {
+                                // Fetch the result as an associative array
+                                $row = mysqli_fetch_assoc($result);
+                                // Get the sum value
+                                $total_interest = $row["p_interest"];
+                                // Display the sum value
+                            } else {
+                                echo "No results found.";
+                            }
+                            ?>
+                            <?php $qry_amt_due = "SELECT SUM(interest) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+                              $result = mysqli_query($conn, $qry_amt_due);
+
+                              // Check if the query was successful
+                              if (mysqli_num_rows($result) > 0) {
+                                  // Fetch the result as an associative array
+                                  $row = mysqli_fetch_assoc($result);
+                                  // Get the sum value
+                                  $total_amt_due = $row["p_amt_due"];
+
+                                  $main_total = $total_amt_due + $total_interest + $total_surcharge + $total_prin;
+                                  // Display the sum value
+                              } else {
+                                  echo "No results found.";
+                              }
+                              ?>
+                              <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>"></td>
+                              <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>"></td>
+                              <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>"></td>
+                              <td style="font-size:12px;"><label>Total Amount Due: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>"></td>
+                          </tr>
+                      </table>
+                    </div>
+                </div>
+                
+            </div>   
+
             </div>
      
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
@@ -290,8 +384,7 @@ body{
           
               <?php
                       
-                //include 'payment_schedule.php'; 
-                include 'payment_record.php';
+                include 'payment_record.php'; 
                 $id = $_GET['id'];
                 $all_payments = load_data($id); 
                 $over_due    = $all_payments[0];
@@ -365,17 +458,13 @@ body{
                     </div>
                 </div>
             </div>               
-
             </div>
             <div id="tab-5" class="tab-content" style="border:solid 1px gainsboro;">
-             
                 <form method="" id="set-paydate">
                     <label class="control-label">Pay Date: </label>
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
                     <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
                 </form>
-  
-              
             </div>
         </div>
     </div>
