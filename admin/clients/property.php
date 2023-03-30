@@ -122,7 +122,7 @@ body{
         <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
         <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
         <li class="tab-link" data-tab="tab-5"><b>Payment Overdue</b></li>
-        <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li>
+       <!--  <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li> -->
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
@@ -379,123 +379,7 @@ body{
               
             </div>
 
-            <div id="tab-6" class="tab-content" style="border:solid 1px gainsboro;">
-             
-             <form method="">
-                 <label class="control-label">Pay Date: </label>
-                 <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
-                 <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
-             
-                 <table class="table3 table-bordered table-hover table-striped" id="comm_table" style="width:100%;">
-									<thead>
-										<tr>
-											<th width="20">
-												<a href="#" class="btn btn-success btn-md add-row"><span class="fa fa-plus" aria-hidden="true"></span></a>
-											</th>
-											<th width="500">
-												<label class="control-label">&nbsp;Due Date</label>
-											</th>
-											<th  width="90">
-											<label class="control-label">&nbsp;Pay Date</label>
-											</th>
-											<th width="90">
-												<label class="control-label">&nbsp;Or No</label>
-											</th>
-											<th width="150">
-												<label class="control-label">&nbsp;Interest</label>
-											</th>
-											<th width="200">
-												<label class="control-label">&nbsp;Principal</label>
-											</th>
-                      <th width="200">
-												<label class="control-label">&nbsp;Surcharge</label>
-											</th>
-                      <th width="200">
-												<label class="control-label">&nbsp;Rebate</label>
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php 
-										if(isset($_GET['id']) && $_GET['id'] > 0){
-										$qry = $conn->query("SELECT * FROM t_csr_commission WHERE md5(c_csr_no) ='{$_GET['id']}'");
-										while($rows = $qry->fetch_assoc()):
-											$agent_name = $rows['c_agent'];
-											$position = $rows['c_position'];
-											$code = $rows['c_code'];
-											$rate = $rows['c_rate'];
-											$comm_amt = $rows['c_amount'];
-										?>
-										<tr>
-											<td>
-												<a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" ></span></a>
-											</td>
-											<td style="padding-top:10px;">
-												<!-- <a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" aria-hidden="true"></span></a> -->
-												
-												<div class="form-group form-group-sm">
-													<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
-													<p class="item-select"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-search" aria-hidden="true"></span> Select Existing Agent</a></p>
-									
-												</div>
-											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
-											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
-											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
-											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" >
-											</td>
-										</tr>
-										<?php endwhile; 
-										
-										}else{ ?>
-											<tr><td>
-												<a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" ></span></a>
-											</td>
-											<td style="padding-top:10px;">
-												<!-- <a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" aria-hidden="true"></span></a> -->
-												
-												<div class="form-group form-group-sm no-margin-bottom">
-													<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
-													<p class="item-select"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-search" aria-hidden="true"></span> Select Existing Agent</a></p>
-									
-												</div>
-											</td>
-											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
-												</div>
-											</td>
-											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													
-													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" readonly>
-												</div>
-											</td>
-											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="number" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
-												</div>
-											</td>
-											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
-												</div>
-											</td>
-										</tr>
-										<?php }
-										?>
-									</tbody>
-								</table>
-                      
-             
-             </form>
+          
 
            
          </div>
