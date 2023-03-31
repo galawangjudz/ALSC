@@ -252,6 +252,8 @@ body{
                       </thead>
                     <tbody>
                         <?php
+                        $total_rebate = 0;
+                        
                         while($row= $qry4->fetch_assoc()): 
                  
                        /*    $property_id = $row["property_id"];
@@ -270,6 +272,8 @@ body{
                           $rebate = $row['rebate'];
                           $period = $row['status'];
                           $balance = $row['remaining_balance'];
+
+                          $total_rebate += $rebate;
 
                       ?>
                       <tr>
@@ -365,6 +369,8 @@ body{
                               ?>
                               <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>"></td>
+                              <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
@@ -467,8 +473,6 @@ body{
                     <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
                 </form>
             </div>
-
-          
 
            
          </div>

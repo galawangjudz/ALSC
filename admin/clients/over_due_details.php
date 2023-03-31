@@ -83,13 +83,13 @@ if(isset($_GET['id'])){
 	<div class="card-body">
     <div class="container-fluid">
     <br>
-<!--     <form method="" id="set-paydate">
+    <form method="" id="set-paydate">
               <label class="control-label">Pay Date: </label>
               <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
               <input type="hidden" name="id" id="id" value="<?php $id ?>">
               <button type="button" class="btn btn-primary set_pay_date_button" data-date ="pay_date_input" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
               <a class="btn btn-success btn-s set_pay_date_button">Set</a>
-    </form> -->
+    </form>
 
     
     <?php $all_payments = load_data($prop_id, $pay_date);
