@@ -1137,8 +1137,6 @@ Class Master extends DBConnection {
 
 	function cfo_booked(){
 
-		
-
 		extract($_POST);
 		$sql = $this->conn->query("SELECT * FROM t_csr where c_csr_no =".$csr_no);
 		while($row = $sql->fetch_array()):

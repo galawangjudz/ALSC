@@ -131,7 +131,7 @@
                             $date_created=$row["c_date_created"];
                             $id=$row["c_csr_no"];
                             $lid = $row["c_lot_lid"];
-
+							$csr_no = $row['c_csr_no'];
 
 						
 					?>
@@ -155,7 +155,8 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item booked_data" ra-id = "<?php echo $row['ra_id']?>" csr_id = "<?php echo $row['c_csr_no']?>" data-lot-id="<?php echo $row['c_lot_lid'] ?>"><span class="fa fa-check text-primary"></span> Approved</a>
+								  <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> Evaluation</a>
+				                    <a class="dropdown-item booked_data" ra-id = "<?php echo $row['ra_id']?>" csr_no = "<?php echo $row['c_csr_no']?>" data-lot-id="<?php echo $row['c_lot_lid'] ?>"><span class="fa fa-check text-primary"></span> Approved</a>
 								 </div>
 							</td>
 							<?php else: ?>
@@ -172,33 +173,44 @@
 	</div>
 </div>
 <script>
+
+
 	$(document).ready(function(){
-		$('.booked_data').click(function(){
-			_conf("Are you sure to booked this RA?","cfo_approval",[$(this).attr('ra-id'),$(this).attr('csr_id'),$(this).attr('data-lot-id')])
-		}) 
-	})	
-	function cfo_approval($ra_id,$csr_no,$lid){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=cfo_booked",
-			method:"POST",
-			data:{ra_id:$ra_id,csr_no:$csr_no,lid:$lid},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert_toast("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.reload();
-				}else{
-					alert_toast("An error occured.",'error');
-					end_loader();
-				}
-			}
+		
+		$('.table').dataTable(
+			{"ordering":false}
+		);
+		
+	})
+
+		$(document).ready(function(){
+			$('.booked_data').click(function(){
+				uni_modal_right("<i class='fa fa-check'></i> Final Approval",'final_approval/fa-view.php?id='+$(this).attr('csr_no')+"&csr="+$(this).attr('ra_id')+"&lid="+$(this).attr('data-lot-id'),"mid-large")
+				//uni_modal("<i class='fa fa-paint-brush'></i> Edit Lot",'inventory/manage_lot.php?id='+$(this).attr('data-lot-id'),"mid-large")
+			})
 		})
-	}
+	// function cfo_approval($ra_id,$csr_no,$lid){
+	// 	start_loader();
+	// 	$.ajax({
+	// 		url:_base_url_+"classes/Master.php?f=cfo_booked",
+	// 		method:"POST",
+	// 		data:{ra_id:$ra_id,csr_no:$csr_no,lid:$lid},
+	// 		dataType:"json",
+	// 		error:err=>{
+	// 			console.log(err)
+	// 			alert_toast("An error occured.",'error');
+	// 			end_loader();
+	// 		},
+	// 		success:function(resp){
+	// 			if(typeof resp== 'object' && resp.status == 'success'){
+	// 				location.reload();
+	// 			}else{
+	// 				alert_toast("An error occured.",'error');
+	// 				end_loader();
+	// 			}
+	// 		}
+	// 	})
+	// }
 
 
 

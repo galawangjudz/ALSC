@@ -138,7 +138,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
     .modal-content{
     width:1035px;
     height:auto;
-    margin-left:-200px;
+    margin-left:auto;
     max-width:1035px;
     display: block!important; /* remove extra space below image */
     }
