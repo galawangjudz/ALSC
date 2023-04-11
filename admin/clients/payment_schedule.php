@@ -823,43 +823,47 @@
                                 
                               }         
                             }
-                      /*  if ($l_pay_date_val < $l_due_date_val) {
-                              $l_days = ($l_due_date_val - $l_pay_date_val) / 86400;
-                              if ($int_rate == 12) {
-                              $l_rebate_value = 0.015;
-                              } elseif ($int_rate == 14) {
-                              $l_rebate_value = 0.0175;
-                              } elseif ($int_rate == 15) {
-                              $l_rebate_value = 0.0175;
-                              } elseif ($int_rate == 16) {
-                              $l_rebate_value = 0.02;
-                              } elseif ($int_rate == 17) {
-                              $l_rebate_value = 0.02;
-                              } elseif ($int_rate == 18) {
-                              $l_rebate_value = 0.02;
-                              } elseif ($int_rate == 19) {
-                              $l_rebate_value = 0.02;
-                              } elseif ($int_rate == 20) {
-                              $l_rebate_value = 0.0225;
-                              } elseif ($int_rate == 21) {
-                              $l_rebate_value = 0.0225;
-                              } elseif ($int_rate == 22) {
-                              $l_rebate_value = 0.0225;
-                              } elseif ($int_rate == 23) {
-                              $l_rebate_value = 0.025;
-                              } elseif ($int_rate == 24) {
-                              $l_rebate_value = 0.025;
+                        $l_pay_date_value = new Datetime($l_pay_date_val);
+                        
+                        if ($l_pay_date_value < $l_due_date_val) {
+                            $interval = $l_pay_date_value->diff($l_due_date_val);
+                            $l_days = $interval->days;
+                            
+                            if ($l_int_rate == 12){
+                                    $l_rebate_value = 0.02;
+                            }else if ($l_int_rate == 14){
+                                    $l_rebate_value = 0.0225;
+                            }else if ($l_int_rate == 15){
+                                    $l_rebate_value = 0.0225;
+                            } else if ($l_int_rate == 16){
+                                    $l_rebate_value = 0.025;
+                            } else if ($l_int_rate == 17){
+                                    $l_rebate_value = 0.025;
+                            } else if ($l_int_rate == 18){
+                                    $l_rebate_value = 0.025;
+                            }else if ($l_int_rate == 19){
+                                    $l_rebate_value = 0.025;
+                            }else if ($l_int_rate == 20){
+                                    $l_rebate_value = 0.025;
+                            }else if ($l_int_rate == 21){
+                                    $l_rebate_value = 0.025;
+                            } else if ($l_int_rate == 22){
+                                    $l_rebate_value = 0.0275;
+                            } else if ($l_int_rate == 23){
+                                    $l_rebate_value = 0.0275;
+                            }else if ($l_int_rate == 24){
+                                    $l_rebate_value = 0.03;
+                            }else{
+                                    $l_rebate_value = 0;
+                            }
+                            if ($l_days > 2) {
+                                $l_rebate = number_format($l_monthly_pay * $l_rebate_value,2);
                               } else {
-                              $l_rebate_value = 0;
+                                $l_rebate = 0;
                               }
-                              if ($l_days > 2) {
-                              $l_rebate = ftom($l_monthly_pay * $l_rebate_value);
-                              } else {
-                              $l_rebate = '0.00';
-                              }
-                          }else{ */
+                          }else{
                           $l_rebate = '0.00';
-                        /*  } */
+                         }
                           $l_amt_due = number_format(floatval(str_replace(',', '',$l_amt_due)) - floatval(str_replace(',', '',$l_rebate)),2);
                           $l_principal = number_format($l_principal,2);
                           $l_interest = number_format($l_interest,2);

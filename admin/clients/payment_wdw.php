@@ -933,7 +933,7 @@ function validateForm() {
                             row += "</tr>";
                             // Add the new row to the table
                             $('#payment-table tbody').append(row);
-                           
+                             
                     });
                     // Show success message and reload page
                     end_loader();
