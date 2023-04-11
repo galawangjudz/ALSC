@@ -881,6 +881,7 @@ function auto_date($last_day,$date)
                   return;
         }
        
+        $l_pay_date_value = new Datetime($l_pay_date_val);
         //echo $l_pay_date_val;
         // echo '|';
        //$l_due_date_val = $t_due_date->format('m/d/y');
@@ -1586,11 +1587,11 @@ if(isset($_GET['id'])){
         </table>
         <hr>
 
-            <td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>" style="width:100%;"></td>
+       <!--      <td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>" style="width:100%;"></td>
+ -->
+           <!--  <?php      
 
-            <?php      
-
-            $pay_date = date('Y-m-d');
+            $pay_date = date('2024-12-31');
             $all_payments = load_data($prop_id, $pay_date);
             $over_due    = $all_payments[0];
             $total_amt_due = $all_payments[1];
@@ -1642,7 +1643,7 @@ if(isset($_GET['id'])){
               </table>
 
               
-
+ -->
 
         <hr>
         <table>
@@ -1675,6 +1676,9 @@ if(isset($_GET['id'])){
         <input type="hidden" class="form-control-sm margin-bottom "  id="ma_balance" name="ma_balance" value="<?php echo $ma_balance; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
      
+
+
+        
         </form>
 
 
@@ -1682,6 +1686,7 @@ if(isset($_GET['id'])){
 	</div>
 </div>
 <script>
+    
 
 function validateForm() {
 	    // error handling
@@ -1704,35 +1709,8 @@ function validateForm() {
 
     $(document).ready(function(){
 
-        $(document).on('keyup', ".pay-date", function(e) {
-            e.preventDefault();
-            var property_id = $("#prop_id").val();
-            var pay_date = $(this).val();
-            
-            console.log(property_id);
-            console.log(pay_date);
-            var data = {
-                property_id: property_id,
-                pay_date: pay_date
-            };
-            $.ajax({
-                type: 'POST',
-                url: 'payments.php',
-                data: data,
-                cache: false,
-                dataType: 'json',
-                success: function(response) {
-                    // Handle response data
-                    console.log(response);
-                },
-                error: function(err) {
-                    console.log(err);
-                    alert_toast("An error occured", 'error');
-                    end_loader();
-                }
-            });
-        });
-
+        
+        
 
 
         $('#save_payment').submit(function(e){

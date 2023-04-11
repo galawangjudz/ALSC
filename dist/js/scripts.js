@@ -296,6 +296,8 @@ $('#comm_table').on('click', ".delete-row", function(e) {
 		$(this).closest('tr').remove();
 	//calculateTotal();
 });
+
+
 $('#buyer_table').on('click', ".delete-buyer-row", function(e) {
 	e.preventDefault();
 		$(this).closest('tr').remove();
@@ -311,6 +313,13 @@ $(".add-row").click(function(e) {
 	cloned.clone().appendTo('#comm_table'); 
 });
 
+// add new agent row on ra
+var cloned = $('#payment_table tr:last').clone();
+cloned.find('input').val('');
+$(".add-pay-row").click(function(e) {
+	e.preventDefault();
+	cloned.clone().appendTo('#payment_table'); 
+});
 
 var cloned2 = $('#buyer_table tr:last').clone();
 cloned2.find('input').val('');

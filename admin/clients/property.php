@@ -227,6 +227,7 @@ body{
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
               <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
                 <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
+                <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
                 <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
               </div>  
                     <table class="table2 table-bordered table-stripped">
@@ -470,6 +471,8 @@ body{
                 <form method="" id="set-paydate">
                     <label class="control-label">Pay Date: </label>
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
+                    <label class="control-label">Due Date: </label>
+                    <input type="date" name="due_date_input" id="due_date_input" value="<?php echo date('Y-m-d'); ?>">
                     <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
                 </form>
             </div>
@@ -498,6 +501,12 @@ $(document).ready(function() {
   
   $('.add_payment').click(function(){
 		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
+	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
+  $('.new_payment').click(function(){
+		
 	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
