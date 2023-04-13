@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
 
+          
+
     $(document).on('keyup', ".pay-date", function(e) {
 		e.preventDefault();
 		check_paydate();
@@ -38,6 +40,7 @@ function check_paydate(){
         const tot_amt_due = monthly_pay + l_sur;
         //console.log(tot_amt_due);
         $('#surcharge').val(l_sur.toFixed(2));
+        $('#rebate_amt').val('0.0');
         $('#tot_amount_due').val(tot_amt_due.toFixed(2));
         $('#amount_paid').val(tot_amt_due.toFixed(2));
         //console.log(`${pa_status.substr(0,2)}`);
@@ -104,7 +107,7 @@ function check_paydate(){
         $('#tot_amount_due').val(monthly_pay.toFixed(2));
         $('#amount_paid').val(monthly_pay.toFixed(2));
         $('#surcharge').val('0.0');
-        $('#rebate').val('0.0');
+        $('#rebate_amt').val('0.0');
     }
     
 
