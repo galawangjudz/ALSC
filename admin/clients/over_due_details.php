@@ -78,9 +78,9 @@ if(isset($_GET['id'])){
 
 <div class="card card-outline rounded-0 card-maroon">
     
-	<div class="card-header">
+	<!-- <div class="card-header">
 	<h3 class="card-title"><b> Due/Overdue Details</b></h3>
-	</div>
+	</div> -->
 	<div class="card-body">
     <div class="container-fluid">
     <br>
