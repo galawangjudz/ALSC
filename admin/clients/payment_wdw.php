@@ -782,20 +782,65 @@ if(isset($_GET['id'])){
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
-        </thead>
+            </thead>
         <tbody>
         </tbody>
     </table>
 
-  
+    <?php 
+        $sql_prin = "SELECT SUM(principal) AS total_principal FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $result_prin = mysqli_query($conn, $sql_prin);
+        $row_prin = mysqli_fetch_assoc($result_prin);
+    ?>
+    <?php 
+        $sql_sur = "SELECT SUM(surcharge) AS total_surcharge FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $result_sur = mysqli_query($conn, $sql_sur);
+        $row_sur = mysqli_fetch_assoc($result_sur);
+    ?>
+    <?php 
+        $sql_int = "SELECT SUM(interest) AS total_interest FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $result_int = mysqli_query($conn, $sql_int);
+        $row_int = mysqli_fetch_assoc($result_int);
+    ?>
+    <?php 
+        $sql_due = "SELECT SUM(amount_due) AS total_amt_due FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $result_due = mysqli_query($conn, $sql_due);
+        $row_due = mysqli_fetch_assoc($result_due);
+    ?>
+    <?php 
+        $sql_rebate = "SELECT SUM(rebate) AS total_rebate FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $result_rebate = mysqli_query($conn, $sql_rebate);
+        $row_rebate = mysqli_fetch_assoc($result_rebate);
+    ?>
+    <table style="width:28%;float:right;">
+        <tr>
+            <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
+            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="border:none;" disabled></td>
+        </tr>   
+        <tr>
+            <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
+            <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="border:none;" disabled></td>
+        </tr>   
+        <tr>
+            <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
+            <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="border:none;" disabled></td>
+        </tr>   
+        <tr>
+            <td style="font-size:14px;"><label class="control-label">Total Rebate: </label></td>
+            <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="border:none;" disabled></td>
+        </tr>  
+        <tr>  
+            <td style="font-size:14px;"><label>Total Amount Due: </label></td>
+            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_due'],2)) ? (number_format($row_due['total_amt_due'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
+        </tr>
+    </table>
+
     </div>
 	</div>
 </div>
 <script>
-
-    
    function deleteRow(rowId) {
-   
    $.ajax({
        url:_base_url_+'classes/Master.php?f=delete_invoice',
        method:'POST',
@@ -806,19 +851,14 @@ if(isset($_GET['id'])){
            alert_toast("An error occured",'error');
            end_loader();
            },
-     
        success:function(resp){
            $('#' + rowId).remove();
            console.log(resp);
            location.reload();
-
-           }
+        }
       
    });
 }  
- 
-
-
 function validateForm() {
 	    // error handling
 	    var errorCounter = 0;
