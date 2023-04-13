@@ -1409,6 +1409,7 @@ Class Master extends DBConnection {
 		$payment_count = $payment_count + 1;
 
 		
+		$to_principal_rbt = 0;
 		$l_status = '';
 		//rem set to zero for cts
 		$rem_prcnt = 0;
@@ -1459,7 +1460,8 @@ Class Master extends DBConnection {
 						$l_surcharge = 0;
 						$l_ampd = 0;
 						// get last total principal
-						for ($x = 0; $x <= $payment_count; $x++) {
+						//for ($x = 0; $x <= $payment_count; $x++) {
+						for ($x = 0; $x < $payment_count - 1; $x++) {
 							try {
 								if ($due_date == $payment_rec[$x]['due_date']) {
 									$l_surcharge += $payment_rec[$x]['surcharge'];
@@ -1587,7 +1589,8 @@ Class Master extends DBConnection {
 						$l_surcharge = 0;
 						$l_ampd = 0;
 						//get last total principal
-						for ($x = 0; $x <= $payment_count; $x++) {
+						for ($x = 0; $x < $payment_count - 1; $x++) {
+						//for ($x = 0; $x <= $payment_count; $x++) {
 							try {
 								if ($due_date == $payment_rec[$x]['due_date']) { 
 									$l_surcharge += $payment_rec[$x]['surcharge'];
@@ -1678,7 +1681,7 @@ Class Master extends DBConnection {
 					endif;
 					$excess = -1;
 				}elseif (($amount_paid) > ($tot_amount_due)){
-					if($over_due == 0 and $to_pricipal_rbtn== 1):
+					if($over_due_mode == 0 and $to_principal_rbt == 1):
 						$excess = -1;
 						$interest =  ((($balance) * ($interest_rate/1200)));
 						$principal = (($amount_paid) - ($interest) - ($surcharge));
@@ -1731,7 +1734,8 @@ Class Master extends DBConnection {
 					$l_surcharge = 0;
 					$l_ampd = 0;
 					// get last total principal
-					for ($x = 0; $x <= $payment_count; $x++) {
+					for ($x = 0; $x < $payment_count - 1; $x++) {
+					//for ($x = 0; $x <= $payment_count; $x++) {
 						try {
 							if ($due_date == $payment_rec[$x]['due_date']) { 
 								$l_surcharge += $payment_rec[$x]['surcharge'];
@@ -1809,7 +1813,7 @@ Class Master extends DBConnection {
 					endif;
 
 				}elseif ($amount_paid > $tot_amount_due) {
-					if (($over_due_mode == 0) && ($to_pricipal_rbt == 1)):
+					if (($over_due_mode == 0) && ($to_principal_rbt == 1)):
 						$excess = -1;
 						$l_interest = ($ma_balance * ($interest_rate/1200));
 						if ($last_interest < $l_interest):
@@ -1875,7 +1879,7 @@ Class Master extends DBConnection {
 		}
 		
 					
-	/* 	$data = " property_id = '$prop_id' ";
+		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
 		$data .= ", pay_date = '$pay_date' ";
 		$data .= ", due_date = '$due_date' ";
@@ -1888,9 +1892,9 @@ Class Master extends DBConnection {
 		$data .= ", remaining_balance = '$balance' ";
 		$data .= ", status = '$status' ";
 		$data .= ", status_count = '$status_count' ";
-		$data .= ", payment_count = '$payment_count' "; */
+		$data .= ", payment_count = '$payment_count' ";
 
-		$resp['data'] = array(
+		/* $resp['data'] = array(
 			'property_id' => $prop_id,
 			'payment_amount' => $amount_paid,
 			'pay_date' => $pay_date,
@@ -1905,11 +1909,11 @@ Class Master extends DBConnection {
 			'status' => $status,
 			'status_count' => $status_count,
 			'payment_count' => $payment_count
-		  );
+		  ); */
 		
 		$save = $this->conn->query("INSERT INTO property_payments set ".$data);
 			
-	
+
 		//$l_sql =  "UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id;
 
 		if ($l_status == ''){
@@ -1957,7 +1961,7 @@ Class Master extends DBConnection {
 		$status_count = $status_count ;
 		$payment_count = $payment_count + 1;
 
-		
+		$to_principal_rbt = 0;
 		$l_status = '';
 		//rem set to zero for cts
 		$rem_prcnt = 0;
@@ -2008,7 +2012,8 @@ Class Master extends DBConnection {
 						$l_surcharge = 0;
 						$l_ampd = 0;
 						// get last total principal
-						for ($x = 0; $x <= $payment_count; $x++) {
+						for ($x = 0; $x < $payment_count - 1; $x++) {
+						//for ($x = 0; $x <= $payment_count - 1; $x++) {
 							try {
 								if ($due_date == $payment_rec[$x]['due_date']) {
 									$l_surcharge += $payment_rec[$x]['surcharge'];
@@ -2136,7 +2141,8 @@ Class Master extends DBConnection {
 						$l_surcharge = 0;
 						$l_ampd = 0;
 						//get last total principal
-						for ($x = 0; $x <= $payment_count; $x++) {
+						for ($x = 0; $x < $payment_count - 1; $x++) {
+						//for ($x = 0; $x <= $payment_count - 1; $x++) {
 							try {
 								if ($due_date == $payment_rec[$x]['due_date']) { 
 									$l_surcharge += $payment_rec[$x]['surcharge'];
@@ -2227,7 +2233,8 @@ Class Master extends DBConnection {
 					endif;
 					$excess = -1;
 				}elseif (($amount_paid) > ($tot_amount_due)){
-					if($over_due == 0 and $to_pricipal_rbtn== 1):
+					if($over_due_mode == 0 and $to_principal_rbt == 1):
+					//if($over_due == 0):
 						$excess = -1;
 						$interest =  ((($balance) * ($interest_rate/1200)));
 						$principal = (($amount_paid) - ($interest) - ($surcharge));
@@ -2280,8 +2287,11 @@ Class Master extends DBConnection {
 					$l_surcharge = 0;
 					$l_ampd = 0;
 					// get last total principal
-					for ($x = 0; $x <= $payment_count; $x++) {
+					//echo $payment_count;
+					//echo $payment_count;
+					for ($x = 0; $x < $payment_count - 1; $x++) {
 						try {
+							//echo $payment_rec[$x]['payment_amount'];
 							if ($due_date == $payment_rec[$x]['due_date']) { 
 								$l_surcharge += $payment_rec[$x]['surcharge'];
 								$l_ampd += $payment_rec[$x]['payment_amount'];
@@ -2358,7 +2368,7 @@ Class Master extends DBConnection {
 					endif;
 
 				}elseif ($amount_paid > $tot_amount_due) {
-					if (($over_due_mode == 0) && ($to_pricipal_rbt == 1)):
+					if (($over_due_mode == 0) && ($to_principal_rbt == 1)):
 						$excess = -1;
 						$l_interest = ($ma_balance * ($interest_rate/1200));
 						if ($last_interest < $l_interest):
@@ -2424,7 +2434,7 @@ Class Master extends DBConnection {
 		}
 		
 					
-	/* 	$data = " property_id = '$prop_id' ";
+		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
 		$data .= ", pay_date = '$pay_date' ";
 		$data .= ", due_date = '$due_date' ";
@@ -2437,7 +2447,11 @@ Class Master extends DBConnection {
 		$data .= ", remaining_balance = '$balance' ";
 		$data .= ", status = '$status' ";
 		$data .= ", status_count = '$status_count' ";
-		$data .= ", payment_count = '$payment_count' "; */
+		$data .= ", payment_count = '$payment_count' ";
+
+
+		
+		$save = $this->conn->query("INSERT INTO property_invoice set ".$data);
 
 		$resp['data'] = array(
 			'property_id' => $prop_id,
@@ -2453,8 +2467,11 @@ Class Master extends DBConnection {
 			'remaining_balance' => $balance,
 			'status' => $status,
 			'status_count' => $status_count,
-			'payment_count' => $payment_count
+			'payment_count' => $payment_count,
+			'excess' => $excess
 		  );
+		
+
 
 
 		if($resp['data'] ){
@@ -2466,6 +2483,24 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 	
+	function delete_invoice(){
+		extract($_POST);
+
+		$rowId = $_POST['rowId'];
+
+		$del = $this->conn->query("DELETE FROM property_invoice where invoice_id = ".$rowId);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Row successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
+	}
+
+
+
 }
 
 
@@ -2557,6 +2592,10 @@ switch ($action) {
 	break;
 	case 'add_payment':
 		echo $Master->add_payment();
+	break;
+
+	case 'delete_invoice':
+		echo $Master->delete_invoice();
 	break;
 	
 	default:

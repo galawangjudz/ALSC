@@ -471,9 +471,9 @@ body{
                 <form method="" id="set-paydate">
                     <label class="control-label">Pay Date: </label>
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
-                    <label class="control-label">Due Date: </label>
-                    <input type="date" name="due_date_input" id="due_date_input" value="<?php echo date('Y-m-d'); ?>">
-                    <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
+                    <label class="control-label">Amount paid: </label>
+                    <input type="text" name="amount_paid_input" id="amount_paid_input" value="0">
+                    <button type="button" class="btn btn-primary set_pay_date_button" data-amt-paid="" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
                 </form>
             </div>
 
@@ -515,9 +515,11 @@ $(document).ready(function() {
   $('.set_pay_date_button').click(function(){
 		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
     var payDateInput = document.getElementById("pay_date_input");
+    var payAmountInput = document.getElementById("amount_paid_input");
     var setPayDateButton = document.querySelector(".set_pay_date_button");  
     setPayDateButton.setAttribute("data-date", payDateInput.value);
-	  uni_modal_right("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date'),"large")
+    setPayDateButton.setAttribute("data-amount", payAmountInput.value);
+	  uni_modal_right("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date')+"&payamt="+$(this).attr('data-amount'),"large")
 
 	})
 

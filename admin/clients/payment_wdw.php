@@ -1,159 +1,7 @@
 
 <?php
+    include 'common.php';
 
-function is_leap_year($year) {
-  return date('L', strtotime("$year-01-01"));
-}
-
-
-
-function validate_date($year,$month,$day){
-    if (($month == 1) || ($month == 6) || ($month == 9) || ($month == 11)):
-        if ($day == 31):
-            $l_new_day = '30';
-        else:
-            $l_new_day = $day;
-        endif;
-    elseif ($month == 2):
-        if ($day > 28):
-            $l_leap = is_leap_year($year);
-
-            if ($l_leap):
-                $l_new_day = '28';
-            else:
-                $l_new_day = '29';
-            endif;
-
-        else:
-            $l_new_day = $day;
-        endif;
-
-    else:
-        $l_new_day = $day;
-
-
-    endif;
-
-
-    return $l_new_day;
-
-}
-
-function auto_date($last_day,$date)
-  {
-   
-    $date_arr = date_parse($date);
-
-    $year = $date_arr['year'];
-    $month = $date_arr['month'];
-    $day = $date_arr['day'];
-    /* $change_date = 0; */
-    $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
-    if (!$conn) {
-        die('Could not connect to database: ' . mysqli_connect_error());
-    }
-    $l_col = "c_retention,c_change_date,c_restructured,c_date_of_sale";
-    $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
-    $l_qry = $conn->query($l_sql);
-    
-    while($row=$l_qry->fetch_assoc()):
-        $l_retention = $row['c_retention'];
-        $change_date = $row['c_change_date'];
-        $restructured = $row['c_restructured'];
-        $date_of_sale = $row['c_date_of_sale'];
-    endwhile;
-
-    $l_leap = is_leap_year($year);
-
-    if($date_of_sale == 31 && $last_day >= 28 && $change_date != 1){
-          $last_day = 31;
-    }
-
-    
-    if ($month == 1):
-        if ($last_day < 28):
-            $dt = new DateTime($date);
-            $dt->modify('+31 days');
-            $l_result = $dt->format('Y-m-d');     
-        else:
-            if ($l_leap):
-                  $l_result = $year .'-02-29';
-            else:
-                  $l_result = $year .'-02-28';
-               
-            endif;
-
-        endif;
-    elseif($month == 2):
-        if ($last_day > 28):
-            if($last_day == 29):
-                $l_result = $year .'-03-29'; 
-            elseif($last_day == 30):
-                $l_result = $year .'-03-30'; 
-            elseif($last_day == 31):
-                $l_result = $year .'-03-31';
-            endif;
-        else:
-
-            if($l_leap):
-                $dt = new DateTime($date);
-                $dt->modify('+29 days');
-                $l_result = $dt->format('Y-m-d');
-            else:
-                $dt = new DateTime($date);
-                $dt->modify('+28 days');
-                $l_result = $dt->format('Y-m-d');
-            endif;
-        endif;
-    
-    elseif($month == 3 or $month == 5 or $month == 7 or $month == 8 or $month == 10 or $month == 12):
-        if($month ==7 or $month == 12):
-              if($last_day >= 30):
-                  $l_date1 = $year .'-' .$month . '-'. $last_day ; 
-              else:
-                  $l_date1 = $date ; 
-              endif;
-              $dt = new DateTime($l_date1);
-              $dt->modify('+31 days');
-              $l_result = $dt->format('Y-m-d');
-
-        else:
-              if ($last_day <= 30):
-                  $l_date1 = $date ;            
-              else:
-                  $l_date1 = $year .'-'.$month . '-'. '30';         
-              endif;     
-              $dt = new DateTime($l_date1);
-              $dt->modify('+31 days');
-              $l_result = $dt->format('Y-m-d');
-        endif;
-
-    elseif($month == 4 or $month == 6 or $month == 9 or $month == 11):
-          if ($last_day == 31):
-                $dt = new DateTime($date);
-                $dt->modify('+1 month');
-                $l_result = $dt->format('Y-m-d');
-          else:
-                $dt = new DateTime($date);
-                $dt->modify('+30 days');
-                $l_result = $dt->format('Y-m-d');
-          endif;
-    else:
-          
-    endif;
-
-    return $l_result;
-
-
-  }
-
-function invoice(){
-
-
-
-}
-
-                  
 
 if(isset($_GET['id'])){
 
@@ -220,13 +68,23 @@ if(isset($_GET['id'])){
         $start_date = $row['c_start_date'];
         $change_date = $row['c_change_date'];
 
-        $payments = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
-        $l_last = $payments->num_rows - 1;
+
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
-        if($payments->num_rows <= 0){
-            echo ('No Payment Records for this Account!');
-        } 
-        while($row = $payments->fetch_assoc()) {
+        if($invoices->num_rows <= 0){
+
+            $payments = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+            $l_last = $payments->num_rows - 1;
+            $payments_data = array(); 
+            if($payments->num_rows <= 0){
+                echo ('No Payment Records for this Account!');
+            } 
+            while($row = $payments->fetch_assoc()) {
+              $payments_data[] = $row; 
+            }
+        }
+        while($row = $invoices->fetch_assoc()) {
           $payments_data[] = $row; 
 
         }
@@ -744,6 +602,11 @@ if(isset($_GET['id'])){
 
 </style>
 
+<script>
+  
+
+</script>
+
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
@@ -768,6 +631,7 @@ if(isset($_GET['id'])){
             </tr>
         </table>
         <hr>
+
         <table>
             <tr>
                 <td style="width:25%;font-size:14px;"><label for="due_date">Due Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>" style="width:100%;"></td>
@@ -804,60 +668,157 @@ if(isset($_GET['id'])){
         
         </form>
 
-        <table class="table3 table-bordered table-hover table-striped" id="payment-table" style="width:100%;">
-        <thead>
-            <tr>
-                <th width="50">
-                    <label class="control-label">&nbsp;Action</label>
-                </th>
-                <th width="50">
-                    <label class="control-label">&nbsp;Due Date</label>
-                </th>
-                <th width="50">
-                    <label class="control-label">&nbsp;Pay Date</label>
-                </th>
-                <th width="100">
-                    <label class="control-label">&nbsp;Or No</label>
-                </th>
-                <th width="120">
-                    <label class="control-label">&nbsp;Amount Paid</label>
-                </th>
-                <th  width="120">
-                    <label class="control-label">&nbsp;Amount Due</label>
-                </th>
-                <th width="100">
-                    <label class="control-label">&nbsp;Interest</label>
-                </th>
-                <th width="100">
-                    <label class="control-label">&nbsp;Principal</label>
-                </th>
-                <th width="100">
-                    <label class="control-label">&nbsp;Surcharge</label>
-                </th>
-                <th width="100">
-                    <label class="control-label">&nbsp;Rebate</label>
-                </th>
-                <th width="100">
-                    <label class="control-label">&nbsp;Period</label>
-                </th>
-                <th width="200">
-                    <label class="control-label">&nbsp;Balance</label>
-                </th>
-            </tr>
+            <table class="table2 table-bordered table-stripped">
+                    <?php $qry4 = $conn->query("SELECT * FROM property_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
+                     if($qry4->num_rows <= 0){
+                           echo "No Payment Records";
+                     }else{  ?>      
+   
+                      <thead> 
+                          <tr>
+                              <th style="text-align:center;font-size:13px;">Action</th>
+                              <th style="text-align:center;font-size:13px;">Payment ID</th>
+                              <th style="text-align:center;font-size:13px;">DUE DATE</th>
+                              <th style="text-align:center;font-size:13px;">PAY DATE</th>
+                              <th style="text-align:center;font-size:13px;">OR NO</th>
+                              <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                              <th style="text-align:center;font-size:13px;">INTEREST</th>
+                              <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
+                              <th style="text-align:center;font-size:13px;">SURCHARGE</th>
+                              <th style="text-align:center;font-size:13px;">REBATE</th>
+                              <th style="text-align:center;font-size:13px;">PERIOD</th>
+                              <th style="text-align:center;font-size:13px;">BALANCE</th>
+                          </tr>
+                      </thead>
+                    <tbody>
+                        <?php
+                        $total_rebate = 0;
+                        
+                        while($row= $qry4->fetch_assoc()): 
+                 
+                       /*    $property_id = $row["property_id"];
+                          $property_id_part1 = substr($property_id, 0, 2);
+                          $property_id_part2 = substr($property_id, 2, 6);
+                          $property_id_part3 = substr($property_id, 8, 5); */
+
+                         /*  $payment_id = $row['payment_id']; */
+                          $invoice_id = $row['invoice_id'];
+                          $due_dte = $row['due_date'];
+                          $pay_dte = $row['pay_date'];
+                          $or_no = $row['or_no'];
+                          $amt_paid = $row['payment_amount'];
+                          $interest = $row['interest'];
+                          $principal = $row['principal'];
+                          $surcharge = $row['surcharge'];
+                          $rebate = $row['rebate'];
+                          $period = $row['status'];
+                          $balance = $row['remaining_balance'];
+
+                          $total_rebate += $rebate;
+
+                      
+                      
+                      echo "<tr id='{$row['invoice_id']}'>";
+                      echo "<td><button onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
+                
+                    echo "<td>{$row['invoice_id']}</td>";
+                       ?>
+                         
+                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($rebate,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $period ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
+                      </tr>
+                        <?php endwhile ; } ?>
         </thead>
         <tbody>
         </tbody>
     </table>
+
+    <div class="col-xs-6 no-padding-right">
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-5">
+                <strong>Sub Total:</strong>
+            </div>
+            <div class="col-xs-3">
+                <span class="invoice-sub-total">0.00</span>
+                <input type="hidden" name="invoice_subtotal" id="invoice_subtotal">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-5">
+                <strong>Discount:</strong>
+            </div>
+            <div class="col-xs-3">
+                <span class="invoice-discount">0.00</span>
+                <input type="hidden" name="invoice_discount" id="invoice_discount">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-5">
+                <strong class="shipping">Shipping:</strong>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon"></span>
+                    <input type="hidden" name="invoice_discount" id="invoice_discount">   </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-5">
+                <strong>TAX/VAT:</strong><br>Remove TAX/VAT <input type="checkbox" class="remove_vat">
+            </div>
+            <div class="col-xs-3">
+                <span class="invoice-vat" data-enable-vat="" data-vat-rate="" data-vat-method="">0.00</span>
+                <input type="hidden" name="invoice_vat" id="invoice_vat">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-5">
+                <strong>Total:</strong>
+            </div>
+            <div class="col-xs-3">
+                <span class="invoice-total">0.00</span>
+                <input type="hidden" name="invoice_total" id="invoice_total">
+            </div>
+        </div>
+    </div>
 
 
     </div>
 	</div>
 </div>
 <script>
-  
+   function deleteRow(rowId) {
+   
+   $.ajax({
+       url:_base_url_+'classes/Master.php?f=delete_invoice',
+       method:'POST',
+       data:{rowId: rowId},
+       dataType:"json",
+       error:err=>{
+           console.log(err)
+           alert_toast("An error occured",'error');
+           end_loader();
+           },
+     
+       success:function(resp){
+           $('#' + rowId).remove();
+           console.log(resp);
 
-
-
+           }
+      
+   });
+}  
+ 
 
 
 function validateForm() {
@@ -880,10 +841,6 @@ function validateForm() {
 	}
 
     $(document).ready(function(){
-
-        
-        
-
 
         $('#save_payment').submit(function(e){
 			e.preventDefault();
@@ -933,8 +890,13 @@ function validateForm() {
                             row += "</tr>";
                             // Add the new row to the table
                             $('#payment-table tbody').append(row);
-                             
+                            compute(payments.excess);
+                        
+                                                
                     });
+                  
+                    
+
                     // Show success message and reload page
                     end_loader();
 					}else if(resp.status == 'failed' && !!resp.msg){
@@ -954,13 +916,29 @@ function validateForm() {
         
 	})
 	
+
+
+
+
     	// remove commission row
 	$('#payment-table').on('click', ".delete-pay-row", function(e) {
 		e.preventDefault();
-			$(this).closest('tr').remove();
-		//calculateTotal();
+		$(this).closest('tr').remove();
+
+            
 	});
 
+
+    function compute(excess){
+        if (excess == -1){
+            excesspay = 0;
+        }else{
+            excesspay = excess;
+        }
+        $('#amount_paid').val(excesspay.toFixed(2));
+  
+        
+    }
 
 
 

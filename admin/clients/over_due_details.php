@@ -1,6 +1,7 @@
 <?php 
 include '../../config.php';
-include 'payment_schedule.php';
+//include 'payment_schedule.php';
+include 'payment_sched_v2.php';
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -59,7 +60,7 @@ if(isset($_GET['id'])){
         
         }
     $pay_date = $_GET['paydate'];
-    
+    $amount_due = $_GET['payamt'];
         
     }
 ?>
@@ -83,16 +84,16 @@ if(isset($_GET['id'])){
 	<div class="card-body">
     <div class="container-fluid">
     <br>
-    <form method="" id="set-paydate">
+  <!--   <form method="" id="set-paydate">
               <label class="control-label">Pay Date: </label>
               <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
               <input type="hidden" name="id" id="id" value="<?php $id ?>">
               <button type="button" class="btn btn-primary set_pay_date_button" data-date ="pay_date_input" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
               <a class="btn btn-success btn-s set_pay_date_button">Set</a>
-    </form>
+    </form> -->
 
     
-    <?php $all_payments = load_data($prop_id, $pay_date);
+    <?php $all_payments = load_data($prop_id, $pay_date, $amount_due);
            $over_due    = $all_payments[0];
            $total_amt_due = $all_payments[1];
            $total_interest =  $all_payments[2];
