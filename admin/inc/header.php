@@ -55,7 +55,7 @@
     </script>
     <script src="<?php echo base_url ?>dist/js/script.js"></script>
     <script src="<?php echo base_url ?>dist/js/scripts.js"></script>
-    <script src="<?php echo base_url ?>dist/js/payment.js"></script>
+  <!--   <script src="<?php echo base_url ?>dist/js/payment.js"></script> -->
 <!-- 
     new -->
     <script src="<?php echo base_url ?>dist/js/TimeCircles.js"></script>
