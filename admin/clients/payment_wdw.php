@@ -68,8 +68,8 @@ if(isset($_GET['id'])){
         $start_date = $row['c_start_date'];
         $change_date = $row['c_change_date'];
 
-
-        $invoices = $conn->query("SELECT due_date,pay_date, or_no,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+/* 
+        $invoices = $conn->query("SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
@@ -84,10 +84,24 @@ if(isset($_GET['id'])){
               $payments_data[] = $row; 
             }
         }
-        while($row = $invoices->fetch_assoc()) {
-          $payments_data[] = $row; 
+        while($row2 = $invoices->fetch_assoc()) {
+          $payments_data[] = $row2; 
 
         }
+ */
+
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, NULL as or_no FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $l_last = $invoices->num_rows - 1;
+        $payments_data = array(); 
+        if($invoices->num_rows <= 0){
+                echo ('No Payment Records for this Account!');
+        }
+        while($row2 = $invoices->fetch_assoc()) {
+          $payments_data[] = $row2; 
+
+        }
+
+
        
         $last_cnt = $l_last;
         $payment_rec = $payments_data;
