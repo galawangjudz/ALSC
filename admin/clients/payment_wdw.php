@@ -1550,11 +1550,10 @@ body{
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
-        </thead>
+            </thead>
         <tbody>
         </tbody>
     </table>
-
     <?php 
         $sql_prin = "SELECT SUM(principal) AS total_principal FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
         $result_prin = mysqli_query($conn, $sql_prin);
@@ -1603,7 +1602,6 @@ body{
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
     </table>
-  
     </div>
 	</div>
 </div>
