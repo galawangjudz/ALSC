@@ -69,7 +69,7 @@ if(isset($_GET['id'])){
         $change_date = $row['c_change_date'];
 
 
-        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $invoices = $conn->query("SELECT due_date,pay_date, or_no,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
@@ -93,6 +93,15 @@ if(isset($_GET['id'])){
         $payment_rec = $payments_data;
         $last_payment = $payments_data[$l_last];
        
+        
+
+        $last_excess = isset($last_payment['excess']) ? $last_payment['excess'] : 0;
+        $last_acc_stat = isset($last_payment['account_status']) ? $last_payment['account_status'] : '';
+        $last_or_ent = isset($last_payment['or_no']) ? $last_payment['or_no'] : '';
+
+       
+
+       
         $check_date = 0;
         $reopen_value = 0;
         $monthly_pay = 0;
@@ -115,6 +124,12 @@ if(isset($_GET['id'])){
 
         $last_stat_count = $last_payment['status_count'];
         $last_pay_count = $last_payment['payment_count'];
+
+       
+     
+        if ($last_acc_stat != ''){
+            $acc_status = $last_acc_stat;
+        }
         //code start here 
 
         
@@ -126,7 +141,7 @@ if(isset($_GET['id'])){
             $total_amount_due_ent = '';
             $due_date_ent = '';
             $payment_status_ent = '';
-            return ;
+            
         endif;
 
         if($retention == '1'):
@@ -542,7 +557,7 @@ if(isset($_GET['id'])){
                         if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
                             $l_status = 'FPD';
                             $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
-                            $amount_paid_ent = (numbe_format($last_payment['remaining_balance'],2));
+                            $amount_paid_ent = (number_format($last_payment['remaining_balance'],2));
                             $amount_ent = (number_format($monthly_pay,2));
                             $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2 ));
                         } else {
@@ -649,7 +664,15 @@ if(isset($_GET['id'])){
                 <td style="width:25%;font-size:14px;"><label for="tot_amt_due">Total Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" required></td><td style="width:25%;font-size:14px;"><label for="balance">Balance:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" required></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" required></td>
+                <?php 
+                if ($last_excess != -1){
+                    $amount_paid_ent = $last_excess;
+                    $or_ent = $last_or_ent;
+                }
+               
+                ?>
+                
+                <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" required></td>
             </tr>
         </table>
         <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
@@ -762,6 +785,7 @@ if(isset($_GET['id'])){
        success:function(resp){
            $('#' + rowId).remove();
            console.log(resp);
+           location.reload();
 
            }
       
@@ -805,7 +829,7 @@ function validateForm() {
             }    
             start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_payment",
+				url:_base_url_+"classes/Master.php?f=add_payment",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -840,6 +864,8 @@ function validateForm() {
                             // Add the new row to the table
                             $('#payment-table tbody').append(row);
                             compute(payments.excess);
+
+                            location.reload();
                         
                                                 
                     });

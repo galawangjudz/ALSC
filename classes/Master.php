@@ -2433,7 +2433,8 @@ Class Master extends DBConnection {
 			endif;
 		}
 		
-					
+	 
+
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
 		$data .= ", pay_date = '$pay_date' ";
@@ -2448,10 +2449,12 @@ Class Master extends DBConnection {
 		$data .= ", status = '$status' ";
 		$data .= ", status_count = '$status_count' ";
 		$data .= ", payment_count = '$payment_count' ";
+		$data .= ", excess = '$excess' ";
+		$data .= ", account_status = '$l_status' ";
 
 
 		
-		$save = $this->conn->query("INSERT INTO property_invoice set ".$data);
+		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 
 		$resp['data'] = array(
 			'property_id' => $prop_id,
@@ -2488,7 +2491,7 @@ Class Master extends DBConnection {
 
 		$rowId = $_POST['rowId'];
 
-		$del = $this->conn->query("DELETE FROM property_invoice where invoice_id = ".$rowId);
+		$del = $this->conn->query("DELETE FROM t_invoice where invoice_id = ".$rowId);
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Row successfully deleted.");
