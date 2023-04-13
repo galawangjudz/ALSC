@@ -1909,8 +1909,8 @@ Class Master extends DBConnection {
 			'payment_count' => $payment_count
 		  ); */
 		
-		//$save = $this->conn->query("INSERT INTO property_payments set ".$data);
-		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
+		$save = $this->conn->query("INSERT INTO property_payments set ".$data);
+		//$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 			
 
 		//$l_sql =  "UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id;
@@ -1939,8 +1939,9 @@ Class Master extends DBConnection {
 	function add_payment(){
 		extract($_POST);
 
-		$payments = $this->conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE property_id = ".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
-        $l_last = $payments->num_rows - 1;
+		//$payments = $this->conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE property_id = ".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $payments = $this->conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no FROM property_payments WHERE  property_id = ".$prop_id."  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE  property_id = ".$prop_id."  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$l_last = $payments->num_rows - 1;
         $payments_data = array(); 
         if($payments->num_rows <= 0){
             echo ('No Payment Records for this Account!');
@@ -2288,7 +2289,7 @@ Class Master extends DBConnection {
 					// get last total principal
 					//echo $payment_count;
 					//echo $payment_count;
-					for ($x = 0; $x < $payment_count - 1; $x++) {
+					for ($x = 0; $x < $payment_count -1; $x++) {
 						try {
 							//echo $payment_rec[$x]['payment_amount'];
 							if ($due_date == $payment_rec[$x]['due_date']) { 
@@ -2299,16 +2300,20 @@ Class Master extends DBConnection {
 							//pass
 						}
 					}
+
+					
 					if ($l_ampd < $l_surcharge):
 						$l_sur_credit = $l_surcharge - $l_ampd;
 					else:
 						$l_sur_credit = 0;
 					endif;
 					if ($last_interest < $l_interest):
+						
 						if ($amount_paid <= $surcharge):
 							$interest = 0;
 							$principal = 0;
 						else:
+							
 							$l_bal_interest = $l_interest - $last_interest;
 							if ($last_payment['payment_amount'] < $last_payment['surcharge']):
 								if (($tot_amount_due - $surcharge - $l_sur_credit) >= $l_bal_interest):
@@ -2351,6 +2356,7 @@ Class Master extends DBConnection {
 						endif;
 					
 					else:
+						
 						$interest = 0;
 						if ($amount_paid <= $surcharge):
 							$principal = 0;
@@ -2359,9 +2365,10 @@ Class Master extends DBConnection {
 								$principal = $amount_paid - $surcharge - $l_sur_credit;
 								if ($principal <= 0):
 									$principal = 0;
-								else:
-									$principal = ($amount_paid - $surcharge);
 								endif;
+							else:
+								$principal = ($amount_paid - $surcharge);
+								
 							endif;
 						endif;
 					endif;
@@ -2398,14 +2405,15 @@ Class Master extends DBConnection {
 						endif;
 					endif;
 				}else{
+					
 					$l_interest = ($ma_balance * ($interest_rate/1200));
 					if ($last_interest < $l_interest) {
 						$interest = $l_interest - $last_interest;
-					if ($rebate != 0) {
-						$principal = $monthly_pay - $interest - atof($rebate);
-					} else {
-						$principal = $monthly_pay - $interest;
-					}
+						if ($rebate != 0) {
+							$principal = $monthly_pay - $interest - atof($rebate);
+						} else {
+							$principal = $monthly_pay - $interest;
+						}
 					} else {
 						$interest = 0;
 						$principal = $monthly_pay;
@@ -2413,6 +2421,7 @@ Class Master extends DBConnection {
 					$excess = 0;
 				}
 			}
+			
 			$balance = $balance - $principal - $rebate;
 			if (($acc_status == 'Reservation') || ($acc_status == 'Full DownPayment')):
 				if (($status == 'FPD') && ($amount_paid >= $tot_amount_due) || ($balance <= 0)):
@@ -2428,6 +2437,7 @@ Class Master extends DBConnection {
 					$l_status = 'Fully Paid';
 				else:
 					$status = 'MA - ' .strval($status_count);
+					$l_status = 'Monthly Amortization';
 				endif;
 			endif;
 		}

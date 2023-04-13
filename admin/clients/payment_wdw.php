@@ -90,7 +90,7 @@ if(isset($_GET['id'])){
         }
  */
 
-        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, NULL as or_no FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
@@ -107,14 +107,15 @@ if(isset($_GET['id'])){
         $payment_rec = $payments_data;
         $last_payment = $payments_data[$l_last];
        
+
+        
         
 
         $last_excess = isset($last_payment['excess']) ? $last_payment['excess'] : 0;
         $last_acc_stat = isset($last_payment['account_status']) ? $last_payment['account_status'] : '';
         $last_or_ent = isset($last_payment['or_no']) ? $last_payment['or_no'] : '';
-
+        $last_pay_ent = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
        
-
        
         $check_date = 0;
         $reopen_value = 0;
@@ -144,6 +145,8 @@ if(isset($_GET['id'])){
         if ($last_acc_stat != ''){
             $acc_status = $last_acc_stat;
         }
+
+        echo $acc_status;
         //code start here 
 
         
@@ -662,8 +665,20 @@ if(isset($_GET['id'])){
         <hr>
 
         <table>
+            <?php 
+                if ($last_excess != -1 && $last_excess != 0){
+                    $amount_paid_ent = $last_excess;
+                    $or_ent = $last_or_ent;
+                    $pay_date_ent = $last_pay_ent;
+                }
+               
+                ?>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="due_date">Due Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td><td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo date('Y-m-d'); ?>" style="width:100%;"></td>
+
+                <td style="width:25%;font-size:14px;"><label for="due_date">Due Date:</label></td>
+                <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;"></td>
+                <td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td>
+                <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
             </tr>
             <tr>
                 <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>"></td><td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" required></td>
@@ -678,13 +693,7 @@ if(isset($_GET['id'])){
                 <td style="width:25%;font-size:14px;"><label for="tot_amt_due">Total Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" required></td><td style="width:25%;font-size:14px;"><label for="balance">Balance:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" required></td>
             </tr>
             <tr>
-                <?php 
-                if ($last_excess != -1){
-                    $amount_paid_ent = $last_excess;
-                    $or_ent = $last_or_ent;
-                }
-               
-                ?>
+                
                 
                 <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" required></td>
             </tr>
@@ -783,6 +792,8 @@ if(isset($_GET['id'])){
 	</div>
 </div>
 <script>
+
+    
    function deleteRow(rowId) {
    
    $.ajax({
@@ -861,22 +872,7 @@ function validateForm() {
                         data = [resp['data']];
                         $.each(data, function(index, payments) {
                             
-                            var row = "<tr>";
-                            row += "<td><a href=\"#\" class=\"btn btn-danger btn-md delete-pay-row\"><span class=\"fa fa-times\"></span></a></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"date\" class=\"form-control form-group-sm item-input due-date\" name=\"due_date[]\" value=\"" +   payments.due_date + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"date\" class=\"form-control pay-date\" name=\"pay_date[]\" value=\"" + payments.pay_date + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control or-no\" name=\"or_no[]\" value=\"" + payments.or_no + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control calculate amount-paid\" name=\"amount_paid[]\" value=\"" + payments.payment_amount+ "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control amount-due\" name=\"amount_due[]\" value=\"" + payments.amount_due + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control interest-amt\" name=\"interest_amt[]\" value=\"" + payments.interest + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control prin-amt\" name=\"prin_amt[]\" value=\"" + payments.principal + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control surcharge-amt\" name=\"surcharge_amt[]\" value=\"" + payments.surcharge + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control rebate-amt\" name=\"rebate_amt[]\" value=\"" + payments.rebate + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control period-stat\" name=\"period_stat[]\" value=\"" + payments.status + "\"></td>";
-                            row += "<td style=\"padding-top:10px;\"><input type=\"text\" class=\"form-control balance-amt\" name=\"balance_amt[]\" value=\"" + payments.remaining_balance + "\"></td>";
-                            row += "</tr>";
-                            // Add the new row to the table
-                            $('#payment-table tbody').append(row);
+                        
                             compute(payments.excess);
 
                             location.reload();

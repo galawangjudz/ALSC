@@ -42,7 +42,7 @@ function check_paydate(){
         $('#surcharge').val(l_sur.toFixed(2));
         $('#rebate_amt').val('0.0');
         $('#tot_amount_due').val(tot_amt_due.toFixed(2));
-        $('#amount_paid').val(tot_amt_due.toFixed(2));
+        //$('#amount_paid').val(tot_amt_due.toFixed(2));
         //console.log(`${pa_status.substr(0,2)}`);
         //console.log(pay_status);
         console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
@@ -98,14 +98,14 @@ function check_paydate(){
        $('#rebate_amt').val(l_rebate.toFixed(2));
        l_monthly = (monthly_pay - l_rebate);
        $('#tot_amount_due').val(l_monthly.toFixed(2));
-       $('#amount_paid').val(l_monthly.toFixed(2));
+       //$('#amount_paid').val(l_monthly.toFixed(2));
 
     }else{
         if ((excess != -1) && (over_due_mode == 0)){
             return;
         }
         $('#tot_amount_due').val(monthly_pay.toFixed(2));
-        $('#amount_paid').val(monthly_pay.toFixed(2));
+        //$('#amount_paid').val(monthly_pay.toFixed(2));
         $('#surcharge').val('0.0');
         $('#rebate_amt').val('0.0');
     }
