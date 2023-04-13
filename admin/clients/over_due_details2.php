@@ -62,7 +62,8 @@ if(isset($_GET['id'])){
     }
 ?>
 <?php
-$pay_date = $_POST['pay_date_input'];
+//$pay_date = $_POST['pay_date_input'];
+$pay_date = date('Y-m-d');
 ?>
 <style>
 #item-list th, #item-list td{
