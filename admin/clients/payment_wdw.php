@@ -1608,10 +1608,7 @@ body{
 	</div>
 </div>
 <script>
-
-    
    function deleteRow(rowId) {
-   
    $.ajax({
        url:_base_url_+'classes/Master.php?f=delete_invoice',
        method:'POST',
@@ -1622,18 +1619,14 @@ body{
            alert_toast("An error occured",'error');
            end_loader();
            },
-     
        success:function(resp){
            $('#' + rowId).remove();
            console.log(resp);
            location.reload();
-
-           }
+        }
       
    });
 }  
-
-
 function validateForm() {
 	    // error handling
 	    var errorCounter = 0;
