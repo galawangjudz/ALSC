@@ -69,7 +69,7 @@ if(isset($_GET['id'])){
         $change_date = $row['c_change_date'];
 
 
-        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
@@ -669,7 +669,7 @@ if(isset($_GET['id'])){
         </form>
 
             <table class="table2 table-bordered table-stripped">
-                    <?php $qry4 = $conn->query("SELECT * FROM property_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
+                    <?php $qry4 = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
                      if($qry4->num_rows <= 0){
                            echo "No Payment Records";
                      }else{  ?>      
@@ -741,58 +741,7 @@ if(isset($_GET['id'])){
         </tbody>
     </table>
 
-    <div class="col-xs-6 no-padding-right">
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-5">
-                <strong>Sub Total:</strong>
-            </div>
-            <div class="col-xs-3">
-                <span class="invoice-sub-total">0.00</span>
-                <input type="hidden" name="invoice_subtotal" id="invoice_subtotal">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-5">
-                <strong>Discount:</strong>
-            </div>
-            <div class="col-xs-3">
-                <span class="invoice-discount">0.00</span>
-                <input type="hidden" name="invoice_discount" id="invoice_discount">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-5">
-                <strong class="shipping">Shipping:</strong>
-            </div>
-            <div class="col-xs-3">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon"></span>
-                    <input type="hidden" name="invoice_discount" id="invoice_discount">   </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-5">
-                <strong>TAX/VAT:</strong><br>Remove TAX/VAT <input type="checkbox" class="remove_vat">
-            </div>
-            <div class="col-xs-3">
-                <span class="invoice-vat" data-enable-vat="" data-vat-rate="" data-vat-method="">0.00</span>
-                <input type="hidden" name="invoice_vat" id="invoice_vat">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-5">
-                <strong>Total:</strong>
-            </div>
-            <div class="col-xs-3">
-                <span class="invoice-total">0.00</span>
-                <input type="hidden" name="invoice_total" id="invoice_total">
-            </div>
-        </div>
-    </div>
-
-
+  
     </div>
 	</div>
 </div>
@@ -856,7 +805,7 @@ function validateForm() {
             }    
             start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=add_payment",
+				url:_base_url_+"classes/Master.php?f=save_payment",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
