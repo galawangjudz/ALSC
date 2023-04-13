@@ -72,26 +72,6 @@ $pay_date = $_POST['pay_date_input'];
 .container-fluid p{
     margin: unset
 }
-table tr{
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
-  border:solid 1px;
-  padding-left:10px!important;
-  border:solid 1px gainsboro;
-}
-table td{
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
-  border:solid 1px gainsboro;
-  padding:5px;
-}
-.table td, .table th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
 
 
 </style>
@@ -106,14 +86,13 @@ table td{
         $total_surcharge = $all_payments[4];  ?>
         <table style="width:100%;float:left;">
             <tr>
-                <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:20%;font-size:14px;"><u><?php echo $pay_date; ?></u></td>
-                <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:50%;font-size:14px;"><u><?php echo $prop_id; ?></u></td>
+                <td style="width:3%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:10%;font-size:14px;"><u><?php echo $pay_date; ?></u></td>
+                <td style="width:3%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:10%;font-size:14px;"><u><?php echo $prop_id; ?></u></td>
 
 <td><a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a></td>
 </tr>
         </table>
-
-<table class="table2 table-bordered table-stripped" id="overdue_table" style="width:100%;">
+<table class="table2 table-bordered table-stripped" id="overdue_table">
                 <thead> 
                     <tr>
                         <th class="text-center" style="font-size:13px;">DUE DATE</th>
@@ -134,9 +113,9 @@ table td{
                 <?php 
                 foreach ($over_due as $l_data): ?>
                     <tr>
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[0] ?></td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[1] ?></td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[2] ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[0] ?></td> 
+                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[1] ?></td> 
+                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[2] ?> </td> 
                     <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[3] ?> </td> 
                     <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[4]) ?></td> 
                     <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td>  -->
