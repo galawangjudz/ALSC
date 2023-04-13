@@ -227,6 +227,7 @@ body{
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
               <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
                 <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
+                <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
                 <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
                 <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
               </div>  
@@ -253,6 +254,8 @@ body{
                       </thead>
                     <tbody>
                         <?php
+                        $total_rebate = 0;
+                        
                         while($row= $qry4->fetch_assoc()): 
                  
                        /*    $property_id = $row["property_id"];
@@ -271,6 +274,8 @@ body{
                           $rebate = $row['rebate'];
                           $period = $row['status'];
                           $balance = $row['remaining_balance'];
+
+                          $total_rebate += $rebate;
 
                       ?>
                       <tr>
@@ -366,6 +371,8 @@ body{
                               ?>
                               <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>"></td>
+                              <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
@@ -465,11 +472,12 @@ body{
                 <form method="" id="set-paydate">
                     <label class="control-label">Pay Date: </label>
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
-                    <button type="button" class="btn btn-primary set_pay_date_button" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
+                    <label class="control-label">Amount paid: </label>
+                    <input type="text" name="amount_paid_input" id="amount_paid_input" value="0">
+                    <button type="button" class="btn btn-primary set_pay_date_button" data-amt-paid="" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
                 </form>
             </div>
-            
-          
+
 
            
          </div>
@@ -499,13 +507,21 @@ $(document).ready(function() {
 
 	})
 
+  $('.new_payment').click(function(){
+		
+	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
 
   $('.set_pay_date_button').click(function(){
 		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
     var payDateInput = document.getElementById("pay_date_input");
+    var payAmountInput = document.getElementById("amount_paid_input");
     var setPayDateButton = document.querySelector(".set_pay_date_button");  
     setPayDateButton.setAttribute("data-date", payDateInput.value);
-	  uni_modal_right("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date'),"large")
+    setPayDateButton.setAttribute("data-amount", payAmountInput.value);
+	  uni_modal_right("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date')+"&payamt="+$(this).attr('data-amount'),"large")
 
 	})
 

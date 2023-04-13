@@ -154,13 +154,12 @@
 
 
 
-    function load_data($id,$pay_date){
+    function load_data($id,$pay_date,$amount_paid){
             $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
             if (!$conn) {
                 die('Could not connect to database: ' . mysqli_connect_error());
             }
 
-          
             $l_col = "property_id,c_account_type,c_account_type1,c_account_status,c_net_tcp,c_payment_type1,c_payment_type2,c_net_dp,c_no_payments,c_monthly_down,c_first_dp,c_full_down,c_amt_financed,c_terms,c_interest_rate,c_fixed_factor,c_monthly_payment,c_start_date,c_retention,c_change_date,c_restructured,c_date_of_sale";
             $l_sql = sprintf("SELECT %s FROM properties WHERE md5(property_id) = '{$_GET['id']}' ", $l_col);
             $l_qry = $conn->query($l_sql);
@@ -194,6 +193,7 @@
                 /* $end->modify("+{$l_x} month"); */
                 $l_pay_date_val = $end->format('Y-m-d');
                 //$l_pay_date_val = '2023-12-31';
+
         
 
                 endwhile;
@@ -345,6 +345,7 @@
                                     $l_status = 'PD-' . strval($l_count);
                                     $l_acc_status = 'Partial DownPayment';
                                 endif;
+                                
                           elseif ($l_acc_status == 'Partial DownPayment'):
                                 $l_date = date('Y-m-d',strtotime($l_last_due_date));
                                 if ($l_change_date == '1'):
@@ -898,8 +899,14 @@
                   }
 
                 $l_bal = floatval(str_replace(',', '',$l_new_bal));
+
+                
+
                 $l_data = array($t_due_date,"----------","******",'0.00',$l_amt_due,$l_interest,$l_principal,$l_surcharge,$l_rebate,$l_status,$l_new_bal);
                 
+
+
+
                 array_push($all_payments, $l_data);
                
                 $l_tot_amnt_due += floatval(str_replace(',', '',$l_amt_due));
@@ -919,14 +926,20 @@
                 $l_last_stat_cnt = $l_count;
 
 
-      
+
+                $amount_paid -= $l_last_amt_paid;
+                echo $amount_paid;
+                $l_last_amt_paid = $amount_paid;
+
+               
+                  
              
                 //$l_new_date = date('Y-m-d',strtotime($l_new_due_date_val));
                 /* $l_due_date_value =  new Datetime(auto_date($last_day,$l_date));   */
                 $l_due_date_value =  new Datetime(auto_date($last_day,$l_last_due_date));  
                 //$l_due_date_val = add($l_last_due_date, 1);
                 $l_due_date_val = $l_due_date_value->format('Y-m-d');
-                if ($l_mode == 1 && $l_due_date_value > $l_pay_date_value):
+                if ($l_mode == 1 && $l_due_date_value > $l_pay_date_value && $l_tot_amnt_due >= $amount_paid):
                         if ($l_date_bago != $l_full_dp):
                             $l_mode = 0;
                         else:

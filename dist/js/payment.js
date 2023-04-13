@@ -4,9 +4,9 @@ $(document).ready(function() {
           
 
     $(document).on('keyup', ".pay-date", function(e) {
-		e.preventDefault();
+		e.preventDefault(); 
 		check_paydate();
-		
+          
 
 	});	
 
