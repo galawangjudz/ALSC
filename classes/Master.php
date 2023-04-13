@@ -1137,8 +1137,6 @@ Class Master extends DBConnection {
 
 	function cfo_booked(){
 
-		
-
 		extract($_POST);
 		$sql = $this->conn->query("SELECT * FROM t_csr where c_csr_no =".$csr_no);
 		while($row = $sql->fetch_array()):
@@ -1892,7 +1890,8 @@ Class Master extends DBConnection {
 
 
 		
-		$save = $this->conn->query("INSERT INTO property_payments set ".$data);
+		//$save = $this->conn->query("INSERT INTO property_payments set ".$data);
+		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 			
 	
 		//$l_sql =  "UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id;
