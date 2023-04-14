@@ -135,7 +135,7 @@ if(isset($_GET['id'])){
             $total_amount_due_ent = '';
             $due_date_ent = '';
             $payment_status_ent = '';
-            return ;
+           
         endif;
 
         if($retention == '1'):
@@ -801,7 +801,7 @@ if(isset($_GET['id'])){
             $acc_status = $last_acc_stat;
         }
 
-        echo $acc_status;
+        //echo $acc_status;
         //code start here 
 
         
@@ -1408,33 +1408,38 @@ body{
         <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
         <br>
 
-        <input type="submit" name="submit" value="Submit" class="btn btn-primary" style="width:100%;">
+        <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:100%;">
+       <!--  <input type="submit" name="credit-pri" value="Credit to Principal" class="btn btn-success" style="width:100%;"> -->
+        <!-- <a href="#" class="btn btn-success btn-md credit-pri" onclick="creditPrincipal()">Credit to Principal</a>-->
+        <a href="#" class="btn btn-success btn-md credit-pri" id= "credit_principal">Credit to Principal</a> 
         <br>
         
         </form>
         <br>
         <table class="table2 table-bordered table-stripped" style="width:100%;">
+            <thead> 
+                <tr>
+                    <th style="text-align:center;font-size:13px;width:5%;">ACTION</th>
+                    <th style="text-align:center;font-size:13px;">DUE DATE</th>
+                    <th style="text-align:center;font-size:13px;">PAY DATE</th>
+                    <th style="text-align:center;font-size:13px;">OR NO</th>
+                    <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                    <th style="text-align:center;font-size:13px;">AMOUNT DUE</th>
+                    <th style="text-align:center;font-size:13px;">INTEREST</th>
+                    <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
+                    <th style="text-align:center;font-size:13px;">SURCHARGE</th>
+                    <th style="text-align:center;font-size:13px;">REBATE</th>
+                    <th style="text-align:center;font-size:13px;">PERIOD</th>
+                    <th style="text-align:center;font-size:13px;">BALANCE</th>
+                </tr>
+            </thead>
                     <?php $qry4 = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
                      if($qry4->num_rows <= 0){
-                           echo "No Payment Records";
+                        echo "<td class='text-center' style='font-size:13px;width:10%;'>  No Payment Record </td> ";
+                        
                      }else{  ?>      
    
-                      <thead> 
-                          <tr>
-                              <th style="text-align:center;font-size:13px;width:5%;">ACTION</th>
-                              <th style="text-align:center;font-size:13px;width:5%;">PAYMENT ID</th>
-                              <th style="text-align:center;font-size:13px;">DUE DATE</th>
-                              <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                              <th style="text-align:center;font-size:13px;">OR NO</th>
-                              <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
-                              <th style="text-align:center;font-size:13px;">INTEREST</th>
-                              <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
-                              <th style="text-align:center;font-size:13px;">SURCHARGE</th>
-                              <th style="text-align:center;font-size:13px;">REBATE</th>
-                              <th style="text-align:center;font-size:13px;">PERIOD</th>
-                              <th style="text-align:center;font-size:13px;">BALANCE</th>
-                          </tr>
-                      </thead>
+                    
                     <tbody>
                         <?php
                         $total_rebate = 0;
@@ -1447,11 +1452,11 @@ body{
                           $property_id_part3 = substr($property_id, 8, 5); */
 
                          /*  $payment_id = $row['payment_id']; */
-                          $invoice_id = $row['invoice_id'];
                           $due_dte = $row['due_date'];
                           $pay_dte = $row['pay_date'];
                           $or_no = $row['or_no'];
                           $amt_paid = $row['payment_amount'];
+                          $amt_due = $row['amount_due'];
                           $interest = $row['interest'];
                           $principal = $row['principal'];
                           $surcharge = $row['surcharge'];
@@ -1464,15 +1469,17 @@ body{
                       
                       
                       echo "<tr id='{$row['invoice_id']}'>";
-                      echo "<td style='font-size:13px;width:10%;text-align:center;'><button onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
+                      
+                      echo "<td style='font-size:13px;width:10%;text-align:center;'><a href='#' class='btn btn-danger btn-md delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                 
-                    echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
+                    //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
                        ?>
                          
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td> 
@@ -1577,6 +1584,52 @@ function validateForm() {
 
     $(document).ready(function(){
 
+        $('#credit_principal').on('click', function() {
+            // Send an AJAX request to update the value of the textbox
+            start_loader();
+			$.ajax({
+				url:_base_url_+"classes/Master.php?f=credit_principal",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					alert_toast("An error occured",'error');
+					end_loader();
+				},
+				success:function(resp){
+					if(typeof resp =='object' && resp.status == 'success'){
+                        data = [resp['data']];
+                        $.each(data, function(index, payments) {
+                            
+                        
+                            compute(payments.excess);
+
+                            location.reload();
+                        
+                                                
+                    });
+                    // Show success message and reload page
+                    end_loader();
+					}else if(resp.status == 'failed' && !!resp.msg){
+                        var el = $('<div>')
+                            el.addClass("alert alert-danger err-msg").text(resp.msg)
+                            _this.prepend(el)
+                            el.show('slow')
+                            end_loader()
+                    }else{
+						alert_toast("An error occured",'error');
+						end_loader();
+                        console.log(resp)
+					}
+				}
+			})
+        })
+
         $('#save_payment').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
@@ -1640,15 +1693,7 @@ function validateForm() {
 	
 
 
-
-
-    	// remove commission row
-	$('#payment-table').on('click', ".delete-pay-row", function(e) {
-		e.preventDefault();
-		$(this).closest('tr').remove();
-
-            
-	});
+ 
 
 
     function compute(excess){
