@@ -1525,8 +1525,9 @@ body{
                       
                       echo "<tr id='{$row['invoice_id']}'>";
 
-                      echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
+                     // echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
 
+                      echo "<td style='font-size:13px;width:10%;text-align:center;'><a href='#' class='btn btn-danger btn-md delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                 
                     //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
                        ?>
