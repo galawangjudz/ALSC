@@ -370,15 +370,15 @@ body{
                               }
                               ?>
                               <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>"></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>" style="width:125px;"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>"></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>" style="width:125px;"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>"></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width:125px;"></td>
                               <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>"></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width:125px;"></td>
                               <td style="font-size:12px;"><label>Total Amount Due: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>"></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width:125px;"></td>
                           </tr>
                       </table>
                     </div>
