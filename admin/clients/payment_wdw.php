@@ -895,7 +895,7 @@ body{
         $row_int = mysqli_fetch_assoc($result_int);
     ?>
     <?php 
-        $sql_due = "SELECT SUM(amount_due) AS total_amt_due FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $sql_due = "SELECT SUM(payment_amount) AS total_amt_paid FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
         $result_due = mysqli_query($conn, $sql_due);
         $row_due = mysqli_fetch_assoc($result_due);
     ?>
@@ -922,8 +922,8 @@ body{
             <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="border:none;" disabled></td>
         </tr>  
         <tr>  
-            <td style="font-size:14px;"><label>Total Amount Due: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_due'],2)) ? (number_format($row_due['total_amt_due'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><label>Total Amount to be Paid: </label></td>
+            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="border:none;" disabled></td>
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
     </table>
