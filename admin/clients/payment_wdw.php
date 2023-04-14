@@ -1419,7 +1419,7 @@ body{
         <hr>
 
 
-        <table style="width:100%;">
+        <table class="table2 table-bordered table-stripped" style="width:100%;">
             <?php 
                 if ($last_excess != -1 && $last_excess != 0){
                     $amount_paid_ent = $last_excess;
