@@ -151,8 +151,8 @@ $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pa
                                 <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
                                 <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
                                 <td style="font-size:14px;"><label>Total Amount Due: </label></td>
-                                <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td> -->
-                                <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td>
+                               <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
+                                <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
                             </tr>
                         </table>
                         <br>
