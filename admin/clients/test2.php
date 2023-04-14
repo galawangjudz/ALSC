@@ -807,6 +807,146 @@ table tr:nth-child(even){
 <?php include 'over_due_details2.php'; ?>
 
 
+
+<table class="table2 table-bordered table-stripped">
+    <h3 class="card-title"><b>PAYMENT RECORD</b></h3><br>
+    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        if($qry4->num_rows <= 0){
+            echo "No Payment Records";
+        }else{  ?>      
+
+        <thead> 
+            <tr>
+            <!--   <th style="text-align:center;font-size:13px;">PROPERTY ID</th> -->
+                <th style="text-align:center;font-size:13px;">DUE DATE</th>
+                <th style="text-align:center;font-size:13px;">PAY DATE</th>
+                <th style="text-align:center;font-size:13px;">OR NO</th>
+                <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                <th style="text-align:center;font-size:13px;">INTEREST</th>
+                <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
+                <th style="text-align:center;font-size:13px;">SURCHARGE</th>
+                <th style="text-align:center;font-size:13px;">REBATE</th>
+                <th style="text-align:center;font-size:13px;">PERIOD</th>
+                <th style="text-align:center;font-size:13px;">BALANCE</th>
+            </tr>
+        </thead>
+    <tbody>
+        <?php
+        while($row= $qry4->fetch_assoc()): 
+    
+        /*    $property_id = $row["property_id"];
+            $property_id_part1 = substr($property_id, 0, 2);
+            $property_id_part2 = substr($property_id, 2, 6);
+            $property_id_part3 = substr($property_id, 8, 5); */
+
+            $id = $row['payment_id'];
+            $due_dte = $row['due_date'];
+            $pay_dte = $row['pay_date'];
+            $or_no = $row['or_no'];
+            $amt_paid = $row['payment_amount'];
+            $interest = $row['interest'];
+            $principal = $row['principal'];
+            $surcharge = $row['surcharge'];
+            $rebate = $row['rebate'];
+            $period = $row['status'];
+            $balance = $row['remaining_balance'];
+
+        ?>
+        <tr>
+        <!-- 
+        <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
+        --> 
+            <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?></td> 
+            <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?></td> 
+            <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($rebate,2) ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo $period ?></td> 
+            <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?></td>  
+        </tr>
+        <?php endwhile ; } ?>
+    </tbody>
+</table>
+<br>
+
+<table style="width:100%;">
+    <tr>
+    <?php $qry_prin = "SELECT SUM(payment_amount) AS p_amnt_total FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+    $result = mysqli_query($conn, $qry_prin);
+
+    // Check if the query was successful
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch the result as an associative array
+        $row = mysqli_fetch_assoc($result);
+        // Get the sum value
+        $total_prin = $row["p_amnt_total"];
+        // Display the sum value
+    } else {
+        echo "No results found.";
+    }
+    ?>
+    <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+    $result = mysqli_query($conn, $qry_surcharge);
+
+    // Check if the query was successful
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch the result as an associative array
+        $row = mysqli_fetch_assoc($result);
+        // Get the sum value
+        $total_surcharge = $row["p_surcharge"];
+        // Display the sum value
+    } else {
+        echo "No results found.";
+    }
+    ?>
+    <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+    $result = mysqli_query($conn, $qry_interest);
+
+    // Check if the query was successful
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch the result as an associative array
+        $row = mysqli_fetch_assoc($result);
+        // Get the sum value
+        $total_interest = $row["p_interest"];
+        // Display the sum value
+    } else {
+        echo "No results found.";
+    }
+    ?>
+    <?php $qry_amt_due = "SELECT SUM(interest) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+
+        $result = mysqli_query($conn, $qry_amt_due);
+
+        // Check if the query was successful
+        if (mysqli_num_rows($result) > 0) {
+            // Fetch the result as an associative array
+            $row = mysqli_fetch_assoc($result);
+            // Get the sum value
+            $total_amt_due = $row["p_amt_due"];
+
+            $main_total = $total_amt_due + $total_interest + $total_surcharge + $total_prin;
+            // Display the sum value
+        } else {
+            echo "No results found.";
+        }
+        ?>
+        <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
+        <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>"></td>
+        <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+        <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>"></td>
+        <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+        <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>"></td>
+        <td style="font-size:12px;"><label>Total Amount Due: </label></td>
+        <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>"></td>
+    </tr>
+</table>
+<br><br>
 <table class="table2 table-bordered table-stripped">
 <h3 class="card-title"><b> PAYMENT RECORD TO INSERT</b></h3><br>
     <?php $qry4 = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");

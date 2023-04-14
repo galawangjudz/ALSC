@@ -61,6 +61,7 @@ if(isset($_GET['id'])){
 ?>
 <?php
 $pay_date = $_POST['pay_date_input'];
+//$pay_date = date('Y-m-d');
 ?>
 <style>
 #item-list th, #item-list td{
@@ -70,29 +71,10 @@ $pay_date = $_POST['pay_date_input'];
 .container-fluid p{
     margin: unset
 }
-table tr{
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
-  border:solid 1px;
-  padding-left:10px!important;
-  border:solid 1px gainsboro;
-}
-table td{
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
-  border:solid 1px gainsboro;
-  padding:5px;
-}
-.table td, .table th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
 
 
 </style>
+
 <div class="card-body">
     <h3 class="card-title"><b>OVERDUE DETAILS</b></h3>
     <?php $all_payments = load_data($prop_id, $pay_date);
@@ -112,6 +94,7 @@ table td{
 
     <table class="table2 table-bordered table-stripped" id="overdue_table" style="width:100%;">
                     <thead> 
+
                         <tr>
                             <th class="text-center" style="font-size:13px;">DUE DATE</th>
                             <th class="text-center" style="font-size:13px;">PAY DATE</th>
