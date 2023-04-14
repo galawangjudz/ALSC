@@ -618,9 +618,7 @@ if(isset($_GET['id'])){
     </div> -->
     <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
     <div class="top_table">   
-       
         <div id='overduediv'>
-            
             <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
                 <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
                 <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
