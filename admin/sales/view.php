@@ -154,6 +154,7 @@
 }
 #uni_modal{
     width:500px;
+    margin-left:35%;
 }
 </style>
 <?php 

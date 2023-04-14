@@ -10,7 +10,9 @@ if($_settings->chk_flashdata('success')): ?>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-
+<?php
+    $pay_date_input = date("Ymd");   
+?>
 <?php
 $getID = $_GET['id'];
 if(isset($_GET['id'])){
@@ -601,18 +603,30 @@ if(isset($_GET['id'])){
 ?>
 
 <body onload="">
-<div class="card card-outline rounded-0 card-maroon">
-    
-<div class="card-header">
-    <h3 class="card-title"><b>Property ID #: <i><?php echo $prop_id ?></i> </b></h3>
+<div class="card-body">
+    <div class="divBtnOverdue">
+        <button class="btn btn-light" id="overduebtn" style="float:right;margin-top:5px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+        </svg>
+        </button><h3 class="card-title" style="float:right;padding-top:15px;"><b>VIEW/HIDE OVERDUE DETAILS&nbsp;&nbsp;&nbsp;</b></h3><br>
+    </div>
 </div>
-<div class="top_table">   
-    <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
-        <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
-        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-<?php include 'over_due_details2.php'; ?>
+<div class="card card-outline rounded-0 card-maroon">
+    <!-- <div class="card-header">
+        <h3 class="card-title"><b>Property ID #: <i><?php echo $prop_id ?></i> </b></h3>
+    </div> -->
+    <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
+    <div class="top_table">   
+       
+        <div id='overduediv'>
+            
+            <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
+                <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
+                <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
+            </form>
+        <?php include 'over_due_details2.php'; ?>
+    </div>
 
 </body>
 
@@ -630,6 +644,17 @@ if (isset($_POST['submit'])) {
 
 ?>
 <script>
+let btn = document.getElementById('overduebtn');
+let div = document.getElementById('overduediv');
+
+btn.addEventListener('click',()=>{
+    if(div.style.display==='none'){
+        div.style.display='block';
+
+    }else{
+        div.style.display='none';
+    }
+})
 function validateForm() {
 	    // error handling
 	    var errorCounter = 0;
@@ -696,53 +721,8 @@ function validateForm() {
 			})
 		})
         
-	})
-	$(document).ready(function(){
-        $('.edit').click(function(){
-        $('.txtedit').hide();
-        $(this).next('.txtedit').show().focus();
-        $(this).hide();
-        });
-        
-        // Save data
-        $(".txtedit").focusout(function(){
-        
-        // Get edit id, field name and value
-        var id = this.id;
-        var split_id = id.split("_");
-        var field_name = split_id[0];
-        var edit_id = split_id[1];
-        var value = $(this).val();
-        
-        // Hide Input element
-        $(this).hide();
-        
-        // Hide and Change Text of the container with input elmeent
-        $(this).prev('.edit').show();
-        $(this).prev('.edit').text(value);
-        
-        $.ajax({
-        url:  _base_url_+"admin/clients/update.php",
-        type: 'post',
-        data: { field:field_name, value:value, id:edit_id },
-        success:function(response){
-            if(response == 1){ 
-                console.log('Save successfully'); 
-            }else{ 
-                console.log("Not saved.");  
-            }
-        }
-        });
-    });
-        
-});
+	});
 
-</script>
-<script>
-    function hidetxtbox(){
-        var txthide = document.getElementById('txtedit');
-        txthide.style.display = none;
-    }
 </script>
 <?php
 
@@ -1345,6 +1325,14 @@ if(isset($_GET['id'])){
 /*  */
 ?>
 <style>
+.divBtnOverdue{
+    height:50px;
+    width:103%!important;
+    margin-left:-1.5%!important;
+    padding-right:1%;
+    background-color:#E1E1E1;
+    border-radius:5px;
+}
 #item-list th, #item-list td{
 	padding:5px 3px!important;
 }
@@ -1406,10 +1394,10 @@ body{
   height:auto;
   width:100%;
 }
-
 </style>
 
 <div class="card card-outline rounded-0 card-maroon">
+
 	<div class="card-body">
     <div class="container-fluid">
     <form action="" method="POST" id="save_payment">
@@ -1431,7 +1419,7 @@ body{
         <hr>
 
 
-        <table>
+        <table style="width:100%;">
             <?php 
                 if ($last_excess != -1 && $last_excess != 0){
                     $amount_paid_ent = $last_excess;
@@ -1531,7 +1519,7 @@ body{
                       
                       
                       echo "<tr id='{$row['invoice_id']}'>";
-                      echo "<td style='font-size:13px;width:10%;text-align:center;'><button onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
+                      echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
                 
                     echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
                        ?>
@@ -1604,6 +1592,7 @@ body{
 	</div>
 </div>
 <script>
+
    function deleteRow(rowId) {
    $.ajax({
        url:_base_url_+'classes/Master.php?f=delete_invoice',

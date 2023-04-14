@@ -56,9 +56,7 @@ if(isset($_GET['id'])){
         $start_date = $row['c_start_date'];
         
         }
-    // $pay_date = $_GET['paydate'];
-    
-
+    // $pay_date = $_GET['pay_date_input'];
     }
 ?>
 <?php
@@ -95,118 +93,116 @@ table td{
 
 
 </style>
-<div class="container-fluid">
-<br>
-<h3 class="card-title"><b>OVERDUE DETAILS</b></h3><br>
-<?php $all_payments = load_data($prop_id, $pay_date);
-        $over_due    = $all_payments[0];
-        $total_amt_due = $all_payments[1];
-        $total_interest =  $all_payments[2];
-        $total_principal = $all_payments[3];
-        $total_surcharge = $all_payments[4];  ?>
-        <table style="width:100%;float:left;">
-            <tr>
-                <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:20%;font-size:14px;"><u><?php echo $pay_date; ?></u></td>
-                <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:50%;font-size:14px;"><u><?php echo $prop_id; ?></u></td>
+<div class="card-body">
+    <h3 class="card-title"><b>OVERDUE DETAILS</b></h3>
+    <?php $all_payments = load_data($prop_id, $pay_date);
+            $over_due    = $all_payments[0];
+            $total_amt_due = $all_payments[1];
+            $total_interest =  $all_payments[2];
+            $total_principal = $all_payments[3];
+            $total_surcharge = $all_payments[4];  ?>
+            <table style="width:100%;float:left;">
+                <tr>
+                    <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:20%;font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><?php echo $pay_date; ?></u></td>
+                    <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:50%;font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><?php echo $prop_id; ?></u></td>
 
-<td><a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a></td>
-</tr>
-        </table>
-
-<table class="table2 table-bordered table-stripped" id="overdue_table" style="width:100%;">
-                <thead> 
-                    <tr>
-                        <th class="text-center" style="font-size:13px;">DUE DATE</th>
-                        <th class="text-center" style="font-size:13px;">PAY DATE</th>
-                        <th class="text-center" style="font-size:13px;">OR NO</th>
-                        <th class="text-center" style="font-size:13px;">AMOUNT PAID</th> 
-                        <th class="text-center" style="font-size:13px;">AMOUNT DUE</th>
-                        <th class="text-center" style="font-size:13px;">INTEREST</th>
-                        <th class="text-center" style="font-size:13px;">PRINCIPAL</th>
-                        <th class="text-center" style="font-size:13px;">SURCHARGE</th>
-                        <th class="text-center" style="font-size:13px;">REBATE</th>
-                        <th class="text-center" style="font-size:13px;">PERIOD</th>
-                        <th class="text-center" style="font-size:13px;">BALANCE</th>
-                    </tr>
-                </thead>
-            <tbody>
-            
-                <?php 
-                foreach ($over_due as $l_data): ?>
-                    <tr>
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[0] ?></td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[1] ?></td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[2] ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[3] ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[4]) ?></td> 
-                    <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td>  -->
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[5]) ?></td> 
-                    <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td>  -->
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[6]) ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[7]) ?></td>  
-                    <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?></td> -->
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[8]) ?></td>  
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[9] ?></td>  
-                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[10]) ?></td>  
-                    <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[10] ?> </td>   -->
-                    </tr>
-                    <?php endforeach; ?>
-            </tbody>
+    <td><a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-print"></span> Print</a></td>
+    </tr>
             </table>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">         
-    
-                        
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <table style="width:100%;">
-                        <tr>
-                            <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
-                            <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
-                            <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
-                            <td style="font-size:14px;"><label>Total Amount Due: </label></td>
-                            <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td> -->
-                            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td>
-                        </tr>
-                    </table>
-                    <br>
-                    <br>
-                    
-                    <!-- <table>
-                        <tr>
-                            <td style="font-size:14px;"><label>Total Amount Due: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_amt_due2" id="tot_amt_due2" value=""></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:14px;"><label>Surcharge: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="surcharge2" id="surcharge2" value=""></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:14px;"><label>Rebate: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="rebate2" id="rebate2" value=""></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:14px;"><label>Interest: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="interest2" id="interest2" value=""></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size:14px;"><label>Principal: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="principal2" id="principal2" value=""></td>
-                        </tr>
-                    </table> -->
-                </div>
-            </div>
-        </div>     
-        
 
-</div>
+    <table class="table2 table-bordered table-stripped" id="overdue_table" style="width:100%;">
+                    <thead> 
+                        <tr>
+                            <th class="text-center" style="font-size:13px;">DUE DATE</th>
+                            <th class="text-center" style="font-size:13px;">PAY DATE</th>
+                            <th class="text-center" style="font-size:13px;">OR NO</th>
+                            <th class="text-center" style="font-size:13px;">AMOUNT PAID</th> 
+                            <th class="text-center" style="font-size:13px;">AMOUNT DUE</th>
+                            <th class="text-center" style="font-size:13px;">INTEREST</th>
+                            <th class="text-center" style="font-size:13px;">PRINCIPAL</th>
+                            <th class="text-center" style="font-size:13px;">SURCHARGE</th>
+                            <th class="text-center" style="font-size:13px;">REBATE</th>
+                            <th class="text-center" style="font-size:13px;">PERIOD</th>
+                            <th class="text-center" style="font-size:13px;">BALANCE</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                
+                    <?php 
+                    foreach ($over_due as $l_data): ?>
+                        <tr>
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[0] ?></td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[1] ?></td> 
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[2] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[3] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[4]) ?></td> 
+                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td>  -->
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[5]) ?></td> 
+                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td>  -->
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[6]) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[7]) ?></td>  
+                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?></td> -->
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[8]) ?></td>  
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[9] ?></td>  
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[10]) ?></td>  
+                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[10] ?> </td>   -->
+                        </tr>
+                        <?php endforeach; ?>
+                </tbody>
+                </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">         
+        
+                            
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
+                                <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
+                                <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
+                                <td style="font-size:14px;"><label>Total Amount Due: </label></td>
+                                <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td> -->
+                                <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td>
+                            </tr>
+                        </table>
+                        <br>
+                        <br>
+                        
+                        <!-- <table>
+                            <tr>
+                                <td style="font-size:14px;"><label>Total Amount Due: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="tot_amt_due2" id="tot_amt_due2" value=""></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:14px;"><label>Surcharge: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="surcharge2" id="surcharge2" value=""></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:14px;"><label>Rebate: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="rebate2" id="rebate2" value=""></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:14px;"><label>Interest: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="interest2" id="interest2" value=""></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:14px;"><label>Principal: </label></td>
+                                <td><input type="text" class= "form-control-sm" name="principal2" id="principal2" value=""></td>
+                            </tr>
+                        </table> -->
+                    </div>
+                </div>
+            </div>     
+        </div>
 <script>
+
     window.onload = function() {
     var table = document.getElementById("overdue_table");
     var overdue_count = 0;
