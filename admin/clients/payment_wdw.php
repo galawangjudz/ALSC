@@ -787,10 +787,10 @@ body{
         <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_pay" name="monthly_pay" value="<?php echo $monthly_pay; ?>">   
-        <input type="text" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
-        <input type="text" class="form-control-sm margin-bottom last-stat-count"  id="last_stat_count" name="last_stat_count" value="<?php echo $last_stat_count; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom last-stat-count"  id="last_stat_count" name="last_stat_count" value="<?php echo $last_stat_count; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom payment-count"  id="payment_count" name="payment_count" value="<?php echo $last_pay_count; ?>">   
-        <input type="text" class="form-control-sm margin-bottom last-due"  id="last_due" name="last_due" value="<?php echo $last_due; ?>"> 
+        <input type="hidden" class="form-control-sm margin-bottom last-due"  id="last_due" name="last_due" value="<?php echo $last_due; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom "  id="ma_balance" name="ma_balance" value="<?php echo $ma_balance; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
         <br>
@@ -803,6 +803,8 @@ body{
         
         </form>
         <br>
+
+
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <thead> 
                 <tr>
@@ -928,7 +930,16 @@ body{
             <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="border:none;" disabled></td>
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
+        <tr>
+        <td style="font-size:14px;"><label>
+            <button type="button"  class="btn btn-success btn-s paid_btn" prop-id ="<?php $prop_id ?>">Proceed with Payment</button>
+       
+            </td>
+        </tr>
     </table>
+
+
+    
     </div>
 	</div>
 </div>
@@ -967,6 +978,12 @@ body{
 
     $(document).ready(function(){
 
+
+
+
+
+
+
       
         $(document).on('click', ".credit-pri", function(e) {
 			e.preventDefault(); 
@@ -988,7 +1005,7 @@ body{
             }    
             start_loader();
 
-            function submitForm() {
+            function addPaymentForm() {
                 $.ajax({
                     url:_base_url_+"classes/Master.php?f=add_payment",
                     data: new FormData(_this[0]),
@@ -1069,14 +1086,49 @@ body{
             if (statusValue === "Credit to Principal") {
                 CreditPrincipalForm();
             }else{
-               submitForm();
+               addPaymentForm();
             }
 		})
 
-      
+
+
+        $('.paid_btn').click(function(){
+            _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+
+           
+         });
+
         
-	})
+	});
 	
+    function payments(){
+        start_loader();
+        $.ajax({
+            url:_base_url_+'classes/Master.php?f=save_payment',
+            method:'POST',
+            data:{prop_id:'<?php echo $prop_id ?>'},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured",'error');
+                end_loader();
+                },
+            success:function(resp){
+                if(typeof resp =='object' && resp.status == 'success'){
+                    location.reload();
+          
+                }else{
+                    alert_toast(resp.err,'error');
+                    end_loader();
+                    console.log(resp)
+                }
+                }
+            
+            })
+
+        }
+
+
     function compute(excess){
         if (excess == -1){
             excesspay = 0;

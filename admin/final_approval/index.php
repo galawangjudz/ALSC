@@ -213,14 +213,4 @@
 	// }
 
 
-
-
-	$(document).ready(function(){
-		
-		$('.table').dataTable(
-			{"ordering":false}
-		);
-		
-	})
-
 </script>
