@@ -43,8 +43,8 @@ function check_paydate(){
         $('#rebate_amt').val('0.0');
         $('#tot_amount_due').val(tot_amt_due.toFixed(2));
         //$('#amount_paid').val(tot_amt_due.toFixed(2));
-        //console.log(`${pa_status.substr(0,2)}`);
-        //console.log(pay_status);
+        console.log(`${pa_status.substr(0,2)}`);
+        console.log(pay_status);
         console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
 
       

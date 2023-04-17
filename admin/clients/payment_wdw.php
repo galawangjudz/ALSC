@@ -170,7 +170,7 @@ if(isset($_GET['id'])){
 
         $last_stat_count = $last_payment['status_count'];
         $last_pay_count = $last_payment['payment_count'];
-
+        $last_due = $last_payment['due_date'];
        
      
         if ($last_acc_stat != ''){
@@ -436,7 +436,7 @@ if(isset($_GET['id'])){
                     }
  
                     $monthly_pay = $monthly_payment - $last_principal;
-                    echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
+                    //echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
                     $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                     $count = $last_payment['status_count'];
                     $due_date = strtotime($l_date);
@@ -750,7 +750,7 @@ body{
 
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <?php 
-                echo $last_excess ;
+                //echo $last_excess ;
                 if ($last_excess != -1 && $last_excess != 0){
                     $amount_paid_ent = $last_excess;
                     $or_ent = $last_or_ent;
@@ -761,7 +761,7 @@ body{
 
             <tr>
 
-                <td style="width:25%;font-size:14px;"><label for="due_date">Due Date:</label></td>
+                <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
                 <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;"></td>
                 <td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td>
                 <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
@@ -787,8 +787,10 @@ body{
         <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_pay" name="monthly_pay" value="<?php echo $monthly_pay; ?>">   
-        <input type="hidden" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
+        <input type="text" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
+        <input type="text" class="form-control-sm margin-bottom last-stat-count"  id="last_stat_count" name="last_stat_count" value="<?php echo $last_stat_count; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom payment-count"  id="payment_count" name="payment_count" value="<?php echo $last_pay_count; ?>">   
+        <input type="text" class="form-control-sm margin-bottom last-due"  id="last_due" name="last_due" value="<?php echo $last_due; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom "  id="ma_balance" name="ma_balance" value="<?php echo $ma_balance; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
         <br>
@@ -796,7 +798,7 @@ body{
         <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:100%;">
        <!--  <input type="submit" name="credit-pri" value="Credit to Principal" class="btn btn-success" style="width:100%;"> -->
         <!-- <a href="#" class="btn btn-success btn-md credit-pri" onclick="creditPrincipal()">Credit to Principal</a>-->
-        <a href="#" class="btn btn-success btn-md credit-pri" id= "credit_principal">Credit to Principal</a> 
+        <a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> 
         <br>
         
         </form>
@@ -933,92 +935,50 @@ body{
 <script>
 
    function deleteRow(rowId) {
-   $.ajax({
-       url:_base_url_+'classes/Master.php?f=delete_invoice',
-       method:'POST',
-       data:{rowId: rowId},
-       dataType:"json",
-       error:err=>{
-           console.log(err)
-           alert_toast("An error occured",'error');
-           end_loader();
-           },
-       success:function(resp){
-           $('#' + rowId).remove();
-           console.log(resp);
-           location.reload();
-        }
-      
-   });
-}  
-function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
-
-	    $(".required").each(function(i, obj) {
-
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
-	        }
-
-	    });
-		
-	    return errorCounter;
-
+        $.ajax({
+            url:_base_url_+'classes/Master.php?f=delete_invoice',
+            method:'POST',
+            data:{rowId: rowId},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured",'error');
+                end_loader();
+                },
+            success:function(resp){
+                $('#' + rowId).remove();
+                console.log(resp);
+                location.reload();
+                }
+            
+        });
+    }  
+    function CreditPrincipal() {
+        $('#status').val('Credit to Principal');
+        $('#surcharge').val('0.0');
+        $('#rebate_amt').val('0.0');
+        $('#tot_amount_due').val('0.0');
+        $('#amount_due').val('0.0');
+        const last_due_date = new Date($('.last-due').val());
+        const last_stat_count = $('.last-stat-count').val();
+        $('#status_count').val(last_stat_count);
+        $('.due-date').val(last_due_date.toISOString().substr(0, 10));
 	}
 
     $(document).ready(function(){
 
-        $('#credit_principal').on('click', function() {
-            // Send an AJAX request to update the value of the textbox
-            start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=credit_principal",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-                        data = [resp['data']];
-                        $.each(data, function(index, payments) {
-                        
-                            location.reload();
-                        
-                    });
-                    // Show success message and reload page
-                    end_loader();
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            end_loader()
-                    }else{
-						alert_toast("An error occured",'error');
-						end_loader();
-                        console.log(resp)
-					}
-				}
-			})
-        })
+      
+        $(document).on('click', ".credit-pri", function(e) {
+			e.preventDefault(); 
+		    CreditPrincipal();
+        });
 
         $('#save_payment').submit(function(e){
 			e.preventDefault();
-            var _this = $(this)
+            var _this = $(this);
 		 	$('.err-msg').remove();
 			
+             var statusValue = $("#status").val();
              var errorCounter = validateForm();
              if (errorCounter > 0) {
                 alert_toast("It appear's you have forgotten to complete something!","warning");	  
@@ -1027,48 +987,93 @@ function validateForm() {
                 $(".required").parent().removeClass("has-error")
             }    
             start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=add_payment",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-                        data = [resp['data']];
-                        $.each(data, function(index, payments) {
-                            
-                        
-                            compute(payments.excess);
 
-                            location.reload();
-                      
-                    });
-                  
-                    // Show success message and reload page
-                    end_loader();
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            end_loader()
-                    }else{
-						alert_toast("An error occured",'error');
-						end_loader();
-                        console.log(resp)
-					}
-				}
-			})
+            function submitForm() {
+                $.ajax({
+                    url:_base_url_+"classes/Master.php?f=add_payment",
+                    data: new FormData(_this[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    type: 'POST',
+                    dataType: 'json',
+                    error:err=>{
+                        console.log(err)
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                    },
+                    success:function(resp){
+                        if(typeof resp =='object' && resp.status == 'success'){
+                            data = [resp['data']];
+                            $.each(data, function(index, payments) {
+                                compute(payments.excess);
+                                location.reload();
+                        });
+                
+                        end_loader();
+                        }else if(resp.status == 'failed' && !!resp.msg){
+                            var el = $('<div>')
+                                el.addClass("alert alert-danger err-msg").text(resp.msg)
+                                _this.prepend(el)
+                                el.show('slow')
+                                end_loader()
+                        }else{
+                            alert_toast("An error occured",'error');
+                            end_loader();
+                            console.log(resp)
+                        }
+                    }
+                })
+            }
+
+
+            function CreditPrincipalForm() {
+                $.ajax({
+                    url:_base_url_+"classes/Master.php?f=credit_principal",
+                    data: new FormData(_this[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    type: 'POST',
+                    dataType: 'json',
+                    error:err=>{
+                        console.log(err)
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                    },
+                    success:function(resp){
+                        if(typeof resp =='object' && resp.status == 'success'){
+                            data = [resp['data']];
+                            $.each(data, function(index, payments) {
+                                compute(payments.excess);
+                                location.reload();
+                        });
+                
+                        end_loader();
+                        }else if(resp.status == 'failed' && !!resp.msg){
+                            var el = $('<div>')
+                                el.addClass("alert alert-danger err-msg").text(resp.msg)
+                                _this.prepend(el)
+                                el.show('slow')
+                                end_loader()
+                        }else{
+                            alert_toast("An error occured",'error');
+                            end_loader();
+                            console.log(resp)
+                        }
+                    }
+                })
+            }
+            if (statusValue === "Credit to Principal") {
+                CreditPrincipalForm();
+            }else{
+               submitForm();
+            }
 		})
+
+      
         
 	})
 	

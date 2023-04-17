@@ -2512,6 +2512,22 @@ Class Master extends DBConnection {
 	}
 
 
+	function credit_principal(){
+		extract($_POST);
+
+		$rowId = $_POST['rowId'];
+
+		$del = $this->conn->query("DELETE FROM t_invoice where invoice_id = ".$rowId);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Row successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
+	}
+
 
 }
 
@@ -2608,6 +2624,10 @@ switch ($action) {
 
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
+	break;
+
+	case 'credit_principal':
+		echo $Master->credit_principal();
 	break;
 	
 	default:
