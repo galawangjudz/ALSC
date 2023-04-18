@@ -218,12 +218,7 @@
 
 						
 						</script>
-					 	
 						<?php 
-						 		
-								
-
-
 							$exp_date=new DateTime($row["c_duration"]);
 							$exp_date_str=$row["c_duration"];
 							$exp_date_only=date("Y-m-d",strtotime($exp_date_str));

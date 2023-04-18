@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <?php require ('../config.php'); ?>
 <?php include "../inc/header.php" ?>
 <head>

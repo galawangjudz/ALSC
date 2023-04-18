@@ -1419,7 +1419,7 @@ body{
         <hr>
 
 
-        <table style="width:100%;">
+        <table class="table2 table-bordered table-stripped" style="width:100%;">
             <?php 
                 if ($last_excess != -1 && $last_excess != 0){
                     $amount_paid_ent = $last_excess;
@@ -1527,22 +1527,22 @@ body{
 
                      // echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
 
-                      echo "<td style='font-size:13px;width:10%;text-align:center;'><a href='#' class='btn btn-danger btn-md delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
+                      echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                 
                     //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
                        ?>
                          
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($rebate,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $period ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo $period ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
             </thead>
@@ -1574,26 +1574,26 @@ body{
         $result_rebate = mysqli_query($conn, $sql_rebate);
         $row_rebate = mysqli_fetch_assoc($result_rebate);
     ?>
-    <table style="width:28%;float:right;">
+    <table style="width:25%;float:right;">
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Rebate: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>  
         <tr>  
             <td style="font-size:14px;"><label>Total Amount Due: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_due'],2)) ? (number_format($row_due['total_amt_due'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_due'],2)) ? (number_format($row_due['total_amt_due'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
     </table>
@@ -1601,7 +1601,6 @@ body{
 	</div>
 </div>
 <script>
-
    function deleteRow(rowId) {
    $.ajax({
        url:_base_url_+'classes/Master.php?f=delete_invoice',
@@ -1618,7 +1617,6 @@ body{
            console.log(resp);
            location.reload();
         }
-      
    });
 }  
 function validateForm() {
@@ -1633,15 +1631,10 @@ function validateForm() {
 	        } else{ 
 	            $(this).parent().removeClass("has-error"); 
 	        }
-
 	    });
-		
 	    return errorCounter;
-
 	}
-
     $(document).ready(function(){
-
         $('#credit_principal').on('click', function() {
             // Send an AJAX request to update the value of the textbox
             start_loader();
@@ -1663,13 +1656,8 @@ function validateForm() {
 					if(typeof resp =='object' && resp.status == 'success'){
                         data = [resp['data']];
                         $.each(data, function(index, payments) {
-                            
-                        
                             compute(payments.excess);
-
-                            location.reload();
-                        
-                                                
+                            location.reload();                    
                     });
                     // Show success message and reload page
                     end_loader();
@@ -1687,12 +1675,10 @@ function validateForm() {
 				}
 			})
         })
-
         $('#save_payment').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
 		 	$('.err-msg').remove();
-			
              var errorCounter = validateForm();
              if (errorCounter > 0) {
                 alert_toast("It appear's you have forgotten to complete something!","warning");	  
@@ -1719,17 +1705,10 @@ function validateForm() {
 					if(typeof resp =='object' && resp.status == 'success'){
                         data = [resp['data']];
                         $.each(data, function(index, payments) {
-                            
-                        
                             compute(payments.excess);
-
                             location.reload();
-                        
-                                                
+                      
                     });
-                  
-                    
-
                     // Show success message and reload page
                     end_loader();
 					}else if(resp.status == 'failed' && !!resp.msg){
@@ -1746,26 +1725,13 @@ function validateForm() {
 				}
 			})
 		})
-        
 	})
-	
-
-
- 
-
-
     function compute(excess){
         if (excess == -1){
             excesspay = 0;
         }else{
             excesspay = excess;
         }
-        $('#amount_paid').val(excesspay.toFixed(2));
-  
-        
+        $('#amount_paid').val(excesspay.toFixed(2));  
     }
-
-
-
-
 </script>
