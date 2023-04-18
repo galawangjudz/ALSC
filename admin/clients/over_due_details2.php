@@ -60,7 +60,7 @@ if(isset($_GET['id'])){
     }
 ?>
 <?php
-$pay_date = $_POST['pay_date_input'];
+$pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pay_date_input'])) : date("Y-m-d");;
 //$pay_date = date('Y-m-d');
 ?>
 <style>
@@ -149,8 +149,8 @@ $pay_date = $_POST['pay_date_input'];
                                 <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
                                 <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
                                 <td style="font-size:14px;"><label>Total Amount Due: </label></td>
-                                <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td> -->
-                                <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td>
+                               <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
+                                <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
                             </tr>
                         </table>
                         <br>
@@ -209,10 +209,10 @@ $pay_date = $_POST['pay_date_input'];
       }
     }
 
-    document.getElementById("tot_amt_due2").value=overdue_count;
+/*     document.getElementById("tot_amt_due2").value=overdue_count;
     document.getElementById("surcharge2").value=surcharge_count;
     document.getElementById("rebate2").value=rebate_count;
     document.getElementById("interest2").value=interest_count;
-    document.getElementById("principal2").value=principal_count;
+    document.getElementById("principal2").value=principal_count; */
   };
 </script>
