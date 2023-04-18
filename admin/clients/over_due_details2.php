@@ -83,18 +83,16 @@ $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pa
             $total_interest =  $all_payments[2];
             $total_principal = $all_payments[3];
             $total_surcharge = $all_payments[4];  ?>
-            <table style="width:100%;float:left;">
-                <tr>
-                    <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:20%;font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><?php echo $pay_date; ?></u></td>
-                    <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:50%;font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><?php echo $prop_id; ?></u></td>
+    <table class="table2 table-bordered table-stripped" id="overdue_table" style="width:100%;float:left;">
+        <tr>
+            <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;"> Overdue Date: </label></td><td style="width:20%;font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><?php echo $pay_date; ?></u></td>
+            <td style="width:10%;font-size:14px;"><label class="control-label" style="margin-top:5px;">Property ID:  </label></td><td style="width:50%;font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><?php echo $prop_id; ?></u></td>
 
-    <td><a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-print"></span> Print</a></td>
-    </tr>
-            </table>
-
+            <td><a href="<?php echo base_url ?>/report/print_over_due_details.php?id=<?php echo md5($prop_id); ?>&date=<?php echo $pay_date;?>", target="_blank" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-print"></span> Print</a></td>
+        </tr>
+    </table>
     <table class="table2 table-bordered table-stripped" id="overdue_table" style="width:100%;">
                     <thead> 
-
                         <tr>
                             <th class="text-center" style="font-size:13px;">DUE DATE</th>
                             <th class="text-center" style="font-size:13px;">PAY DATE</th>

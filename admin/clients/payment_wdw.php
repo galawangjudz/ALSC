@@ -862,22 +862,22 @@ body{
 
                      // echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
 
-                      echo "<td style='font-size:13px;width:10%;text-align:center;'><a href='#' class='btn btn-danger btn-md delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
+                      echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                 
                     //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
                        ?>
                          
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($rebate,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $period ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:8%;"><?php echo $period ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:12%;"><?php echo number_format($balance,2) ?> </td>  
                       </tr>
                         <?php endwhile ; } ?>
             </thead>
@@ -909,26 +909,28 @@ body{
         $result_rebate = mysqli_query($conn, $sql_rebate);
         $row_rebate = mysqli_fetch_assoc($result_rebate);
     ?>
-    <table style="width:28%;float:right;">
+    <table style="width:25%;float:right;">
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Rebate: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="border:none;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
         </tr>  
         <tr>  
+
             <td style="font-size:14px;"><label>Total Amount to be Paid: </label></td>
             <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="border:none;" disabled></td>
+
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
         <tr>
@@ -945,6 +947,7 @@ body{
 	</div>
 </div>
 <script>
+
 
 
 window.onload = check_paydate();
@@ -989,6 +992,7 @@ function check_paydate(){
             l_sur = 0;
         }
 
+
         tot_amt_due = monthly_pay + l_sur;
         const total_amt_due = tot_amt_due.toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -1007,6 +1011,7 @@ function check_paydate(){
             $('#amount_paid').val(total_amt_due);
         }
    
+
 
 
         console.log(`${pay_status.substr(0,2)}`);
@@ -1164,8 +1169,9 @@ function check_paydate(){
 			e.preventDefault();
             var _this = $(this);
 		 	$('.err-msg').remove();
-			
+
              var statusValue = $("#status").val();
+
              var errorCounter = validateForm();
              if (errorCounter > 0) {
                 alert_toast("It appear's you have forgotten to complete something!","warning");	  
@@ -1174,6 +1180,7 @@ function check_paydate(){
                 $(".required").parent().removeClass("has-error")
             }    
             start_loader();
+
 
             function addPaymentForm() {
                 $.ajax({
@@ -1297,19 +1304,14 @@ function check_paydate(){
             })
 
         }
-
-
     function compute(excess){
         if (excess == -1){
             excesspay = 0;
         }else{
             excesspay = excess;
         }
-        $('#amount_paid').val(excesspay.toFixed(2));
-  
-        
+        $('#amount_paid').val(excesspay.toFixed(2));  
     }
-
 
   
 
