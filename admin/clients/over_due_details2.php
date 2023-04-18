@@ -211,10 +211,10 @@ $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pa
       }
     }
 
-    document.getElementById("tot_amt_due2").value=overdue_count;
+/*     document.getElementById("tot_amt_due2").value=overdue_count;
     document.getElementById("surcharge2").value=surcharge_count;
     document.getElementById("rebate2").value=rebate_count;
     document.getElementById("interest2").value=interest_count;
-    document.getElementById("principal2").value=principal_count;
+    document.getElementById("principal2").value=principal_count; */
   };
 </script>

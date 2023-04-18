@@ -170,7 +170,7 @@ if(isset($_GET['id'])){
 
         $last_stat_count = $last_payment['status_count'];
         $last_pay_count = $last_payment['payment_count'];
-
+        $last_due = $last_payment['due_date'];
        
      
         if ($last_acc_stat != ''){
@@ -436,7 +436,7 @@ if(isset($_GET['id'])){
                     }
  
                     $monthly_pay = $monthly_payment - $last_principal;
-                    echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
+                    //echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
                     $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                     $count = $last_payment['status_count'];
                     $due_date = strtotime($l_date);
@@ -733,16 +733,16 @@ body{
 
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;"></td>
+                <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;" readonly></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="acc_option">Account Option:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;"><br></td>
+                <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="acc_option">Account Option:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td><td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="payment_type1">Payment Type 1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;"></td>
+                <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td><td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="payment_type1">Payment Type 1:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td><td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;"></td><td style="width:25%;"><label for="payment_type2">Payment Type 2:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;"></td>
+                <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td><td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td><td style="width:25%;"><label for="payment_type2">Payment Type 2:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
             </tr>
         </table>
         <hr>
@@ -750,7 +750,7 @@ body{
 
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <?php 
-                echo $last_excess ;
+                //echo $last_excess ;
                 if ($last_excess != -1 && $last_excess != 0){
                     $amount_paid_ent = $last_excess;
                     $or_ent = $last_or_ent;
@@ -761,22 +761,22 @@ body{
 
             <tr>
 
-                <td style="width:25%;font-size:14px;"><label for="due_date">Due Date:</label></td>
-                <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;"></td>
+                <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
+                <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
                 <td style="width:25%;font-size:14px;"><label for="pay_date">Pay Date:</label></td>
                 <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;"></td><td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
             </tr>
         </table>
         <br>
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="tot_amt_due">Total Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" style="width:100%;" required></td><td style="width:25%;font-size:14px;"><label for="balance">Balance:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" style="width:100%;" required></td>
+                <td style="width:25%;font-size:14px;"><label for="tot_amt_due">Total Amount Due:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="balance">Balance:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" style="width:100%;" readonly></td>
             </tr>
             <tr>
                 <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td><td style="width:25%;font-size:14px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required></td>
@@ -785,10 +785,13 @@ body{
         <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
+        <input type="hidden" class="form-control-sm margin-bottom last-excess"  id="last_excess" name="last_excess" value="<?php echo $last_excess; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_pay" name="monthly_pay" value="<?php echo $monthly_pay; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom last-stat-count"  id="last_stat_count" name="last_stat_count" value="<?php echo $last_stat_count; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom payment-count"  id="payment_count" name="payment_count" value="<?php echo $last_pay_count; ?>">   
+        <input type="hidden" class="form-control-sm margin-bottom last-due"  id="last_due" name="last_due" value="<?php echo $last_due; ?>"> 
         <input type="hidden" class="form-control-sm margin-bottom "  id="ma_balance" name="ma_balance" value="<?php echo $ma_balance; ?>">   
         <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
         <br>
@@ -796,11 +799,13 @@ body{
         <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:100%;">
        <!--  <input type="submit" name="credit-pri" value="Credit to Principal" class="btn btn-success" style="width:100%;"> -->
         <!-- <a href="#" class="btn btn-success btn-md credit-pri" onclick="creditPrincipal()">Credit to Principal</a>-->
-        <a href="#" class="btn btn-success btn-md credit-pri" id= "credit_principal">Credit to Principal</a> 
+        <a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> 
         <br>
         
         </form>
         <br>
+
+
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <thead> 
                 <tr>
@@ -880,7 +885,7 @@ body{
         </tbody>
     </table>
     <?php 
-        $sql_prin = "SELECT SUM(principal) AS total_principal FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+        $sql_prin = "SELECT SUM(principal) AS total_principal  FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
         $result_prin = mysqli_query($conn, $sql_prin);
         $row_prin = mysqli_fetch_assoc($result_prin);
     ?>
@@ -926,99 +931,241 @@ body{
             <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="border:none;" disabled></td>
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
+        <tr>
+        <td style="font-size:14px;"><label>
+            <button type="button"  class="btn btn-success btn-s paid_btn" prop-id ="<?php $prop_id ?>">Proceed with Payment</button>
+       
+            </td>
+        </tr>
     </table>
+
+
+    
     </div>
 	</div>
 </div>
 <script>
 
-   function deleteRow(rowId) {
-   $.ajax({
-       url:_base_url_+'classes/Master.php?f=delete_invoice',
-       method:'POST',
-       data:{rowId: rowId},
-       dataType:"json",
-       error:err=>{
-           console.log(err)
-           alert_toast("An error occured",'error');
-           end_loader();
-           },
-       success:function(resp){
-           $('#' + rowId).remove();
-           console.log(resp);
-           location.reload();
+
+window.onload = check_paydate();
+
+   $(document).ready(function() {
+
+            $(document).on('keyup', ".pay-date", function(e) {
+                e.preventDefault(); 
+                check_paydate();
+                
+
+            });
+
+});
+
+function check_paydate(){
+
+    const due_date = new Date($('.due-date').val());
+    const pay_date = new Date($('.pay-date').val());
+    const payment_type2 = $('.payment-type2').val();
+    const pay_status = $('.pay-stat').val();
+    const pay_stat_acro = pay_status.substring(0, 2);
+    const interest_rate =  $('.int-rate').val();
+    const underpay =  $('.under-pay').val();
+    const excess =  $('.excess').val();
+    const last_excess =  $('.last-excess').val();
+    const over_due_mode =  $('.over-due-mode').val();
+    const monthly_payment =  $('.monthly-pay').val();
+    const numStr = $('.amt-due').val();
+    const monthly_pay  = parseFloat(numStr.replace(",", ""));
+
+
+    //console.log(pay_stat_acro);
+    if (pay_date > due_date) {
+        const timeDiff = Math.abs(pay_date.getTime() - due_date.getTime());
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        
+        //console.log(monthly_pay);
+        let l_sur = (monthly_pay * ((0.6/360) * diffDays));
+
+        if (diffDays <= 2) {
+            l_sur = 0;
         }
-      
-   });
-}  
-function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
 
-	    $(".required").each(function(i, obj) {
+        tot_amt_due = monthly_pay + l_sur;
+        const total_amt_due = tot_amt_due.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+        
+        const l_surcharge = l_sur.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+        //console.log(tot_amt_due);
+        $('#surcharge').val(l_surcharge);
+        $('#rebate_amt').val('0.0');
+        $('#tot_amount_due').val(total_amt_due);
+        if (last_excess == -1 || last_excess <= 0){
+            $('#amount_paid').val(total_amt_due);
+        }
+   
 
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
-	        }
 
-	    });
-		
-	    return errorCounter;
+        console.log(`${pay_status.substr(0,2)}`);
+        console.log(pay_status);
+        console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
 
+    
+    }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
+
+        console.log(interest_rate);
+        const timeDiff = Math.abs(due_date.getTime() - pay_date.getTime());
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+
+        
+        if (interest_rate == 12){
+                l_rebate_value = 0.02;
+        }else if (interest_rate == 14){
+                l_rebate_value = 0.0225;
+        }else if (interest_rate == 15){
+                l_rebate_value = 0.0225;
+        } else if (interest_rate == 16){
+                l_rebate_value = 0.025;
+        } else if (interest_rate == 17){
+                l_rebate_value = 0.025;
+        } else if (interest_rate == 18){
+                l_rebate_value = 0.025;
+        }else if (interest_rate == 19){
+                l_rebate_value = 0.025;
+        }else if (interest_rate == 20){
+                l_rebate_value = 0.025;
+        }else if (interest_rate == 21){
+                l_rebate_value = 0.025;
+        } else if (interest_rate == 22){
+                l_rebate_value = 0.0275;
+        } else if (interest_rate == 23){
+                l_rebate_value = 0.0275;
+        }else if (interest_rate == 24){
+                l_rebate_value = 0.03;
+        }else{
+                l_rebate_value = 0;
+        }
+        if (diffDays > 2){
+                if (underpay == 1){
+                    l_rebate = (monthly_payment * l_rebate_value);
+                }else{
+                    l_rebate = (monthly_pay * l_rebate_value);
+                }
+
+        }else{
+                l_rebate = 0;
+        }
+
+        console.log(diffDays);
+        console.log(l_rebate);
+
+
+    
+        
+        const l_reb = l_rebate.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+
+
+        $('#rebate_amt').val(l_reb);
+
+        l_monthly = (monthly_pay - l_rebate);
+
+        const l_monthly_pay = l_monthly.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+
+
+        l_monthly_pay2 = monthly_pay.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+
+        $('#tot_amount_due').val(l_monthly_pay);
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(l_monthly_pay);
+        }
+        //$('#amount_paid').val(l_monthly.toFixed(2));
+
+    }else{
+
+        l_monthly_pay2 = monthly_pay.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+        
+        if ((excess != -1) && (over_due_mode == 0)){
+            return;
+        }
+
+        $('#tot_amount_due').val(l_monthly_pay2);
+        if (last_excess == -1 || last_excess <= 0){
+            $('#amount_paid').val(l_monthly_pay2);
+        }
+        $('#surcharge').val('0.0');
+        $('#rebate_amt').val('0.0');
+    }
+
+
+    }
+
+
+
+
+
+
+
+   function deleteRow(rowId) {
+        start_loader();
+        $.ajax({
+            url:_base_url_+'classes/Master.php?f=delete_invoice',
+            method:'POST',
+            data:{rowId: rowId},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured",'error');
+                end_loader();
+                },
+            success:function(resp){
+                $('#' + rowId).remove();
+                
+                end_loader();
+                location.reload();
+                }
+            
+        });
+    }  
+    function CreditPrincipal() {
+        $('#status').val('Credit to Principal');
+        $('#surcharge').val('0.0');
+        $('#rebate_amt').val('0.0');
+        $('#tot_amount_due').val('0.0');
+        $('#amount_due').val('0.0');
+        const last_due_date = new Date($('.last-due').val());
+        const last_stat_count = $('.last-stat-count').val();
+        $('#status_count').val(last_stat_count);
+        $('.due-date').val(last_due_date.toISOString().substr(0, 10));
 	}
 
     $(document).ready(function(){
-
-        $('#credit_principal').on('click', function() {
-            // Send an AJAX request to update the value of the textbox
-            start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=credit_principal",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-                        data = [resp['data']];
-                        $.each(data, function(index, payments) {
-                        
-                            location.reload();
-                        
-                    });
-                    // Show success message and reload page
-                    end_loader();
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            end_loader()
-                    }else{
-						alert_toast("An error occured",'error');
-						end_loader();
-                        console.log(resp)
-					}
-				}
-			})
-        })
+  
+        $(document).on('click', ".credit-pri", function(e) {
+			e.preventDefault(); 
+		    CreditPrincipal();
+        });
 
         $('#save_payment').submit(function(e){
 			e.preventDefault();
-            var _this = $(this)
+            var _this = $(this);
 		 	$('.err-msg').remove();
 			
+             var statusValue = $("#status").val();
              var errorCounter = validateForm();
              if (errorCounter > 0) {
                 alert_toast("It appear's you have forgotten to complete something!","warning");	  
@@ -1027,51 +1174,131 @@ function validateForm() {
                 $(".required").parent().removeClass("has-error")
             }    
             start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=add_payment",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-                        data = [resp['data']];
-                        $.each(data, function(index, payments) {
-                            
-                        
-                            compute(payments.excess);
 
-                            location.reload();
-                      
-                    });
-                  
-                    // Show success message and reload page
-                    end_loader();
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            end_loader()
-                    }else{
-						alert_toast("An error occured",'error');
-						end_loader();
-                        console.log(resp)
-					}
-				}
-			})
+            function addPaymentForm() {
+                $.ajax({
+                    url:_base_url_+"classes/Master.php?f=add_payment",
+                    data: new FormData(_this[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    type: 'POST',
+                    dataType: 'json',
+                    error:err=>{
+                        console.log(err)
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                    },
+                    success:function(resp){
+                        if(typeof resp =='object' && resp.status == 'success'){
+                            data = [resp['data']];
+                            $.each(data, function(index, payments) {
+                                compute(payments.excess);
+                                check_paydate();
+                                location.reload();
+                        });
+                
+                        end_loader();
+                        }else if(resp.status == 'failed' && !!resp.msg){
+                            var el = $('<div>')
+                                el.addClass("alert alert-danger err-msg").text(resp.msg)
+                                _this.prepend(el)
+                                el.show('slow')
+                                end_loader()
+                        }else{
+                            alert_toast("An error occured",'error');
+                            end_loader();
+                            console.log(resp)
+                        }
+                    }
+                })
+            }
+
+
+            function CreditPrincipalForm() {
+                $.ajax({
+                    url:_base_url_+"classes/Master.php?f=credit_principal",
+                    data: new FormData(_this[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    type: 'POST',
+                    dataType: 'json',
+                    error:err=>{
+                        console.log(err)
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                    },
+                    success:function(resp){
+                        if(typeof resp =='object' && resp.status == 'success'){
+                            data = [resp['data']];
+                            $.each(data, function(index, payments) {
+                                compute(payments.excess);
+                                location.reload();
+                        });
+                
+                        end_loader();
+                        }else if(resp.status == 'failed' && !!resp.msg){
+                            var el = $('<div>')
+                                el.addClass("alert alert-danger err-msg").text(resp.msg)
+                                _this.prepend(el)
+                                el.show('slow')
+                                end_loader()
+                        }else{
+                            alert_toast("An error occured",'error');
+                            end_loader();
+                            console.log(resp)
+                        }
+                    }
+                })
+            }
+            if (statusValue === "Credit to Principal") {
+                CreditPrincipalForm();
+            }else{
+               addPaymentForm();
+            }
 		})
+
+
+
+        $('.paid_btn').click(function(){
+            _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+       
+         });
+
         
-	})
+	});
 	
+    function payments(){
+        start_loader();
+        $.ajax({
+            url:_base_url_+'classes/Master.php?f=save_payment',
+            method:'POST',
+            data:{prop_id:'<?php echo $prop_id ?>'},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured",'error');
+                end_loader();
+                },
+            success:function(resp){
+                if(typeof resp =='object' && resp.status == 'success'){
+                    location.reload();
+          
+                }else{
+                    alert_toast(resp.err,'error');
+                    end_loader();
+                    console.log(resp)
+                }
+                }
+            
+            })
+
+        }
+
+
     function compute(excess){
         if (excess == -1){
             excesspay = 0;
@@ -1115,8 +1342,6 @@ function validateForm() {
 	    return errorCounter;
 
 	}
-
-   
 
 
 </script>
