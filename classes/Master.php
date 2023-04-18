@@ -1472,6 +1472,8 @@ Class Master extends DBConnection {
 
 		$amount_paid = (float) str_replace(",", "", $amount_paid);
 		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
+		$surcharge = (float) str_replace(",", "", $surcharge);
+		$rebate = (float) str_replace(",", "", $rebate);
 		$status_count = $status_count ;
 		$payment_count = $payment_count + 1;
 
@@ -2017,10 +2019,10 @@ Class Master extends DBConnection {
 		$del = $this->conn->query("DELETE FROM t_invoice where invoice_id = ".$rowId);
 		if($del){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Row successfully deleted.");
+			//$this->settings->set_flashdata('success',"Row successfully deleted.");
 		}else{
 			$resp['status'] = 'failed';
-			$resp['error'] = $this->conn->error;
+			$resp['err'] = $this->conn->error."[{$del}]";
 		}
 		return json_encode($resp);	
 	}
