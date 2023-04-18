@@ -352,7 +352,7 @@ body{
                                 echo "No results found.";
                             }
                             ?>
-                            <?php $qry_amt_due = "SELECT SUM(interest) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+                            <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}'";
 
                               $result = mysqli_query($conn, $qry_amt_due);
 
