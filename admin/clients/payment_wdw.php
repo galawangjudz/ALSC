@@ -152,7 +152,7 @@ if(isset($_GET['id'])){
 
         elseif(($p1 == 'Partial DownPayment') && ($acc_status == 'Reservation' || $acc_status == 'Partial DownPayment') || ($p1 == 'Full DownPayment' && $acc_status == 'Partial DownPayment')):
             //$rebate_ent->set_sensitive(0);
-
+            
             $l_date = date('Y-m-d', strtotime($first_dp));
             $day = date('d', strtotime($l_date));
             $l_full_down = $last_payment['remaining_balance'] - $amt_fnanced;
@@ -191,6 +191,7 @@ if(isset($_GET['id'])){
                 $payment_status_ent = $l_status;
 
             elseif ($acc_status == 'Partial DownPayment'):
+               
                 $l_date = $last_payment['due_date'];
                 $t_year = date('Y', strtotime($l_date));
                 $t_month = date('m', strtotime($l_date));
@@ -245,12 +246,12 @@ if(isset($_GET['id'])){
                     } else {
                         $l_status = 'PD - ' . strval($count);
                     }
+                    
+                    $payment_status_ent = $l_status	;
                 else:
-                    //echo $day;
                     $l_date2 = new Datetime(auto_date($day,$l_date));
                     $due_date = $l_date2;
                     $due_date_ent = $due_date->format('m/d/y');
-                    //echo $last_payment['status_count'];
                     $count = floatval($last_payment['status_count']) + 1;
                     $amount_paid_ent = (number_format($monthly_pay,2));
                     $amount_ent = (number_format($monthly_pay,2));
@@ -265,9 +266,11 @@ if(isset($_GET['id'])){
                     } else {
                         $l_status = 'PD - ' . strval($count);
                     }
+                    
                 endif;     
+                $payment_status_ent = $l_status	;
             endif;    
-            $payment_status_ent = $l_status	;
+           
 
         elseif ($p1 == 'Spot Cash' && $acc_status == 'Reservation'):
             $l_date = date('Y-m-d', strtotime($start_date));
@@ -422,8 +425,9 @@ if(isset($_GET['id'])){
                     }
                    
                 endif;
+                $payment_status_ent = $l_status	;
             endif;
-            $payment_status_ent = $l_status	;
+            
                 
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
                 $l_date = date('Y-m-d', strtotime($start_date));
