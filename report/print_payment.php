@@ -1,5 +1,3 @@
-
-
 <?php require_once('../config.php'); ?>
 
 <!DOCTYPE html>
@@ -190,7 +188,7 @@
     <br><br>
     
     <br><br>
-            <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+            <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
 
             $result = mysqli_query($conn, $qry_prin);
 
@@ -205,7 +203,7 @@
                 echo "No results found.";
             }
             ?>
-            <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+            <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
 
             $result = mysqli_query($conn, $qry_surcharge);
 
@@ -220,7 +218,7 @@
                 echo "No results found.";
             }
             ?>
-            <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+            <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
 
             $result = mysqli_query($conn, $qry_interest);
 
@@ -235,7 +233,7 @@
                 echo "No results found.";
             }
             ?>
-            <?php $qry_rebate = "SELECT SUM(rebate) AS p_rebate FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+            <?php $qry_rebate = "SELECT SUM(rebate) AS p_rebate FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
 
             $result = mysqli_query($conn, $qry_rebate);
 
@@ -250,7 +248,7 @@
                 echo "No results found.";
             }
             ?>
-            <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+            <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
 
                 $result = mysqli_query($conn, $qry_amt_due);
 
@@ -286,3 +284,14 @@
 </div>
 </body>
 </html>
+<script type="text/javascript">
+	function PrintPage() {
+		window.print();
+	}
+	    document.loaded = function(){
+	}
+	window.addEventListener('DOMContentLoaded', (event) => {
+   		PrintPage()
+		setTimeout(function(){ window.close() },750)
+	});
+</script>
