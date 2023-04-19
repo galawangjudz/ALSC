@@ -226,11 +226,9 @@ body{
 
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
               <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
-
-               <!--  <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
-               -->  <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
-                <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span> </a>            
-
+                <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>   
+                <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
+                <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span></a>            
                 <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
               </div>  
                     <table class="table2 table-bordered table-stripped">
@@ -496,6 +494,19 @@ $(document).ready(function() {
   $('.view_data').click(function(){
 		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
 	  uni_modal_right("<i class='fa fa-info'></i> Property Details",'clients/property_details.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
+  
+  $('.add_payment').click(function(){
+		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
+	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
+  $('.new_payment').click(function(){
+		
+	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
 
