@@ -288,7 +288,7 @@
             $count = 1;
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Deferred Cash Payment') || ($p1 == 'No DownPayment' && $p2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment'):
  
-            $l_date = date('Y-m-d', strtotime($full_down));
+            $l_date = date('Y-m-d', strtotime($start_date));
             $day = date('d', strtotime($l_date));
             $monthly_pay = $monthly_payment;
             $l_full_payment = 0;
@@ -301,7 +301,9 @@
             endif;
         
             if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                echo $acc_status;
                 $due_date_ent = date('Y-m-d', strtotime($l_date));
+                echo $due_date_ent;
                 $due_date = new Datetime($due_date_ent);
                 $amount_paid_ent = (number_format($monthly_pay,2));
                 $amount_ent = (number_format($monthly_pay,2));

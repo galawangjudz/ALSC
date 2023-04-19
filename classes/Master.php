@@ -1713,16 +1713,6 @@ Class Master extends DBConnection {
 			$balance = floatval(str_replace(',', '',$balance));
 			$balance = $balance - $principal;
 		
-
-			//fo cts
-		/* 	if ($balance <= $rem_prcnt) {
-				if ($old_balance <= $rem_prcnt) {
-					$l_for_cts = 0;
-				} else {
-					$l_for_cts = 1;
-				}
-			} */
-
 			if ($acc_status == 'Reservation' || $acc_status == 'Full DownPayment') {
 				if (($status == 'FPD' && ($amount_paid >= $tot_amount_due) || $balance <= 0)) {
 					$status = 'FPD';
