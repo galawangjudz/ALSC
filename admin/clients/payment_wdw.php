@@ -176,20 +176,17 @@ if(isset($_GET['id'])){
         if ($last_acc_stat != ''){
             $acc_status = $last_acc_stat;
         }
-
-        //echo $acc_status;
-        //code start here 
-
-        
+     
         if($acc_status == 'Fully Paid'):
-            $amount_ent = '';
-            $amount_paid_ent = '';
-            $surcharge_ent = '';
-            $rebate_ent = '';
-            $total_amount_due_ent = '';
+            $amount_ent = 0.0;
+            $amount_paid_ent = 0.0;
+            $surcharge_ent = 0.0;
+            $rebate_ent = 0.0;
+            $total_amount_due_ent = 0.0;
             $due_date_ent = '';
             $payment_status_ent = '';
             
+           
         endif;
 
         if($retention == '1'):
@@ -443,6 +440,7 @@ if(isset($_GET['id'])){
                     $amount_paid_ent = (number_format($l_monthly,2));
                     $amount_ent = (number_format($l_monthly,2));
                     $total_amount_due_ent = (number_format($l_monthly,2));
+
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
                             $monthly_pay = $l_full_payment;
@@ -462,6 +460,7 @@ if(isset($_GET['id'])){
                     $amount_paid_ent = (number_format($monthly_pay,2));
                     $amount_ent = (number_format($monthly_pay,2));
                     $total_amount_due_ent = (number_format($monthly_pay,2));
+
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
                             $l_full_payment = $last_payment['remaining_balance'];
@@ -474,8 +473,9 @@ if(isset($_GET['id'])){
                     }
                    
                 endif;
+                $payment_status_ent = $l_status	;
             endif;
-            $payment_status_ent = $l_status	;
+            
                 
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
                 $l_date = date('Y-m-d', strtotime($start_date));
@@ -644,7 +644,7 @@ if(isset($_GET['id'])){
                
         else:        
         
-            echo "Error";
+            echo '<script>alert("Error.");</script>';
             
         endif;
 
@@ -747,11 +747,15 @@ body{
         </table>
         <hr>
 
+       
+
 
         <table class="table2 table-bordered table-stripped" style="width:100%;">
             <?php 
                 //echo $last_excess ;
                 if ($last_excess != -1 && $last_excess != 0){
+                    
+                    $last_excess = number_format($last_excess,2);
                     $amount_paid_ent = $last_excess;
                     $or_ent = $last_or_ent;
                     $pay_date_ent = $last_pay_ent;
@@ -767,10 +771,30 @@ body{
                 <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;" readonly>
+                <input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
+                <td style="width:25%;font-size:14px;"><label for="surcharge">Surcharge:</label>  <div class="toggle-container">
+            <input type="radio" id="surcharge-25" name="surcharge" value="25">
+            <label for="surcharge-25">25%</label>
+            
+            <input type="radio" id="surcharge-50" name="surcharge" value="50">
+            <label for="surcharge-50">50%</label>
+            
+            <input type="radio" id="surcharge-75" name="surcharge" value="75">
+            <label for="surcharge-75">75%</label>
+            
+            <input type="radio" id="surcharge-none" name="surcharge" value="0">
+            <label for="surcharge-none">100% (Less)</label>
+        </div>
+</td><td style="width:25%;font-size:14px;" readonly>
+                <input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
             </tr>
             <tr>
-                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;">
+                <input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
+                <td style="width:25%;font-size:14px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;">
+                <input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+
             </tr>
         </table>
         <br>
@@ -796,17 +820,21 @@ body{
         <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
         <br>
 
-        <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:100%;">
-       <!--  <input type="submit" name="credit-pri" value="Credit to Principal" class="btn btn-success" style="width:100%;"> -->
-        <!-- <a href="#" class="btn btn-success btn-md credit-pri" onclick="creditPrincipal()">Credit to Principal</a>-->
-        <a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> 
+        <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:50%;">
+        <?php 
+             if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
+                echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> ';
+             }
+        ?>
+       
+        <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a> 
         <br>
         
         </form>
         <br>
 
 
-        <table class="table2 table-bordered table-stripped" style="width:100%;">
+        <table class="table table-bordered table-stripped" style="text-align:center;">
             <thead> 
                 <tr>
                     <th style="text-align:center;font-size:13px;width:5%;">ACTION</th>
@@ -824,8 +852,10 @@ body{
                 </tr>
             </thead>
                     <?php $qry4 = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
+                     $last_row = $qry4->num_rows - 1;
+                     $i = 0;
                      if($qry4->num_rows <= 0){
-                        echo "<td class='text-center' style='font-size:13px;width:10%;'>  No Payment Record </td> ";
+                        echo "<td class='text-center' style='font-size:13px;width:10%;'>  No Payment Record </td>";
                         
                      }else{  ?>      
    
@@ -859,14 +889,16 @@ body{
                       
                       
                       echo "<tr id='{$row['invoice_id']}'>";
-
-                     // echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
-
-                      echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
-                
-                    //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
-                       ?>
-                         
+               
+                      if ($i == $last_row){
+                            echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
+                      
+                      }else{
+                        echo "<td class='text-center'><span class='badge badge-success'>Added</span></td>";
+                      
+                      }
+                      $i++;
+                      ?>       
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
@@ -912,24 +944,24 @@ body{
     <table style="width:25%;float:right;">
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
-            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:75%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
-            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:75%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
-            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:75%;float:right;text-align:right;" disabled></td>
         </tr>   
         <tr>
             <td style="font-size:14px;"><label class="control-label">Total Rebate: </label></td>
-            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;" disabled></td>
+            <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:75%;float:right;text-align:right;" disabled></td>
         </tr>  
         <tr>  
 
             <td style="font-size:14px;"><label>Total Amount to be Paid: </label></td>
-            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="border:none;" disabled></td>
+            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:75%;float:right;text-align:right;" disabled></td>
 
             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
         </tr>
@@ -951,17 +983,37 @@ body{
 
 
 window.onload = check_paydate();
-
+                            
    $(document).ready(function() {
 
-            $(document).on('keyup', ".pay-date", function(e) {
-                e.preventDefault(); 
-                check_paydate();
-                
+        $(document).on('keyup', ".pay-date", function(e) {
+            e.preventDefault(); 
+            check_paydate();
+            
 
-            });
+        });
+
+        $(document).on('keyup', ".amt-paid", function(e) {
+            e.preventDefault(); 
+            input_to_money();
+            
+
+        });
 
 });
+
+function input_to_money(){
+    const amount = $('.amt-paid').val();
+    
+    const money = amount.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+    });
+
+
+    $('#amount_paid').val(money);
+
+}
 
 function check_paydate(){
 
@@ -1138,10 +1190,10 @@ function check_paydate(){
                 end_loader();
                 },
             success:function(resp){
+                               
                 $('#' + rowId).remove();
-                
-                end_loader();
                 location.reload();
+                end_loader();
                 }
             
         });

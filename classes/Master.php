@@ -1626,6 +1626,9 @@ Class Master extends DBConnection {
 		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Deferred Cash Payment') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment') {
 			$rebate = 0;
 			$interest = 0;
+			$principal = floatval(str_replace(',', '',$amount_paid));
+			$balance = floatval(str_replace(',', '',$balance));
+
 			if ($under_pay == 0) {
 				if ($amount_paid < $tot_amount_due) {
 					if ($amount_paid <= $surcharge) {
@@ -1704,15 +1707,19 @@ Class Master extends DBConnection {
 					$excess = -1;
 				}
 			}
+			$principal = floatval(str_replace(',', '',$amount_paid));
+			$balance = floatval(str_replace(',', '',$balance));
 			$balance = $balance - $principal;
 		
-			if ($balance <= $rem_prcnt) {
+
+			//fo cts
+		/* 	if ($balance <= $rem_prcnt) {
 				if ($old_balance <= $rem_prcnt) {
 					$l_for_cts = 0;
 				} else {
 					$l_for_cts = 1;
 				}
-			}
+			} */
 
 			if ($acc_status == 'Reservation' || $acc_status == 'Full DownPayment') {
 				if (($status == 'FPD' && ($amount_paid >= $tot_amount_due) || $balance <= 0)) {
@@ -1728,6 +1735,7 @@ Class Master extends DBConnection {
 					$l_status = 'Fully Paid';
 				} else {
 					$status = 'DFC - ' . strval($status_count);
+					$l_status = 'Deferred Cash Payment';
 				}
 			}
 		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Monthly Amortization') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'){
