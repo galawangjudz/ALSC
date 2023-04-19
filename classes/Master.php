@@ -2190,6 +2190,9 @@ switch ($action) {
 	case 'save_ca':
 		echo $Master->save_ca();
 	break;
+	case 'print_payment_func':
+		echo $Master->print_payment_func();
+	break;
 	case 'print_payment':
 		echo $Master->print_payment();
 	break;

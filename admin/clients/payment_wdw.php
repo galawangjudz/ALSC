@@ -13,9 +13,596 @@ if($_settings->chk_flashdata('success')): ?>
 <?php
     $pay_date_input = date("Ymd");   
 ?>
+<?php
+$getID = $_GET['id'];
+if(isset($_GET['id'])){
+
+    $account_info = [];
+    $last_payment = [];
+    $payment_rec = [];
+    $over_due_mode = 0;
+    $over_pay_mode = 0;
+    $over_due_mode_upay = 0;
+    $excess = -1;
+    $or_no = '';
+
+    
+    $prop = $conn->query("SELECT * FROM properties where md5(property_id) = '{$_GET['id']}' ");    
+    while($row=$prop->fetch_assoc()):
+    
+        ///LOT
+        $prop_id = $row['property_id'];
+        $type = $row['c_type'];
+        $lot_area = $row['c_lot_area'];
+        $price_sqm = $row['c_price_sqm'];
+        $lot_disc = $row['c_lot_discount'];
+        $lot_disc_amt = $row['c_lot_discount_amt'];
+        $lres = $lot_area * $price_sqm;
+        $lcp = $lres-($lres*($lot_disc*0.01));
+        $l_acc_type = $row['c_account_type'];
+        $l_acc_type1 = $row['c_account_type1'];
+        $acc_status = $row['c_account_status'];
+        $l_date_of_sale = $row['c_date_of_sale'];
+        $retention = $row['c_retention'];
+
+        //HOUSE
+        $house_model = $row['c_house_model'];
+        $floor_area = $row['c_floor_area'];
+        $house_price_sqm = $row['c_house_price_sqm'];
+        $house_disc = $row['c_house_discount'];
+        $house_disc_amt = $row['c_house_discount_amt'];
+        $hres = $floor_area * $house_price_sqm;
+        $hcp = $hres-($hres*($house_disc*0.01));
+        
+        //PAYMENT
+        $tcp = $row['c_tcp'];
+        $tcp_discount = $row['c_tcp_discount'];
+        $tcp_discount_amt = $row['c_tcp_discount_amt'];
+        $vat = $row['c_vat_amount'];
+        $vat_amt = (0.01 * $vat)*$tcp;
+        $net_tcp = $row['c_net_tcp'];
+
+        $reservation = $row['c_reservation'];
+        $p1 = $row['c_payment_type1'];
+        $p2 = $row['c_payment_type2'];
+
+        $amt_fnanced = $row['c_amt_financed'];
+        $monthly_down = $row['c_monthly_down'];
+        $first_dp = $row['c_first_dp'];
+        $full_down = $row['c_full_down'];
+        $terms = $row['c_terms'];
+        $interest_rate = $row['c_interest_rate'];
+        $fixed_factor = $row['c_fixed_factor'];
+        $monthly_payment = $row['c_monthly_payment'];
+        $no_payments = $row['c_no_payments'];
+        $net_dp = $row['c_net_dp'];
+        $down_percent = $row['c_down_percent'];
+        $start_date = $row['c_start_date'];
+        $change_date = $row['c_change_date'];
+
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $l_last = $invoices->num_rows - 1;
+        $payments_data = array(); 
+        if($invoices->num_rows <= 0){
+
+            $payments = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count FROM property_payments WHERE md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+            $l_last = $payments->num_rows - 1;
+            $payments_data = array(); 
+            if($payments->num_rows <= 0){
+                echo ('No Payment Records for this Account!');
+            } 
+            while($row = $payments->fetch_assoc()) {
+              $payments_data[] = $row; 
+            }
+        }
+        while($row = $invoices->fetch_assoc()) {
+          $payments_data[] = $row; 
+
+        }
+       
+        $last_cnt = $l_last;
+        $payment_rec = $payments_data;
+        $last_payment = $payments_data[$l_last];
+       
+        $check_date = 0;
+        $reopen_value = 0;
+        $monthly_pay = 0;
+        $count = 0;
+        $last_sur = 0;
+        $pay_mode = 0;
+        $due_date = 0;
+        $payment_mode = 0;
+        $underpay = 0;
+        $last_principal = 0;
+        $last_interest = 0;
+        $ma_balance = 0;
+        $change_date = $change_date;
+        $l_net_tcp = $net_tcp;
+        $l_30_prcnt = $l_net_tcp * 0.30;
+        $rem_prcnt = $l_net_tcp - $l_30_prcnt;
+        $last_pay_date = strtotime($last_payment['pay_date']);
+        $balance_ent = number_format($last_payment['remaining_balance'],2);
+        $old_balance = $last_payment['remaining_balance'];
+
+        $last_stat_count = $last_payment['status_count'];
+        $last_pay_count = $last_payment['payment_count'];
+        //code start here 
+
+        
+        if($acc_status == 'Fully Paid'):
+            $amount_ent = '';
+            $amount_paid_ent = '';
+            $surcharge_ent = '';
+            $rebate_ent = '';
+            $total_amount_due_ent = '';
+            $due_date_ent = '';
+            $payment_status_ent = '';
+            return ;
+        endif;
+
+        if($retention == '1'):
+            $l_date = $last_pay_date;
+            $amount_ent = '0.00';
+            $amount_paid_ent = number_format($last_payment['remaining_balance'],2);
+            $surcharge_ent = '0.00';
+            $rebate_ent = '0.00';
+            $total_amount_due_ent = '0.00';
+            $due_date_ent = $l_date;
+            $payment_status_ent = 'RETENTION';
+
+        elseif(($p1 == 'Partial DownPayment') && ($acc_status == 'Reservation' || $acc_status == 'Partial DownPayment') || ($p1 == 'Full DownPayment' && $acc_status == 'Partial DownPayment')):
+            //$rebate_ent->set_sensitive(0);
+
+            $l_date = date('Y-m-d', strtotime($first_dp));
+            $day = date('d', strtotime($l_date));
+            $l_full_down = $last_payment['remaining_balance'] - $amt_fnanced;
+            $monthly_pay = $monthly_down;
+            if ($l_full_down <= $monthly_pay) {
+                $l_fd_mode = 1;
+            } else {
+                $l_fd_mode = 0;
+            }
+            if ($acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                $due_date_ent = (date('m/d/Y', strtotime($first_dp)));
+                //$due_date = strtotime(gmdate('Y-m-d', strtotime($first_dp)));
+                $due_date = new DateTime($due_date_ent);
+                $amount_paid_ent = (number_format($monthly_down,2));
+                $amount_ent = (number_format($monthly_down,2));
+                $total_amount_due_ent = (number_format($monthly_down,2));
+                $count = 1;
+                if ($last_payment['status'] == 'ADDITIONAL'):
+                        $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        
+                        if ($retention == '1'):
+                            $l_date = new DateTime($first_dp);
+                        endif;
+                        $t_day = date('d', strtotime($l_date));
+                        $l_date2 =  new Datetime(auto_date($t_day,$l_date));
+                        $due_date_ent = $l_date2->format('m/d/y');
+                        $count = floatval($last_payment['status_count']) + 1;
+
+                endif;
+                if ($no_payments == $count || $l_fd_mode == 1):
+                    $l_status = 'FD';
+                else:
+                    $l_status = 'PD - ' . strval($count);
+                endif;
+
+                $payment_status_ent = $l_status;
+
+            elseif ($acc_status == 'Partial DownPayment'):
+                $l_date = $last_payment['due_date'];
+                $t_year = date('Y', strtotime($l_date));
+                $t_month = date('m', strtotime($l_date));
+                
+                if ($retention == 1):
+                    $l_date = date("Y-m-d", strtotime($full_down));
+                endif;
+                $day = date('d', strtotime($l_date));
+                $t_day = validate_date($t_year,$t_month,$day);
+                $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
+                //$due_date_ent = date('m/d/Y', strtotime($l_date));
+                if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                    $underpay = 1;
+                    $l_surcharge = 0;
+                    for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
+                        try {
+                            if ($last_payment['due_date'] == $payment_rec[$x]['due_date']) {
+                                $last_principal += $payment_rec[$x]['principal'];
+                                $l_surcharge += $payment_rec[$x]['surcharge'];
+                            }
+                        } catch (Exception $e) {
+                            //pass
+                        }
+                    }
+
+                    if ($last_payment['surcharge'] == 0):
+                        $last_sur = 0;
+          
+                    elseif ($last_payment['payment_amount'] < $last_payment['surcharge']):
+                        $last_sur = $last_payment['payment_amount'];
+                            
+                        $over_due_mode_upay = 1;
+                    else:
+                        $last_sur = $last_payment['surcharge'];
+                
+                        $over_due_mode_upay = 1;
+                    endif;
+
+                    $monthly_pay = $monthly_down - $last_principal;
+                    $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                    $count = $last_payment['status_count'];
+                    $due_date = strtotime($l_date);
+                    $amount_paid_ent = (number_format($l_monthly,2));
+                    $amount_ent = (number_format($l_monthly,2));
+                    $total_amount_due_ent = (number_format($l_monthly,2));
+                    if ($no_payments == $count || $l_fd_mode == 1) {
+                        $l_status = 'FD';
+                        $monthly_pay = $l_full_down;
+                        $amount_paid_ent = number_format($monthly_pay,2);
+                        $amount_ent = number_format($monthly_pay,2);
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+                    } else {
+                        $l_status = 'PD - ' . strval($count);
+                    }
+                else:
+                    //echo $day;
+                    $l_date2 = new Datetime(auto_date($day,$l_date));
+                    $due_date = $l_date2;
+                    $due_date_ent = $due_date->format('m/d/y');
+                    //echo $last_payment['status_count'];
+                    $count = floatval($last_payment['status_count']) + 1;
+                    $amount_paid_ent = (number_format($monthly_pay,2));
+                    $amount_ent = (number_format($monthly_pay,2));
+                    $total_amount_due_ent = (number_format($monthly_pay,2));
+                                
+                    if ($no_payments == $count || $l_fd_mode == 1) {
+                        $l_status = 'FD';
+                        $monthly_pay = $l_full_down;
+                        $amount_paid_ent = (number_format($monthly_pay,2));
+                        $amount_ent = (number_format($monthly_pay,2));
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+                    } else {
+                        $l_status = 'PD - ' . strval($count);
+                    }
+                endif;     
+            endif;    
+            $payment_status_ent = $l_status	;
+
+        elseif ($p1 == 'Spot Cash' && $acc_status == 'Reservation'):
+            $l_date = date('Y-m-d', strtotime($start_date));
+            $day = date('d', strtotime($l_date));
+            $due_date_ent = date('m/d/Y', strtotime($l_date));
+            $payment_status_ent = ('SC');
+            $due_date = $start_date;
+            $amount_paid_ent = (number_format($last_payment['remaining_balance'],2));
+            $amount_ent = (number_format($last_payment['remaining_balance'],2));
+            $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2));
+            $balance_ent = (number_format($last_payment['remaining_balance'],2));
+            
+        elseif ($p1 == 'Full DownPayment' && $acc_status == 'Reservation'):
+            $l_date = date('Y-m-d', strtotime($full_down));
+            $day = date('d', strtotime($l_date));
+            $due_date_ent = date('m/d/Y', strtotime($l_date));
+            $payment_status_ent = 'FD';
+            $due_date = $full_down;
+            if ($last_payment['status'] == 'RES') {
+                $monthly_pay = $net_dp;
+            } elseif ($last_payment['status'] == 'PFD') {
+                $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                $l_date = ($last_payment['pay_date']);
+                $due_date = timegm($l_date);
+            }
+            $amount_paid_ent = number_format($monthly_pay,2);
+            $amount_ent = number_format($monthly_pay,2);
+            $total_amount_due_ent = number_format($monthly_pay,2);
+            $count = 1;
+        elseif (($acc_status == 'Full DownPayment' && $p2 == 'Deferred Cash Payment') || ($p1 == 'No DownPayment' && $p2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment'):
+ 
+            $l_date = date('Y-m-d', strtotime($full_down));
+            $day = date('d', strtotime($l_date));
+            $monthly_pay = $monthly_payment;
+            $l_full_payment = 0;
+            // check for fully paid
+            if ($last_payment['remaining_balance'] <= $monthly_pay):
+                $l_fp_mode = 1;
+                $l_full_payment = $last_payment['remaining_balance'];
+            else:
+                $l_fp_mode = 0;
+            endif;
+        
+            if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                $due_date_ent = date('Y-m-d', strtotime($l_date));
+                $due_date = new Datetime($due_date_ent);
+                $amount_paid_ent = (number_format($monthly_pay,2));
+                $amount_ent = (number_format($monthly_pay,2));
+                $total_amount_due_ent = (number_format($monthly_pay,2));
+                $count = 1;
+                if ($last_payment['status'] == 'ADDITIONAL'):
+                    $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        
+                    if ($retention == '1'):
+                        $l_date = new DateTime($first_dp);
+                    endif;
+                    $t_day =  date('d', strtotime($l_date));
+                    $l_date2 = new Datetime(auto_date($day,$due_date_ent));
+                    $due_date = $l_date2;
+                    $due_date_ent = $due_date->format('m/d/y');
+                    $count = $last_payment['status_count'] + 1;
+                endif;
+               
+                
+                if ($terms == $count || $l_fp_mode == 1):
+                    $l_full_payment = $last_payment['remaining_balance'];
+                    $l_status = 'FPD';
+                    $monthly_pay = $l_full_payment;
+                    $amount_paid_ent = number_format($monthly_pay,2);
+                    $amount_ent = number_format($monthly_pay,2);
+                    $total_amount_due_ent = number_format($monthly_pay,2);
+                else:
+                    $l_status = 'DFC - ' . strval($count);
+                endif;
+                $payment_status_ent = ($l_status);
+                  
+            elseif ($acc_status == 'Deferred Cash Payment'):
+                $l_date = $last_payment['due_date'];
+                $t_year = date('Y', strtotime($l_date));
+                $t_month = date('m', strtotime($l_date));
+                
+                if ($retention == 1):
+                    $l_date = date("Y-m-d", strtotime($start_date));
+                endif;
+                $day = date('d', strtotime($l_date));
+                $t_day = validate_date($t_year,$t_month,$day);
+                $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
+                // under_pay
+                if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                    $underpay = 1;
+                    $l_surcharge = 0;
+
+                    for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
+                        try {
+                            if ($last_payment['status'] == $payment_rec[$x]['status'] && $last_payment['due_date'] == $payment_rec[$x]['due_date']) {
+                                $last_principal += $payment_rec[$x]['principal'];
+                                $l_surcharge += $payment_rec[$x]['surcharge'];
+                            }
+                        } catch (Exception $e) {
+                            // pass
+                        }
+                    }
+                    if ($last_payment['amount_due'] == 0) {
+                        $last_sur = 0;
+                   
+                    } elseif ($last_payment['payment_amount'] < $last_payment['amount_due']) {
+                        $last_sur = $last_payment['payment_amount'];
+       
+                        $over_due_mode_upay = 1;
+                    } else {
+                        $last_sur = $last_payment['surcharge'];
+                    
+                        $over_due_mode_upay = 1;
+                    }
+ 
+                    $monthly_pay = $monthly_payment - $last_principal;
+                    echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
+                    $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                    $count = $last_payment['status_count'];
+                    $due_date = strtotime($l_date);
+                    $amount_paid_ent = (number_format($l_monthly,2));
+                    $amount_ent = (number_format($l_monthly,2));
+                    $total_amount_due_ent = (number_format($l_monthly,2));
+                    if ($terms == $count || $l_fp_mode == 1) {
+                            $l_status = 'FPD';
+                            $monthly_pay = $l_full_payment;
+                            $amount_paid_ent = (number_format($monthly_pay,2));
+                            $amount_ent = (number_format($monthly_pay));
+                            $total_amount_due_ent = (number_format($monthly_pay,2));
+                    } else {
+                            $l_status = 'DFC - ' . strval($count);
+                    }
+
+                else:
+                
+                    $l_date2 = new Datetime(auto_date($day,$due_date_ent));
+                    $due_date = $l_date2;
+                    $due_date_ent = $due_date->format('m/d/y');
+                    $count = floatval($last_payment['status_count']) + 1;
+                    $amount_paid_ent = (number_format($monthly_pay,2));
+                    $amount_ent = (number_format($monthly_pay,2));
+                    $total_amount_due_ent = (number_format($monthly_pay,2));
+                    if ($terms == $count || $l_fp_mode == 1) {
+                            $l_status = 'FPD';
+                            $l_full_payment = $last_payment['remaining_balance'];
+                            $monthly_pay = $l_full_payment;
+                            $amount_paid_ent = (number_format($monthly_pay,2));
+                            $amount_ent = (number_format($monthly_pay,2));
+                            $total_amount_due_ent = (number_format($monthly_pay,2));
+                    } else {
+                            $l_status = 'DFC - ' . strval($count);
+                    }
+                   
+                endif;
+            endif;
+            $payment_status_ent = $l_status	;
+                
+        elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
+                $l_date = date('Y-m-d', strtotime($start_date));
+                $day = date('d', strtotime($l_date));
+                $monthly_pay = $monthly_payment;
+            
+                
+                if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
+                    $due_date = date('m/d/Y', strtotime($l_date));
+                    $due_date_ent = $due_date;
+                    $due_date = $due_date_ent;
+                    $amount = number_format($monthly_payment,2);
+                    $amount_paid_ent = ($amount);
+                    $amount_ent = $amount;
+                    $total_amount_due_ent = $amount;
+                    $count = 1;
+                    if ($last_payment['status'] == 'ADDITIONAL') {
+                        $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        $t_year =  date('Y', strtotime($l_date));
+                        $t_month =  date('m', strtotime($l_date));
+                        if ($retention == '1') {
+                            $l_date = date('Y-m-d', strtotime($last_payment['first_dp']));
+                        }
+                        $t_day =  date('d', strtotime($l_date));
+                        $l_date2 = new Datetime(auto_date($t_day,$due_date));
+                        $due_date = $l_date2;
+                        $due_date_ent = $due_date->format('m/d/y');
+                        $count = $last_payment[9] + 1;
+                    }
+                    $l_interest = $last_payment['remaining_balance'] * ($interest_rate / 1200);
+                    $l_principal = $monthly_payment - $l_interest;
+                    if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
+                        $l_status = 'FPD';
+                        $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
+                        $amount_paid_ent = number_format($monthly_pay,2);
+                        $amount_ent = number_format($monthly_pay,2);
+                        $total_amount_due_ent = number_format($monthly_pay,2);
+                    }else {
+                        $l_status = 'MA - ' . strval($count);
+                    }
+                    $payment_status_ent = ($l_status);
 
 
-<body onload="">
+                elseif ($acc_status == 'Monthly Amortization'):
+                    $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                    $t_year =  date('Y', strtotime($l_date));
+                    $t_month =  date('m', strtotime($l_date));
+                    if ($retention == '1') {
+                        $l_date = date('Y-m-d', strtotime($start_date));
+                    }
+                    $day = date('d', strtotime($l_date));
+                    $t_day = validate_date($t_year,$t_month,$day);
+                    $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
+                    //under_pay
+                    if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                        $l_surcharge = 0;
+                        $underpay = 1;
+                        $x_y = $last_cnt;
+                        $l_cnt = 0;
+                        $l_tot_int = 0;
+                        while ($last_payment['status'] == $payment_rec[$x_y]['status']) {
+                            $l_last_interest = $payment_rec[$x_y]['remaining_balance'] * ($interest_rate / 1200);
+                            $l_tot_int += $payment_rec[$x_y]['interest'];
+                            $x_y -= 1;
+                            $l_cnt += 1;
+                            $l_int_last = $l_last_interest - $l_tot_int;
+                        }
+                        $monthly_pay = $monthly_pay - $last_principal - $last_interest;
+                        if ($l_cnt > 1) {
+                            // implement additional code here   
+                            for ($x = 0; $x < floatval($last_payment['payment_count']); $x++) {
+                                try {
+                                   
+                                    if ($last_payment['status'] == $payment_rec[$x]['status'] && $last_payment['due_date'] == $payment_rec[$x]['due_date']) {
+                                        $last_principal += $payment_rec[$x]['principal'];
+                                        $last_interest += $payment_rec[$x]['interest'];
+                                        $l_surcharge += $payment_rec[$x]['surcharge'];
+                                    }
+                                } catch (Exception $e) {
+                                    //pass
+                                }
+                            }  
+                            $monthly_pay = $monthly_pay - $last_principal - $last_interest;  
+            
+                        }else {
+                            $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                            $last_interest = $l_tot_int;
+                            $ma_balance = $last_payment['remaining_balance'] + $last_principal;
+                        }
+                        if ($last_payment['surcharge'] == 0):
+                            $last_sur = 0;
+                        elseif ($last_payment['payment_amount'] < $last_payment['surcharge']):
+                            $last_sur = $last_payment['payment_amount'];
+                            $over_due_mode_upay = 1;
+                            $monthly_pay = $monthly_payment;
+                        else:
+                            $last_sur = $last_payment['surcharge'];
+                            $over_due_mode_upay = 1;
+                        endif;
+                        
+                        if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                                $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        endif;
+
+                        $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
+                        $count = $last_payment['status_count'];
+                        //$due_date = timegm($l_date);
+                        $amount_paid_ent = (number_format($monthly_pay,2));
+                        $amount_ent = (number_format($monthly_pay,2));
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+
+                        if ($l_cnt > 1) {
+                            $l_interest = $l_int_last;
+                        } else {
+                            $l_interest = $ma_balance * ($interest_rate / 1200);
+                        }
+                        if ($last_interest < $l_interest) {
+                            $l_interest = $l_interest - $last_interest;
+                        } else {
+                            $l_interest = 0.00;
+                        }
+                        if ($l_cnt > 1) {
+                            $l_principal = $monthly_pay - $l_last_interest;
+                        } else {
+                            $l_principal = $monthly_pay - $l_interest;
+                        }
+                        if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
+                            $l_status = 'FPD';
+                            $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
+                            $amount_paid_ent = (numbe_format($last_payment['remaining_balance'],2));
+                            $amount_ent = (number_format($monthly_pay,2));
+                            $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2 ));
+                        } else {
+                            $l_status = 'MA - ' . strval($count);
+                        }
+                        $payment_status_ent = ($l_status);
+
+
+
+                    else:
+                        $l_date = new Datetime(auto_date($t_day,$due_date_ent));
+                        $due_date = $l_date;
+                        $due_date_ent = $due_date->format('m/d/y');
+                        $count = floatval($last_payment['status_count']) + 1;
+                        $amount_paid_ent = (number_format($monthly_pay,2));
+                        $amount_ent = (number_format($monthly_pay,2));
+                        $total_amount_due_ent = (number_format($monthly_pay,2));
+
+                        $l_interest = $last_payment['remaining_balance'] * ($interest_rate /1200);
+                        $l_principal = $monthly_pay - $l_interest;
+                        if ($last_payment['remaining_balance'] <= $l_principal || $terms == $count) {
+                            $interest = $l_interest;
+                            $l_status = 'FPD';
+                            $monthly_pay = $last_payment['remaining_balance'] + $l_interest;
+                            $amount_paid_ent = (number_format($last_payment['remaining_balance'],2));
+                            $amount_ent = (number_format($monthly_pay,2));
+                            $total_amount_due_ent = (number_format($last_payment['remaining_balance'],2));
+                        } else {
+                            $l_status = 'MA - ' . strval($count);
+                        }
+                        $payment_status_ent = ($l_status);
+                    endif;
+
+                endif;   
+            
+               
+        else:        
+        
+            echo "Error";
+            
+        endif;
+
+    endwhile;
+
+}
+/*  */
+?>
+
+<body>
 <div class="card-body">
     <div class="divBtnOverdue">
         <button class="btn btn-light" id="overduebtn" style="float:right;margin-top:5px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
@@ -27,18 +614,19 @@ if($_settings->chk_flashdata('success')): ?>
 </div>
 <div class="card card-outline rounded-0 card-maroon">
     <!-- <div class="card-header">
-        <h3 class="card-title"><b>Property ID #: <i><?php echo $prop_id ?></i> </b></h3>
-    </div> -->
-    <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
-    <div class="top_table">   
-        <div id='overduediv'>
-            <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
-                <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
-                <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
-            </form>
-        <?php include 'over_due_details2.php'; ?>
-    </div>
-
+            <h3 class="card-title"><b>Property ID #: <i><?php echo $prop_id ?></i> </b></h3>
+        </div> -->
+        <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
+        <div class="top_table">   
+            <div id='overduediv'>
+                <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
+                    <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
+                    <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
+                </form>
+            <?php include 'over_due_details2.php'; ?>
+            </div>
+        </div>
+</div>
 </body>
 
 <?php // Start the session
@@ -54,7 +642,6 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
-
 <?php
 
 if(isset($_GET['id'])){
@@ -726,8 +1313,8 @@ body{
 </style>
 
 <div class="card card-outline rounded-0 card-maroon">
-
 	<div class="card-body">
+
     <div class="container-fluid">
     <form action="" method="POST" id="save_payment">
 
@@ -836,20 +1423,11 @@ body{
 
         <table class="table table-bordered table-stripped" style="text-align:center;">
             <thead> 
+
                 <tr>
-                    <th style="text-align:center;font-size:13px;width:5%;">ACTION</th>
-                    <th style="text-align:center;font-size:13px;">DUE DATE</th>
-                    <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                    <th style="text-align:center;font-size:13px;">OR NO</th>
-                    <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
-                    <th style="text-align:center;font-size:13px;">AMOUNT DUE</th>
-                    <th style="text-align:center;font-size:13px;">INTEREST</th>
-                    <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
-                    <th style="text-align:center;font-size:13px;">SURCHARGE</th>
-                    <th style="text-align:center;font-size:13px;">REBATE</th>
-                    <th style="text-align:center;font-size:13px;">PERIOD</th>
-                    <th style="text-align:center;font-size:13px;">BALANCE</th>
+                    <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
                 </tr>
+
             </thead>
                     <?php $qry4 = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
                      $last_row = $qry4->num_rows - 1;
@@ -974,13 +1552,91 @@ body{
     </table>
 
 
-    
-    </div>
+                    // echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
+
+                    echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
+            
+                //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
+                    ?>
+                        
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo $period ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:12%;"><?php echo number_format($balance,2) ?> </td>  
+                    </tr>
+                <?php endwhile ; } ?>
+                </thead>
+            </table>
+            <?php 
+                $sql_prin = "SELECT SUM(principal) AS total_principal  FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+                $result_prin = mysqli_query($conn, $sql_prin);
+                $row_prin = mysqli_fetch_assoc($result_prin);
+            ?>
+            <?php 
+                $sql_sur = "SELECT SUM(surcharge) AS total_surcharge FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+                $result_sur = mysqli_query($conn, $sql_sur);
+                $row_sur = mysqli_fetch_assoc($result_sur);
+            ?>
+            <?php 
+                $sql_int = "SELECT SUM(interest) AS total_interest FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+                $result_int = mysqli_query($conn, $sql_int);
+                $row_int = mysqli_fetch_assoc($result_int);
+            ?>
+            <?php 
+                $sql_due = "SELECT SUM(payment_amount) AS total_amt_paid FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+                $result_due = mysqli_query($conn, $sql_due);
+                $row_due = mysqli_fetch_assoc($result_due);
+            ?>
+            <?php 
+                $sql_rebate = "SELECT SUM(rebate) AS total_rebate FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+                $result_rebate = mysqli_query($conn, $sql_rebate);
+                $row_rebate = mysqli_fetch_assoc($result_rebate);
+            ?>
+            <table style="width:25%;float:right;">
+                <tr>
+                    <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
+                    <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
+                </tr>   
+                <tr>
+                    <td style="font-size:14px;"><label class="control-label">Total Surcharge: </label></td>
+                    <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
+                </tr>   
+                <tr>
+                    <td style="font-size:14px;"><label class="control-label">Total Interest: </label></td>
+                    <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
+                </tr>   
+                <tr>
+                    <td style="font-size:14px;"><label class="control-label">Total Rebate: </label></td>
+                    <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
+                </tr>  
+                <tr>  
+
+                    <td style="font-size:14px;"><label>Total Amount to be Paid: </label></td>
+                    <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
+
+                    <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
+                </tr>
+                <tr>
+                    <td style="font-size:14px;">
+                        <button type="button" class="btn btn-success btn-s paid_btn" prop-id ="<?php $prop_id ?>" style="width:100%;">Save Payment</button>
+                    </td>
+                    <td>
+                        <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-print">Print Invoice</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
 	</div>
 </div>
+</form>
 <script>
-
-
 
 window.onload = check_paydate();
                             
@@ -989,6 +1645,7 @@ window.onload = check_paydate();
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
             check_paydate();
+
             
 
         });
@@ -999,6 +1656,7 @@ window.onload = check_paydate();
             
 
         });
+
 
 });
 
@@ -1119,9 +1777,6 @@ function check_paydate(){
         console.log(diffDays);
         console.log(l_rebate);
 
-
-    
-        
         const l_reb = l_rebate.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -1167,205 +1822,193 @@ function check_paydate(){
         $('#surcharge').val('0.0');
         $('#rebate_amt').val('0.0');
     }
+}
 
+function deleteRow(rowId) {
+    start_loader();
+    $.ajax({
+        url:_base_url_+'classes/Master.php?f=delete_invoice',
+        method:'POST',
+        data:{rowId: rowId},
+        dataType:"json",
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+            },
+        success:function(resp){
+            $('#' + rowId).remove();
+            
+            end_loader();
+            location.reload();
+            }
+        
+    });
+}  
+function CreditPrincipal() {
+    $('#status').val('Credit to Principal');
+    $('#surcharge').val('0.0');
+    $('#rebate_amt').val('0.0');
+    $('#tot_amount_due').val('0.0');
+    $('#amount_due').val('0.0');
+    const last_due_date = new Date($('.last-due').val());
+    const last_stat_count = $('.last-stat-count').val();
+    $('#status_count').val(last_stat_count);
+    $('.due-date').val(last_due_date.toISOString().substr(0, 10));
+}
 
-    }
+$(document).ready(function(){
 
+    $(document).on('click', ".credit-pri", function(e) {
+        e.preventDefault(); 
+        CreditPrincipal();
+    });
 
+    $('#save_payment').submit(function(e){
+        e.preventDefault();
+        var _this = $(this);
+        $('.err-msg').remove();
 
+            var statusValue = $("#status").val();
 
-
-
-
-   function deleteRow(rowId) {
+            var errorCounter = validateForm();
+            if (errorCounter > 0) {
+            alert_toast("It appear's you have forgotten to complete something!","warning");	  
+            return false;
+        }else{
+            $(".required").parent().removeClass("has-error")
+        }    
         start_loader();
-        $.ajax({
-            url:_base_url_+'classes/Master.php?f=delete_invoice',
-            method:'POST',
-            data:{rowId: rowId},
-            dataType:"json",
-            error:err=>{
-                console.log(err)
-                alert_toast("An error occured",'error');
-                end_loader();
+
+
+        function addPaymentForm() {
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=add_payment",
+                data: new FormData(_this[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error:err=>{
+                    console.log(err)
+                    alert_toast("An error occured",'error');
+                    end_loader();
                 },
+
             success:function(resp){
                                
                 $('#' + rowId).remove();
                 location.reload();
                 end_loader();
                 }
+
             
-        });
-    }  
-    function CreditPrincipal() {
-        $('#status').val('Credit to Principal');
-        $('#surcharge').val('0.0');
-        $('#rebate_amt').val('0.0');
-        $('#tot_amount_due').val('0.0');
-        $('#amount_due').val('0.0');
-        const last_due_date = new Date($('.last-due').val());
-        const last_stat_count = $('.last-stat-count').val();
-        $('#status_count').val(last_stat_count);
-        $('.due-date').val(last_due_date.toISOString().substr(0, 10));
-	}
-
-    $(document).ready(function(){
-  
-        $(document).on('click', ".credit-pri", function(e) {
-			e.preventDefault(); 
-		    CreditPrincipal();
-        });
-
-        $('#save_payment').submit(function(e){
-			e.preventDefault();
-            var _this = $(this);
-		 	$('.err-msg').remove();
-
-             var statusValue = $("#status").val();
-
-             var errorCounter = validateForm();
-             if (errorCounter > 0) {
-                alert_toast("It appear's you have forgotten to complete something!","warning");	  
-                return false;
-            }else{
-                $(".required").parent().removeClass("has-error")
-            }    
-            start_loader();
-
-
-            function addPaymentForm() {
-                $.ajax({
-                    url:_base_url_+"classes/Master.php?f=add_payment",
-                    data: new FormData(_this[0]),
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    method: 'POST',
-                    type: 'POST',
-                    dataType: 'json',
-                    error:err=>{
-                        console.log(err)
-                        alert_toast("An error occured",'error');
-                        end_loader();
-                    },
-                    success:function(resp){
-                        if(typeof resp =='object' && resp.status == 'success'){
-                            data = [resp['data']];
-                            $.each(data, function(index, payments) {
-                                compute(payments.excess);
-                                check_paydate();
-                                location.reload();
-                        });
-                
-                        end_loader();
-                        }else if(resp.status == 'failed' && !!resp.msg){
-                            var el = $('<div>')
-                                el.addClass("alert alert-danger err-msg").text(resp.msg)
-                                _this.prepend(el)
-                                el.show('slow')
-                                end_loader()
-                        }else{
-                            alert_toast("An error occured",'error');
-                            end_loader();
-                            console.log(resp)
-                        }
-                    }
-                })
-            }
-
-
-            function CreditPrincipalForm() {
-                $.ajax({
-                    url:_base_url_+"classes/Master.php?f=credit_principal",
-                    data: new FormData(_this[0]),
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    method: 'POST',
-                    type: 'POST',
-                    dataType: 'json',
-                    error:err=>{
-                        console.log(err)
-                        alert_toast("An error occured",'error');
-                        end_loader();
-                    },
-                    success:function(resp){
-                        if(typeof resp =='object' && resp.status == 'success'){
-                            data = [resp['data']];
-                            $.each(data, function(index, payments) {
-                                compute(payments.excess);
-                                location.reload();
-                        });
-                
-                        end_loader();
-                        }else if(resp.status == 'failed' && !!resp.msg){
-                            var el = $('<div>')
-                                el.addClass("alert alert-danger err-msg").text(resp.msg)
-                                _this.prepend(el)
-                                el.show('slow')
-                                end_loader()
-                        }else{
-                            alert_toast("An error occured",'error');
-                            end_loader();
-                            console.log(resp)
-                        }
-                    }
-                })
-            }
-            if (statusValue === "Credit to Principal") {
-                CreditPrincipalForm();
-            }else{
-               addPaymentForm();
-            }
-		})
-
-
-
-        $('.paid_btn').click(function(){
-            _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
-       
-         });
-
-        
-	});
-	
-    function payments(){
-        start_loader();
-        $.ajax({
-            url:_base_url_+'classes/Master.php?f=save_payment',
-            method:'POST',
-            data:{prop_id:'<?php echo $prop_id ?>'},
-            dataType:"json",
-            error:err=>{
-                console.log(err)
-                alert_toast("An error occured",'error');
-                end_loader();
-                },
-            success:function(resp){
-                if(typeof resp =='object' && resp.status == 'success'){
-                    location.reload();
-          
-                }else{
-                    alert_toast(resp.err,'error');
                     end_loader();
-                    console.log(resp)
+                    }else if(resp.status == 'failed' && !!resp.msg){
+                        var el = $('<div>')
+                            el.addClass("alert alert-danger err-msg").text(resp.msg)
+                            _this.prepend(el)
+                            el.show('slow')
+                            end_loader()
+                    }else{
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                        console.log(resp)
+                    }
                 }
-                }
-            
             })
-
         }
-    function compute(excess){
-        if (excess == -1){
-            excesspay = 0;
+
+
+        function CreditPrincipalForm() {
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=credit_principal",
+                data: new FormData(_this[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error:err=>{
+                    console.log(err)
+                    alert_toast("An error occured",'error');
+                    end_loader();
+                },
+                success:function(resp){
+                    if(typeof resp =='object' && resp.status == 'success'){
+                        data = [resp['data']];
+                        $.each(data, function(index, payments) {
+                            compute(payments.excess);
+                            location.reload();
+                    });
+            
+                    end_loader();
+                    }else if(resp.status == 'failed' && !!resp.msg){
+                        var el = $('<div>')
+                            el.addClass("alert alert-danger err-msg").text(resp.msg)
+                            _this.prepend(el)
+                            el.show('slow')
+                            end_loader()
+                    }else{
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                        console.log(resp)
+                    }
+                }
+            })
+        }
+        if (statusValue === "Credit to Principal") {
+            CreditPrincipalForm();
         }else{
-            excesspay = excess;
+            addPaymentForm();
         }
-        $('#amount_paid').val(excesspay.toFixed(2));  
-    }
+    })
 
-  
+
+
+$('.paid_btn').click(function(){
+    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+
+    });
+});
+	
+function payments(){
+    start_loader();
+    $.ajax({
+        url:_base_url_+'classes/Master.php?f=save_payment',
+        method:'POST',
+        data:{prop_id:'<?php echo $prop_id ?>'},
+        dataType:"json",
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+            },
+        success:function(resp){
+            if(typeof resp =='object' && resp.status == 'success'){
+                location.reload();
+        
+            }else{
+                alert_toast(resp.err,'error');
+                end_loader();
+                console.log(resp)
+            }
+            }
+        
+        })
+
+    }
+function compute(excess){
+    if (excess == -1){
+        excesspay = 0;
+    }else{
+        excesspay = excess;
+    }
+    $('#amount_paid').val(excesspay.toFixed(2));  
+}
 
 let btn = document.getElementById('overduebtn');
 let div = document.getElementById('overduediv');
@@ -1394,8 +2037,56 @@ function validateForm() {
 	    });
 		
 	    return errorCounter;
-
 	}
+    
+</script>
+<script>
+     $(document).ready(function(){
 
+$('#print_payment_func').submit(function(e){
+    e.preventDefault();
+    var _this = $(this)
+    $('.err-msg').remove();
+    start_loader();
+    $.ajax({
+        url:_base_url_+"classes/Master.php?f=print_payment_func",
+        data: new FormData($(this)[0]),
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        dataType: 'json',
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+        },
+        success:function(resp){
+            if(typeof resp =='object' && resp.status == 'success'){
+                var nw = window.open("./report/print_payment.php?id="+resp.id,"_blank","width=700,height=500")
+                    setTimeout(()=>{
+                        nw.print()
+                        setTimeout(()=>{
+                            nw.close()
+                            end_loader();
+                            location.replace('./?page=print_payment/print-payment-view&id='+resp.id_encrypt)
+                        },500)
+                    },500)
+            }else if(resp.status == 'failed' && !!resp.msg){
+                var el = $('<div>')
+                    el.addClass("alert alert-danger err-msg").text(resp.msg)
+                    _this.prepend(el)
+                    el.show('slow')
+                    end_loader()
+            }else{
+                alert_toast("An error occured",'error');
+                end_loader();
+                console.log(resp)
+            }
+        }
+    })
+})
 
+});
 </script>
