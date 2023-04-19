@@ -165,15 +165,24 @@ if(isset($_GET['id'])){
     
 
     <div class="row-xs-3"> 
-        <?php if ($cfo_stat == 0):?>
-            <button type="button"  class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
-        
-            <button type="button"  class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
-            
-            <button type="button"  class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
-        <?php endif;?>
-            <button type="button" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
-      
+        <table style="width:100%">
+            <tr>
+            <?php if ($cfo_stat == 0):?>
+                <td>
+                    <button type="button" style="width:100%" class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
+                </td>
+                <td>
+                    <button type="button" style="width:100%" class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
+                </td>
+                <td>
+                    <button type="button" style="width:100%" class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
+                </td>
+                <td>
+                    <?php endif;?>
+                    <button type="button" style="width:100%" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
+                </td>
+            </tr>
+        </table>
     </div>
 
 

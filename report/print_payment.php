@@ -1,13 +1,14 @@
-
-
 <?php require_once('../config.php'); ?>
 
 <!DOCTYPE html>
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
 </head>
 <!DOCTYPE html>
@@ -35,11 +36,11 @@
     } */
     body{
         font-family: 'Armata', sans-serif;
-        font-size:8px;
+        font-size:12px;
     }
     .or_box{
         font-family: 'Armata', sans-serif;
-        font-size:10px;
+        font-size:15px;
         background-color:black;
         color:white;
         float:right;
@@ -48,14 +49,14 @@
     }
     .or_address{
         font-family: 'Armata', sans-serif;
-        font-size:7.5px;
+        font-size:11px;
         font-weight:light!important;
         margin-top:10px;
         /* position:absolute; */
     }
     .comp_name{
         font-family: 'Armata', sans-serif;
-        font-size:14px;
+        font-size:18px;
         font-weight:bold;
         margin-top:0px;
         /* position:absolute; */
@@ -63,19 +64,14 @@
     }
     .cust_info{
         float:left;
-        background-color:gainsboro;
         width:100%;
     }
     .div_particulars{
         text-align:center;
     }
-    table tr td{
-        border: solid 1px black;
-    }
 @media print  
 { 
     @page {
-    size: A5;  
 
     /* this affects the margin in the printer settings */ 
     margin: 1mm;  
@@ -95,9 +91,9 @@
 	<input type="button" id="rep" value="Print" class="btn btn-info btn_print">
 </div> -->
     <div class="container_content" id="container_content">
-        <img src="../images/ALSC_BnW.jpg" style="height:75px;width:95px;float:left;margin-top:-10px;z-index:-1;margin-bottom:2px;margin-left:-5px;">
+        <img src="../images/ALSC_BnW.jpg" style="height:95px;width:115px;float:left;margin-top:-10px;z-index:-1;margin-bottom:2px;margin-left:-5px;">
         <div class="comp_name">ASIAN LAND STRATEGIES CORPORATION</div>
-        <div class="or_box">OFFICIAL RECEIPT</div>
+        <div class="or_box">INVOICE</div>
         <div class="or_address">
             <br>
             <br>
@@ -113,7 +109,7 @@
         <br><br>
         <div class="card-body" style="margin-top:-25px;">
             <div class="cust_info">
-                <table style="width:100%;">
+                <table style="width:100%;border:solid 1px black;">
                     <tr>
                         <td style="padding-right:5px;">
                             Received From: 
@@ -150,140 +146,152 @@
     <br>
     <br>
     <br>
-    <hr>
-    <div class="card-body" id="tables">
-        <!-- <table style="background-color:red;float:left;width:100%;">
-            <tr>
-                <td>
-                    <div class="div_particulars">PARTICULARS</div>
-                </td>
-            </tr>
-            <tr>
-            </tr>
-            <br>
-            <br>
-        </table> -->
-
-
-        <table style="background-color:gainsboro;float:left;width:100%;">
-        <thead>
-            <tr>
-            <th>Invoice ID#</th>
-            <th>Payment Amount</th>
-            <th>Pay Date</th>
-            <th>Due Date</th>
-            <th>OR #</th>
-            <th>Amount Due</th>
-            <th>Rebate</th>
-            <th>Surcharge</th>
-            <th>Interest</th>
-            <th>Principal</th>
-            <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php 
-            $i = 1;
-                $qry = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ");
-                while($row = $qry->fetch_assoc()):
-                    
-            ?>
-            <tr>
-            <td><?php echo $row["invoice_id"] ?></td>
-            <td><?php echo $row["payment_amount"] ?></td>
-            <td><?php echo $row["pay_date"] ?></td>
-            <td><?php echo $row["due_date"] ?></td>
-            <td><?php echo $row["or_no"] ?></td>
-            <td><?php echo $row["amount_due"] ?></td>
-            <td><?php echo $row["rebate"] ?></td>
-            <td><?php echo $row["surcharge"] ?></td>
-            <td><?php echo $row["interest"] ?></td>
-            <td><?php echo $row["principal"] ?></td>
-            <td><?php echo $row["status"] ?></td>
-            </tr>
-        <?php endwhile; ?>
-        </tbody></table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- <table style="background-color:blue;float:left;width:30%;">
-        <tr>
-            <td>
-                <div class="div_particulars">AMOUNT</div>
-            </td>
-            <td></td>
-        </tr>
-            <tr>
-                <td>Principal: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Interest: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Surcharge: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Others: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Amount Due: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Less: Rebate/ </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Discount: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Total Payment: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <td>VATABLE Sales: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>VAT Exempt Sales: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Zero Rated Sales: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>VAT Amount: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Total Sales: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>Less: EWT: </td><td style="background-color:gainsboro;"></td>
-            </tr>
-            <tr>
-                <td>NET SALES: </td><td style="background-color:gainsboro;">10,555.74</td>
-            </tr>
-        </table> -->
+    <br>
+    <div class="card-body" id="tables" style="float:left;width:100%;">
+        <table style="float:left;width:100%;text-align:center;">
+            <thead>
+                <tr>
+                    <th>DUE DATE</th>
+                    <th>PAY DATE</th>
+                    <th>OR No.</th>
+                    <th>PERIOD</th>
+                    <th>AMOUNT PAID</th>
+                    <th>REBATE</th>
+                    <th>SURCHARGE</th>
+                    <th>INTEREST</th>
+                    <th>PRINCIPAL</th>
+                    <th>BALANCE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    $i = 1;
+                        $qry = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ");
+                        while($row = $qry->fetch_assoc()):         
+                    ?>
+                    <tr>
+                    <td><?php echo $row["due_date"] ?></td>
+                    <td><?php echo $row["pay_date"] ?></td>
+                    <td><?php echo $row["or_no"] ?></td>
+                    <td><?php echo $row["status"] ?></td>
+                    <td><?php echo $row["payment_amount"] ?></td>
+                    <td><?php echo $row["rebate"] ?></td>
+                    <td><?php echo $row["surcharge"] ?></td>
+                    <td><?php echo $row["interest"] ?></td>
+                    <td><?php echo $row["principal"] ?></td>
+                    <td><?php echo $row["remaining_balance"] ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>  
     </div>
+    <br><br>
+    
+    <br><br>
+            <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
+
+            $result = mysqli_query($conn, $qry_prin);
+
+            // Check if the query was successful
+            if (mysqli_num_rows($result) > 0) {
+                // Fetch the result as an associative array
+                $row = mysqli_fetch_assoc($result);
+                // Get the sum value
+                $total_prin = $row["p_principal"];
+                // Display the sum value
+            } else {
+                echo "No results found.";
+            }
+            ?>
+            <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
+
+            $result = mysqli_query($conn, $qry_surcharge);
+
+            // Check if the query was successful
+            if (mysqli_num_rows($result) > 0) {
+                // Fetch the result as an associative array
+                $row = mysqli_fetch_assoc($result);
+                // Get the sum value
+                $total_surcharge = $row["p_surcharge"];
+                // Display the sum value
+            } else {
+                echo "No results found.";
+            }
+            ?>
+            <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
+
+            $result = mysqli_query($conn, $qry_interest);
+
+            // Check if the query was successful
+            if (mysqli_num_rows($result) > 0) {
+                // Fetch the result as an associative array
+                $row = mysqli_fetch_assoc($result);
+                // Get the sum value
+                $total_interest = $row["p_interest"];
+                // Display the sum value
+            } else {
+                echo "No results found.";
+            }
+            ?>
+            <?php $qry_rebate = "SELECT SUM(rebate) AS p_rebate FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
+
+            $result = mysqli_query($conn, $qry_rebate);
+
+            // Check if the query was successful
+            if (mysqli_num_rows($result) > 0) {
+                // Fetch the result as an associative array
+                $row = mysqli_fetch_assoc($result);
+                // Get the sum value
+                $total_rebate = $row["p_rebate"];
+                // Display the sum value
+            } else {
+                echo "No results found.";
+            }
+            ?>
+            <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM t_invoice where md5(property_id) = '{$_GET['id']}'";
+
+                $result = mysqli_query($conn, $qry_amt_due);
+
+                // Check if the query was successful
+                if (mysqli_num_rows($result) > 0) {
+                    // Fetch the result as an associative array
+                    $row = mysqli_fetch_assoc($result);
+                    // Get the sum value
+                    $total_amt_due = $row["p_amt_due"];
+
+                    $main_total = $total_amt_due + $total_interest + $total_surcharge + $total_prin;
+                    // Display the sum value
+                } else {
+                    echo "No results found.";
+                }
+                ?>
+                <br><br>
+        <table style="width:100%;background-color:#F8F8F8;border:solid 1px black;margin-top:10px;">
+            <tr>
+                <td style="width:10%;"><label class="control-label"><b>Total Principal: </b></label></td>
+                
+                <td style="width:10%;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>" style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;"></td>
+                <td style="width:10%;"><label class="control-label"><b>Total Rebate: </b></label></td>
+                <td style="width:10%;"><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>" style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;"></td>
+                <td style="width:10%;"><label class="control-label"><b>Total Surcharge: </b></label></td>
+                <td style="width:10%;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;"></td>
+                <td style="width:10%;"><label class="control-label"><b>Total Interest: </b></label></td>
+                <td style="width:10%;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;"></td>
+                <td style="width:10%;"><label class="control-label"><b>Total Amount Due: </b></label></td>
+                <td style="width:10%;"><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;"></td>
+            </tr>
+        </table>
 </div>
 </body>
 </html>
+<script type="text/javascript">
+	function PrintPage() {
+		window.print();
+	}
+	    document.loaded = function(){
+	}
+	window.addEventListener('DOMContentLoaded', (event) => {
+   		PrintPage()
+		setTimeout(function(){ window.close() },750)
+	});
+</script>
