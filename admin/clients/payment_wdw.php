@@ -763,20 +763,17 @@ if(isset($_GET['id'])){
         if ($last_acc_stat != ''){
             $acc_status = $last_acc_stat;
         }
-
-        //echo $acc_status;
-        //code start here 
-
-        
+     
         if($acc_status == 'Fully Paid'):
-            $amount_ent = '';
-            $amount_paid_ent = '';
-            $surcharge_ent = '';
-            $rebate_ent = '';
-            $total_amount_due_ent = '';
+            $amount_ent = 0.0;
+            $amount_paid_ent = 0.0;
+            $surcharge_ent = 0.0;
+            $rebate_ent = 0.0;
+            $total_amount_due_ent = 0.0;
             $due_date_ent = '';
             $payment_status_ent = '';
             
+           
         endif;
 
         if($retention == '1'):
@@ -1030,6 +1027,7 @@ if(isset($_GET['id'])){
                     $amount_paid_ent = (number_format($l_monthly,2));
                     $amount_ent = (number_format($l_monthly,2));
                     $total_amount_due_ent = (number_format($l_monthly,2));
+
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
                             $monthly_pay = $l_full_payment;
@@ -1049,6 +1047,7 @@ if(isset($_GET['id'])){
                     $amount_paid_ent = (number_format($monthly_pay,2));
                     $amount_ent = (number_format($monthly_pay,2));
                     $total_amount_due_ent = (number_format($monthly_pay,2));
+
                     if ($terms == $count || $l_fp_mode == 1) {
                             $l_status = 'FPD';
                             $l_full_payment = $last_payment['remaining_balance'];
@@ -1061,8 +1060,9 @@ if(isset($_GET['id'])){
                     }
                    
                 endif;
+                $payment_status_ent = $l_status	;
             endif;
-            $payment_status_ent = $l_status	;
+            
                 
         elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
                 $l_date = date('Y-m-d', strtotime($start_date));
@@ -1231,7 +1231,7 @@ if(isset($_GET['id'])){
                
         else:        
         
-            echo "Error";
+            echo '<script>alert("Error.");</script>';
             
         endif;
 
@@ -1383,11 +1383,15 @@ body{
             <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
             <br>
 
-            <input type="submit" name="submit" value="Add Payment" class="btn btn-primary" style="width:100%;">
-        <!--  <input type="submit" name="credit-pri" value="Credit to Principal" class="btn btn-success" style="width:100%;"> -->
-            <!-- <a href="#" class="btn btn-success btn-md credit-pri" onclick="creditPrincipal()">Credit to Principal</a>-->
-            <a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> 
-            <br>
+            <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:50%;">
+                <?php 
+                    if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
+                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> ';
+                    }
+                ?>
+            
+                <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a> 
+                <br>
             </form>
             <br>
         </div>
@@ -1417,47 +1421,52 @@ body{
                     </tr>
                 </thead>
                 <?php $qry4 = $conn->query("SELECT * FROM t_invoice where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
-                    if($qry4->num_rows <= 0){
-                    echo "<td class='text-center' style='font-size:13px;width:10%;'>  No Payment Record </td> ";
+                     $last_row = $qry4->num_rows - 1;
+                     $i = 0;
+                     if($qry4->num_rows <= 0){
+                        echo "<td class='text-center' style='font-size:13px;width:10%;'>  No Payment Record </td>";
+                        
+                     }else{  ?>      
+   
                     
-                    }else{  ?>      
+                    <tbody>
+                        <?php
+                        $total_rebate = 0;
+                        
+                        while($row= $qry4->fetch_assoc()): 
+                 
+                       /*    $property_id = $row["property_id"];
+                          $property_id_part1 = substr($property_id, 0, 2);
+                          $property_id_part2 = substr($property_id, 2, 6);
+                          $property_id_part3 = substr($property_id, 8, 5); */
 
-                
-                <tbody>
-                    <?php
-                    $total_rebate = 0;
-                    
-                    while($row= $qry4->fetch_assoc()): 
-                
-                    /*    $property_id = $row["property_id"];
-                        $property_id_part1 = substr($property_id, 0, 2);
-                        $property_id_part2 = substr($property_id, 2, 6);
-                        $property_id_part3 = substr($property_id, 8, 5); */
+                         /*  $payment_id = $row['payment_id']; */
+                          $due_dte = $row['due_date'];
+                          $pay_dte = $row['pay_date'];
+                          $or_no = $row['or_no'];
+                          $amt_paid = $row['payment_amount'];
+                          $amt_due = $row['amount_due'];
+                          $interest = $row['interest'];
+                          $principal = $row['principal'];
+                          $surcharge = $row['surcharge'];
+                          $rebate = $row['rebate'];
+                          $period = $row['status'];
+                          $balance = $row['remaining_balance'];
 
-                        /*  $payment_id = $row['payment_id']; */
-                        $due_dte = $row['due_date'];
-                        $pay_dte = $row['pay_date'];
-                        $or_no = $row['or_no'];
-                        $amt_paid = $row['payment_amount'];
-                        $amt_due = $row['amount_due'];
-                        $interest = $row['interest'];
-                        $principal = $row['principal'];
-                        $surcharge = $row['surcharge'];
-                        $rebate = $row['rebate'];
-                        $period = $row['status'];
-                        $balance = $row['remaining_balance'];
+                          $total_rebate += $rebate;
 
-                        $total_rebate += $rebate;
-
-                    
-                    
-                    echo "<tr id='{$row['invoice_id']}'>";
-
-                    // echo "<td style='font-size:13px;width:10%;text-align:center;'><button class='btn btn-secondary btn-sm' style='' onclick='deleteRow({$row['invoice_id']})'>Delete</button></td>";
-
-                    echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
-            
-                //echo "<td style='font-size:13px;width:10%;text-align:center;'>{$row['invoice_id']}</td>";
+                      
+                      
+                      echo "<tr id='{$row['invoice_id']}'>";
+               
+                      if ($i == $last_row){
+                            echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
+                      
+                      }else{
+                        echo "<td class='text-center'><span class='badge badge-success'>Added</span></td>";
+                      
+                      }
+                      $i++;
                     ?>
                         
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
@@ -1540,15 +1549,39 @@ body{
 <script>
 
 window.onload = check_paydate();
-
+                            
    $(document).ready(function() {
 
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
             check_paydate();
-        
+
+            
+
         });
+
+        $(document).on('keyup', ".amt-paid", function(e) {
+            e.preventDefault(); 
+            input_to_money();
+            
+
+        });
+
+
 });
+
+function input_to_money(){
+    const amount = $('.amt-paid').val();
+    
+    const money = amount.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+    });
+
+
+    $('#amount_paid').val(money);
+
+}
 
 function check_paydate(){
 
