@@ -1,4 +1,8 @@
  <?php    
+
+
+$getID = $_GET['id'];
+if(isset($_GET['id'])){
     $account_info = [];
     $last_payment = [];
     $payment_rec = [];
@@ -118,19 +122,20 @@
         }
      
         if($acc_status == 'Fully Paid'):
+            $l_date = $last_due;
+            $due_date_ent = $l_date;
             $amount_ent = 0.0;
             $amount_paid_ent = 0.0;
             $surcharge_ent = 0.0;
             $rebate_ent = 0.0;
             $total_amount_due_ent = 0.0;
-            $due_date_ent = '';
             $payment_status_ent = '';
             
-           
+            
         endif;
 
         if($retention == '1'):
-            $l_date = $last_pay_date;
+            $l_date = $last_due;
             $amount_ent = '0.00';
             $amount_paid_ent = number_format($last_payment['remaining_balance'],2);
             $surcharge_ent = '0.00';
@@ -587,9 +592,12 @@
         else:        
         
             echo '<script>alert("Error.");</script>';
+
+          
             
         endif;
 
     endwhile;
 
+}
 ?>

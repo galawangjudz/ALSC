@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php require ('../config.php'); ?>
 <?php include "../inc/header.php" ?>
+<?php include '../admin/clients/common.php'; ?>
 <head>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
@@ -180,8 +181,6 @@
                             
                                     <?php 
                                     include '../admin/clients/payment_schedule.php';
-                                    //include '../admin/clients/payment_record.php';
-                                    //include 'payment_record.php';
                                     $id = $_GET['id'];
                                     $pay_date = $_GET['date'];     
                                     $all_payments = load_data($id, $pay_date);

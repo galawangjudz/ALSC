@@ -1,17 +1,19 @@
 
 <?php 
-    include 'common.php';
-
-
-// include '../../config.php';
+include 'common.php';
 
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+
 <?php
-   include('overdue_reload.php');
+
+if(isset($_GET['id'])){
+    include('payment_reload.php');
+}
+
 ?>
 
 <body onload="">
@@ -24,32 +26,31 @@ if($_settings->chk_flashdata('success')): ?>
         </button><h3 class="card-title" style="float:right;padding-top:15px;"><b>VIEW/HIDE OVERDUE DETAILS&nbsp;&nbsp;&nbsp;</b></h3><br>
     </div>
 </div>
-<div class="card card-outline rounded-0 card-maroon">
+
     <!-- <div class="card-header">
         <h3 class="card-title"><b>Property ID #: <i><?php echo $prop_id ?></i> </b></h3>
     </div> -->
     <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
-    <div class="top_table">   
-        <div id='overduediv'>
-            <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
-                <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
-                <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
-            </form>
-        <?php include 'over_due_details2.php'; ?>
+    <div class="top_table"> 
+        <div id='overduediv' style="display:none;">
+            <div class="card card-outline rounded-0 card-maroon"> 
+                <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
+                    <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
+                    <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
+                </form>
+            <?php include 'over_due_details.php'; ?>
+            </div>
+        </div>
     </div>
-
 </body>
 
-<?php
+<style>
 
-if(isset($_GET['id'])){
-    include('payment_reload.php');
+.not-clickable {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
-?>
-
-
-<style>
 .divBtnOverdue{
     height:50px;
     width:103%!important;
@@ -125,50 +126,71 @@ body{
 	<div class="card-body">
         <div class="container-fluid">
         <h3 class="card-title"><b>TRANSACTION</b></h3>
-        <br><hr style="height:1px;border-width:0;color:gray;background-color:gray"><br>
-        <form action="" method="POST" id="save_payment">
-            <table class="table2 table-bordered table-stripped" style="width:100%;">
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;" readonly></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_option">Account Option:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td><td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="payment_type1">Payment Type 1:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td><td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td><td style="width:25%;padding-left:10px;"><label for="payment_type2">Payment Type 2:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
-                </tr>
-            </table>
-            <hr>
+            <br><hr style="height:1px;border-width:0;color:gray;background-color:gray"><br>
+                <form action="" method="POST" id="save_payment">
+                    <table class="table2 table-bordered table-stripped" style="width:100%;">
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_status">Account Status:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;" readonly></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_option">Account Option:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td>
+                            <td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="payment_type1">Payment Type 1:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td>
+                            <td style="width:25%;padding-left:10px;"><label for="payment_type2">Payment Type 2:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
+                        </tr>
+                    </table>
+                    <br>
 
 
-            <table class="table2 table-bordered table-stripped" style="width:100%;">
-                <?php 
+                    <table class="table2 table-bordered table-stripped" style="width:100%;">
+                        
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="pay_date">Pay Date:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="rebate">Rebate:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                        </tr>
+
+                    </table>
+            
+            <?php 
                     //echo $last_excess ;
                     if ($last_excess != -1 && $last_excess != 0){
-                        $amount_paid_ent = $last_excess;
+                        $amount_paid_ent = number_format($last_excess,2,'.',',');
                         $or_ent = $last_or_ent;
                         $pay_date_ent = $last_pay_ent;
                     }
                 
                     ?>
 
-                <tr>
-
-                    <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
-                    <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
-                    <td style="width:25%;font-size:14px;padding-left:10px;"><label for="pay_date">Pay Date:</label></td>
-                    <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
-                </tr>
-            </table>
+        
             <br>
             <table class="table2 table-bordered table-stripped" style="width:100%;">
                 <tr>
@@ -192,20 +214,32 @@ body{
             <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
             <br>
 
-            <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:50%;">
+            <?php 
+                if ($acc_status == 'Fully Paid'){
+                    echo ' <input type="submit" name="submit" value="Add to List &#43;" class="btn btn-secondary not-clickable" disabled style="width:50%;">';
+                  
+                }else{
+                    echo '<input type="submit" name="submit" value="Add to List &#43;" class="btn btn-info" style="width:50%;">';
+                    
+
+                       }
+
+
+            ?>
                 <?php 
                     if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
-                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> ';
+                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal <i class="fa fa-wallet"></i></a> ';
                     }
                 ?>
-            
-                <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a> 
+                <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+                <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all">Delete All <i class='fa fa-trash'></i></a> 
                 <br>
             </form>
             <br>
         </div>
     </div>
 </div>
+
 <form method="post" id="print_payment_func">
 <div class="card card-outline rounded-0 card-maroon"> 
     <div class="card-body">
@@ -272,14 +306,14 @@ body{
                             echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                       
                       }else{
-                        echo "<td class='text-center'><span class='badge badge-success'>Added</span></td>";
+                        echo "<td class='text-center'><span class='badge badge-info'>Added</span></td>";
                       
                       }
                       $i++;
                     ?>
                         
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo date('m/d/Y', strtotime($due_dte)); ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo  date('m/d/Y', strtotime($pay_date)); ?> </td> 
                     <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                     <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
@@ -318,7 +352,7 @@ body{
                 $result_rebate = mysqli_query($conn, $sql_rebate);
                 $row_rebate = mysqli_fetch_assoc($result_rebate);
             ?>
-            <table style="width:25%;float:right;">
+            <table style="width:30%;float:right;">
                 <tr>
                     <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
                     <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
@@ -344,10 +378,10 @@ body{
                 </tr>
                 <tr>
                     <td style="font-size:14px;">
-                        <button type="button" class="btn btn-success btn-s paid_btn" prop-id ="<?php $prop_id ?>" style="width:100%;">Save Payment</button>
+                        <button type="button" class="btn btn-primary btn-s paid_btn" prop-id ="<?php $prop_id ?>" style="width:100%;">Save Payment <i class='fa fa-save'></i></button>
                     </td>
                     <td>
-                        <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-print">Print Invoice</span></a>
+                        <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;">Print Invoice  <i class='fa fa-print'></i></a>
                     </td>
                 </tr>
             </table>
@@ -355,7 +389,9 @@ body{
 	</div>
 </div>
 </form>
+
 <script>
+
 
 window.onload = check_paydate();
                             
@@ -364,33 +400,35 @@ window.onload = check_paydate();
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
             check_paydate();
-
-            
-
         });
 
-        $(document).on('keyup', ".amt-paid", function(e) {
+        $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
-            input_to_money();
-            
-
+            let amount = $('.amt-paid').val();
+            amount = amount.replace(",", "");
+            if (isNaN(amount)) {
+                alert("Please enter a number!");
+                $('#amount_paid').val(0);
+            }else{
+                const formattedAmount = formatCurrency(amount);   
+                $('#amount_paid').val(formattedAmount);
+            }
         });
 
 
 });
 
-function input_to_money(){
-    const amount = $('.amt-paid').val();
-    
-    const money = amount.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-    });
 
+function formatCurrency(amount) {
+    const formatter = new Intl.NumberFormat('en-PH', {
+    style: 'decimal',
+    currency: 'PHP',
+    minimumFractionDigits: 2
+  });
 
-    $('#amount_paid').val(money);
-
+  return formatter.format(amount);
 }
+
 
 function check_paydate(){
 
@@ -434,7 +472,7 @@ function check_paydate(){
         });
         //console.log(tot_amt_due);
         $('#surcharge').val(l_surcharge);
-        $('#rebate_amt').val('0.0');
+        $('#rebate_amt').val('0.00');
         $('#tot_amount_due').val(total_amt_due);
         if (last_excess == -1 || last_excess <= 0){
             $('#amount_paid').val(total_amt_due);
@@ -501,7 +539,7 @@ function check_paydate(){
         maximumFractionDigits: 2
         });
 
-
+        $('#surcharge').val(0);
         $('#rebate_amt').val(l_reb);
 
         l_monthly = (monthly_pay - l_rebate);
@@ -576,12 +614,119 @@ function CreditPrincipal() {
     $('.due-date').val(last_due_date.toISOString().substr(0, 10));
 }
 
+
+function DeleteAll() {
+    start_loader();
+    $.ajax({
+        url:_base_url_+'classes/Master.php?f=delete_all_invoice',
+        method:'POST',
+        data:{prop_id:'<?php echo $prop_id ?>'},
+        dataType:"json",
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+            },
+        success:function(resp){
+            if(typeof resp =='object' && resp.status == 'success'){
+                location.reload();
+        
+            }else{
+                alert_toast(resp.err,'error');
+                end_loader();
+                console.log(resp)
+            }
+            }
+        
+        })
+
+}
+
+	
+function payments(){
+    start_loader();
+    $.ajax({
+        url:_base_url_+'classes/Master.php?f=save_payment',
+        method:'POST',
+        data:{prop_id:'<?php echo $prop_id ?>'},
+        dataType:"json",
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+            },
+        success:function(resp){
+            if(typeof resp =='object' && resp.status == 'success'){
+                location.reload();
+        
+            }else{
+                alert_toast(resp.err,'error');
+                end_loader();
+                console.log(resp)
+            }
+            }
+        
+        })
+
+    }
+function compute(excess){
+    if (excess == -1){
+        excesspay = 0;
+    }else{
+        excesspay = excess;
+    }
+    $('#amount_paid').val(excesspay.toFixed(2));  
+}
+
+let btn = document.getElementById('overduebtn');
+let div = document.getElementById('overduediv');
+
+btn.addEventListener('click',()=>{
+   
+    if(div.style.display==='none'){
+        div.style.display='block';
+
+       
+    }else{
+        div.style.display='none';
+    }
+})
+function validateForm() {
+	    // error handling
+	    var errorCounter = 0;
+
+	    $(".required").each(function(i, obj) {
+
+	        if($(this).val() === ''){
+	            $(this).parent().addClass("has-error");
+	            errorCounter++;
+	        } else{ 
+	            $(this).parent().removeClass("has-error"); 
+	        }
+
+	    });
+		
+	    return errorCounter;
+	}
+    
+
 $(document).ready(function(){
 
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 
         CreditPrincipal();
     });
+
+    $('.delete-all').click(function(){
+        _conf("Are you sure you want to delete all? ","DeleteAll");
+
+    });
+
+    $('.paid_btn').click(function(){
+    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+
+    });
+
 
     $('#save_payment').submit(function(e){
         e.preventDefault();
@@ -688,76 +833,9 @@ $(document).ready(function(){
 
 
 
-$('.paid_btn').click(function(){
-    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
 
-    });
 });
-	
-function payments(){
-    start_loader();
-    $.ajax({
-        url:_base_url_+'classes/Master.php?f=save_payment',
-        method:'POST',
-        data:{prop_id:'<?php echo $prop_id ?>'},
-        dataType:"json",
-        error:err=>{
-            console.log(err)
-            alert_toast("An error occured",'error');
-            end_loader();
-            },
-        success:function(resp){
-            if(typeof resp =='object' && resp.status == 'success'){
-                location.reload();
-        
-            }else{
-                alert_toast(resp.err,'error');
-                end_loader();
-                console.log(resp)
-            }
-            }
-        
-        })
 
-    }
-function compute(excess){
-    if (excess == -1){
-        excesspay = 0;
-    }else{
-        excesspay = excess;
-    }
-    $('#amount_paid').val(excesspay.toFixed(2));  
-}
-
-let btn = document.getElementById('overduebtn');
-let div = document.getElementById('overduediv');
-
-btn.addEventListener('click',()=>{
-    if(div.style.display==='none'){
-        div.style.display='block';
-
-    }else{
-        div.style.display='none';
-    }
-})
-function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
-
-	    $(".required").each(function(i, obj) {
-
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
-	        }
-
-	    });
-		
-	    return errorCounter;
-	}
-    
 </script>
 <script>
      $(document).ready(function(){

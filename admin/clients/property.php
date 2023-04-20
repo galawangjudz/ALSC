@@ -126,7 +126,6 @@ body{
         <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
         <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
         <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
-        <li class="tab-link" data-tab="tab-5"><b>Payment Overdue</b></li>
        <!--  <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li> -->
         </ul>
 
@@ -393,7 +392,7 @@ body{
           
               <?php
                       
-                include 'payment_record.php'; 
+                include 'payment_schedule_to_fpd.php'; 
                 $id = $_GET['id'];
                 $all_payments = load_data($id); 
                 $over_due    = $all_payments[0];
@@ -468,15 +467,7 @@ body{
                 </div>
             </div>               
             </div>
-            <div id="tab-5" class="tab-content" style="border:solid 1px gainsboro;">
-                <form method="" id="set-paydate">
-                    <label class="control-label">Pay Date: </label>
-                    <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo date('Y-m-d'); ?>">
-                    <label class="control-label">Amount paid: </label>
-                    <input type="text" name="amount_paid_input" id="amount_paid_input" value="0">
-                    <button type="button" class="btn btn-primary set_pay_date_button" data-amt-paid="" data-date="" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Set Paydate </span></button> 
-                </form>
-            </div>           
+           
          </div>
         </div>
     </div>
@@ -511,16 +502,6 @@ $(document).ready(function() {
 	})
 
 
-  $('.set_pay_date_button').click(function(){
-		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
-    var payDateInput = document.getElementById("pay_date_input");
-    var payAmountInput = document.getElementById("amount_paid_input");
-    var setPayDateButton = document.querySelector(".set_pay_date_button");  
-    setPayDateButton.setAttribute("data-date", payDateInput.value);
-    setPayDateButton.setAttribute("data-amount", payAmountInput.value);
-	  uni_modal_right("<i class='fa fa-plus'></i> Overdue",'clients/over_due_details.php?id='+$(this).attr('data-id')+"&paydate="+$(this).attr('data-date')+"&payamt="+$(this).attr('data-amount'),"large")
-
-	})
 
   $('#data-table').dataTable({
 

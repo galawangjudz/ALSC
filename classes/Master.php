@@ -1926,7 +1926,7 @@ Class Master extends DBConnection {
 					if ($last_interest < $l_interest) {
 						$interest = $l_interest - $last_interest;
 						if ($rebate != 0) {
-							$principal = $monthly_pay - $interest - atof($rebate);
+							$principal = $monthly_pay - $interest - $rebate;
 						} else {
 							$principal = $monthly_pay - $interest;
 						}
@@ -2027,6 +2027,20 @@ Class Master extends DBConnection {
 		return json_encode($resp);	
 	}
 
+	function delete_all_invoice(){
+		extract($_POST);
+
+		$del_all = $this->conn->query("DELETE FROM t_invoice where property_id = ".$prop_id);
+		if($del_all){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"All Invoice successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$del}]";
+		}
+		return json_encode($resp);	
+	}
+
 
 	function credit_principal(){
 		extract($_POST);
@@ -2037,18 +2051,21 @@ Class Master extends DBConnection {
 		$rebate = (float) str_replace(",", "", $rebate_amt);
 		$surcharge = 0;
 		$interest = 0;
+	
+
+
 		if ($status == 'Credit to Principal'){
 			$status = 'C PRIN';
 		}
 
-		$l_status = '';
+		//$l_status = '';
 		if ($balance <= 0 ){
 			$status = 'FPD/' + $status;
-			$l_status = 'Fully Paid';
+			$acc_status = 'Fully Paid';
 			}
 
-		$total_amt_paid = $balance + $rebate;
-		$principal = $balance - $total_amt_paid;
+		$principal = $amount_paid + $rebate;
+		$balance = $balance - $principal;
 		$status_count = $status_count ;
 		$payment_count = $payment_count + 1;
 
@@ -2069,7 +2086,8 @@ Class Master extends DBConnection {
 		$data .= ", status_count = '$status_count' ";
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
-		$data .= ", account_status = '$l_status' ";
+		$data .= ", account_status = '$acc_status' ";
+		
 
 		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 
@@ -2200,6 +2218,10 @@ switch ($action) {
 
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
+	break;
+
+	case 'delete_all_invoice':
+		echo $Master->delete_all_invoice();
 	break;
 
 	case 'credit_principal':
