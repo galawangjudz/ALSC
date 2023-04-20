@@ -2027,6 +2027,20 @@ Class Master extends DBConnection {
 		return json_encode($resp);	
 	}
 
+	function delete_all_invoice(){
+		extract($_POST);
+
+		$del_all = $this->conn->query("DELETE FROM t_invoice where property_id = ".$prop_id);
+		if($del_all){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"All Invoice successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$del}]";
+		}
+		return json_encode($resp);	
+	}
+
 
 	function credit_principal(){
 		extract($_POST);
@@ -2200,6 +2214,10 @@ switch ($action) {
 
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
+	break;
+
+	case 'delete_all_invoice':
+		echo $Master->delete_all_invoice();
 	break;
 
 	case 'credit_principal':

@@ -1,5 +1,7 @@
 
 <?php
+    
+
     function load_data($id,$pay_date){
             $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
             if (!$conn) {
@@ -769,6 +771,7 @@
              
                 //$l_new_date = date('Y-m-d',strtotime($l_new_due_date_val));
                 /* $l_due_date_value =  new Datetime(auto_date($last_day,$l_date));   */
+                //include 'common.php';
                 $l_due_date_value =  new Datetime(auto_date($last_day,$l_last_due_date));  
                 //$l_due_date_val = add($l_last_due_date, 1);
                 $l_due_date_val = $l_due_date_value->format('Y-m-d');

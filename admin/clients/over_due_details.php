@@ -1,5 +1,6 @@
 <?php 
 // include '../../config.php';
+//include 'common.php';
 include 'payment_schedule.php';
 
 if($_settings->chk_flashdata('success')): ?>

@@ -26,20 +26,22 @@ if(isset($_GET['id'])){
         </button><h3 class="card-title" style="float:right;padding-top:15px;"><b>VIEW/HIDE OVERDUE DETAILS&nbsp;&nbsp;&nbsp;</b></h3><br>
     </div>
 </div>
-<div class="card card-outline rounded-0 card-maroon">
+
     <!-- <div class="card-header">
         <h3 class="card-title"><b>Property ID #: <i><?php echo $prop_id ?></i> </b></h3>
     </div> -->
     <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
-    <div class="top_table">   
+    <div class="top_table"> 
         <div id='overduediv'>
-            <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
-                <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
-                <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
-            </form>
-        <?php include 'over_due_details2.php'; ?>
+            <div class="card card-outline rounded-0 card-maroon"> 
+                <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
+                    <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
+                    <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
+                </form>
+            <?php include 'over_due_details.php'; ?>
+            </div>
+        </div>
     </div>
-
 </body>
 
 <style>
@@ -147,7 +149,7 @@ body{
                 <?php 
                     //echo $last_excess ;
                     if ($last_excess != -1 && $last_excess != 0){
-                        $amount_paid_ent = $last_excess;
+                        $amount_paid_ent = number_format($last_excess,2,'.',',');
                         $or_ent = $last_or_ent;
                         $pay_date_ent = $last_pay_ent;
                     }
@@ -193,24 +195,23 @@ body{
 
             <?php 
                 if ($acc_status == 'Fully Paid'){
-                    echo ' <input type="submit" name="submit" value="Add" class="btn btn-primary not-clickable" disabled style="width:50%;">';
-
+                    echo ' <input type="submit" name="submit" value="Add to List &#43;" class="btn btn-secondary not-clickable" disabled style="width:50%;">';
+                  
                 }else{
-                    echo '<input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:50%;">';
-                }
+                    echo '<input type="submit" name="submit" value="Add to List &#43;" class="btn btn-info" style="width:50%;">';
+                    
+
+                       }
 
 
             ?>
-
-
-           
                 <?php 
                     if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
-                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> ';
+                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal <i class="fa fa-wallet"></i></a> ';
                     }
                 ?>
-            
-                <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a> 
+                <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+                <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all">Delete All <i class='fa fa-trash'></i></a> 
                 <br>
             </form>
             <br>
@@ -283,7 +284,7 @@ body{
                             echo "<td style='font-size:13px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                       
                       }else{
-                        echo "<td class='text-center'><span class='badge badge-success'>Added</span></td>";
+                        echo "<td class='text-center'><span class='badge badge-info'>Added</span></td>";
                       
                       }
                       $i++;
@@ -329,7 +330,7 @@ body{
                 $result_rebate = mysqli_query($conn, $sql_rebate);
                 $row_rebate = mysqli_fetch_assoc($result_rebate);
             ?>
-            <table style="width:25%;float:right;">
+            <table style="width:30%;float:right;">
                 <tr>
                     <td style="font-size:14px;"><label class="control-label">Total Principal: </label></td>
                     <td style="font-size:14px;"><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;" disabled></td>
@@ -355,10 +356,10 @@ body{
                 </tr>
                 <tr>
                     <td style="font-size:14px;">
-                        <button type="button" class="btn btn-success btn-s paid_btn" prop-id ="<?php $prop_id ?>" style="width:100%;">Save Payment</button>
+                        <button type="button" class="btn btn-primary btn-s paid_btn" prop-id ="<?php $prop_id ?>" style="width:100%;">Save Payment <i class='fa fa-save'></i></button>
                     </td>
                     <td>
-                        <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-print">Print Invoice</span></a>
+                        <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;">Print Invoice  <i class='fa fa-print'></i></a>
                     </td>
                 </tr>
             </table>
@@ -368,6 +369,7 @@ body{
 </form>
 <script>
 
+
 window.onload = check_paydate();
                             
    $(document).ready(function() {
@@ -375,33 +377,29 @@ window.onload = check_paydate();
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
             check_paydate();
-
-            
-
         });
 
-        $(document).on('keyup', ".amt-paid", function(e) {
+        $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
-            input_to_money();
-            
-
+            const amount = $('.amt-paid').val();
+            const formattedAmount = formatCurrency(amount);   
+            $('#amount_paid').val(formattedAmount);
         });
 
 
 });
 
-function input_to_money(){
-    const amount = $('.amt-paid').val();
-    
-    const money = amount.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-    });
 
+function formatCurrency(amount) {
+    const formatter = new Intl.NumberFormat('en-PH', {
+    style: 'decimal',
+    currency: 'PHP',
+    minimumFractionDigits: 2
+  });
 
-    $('#amount_paid').val(money);
-
+  return formatter.format(amount);
 }
+
 
 function check_paydate(){
 
@@ -587,12 +585,117 @@ function CreditPrincipal() {
     $('.due-date').val(last_due_date.toISOString().substr(0, 10));
 }
 
+
+function DeleteAll() {
+    start_loader();
+    $.ajax({
+        url:_base_url_+'classes/Master.php?f=delete_all_invoice',
+        method:'POST',
+        data:{prop_id:'<?php echo $prop_id ?>'},
+        dataType:"json",
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+            },
+        success:function(resp){
+            if(typeof resp =='object' && resp.status == 'success'){
+                location.reload();
+        
+            }else{
+                alert_toast(resp.err,'error');
+                end_loader();
+                console.log(resp)
+            }
+            }
+        
+        })
+
+}
+
+	
+function payments(){
+    start_loader();
+    $.ajax({
+        url:_base_url_+'classes/Master.php?f=save_payment',
+        method:'POST',
+        data:{prop_id:'<?php echo $prop_id ?>'},
+        dataType:"json",
+        error:err=>{
+            console.log(err)
+            alert_toast("An error occured",'error');
+            end_loader();
+            },
+        success:function(resp){
+            if(typeof resp =='object' && resp.status == 'success'){
+                location.reload();
+        
+            }else{
+                alert_toast(resp.err,'error');
+                end_loader();
+                console.log(resp)
+            }
+            }
+        
+        })
+
+    }
+function compute(excess){
+    if (excess == -1){
+        excesspay = 0;
+    }else{
+        excesspay = excess;
+    }
+    $('#amount_paid').val(excesspay.toFixed(2));  
+}
+
+let btn = document.getElementById('overduebtn');
+let div = document.getElementById('overduediv');
+
+btn.addEventListener('click',()=>{
+    if(div.style.display==='none'){
+        div.style.display='block';
+
+    }else{
+        div.style.display='none';
+    }
+})
+function validateForm() {
+	    // error handling
+	    var errorCounter = 0;
+
+	    $(".required").each(function(i, obj) {
+
+	        if($(this).val() === ''){
+	            $(this).parent().addClass("has-error");
+	            errorCounter++;
+	        } else{ 
+	            $(this).parent().removeClass("has-error"); 
+	        }
+
+	    });
+		
+	    return errorCounter;
+	}
+    
+
 $(document).ready(function(){
 
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 
         CreditPrincipal();
     });
+
+    $('.delete-all').click(function(){
+        _conf("Are you sure you want to delete all? ","DeleteAll");
+
+    });
+
+    $('.paid_btn').click(function(){
+    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+
+    });
+
 
     $('#save_payment').submit(function(e){
         e.preventDefault();
@@ -699,76 +802,9 @@ $(document).ready(function(){
 
 
 
-$('.paid_btn').click(function(){
-    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
 
-    });
 });
-	
-function payments(){
-    start_loader();
-    $.ajax({
-        url:_base_url_+'classes/Master.php?f=save_payment',
-        method:'POST',
-        data:{prop_id:'<?php echo $prop_id ?>'},
-        dataType:"json",
-        error:err=>{
-            console.log(err)
-            alert_toast("An error occured",'error');
-            end_loader();
-            },
-        success:function(resp){
-            if(typeof resp =='object' && resp.status == 'success'){
-                location.reload();
-        
-            }else{
-                alert_toast(resp.err,'error');
-                end_loader();
-                console.log(resp)
-            }
-            }
-        
-        })
 
-    }
-function compute(excess){
-    if (excess == -1){
-        excesspay = 0;
-    }else{
-        excesspay = excess;
-    }
-    $('#amount_paid').val(excesspay.toFixed(2));  
-}
-
-let btn = document.getElementById('overduebtn');
-let div = document.getElementById('overduediv');
-
-btn.addEventListener('click',()=>{
-    if(div.style.display==='none'){
-        div.style.display='block';
-
-    }else{
-        div.style.display='none';
-    }
-})
-function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
-
-	    $(".required").each(function(i, obj) {
-
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
-	        }
-
-	    });
-		
-	    return errorCounter;
-	}
-    
 </script>
 <script>
      $(document).ready(function(){
