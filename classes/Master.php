@@ -1926,7 +1926,7 @@ Class Master extends DBConnection {
 					if ($last_interest < $l_interest) {
 						$interest = $l_interest - $last_interest;
 						if ($rebate != 0) {
-							$principal = $monthly_pay - $interest - atof($rebate);
+							$principal = $monthly_pay - $interest - $rebate;
 						} else {
 							$principal = $monthly_pay - $interest;
 						}
@@ -2051,18 +2051,21 @@ Class Master extends DBConnection {
 		$rebate = (float) str_replace(",", "", $rebate_amt);
 		$surcharge = 0;
 		$interest = 0;
+	
+
+
 		if ($status == 'Credit to Principal'){
 			$status = 'C PRIN';
 		}
 
-		$l_status = '';
+		//$l_status = '';
 		if ($balance <= 0 ){
 			$status = 'FPD/' + $status;
-			$l_status = 'Fully Paid';
+			$acc_status = 'Fully Paid';
 			}
 
-		$total_amt_paid = $balance + $rebate;
-		$principal = $balance - $total_amt_paid;
+		$principal = $amount_paid + $rebate;
+		$balance = $balance - $principal;
 		$status_count = $status_count ;
 		$payment_count = $payment_count + 1;
 
@@ -2083,7 +2086,8 @@ Class Master extends DBConnection {
 		$data .= ", status_count = '$status_count' ";
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
-		$data .= ", account_status = '$l_status' ";
+		$data .= ", account_status = '$acc_status' ";
+		
 
 		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 

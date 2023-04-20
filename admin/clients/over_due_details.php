@@ -121,17 +121,18 @@ $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pa
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[1] ?></td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $l_data[2] ?> </td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[3] ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[4]) ?></td> 
-                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td>  -->
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[5]) ?></td> 
-                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td>  -->
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[6]) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[7]) ?></td>  
-                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?></td> -->
+                       <!--  <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[4]) ?></td>  -->
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td> 
+                       <!--  <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[5]) ?></td>  -->
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td> 
+                       <!--  <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[6]) ?> </td>  -->
+                       <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[6] ?> </td>  
+                       <!--  <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[7]) ?></td>   -->
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?></td>
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[8]) ?></td>  
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[9] ?></td>  
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[10]) ?></td>  
-                        <!-- <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[10] ?> </td>   -->
+                     <!--    <td class="text-center" style="font-size:13px;width:15%;"><?php echo str_replace(",", "",$l_data[10]) ?></td>  --> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[10] ?> </td>  
                         </tr>
                         <?php endforeach; ?>
                 </tbody>

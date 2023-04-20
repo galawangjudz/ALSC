@@ -32,7 +32,7 @@ if(isset($_GET['id'])){
     </div> -->
     <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
     <div class="top_table"> 
-        <div id='overduediv'>
+        <div id='overduediv' style="display:none;">
             <div class="card card-outline rounded-0 card-maroon"> 
                 <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
@@ -126,27 +126,61 @@ body{
 	<div class="card-body">
         <div class="container-fluid">
         <h3 class="card-title"><b>TRANSACTION</b></h3>
-        <br><hr style="height:1px;border-width:0;color:gray;background-color:gray"><br>
-        <form action="" method="POST" id="save_payment">
-            <table class="table2 table-bordered table-stripped" style="width:100%;">
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_status">Account Status:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;" readonly></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td><td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_option">Account Option:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td><td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="payment_type1">Payment Type 1:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td><td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td><td style="width:25%;padding-left:10px;"><label for="payment_type2">Payment Type 2:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
-                </tr>
-            </table>
-            <hr>
+            <br><hr style="height:1px;border-width:0;color:gray;background-color:gray"><br>
+                <form action="" method="POST" id="save_payment">
+                    <table class="table2 table-bordered table-stripped" style="width:100%;">
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="prop_id">Property ID:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_status">Account Status:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;" readonly></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="acc_type1">Account Type1:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="acc_option">Account Option:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="acc_type2">Account Type2:</label></td>
+                            <td style="width:25%;font-size:14px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="payment_type1">Payment Type 1:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="date_of_sale">Date of Sale:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td>
+                            <td style="width:25%;padding-left:10px;"><label for="payment_type2">Payment Type 2:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
+                        </tr>
+                    </table>
+                    <br>
 
 
-            <table class="table2 table-bordered table-stripped" style="width:100%;">
-                <?php 
+                    <table class="table2 table-bordered table-stripped" style="width:100%;">
+                        
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="pay_date">Pay Date:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label></td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="rebate">Rebate:</label></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                        </tr>
+
+                    </table>
+            
+            <?php 
                     //echo $last_excess ;
                     if ($last_excess != -1 && $last_excess != 0){
                         $amount_paid_ent = number_format($last_excess,2,'.',',');
@@ -156,20 +190,7 @@ body{
                 
                     ?>
 
-                <tr>
-
-                    <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
-                    <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
-                    <td style="width:25%;font-size:14px;padding-left:10px;"><label for="pay_date">Pay Date:</label></td>
-                    <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label></td><td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
-                </tr>
-                <tr>
-                    <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="rebate">Rebate:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
-                </tr>
-            </table>
+        
             <br>
             <table class="table2 table-bordered table-stripped" style="width:100%;">
                 <tr>
@@ -218,6 +239,7 @@ body{
         </div>
     </div>
 </div>
+
 <form method="post" id="print_payment_func">
 <div class="card card-outline rounded-0 card-maroon"> 
     <div class="card-body">
@@ -290,8 +312,8 @@ body{
                       $i++;
                     ?>
                         
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $due_dte ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo $pay_dte ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo date('m/d/Y', strtotime($due_dte)); ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo  date('m/d/Y', strtotime($pay_date)); ?> </td> 
                     <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                     <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
@@ -367,6 +389,7 @@ body{
 	</div>
 </div>
 </form>
+
 <script>
 
 
@@ -381,9 +404,15 @@ window.onload = check_paydate();
 
         $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
-            const amount = $('.amt-paid').val();
-            const formattedAmount = formatCurrency(amount);   
-            $('#amount_paid').val(formattedAmount);
+            let amount = $('.amt-paid').val();
+            amount = amount.replace(",", "");
+            if (isNaN(amount)) {
+                alert("Please enter a number!");
+                $('#amount_paid').val(0);
+            }else{
+                const formattedAmount = formatCurrency(amount);   
+                $('#amount_paid').val(formattedAmount);
+            }
         });
 
 
@@ -443,7 +472,7 @@ function check_paydate(){
         });
         //console.log(tot_amt_due);
         $('#surcharge').val(l_surcharge);
-        $('#rebate_amt').val('0.0');
+        $('#rebate_amt').val('0.00');
         $('#tot_amount_due').val(total_amt_due);
         if (last_excess == -1 || last_excess <= 0){
             $('#amount_paid').val(total_amt_due);
@@ -653,9 +682,11 @@ let btn = document.getElementById('overduebtn');
 let div = document.getElementById('overduediv');
 
 btn.addEventListener('click',()=>{
+   
     if(div.style.display==='none'){
         div.style.display='block';
 
+       
     }else{
         div.style.display='none';
     }
