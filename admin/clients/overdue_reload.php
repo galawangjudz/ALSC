@@ -1,6 +1,4 @@
-<?php
-    $pay_date_input = date("Ymd");   
-?>
+
 <?php
 $getID = $_GET['id'];
 if(isset($_GET['id'])){

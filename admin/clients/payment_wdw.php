@@ -1,6 +1,6 @@
 
 <?php 
-    include 'common.php';
+include 'common.php';
 
 
 // include '../../config.php';
@@ -10,9 +10,9 @@ if($_settings->chk_flashdata('success')): ?>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-<?php
+<!-- <?php
    include('overdue_reload.php');
-?>
+?> -->
 
 <body onload="">
 <div class="card-body">
@@ -32,7 +32,7 @@ if($_settings->chk_flashdata('success')): ?>
     <div class="top_table">   
         <div id='overduediv'>
             <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
-                <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo $_SESSION['pay_date_input']; ?>">
+                <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
                 <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
             </form>
         <?php include 'over_due_details2.php'; ?>
@@ -50,6 +50,12 @@ if(isset($_GET['id'])){
 
 
 <style>
+
+.not-clickable {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .divBtnOverdue{
     height:50px;
     width:103%!important;
@@ -192,7 +198,19 @@ body{
             <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
             <br>
 
-            <input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:50%;">
+            <?php 
+                if ($acc_status == 'Fully Paid'){
+                    echo ' <input type="submit" name="submit" value="Add" class="btn btn-primary not-clickable" disabled style="width:50%;">';
+
+                }else{
+                    echo '<input type="submit" name="submit" value="Add" class="btn btn-primary" style="width:50%;">';
+                }
+
+
+            ?>
+
+
+           
                 <?php 
                     if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
                         echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal</a> ';
@@ -501,7 +519,7 @@ function check_paydate(){
         maximumFractionDigits: 2
         });
 
-
+        $('#surcharge').val(0);
         $('#rebate_amt').val(l_reb);
 
         l_monthly = (monthly_pay - l_rebate);

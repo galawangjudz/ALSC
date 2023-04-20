@@ -1,6 +1,7 @@
 <?php 
 // include '../../config.php';
-include 'payment_schedule2.php';
+include 'payment_schedule.php';
+
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -62,6 +63,7 @@ if(isset($_GET['id'])){
 <?php
 $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pay_date_input'])) : date("Y-m-d");;
 //$pay_date = date('Y-m-d');
+
 ?>
 <style>
 #item-list th, #item-list td{
@@ -76,6 +78,8 @@ $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pa
 </style>
 
 <div class="card-body">
+
+
 
     <?php $all_payments = load_data($prop_id, $pay_date);
             $over_due    = $all_payments[0];
