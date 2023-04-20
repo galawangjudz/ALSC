@@ -2,17 +2,19 @@
 <?php 
 include 'common.php';
 
-
-// include '../../config.php';
-
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-<!-- <?php
-   include('overdue_reload.php');
-?> -->
+
+<?php
+
+if(isset($_GET['id'])){
+    include('payment_reload.php');
+}
+
+?>
 
 <body onload="">
 <div class="card-body">
@@ -39,15 +41,6 @@ if($_settings->chk_flashdata('success')): ?>
     </div>
 
 </body>
-
-<?php
-
-if(isset($_GET['id'])){
-    include('payment_reload.php');
-}
-
-?>
-
 
 <style>
 

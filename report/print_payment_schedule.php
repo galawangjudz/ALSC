@@ -179,9 +179,9 @@
                                 <tbody>
                             
                                     <?php 
-                                    //include '../admin/clients/payment_schedule.php';
-                                    include '../admin/clients/payment_record.php';
-                                    //include 'payment_record.php';
+                                    
+                                    include '../admin/clients/payment_schedule_to_fpd.php';
+                                
                                     $id = $_GET['id'];   
                                     $all_payments = load_data($id); 
                                     $over_due    = $all_payments[0];

@@ -180,8 +180,6 @@
                             
                                     <?php 
                                     include '../admin/clients/payment_schedule.php';
-                                    //include '../admin/clients/payment_record.php';
-                                    //include 'payment_record.php';
                                     $id = $_GET['id'];
                                     $pay_date = $_GET['date'];     
                                     $all_payments = load_data($id, $pay_date);
