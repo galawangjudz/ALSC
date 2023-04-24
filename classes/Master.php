@@ -1962,7 +1962,7 @@ Class Master extends DBConnection {
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
-		$data .= ", pay_date = '$pay_date' ";
+		$data .= ", pay_date = '$pay_date_ent' ";
 		$data .= ", due_date = '$due_date' ";
 		$data .= ", or_no = '$or_no_ent' " ;
 		$data .= ", amount_due = '$tot_amount_due' ";
@@ -1984,7 +1984,7 @@ Class Master extends DBConnection {
 		$resp['data'] = array(
 			'property_id' => $prop_id,
 			'payment_amount' => $amount_paid,
-			'pay_date' => $pay_date,
+			'pay_date' => $pay_date_ent,
 			'due_date' => $due_date,
 			'or_no' => $or_no_ent,
 			'amount_due' => $tot_amount_due,

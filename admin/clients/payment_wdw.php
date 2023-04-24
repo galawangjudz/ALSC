@@ -172,10 +172,10 @@ body{
                         <tr>
                             <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
                             <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:14px;"><label for="pay_date">Transaction Date:</label>
-                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:14px;"><label for="pay_date_label">Transaction Date:</label>
+                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
                             <td style="width:25%;font-size:14px;"><label for="pay_date">OR Date:</label>
-                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
                            
                         </tr>
                         <tr>
@@ -328,7 +328,7 @@ body{
                     ?>
                         
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo date('m/d/Y', strtotime($due_dte)); ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo  date('m/d/Y', strtotime($pay_date)); ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:10%;"><?php echo  date('m/d/Y', strtotime($pay_dte)); ?> </td> 
                     <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                     <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
