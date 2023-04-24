@@ -2045,6 +2045,8 @@ Class Master extends DBConnection {
 	function credit_principal(){
 		extract($_POST);
 
+		$monthly_pay = (float) str_replace(",", "", $monthly_pay);
+		//echo $monthly_pay;
 		$amount_paid = (float) str_replace(",", "", $amount_paid);
 		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
 		$balance = (float) str_replace(",", "", $balance);
@@ -2052,6 +2054,12 @@ Class Master extends DBConnection {
 		$surcharge = 0;
 		$interest = 0;
 	
+
+		if ($amount_paid < ($monthly_pay * 3)){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Credit Principal Amount is not enough!! san ako nagkulang";
+			return json_encode($resp);
+		}
 
 
 		if ($status == 'Credit to Principal'){

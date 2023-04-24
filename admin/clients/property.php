@@ -243,9 +243,9 @@ body{
                               <th style="text-align:center;font-size:13px;">PAY DATE</th>
                               <th style="text-align:center;font-size:13px;">OR NO</th>
                               <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                              <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                               <th style="text-align:center;font-size:13px;">INTEREST</th>
                               <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
-                              <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                               <th style="text-align:center;font-size:13px;">REBATE</th>
                               <th style="text-align:center;font-size:13px;">PERIOD</th>
                               <th style="text-align:center;font-size:13px;">BALANCE</th>
@@ -283,10 +283,10 @@ body{
                         --> <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td>
+                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td>  
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($rebate,2) ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo $period ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($balance,2) ?> </td>  
@@ -413,9 +413,9 @@ body{
                           <th class="text-center" style="font-size:13px;">OR NO</th>
                           <th class="text-center" style="font-size:13px;">AMOUNT PAID</th> 
                           <th class="text-center" style="font-size:13px;">AMOUNT DUE</th>
+                          <th class="text-center" style="font-size:13px;">SURCHARGE</th>
                           <th class="text-center" style="font-size:13px;">INTEREST</th>
                           <th class="text-center" style="font-size:13px;">PRINCIPAL</th>
-                          <th class="text-center" style="font-size:13px;">SURCHARGE</th>
                           <th class="text-center" style="font-size:13px;">REBATE</th>
                           <th class="text-center" style="font-size:13px;">PERIOD</th>
                           <th class="text-center" style="font-size:13px;">BALANCE</th>
@@ -430,10 +430,10 @@ body{
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[1] ?></td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[2] ?> </td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[3] ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[4] ?> </td>
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?> </td>  
+                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[5] ?> </td>
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[6] ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[7] ?> </td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[8] ?> </td>  
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[9] ?> </td>  
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo $l_data[10] ?> </td>  

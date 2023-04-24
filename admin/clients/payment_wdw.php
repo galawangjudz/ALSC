@@ -156,39 +156,52 @@ body{
                     </table>
                     <br>
 
+                    <?php 
+                    //echo $last_excess ;
+                    if ($last_excess != -1 && $last_excess != 0){
+                        $amount_paid_ent = number_format($last_excess,2,'.',',');
+                        $or_ent = $last_or_ent;
+                        $trans_date_ent= $last_pay_ent;
+                    }
+                
+                    ?>
+
 
                     <table class="table2 table-bordered table-stripped" style="width:100%;">
                         
                         <tr>
                             <td style="width:25%;font-size:14px;"><label for="due_date_label">Due Date:</label></td>
                             <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="pay_date">Pay Date:</label></td>
-                            <td style="width:25%;font-size:14px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:14px;"><label for="pay_date">Transaction Date:</label>
+                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:14px;"><label for="pay_date">OR Date:</label>
+                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                           
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td>
                             <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label></td>
-                            <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label> <?php 
+                            $surcharge_percent = 0;
+                            echo '<input type="radio" name="surcharge_percent" value="25" '.($surcharge_percent == 0 ? 'checked' : '').'>0% ';
+                            echo '<input type="radio" name="surcharge_percent" value="25" '.($surcharge_percent == 25 ? 'checked' : '').'>25% ';
+                            echo '<input type="radio" name="surcharge_percent" value="50" '.($surcharge_percent == 50 ? 'checked' : '').'>50% ';
+                            echo '<input type="radio" name="surcharge_percent" value="75" '.($surcharge_percent == 75 ? 'checked' : '').'>75% ';
+                            echo '<input type="radio" name="surcharge_percent" value="100" '.($surcharge_percent == 100 ? 'checked' : '').'>100% ';
+                            ?>
+                            </td>
+                            <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:14px;"><label for="status">Status:</label></td>
                             <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:14px;padding-left:10px;"><label for="rebate">Rebate:</label></td>
-                            <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                            <td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" readonly></td>
                         </tr>
 
                     </table>
             
-            <?php 
-                    //echo $last_excess ;
-                    if ($last_excess != -1 && $last_excess != 0){
-                        $amount_paid_ent = number_format($last_excess,2,'.',',');
-                        $or_ent = $last_or_ent;
-                        $pay_date_ent = $last_pay_ent;
-                    }
-                
-                    ?>
+       
 
         
             <br>
@@ -198,6 +211,7 @@ body{
                 </tr>
                 <tr>
                     <td style="width:25%;font-size:14px;"><label for="amount_paid">Amount Paid:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td><td style="width:25%;font-size:14px;padding-left:10px;"><label for="or_no">OR #:</label></td><td style="width:25%;font-size:14px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required></td>
+                    
                 </tr>
             </table>
             <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
@@ -228,6 +242,7 @@ body{
             ?>
                 <?php 
                     if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
+                       
                         echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal">Credit to Principal <i class="fa fa-wallet"></i></a> ';
                     }
                 ?>
@@ -255,9 +270,9 @@ body{
                         <th style="text-align:center;font-size:13px;">OR NO</th>
                         <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
                         <th style="text-align:center;font-size:13px;">AMOUNT DUE</th>
+                        <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                         <th style="text-align:center;font-size:13px;">INTEREST</th>
                         <th style="text-align:center;font-size:13px;">PRINCIPAL</th>
-                        <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                         <th style="text-align:center;font-size:13px;">REBATE</th>
                         <th style="text-align:center;font-size:13px;">PERIOD</th>
                         <th style="text-align:center;font-size:13px;">BALANCE</th>
@@ -317,9 +332,9 @@ body{
                     <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                     <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($amt_paid,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
+                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
-                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
                     <td class="text-center" style="font-size:13px;width:8%;"><?php echo $period ?> </td> 
                     <td class="text-center" style="font-size:13px;width:12%;"><?php echo number_format($balance,2) ?> </td>  
@@ -417,6 +432,8 @@ window.onload = check_paydate();
 
 
 });
+
+
 
 
 function formatCurrency(amount) {
@@ -810,11 +827,8 @@ $(document).ready(function(){
                     });
             
                     end_loader();
-                    }else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
+                    }else if(resp.status == 'failed' && resp.msg){
+                            alert_toast(resp.msg,'error');
                             end_loader()
                     }else{
                         alert_toast("An error occured",'error');
