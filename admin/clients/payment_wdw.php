@@ -158,10 +158,13 @@ body{
 
                     <?php 
                     //echo $last_excess ;
+                    $trans_date_ent = $last_trans_date;
+                    $or_date_ent = $last_or_date;
                     if ($last_excess != -1 && $last_excess != 0){
                         $amount_paid_ent = number_format($last_excess,2,'.',',');
                         $or_ent = $last_or_ent;
-                        $trans_date_ent= $last_pay_ent;
+                        
+                        
                     }
                 
                     ?>
@@ -175,20 +178,31 @@ body{
                             <td style="width:25%;font-size:14px;"><label for="pay_date_label">Transaction Date:</label>
                             <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
                             <td style="width:25%;font-size:14px;"><label for="pay_date">OR Date:</label>
-                            <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <input type="date" class="form-control-sm margin-bottom pay-date" id="or_date_ent" name="or_date_ent" value="<?php echo isset($or_date_ent) ? date("Y-m-d", strtotime($or_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
                            
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:14px;"><label for="amount_due">Amount Due:</label></td>
                             <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label> <?php 
+                            <td style="width:25%;font-size:14px;padding-left:10px;"><label for="surcharge">Surcharge:</label> 
+                        <!--     <?php 
                             $surcharge_percent = 0;
-                            echo '<input type="radio" name="surcharge_percent" value="25" '.($surcharge_percent == 0 ? 'checked' : '').'>0% ';
+                            echo '<input type="radio" name="surcharge_percent" value="0" '.($surcharge_percent == 0 ? 'checked' : '').'>0% ';
                             echo '<input type="radio" name="surcharge_percent" value="25" '.($surcharge_percent == 25 ? 'checked' : '').'>25% ';
                             echo '<input type="radio" name="surcharge_percent" value="50" '.($surcharge_percent == 50 ? 'checked' : '').'>50% ';
                             echo '<input type="radio" name="surcharge_percent" value="75" '.($surcharge_percent == 75 ? 'checked' : '').'>75% ';
                             echo '<input type="radio" name="surcharge_percent" value="100" '.($surcharge_percent == 100 ? 'checked' : '').'>100% ';
-                            ?>
+                            ?> -->
+                            <input type="radio" name="surcharge_percent" value="0" id="radio0">
+                            <label for="radio0">0%</label>
+                            <input type="radio" name="surcharge_percent" value="25" id="radio25">
+                            <label for="radio25">25%</label>
+                            <input type="radio" name="surcharge_percent" value="50" id="radio50">
+                            <label for="radio50">50%</label>
+                            <input type="radio" name="surcharge_percent" value="75" id="radio75">
+                            <label for="radio75">75%</label>
+                            <input type="radio" name="surcharge_percent" value="100" id="radio100">
+                            <label for="radio100">100%</label>
                             </td>
                             <td style="width:25%;font-size:14px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
                         </tr>
@@ -409,8 +423,16 @@ body{
 
 
 window.onload = check_paydate();
+
                             
    $(document).ready(function() {
+
+
+        
+    $(document).on('change', ".surcharge_percent", function(e) {
+            e.preventDefault(); 
+            check_paydate();
+        });
 
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
@@ -470,8 +492,9 @@ function check_paydate(){
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
         
         //console.log(monthly_pay);
+    
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
-
+   
         if (diffDays <= 2) {
             l_sur = 0;
         }
@@ -494,13 +517,6 @@ function check_paydate(){
         if (last_excess == -1 || last_excess <= 0){
             $('#amount_paid').val(total_amt_due);
         }
-   
-
-
-
-        console.log(`${pay_status.substr(0,2)}`);
-        console.log(pay_status);
-        console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
 
     
     }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
@@ -548,8 +564,8 @@ function check_paydate(){
                 l_rebate = 0;
         }
 
-        console.log(diffDays);
-        console.log(l_rebate);
+        //console.log(diffDays);
+        //console.log(l_rebate);
 
         const l_reb = l_rebate.toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -606,7 +622,7 @@ function deleteRow(rowId) {
         data:{rowId: rowId},
         dataType:"json",
         error:err=>{
-            console.log(err)
+            //console.log(err)
             alert_toast("An error occured",'error');
             end_loader();
             },
@@ -640,7 +656,7 @@ function DeleteAll() {
         data:{prop_id:'<?php echo $prop_id ?>'},
         dataType:"json",
         error:err=>{
-            console.log(err)
+            //console.log(err)
             alert_toast("An error occured",'error');
             end_loader();
             },
@@ -679,7 +695,7 @@ function payments(){
             }else{
                 alert_toast(resp.err,'error');
                 end_loader();
-                console.log(resp)
+                //console.log(resp)
             }
             }
         
@@ -900,4 +916,57 @@ $('#print_payment_func').submit(function(e){
 })
 
 });
+</script>
+
+<script>
+
+
+
+// Get a reference to the surcharge entry element
+
+
+// Get a reference to the radio buttons
+const radioButtons = document.querySelectorAll('input[name="surcharge_percent"]');
+
+// Add an event listener to each radio button
+radioButtons.forEach(radioButton => {
+  radioButton.addEventListener("change", () => {
+    check_paydate();
+    const surchargeEntry = document.getElementById("surcharge");
+    // Get the value of the selected radio button
+    const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
+    
+    // Calculate the surcharge amount based on the selected percentage
+    const surchargeAmount = surchargeEntry.value - (surchargeEntry.value * (selectedValue / 100));
+    
+    // Update the surcharge entry value
+    const numStr = $('.amt-due').val();
+    const excess =  $('.excess').val();
+    const last_excess =  $('.last-excess').val();
+    const monthly_pay  = parseFloat(numStr.replace(",", ""));
+
+    l_tot_amt_due = monthly_pay - surchargeAmount;
+
+
+    l_surcharge = surchargeAmount.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+
+    l_tot_amt_due = l_tot_amt_due.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+    surchargeEntry.value = l_surcharge;
+
+    $('#tot_amount_due').val(l_tot_amt_due);
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(l_tot_amt_due);
+        }
+    
+  });
+});
+
+
+
 </script>

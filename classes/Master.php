@@ -1962,7 +1962,7 @@ Class Master extends DBConnection {
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
-		$data .= ", pay_date = '$pay_date_ent' ";
+		$data .= ", pay_date = '$or_date_ent' ";
 		$data .= ", due_date = '$due_date' ";
 		$data .= ", or_no = '$or_no_ent' " ;
 		$data .= ", amount_due = '$tot_amount_due' ";
@@ -1976,6 +1976,7 @@ Class Master extends DBConnection {
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$l_status' ";
+		$data .= ", trans_date = '$pay_date_ent' ";
 
 
 		
@@ -1984,7 +1985,7 @@ Class Master extends DBConnection {
 		$resp['data'] = array(
 			'property_id' => $prop_id,
 			'payment_amount' => $amount_paid,
-			'pay_date' => $pay_date_ent,
+			'pay_date' => $or_date_ent,
 			'due_date' => $due_date,
 			'or_no' => $or_no_ent,
 			'amount_due' => $tot_amount_due,
@@ -1996,7 +1997,8 @@ Class Master extends DBConnection {
 			'status' => $status,
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
-			'excess' => $excess
+			'excess' => $excess,
+			'trans_date' => $pay_date_ent
 		  );
 		
 

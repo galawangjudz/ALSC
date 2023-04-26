@@ -68,7 +68,7 @@ if(isset($_GET['id'])){
 
 
 
-        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no, NULL as trans_date FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no,trans_date FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
@@ -89,7 +89,8 @@ if(isset($_GET['id'])){
         $last_excess = isset($last_payment['excess']) ? $last_payment['excess'] : 0;
         $last_acc_stat = isset($last_payment['account_status']) ? $last_payment['account_status'] : '';
         $last_or_ent = isset($last_payment['or_no']) ? $last_payment['or_no'] : '';
-        $last_pay_ent = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
+        $last_or_date = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
+        $last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : date('Y-m-d');
        
        
         $check_date = 0;
