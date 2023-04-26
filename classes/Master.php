@@ -1600,7 +1600,7 @@ Class Master extends DBConnection {
 		}elseif ($payment_type1 == 'Full DownPayment' && $acc_status == 'Reservation'){
 			$rebate = 0;
 			$interest = 0;
-			$principal = floatval(str_replace(',', '',$amount_paid));
+			$amount_paid = floatval(str_replace(',', '',$amount_paid));
 			$balance = floatval(str_replace(',', '',$balance));
 			if ($amount_paid == floatval($tot_amount_due)) {
 				$principal = $amount_paid - floatval($surcharge);
@@ -1628,7 +1628,7 @@ Class Master extends DBConnection {
 		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Deferred Cash Payment') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment') {
 			$rebate = 0;
 			$interest = 0;
-			$principal = floatval(str_replace(',', '',$amount_paid));
+			$amount_paid = floatval(str_replace(',', '',$amount_paid));
 			$balance = floatval(str_replace(',', '',$balance));
 
 			if ($under_pay == 0) {
@@ -1689,6 +1689,7 @@ Class Master extends DBConnection {
 								$principal = number_format($amount_paid - $surcharge - $l_sur_credit, 2);
 							} else {
 								$principal = number_format($amount_paid - $surcharge, 2);
+								
 							}
 						}
 						$excess = -1;
@@ -1709,7 +1710,7 @@ Class Master extends DBConnection {
 					$excess = -1;
 				}
 			}
-			$principal = floatval(str_replace(',', '',$amount_paid));
+			$principal = floatval(str_replace(',', '',$principal));
 			$balance = floatval(str_replace(',', '',$balance));
 			$balance = $balance - $principal;
 		

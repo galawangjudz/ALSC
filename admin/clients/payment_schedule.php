@@ -345,7 +345,7 @@
                                 //$l_due_date_val_old = add($l_date,1);
                                 $l_due_date_val_old = new Datetime(auto_date($last_day,$l_date));
                                 $l_date_old = $l_due_date_val_old->format('m/d/y');
-                                $l_date_bago = $l_date_old->format('Y-m-d');
+                                $l_date_bago = $l_date_old;
                               }
                         endif;
                         if ($l_acc_status == 'Full DownPayment' || $l_acc_status == 'Reservation' || $l_last_status == 'RESTRUCTURED' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL') {

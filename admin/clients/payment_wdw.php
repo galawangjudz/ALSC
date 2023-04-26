@@ -436,13 +436,14 @@ window.onload = check_paydate();
 
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
+            document.getElementById("radio0").checked = true;
             check_paydate();
         });
 
         $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
             let amount = $('.amt-paid').val();
-            amount = amount.replace(",", "");
+            amount = amount.replace(/[^0-9.-]+/g,"");
             if (isNaN(amount)) {
                 alert("Please enter a number!");
                 $('#amount_paid').val(0);
@@ -483,7 +484,9 @@ function check_paydate(){
     const over_due_mode =  $('.over-due-mode').val();
     const monthly_payment =  $('.monthly-pay').val();
     const numStr = $('.amt-due').val();
-    const monthly_pay  = parseFloat(numStr.replace(",", ""));
+    monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
+    console.log(numStr);
+    console.log(monthly_pay);
 
 
     //console.log(pay_stat_acro);
@@ -572,7 +575,7 @@ function check_paydate(){
         maximumFractionDigits: 2
         });
 
-        $('#surcharge').val(0);
+        $('#surcharge').val(0.00);
         $('#rebate_amt').val(l_reb);
 
         l_monthly = (monthly_pay - l_rebate);
@@ -595,6 +598,8 @@ function check_paydate(){
         //$('#amount_paid').val(l_monthly.toFixed(2));
 
     }else{
+
+        console.log(monthly_pay);
 
         l_monthly_pay2 = monthly_pay.toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -933,17 +938,19 @@ radioButtons.forEach(radioButton => {
   radioButton.addEventListener("change", () => {
     check_paydate();
     const surchargeEntry = document.getElementById("surcharge");
+    surcharge_value = surchargeEntry.value;
+    surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
     // Get the value of the selected radio button
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
     
     // Calculate the surcharge amount based on the selected percentage
-    const surchargeAmount = surchargeEntry.value - (surchargeEntry.value * (selectedValue / 100));
+    const surchargeAmount = surcharge_amt - (surcharge_amt * (selectedValue / 100));
     
     // Update the surcharge entry value
     const numStr = $('.amt-due').val();
     const excess =  $('.excess').val();
     const last_excess =  $('.last-excess').val();
-    const monthly_pay  = parseFloat(numStr.replace(",", ""));
+    const monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
 
     l_tot_amt_due = monthly_pay - surchargeAmount;
 

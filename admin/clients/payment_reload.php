@@ -2,6 +2,7 @@
 
 
 $getID = $_GET['id'];
+
 if(isset($_GET['id'])){
     $account_info = [];
     $last_payment = [];
@@ -15,7 +16,7 @@ if(isset($_GET['id'])){
     
     $prop = $conn->query("SELECT * FROM properties where md5(property_id) = '{$_GET['id']}' ");    
     while($row=$prop->fetch_assoc()):
-    
+        
         ///LOT
         $prop_id = $row['property_id'];
         $type = $row['c_type'];
@@ -80,6 +81,7 @@ if(isset($_GET['id'])){
 
         }
        
+     
         $last_cnt = $l_last;
         $payment_rec = $payments_data;
         $last_payment = $payments_data[$l_last];
@@ -164,6 +166,7 @@ if(isset($_GET['id'])){
                 $amount_paid_ent = (number_format($monthly_down,2));
                 $amount_ent = (number_format($monthly_down,2));
                 $total_amount_due_ent = (number_format($monthly_down,2));
+                //echo $total_amount_due_ent;
                 $count = 1;
                 if ($last_payment['status'] == 'ADDITIONAL'):
                         $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
