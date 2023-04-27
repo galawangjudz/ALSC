@@ -239,7 +239,7 @@ body{
                                 <label for="radio100">100%</label>
                         
                             </td>   
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
                        
                         </tr>
                         
@@ -249,7 +249,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" readonly></td>
                         </tr>
                         <tr>
                         </tr>
@@ -560,6 +560,7 @@ function check_paydate(){
 
 
         tot_amt_due = monthly_pay + l_sur;
+        console.log(tot_amt_due);
         const total_amt_due = tot_amt_due.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -1000,6 +1001,7 @@ radioButtons.forEach(radioButton => {
     check_paydate();
     const surchargeEntry = document.getElementById("surcharge");
     surcharge_value = surchargeEntry.value;
+    console.log(surcharge_value);
     surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
     // Get the value of the selected radio button
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
@@ -1013,7 +1015,7 @@ radioButtons.forEach(radioButton => {
     const last_excess =  $('.last-excess').val();
     const monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
 
-    l_tot_amt_due = monthly_pay - surchargeAmount;
+    l_tot_amt_due = monthly_pay + surchargeAmount;
 
 
     l_surcharge = surchargeAmount.toLocaleString(undefined, {
