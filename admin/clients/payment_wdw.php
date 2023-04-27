@@ -163,47 +163,86 @@ body{
                             <td style="width:25%;font-size:13px;"><input type="text" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:13px;" readonly><input type="text" id="acc_status" name="acc_status" value="<?php echo $acc_status; ?>" style="width:100%;" readonly></td>
                         </tr>
-                        <tr>
+                       <!--  <tr>
                             <td style="width:25%;font-size:13px;"><label for="acc_type1">Account Type1:</label></td>
                             <td style="width:25%;font-size:13px;"><label for="acc_option">Account Option:</label></td>
-                        </tr>
-                        <tr>
+                        </tr> -->
+                       <!--  <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:13px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
-                        </tr>
+                        </tr> -->
 
                         <tr>
-                            <td style="width:25%;font-size:13px;"><label for="acc_type2">Account Type2:</label></td>
+                           <!--  <td style="width:25%;font-size:13px;"><label for="acc_type2">Account Type2:</label></td> -->
                             <td style="width:25%;font-size:13px;"><label for="payment_type1">Payment Type 1:</label></td>
-                        </tr>
-                        <tr>
-                            <td style="width:25%;font-size:13px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>    
-                        </tr>
-                        <tr>
-                            <td style="width:25%;font-size:13px;"><label for="date_of_sale">Date of Sale:</label></td>
                             <td style="width:25%;"><label for="payment_type2">Payment Type 2:</label></td>
                         </tr>
-                        <tr>
-                            <td style="width:25%;font-size:13px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td>
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
                         </tr>
                         <tr>
+                           <!--  <td style="width:25%;font-size:13px;"> <input type="text" id="acc_type2" name="acc_type2" value="<?php echo $l_acc_type1; ?>" style="width:100%;" readonly></td>
+                           -->  <td style="width:25%;font-size:13px;" readonly><input type="text" id="payment_type1" name="payment_type1" value="<?php echo $p1; ?>" style="width:100%;" readonly> </td>    
+                                <td style="width:25%;font-size:13px;" readonly><input type="text" id="payment_type2" name="payment_type2" value="<?php echo $p2; ?>" style="width:100%;" readonly></td>
+                       
+                        </tr>
+                       <!--  <tr>
+                            <td style="width:25%;font-size:13px;"><label for="date_of_sale">Date of Sale:</label></td>
+                            
+                        <tr>
+                            <td style="width:25%;font-size:13px;"><input type="date" id="date_of_sale" name="date_of_sale" value="<?php echo $l_date_of_sale; ?>" style="width:100%;font-size:14px;" readonly></td>
+                            </tr> -->
+
+                        <?php 
+                            //echo $last_excess ;
+                            $trans_date_ent = $last_trans_date;
+                            $or_date_ent = $last_or_date;
+                            if ($last_excess != -1 && $last_excess != 0){
+                                $amount_paid_ent = number_format($last_excess,2,'.',',');
+                                $or_ent = $last_or_ent;
+                                
+                                
+                                }
+                
+                         ?>
+                        <tr>
                             <td style="width:25%;font-size:13px;"><label for="due_date_label">Due Date:</label></td> 
-                            <td style="width:25%;font-size:13px;"><label for="pay_date">Pay Date:</label></td>
+                            <td style="width:25%;font-size:13px;"><label for="amount_due">Amount Due:</label></td>
+                           
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date" name="pay_date" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
-                        </tr>
-                        <tr>
-                            <td style="width:25%;font-size:13px;"><label for="amount_due">Amount Due:</label></td>
-                            <td style="width:25%;font-size:13px;"><label for="surcharge">Surcharge:</label></td>    
-                        </tr>
-                        <tr>
                             <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                          
                         </tr>
+                        <tr>
+                        <td style="width:25%;font-size:13px;"><label for="pay_date">Transaction Date: </label></td>
+                            <td style="width:25%;font-size:13px;"><label for="due_date_label">OR Date:</label></td> 
+                           
+                        </tr>
+                        <tr>
+                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="or_date_ent" name="or_date_ent" value="<?php echo isset($or_date_ent) ? date("Y-m-d", strtotime($or_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:13px;"> <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                       
+                        </tr>
+                        <tr>
+                            
+                            <td style="width:25%;font-size:13px;"><label for="surcharge">Surcharge:</label>
+                                <br>
+                                <input type="radio" name="surcharge_percent" value="0" id="radio0">
+                                <label for="radio0">0%</label>
+                                <input type="radio" name="surcharge_percent" value="25" id="radio25">
+                                <label for="radio25">25%</label>
+                                <input type="radio" name="surcharge_percent" value="50" id="radio50">
+                                <label for="radio50">50%</label>
+                                <input type="radio" name="surcharge_percent" value="75" id="radio75">
+                                <label for="radio75">75%</label>
+                                <input type="radio" name="surcharge_percent" value="100" id="radio100">
+                                <label for="radio100">100%</label>
+                        
+                            </td>   
+                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+                       
+                        </tr>
+                        
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="status">Status:</label></td>
                             <td style="width:25%;font-size:13px;"><label for="rebate">Rebate:</label></td>
@@ -219,14 +258,7 @@ body{
                         </tr>
                     </table>
 
-                    <?php 
-                    //echo $last_excess ;
-                    if ($last_excess != -1 && $last_excess != 0){
-                        $amount_paid_ent = number_format($last_excess,2,'.',',');
-                        $or_ent = $last_or_ent;
-                        $pay_date_ent = $last_pay_ent;
-                    }
-                    ?>
+                  
                     <br>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;table-layout: fixed;">
                         <tr>
@@ -310,9 +342,9 @@ body{
                                 <th style="text-align:center;font-size:11px;">OR NO</th>
                                 <th style="text-align:center;font-size:11px;">AMT PAID</th>
                                 <th style="text-align:center;font-size:11px;">AMT DUE</th>
+                                <th style="text-align:center;font-size:11px;">SURCHARGE</th>
                                 <th style="text-align:center;font-size:11px;">INTEREST</th>
                                 <th style="text-align:center;font-size:11px;">PRINCIPAL</th>
-                                <th style="text-align:center;font-size:11px;">SURCHARGE</th>
                                 <th style="text-align:center;font-size:11px;">REBATE</th>
                                 <th style="text-align:center;font-size:11px;">PERIOD</th>
                                 <th style="text-align:center;font-size:11px;">BALANCE</th>
@@ -366,9 +398,9 @@ body{
                             <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_paid,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($interest,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo $period ?> </td> 
                             <td class="text-center" style="font-size:13px;width:12%;"><?php echo number_format($balance,2) ?> </td>  
