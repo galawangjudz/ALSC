@@ -1600,7 +1600,7 @@ Class Master extends DBConnection {
 		}elseif ($payment_type1 == 'Full DownPayment' && $acc_status == 'Reservation'){
 			$rebate = 0;
 			$interest = 0;
-			$principal = floatval(str_replace(',', '',$amount_paid));
+			$amount_paid = floatval(str_replace(',', '',$amount_paid));
 			$balance = floatval(str_replace(',', '',$balance));
 			if ($amount_paid == floatval($tot_amount_due)) {
 				$principal = $amount_paid - floatval($surcharge);
@@ -1628,7 +1628,7 @@ Class Master extends DBConnection {
 		}elseif (($acc_status == 'Full DownPayment' && $payment_type2 == 'Deferred Cash Payment') || ($payment_type1 == 'No DownPayment' && $payment_type2 == 'Deferred Cash Payment') || $acc_status == 'Deferred Cash Payment') {
 			$rebate = 0;
 			$interest = 0;
-			$principal = floatval(str_replace(',', '',$amount_paid));
+			$amount_paid = floatval(str_replace(',', '',$amount_paid));
 			$balance = floatval(str_replace(',', '',$balance));
 
 			if ($under_pay == 0) {
@@ -1689,6 +1689,7 @@ Class Master extends DBConnection {
 								$principal = number_format($amount_paid - $surcharge - $l_sur_credit, 2);
 							} else {
 								$principal = number_format($amount_paid - $surcharge, 2);
+								
 							}
 						}
 						$excess = -1;
@@ -1709,7 +1710,7 @@ Class Master extends DBConnection {
 					$excess = -1;
 				}
 			}
-			$principal = floatval(str_replace(',', '',$amount_paid));
+			$principal = floatval(str_replace(',', '',$principal));
 			$balance = floatval(str_replace(',', '',$balance));
 			$balance = $balance - $principal;
 		
@@ -1962,7 +1963,7 @@ Class Master extends DBConnection {
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
-		$data .= ", pay_date = '$pay_date' ";
+		$data .= ", pay_date = '$or_date_ent' ";
 		$data .= ", due_date = '$due_date' ";
 		$data .= ", or_no = '$or_no_ent' " ;
 		$data .= ", amount_due = '$tot_amount_due' ";
@@ -1976,6 +1977,7 @@ Class Master extends DBConnection {
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$l_status' ";
+		$data .= ", trans_date = '$pay_date_ent' ";
 
 
 		
@@ -1984,7 +1986,7 @@ Class Master extends DBConnection {
 		$resp['data'] = array(
 			'property_id' => $prop_id,
 			'payment_amount' => $amount_paid,
-			'pay_date' => $pay_date,
+			'pay_date' => $or_date_ent,
 			'due_date' => $due_date,
 			'or_no' => $or_no_ent,
 			'amount_due' => $tot_amount_due,
@@ -1996,7 +1998,8 @@ Class Master extends DBConnection {
 			'status' => $status,
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
-			'excess' => $excess
+			'excess' => $excess,
+			'trans_date' => $pay_date_ent
 		  );
 		
 
@@ -2045,6 +2048,8 @@ Class Master extends DBConnection {
 	function credit_principal(){
 		extract($_POST);
 
+		$monthly_pay = (float) str_replace(",", "", $monthly_pay);
+		//echo $monthly_pay;
 		$amount_paid = (float) str_replace(",", "", $amount_paid);
 		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
 		$balance = (float) str_replace(",", "", $balance);
@@ -2052,6 +2057,12 @@ Class Master extends DBConnection {
 		$surcharge = 0;
 		$interest = 0;
 	
+
+		if ($amount_paid < ($monthly_pay * 3)){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Credit Principal Amount is not enough!! san ako nagkulang";
+			return json_encode($resp);
+		}
 
 
 		if ($status == 'Credit to Principal'){
@@ -2073,7 +2084,7 @@ Class Master extends DBConnection {
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
-		$data .= ", pay_date = '$pay_date' ";
+		$data .= ", pay_date = '$or_date_ent' ";
 		$data .= ", due_date = '$due_date' ";
 		$data .= ", or_no = '$or_no_ent' " ;
 		$data .= ", amount_due = '$amount_paid' ";
@@ -2087,14 +2098,14 @@ Class Master extends DBConnection {
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$acc_status' ";
-		
+		$data .= ", trans_date = '$pay_date_ent' ";
 
 		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 
 		$resp['data'] = array(
 			'property_id' => $prop_id,
 			'payment_amount' => $amount_paid,
-			'pay_date' => $pay_date,
+			'pay_date' => $or_no_ent,
 			'due_date' => $due_date,
 			'or_no' => $or_no_ent,
 			'amount_due' => $tot_amount_due,
@@ -2106,7 +2117,8 @@ Class Master extends DBConnection {
 			'status' => $status,
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
-			'excess' => $excess
+			'excess' => $excess,
+			'trans_date' => $pay_date_ent
 		  );
 
 

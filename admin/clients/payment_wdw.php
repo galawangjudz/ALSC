@@ -171,6 +171,7 @@ body{
                             <td style="width:25%;font-size:13px;"><input type="text" id="acc_type1" name="acc_type1" value="<?php echo $l_acc_type; ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:13px;" readonly><input type="text" id="acc_option" name="acc_option" value="<?php echo isset($retention) && $retention == 1 ? 'Retention' : '' ?>" style="width:100%;" readonly><br></td>
                         </tr>
+
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="acc_type2">Account Type2:</label></td>
                             <td style="width:25%;font-size:13px;"><label for="payment_type1">Payment Type 1:</label></td>
@@ -214,8 +215,10 @@ body{
                         <tr>
                         </tr>
                         <tr>
+
                         </tr>
                     </table>
+
                     <?php 
                     //echo $last_excess ;
                     if ($last_excess != -1 && $last_excess != 0){
@@ -290,6 +293,7 @@ body{
                 </form>
             </div>
         </div> 
+
     </div>
     <div class="right-div">
         <div class="card card-outline rounded-0 card-maroon" style="padding:5px;">
@@ -345,8 +349,7 @@ body{
                                     $balance = $row['remaining_balance'];
 
                                     $total_rebate += $rebate;
-
-                        
+             
                                 echo "<tr id='{$row['invoice_id']}'>";
                         
                                 if ($i == $last_row){
@@ -378,6 +381,7 @@ body{
                         $result_prin = mysqli_query($conn, $sql_prin);
                         $row_prin = mysqli_fetch_assoc($result_prin);
                     ?>
+
                     <?php 
                         $sql_sur = "SELECT SUM(surcharge) AS total_surcharge FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
                         $result_sur = mysqli_query($conn, $sql_sur);
@@ -434,6 +438,7 @@ body{
                     </table>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
@@ -442,18 +447,27 @@ body{
 
 
 window.onload = check_paydate();
+
                             
    $(document).ready(function() {
 
+
+        
+    $(document).on('change', ".surcharge_percent", function(e) {
+            e.preventDefault(); 
+            check_paydate();
+        });
+
         $(document).on('keyup', ".pay-date", function(e) {
             e.preventDefault(); 
+            document.getElementById("radio0").checked = true;
             check_paydate();
         });
 
         $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
             let amount = $('.amt-paid').val();
-            amount = amount.replace(",", "");
+            amount = amount.replace(/[^0-9.-]+/g,"");
             if (isNaN(amount)) {
                 alert("Please enter a number!");
                 $('#amount_paid').val(0);
@@ -465,6 +479,8 @@ window.onload = check_paydate();
 
 
 });
+
+
 
 
 function formatCurrency(amount) {
@@ -492,7 +508,9 @@ function check_paydate(){
     const over_due_mode =  $('.over-due-mode').val();
     const monthly_payment =  $('.monthly-pay').val();
     const numStr = $('.amt-due').val();
-    const monthly_pay  = parseFloat(numStr.replace(",", ""));
+    monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
+    console.log(numStr);
+    console.log(monthly_pay);
 
 
     //console.log(pay_stat_acro);
@@ -501,8 +519,9 @@ function check_paydate(){
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
         
         //console.log(monthly_pay);
+    
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
-
+   
         if (diffDays <= 2) {
             l_sur = 0;
         }
@@ -525,13 +544,6 @@ function check_paydate(){
         if (last_excess == -1 || last_excess <= 0){
             $('#amount_paid').val(total_amt_due);
         }
-   
-
-
-
-        console.log(`${pay_status.substr(0,2)}`);
-        console.log(pay_status);
-        console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
 
     
     }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
@@ -579,15 +591,15 @@ function check_paydate(){
                 l_rebate = 0;
         }
 
-        console.log(diffDays);
-        console.log(l_rebate);
+        //console.log(diffDays);
+        //console.log(l_rebate);
 
         const l_reb = l_rebate.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
         });
 
-        $('#surcharge').val(0);
+        $('#surcharge').val(0.00);
         $('#rebate_amt').val(l_reb);
 
         l_monthly = (monthly_pay - l_rebate);
@@ -610,6 +622,8 @@ function check_paydate(){
         //$('#amount_paid').val(l_monthly.toFixed(2));
 
     }else{
+
+        console.log(monthly_pay);
 
         l_monthly_pay2 = monthly_pay.toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -637,7 +651,7 @@ function deleteRow(rowId) {
         data:{rowId: rowId},
         dataType:"json",
         error:err=>{
-            console.log(err)
+            //console.log(err)
             alert_toast("An error occured",'error');
             end_loader();
             },
@@ -660,6 +674,11 @@ function CreditPrincipal() {
     const last_stat_count = $('.last-stat-count').val();
     $('#status_count').val(last_stat_count);
     $('.due-date').val(last_due_date.toISOString().substr(0, 10));
+    const last_excess =  $('.last-excess').val();
+    const l_balance =  $('.balance-amt').val();
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(l_balance);
+        }
 }
 
 
@@ -671,7 +690,7 @@ function DeleteAll() {
         data:{prop_id:'<?php echo $prop_id ?>'},
         dataType:"json",
         error:err=>{
-            console.log(err)
+            //console.log(err)
             alert_toast("An error occured",'error');
             end_loader();
             },
@@ -710,7 +729,7 @@ function payments(){
             }else{
                 alert_toast(resp.err,'error');
                 end_loader();
-                console.log(resp)
+                //console.log(resp)
             }
             }
         
@@ -858,11 +877,8 @@ $(document).ready(function(){
                     });
             
                     end_loader();
-                    }else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
+                    }else if(resp.status == 'failed' && resp.msg){
+                            alert_toast(resp.msg,'error');
                             end_loader()
                     }else{
                         alert_toast("An error occured",'error');
@@ -934,4 +950,59 @@ $('#print_payment_func').submit(function(e){
 })
 
 });
+</script>
+
+<script>
+
+
+
+// Get a reference to the surcharge entry element
+
+
+// Get a reference to the radio buttons
+const radioButtons = document.querySelectorAll('input[name="surcharge_percent"]');
+
+// Add an event listener to each radio button
+radioButtons.forEach(radioButton => {
+  radioButton.addEventListener("change", () => {
+    check_paydate();
+    const surchargeEntry = document.getElementById("surcharge");
+    surcharge_value = surchargeEntry.value;
+    surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
+    // Get the value of the selected radio button
+    const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
+    
+    // Calculate the surcharge amount based on the selected percentage
+    const surchargeAmount = surcharge_amt - (surcharge_amt * (selectedValue / 100));
+    
+    // Update the surcharge entry value
+    const numStr = $('.amt-due').val();
+    const excess =  $('.excess').val();
+    const last_excess =  $('.last-excess').val();
+    const monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
+
+    l_tot_amt_due = monthly_pay - surchargeAmount;
+
+
+    l_surcharge = surchargeAmount.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+
+    l_tot_amt_due = l_tot_amt_due.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+    surchargeEntry.value = l_surcharge;
+
+    $('#tot_amount_due').val(l_tot_amt_due);
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(l_tot_amt_due);
+        }
+    
+  });
+});
+
+
+
 </script>

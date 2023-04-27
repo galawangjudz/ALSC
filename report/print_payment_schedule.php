@@ -1,7 +1,7 @@
  <!DOCTYPE html>
 <?php require ('../config.php'); ?>
 <?php include "../inc/header.php" ?>
-<?php include '../admin/clients/common.php'; ?>
+
 <head>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
@@ -180,7 +180,7 @@
                                 <tbody>
                             
                                     <?php 
-                                    
+                                   
                                     include '../admin/clients/payment_schedule_to_fpd.php';
                                 
                                     $id = $_GET['id'];   

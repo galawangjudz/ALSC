@@ -2,6 +2,7 @@
 
 
 $getID = $_GET['id'];
+
 if(isset($_GET['id'])){
     $account_info = [];
     $last_payment = [];
@@ -15,7 +16,7 @@ if(isset($_GET['id'])){
     
     $prop = $conn->query("SELECT * FROM properties where md5(property_id) = '{$_GET['id']}' ");    
     while($row=$prop->fetch_assoc()):
-    
+        
         ///LOT
         $prop_id = $row['property_id'];
         $type = $row['c_type'];
@@ -68,7 +69,7 @@ if(isset($_GET['id'])){
 
 
 
-        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no, NULL as trans_date FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no,trans_date FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
@@ -80,6 +81,7 @@ if(isset($_GET['id'])){
 
         }
        
+     
         $last_cnt = $l_last;
         $payment_rec = $payments_data;
         $last_payment = $payments_data[$l_last];
@@ -89,7 +91,8 @@ if(isset($_GET['id'])){
         $last_excess = isset($last_payment['excess']) ? $last_payment['excess'] : 0;
         $last_acc_stat = isset($last_payment['account_status']) ? $last_payment['account_status'] : '';
         $last_or_ent = isset($last_payment['or_no']) ? $last_payment['or_no'] : '';
-        $last_pay_ent = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
+        $last_or_date = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
+        $last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : date('Y-m-d');
        
        
         $check_date = 0;
@@ -163,6 +166,7 @@ if(isset($_GET['id'])){
                 $amount_paid_ent = (number_format($monthly_down,2));
                 $amount_ent = (number_format($monthly_down,2));
                 $total_amount_due_ent = (number_format($monthly_down,2));
+                //echo $total_amount_due_ent;
                 $count = 1;
                 if ($last_payment['status'] == 'ADDITIONAL'):
                         $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
@@ -591,7 +595,7 @@ if(isset($_GET['id'])){
                
         else:        
         
-            echo '<script>alert("Error.");</script>';
+            echo '<script>alert("Account Is Fully Paid.");</script>';
 
           
             

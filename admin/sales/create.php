@@ -1819,6 +1819,15 @@ input{
 		document.getElementById('onlink4').style.backgroundColor="#ccc";
 	}
 
+
+
+	var cloned = $('#comm_table tr:last').clone();
+	cloned.find('input').val('');
+	$('#comm_table').on('click', ".add-row", function(e) {
+		e.preventDefault();
+		cloned.clone().appendTo('#comm_table'); 
+	});
+
 	// remove commission row
 	$('#comm_table').on('click', ".delete-row", function(e) {
 		e.preventDefault();
