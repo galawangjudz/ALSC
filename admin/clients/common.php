@@ -3,8 +3,6 @@ function is_leap_year($year) {
   return date('L', strtotime("$year-01-01"));
 }
 
-
-
 function validate_date($year,$month,$day){
     if (($month == 1) || ($month == 6) || ($month == 9) || ($month == 11)):
         if ($day == 31):

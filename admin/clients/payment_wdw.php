@@ -650,6 +650,11 @@ function CreditPrincipal() {
     const last_stat_count = $('.last-stat-count').val();
     $('#status_count').val(last_stat_count);
     $('.due-date').val(last_due_date.toISOString().substr(0, 10));
+    const last_excess =  $('.last-excess').val();
+    const l_balance =  $('.balance-amt').val();
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(l_balance);
+        }
 }
 
 
