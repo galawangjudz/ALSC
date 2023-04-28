@@ -219,8 +219,8 @@ body{
                            
                         </tr>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="or_date_ent" name="or_date_ent" value="<?php echo isset($or_date_ent) ? date("Y-m-d", strtotime($or_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
-                            <td style="width:25%;font-size:13px;"> <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom trans-date" id="trans_date_ent" name="trans_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:13px;"> <input type="date" class="form-control-sm margin-bottom or-date" id="or_date_ent" name="or_date_ent" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
                        
                         </tr>
                         <tr>
@@ -490,7 +490,7 @@ window.onload = check_paydate();
             check_paydate();
         });
 
-        $(document).on('keyup', ".pay-date", function(e) {
+        $(document).on('keyup', ".trans-date", function(e) {
             e.preventDefault(); 
             document.getElementById("radio0").checked = true;
             check_paydate();
@@ -529,7 +529,7 @@ function formatCurrency(amount) {
 function check_paydate(){
 
     const due_date = new Date($('.due-date').val());
-    const pay_date = new Date($('.pay-date').val());
+    const pay_date = new Date($('.trans-date').val());
     const payment_type2 = $('.payment-type2').val();
     const pay_status = $('.pay-stat').val();
     const pay_stat_acro = pay_status.substring(0, 2);
