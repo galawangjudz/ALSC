@@ -134,6 +134,47 @@ Class Master extends DBConnection {
 		return json_encode($resp);	
 	}
 
+	function save_or_logs(){
+		extract($_POST);
+		// $data = " log_id = '$log_id' ";
+		$data = " property_id = '$prop_id' ";
+		$data .= ", pay_date = '$pay_date_ent1' ";
+		$data .= ", or_no = '$or_no' ";
+		$data .= ", amount_paid = '$amt_pd' ";
+		$data .= ", amount_due = '$amt_due' ";
+		$data .= ", surcharge = '$amt_surcharge' ";
+		
+		$data .= ", interest = '$amt_interest' ";
+		$data .= ", principal = '$amt_principal' ";
+		$data .= ", rebate = '$amt_rebate' ";
+		$data .= ", remaining_balance = '$balance' ";
+		$data .= ", mode_of_payment = '$mode_of_payment' ";
+		$data .= ", user = '$user' ";
+
+		$sql = "INSERT INTO or_logs set ".$data;
+		$save = $this->conn->query($sql);
+
+
+		// if(empty($prod_id)){
+		// 	$sql = "INSERT INTO t_model_house set ".$data;
+		// 	$save = $this->conn->query($sql);
+		// }else{
+		// 	$sql = "UPDATE t_model_house set ".$data." where c_code = ".$prod_id;
+		// 	$save = $this->conn->query($sql);
+		// }
+		
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($prop_id))
+				$this->settings->set_flashdata('success',"New log successfully saved.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+
 	function save_house_model(){
 		extract($_POST);
 		$data = " c_model = '$c_model' ";
@@ -1427,6 +1468,7 @@ Class Master extends DBConnection {
 			$data .= ", payment_count = '$payment_count' ";
 
 			$save = $this->conn->query("INSERT INTO property_payments set ".$data);
+
 		
 			if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
@@ -1434,7 +1476,7 @@ Class Master extends DBConnection {
 					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id);
 			}
 		endwhile;
-		
+
 		if($save && $l_sql){
 			$delete = $this->conn->query("DELETE FROM t_invoice where property_id =".$prop_id);
 			if ($delete){
@@ -2011,10 +2053,12 @@ Class Master extends DBConnection {
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
 		}
+		
 		return json_encode($resp);
 	}
 	
 	function delete_invoice(){
+		
 		extract($_POST);
 
 		$rowId = $_POST['rowId'];
@@ -2186,6 +2230,9 @@ switch ($action) {
 	break;
 	case 'save_project':
 		echo $Master->save_project();
+	break;
+	case 'save_or_logs':
+		echo $Master->save_or_logs();
 	break;
 	case 'save_agent':
 		echo $Master->save_agent();

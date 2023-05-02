@@ -224,23 +224,61 @@ body{
                        
                         </tr>
                         <tr>
-                            
                             <td style="width:25%;font-size:13px;"><label for="surcharge">Surcharge:</label>
                                 <br>
-                                <input type="radio" name="surcharge_percent" value="0" id="radio0">
-                                <label for="radio0">0%</label>
-                                <input type="radio" name="surcharge_percent" value="25" id="radio25">
-                                <label for="radio25">25%</label>
-                                <input type="radio" name="surcharge_percent" value="50" id="radio50">
-                                <label for="radio50">50%</label>
-                                <input type="radio" name="surcharge_percent" value="75" id="radio75">
-                                <label for="radio75">75%</label>
-                                <input type="radio" name="surcharge_percent" value="100" id="radio100">
-                                <label for="radio100">100%</label>
-                        
+                                <table style="margin: 0 auto;">
+                                    <tr style="">
+                                        <td>
+                                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                                                <input type="radio" name="surcharge_percent" value="0" id="radio0">
+                                            </div>
+                                            <div style="float:left">
+                                                <label class="light">0%<label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                                                <input type="radio" name="surcharge_percent" value="25" id="radio25">
+                                            </div>
+                                            <div style="float:left">
+                                                <label for="radio25">25%</label>
+                                            </div>
+                                        </td>
+                                        <td>    
+                                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                                                <input type="radio" name="surcharge_percent" value="50" id="radio50">
+                                            </div>
+                                            <div style="float:left">
+                                                <label for="radio25">50%</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="margin: 0 auto;">
+                                    <tr>
+                                        <td>
+                                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                                                <input type="radio" name="surcharge_percent" value="75" id="radio75">
+                                            </div>
+                                            <div style="float:left">
+                                                <label for="radio25">75%</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="float:left;margin-right:2px;margin-top:2px;">
+                                                <input type="radio" name="surcharge_percent" value="100" id="radio100">
+                                            </div>
+                                            <div style="float:left">
+                                                <label for="radio25">100%</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>   
+
                             <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
                        
+
                         </tr>
                         
                         <tr>
@@ -276,7 +314,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td>
-                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required></td>
+                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required ></td>
                         </tr>
                     </table>
                     <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
@@ -300,7 +338,7 @@ body{
                                         echo ' <input type="submit" name="submit" value="Add to List &#43;" class="btn btn-secondary not-clickable" disabled style="width:100%;font-size:15px;">';
                                         
                                     }else{
-                                        echo '<input type="submit" name="submit" value="Add to List &#43;" class="btn btn-info" style="width:100%;font-size:15px;">';
+                                        echo '<input type="submit" name="submit" value="Add to List &#43;" class="btn btn-info" style="width:100%;font-size:15px; onclick="or_no_onchange()"">';
                                     }
                                 ?>
                             </td>
@@ -326,7 +364,6 @@ body{
                 </form>
             </div>
         </div> 
-
     </div>
     <div class="right-div">
         <div class="card card-outline rounded-0 card-maroon" style="padding:5px;">
@@ -438,46 +475,114 @@ body{
                     <table style="width:30%;float:right;table-layout: fixed;table-layout: fixed;">
                         <tr>
                             <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" disabled></td>
+                            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
                             <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" disabled></td>
+                            <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
                             <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" disabled></td>
+                            <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
                             <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" disabled></td>
+                            <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>  
                         <tr>  
 
                             <td style="font-size:12px;"><label>Total Amount to be Paid: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" disabled></td>
+                            <td><input type="text" class= "form-control-sm" name="tot_amt_pd" id="tot_amt_pd" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
 
                             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
                         </tr>
                         <tr>
-                            <td>
+                            <!-- <td>
                                 <button type="button" class="btn btn-primary btn-s paid_btn" prop-id ="<?php $prop_id ?>" style="width:100%;font-size:15px;">Save&nbsp;&nbsp; <i class='fa fa-save'></i></button>
+                               
                             </td>
+
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;  <i class='fa fa-print'></i></a>
-                            </td>
-                            <!-- <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;">SOA TESTING  <i class='fa fa-print'></i></a> -->
+                            </td> -->
                         </tr>
                     </table>
                 </form>
             </div>
+        </div>
+        
+        <div class="card card-outline rounded-0 card-maroon" style="padding:5px;">
+            <div class="container-fluid">
+                <form action="" method="POST" id="or_form_logs">
+                    <input type="hidden" id="prop_id" name="prop_id" value="<?php echo $prop_id; ?>" style="width:100%;" readonly>
+                    <input type="hidden" class="form-control-sm margin-bottom pay-date" id="pay_date_ent1" name="pay_date_ent1" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;">
+                    <?php 
+                        $sql_or = "SELECT or_no AS or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER BY gen_time DESC limit 1";
+                        //$sql_or = "SELECT or_no FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ORDER BY or_no DESC limit 1";
+                        $result_or = mysqli_query($conn, $sql_or);
+                        $row_or = mysqli_fetch_assoc($result_or);
+                    ?>
+                    <?php 
+                        $sql_sur = "SELECT SUM(surcharge) AS total_surcharge FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
+                        $result_sur = mysqli_query($conn, $sql_sur);
+                        $row_sur = mysqli_fetch_assoc($result_sur);
+                    ?>
+                    <input type="hidden" id="or_no" name="or_no" value="<?php echo $row_or['or_no'] ? $row_or['or_no']: ''; ?>" style="width:100%;" required>
+                    <input type="hidden" id="amt_pd" name="amt_pd" value="<?php echo ($row_due['total_amt_paid']) ? ($row_due['total_amt_paid']) : ''; ?>" style="width:100%;" required>
+                    <input type="hidden" id="amt_due" name="amt_due" value="<?php echo isset($total_amount_due_ent) ? str_replace(',', '', $total_amount_due_ent) : '0.00'; ?>" style="width:100%;" readonly>
+                    <input type="hidden" name="amt_surcharge" id="amt_surcharge" value="<?php echo ($row_sur['total_surcharge']) ? ($row_sur['total_surcharge']) : ''; ?>" style="width:100%;" readonly>
+                    <input type="hidden" class= "form-control-sm" name="amt_interest" id="amt_interest" value="<?php echo ($row_int['total_interest']) ? ($row_int['total_interest']) : ''; ?>" style="width:100%;" readonly>
+                    <input type="hidden" class="form-control-sm margin-bottom amt-prin"  id="amt_principal" name="amt_principal" value="<?php echo ($row_prin['total_principal']) ? ($row_prin['total_principal']) : ''; ?>" style="width:100%;" required>
+                    <input type="hidden" class= "form-control-sm" name="amt_rebate" id="amt_rebate" value="<?php echo ($row_rebate['total_rebate']) ? ($row_rebate['total_rebate']): ''; ?>" style="width:100%;" readonly>
+                    <input type="hidden" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo str_replace(',', '', $balance_ent); ?>" style="width:100%;" readonly>
+                    
+                    
+                    <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;table-layout: fixed;">
 
+                    <tr>
+                        <td>
+                            <label>Mode of Payment:</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control-sm margin-bottom"  id="mode_of_payment" name="mode_of_payment" value="CASH" style="width:100%;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>User:</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;">
+                        </td>
+                    </tr>
+                    
+                    
+
+                        <tr>
+                            <td>
+                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
+                            </td>
+                            <td>
+                                <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-
+function or_no_onchange(){
+    document.getElementById('or_no_ent1').value = document.getElementById('or_no_ent2').value;
+    document.getElementById('pay_date_ent1').value = document.getElementById('pay_date_ent').value;
+    document.getElementById('tot_amt_pd1').value = document.getElementById('amount_paid').value;
+    document.getElementById('tot_amt_due1').value = document.getElementById('amount_due').value;
+    document.getElementById('surcharge1').value = document.getElementById('tot_sur').value;
+    document.getElementById('tot_int1').value = document.getElementById('tot_int').value;
+    document.getElementById('tot_prin1').value = document.getElementById('tot_prin').value;
+}
 
 window.onload = check_paydate();
 
@@ -743,7 +848,8 @@ function DeleteAll() {
 
 }
 
-	
+
+
 function payments(){
     start_loader();
     $.ajax({
@@ -758,6 +864,8 @@ function payments(){
             },
         success:function(resp){
             if(typeof resp =='object' && resp.status == 'success'){
+                // location.reload();
+                redirectSoa();
                 location.reload();
         
             }else{
@@ -765,11 +873,9 @@ function payments(){
                 end_loader();
                 //console.log(resp)
             }
-            }
-        
-        })
-
-    }
+        }
+    })
+}
 function compute(excess){
     if (excess == -1){
         excesspay = 0;
@@ -829,11 +935,58 @@ $(document).ready(function(){
 
     });
 
-    $('.paid_btn').click(function(){
+    $('.paid_btns').click(function(){
     _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
-
+    event.preventDefault();
     });
 
+
+    $('#or_form_logs').submit(function(e){
+        e.preventDefault();
+        var _this = $(this);
+        $('.err-msg').remove();
+
+            var statusValue = $("#status").val();
+
+            var errorCounter = validateForm();
+            if (errorCounter > 0) {
+            alert_toast("It appear's you have forgotten to complete something!","warning");	  
+            return false;
+        }else{
+            $(".required").parent().removeClass("has-error")
+        }    
+        
+        $.ajax({
+            url:_base_url_+'classes/Master.php?f=save_or_logs',
+            method:'POST',
+            data: new FormData(_this[0]),
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            dataType: 'json',
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured",'error');
+                end_loader();
+                },
+            success:function(resp){
+                if(typeof resp =='object' && resp.status == 'success'){
+                    payments();
+            
+                }else{
+                    alert_toast(resp.err,'error');
+                    end_loader();
+                    //console.log(resp)
+                }
+            }
+        })
+
+        })
+
+
+    
 
     $('#save_payment').submit(function(e){
         e.preventDefault();
@@ -942,7 +1095,12 @@ $(document).ready(function(){
 
 </script>
 <script>
-     $(document).ready(function(){
+function redirectSoa() {
+    
+    // window.location.href = "<?php echo base_url ?>/report/print_soa.php?id=<?php echo md5($prop_id); ?>";
+    window.open("<?php echo base_url ?>/report/print_soa.php?id=<?php echo md5($prop_id); ?>", "_blank");
+}
+$(document).ready(function(){
 
 $('#print_payment_func').submit(function(e){
     e.preventDefault();
