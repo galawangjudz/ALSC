@@ -317,6 +317,7 @@ body{
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+                            <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($property_id)  ?>" id="payment_bal" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
                             <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
                             <br>
                             </td>
@@ -811,6 +812,12 @@ function validateForm() {
     
 
 $(document).ready(function(){
+
+
+    $('.add-payment-bal').click(function(){
+	  uni_modal("<i class='fa fa-plus'></i> Payment of Balance",'clients/payment_of_bal.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
 
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 

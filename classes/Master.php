@@ -2069,16 +2069,18 @@ Class Master extends DBConnection {
 			$status = 'C PRIN';
 		}
 
-		//$l_status = '';
-		if ($balance <= 0 ){
-			$status = 'FPD/' + $status;
-			$acc_status = 'Fully Paid';
-			}
 
 		$principal = $amount_paid + $rebate;
 		$balance = $balance - $principal;
 		$status_count = $status_count ;
 		$payment_count = $payment_count + 1;
+		//$l_status = '';
+		if ($balance <= 0 ){
+			$status = 'FPD/'. $status;
+			$acc_status = 'Fully Paid';
+			}
+
+		
 
 	
 
@@ -2098,7 +2100,7 @@ Class Master extends DBConnection {
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$acc_status' ";
-		$data .= ", trans_date = '$pay_date_ent' ";
+		$data .= ", trans_date = '$trans_date_ent' ";
 
 		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 
@@ -2118,7 +2120,7 @@ Class Master extends DBConnection {
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
 			'excess' => $excess,
-			'trans_date' => $pay_date_ent
+			'trans_date' => $trans_date_ent
 		  );
 
 
