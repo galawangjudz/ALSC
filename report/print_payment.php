@@ -143,13 +143,14 @@ $name = $row2['c_acronym']; ?>
                         <tr>
                             <th scope="col">DUE DATE</th>
                             <th scope="col">PAY DATE</th>
-                            <th scope="col">OR No.</th>
-                            <th scope="col">PERIOD</th>
-                            <th scope="col">AMOUNT PAID</th>
-                            <th scope="col">REBATE</th>
-                            <th scope="col">SURCHARGE</th>
+                            <th scope="col">OR NO.</th>
+                            <th scope="col">AMT PAID</th>
+                            <th scope="col">AMT DUE</th>
                             <th scope="col">INTEREST</th>
                             <th scope="col">PRINCIPAL</th>
+                            <th scope="col">SURCHARGE</th>
+                            <th scope="col">REBATE</th>
+                            <th scope="col">PERIOD</th>
                             <th scope="col">BALANCE</th>
                         </tr>
                     </thead>
@@ -168,22 +169,25 @@ $name = $row2['c_acronym']; ?>
                                     <?php echo $row["or_no"] ?>
                                 </td>
                                 <td>
-                                    <?php echo $row["status"] ?>
-                                </td>
-                                <td>
                                     <?php echo number_format($row["payment_amount"], 2) ?>
                                 </td>
                                 <td>
-                                    <?php echo number_format($row["rebate"], 2) ?>
-                                </td>
-                                <td>
-                                    <?php echo number_format($row["surcharge"], 2) ?>
+                                    <?php echo number_format($row["amount_due"], 2) ?>
                                 </td>
                                 <td>
                                     <?php echo number_format($row["interest"], 2) ?>
                                 </td>
                                 <td>
                                     <?php echo number_format($row["principal"], 2) ?>
+                                </td>
+                                <td>
+                                    <?php echo number_format($row["surcharge"], 2) ?>
+                                </td>
+                                <td>
+                                    <?php echo number_format($row["rebate"], 2) ?>
+                                </td>
+                                <td>
+                                    <?php echo $row["status"] ?>
                                 </td>
                                 <td>
                                     <?php echo number_format($row["remaining_balance"], 2) ?>
@@ -237,13 +241,6 @@ $name = $row2['c_acronym']; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:10%;"><label class="control-label"><b>Total Rebate: </b></label></td>
-                        <td style="width:10%;"><input type="text" class="form-control-sm" name="tot_reb" id="tot_reb"
-                                value="<?php echo number_format($total_rebate, 2) ?>"
-                                style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;text-align:right;">
-                        </td>
-                    </tr>
-                    <tr>
                         <td style="width:10%;"><label class="control-label"><b>Total Surcharge: </b></label></td>
                         <td style="width:10%;"><input type="text" class="form-control-sm" name="tot_sur" id="tot_sur"
                                 value="<?php echo number_format($total_surcharge, 2) ?>"
@@ -254,6 +251,13 @@ $name = $row2['c_acronym']; ?>
                         <td style="width:10%;"><label class="control-label"><b>Total Interest: </b></label></td>
                         <td style="width:10%;"><input type="text" class="form-control-sm" name="tot_int" id="tot_int"
                                 value="<?php echo number_format($total_interest, 2) ?>"
+                                style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;text-align:right;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:10%;"><label class="control-label"><b>Total Rebate: </b></label></td>
+                        <td style="width:10%;"><input type="text" class="form-control-sm" name="tot_reb" id="tot_reb"
+                                value="<?php echo number_format($total_rebate, 2) ?>"
                                 style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;text-align:right;">
                         </td>
                     </tr>
