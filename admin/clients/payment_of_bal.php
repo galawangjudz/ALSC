@@ -1,4 +1,5 @@
 <?php 
+
 include 'common.php';
 
 include '../../config.php';
@@ -9,12 +10,11 @@ if($_settings->chk_flashdata('success')): ?>
 <?php endif;?>
 <?php
 if(isset($_GET['id'])){
-    echo $_GET['id'];
     include('payment_reload.php');
 }
 
 ?>
-<form>
+<form action="" method="POST" id="payment_of_bal">
 
 <table>
             <tr>

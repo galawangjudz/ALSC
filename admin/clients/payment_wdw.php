@@ -355,7 +355,8 @@ body{
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
-                            <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($property_id)  ?>" id="payment_bal" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
+                            
+                            <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
                             <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
                             <br>
                             </td>
@@ -921,6 +922,8 @@ $(document).ready(function(){
 
 
     $('.add-payment-bal').click(function(){
+
+     /*  alert($(this).attr('data-id')); */
 	  uni_modal("<i class='fa fa-plus'></i> Payment of Balance",'clients/payment_of_bal.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
@@ -936,7 +939,7 @@ $(document).ready(function(){
     });
 
     $('.paid_btns').click(function(){
-    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+    _conf("Are you sure you want to proceed with this request? Click 'Continue' to confirm or 'Close' to cancel the request.","payments");
     event.preventDefault();
     });
 
