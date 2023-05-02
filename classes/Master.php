@@ -2019,7 +2019,7 @@ Class Master extends DBConnection {
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$l_status' ";
-		$data .= ", trans_date = '$pay_date_ent' ";
+		$data .= ", trans_date = '$trans_date_ent' ";
 
 
 		
@@ -2041,7 +2041,7 @@ Class Master extends DBConnection {
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
 			'excess' => $excess,
-			'trans_date' => $pay_date_ent
+			'trans_date' => $trans_date_ent
 		  );
 		
 
@@ -2113,16 +2113,18 @@ Class Master extends DBConnection {
 			$status = 'C PRIN';
 		}
 
-		//$l_status = '';
-		if ($balance <= 0 ){
-			$status = 'FPD/' + $status;
-			$acc_status = 'Fully Paid';
-			}
 
 		$principal = $amount_paid + $rebate;
 		$balance = $balance - $principal;
 		$status_count = $status_count ;
 		$payment_count = $payment_count + 1;
+		//$l_status = '';
+		if ($balance <= 0 ){
+			$status = 'FPD/'. $status;
+			$acc_status = 'Fully Paid';
+			}
+
+		
 
 	
 
@@ -2142,14 +2144,14 @@ Class Master extends DBConnection {
 		$data .= ", payment_count = '$payment_count' ";
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$acc_status' ";
-		$data .= ", trans_date = '$pay_date_ent' ";
+		$data .= ", trans_date = '$trans_date_ent' ";
 
 		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 
 		$resp['data'] = array(
 			'property_id' => $prop_id,
 			'payment_amount' => $amount_paid,
-			'pay_date' => $or_no_ent,
+			'pay_date' => $or_date_ent,
 			'due_date' => $due_date,
 			'or_no' => $or_no_ent,
 			'amount_due' => $tot_amount_due,
@@ -2162,7 +2164,7 @@ Class Master extends DBConnection {
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
 			'excess' => $excess,
-			'trans_date' => $pay_date_ent
+			'trans_date' => $trans_date_ent
 		  );
 
 

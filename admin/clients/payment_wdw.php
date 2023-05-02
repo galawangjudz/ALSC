@@ -219,8 +219,8 @@ body{
                            
                         </tr>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom pay-date" id="or_date_ent" name="or_date_ent" value="<?php echo isset($or_date_ent) ? date("Y-m-d", strtotime($or_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
-                            <td style="width:25%;font-size:13px;"> <input type="date" class="form-control-sm margin-bottom pay-date" id="pay_date_ent" name="pay_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom trans-date" id="trans_date_ent" name="trans_date_ent" value="<?php echo isset($trans_date_ent) ? date("Y-m-d", strtotime($trans_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:13px;"> <input type="date" class="form-control-sm margin-bottom or-date" id="or_date_ent" name="or_date_ent" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>" style="width:100%;"></td>
                        
                         </tr>
                         <tr>
@@ -275,7 +275,10 @@ body{
                                     </tr>
                                 </table>
                             </td>   
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" required></td>
+
+                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
+                       
+
                         </tr>
                         
                         <tr>
@@ -284,7 +287,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
-                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" required></td>
+                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom rebate-amt" id="rebate_amt" name="rebate_amt" value="<?php echo isset($rebate_ent) ? $rebate_ent : 0.00; ?>" style="width:100%;" readonly></td>
                         </tr>
                         <tr>
                         </tr>
@@ -352,6 +355,7 @@ body{
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+                            <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($property_id)  ?>" id="payment_bal" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
                             <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
                             <br>
                             </td>
@@ -592,7 +596,7 @@ window.onload = check_paydate();
             check_paydate();
         });
 
-        $(document).on('keyup', ".pay-date", function(e) {
+        $(document).on('keyup', ".trans-date", function(e) {
             e.preventDefault(); 
             document.getElementById("radio0").checked = true;
             check_paydate();
@@ -631,7 +635,7 @@ function formatCurrency(amount) {
 function check_paydate(){
 
     const due_date = new Date($('.due-date').val());
-    const pay_date = new Date($('.pay-date').val());
+    const pay_date = new Date($('.trans-date').val());
     const payment_type2 = $('.payment-type2').val();
     const pay_status = $('.pay-stat').val();
     const pay_stat_acro = pay_status.substring(0, 2);
@@ -662,6 +666,7 @@ function check_paydate(){
 
 
         tot_amt_due = monthly_pay + l_sur;
+        console.log(tot_amt_due);
         const total_amt_due = tot_amt_due.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -914,6 +919,12 @@ function validateForm() {
 
 $(document).ready(function(){
 
+
+    $('.add-payment-bal').click(function(){
+	  uni_modal("<i class='fa fa-plus'></i> Payment of Balance",'clients/payment_of_bal.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 
         CreditPrincipal();
@@ -1155,6 +1166,7 @@ radioButtons.forEach(radioButton => {
     check_paydate();
     const surchargeEntry = document.getElementById("surcharge");
     surcharge_value = surchargeEntry.value;
+    console.log(surcharge_value);
     surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
     // Get the value of the selected radio button
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
@@ -1168,7 +1180,7 @@ radioButtons.forEach(radioButton => {
     const last_excess =  $('.last-excess').val();
     const monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
 
-    l_tot_amt_due = monthly_pay - surchargeAmount;
+    l_tot_amt_due = monthly_pay + surchargeAmount;
 
 
     l_surcharge = surchargeAmount.toLocaleString(undefined, {
