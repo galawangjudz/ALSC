@@ -560,7 +560,7 @@ body{
 
                         <tr>
                             <td>
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
+                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s paid_btns" style="width:100%;font-size:15px;">
                             </td>
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
