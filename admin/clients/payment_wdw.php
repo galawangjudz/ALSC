@@ -329,6 +329,7 @@ body{
                     <input type="hidden" class="form-control-sm margin-bottom last-due"  id="last_due" name="last_due" value="<?php echo $last_due; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom "  id="ma_balance" name="ma_balance" value="<?php echo $ma_balance; ?>">   
                     <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
+                    <input type="hidden" class="form-control-sm margin-bottom "  id="sur_percent" name="sur_percent" value="<?php echo isset($sur_percent) ? $sur_percent  : 0; ?>"> 
                     <br>
                     <table style="width:100%;table-layout: fixed;table-layout: fixed;">
                         <tr>
@@ -418,6 +419,7 @@ body{
                                     $rebate = $row['rebate'];
                                     $period = $row['status'];
                                     $balance = $row['remaining_balance'];
+                                    $sur_per = $row['surcharge_percent'];
 
                                     $total_rebate += $rebate;
              
@@ -427,7 +429,7 @@ body{
                                     echo "<td style='font-size:12px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                                 
                                 }else{
-                                echo "<td class='text-center'><span class='badge badge-info'>Added</span></td>";
+                                echo "<td class='text-center'><span class='badge badge-info'>Added</span>  </td>";
                                 
                                 }
                                 $i++;
@@ -437,7 +439,7 @@ body{
                             <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_paid,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> <span class='badge badge-primary'> Less <?php echo $sur_per ?> % </span> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($interest,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
@@ -1173,6 +1175,8 @@ radioButtons.forEach(radioButton => {
     surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
     // Get the value of the selected radio button
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
+    
+    $('#sur_percent').val(selectedValue);
     
     // Calculate the surcharge amount based on the selected percentage
     const surchargeAmount = surcharge_amt - (surcharge_amt * (selectedValue / 100));
