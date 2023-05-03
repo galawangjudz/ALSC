@@ -150,6 +150,8 @@ Class Master extends DBConnection {
 		$data .= ", remaining_balance = '$balance' ";
 		$data .= ", mode_of_payment = '$mode_of_payment' ";
 		$data .= ", user = '$user' ";
+		$data .= ", check_date = '$check_date' ";
+		$data .= ", branch = '$branch' ";
 
 		$sql = "INSERT INTO or_logs set ".$data;
 		$save = $this->conn->query($sql);

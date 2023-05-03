@@ -58,7 +58,7 @@
                 <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
                     <thead>
                         <tr>
-                        <th>Lot ID#</th>
+                        <th>Lot ID</th>
                         <th>Phase</th>
                         <th>Block</th>
                         <th>Lot</th>
