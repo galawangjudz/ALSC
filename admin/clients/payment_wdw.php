@@ -359,11 +359,7 @@ body{
                             ?>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($property_id)  ?>" id="payment_bal" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a>
-                            </td>
-                        </tr>
+                       
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
