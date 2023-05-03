@@ -79,6 +79,7 @@ body{
   height:auto;
   width:100%;
 }
+
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
