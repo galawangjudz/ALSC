@@ -595,17 +595,10 @@ body{
                             <label>User:</label>
                         </td>
                         <td>
-                            <b><input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;"></b>
+                            <b><input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;" readonly></b>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
-                        </td>
-                        <td>
-                            <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
-                        </td>
-                    </tr>
+                   
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
@@ -615,8 +608,7 @@ body{
                             </td>
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
-
-                            <a href="<?php echo base_url ?>/admin/?page=logs/or_logs", target="_blank" class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
+                                <a href="<?php echo base_url ?>/admin/?page=logs/or_logs", target="_blank" class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
 
                             </td>
                         </tr>
