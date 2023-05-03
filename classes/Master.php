@@ -168,7 +168,7 @@ Class Master extends DBConnection {
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($prop_id))
-				$this->settings->set_flashdata('success',"New log successfully saved.");
+				$this->settings->set_flashdata('success',"New OR log successfully saved.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";

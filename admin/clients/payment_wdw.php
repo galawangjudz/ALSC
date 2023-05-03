@@ -359,7 +359,11 @@ body{
                             ?>
                             </td>
                         </tr>
-                        
+                        <tr>
+                            <td>
+                                <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($property_id)  ?>" id="payment_bal" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
@@ -591,16 +595,15 @@ body{
                             <label>User:</label>
                         </td>
                         <td>
-                            <b><input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;" readonly></b>
+                            <b><input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;"></b>
                         </td>
                     </tr>
-                   
+                
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
                             <td>
-
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s paid_btns" style="width:100%;font-size:15px;">
+                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
                             </td>
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
