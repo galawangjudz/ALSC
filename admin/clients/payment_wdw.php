@@ -320,7 +320,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td>
-                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required ></td>
+                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" ></td>
                         </tr>
                     </table>
                     <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
@@ -599,7 +599,7 @@ body{
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
                             <td>
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
+                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s paid_btns" style="width:100%;font-size:15px;">
                             </td>
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
@@ -643,7 +643,7 @@ body{
                             $last_row = $qry4->num_rows - 1;
                             $i = 1;
                             if($qry4->num_rows <= 0){
-                            echo "<div class='text-center' style='font-size:15px;position:absolute;margin-top:40px;font-weight:bold;'>  No Payment Record </div>";
+                            echo "<div class='text-center' style='font-size:15px;position:absolute;margin-top:40px;font-weight:bold;'>  No Record </div>";
                             }else{  ?>      
                         <tbody>
                             <tr>
@@ -1071,7 +1071,7 @@ $(document).ready(function(){
     });
 
     $('.paid_btns').click(function(){
-    _conf("Are you sure you want to proceed with this request? Click 'Continue' to confirm or 'Close' to cancel the request.","payments");
+    _conf("Are you sure you want to proceed with this request? Click 'Continue' to confirm or 'Close' to cancel the request.","or_form_logs");
     event.preventDefault();
     });
 
