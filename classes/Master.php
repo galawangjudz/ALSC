@@ -2001,6 +2001,13 @@ Class Master extends DBConnection {
 					$l_status = 'Monthly Amortization';
 				endif;
 			endif;
+
+			// lagay ako dito condition para sa payment of balance
+
+						//$principal = $amount_paid - $rebate;
+						//$interest = 0;
+					///
+
 		}
 		
 	 
@@ -2104,12 +2111,17 @@ Class Master extends DBConnection {
 		$rebate = (float) str_replace(",", "", $rebate_amt);
 		$surcharge = 0;
 		$interest = 0;
-	
+		
 
 		if ($amount_paid < ($monthly_pay * 3)){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Credit Principal Amount is not enough!! san ako nagkulang";
+			$resp['msg'] = "Credit Principal Amount is not enough !! " ;
 			return json_encode($resp);
+		}elseif($due_date < $trans_date_ent){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Account is not Full Update cannot insert into Principal " ;
+			return json_encode($resp);
+
 		}
 
 
