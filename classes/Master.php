@@ -2068,6 +2068,78 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 	
+	function delete_payment(){
+		extract($_POST);
+		$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$l_last = $sql->num_rows - 1;
+		$payments_data = array(); 
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet!';
+			return json_encode($resp);
+        } 
+		while($row = $sql->fetch_assoc()) {
+		  $payments_data[] = $row; 
+
+		}
+		$last_row = $payments_data[$l_last];
+		$l_bal = $last_row['remaining_balance'];
+		$l_last_due_date = $last_row['due_date'];
+		$l_last_pay_date = $last_row['pay_date'];
+		$l_last_amt_paid = $last_row['payment_amount'];
+		$l_last_amt_due = $last_row['amount_due'];
+		$l_last_sur = $last_row['surcharge'];
+		$l_last_int = $last_row['interest'];
+		$l_last_status = $last_row['status'];
+		$l_last_stat_cnt = $last_row['status_count'];
+		$l_last_rebate = $last_row['rebate'];
+		$l_last_prin = $last_row['principal'];
+		$l_last_or_no = $last_row['or_no'];
+		$l_last_pay_cnt = $last_row['payment_count'];
+
+		$all_payments= array();
+		for ($x = 0; $x < $sql->num_rows; $x++){
+
+
+		  if ($l_last_pay_date == $payments_data[$x]['pay_date']):
+			  if ($payments_data[$x]['due_date'] != 0){
+				  $l_date = strtotime($payments_data[$x]['due_date']);
+				  $t_due_date = date('m/d/y', $l_date);
+				  
+			  }
+			  else{
+				  $t_due_date = '';
+			  }
+			  if ($payments_data[$x]['pay_date'] != 0){
+				  $l_date = strtotime($payments_data[$x]['pay_date']);
+				  $l_last_pay_date1 =  date('m/d/y', $l_date);
+			  }
+			  else{
+				  $l_last_pay_date1 = '';
+			  }
+
+			  $query = "DELETE FROM property_payments WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+			  $delete = $this->conn->query($query);
+
+			
+		  endif;
+		  }
+		
+	
+		
+		if ($delete){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"New payments successfully deleted.");	
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+
+		return json_encode($resp);
+	}
+
+
+
 	function delete_invoice(){
 		
 		extract($_POST);
@@ -2109,6 +2181,7 @@ Class Master extends DBConnection {
 		$tot_amount_due = (float) str_replace(",", "", $tot_amount_due);
 		$balance = (float) str_replace(",", "", $balance);
 		$rebate = (float) str_replace(",", "", $rebate_amt);
+	
 		$surcharge = 0;
 		$interest = 0;
 		
@@ -2122,6 +2195,10 @@ Class Master extends DBConnection {
 			$resp['msg'] = "Account is not Full Update cannot insert into Principal " ;
 			return json_encode($resp);
 
+		}elseif($tot_amount_due == $amount_paid){
+			if ($status == 'Payment of Balance'){
+				$status = 'FPD';
+			}
 		}
 
 
@@ -2150,7 +2227,7 @@ Class Master extends DBConnection {
 		$data .= ", due_date = '$due_date' ";
 		$data .= ", or_no = '$or_no_ent' " ;
 		$data .= ", amount_due = '$amount_paid' ";
-		$data .= ", rebate = '$rebate_amt' ";
+		$data .= ", rebate = '$rebate' ";
 		$data .= ", surcharge = '$surcharge' ";
 		$data .= ", interest = '$interest' ";
 		$data .= ", principal = '$principal' ";
@@ -2294,7 +2371,9 @@ switch ($action) {
 	case 'add_payment':
 		echo $Master->add_payment();
 	break;
-
+	case 'delete_payment':
+		echo $Master->delete_payment();
+	break;
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
 	break;

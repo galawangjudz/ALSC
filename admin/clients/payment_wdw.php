@@ -731,7 +731,14 @@ window.onload = check_paydate();
         $(document).on('keyup', ".trans-date", function(e) {
             e.preventDefault(); 
             document.getElementById("radio0").checked = true;
+            let status = $('#status').val();
+            //console.log(status);
+            if ((status == 'Credit to Principal') || (status == 'Payment of Balance')){
+                return;
+            }
+            
             check_paydate();
+                
         });
 
         $(document).on('blur', ".amt-paid", function(e) {
@@ -975,7 +982,7 @@ function PaymentofBalance() {
 
     amount_paid.readOnly = true;
 
-    $('#status').val('FPD');
+    $('#status').val('Payment of Balance');
     $('#surcharge').val('0.0');
     $('#rebate_amt').val(l_rebate);
     $('#tot_amount_due').val(tot_amt_due);
@@ -1253,44 +1260,8 @@ $(document).ready(function(){
             })
         }
 
-        function CreditPrincipalForm() {
-            $.ajax({
-                url:_base_url_+"classes/Master.php?f=credit_principal",
-                data: new FormData(_this[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-                error:err=>{
-                    console.log(err)
-                    alert_toast("An error occured",'error');
-                    end_loader();
-                },
-                success:function(resp){
-                    if(typeof resp =='object' && resp.status == 'success'){
-                        data = [resp['data']];
-                        $.each(data, function(index, payments) {
-                            compute(payments.excess);
-                            location.reload();
-                    });
-            
-                    end_loader();
-                    }else if(resp.status == 'failed' && resp.msg){
-                            alert_toast(resp.msg,'error');
-                            end_loader()
-                    }else{
-                        alert_toast("An error occured",'error');
-                        end_loader();
-                        console.log(resp)
-                    }
-                }
-            })
-        }
 
-
-        if (statusValue === "Credit to Principal") {
+        if (statusValue === "Credit to Principal" || statusValue === 'Payment of Balance') {
             CreditPrincipalForm();
         }else{
             addPaymentForm();
