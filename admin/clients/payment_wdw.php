@@ -335,6 +335,7 @@ body{
                     <input type="hidden" class="form-control-sm margin-bottom last-due"  id="last_due" name="last_due" value="<?php echo $last_due; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom "  id="ma_balance" name="ma_balance" value="<?php echo $ma_balance; ?>">   
                     <input type="hidden" class="form-control-sm margin-bottom "  id="last_interest" name="last_interest" value="<?php echo isset($last_interest) ? $last_interest  : 0; ?>">   
+                    <input type="hidden" class="form-control-sm margin-bottom "  id="sur_percent" name="sur_percent" value="<?php echo isset($sur_percent) ? $sur_percent  : 0; ?>"> 
                     <br>
                     <table style="width:100%;table-layout: fixed;">
                         <tr>
@@ -358,14 +359,14 @@ body{
                             ?>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($property_id)  ?>" id="payment_bal" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a>
-                            </td>
-                        </tr>
+                       
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+
+                            
+                            <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
+
                             <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
                             <br>
                             </td>
@@ -427,6 +428,7 @@ body{
                                     $rebate = $row['rebate'];
                                     $period = $row['status'];
                                     $balance = $row['remaining_balance'];
+                                    $sur_per = $row['surcharge_percent'];
 
                                     $total_rebate += $rebate;
              
@@ -436,7 +438,7 @@ body{
                                     echo "<td style='font-size:12px;width:5%;text-align:center;'><a href='#' class='btn btn-danger btn-sm delete-row' onclick='deleteRow({$row['invoice_id']})'><span class='fa fa-times' ></span></a></td>";
                                 
                                 }else{
-                                echo "<td class='text-center'><span class='badge badge-info'>Added</span></td>";
+                                echo "<td class='text-center'><span class='badge badge-info'>Added</span>  </td>";
                                 
                                 }
                                 $i++;
@@ -446,7 +448,7 @@ body{
                             <td class="text-center" style="font-size:13px;width:5%;"><?php echo $or_no ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_paid,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($amt_due,2) ?> </td> 
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> </td> 
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($surcharge,2) ?> <span class='badge badge-primary'> Less <?php echo $sur_per ?> % </span> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($interest,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($principal,2) ?> </td> 
                             <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($rebate,2) ?> </td> 
@@ -606,19 +608,20 @@ body{
                             <b><input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;"></b>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
-                        </td>
-                        <td>
-                            <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
-                        </td>
-                    </tr>
+                
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
                             <td>
-                            <a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
+
+                           
+
+                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
+                            </td>
+                            <td>
+                                <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
+                                <a href="<?php echo base_url ?>/admin/?page=logs/or_logs", target="_blank" class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
+                                 <a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
                             </td>
                         </tr>
                     </table>
@@ -1034,6 +1037,8 @@ $(document).ready(function(){
 
 
     $('.add-payment-bal').click(function(){
+
+     /*  alert($(this).attr('data-id')); */
 	  uni_modal("<i class='fa fa-plus'></i> Payment of Balance",'clients/payment_of_bal.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
@@ -1049,7 +1054,7 @@ $(document).ready(function(){
     });
 
     $('.paid_btns').click(function(){
-    _conf("Are you sure you want to proceed with this request? Click 'Continue' to continue or 'Close' to cancel the request.","payments");
+    _conf("Are you sure you want to proceed with this request? Click 'Continue' to confirm or 'Close' to cancel the request.","payments");
     event.preventDefault();
     });
 
@@ -1269,6 +1274,8 @@ radioButtons.forEach(radioButton => {
     surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
     // Get the value of the selected radio button
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
+    
+    $('#sur_percent').val(selectedValue);
     
     // Calculate the surcharge amount based on the selected percentage
     const surchargeAmount = surcharge_amt - (surcharge_amt * (selectedValue / 100));

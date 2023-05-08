@@ -170,7 +170,7 @@ Class Master extends DBConnection {
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($prop_id))
-				$this->settings->set_flashdata('success',"New log successfully saved.");
+				$this->settings->set_flashdata('success',"New OR log successfully saved.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
@@ -2024,6 +2024,7 @@ Class Master extends DBConnection {
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$l_status' ";
 		$data .= ", trans_date = '$trans_date_ent' ";
+		$data .= ", surcharge_percent = '$sur_percent' ";
 
 
 		
@@ -2045,7 +2046,8 @@ Class Master extends DBConnection {
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
 			'excess' => $excess,
-			'trans_date' => $trans_date_ent
+			'trans_date' => $trans_date_ent,
+			'surcharge_percent'=>  $sur_percent
 		  );
 		
 
@@ -2149,6 +2151,7 @@ Class Master extends DBConnection {
 		$data .= ", excess = '$excess' ";
 		$data .= ", account_status = '$acc_status' ";
 		$data .= ", trans_date = '$trans_date_ent' ";
+		$data .= ", surcharge_percent = '$sur_percent' ";
 
 		$save = $this->conn->query("INSERT INTO t_invoice set ".$data);
 
@@ -2168,7 +2171,8 @@ Class Master extends DBConnection {
 			'status_count' => $status_count,
 			'payment_count' => $payment_count,
 			'excess' => $excess,
-			'trans_date' => $trans_date_ent
+			'trans_date' => $trans_date_ent,
+			'surcharge_percent' => $sur_percent
 		  );
 
 
