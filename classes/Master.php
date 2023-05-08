@@ -151,6 +151,8 @@ Class Master extends DBConnection {
 		$data .= ", mode_of_payment = '$mode_of_payment' ";
 		$data .= ", user = '$user' ";
 		$data .= ", check_date = '$check_date' ";
+		$data .= ", particulars = '$b_particulars' ";
+		$data .= ", check_number = '$check_number' ";
 		$data .= ", branch = '$branch' ";
 
 		$sql = "INSERT INTO or_logs set ".$data;
