@@ -510,6 +510,7 @@ $(document).ready(function() {
 
   }); 
 
+
   
 
   $('.delete-last-or').click(function(){
@@ -518,7 +519,7 @@ $(document).ready(function() {
 
 
 	
-  
+ 
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');

@@ -66,7 +66,17 @@
                         </p>
                       </a>
                     </li> 
-                   
+                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>or_logs.php" class="nav-link nav-logs">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                          OR Logs
+                        </p>
+                      </a>
+                    </li> 
+                    <?php endif ; ?>
+
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -92,6 +102,7 @@
                       </a>
                     </li>
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
+                      
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=reservation" class="nav-link nav-reservation">
                         <i class="nav-icon fas fa-box"></i>
