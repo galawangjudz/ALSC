@@ -508,8 +508,6 @@ $(document).ready(function() {
 
   }); 
 
-  
-  
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');

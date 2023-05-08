@@ -136,7 +136,7 @@ body{
 .right-div {
   width: 70%;
   top:0;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   padding:1%;
 }
 .main_container{
@@ -454,7 +454,7 @@ body{
                             <td class="text-center" style="font-size:13px;width:12%;"><?php echo number_format($balance,2) ?> </td>  
                             </tr>
                         <?php endwhile ; } ?>
-                        </thead>
+                            </tbody>
                     </table>
                     <?php 
                         $sql_prin = "SELECT SUM(principal) AS total_principal  FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
@@ -548,7 +548,14 @@ body{
                     
                     
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
-
+                    <tr>
+                        <td>
+                            <label>Particulars:</label>
+                        </td>
+                        <td>
+                            <textarea class="b_particulars" name="b_particulars" style="height:80px;width:100%;border:none;resize:none;"></textarea>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <label>Mode of Payment:</label>
@@ -571,6 +578,13 @@ body{
                             <label>Check Date: </label>
                         <td>
                             <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="date()" style="width:100%;">
+                        </td>
+                    </tr>
+                    <tr class="default-hide">
+                        <td>
+                            <label>Check Number: </label>
+                        <td>
+                            <input type="number" class= "form-control-sm" name="check_number" id="check_number" style="width:100%;">
                         </td>
                         
                     </tr>
@@ -604,7 +618,7 @@ body{
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
                             <td>
-                            <a href="<?php echo base_url ?>/admin/?page=logs/or_logs", target="_blank" class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
+                            <a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
                             </td>
                         </tr>
                     </table>
@@ -612,84 +626,79 @@ body{
             </div>
         </div>
 
-        <div class="card card-outline rounded-0 card-maroon" style="padding:5px;">
+        <div class="card card-outline rounded-0 card-maroon" style="padding:5px;height:auto;padding-bottom:40px;">
             <div class="container-fluid">
                 <h3 class="card-title"><b>CLIENT'S OR LOGS</b></h3>
                 <br><hr style="height:1px;border-width:0;color:gray;background-color:gray">
                 <div class="logs_cont" style="overflow-x: auto;max-height:500px;">
-                <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;overflow-x: auto;overflow-y: auto;">
+                <table class="table table-bordered table-stripped" id="data-table" style="width:100%;table-layout: fixed;overflow-x: auto;overflow-y: auto;">
                     <thead>
                         <tr>
-                        <th style="text-align:center;font-size:11px;">#</th>
-                        <!-- <th>Property ID</th> -->
-                        <th style="text-align:center;font-size:11px;">OR NO</th>
-                        <th style="text-align:center;font-size:11px;">PAY DATE</th>
-                        <th style="text-align:center;font-size:11px;">AMOUT PAID</th>
-                        <!-- <th>Amt Due</th>
-                        <th>Surcharge</th>
-                        <th>Interest</th>
-                        <th>Principal</th>
-                        <th>Rebate</th>
-                        <th>Remaining Balance</th>
-                        <th>Mode of Payment</th>
-                        <th>Check Date</th>
-                        <th>Branch</th> -->
-                        <th style="text-align:center;font-size:11px;">PREPARER</th>
-                        <th style="text-align:center;font-size:11px;">DATE PREPARED</th>
-				        <th style="text-align:center;font-size:11px;">ACTION</th>
+                            <th style="text-align:center;font-size:11px;width:2%">#</th>
+                            <!-- <th>Property ID</th> -->
+                            <th style="text-align:center;font-size:11px;width:8%">OR NO</th>
+                            <th style="text-align:center;font-size:11px;width:8%">PAY DATE</th>
+                            <th style="text-align:center;font-size:11px;width:8%">AMOUT PAID</th>
+                            <!-- <th>Amt Due</th>
+                            <th>Surcharge</th>
+                            <th>Interest</th>
+                            <th>Principal</th>
+                            <th>Rebate</th>
+                            <th>Remaining Balance</th>
+                            <th>Mode of Payment</th>
+                            <th>Check Date</th>
+                            <th>Branch</th> -->
+                            <th style="text-align:center;font-size:11px;width:8%">PREPARER</th>
+                            <th style="text-align:center;font-size:11px;width:12%">DATE PREPARED</th>
+                            <th style="text-align:center;font-size:11px;width:8%">ACTION</th>   
                         </tr>
-                    </thead>
-                    <?php $qry4 = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' ORDER by gen_time DESC");
-                            $last_row = $qry4->num_rows - 1;
-                            $i = 1;
-                            if($qry4->num_rows <= 0){
-                            echo "<div class='text-center' style='font-size:15px;position:absolute;margin-top:40px;font-weight:bold;'>  No Payment Record </div>";
-                            }else{  ?>      
-                        <tbody>
-                            <tr>
-                            <?php
-                            while($row= $qry4->fetch_assoc()): 
-                                ?>
-                                <tr>
-                                    <td class="text-center" style="font-size:13px;width:2%;"><?php echo $i++ ?></td>
-                                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
-                                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
+                    </thead>    
+                    <tbody>
+                    <?php 
+                        $i = 1;
+                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' ORDER by gen_time DESC");
+                            while($row = $qry->fetch_assoc()):
+                                
+                        ?>
+                        <tr>
+                        <td class="text-center" style="font-size:13px;width:2%;"><?php echo $i++ ?></td>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
 
-                                    
-                                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["amount_paid"] ?></td>
-                                    <!-- <td><?php echo $row["amount_due"] ?></td>
-                                    <td><?php echo $row["surcharge"] ?></td>
-                                    <td><?php echo $row["interest"] ?></td>
-                                    <td><?php echo $row["principal"] ?></td>
-                                    <td><?php echo $row["rebate"] ?></td>
-                                    <td><?php echo $row["remaining_balance"] ?></td>
-                                    <td><?php echo $row["mode_of_payment"] ?></td>
-                                    <td><?php echo $row["check_date"] ?></td>
-                                    <td><?php echo $row["branch"] ?></td> -->
+                                
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["amount_paid"] ?></td>
+                                <!-- <td><?php echo $row["amount_due"] ?></td>
+                                <td><?php echo $row["surcharge"] ?></td>
+                                <td><?php echo $row["interest"] ?></td>
+                                <td><?php echo $row["principal"] ?></td>
+                                <td><?php echo $row["rebate"] ?></td>
+                                <td><?php echo $row["remaining_balance"] ?></td>
+                                <td><?php echo $row["mode_of_payment"] ?></td>
+                                <td><?php echo $row["check_date"] ?></td>
+                                <td><?php echo $row["branch"] ?></td> -->
 
 
-                                    <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
-                                    <td class="text-center" style="font-size:13px;width:15%;"><?php echo $row["gen_time"] ?></td>
-                                    
-                                    <td class="text-center" style="font-size:13px;width:8%;">
-                                        <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR</a>
-                                    </td> 
-                                </tr>
-                            <?php endwhile ; } ?>
-                            </tbody>
-                    </table>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
+                                <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
+                                
+                                <td class="text-center" style="font-size:13px;width:8%;">
+                                    <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR</a>
+                                </td> 
+
+                        </tr>
+                    <?php endwhile; ?>
+                    </tbody>
+                </table>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <script>
 $(document).ready(function() {
     $('#myTable tr.default-hide').hide();
-
-  $('#mode_of_payment').on('change', function() {
+    $('#mode_of_payment').on('change', function() {
     var selectedValue = $(this).val();
     $('#myTable tr').each(function() {
       if (selectedValue === '-1') {
@@ -704,9 +713,6 @@ $(document).ready(function() {
     });
   });
 });
-
-
-
 // function or_no_onchange(){
 //     document.getElementById('or_no_ent1').value = document.getElementById('or_no_ent2').value;
 //     document.getElementById('pay_date_ent1').value = document.getElementById('pay_date_ent').value;
@@ -717,18 +723,12 @@ $(document).ready(function() {
 //     document.getElementById('tot_prin1').value = document.getElementById('tot_prin').value;
 // }
 
-window.onload = check_paydate();
-
-                            
-   $(document).ready(function() {
-
-
-        
+window.onload = check_paydate();                  
+    $(document).ready(function() {
     $(document).on('change', ".surcharge_percent", function(e) {
             e.preventDefault(); 
             check_paydate();
         });
-
         $(document).on('keyup', ".trans-date", function(e) {
             e.preventDefault(); 
             document.getElementById("radio0").checked = true;
@@ -747,11 +747,7 @@ window.onload = check_paydate();
                 $('#amount_paid').val(formattedAmount);
             }
         });
-
-
 });
-
-
 
 
 function formatCurrency(amount) {
@@ -817,7 +813,6 @@ function check_paydate(){
             $('#amount_paid').val(total_amt_due);
         }
 
-    
     }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
 
         console.log(interest_rate);
@@ -933,7 +928,6 @@ function deleteRow(rowId) {
             end_loader();
             location.reload();
             }
-        
     });
 }  
 function CreditPrincipal() {
@@ -948,11 +942,10 @@ function CreditPrincipal() {
     $('.due-date').val(last_due_date.toISOString().substr(0, 10));
     const last_excess =  $('.last-excess').val();
     const l_balance =  $('.balance-amt').val();
-        if (last_excess == -1 || last_excess <= 0){
-                $('#amount_paid').val(l_balance);
-        }
+    if (last_excess == -1 || last_excess <= 0){
+            $('#amount_paid').val(l_balance);
+    }
 }
-
 
 function DeleteAll() {
     start_loader();
@@ -975,13 +968,9 @@ function DeleteAll() {
                 end_loader();
                 console.log(resp)
             }
-            }
-        
-        })
-
+        }
+    })
 }
-
-
 
 function payments(){
     start_loader();
@@ -1020,13 +1009,10 @@ function compute(excess){
 
 let btn = document.getElementById('overduebtn');
 let div = document.getElementById('overduediv');
-
 btn.addEventListener('click',()=>{
    
     if(div.style.display==='none'){
         div.style.display='block';
-
-       
     }else{
         div.style.display='none';
     }
@@ -1034,22 +1020,16 @@ btn.addEventListener('click',()=>{
 function validateForm() {
 	    // error handling
 	    var errorCounter = 0;
-
 	    $(".required").each(function(i, obj) {
-
 	        if($(this).val() === ''){
 	            $(this).parent().addClass("has-error");
 	            errorCounter++;
 	        } else{ 
 	            $(this).parent().removeClass("has-error"); 
 	        }
-
 	    });
-		
 	    return errorCounter;
 	}
-    
-
 $(document).ready(function(){
 
 
@@ -1115,11 +1095,7 @@ $(document).ready(function(){
                 }
             }
         })
-
-        })
-
-
-    
+    })
 
     $('#save_payment').submit(function(e){
         e.preventDefault();
@@ -1136,8 +1112,6 @@ $(document).ready(function(){
             $(".required").parent().removeClass("has-error")
         }    
         start_loader();
-
-
         function addPaymentForm() {
             $.ajax({
                 url:_base_url_+"classes/Master.php?f=add_payment",
@@ -1177,8 +1151,6 @@ $(document).ready(function(){
                 }
             })
         }
-
-
         function CreditPrincipalForm() {
             $.ajax({
                 url:_base_url_+"classes/Master.php?f=credit_principal",
@@ -1220,10 +1192,6 @@ $(document).ready(function(){
             addPaymentForm();
         }
     })
-
-
-
-
 });
 
 </script>
@@ -1234,7 +1202,6 @@ function redirectSoa() {
     window.open("<?php echo base_url ?>/report/print_soa.php?id=<?php echo md5($prop_id); ?>", "_blank");
 }
 $(document).ready(function(){
-
 $('#print_payment_func').submit(function(e){
     e.preventDefault();
     var _this = $(this)
@@ -1279,7 +1246,6 @@ $('#print_payment_func').submit(function(e){
         }
     })
 })
-
 });
 </script>
 
@@ -1334,7 +1300,7 @@ radioButtons.forEach(radioButton => {
     
   });
 });
-
-
-
+$(document).ready(function(){
+    $('.table').dataTable(); 
+})
 </script>
