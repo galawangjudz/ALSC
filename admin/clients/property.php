@@ -230,6 +230,7 @@ body{
                 <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
                 <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span></a>            
                 <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
+                <a class="btn btn-danger delete-last-or" prop-id="<?php echo $property_id; ?>" >Delete Last OR</a>
               </div>  
                     <table class="table2 table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
@@ -250,6 +251,7 @@ body{
                               <th style="text-align:center;font-size:13px;">REBATE</th>
                               <th style="text-align:center;font-size:13px;">PERIOD</th>
                               <th style="text-align:center;font-size:13px;">BALANCE</th>
+                              
                           </tr>
                       </thead>
                     <tbody>
@@ -508,6 +510,16 @@ $(document).ready(function() {
 
   }); 
 
+
+  
+
+  $('.delete-last-or').click(function(){
+        _conf("Are you sure to delete this Lot?","delete_last_or",[$(this).attr('prop-id')])
+    }) 
+
+
+	
+ 
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');
@@ -539,6 +551,30 @@ $(document).ready(function() {
 
 
  });
+
+
+  function delete_last_or($prop_id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=delete_payment",
+            method:"POST",
+            data:{prop_id: $prop_id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured.",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
 
   function check_paydate(){
 

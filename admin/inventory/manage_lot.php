@@ -94,7 +94,7 @@ if(isset($_GET['id'])){
                 </div>
                 <div class="form-group">
                     <label for="name">Price per SQM</label>
-                    <input type="number" class="form-control required" name="prod_lot_price" id="prod_lot_price" value="<?php echo isset($meta['c_price_sqm']) ? $meta['c_price_sqm']: '' ?>" id="prod_lot_price" onchange="lcp()">
+                    <input type="text" class="form-control required" name="prod_lot_price" id="prod_lot_price" value="<?php echo isset($meta['c_price_sqm']) ? $meta['c_price_sqm']: '' ?>" id="prod_lot_price" onchange="lcp()">
                 </div>
                 <div class="form-group">
                     <label class="control-label">Status: </label>
@@ -113,7 +113,7 @@ if(isset($_GET['id'])){
                 <div class="form-group">
                     <label class="control-label">Lot Contract Price: </label>
                     <div class="input-group">
-                        <input type="number" name="prod_lcp" id="prod_lcp" value="<?php echo isset($meta['prod_lcp']) ? $meta['prod_lcp']: '' ?>" id="prod_lcp" class="form-control" placeholder="0.00" aria-describedby="sizing-addon1">
+                        <input type="text" name="prod_lcp" id="prod_lcp" value="<?php echo isset($meta['prod_lcp']) ? $meta['prod_lcp']: '' ?>" id="prod_lcp" class="form-control" placeholder="0.00" aria-describedby="sizing-addon1">
                     </div>
                 </div>
                 <div class="form-group">

@@ -366,7 +366,6 @@ body{
 
                             
                             <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
-
                             <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
                             <br>
                             </td>
@@ -579,7 +578,7 @@ body{
                         <td>
                             <label>Check Date: </label>
                         <td>
-                            <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="date()" style="width:100%;">
+                            <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="<?php echo date('Y-m-d') ?>" style="width:100%;">
                         </td>
                     </tr>
                     <tr class="default-hide">
@@ -614,9 +613,8 @@ body{
                         <tr>
                             <td>
 
-                           
+                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" >
 
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" onclick="paid_btns()">
                             </td>
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
@@ -655,6 +653,7 @@ body{
                             <th style="text-align:center;font-size:11px;width:12%">DATE PREPARED</th>
                             <th style="text-align:center;font-size:11px;width:8%">ACTION</th>   
                         </tr>
+
                     </thead>    
                     <tbody>
                     <?php 
@@ -735,7 +734,14 @@ window.onload = check_paydate();
         $(document).on('keyup', ".trans-date", function(e) {
             e.preventDefault(); 
             document.getElementById("radio0").checked = true;
+            let status = $('#status').val();
+            //console.log(status);
+            if ((status == 'Credit to Principal') || (status == 'Payment of Balance')){
+                return;
+            }
+            
             check_paydate();
+                
         });
 
         $(document).on('blur', ".amt-paid", function(e) {
@@ -779,8 +785,8 @@ function check_paydate(){
     const monthly_payment =  $('.monthly-pay').val();
     const numStr = $('.amt-due').val();
     monthly_pay  = parseFloat(numStr.replace(/[^0-9.-]+/g,""));
-    console.log(numStr);
-    console.log(monthly_pay);
+    //console.log(numStr);
+    //console.log(monthly_pay);
 
 
     //console.log(pay_stat_acro);
@@ -798,7 +804,7 @@ function check_paydate(){
 
 
         tot_amt_due = monthly_pay + l_sur;
-        console.log(tot_amt_due);
+        //console.log(tot_amt_due);
         const total_amt_due = tot_amt_due.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -893,7 +899,7 @@ function check_paydate(){
 
     }else{
 
-        console.log(monthly_pay);
+        //console.log(monthly_pay);
 
         l_monthly_pay2 = monthly_pay.toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -945,10 +951,52 @@ function CreditPrincipal() {
     $('.due-date').val(last_due_date.toISOString().substr(0, 10));
     const last_excess =  $('.last-excess').val();
     const l_balance =  $('.balance-amt').val();
-    if (last_excess == -1 || last_excess <= 0){
-            $('#amount_paid').val(l_balance);
-    }
+
+    radio0.disabled = true;
+    radio25.disabled = true;
+    radio50.disabled = true;
+    radio75.disabled = true;
+    radio100.disabled = true;
+
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(l_balance);
+        }
 }
+
+
+function PaymentofBalance() {
+    let l_balance =  parseFloat($('.balance-amt').val().replace(/[^0-9.-]+/g,""));
+    
+    let rebate = (l_balance * 0.025).toFixed(2);
+    let amt_due = (l_balance - rebate);
+    let tot_amt_due = formatCurrency(amt_due.toFixed(2));
+    let l_rebate = formatCurrency(rebate);
+
+    radio0.disabled = true;
+    radio25.disabled = true;
+    radio50.disabled = true;
+    radio75.disabled = true;
+    radio100.disabled = true;
+
+    amount_paid.readOnly = true;
+
+    $('#status').val('Payment of Balance');
+    $('#surcharge').val('0.0');
+    $('#rebate_amt').val(l_rebate);
+    $('#tot_amount_due').val(tot_amt_due);
+    $('#amount_due').val(tot_amt_due);
+    const last_due_date = new Date($('.last-due').val());
+    const last_stat_count = $('.last-stat-count').val();
+    $('#status_count').val(last_stat_count);
+    $('.due-date').val(last_due_date.toISOString().substr(0, 10));
+    const last_excess =  $('.last-excess').val();
+    //const l_balance =  $('.balance-amt').val();
+        if (last_excess == -1 || last_excess <= 0){
+                $('#amount_paid').val(tot_amt_due);
+        }
+}
+
+
 
 function DeleteAll() {
     start_loader();
@@ -1036,16 +1084,18 @@ function validateForm() {
 $(document).ready(function(){
 
 
-    $('.add-payment-bal').click(function(){
-
-     /*  alert($(this).attr('data-id')); */
+   /*  $('.add-payment-bal').click(function(){
 	  uni_modal("<i class='fa fa-plus'></i> Payment of Balance",'clients/payment_of_bal.php?id='+$(this).attr('data-id'),"mid-large")
-
-	})
+	}) */
 
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 
         CreditPrincipal();
+    });
+
+    $(document).on('click', ".add-payment-bal", function(e) {
+        e.preventDefault(); 
+        PaymentofBalance();
     });
 
     $('.delete-all').click(function(){
@@ -1053,11 +1103,7 @@ $(document).ready(function(){
 
     });
 
-    $('.paid_btns').click(function(){
-    _conf("Are you sure you want to proceed with this request? Click 'Continue' to confirm or 'Close' to cancel the request.","payments");
-    event.preventDefault();
-    });
-
+    
 
     $('#or_form_logs').submit(function(e){
         e.preventDefault();
@@ -1191,7 +1237,9 @@ $(document).ready(function(){
                 }
             })
         }
-        if (statusValue === "Credit to Principal") {
+
+
+        if (statusValue === "Credit to Principal" || statusValue === 'Payment of Balance') {
             CreditPrincipalForm();
         }else{
             addPaymentForm();
@@ -1257,6 +1305,18 @@ $('#print_payment_func').submit(function(e){
 <script>
 
 
+function paid_btns() {
+    var confirmed = confirm("Are you sure you want to continue?");
+    if (confirmed) {
+      // user clicked "OK", continue with the action
+      return true;
+    } else {
+      // user clicked "Cancel", cancel the action
+      return false;
+    }
+  }
+
+
 
 // Get a reference to the surcharge entry element
 
@@ -1270,7 +1330,7 @@ radioButtons.forEach(radioButton => {
     check_paydate();
     const surchargeEntry = document.getElementById("surcharge");
     surcharge_value = surchargeEntry.value;
-    console.log(surcharge_value);
+    //console.log(surcharge_value);
     surcharge_amt  = parseFloat(surcharge_value.replace(/[^0-9.-]+/g,""));
     // Get the value of the selected radio button
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);

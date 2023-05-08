@@ -595,7 +595,7 @@ if(isset($_GET['id'])){
                
         else:        
         
-            echo '<script>alert("Account Is Fully Paid.");</script>';
+            echo '<script>confirm("Account Is Fully Paid.");</script>';
 
           
             
