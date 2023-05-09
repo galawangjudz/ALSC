@@ -2119,28 +2119,23 @@ Class Master extends DBConnection {
 			  else{
 				  $l_last_pay_date1 = '';
 			  }
-
-			  $query = "DELETE FROM property_payments WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+			  $query = "UPDATE or_logs SET status = 0 WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+			  $query1 = "DELETE FROM property_payments WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+			   
 			  $delete = $this->conn->query($query);
-
-			
+			  $delete1 = $this->conn->query($query1);
 		  endif;
 		  }
-		
-	
-		
-		if ($delete){
+		if ($delete && $delete1) {
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"New payments successfully deleted.");	
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
 		}
-
+		
 		return json_encode($resp);
 	}
-
-
 
 	function delete_invoice(){
 		
