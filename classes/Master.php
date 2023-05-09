@@ -2181,20 +2181,24 @@ Class Master extends DBConnection {
 	
 		$surcharge = 0;
 		$interest = 0;
-		
+
+		$datetime1 = new DateTime($due_date);
+		$datetime2 = new DateTime($trans_date_ent);
+		$interval = $datetime1->diff($datetime2);
+		$l_days = $interval->days;
 
 		if ($amount_paid < ($monthly_pay * 3)){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Credit Principal Amount is not enough !!" ;
 			return json_encode($resp);
-		}elseif($due_date < $trans_date_ent){
+		}elseif($l_days >= 30){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
 			return json_encode($resp);
 
 		}elseif($tot_amount_due == $amount_paid){
 			if ($status == 'Payment of Balance'){
-				$status = 'FPD';
+				$status = 'C PRIN';
 			}
 		}
 

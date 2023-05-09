@@ -827,7 +827,7 @@ function check_paydate(){
 
     }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
 
-        console.log(interest_rate);
+        //console.log(interest_rate);
         const timeDiff = Math.abs(due_date.getTime() - pay_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
