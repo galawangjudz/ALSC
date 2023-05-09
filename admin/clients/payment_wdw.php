@@ -554,7 +554,7 @@ body{
                             <label>Particulars:</label>
                         </td>
                         <td>
-                            <textarea class="b_particulars" name="b_particulars" style="height:80px;width:100%;border:none;resize:none;"></textarea>
+                            <textarea class="b_particulars" name="b_particulars" placeholder = "Description" style="height:80px;width:100%;border:none;resize:none;"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -578,7 +578,7 @@ body{
                         <td>
                             <label>Check Date: </label>
                         <td>
-                            <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="<?php echo date('Y-m-d') ?>" style="width:100%;">
+                            <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="" style="width:100%;">
                         </td>
                     </tr>
                     <tr class="default-hide">
@@ -683,7 +683,9 @@ body{
                                 <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
                                 
                                 <td class="text-center" style="font-size:13px;width:8%;">
-                                    <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR</a>
+                                    <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
+                                    <a class="btn btn-warning btn-sm send-mail" style="width:100%;">Send to Email <i class="fa fa-envelope"></i></a>
+                           
                                 </td> 
 
                         </tr>
@@ -951,6 +953,7 @@ function CreditPrincipal() {
     const last_excess =  $('.last-excess').val();
     const l_balance =  $('.balance-amt').val();
 
+    document.getElementById("radio0").checked = true;
     radio0.disabled = true;
     radio25.disabled = true;
     radio50.disabled = true;
@@ -971,6 +974,7 @@ function PaymentofBalance() {
     let tot_amt_due = formatCurrency(amt_due.toFixed(2));
     let l_rebate = formatCurrency(rebate);
 
+    document.getElementById("radio0").checked = true;
     radio0.disabled = true;
     radio25.disabled = true;
     radio50.disabled = true;
@@ -1083,9 +1087,12 @@ function validateForm() {
 $(document).ready(function(){
 
 
-   /*  $('.add-payment-bal').click(function(){
-	  uni_modal("<i class='fa fa-plus'></i> Payment of Balance",'clients/payment_of_bal.php?id='+$(this).attr('data-id'),"mid-large")
-	}) */
+    $('.send-mail').click(function(){
+        uni_modal_right("<i class='fa fa-envelope'></i> Sending Email",'clients/payment_mail.php?id='+$(this).attr('prop_id'),"mid-large")
+        //uni_modal("<i class='fa fa-paint-brush'></i> Edit Lot",'inventory/manage_lot.php?id='+$(this).attr('data-lot-id'),"mid-large")
+        //uni_modal_right("<i class='fa fa-check'></i> Sending Email",'clients/payment_mail.php?id='+$(this).attr('prop_id')+"&csr="+$(this).attr('ra_id')+"&lid="+$(this).attr('data-lot-id'),"mid-large")
+       
+    })
 
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 

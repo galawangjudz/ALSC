@@ -2190,11 +2190,11 @@ Class Master extends DBConnection {
 
 		if ($amount_paid < ($monthly_pay * 3)){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Credit Principal Amount is not enough !! " ;
+			$resp['msg'] = "Credit Principal Amount is not enough !!" ;
 			return json_encode($resp);
 		}elseif($due_date < $trans_date_ent){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Account is not Full Update cannot insert into Principal " ;
+			$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
 			return json_encode($resp);
 
 		}elseif($tot_amount_due == $amount_paid){
