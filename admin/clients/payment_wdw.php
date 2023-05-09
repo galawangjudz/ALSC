@@ -352,22 +352,22 @@ body{
                         </tr>
                         <tr>
                             <td>
-                            <?php 
-                                if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
-                                    echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal" style="width:100%;font-size:15px;">Credit to Principal <i class="fa fa-wallet"></i></a> ';
-                                }
-                            ?>
+                                <?php 
+                                    if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
+                                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal" style="width:100%;font-size:15px;">Credit to Principal <i class="fa fa-wallet"></i></a> ';
+                                    }
+                                ?>
                             </td>
                         </tr>
-                       
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
-
-                            
-                            <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
-                            <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
-                            <br>
+                                <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
                             </td>
                         </tr>
                     </table>
@@ -607,21 +607,23 @@ body{
                             <b><input type="text" class="form-control-sm margin-bottom"  id="user" name="user" value="<?php echo $_settings->userdata('username') ?>" style="width:100%;"></b>
                         </td>
                     </tr>
-                
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
                             <td>
-
                                 <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" >
-
                             </td>
                             <td>
                                 <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
-                                 <a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a>
                             </td>
                         </tr>
+                        
                     </table>
+                    <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
+                            <tr>
+                                <td><a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
+                            </tr>
+                        </table>
                 </form>
             </div>
         </div>
@@ -657,7 +659,7 @@ body{
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' ORDER by gen_time DESC");
+                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' AND status = 1 ORDER by gen_time DESC");
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>

@@ -33,6 +33,7 @@
                 $l_start_date = $row['c_start_date'];
                 $l_retention = $row['c_retention'];
                 $l_change_date = $row['c_change_date'];
+                
                 $l_restructured = $row['c_restructured'];
                 $l_date_of_sale = $row['c_date_of_sale'];
             
