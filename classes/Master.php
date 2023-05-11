@@ -136,6 +136,13 @@ Class Master extends DBConnection {
 
 	function save_or_logs(){
 		extract($_POST);
+		$sql = $this->conn->query("SELECT * FROM t_invoice where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet! Please add to proceed with payments';
+			return json_encode($resp);
+        } 
 		// $data = " log_id = '$log_id' ";
 		$data = " property_id = '$prop_id' ";
 		$data .= ", pay_date = '$pay_date_ent1' ";
@@ -2072,7 +2079,8 @@ Class Master extends DBConnection {
 	
 	function delete_payment(){
 		extract($_POST);
-		$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$qry = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
 		if($sql->num_rows <= 0){
@@ -2099,34 +2107,62 @@ Class Master extends DBConnection {
 		$l_last_or_no = $last_row['or_no'];
 		$l_last_pay_cnt = $last_row['payment_count'];
 
-		$all_payments= array();
-		for ($x = 0; $x < $sql->num_rows; $x++){
+
+		if ($l_last_status == 'RETENTION' or $l_last_status = 'RECOMPUTED' or $l_last_status = 'ADDITIONAL'){
+			$resp['status'] = 'Cant Delete Last Payment';
+			$resp['err'] = $this->conn->error."[{$qry}]";
+	
+		}
 
 
-		  if ($l_last_pay_date == $payments_data[$x]['pay_date']):
-			  if ($payments_data[$x]['due_date'] != 0){
-				  $l_date = strtotime($payments_data[$x]['due_date']);
-				  $t_due_date = date('m/d/y', $l_date);
-				  
-			  }
-			  else{
-				  $t_due_date = '';
-			  }
-			  if ($payments_data[$x]['pay_date'] != 0){
-				  $l_date = strtotime($payments_data[$x]['pay_date']);
-				  $l_last_pay_date1 =  date('m/d/y', $l_date);
-			  }
-			  else{
-				  $l_last_pay_date1 = '';
-			  }
-			  $query = "UPDATE or_logs SET status = 0 WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
-			  $query1 = "DELETE FROM property_payments WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
-			   
-			  $delete = $this->conn->query($query);
-			  $delete1 = $this->conn->query($query1);
-		  endif;
-		  }
-		if ($delete && $delete1) {
+		$query = "UPDATE or_logs SET status = 0 WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+		$query1 = "DELETE FROM property_payments WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+		
+		$delete = $this->conn->query($query);
+		$delete1 = $this->conn->query($query1);
+
+		$query_payments = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count DESC";
+		$qry_pay = $this->conn->query($query_payments);
+		while($pay = $qry_pay->fetch_assoc()){
+			$l_status = substr($pay['status'],0,4);
+			$l_bal = $pay['remaining_balance'];
+			if ($l_status == 'MA -'):
+					$l_status1 = 'Monthly Amortization';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'DFC'):
+					$l_status1 = 'Deferred Cash Payment';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'FD'):
+					$l_status1 = 'Full DownPayment';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'RES'):
+					$l_status1 = 'Reservation';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'PD -' or $l_status == 'PD'):
+					$l_status1 = 'Partial DownPayment';	
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					//echo $update;
+					$updating = $this->conn->query($update);
+					break;	
+			elseif($l_status == 'C PR' or $l_status == 'DISC' or $l_status == 'FPD/'):
+					continue;
+			else:
+					continue;
+			endif;		
+		}
+
+		$updating = $this->conn->query($update);
+
+		
+		if ($delete && $delete1 && $updating) {
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"New payments successfully deleted.");	
 		}else{
@@ -2202,7 +2238,6 @@ Class Master extends DBConnection {
 			}
 		}
 
-
 		if ($status == 'Credit to Principal'){
 			$status = 'C PRIN';
 		}
@@ -2218,9 +2253,7 @@ Class Master extends DBConnection {
 			$acc_status = 'Fully Paid';
 			}
 
-		
 
-	
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";

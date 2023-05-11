@@ -200,10 +200,11 @@ body{
                         <?php 
                             //echo $last_excess ;
                             $trans_date_ent = $last_trans_date;
-                            $or_date_ent = $last_or_date;
+                            $pay_date_ent = $last_or_date;
                             if ($last_excess != -1 && $last_excess != 0){
                                 $amount_paid_ent = number_format($last_excess,2,'.',',');
                                 $or_ent = $last_or_ent;
+                                
                                 
                                 
                                 }
@@ -282,7 +283,7 @@ body{
                                 </table>
                             </td>   
 
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" ></td>
                        
 
                         </tr>
@@ -325,6 +326,7 @@ body{
                     </table>
                     <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
+                    <input type="hidden" class="form-control-sm margin-bottom under-due-date"  id="under_due_date" name="under_due_date" value="<?php echo $under_due_date; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom last-excess"  id="last_excess" name="last_excess" value="<?php echo $last_excess; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
@@ -621,7 +623,7 @@ body{
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                             <tr>
-                                <td><a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
+                                <td><a href="<?php echo base_url ?>or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
                             </tr>
                         </table>
                 </form>
@@ -652,6 +654,7 @@ body{
                             <th>Branch</th> -->
                             <th style="text-align:center;font-size:11px;width:8%">PREPARER</th>
                             <th style="text-align:center;font-size:11px;width:12%">DATE PREPARED</th>
+                            <th style="text-align:center;font-size:11px;width:12%">OR STATUS</th>
                             <th style="text-align:center;font-size:11px;width:8%">ACTION</th>   
                         </tr>
 
@@ -659,7 +662,7 @@ body{
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' AND status = 1 ORDER by gen_time DESC");
+                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' ORDER by gen_time DESC");
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>
@@ -683,10 +686,14 @@ body{
 
                                 <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
                                 <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
-                                
+                                <?php if($row['status'] == 1){ ?> 
+                                    <td class="text-center" style="font-size:13px;width:12%;"><span class="badge badge-success">Active</span></td>
+                                <?php }elseif($row['status'] == 0){ ?>
+                                    <td class="text-center" style="font-size:13px;width:12%;"><span class="badge badge-danger">Cancelled</span></td>
+                                <?php } ?>
                                 <td class="text-center" style="font-size:13px;width:8%;">
                                     <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
-                                    <a class="btn btn-warning btn-sm send-mail" style="width:100%;">Send to Email <i class="fa fa-envelope"></i></a>
+                                    <a class="btn btn-warning btn-sm send-mail" style="width:100%;">Email <i class="fa fa-envelope"></i></a>
                            
                                 </td> 
 
@@ -1128,6 +1135,10 @@ $(document).ready(function(){
             $(".required").parent().removeClass("has-error")
         }    
         
+        var result = confirm('Are you sure you want to save the payment?');
+  
+        if (result == true) {
+
         $.ajax({
             url:_base_url_+'classes/Master.php?f=save_or_logs',
             method:'POST',
@@ -1154,6 +1165,12 @@ $(document).ready(function(){
                 }
             }
         })
+    }else{
+
+         // If the user clicked "Cancel", do nothing
+        return false;
+    }
+
     })
 
     $('#save_payment').submit(function(e){

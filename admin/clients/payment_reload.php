@@ -92,7 +92,9 @@ if(isset($_GET['id'])){
         $last_acc_stat = isset($last_payment['account_status']) ? $last_payment['account_status'] : '';
         $last_or_ent = isset($last_payment['or_no']) ? $last_payment['or_no'] : '';
         $last_or_date = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
-        $last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : date('Y-m-d');
+        //Balik mo to pag may problem sa date
+        //$last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : date('Y-m-d');
+        $last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : $last_or_date;
        
        
         $check_date = 0;
@@ -227,6 +229,13 @@ if(isset($_GET['id'])){
                         $over_due_mode_upay = 1;
                     endif;
 
+                    if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                        $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                    else:
+                            $l_date = date('Y-m-d', strtotime($last_payment['pay_date']));
+                    endif;
+                    $under_due_date = ($l_date);
+
                     $monthly_pay = $monthly_down - $last_principal;
                     $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                     $count = $last_payment['status_count'];
@@ -289,7 +298,7 @@ if(isset($_GET['id'])){
             } elseif ($last_payment['status'] == 'PFD') {
                 $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
                 $l_date = ($last_payment['pay_date']);
-                $due_date = timegm($l_date);
+                $due_date = $l_date;
             }
             $amount_paid_ent = number_format($monthly_pay,2);
             $amount_ent = number_format($monthly_pay,2);
@@ -382,6 +391,13 @@ if(isset($_GET['id'])){
                     
                         $over_due_mode_upay = 1;
                     }
+
+                    if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                            $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                    else:
+                            $l_date = date('Y-m-d', strtotime($last_payment['pay_date']));
+                    endif;
+                    $under_due_date = ($l_date);
  
                     $monthly_pay = $monthly_payment - $last_principal;
                     //echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
@@ -529,11 +545,14 @@ if(isset($_GET['id'])){
                         
                         if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                                 $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                        else:
+                                $l_date = date('Y-m-d', strtotime($last_payment['pay_date']));
                         endif;
+                        $under_due_date = ($l_date);
 
                         $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                         $count = $last_payment['status_count'];
-                        //$due_date = timegm($l_date);
+                        
                         $amount_paid_ent = (number_format($monthly_pay,2));
                         $amount_ent = (number_format($monthly_pay,2));
                         $total_amount_due_ent = (number_format($monthly_pay,2));
