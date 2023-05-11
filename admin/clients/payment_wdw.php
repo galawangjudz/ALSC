@@ -324,9 +324,10 @@ body{
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required ></td>
                         </tr>
                     </table>
+                    <input type="hidden" class="form-control-sm margin-bottom due-date2" name="due_date2" value="<?php echo date("Y-m-d", strtotime($due_date)); ?>" style="width:100%;" readonly>
+                           
                     <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
-                    <input type="hidden" class="form-control-sm margin-bottom under-due-date"  id="under_due_date" name="under_due_date" value="<?php echo $under_due_date; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom last-excess"  id="last_excess" name="last_excess" value="<?php echo $last_excess; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
@@ -782,7 +783,7 @@ function formatCurrency(amount) {
 
 function check_paydate(){
 
-    const due_date = new Date($('.due-date').val());
+    const due_date = new Date($('.due-date2').val());
     const pay_date = new Date($('.trans-date').val());
     const payment_type2 = $('.payment-type2').val();
     const pay_status = $('.pay-stat').val();
@@ -799,12 +800,12 @@ function check_paydate(){
     //console.log(monthly_pay);
 
 
-    //console.log(pay_stat_acro);
+  
     if (pay_date > due_date) {
         const timeDiff = Math.abs(pay_date.getTime() - due_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
         
-        //console.log(monthly_pay);
+        console.log(diffDays);
     
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
    
@@ -997,6 +998,7 @@ function PaymentofBalance() {
     $('#rebate_amt').val(l_rebate);
     $('#tot_amount_due').val(tot_amt_due);
     $('#amount_due').val(tot_amt_due);
+    $('#amount_paid').val(tot_amt_due);
     const last_due_date = new Date($('.last-due').val());
     const last_stat_count = $('.last-stat-count').val();
     $('#status_count').val(last_stat_count);
