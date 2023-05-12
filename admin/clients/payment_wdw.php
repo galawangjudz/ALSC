@@ -708,7 +708,6 @@ body{
                 <?php
                         /* session_start();  */
                         include('payment_mail/functions.php');
-
                         // $conn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
                         // output any connection error
                         if ($conn->connect_error) {
