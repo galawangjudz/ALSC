@@ -73,6 +73,7 @@ if (isset($_GET['textboxValue'])) {
         $mail->setFrom("asianland.ph.it@gmail.com", 'IT ASIANLAND');
         // $mail->addAddress($_POST["email"]);
 
+        
         $addresses = explode(',',$_POST["email"]);
         foreach ( $addresses as $address ){
             $mail->AddAddress($address);
