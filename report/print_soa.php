@@ -104,7 +104,7 @@
         </div>
 
         <div class="b_due" style="position:absolute;margin-top:-242px;margin-left:645px;text-align:right;width:140px;padding-right:5px;">
-            <?php echo number_format($total_amt_due, 2) ?>
+            <?php echo number_format($total_amt_pd, 2) ?>
         </div>
         <div class="b_rebate" style="position:absolute;margin-top:-207px;margin-left:645px;text-align:right;width:140px;padding-right:5px;">
             <?php echo number_format($total_rebate, 2) ?>

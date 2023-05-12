@@ -50,7 +50,7 @@ if($result) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'asianland.ph.it@gmail.com';
-        $mail->Password = 'wpyxwmcvfwpudqcm';
+        $mail->Password = 'lnecpyuqovopdbae';
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 

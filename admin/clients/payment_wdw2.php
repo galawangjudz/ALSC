@@ -661,52 +661,64 @@ body{
                     </thead>    
                     <tbody>
                     <?php 
-                        $i = 1;
+                        $i = 0;
                             $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' AND status = 1 ORDER by gen_time DESC");
                             while($row = $qry->fetch_assoc()):
+                                
                         ?>
                         <tr id="<?php echo $i; ?>">
-                            <td class="text-center" style="font-size:13px;width:2%;"><?php echo $i ?></td>
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($row["amount_paid"]); ?></td>
-                            <!-- <td><?php echo $row["amount_due"] ?></td>
-                            <td><?php echo $row["surcharge"] ?></td>
-                            <td><?php echo $row["interest"] ?></td>
-                            <td><?php echo $row["principal"] ?></td>
-                            <td><?php echo $row["rebate"] ?></td>
-                            <td><?php echo $row["remaining_balance"] ?></td>
-                            <td><?php echo $row["mode_of_payment"] ?></td>
-                            <td><?php echo $row["check_date"] ?></td>
-                            <td><?php echo $row["branch"] ?></td> -->
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
-                            <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
-                            
-                            <td class="text-center" style="font-size:13px;width:8%;">
-                                <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
-                                <form method="post" action="payment_mail.php">
+                        <td class="text-center" style="font-size:13px;width:2%;"><?php echo $i++ ?></td>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
+
+                                
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["amount_paid"] ?></td>
+                                <!-- <td><?php echo $row["amount_due"] ?></td>
+                                <td><?php echo $row["surcharge"] ?></td>
+                                <td><?php echo $row["interest"] ?></td>
+                                <td><?php echo $row["principal"] ?></td>
+                                <td><?php echo $row["rebate"] ?></td>
+                                <td><?php echo $row["remaining_balance"] ?></td>
+                                <td><?php echo $row["mode_of_payment"] ?></td>
+                                <td><?php echo $row["check_date"] ?></td>
+                                <td><?php echo $row["branch"] ?></td> -->
+
+
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
+                                <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
+                                
+                                <td class="text-center" style="font-size:13px;width:8%;">
+                                    <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
+                                    <form method="post" action="payment_mail.php">
+                                        
+                                        <input type="hidden" id="p-amount<?php echo $i; ?>" name="p-amount" value="<?php echo $row["amount_paid"]; ?>">
+                                        <input type="hidden" id="p-date<?php echo $i; ?>" name="p-date" value="<?php echo $row["pay_date"]; ?>">
+                                        <!-- <a class="btn btn-warning btn-sm send-mail" style="width:100%;">Send to Email <i class="fa fa-envelope"></i></a> -->
+                                        <!-- <button type="submit" name="submit" class="btn btn-warning btn-sm">Send to Email</button> -->
+                                    </form>
                                     
-                                    <input type="hidden" id="p-amount<?php echo $i; ?>" name="p-amount" value="<?php echo $row["amount_paid"]; ?>">
-                                    <input type="hidden" id="p-date<?php echo $i; ?>" name="p-date" value="<?php echo $row["pay_date"]; ?>">
-                                    <input type="hidden" id="test" name="test">
-                                    <!-- <a class="btn btn-warning btn-sm send-mail" style="width:100%;">Send to Email <i class="fa fa-envelope"></i></a> -->
-                                    <!-- <button type="submit" name="submit" class="btn btn-warning btn-sm">Send to Email</button> -->
-                                </form>
-                                <button onclick="getTableRowId(<?php echo $i; ?>)" class="btn btn-warning btn-sm" style="width:100%;margin-top:2px;">Email</button>
-                            </td>
+                           
+                               
+                                <button onclick="getTableRowId(<?php echo $i; ?>)">Send to Email</button>
+                                <input type="hidden" id="test" name="test"></td>
+                                
+
                         </tr>
-                        <?php $i++; ?>
                     <?php endwhile; ?>
                     </tbody>
                 </table>
                 
                 </div>
             </div>
-            </div>
-            <div class="card card-outline rounded-0 card-maroon" style="padding:5px;height:auto;padding-bottom:40px;display:none;" id="composeEmail">
-        <div class="container-fluid">
+
+            <div class="card-body">
+                <div class="divBtnOverdue">
                 
-                <?php
+
+
+
+
+                        <?php
                         /* session_start();  */
                         include('payment_mail/functions.php');
 
@@ -726,14 +738,11 @@ body{
                                 ///LOT
                                 $prop_id = $row['property_id'];
                                 $eadd = $row['email'];
-                                $lname = $row['last_name'];
-                                $fname = $row['first_name'];
-                                $mname = $row['middle_name'];
-                                $sname = $row['suffix_name'];
+                                
                                 }
                             // $pay_date = $_GET['pay_date_input'];
                             }
-                            // echo $prop_id;
+                            echo $prop_id;
                         ?>
                         <?php
                             use PhpMailer\PhpMailer\PhpMailer;
@@ -756,30 +765,25 @@ body{
 
                                 $mail->setFrom("asianland.ph.it@gmail.com", 'IT ASIANLAND');
                                 // $mail->addAddress($_POST["email"]);
+
                                 $addresses = explode(',',$_POST["email"]);
                                 foreach ( $addresses as $address ){
                                     $mail->AddAddress($address);
                                 }
+
+                                
                                 $mail->isHTML(true);
                                 $mail->Subject = $_POST["subject"];
-                                $m_p_amt = number_format($_POST["p_amt"]);
-                                $m_p_date = $_POST["p_date"];
-                                $m_fname = strtoupper($_POST ["p_fname"]);
-                                $m_mname = strtoupper($_POST ["p_mname"]);
-                                $m_lname = strtoupper($_POST ["p_lname"]);
-                                $m_sname = strtoupper($_POST ["p_sname"]);
+                                $mail->Body = $_POST["message"];
 
-                                $mail->Body = "Dear " . $m_fname." ".$m_mname." ".$m_lname." ".$m_sname . ",<br><br>";
-                                $mail->Body .= "Warm greetings from Asian Land!" . "<br>";
-                                $mail->Body .= "Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us." . "<br>";
-                                $mail->Body .= "As a reminder, the payment amount was " . "<b>".$m_p_amt."00</b>" .", which was applied to your account on "."<b>".$m_p_date.".</b><br>";
-                                $mail->Body .= "If you have any questions or concerns about your account, please don't hesitate to contact us at <b>0917-523-7373</b>." . "<br>";
-                                $mail->Body .= "Once again, thank you for your payment and we look forward to serving you in the future." . "<br><br>";
-                                $mail->Body .= "----------" . "<br>";
-                                $mail->Body .= "<b>ASIAN LAND STRATEGIES CORPORATION</b>" . "<br><br>";
-                                $mail->Body .= "<i>** This Electronic Mail is system-generated. Please do not reply. **</i>";
+
+
+
                                 
-                                
+                                $mail->Body .= $_POST["p_amt"];
+                                $mail->Body .= $_POST["p_date"];
+
+
                                 if($mail->send()){?>
                                     <script>
                                         alert("Email Sent!");
@@ -805,16 +809,17 @@ body{
                                 // ";
                             }
                         ?>
-                        <div class="card-body">
+                        <div class="card card-outline rounded-0 card-maroon">
+                            <div class="card-body">
                                 <div class="container-fluid">
-                                <h3 class="card-title"><b>PREVIEW EMAIL</b></h3>
-                                <br><hr style="height:1px;border-width:0;color:gray;background-color:gray">
+                                    <h2>Compose Email</h2>
+                                    <hr>
                                     <body>
                                         <form class="" method="post" enctype="multipart/form-data">
                                             <div class="box_big1">
                                                 <div class="main_box">
                                                     <div class="row">
-                                                        <div class="col-xs-12" style="width:100%;">		
+                                                        <div class="col-xs-12" style="width:86%;">		
                                                             <div class="form-group">
                                                                 <label class="control-label">To: </label>
                                                                 <textarea class="form-control required textarea" type="text" name="email"><?php echo $eadd; ?></textarea><br/>
@@ -822,10 +827,10 @@ body{
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-xs-12" style="width:100%;">		
+                                                        <div class="col-xs-12" style="width:86%;">		
                                                             <div class="form-group">
                                                             <label class="control-label">Subject: </label>
-                                                            <input type="text" name="subject" class="form-control required" value="PAYMENT RECEIVED - <?php echo $prop_id; ?>" style="font-weight:bold;">
+                                                            <input type="text" name="subject" class="form-control required" value="PAYMENT RECEIVED - <?php echo $prop_id; ?>">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -833,41 +838,28 @@ body{
                                                         <div class="col-xs-12">		
                                                             <div class="form-group">
                                                                 <label class="control-label">Message: </label>
-                                                                <textarea class="form-control required" id='makeMeSummernote' name="message" rows="3">
-                                                                <br>
-                                                                <div style="text-align:justify">Dear <?php echo strtoupper($fname); ?> <?php echo strtoupper($mname); ?> <?php echo strtoupper($lname); ?> <?php echo strtoupper($sname); ?>,
-                                                                </div>
-                                                                <br>
-                                                 
-                                                                <div style="text-align:justify">Warm greetings from Asian Land!
-                                                                </div>
-                                                                <div style="text-align:justify">Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us.
-                                                                </div>
-                                                                <div style="text-align:justify">As a reminder, the payment amount was <b><input type='text' id='p_amt' name='p_amt' style='width:auto;text-align:center;font-weight:bold;' readonly/></b>, which was applied to your account on <b><input type='text' id='p_date' name='p_date' style='width:auto;text-align:center;font-weight:bold;' readonly/></b>.
-                                                                </div>
-                                                                <div style="text-align:justify">If you have any questions or concerns about your account, please don't hesitate to contact us at <b>0917-523-7373</b>.
-                                                                </div>
-                                                                <div style="text-align:justify">Once again, thank you for your payment and we look forward to serving you in the future.
-                                                                </div><br>
+                                                                <textarea class="form-control required textarea" id='makeMeSummernote' name="message" rows="3">
+                                                                <div style="text-align:justify">&emsp;Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us.
+                                                                </div><br><br>
+                                                                <div style="text-align:justify">&emsp;Please note that your payment has been applied to your account and any outstanding balances have been adjusted accordingly. You can rest assured that your account is up-to-date and in good standing.
+                                                                </div><br><br>
+                                                                <div style="text-align:justify">&emsp;As a reminder, the payment amount was <input type='text' id='p_amt' name='p_amt' style='width:auto;'>, which was applied to your account on <input type='text' id='p_date' name='p_date' style='width:auto;'>.
+                                                                If you have any questions or concerns about your account, please do not hesitate to contact us. We are always here to assist you and ensure your satisfaction.
+                                                                </div><br><br>
+                                                                <div style="text-align:justify">&emsp;Once again, thank you for your payment and we look forward to serving you in the future.
+                                                                </div><br><br>
                                                                 <input type="text" id="inside_txtbox" disabled style="border:none" value="----------"><br>
-                                                                <div style="text-align:justify"><b>ASIAN LAND STRATEGIES CORPORATION</b>
-                                                                </div>
-                                                                <br>
-                                                                <div style="text-align:justify">
-                                                                <i>** This Electronic Mail is system-generated. Please do not reply. **</i>
-                                                                </div>
+                                                                <input type="text" id="inside_txtbox" disabled style="border:none" value="<?php echo $_settings->userdata('lastname');?>, <?php echo $_settings->userdata('firstname');?> <?php echo $_settings->userdata('middlename');?>"><br>
+                                                                <input type="text" id="inside_txtbox" disabled style="border:none" value="<?php echo $_settings->userdata('user_type'); ?>">
+
                                                                 </textarea>
-                                                                <input type='hidden' id='p_sname' name='p_sname' style='width:auto;' value='<?php echo $sname; ?>'>
-                                                                <input type='hidden' id='p_mname' name='p_mname' style='width:auto;' value='<?php echo $mname; ?>'>
-                                                                <input type='hidden' id='p_fname' name='p_fname' style='width:auto;' value='<?php echo $fname; ?>'>
-                                                                <input type='hidden' id='p_lname' name='p_lname' style='width:auto;' value='<?php echo $lname; ?>'>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-xs-12">		
                                                             <div class="form-group">
-                                                                <button type="submit" name="send" id="btnSend" class="btn btn-success">Send Mail</button>
+                                                                <button type="submit" name="send" id="btnSend" class="btn btn-success">Send</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -877,6 +869,7 @@ body{
                                     </body>
                                 </div>
                             </div>
+                        </div>
                 </div>
             </div>
 
@@ -1586,12 +1579,13 @@ function sendData() {
 }
 
 function getTableRowId(rowNum) {
-    var getDiv = document.getElementById("composeEmail");
-    getDiv.style.display = "block";
-    var row = document.getElementById(rowNum);
-
+  // Get the row element by concatenating the ID string with the row number
+  var row = document.getElementById(rowNum);
+  
+  // Get the ID attribute of the row element
   var rowId = row.getAttribute("id");
-
+  
+  // Log the row ID to the console
   document.getElementById("test").value=rowId;
   document.getElementById("p_amt").value = document.getElementById("p-amount"+rowId).value;
     document.getElementById("p_date").value = document.getElementById("p-date"+rowId).value;

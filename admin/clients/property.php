@@ -88,7 +88,7 @@ body{
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
       <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-default btn-flat border-primary update_client" href=""><i class="fa fa-edit"></i> Update Details</a>
+				<a class="btn btn-block btn-sm btn-default btn-flat border-primary update_client" client-id="<?php echo $client_id; ?>" href=""><i class="fa fa-edit"></i> Update Details</a>
 			</div>
 	</div>
   
@@ -675,7 +675,9 @@ $(document).ready(function() {
 
       }
 
-
+      $('.update_client').click(function(){
+        uni_modal("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client.php?id='+$(this).attr('client-id'),"mid-large")
+    })
 
 
 
