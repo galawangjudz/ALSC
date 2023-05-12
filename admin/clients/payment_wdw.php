@@ -705,7 +705,6 @@ body{
             </div>
             <div class="card card-outline rounded-0 card-maroon" style="padding:5px;height:auto;padding-bottom:40px;display:none;" id="composeEmail">
         <div class="container-fluid">
-                
                 <?php
                         /* session_start();  */
                         include('payment_mail/functions.php');
