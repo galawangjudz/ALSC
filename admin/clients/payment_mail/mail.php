@@ -1,40 +1,24 @@
 <?php
 /* session_start();  */
-include('payment_mail/functions.php');
-
+include('functions.php');
+$getID = $_GET['id'];
 // $conn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
 // output any connection error
 if ($conn->connect_error) {
 	die('Error : ('.$conn->connect_errno .') '. $conn->connect_error);
 }
 // the query
-
-?>
-<?php
-if(isset($_GET['id'])){
-    $prop = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}'");    
-    while($row=$prop->fetch_assoc()){
-    
-        ///LOT
-        $prop_id = $row['property_id'];
-        $eadd = $row['email'];
-        
-        }
-    // $pay_date = $_GET['pay_date_input'];
+$query = "SELECT * FROM t_csr inner join t_csr_buyers on t_csr.c_csr_no = t_csr_buyers.c_csr_no WHERE t_csr_buyers.c_buyer_count = 1 and t_csr.c_csr_no = '" . $conn->real_escape_string($getID) . "'";
+$result = mysqli_query($conn, $query);
+// mysqli select query
+if($result) {
+	while ($row = mysqli_fetch_assoc($result)) {
+		$csr_no = $row['c_csr_no'];
+        $email = $row['email'];
+      /*   $employment_status= $row['c_employment_status']; */
     }
-    echo $prop_id;
-?>
-<?php
-// Check if the textbox value was passed
-if (isset($_GET['textboxValue'])) {
-  // Retrieve the textbox value from the GET parameters
-  $textboxValue = $_GET['textboxValue'];
-
-  // Use the textbox value in your code
-  echo "You passed: " . $textboxValue;
 }
 ?>
-
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
@@ -55,9 +39,9 @@ if (isset($_GET['textboxValue'])) {
     use PhpMailer\PhpMailer\PhpMailer;
     use PhpMailer\PhpMailer\Exception;
 
-    require 'payment_mail/phpmailer/src/Exception.php';
-    require 'payment_mail/phpmailer/src/PhpMailer.php';
-    require 'payment_mail/phpmailer/src/SMTP.php';
+    require '../mail/phpmailer/src/Exception.php';
+    require '../mail/phpmailer/src/PhpMailer.php';
+    require '../mail/phpmailer/src/SMTP.php';
 
     if(isset($_POST["send"])){
         $mail = new PHPMailer(true);
@@ -73,7 +57,6 @@ if (isset($_GET['textboxValue'])) {
         $mail->setFrom("asianland.ph.it@gmail.com", 'IT ASIANLAND');
         // $mail->addAddress($_POST["email"]);
 
-        
         $addresses = explode(',',$_POST["email"]);
         foreach ( $addresses as $address ){
             $mail->AddAddress($address);
@@ -127,7 +110,7 @@ if (isset($_GET['textboxValue'])) {
                                 <div class="col-xs-12" style="width:86%;">		
                                     <div class="form-group">
                                         <label class="control-label">To: </label>
-                                        <textarea class="form-control required textarea" type="text" name="email"><?php echo $eadd; ?></textarea><br/>
+                                        <textarea class="form-control required textarea" type="text" name="email">donitarosetantoco2028@gmail.com</textarea><br/>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +118,7 @@ if (isset($_GET['textboxValue'])) {
                                 <div class="col-xs-12" style="width:86%;">		
                                     <div class="form-group">
                                     <label class="control-label">Subject: </label>
-                                    <input type="text" name="subject" class="form-control required" value="PAYMENT RECEIVED - <?php echo $prop_id; ?>">
+                                    <input type="text" name="subject" class="form-control required" value="APPROVAL FOR CSR #<?php echo $getID; ?>">
                                     </div>
                                 </div>
                             </div>
@@ -144,20 +127,20 @@ if (isset($_GET['textboxValue'])) {
                                     <div class="form-group">
                                         <label class="control-label">Message: </label>
                                         <textarea class="form-control required textarea" id='makeMeSummernote' name="message" rows="3">
-                                        Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us.
-                                        <br><br>
-                                        Please note that your payment has been applied to your account and any outstanding balances have been adjusted accordingly. You can rest assured that your account is up-to-date and in good standing.
-                                        <br><br>
-                                        As a reminder, the payment amount was [Payment Amount], which was applied to your account on [Payment Date]. If you have any questions or concerns about your account, please don't hesitate to contact us at [Contact Information].
-                                        If you have any questions or concerns about your account, please do not hesitate to contact us. We are always here to assist you and ensure your satisfaction.
-                                        <br><br>
-                                        Once again, thank you for your payment and we look forward to serving you in the future.<?php echo $textboxValue; ?>
-                                        <br><br>
+                                        <br><br><br><br><br><br>
                                         <input type="text" id="inside_txtbox" disabled style="border:none" value="----------"><br>
                                         <input type="text" id="inside_txtbox" disabled style="border:none" value="<?php echo $_settings->userdata('lastname');?>, <?php echo $_settings->userdata('firstname');?> <?php echo $_settings->userdata('middlename');?>"><br>
                                         <input type="text" id="inside_txtbox" disabled style="border:none" value="<?php echo $_settings->userdata('user_type'); ?>">
 
                                         </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12" style="width:86%;">		
+                                    <div class="form-group">
+                                        <label class="control-label">Attachment/s: </label>
+                                        <input name="file[]" multiple="multiple" class="form-control" type="file" id="file">
                                     </div>
                                 </div>
                             </div>
