@@ -263,16 +263,6 @@ class Login extends DBConnection
                                     <th>OR No.</th>
                                     <th>Pay Date</th>
                                     <th>Amt Paid</th>
-                                    <!-- 
-                        <th>Amt Due</th>
-                        <th>Surcharge</th>
-                        <th>Interest</th>
-                        <th>Principal</th>
-                        <th>Rebate</th>
-                        <th>Remaining Balance</th>
-                        <th>Mode of Payment</th>
-                        <th>Check Date</th>
-                        <th>Branch</th> -->
                                     <th>Preparer</th>
                                     <th>Date Prepared</th>
                                     <th>Action</th>
@@ -289,7 +279,7 @@ class Login extends DBConnection
                                     $to_date = $_GET['to_date'];
                                     $preparer = $_GET['preparer'];
 
-                                    $query = "SELECT * FROM or_logs WHERE user = '$preparer' AND status = 1 AND gen_time BETWEEN '$from_date' AND '$to_date'";
+                                    $query = "SELECT * FROM or_logs WHERE user = '$preparer' AND status = 0 AND gen_time BETWEEN '$from_date' AND '$to_date'";
                                     //$query1 = "SELECT or_id,property_id,or_no,pay_date,user,gen_time,amount_paid, SUM(amount_paid) as amt_paid FROM or_logs WHERE user = '$preparer' AND gen_time BETWEEN '$from_date' AND '$to_date' GROUP BY $preparer";
                                     $query_run = mysqli_query($con, $query);
 
@@ -382,13 +372,13 @@ class Login extends DBConnection
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:50%;"><label>TOTAL SALES:</label></td>
+                                        <td style="width:50%;"><label>TOTAL COLLECTION:</label></td>
                                         <td>
                                             <?php echo $amt_pd; ?>
                                         </td>
                                     </tr>
                                 </table>
-                                <label style="text-align:center;width:100%;">SALES PERIOD</label>
+                                <label style="text-align:center;width:100%;">COLLECTION PERIOD</label>
                                 <br>
                                 <hr style="height:1px;border-width:0;color:gray;background-color:gray">
                                 <table class="table table-bordered table-stripped" id="data-table"

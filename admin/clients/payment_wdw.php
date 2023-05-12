@@ -203,10 +203,11 @@ body{
                         <?php 
                             //echo $last_excess ;
                             $trans_date_ent = $last_trans_date;
-                            $or_date_ent = $last_or_date;
+                            $pay_date_ent = $last_or_date;
                             if ($last_excess != -1 && $last_excess != 0){
                                 $amount_paid_ent = number_format($last_excess,2,'.',',');
                                 $or_ent = $last_or_ent;
+                                
                                 
                                 
                                 }
@@ -285,7 +286,7 @@ body{
                                 </table>
                             </td>   
 
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" ></td>
                        
 
                         </tr>
@@ -326,6 +327,8 @@ body{
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required ></td>
                         </tr>
                     </table>
+                    <input type="hidden" class="form-control-sm margin-bottom due-date2" name="due_date2" value="<?php echo date("Y-m-d", strtotime($due_date)); ?>" style="width:100%;" readonly>
+                           
                     <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
@@ -624,7 +627,7 @@ body{
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                             <tr>
-                                <td><a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
+                                <td><a href="<?php echo base_url ?>or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
                             </tr>
                         </table>
                 </form>
@@ -655,6 +658,7 @@ body{
                             <th>Branch</th> -->
                             <th style="text-align:center;font-size:11px;width:8%">PREPARER</th>
                             <th style="text-align:center;font-size:11px;width:12%">DATE PREPARED</th>
+                            <th style="text-align:center;font-size:11px;width:12%">OR STATUS</th>
                             <th style="text-align:center;font-size:11px;width:8%">ACTION</th>   
                         </tr>
 
@@ -662,27 +666,37 @@ body{
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' AND status = 1 ORDER by gen_time DESC");
+                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' ORDER by gen_time DESC");
                             while($row = $qry->fetch_assoc()):
                         ?>
-                        <tr id="<?php echo $i; ?>">
-                            <td class="text-center" style="font-size:13px;width:2%;"><?php echo $i ?></td>
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($row["amount_paid"]); ?></td>
-                            <!-- <td><?php echo $row["amount_due"] ?></td>
-                            <td><?php echo $row["surcharge"] ?></td>
-                            <td><?php echo $row["interest"] ?></td>
-                            <td><?php echo $row["principal"] ?></td>
-                            <td><?php echo $row["rebate"] ?></td>
-                            <td><?php echo $row["remaining_balance"] ?></td>
-                            <td><?php echo $row["mode_of_payment"] ?></td>
-                            <td><?php echo $row["check_date"] ?></td>
-                            <td><?php echo $row["branch"] ?></td> -->
-                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
-                            <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
-                            
-                            <td class="text-center" style="font-size:13px;width:8%;">
+
+                        <tr>
+                        <td class="text-center" style="font-size:13px;width:2%;"><?php echo $i++ ?></td>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
+
+                                
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["amount_paid"] ?></td>
+                                <!-- <td><?php echo $row["amount_due"] ?></td>
+                                <td><?php echo $row["surcharge"] ?></td>
+                                <td><?php echo $row["interest"] ?></td>
+                                <td><?php echo $row["principal"] ?></td>
+                                <td><?php echo $row["rebate"] ?></td>
+                                <td><?php echo $row["remaining_balance"] ?></td>
+                                <td><?php echo $row["mode_of_payment"] ?></td>
+                                <td><?php echo $row["check_date"] ?></td>
+                                <td><?php echo $row["branch"] ?></td> -->
+
+
+                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
+                                <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
+                                <?php if($row['status'] == 1){ ?> 
+                                    <td class="text-center" style="font-size:13px;width:12%;"><span class="badge badge-success">Active</span></td>
+                                <?php }elseif($row['status'] == 0){ ?>
+                                    <td class="text-center" style="font-size:13px;width:12%;"><span class="badge badge-danger">Cancelled</span></td>
+                                <?php } ?>
+                          
+                                <td class="text-center" style="font-size:13px;width:8%;">
                                 <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
                                 <form method="post" action="payment_mail.php">
                                     
@@ -694,6 +708,7 @@ body{
                                 </form>
                                 <button onclick="getTableRowId(<?php echo $i; ?>)" class="btn btn-warning btn-sm" style="width:100%;margin-top:2px;">Email</button>
                             </td>
+
                         </tr>
                         <?php $i++; ?>
                     <?php endwhile; ?>
@@ -970,7 +985,7 @@ function formatCurrency(amount) {
 
 function check_paydate(){
 
-    const due_date = new Date($('.due-date').val());
+    const due_date = new Date($('.due-date2').val());
     const pay_date = new Date($('.trans-date').val());
     const payment_type2 = $('.payment-type2').val();
     const pay_status = $('.pay-stat').val();
@@ -987,12 +1002,12 @@ function check_paydate(){
     //console.log(monthly_pay);
 
 
-    //console.log(pay_stat_acro);
+  
     if (pay_date > due_date) {
         const timeDiff = Math.abs(pay_date.getTime() - due_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
         
-        //console.log(monthly_pay);
+        console.log(diffDays);
     
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
    
@@ -1022,7 +1037,7 @@ function check_paydate(){
 
     }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
 
-        console.log(interest_rate);
+        //console.log(interest_rate);
         const timeDiff = Math.abs(due_date.getTime() - pay_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
@@ -1185,6 +1200,7 @@ function PaymentofBalance() {
     $('#rebate_amt').val(l_rebate);
     $('#tot_amount_due').val(tot_amt_due);
     $('#amount_due').val(tot_amt_due);
+    $('#amount_paid').val(tot_amt_due);
     const last_due_date = new Date($('.last-due').val());
     const last_stat_count = $('.last-stat-count').val();
     $('#status_count').val(last_stat_count);
@@ -1323,6 +1339,10 @@ $(document).ready(function(){
             $(".required").parent().removeClass("has-error")
         }    
         
+        var result = confirm('Are you sure you want to save the payment?');
+  
+        if (result == true) {
+
         $.ajax({
             url:_base_url_+'classes/Master.php?f=save_or_logs',
             method:'POST',
@@ -1349,6 +1369,12 @@ $(document).ready(function(){
                 }
             }
         })
+    }else{
+
+         // If the user clicked "Cancel", do nothing
+        return false;
+    }
+
     })
 
     $('#save_payment').submit(function(e){
