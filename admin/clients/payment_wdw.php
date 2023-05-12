@@ -715,7 +715,6 @@ body{
                             die('Error : ('.$conn->connect_errno .') '. $conn->connect_error);
                         }
                         // the query
-
                         ?>
                         <?php
                         if(isset($_GET['id'])){
