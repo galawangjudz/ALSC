@@ -2223,16 +2223,23 @@ Class Master extends DBConnection {
 		$interval = $datetime1->diff($datetime2);
 		$l_days = $interval->days;
 
+		//echo $l_days;
+
 		if ($amount_paid < ($monthly_pay * 3)){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Credit Principal Amount is not enough !!" ;
 			return json_encode($resp);
-		}elseif($l_days >= 30){
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
-			return json_encode($resp);
-
-		}elseif($tot_amount_due == $amount_paid){
+		}
+		
+		if($datetime2 > $datetime1){
+			if($l_days >= 30){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
+				return json_encode($resp);
+			}
+		}
+		
+		if($tot_amount_due == $amount_paid){
 			if ($status == 'Payment of Balance'){
 				$status = 'C PRIN';
 			}
