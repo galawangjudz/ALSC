@@ -92,7 +92,9 @@ if(isset($_GET['id'])){
         $last_acc_stat = isset($last_payment['account_status']) ? $last_payment['account_status'] : '';
         $last_or_ent = isset($last_payment['or_no']) ? $last_payment['or_no'] : '';
         $last_or_date = isset($last_payment['pay_date']) ? $last_payment['pay_date'] : date('Y-m-d');
-        $last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : date('Y-m-d');
+        //Balik mo to pag may problem sa date
+        //$last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : date('Y-m-d');
+        $last_trans_date = isset($last_payment['trans_date']) ? $last_payment['trans_date'] : $last_or_date;
        
        
         $check_date = 0;
@@ -160,9 +162,8 @@ if(isset($_GET['id'])){
                 $l_fd_mode = 0;
             }
             if ($acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
-                $due_date_ent = (date('m/d/Y', strtotime($first_dp)));
-                //$due_date = strtotime(gmdate('Y-m-d', strtotime($first_dp)));
-                $due_date = new DateTime($due_date_ent);
+                $due_date_ent = date('m/d/Y', strtotime($first_dp));
+                $due_date = $due_date_ent;
                 $amount_paid_ent = (number_format($monthly_down,2));
                 $amount_ent = (number_format($monthly_down,2));
                 $total_amount_due_ent = (number_format($monthly_down,2));
@@ -175,8 +176,9 @@ if(isset($_GET['id'])){
                             $l_date = new DateTime($first_dp);
                         endif;
                         $t_day = date('d', strtotime($l_date));
-                        $l_date2 =  new Datetime(auto_date($t_day,$l_date));
+                        $l_date2 =  new Datetime(auto_date($t_day,$due_date));
                         $due_date_ent = $l_date2->format('m/d/y');
+                        $due_date = $due_date_ent;
                         $count = floatval($last_payment['status_count']) + 1;
 
                 endif;
@@ -199,7 +201,7 @@ if(isset($_GET['id'])){
                 $day = date('d', strtotime($l_date));
                 $t_day = validate_date($t_year,$t_month,$day);
                 $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
-                //$due_date_ent = date('m/d/Y', strtotime($l_date));
+             
                 if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                     $underpay = 1;
                     $l_surcharge = 0;
@@ -227,10 +229,17 @@ if(isset($_GET['id'])){
                         $over_due_mode_upay = 1;
                     endif;
 
+                    if (strtotime($last_payment['pay_date']) > strtotime($last_payment['due_date'])):
+                        $l_date2 = date('Y-m-d', strtotime($last_payment['pay_date']));
+                    else:
+                        $l_date2 = date('Y-m-d', strtotime($last_payment['due_date']));
+                    endif;
+                    $due_date = $l_date2;
+
                     $monthly_pay = $monthly_down - $last_principal;
                     $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                     $count = $last_payment['status_count'];
-                    $due_date = strtotime($l_date);
+                
                     $amount_paid_ent = (number_format($l_monthly,2));
                     $amount_ent = (number_format($l_monthly,2));
                     $total_amount_due_ent = (number_format($l_monthly,2));
@@ -246,8 +255,8 @@ if(isset($_GET['id'])){
                 else:
                     //echo $day;
                     $l_date2 = new Datetime(auto_date($day,$l_date));
-                    $due_date = $l_date2;
-                    $due_date_ent = $due_date->format('m/d/y');
+                    $due_date = $l_date2->format('m/d/y');
+                    $due_date_ent = $l_date2->format('m/d/y');
                     //echo $last_payment['status_count'];
                     $count = floatval($last_payment['status_count']) + 1;
                     $amount_paid_ent = (number_format($monthly_pay,2));
@@ -289,7 +298,7 @@ if(isset($_GET['id'])){
             } elseif ($last_payment['status'] == 'PFD') {
                 $monthly_pay = $last_payment['amount_due'] - $last_payment['payment_amount'];
                 $l_date = ($last_payment['pay_date']);
-                $due_date = timegm($l_date);
+                $due_date = $l_date;
             }
             $amount_paid_ent = number_format($monthly_pay,2);
             $amount_ent = number_format($monthly_pay,2);
@@ -310,10 +319,8 @@ if(isset($_GET['id'])){
             endif;
         
             if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
-                echo $acc_status;
                 $due_date_ent = date('Y-m-d', strtotime($l_date));
-                echo $due_date_ent;
-                $due_date = new Datetime($due_date_ent);
+                $due_date = $due_date_ent;
                 $amount_paid_ent = (number_format($monthly_pay,2));
                 $amount_ent = (number_format($monthly_pay,2));
                 $total_amount_due_ent = (number_format($monthly_pay,2));
@@ -325,9 +332,9 @@ if(isset($_GET['id'])){
                         $l_date = new DateTime($first_dp);
                     endif;
                     $t_day =  date('d', strtotime($l_date));
-                    $l_date2 = new Datetime(auto_date($day,$due_date_ent));
-                    $due_date = $l_date2;
-                    $due_date_ent = $due_date->format('m/d/y');
+                    $l_date2 = new Datetime(auto_date($day,$due_date));
+                    $due_date = $l_date2->format('m/d/y');
+                    $due_date_ent = $l_date2->format('m/d/y');
                     $count = $last_payment['status_count'] + 1;
                 endif;
                
@@ -382,12 +389,17 @@ if(isset($_GET['id'])){
                     
                         $over_due_mode_upay = 1;
                     }
- 
+
+                    if (strtotime($last_payment['pay_date']) > strtotime($last_payment['due_date'])):
+                            $l_date2 = date('Y-m-d', strtotime($last_payment['pay_date']));
+                    else:
+                            $l_date2 = date('Y-m-d', strtotime($last_payment['due_date']));
+                    endif;
+
+                    $due_date = $l_date2;
                     $monthly_pay = $monthly_payment - $last_principal;
-                    //echo $monthly_pay . ' ' . $monthly_payment . ' ' . $last_principal;
                     $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                     $count = $last_payment['status_count'];
-                    $due_date = strtotime($l_date);
                     $amount_paid_ent = (number_format($l_monthly,2));
                     $amount_ent = (number_format($l_monthly,2));
                     $total_amount_due_ent = (number_format($l_monthly,2));
@@ -405,8 +417,8 @@ if(isset($_GET['id'])){
                 else:
                 
                     $l_date2 = new Datetime(auto_date($day,$due_date_ent));
-                    $due_date = $l_date2;
-                    $due_date_ent = $due_date->format('m/d/y');
+                    $due_date = $l_date2->format('m/d/y');
+                    $due_date_ent = $l_date2->format('m/d/y');
                     $count = floatval($last_payment['status_count']) + 1;
                     $amount_paid_ent = (number_format($monthly_pay,2));
                     $amount_ent = (number_format($monthly_pay,2));
@@ -435,8 +447,7 @@ if(isset($_GET['id'])){
             
                 
                 if ($acc_status == 'Full DownPayment' || $acc_status == 'Reservation' || $last_payment['status'] == 'RESTRUCTURED' || $last_payment['status'] == 'RECOMPUTED' || $last_payment['status'] == 'ADDITIONAL'):
-                    $due_date = date('m/d/Y', strtotime($l_date));
-                    $due_date_ent = $due_date;
+                    $due_date_ent = date('m/d/Y', strtotime($l_date));
                     $due_date = $due_date_ent;
                     $amount = number_format($monthly_payment,2);
                     $amount_paid_ent = ($amount);
@@ -452,8 +463,8 @@ if(isset($_GET['id'])){
                         }
                         $t_day =  date('d', strtotime($l_date));
                         $l_date2 = new Datetime(auto_date($t_day,$due_date));
-                        $due_date = $l_date2;
-                        $due_date_ent = $due_date->format('m/d/y');
+                        $due_date = $l_date2->format('m/d/y');
+                        $due_date_ent = $l_date2->format('m/d/y');
                         $count = $last_payment[9] + 1;
                     }
                     $l_interest = $last_payment['remaining_balance'] * ($interest_rate / 1200);
@@ -527,13 +538,18 @@ if(isset($_GET['id'])){
                             $over_due_mode_upay = 1;
                         endif;
                         
-                        if ($last_payment['payment_amount'] < $last_payment['amount_due']):
+                        if (strtotime($last_payment['pay_date']) > strtotime($last_payment['due_date'])):
+                                $l_date = date('Y-m-d', strtotime($last_payment['pay_date']));
+
+                        else:
                                 $l_date = date('Y-m-d', strtotime($last_payment['due_date']));
+                                
                         endif;
+                        $due_date = $l_date;
 
                         $l_monthly = $last_payment['amount_due'] - $last_payment['payment_amount'];
                         $count = $last_payment['status_count'];
-                        //$due_date = timegm($l_date);
+                        
                         $amount_paid_ent = (number_format($monthly_pay,2));
                         $amount_ent = (number_format($monthly_pay,2));
                         $total_amount_due_ent = (number_format($monthly_pay,2));
@@ -568,8 +584,8 @@ if(isset($_GET['id'])){
 
                     else:
                         $l_date = new Datetime(auto_date($t_day,$due_date_ent));
-                        $due_date = $l_date;
-                        $due_date_ent = $due_date->format('m/d/y');
+                        $due_date = $l_date->format('m/d/y');
+                        $due_date_ent = $l_date->format('m/d/y');
                         $count = floatval($last_payment['status_count']) + 1;
                         $amount_paid_ent = (number_format($monthly_pay,2));
                         $amount_ent = (number_format($monthly_pay,2));
