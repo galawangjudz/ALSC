@@ -2313,6 +2313,93 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function update_prop_client(){
+		extract($_POST);
+		$data = " last_name = '$customer_last_name' ";
+		$data .= ", first_name = '$customer_first_name' ";
+		$data .= ", middle_name = '$customer_middle_name' ";
+		$data .= ", suffix_name = '$customer_suffix_name' ";
+		$data .= ", address = '$customer_address' ";
+		$data .= ", zip_code = '$customer_zip_code' ";
+		$data .= ", address_abroad = '$customer_address_2' ";
+		$data .= ", birthdate = '$birth_day' ";
+		$data .= ", age = '$customer_age' ";
+		$data .= ", gender = '$customer_gender' ";
+		$data .= ", viber = '$customer_viber' ";
+		$data .= ", civil_status = '$civil_status' ";
+		$data .= ", citizenship = '$citizenship' ";
+		$data .= ", email = '$customer_email' ";
+		$data .= ", contact_no = '$contact_no' ";
+
+
+		$sql = "UPDATE property_clients set ".$data." where client_id = ".$client_id;
+		$save = $this->conn->query($sql);
+		
+		if($save){
+			$resp['status'] = 'success';
+		
+			$this->settings->set_flashdata('success',"Client Details successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function save_member(){
+		extract($_POST);
+		$data = " client_id = '$client_id' ";
+		$data .= ", last_name = '$customer_last_name' ";
+		$data .= ", first_name = '$customer_first_name' ";
+		$data .= ", middle_name = '$customer_middle_name' ";
+		$data .= ", suffix_name = '$customer_suffix_name' ";
+		$data .= ", address = '$customer_address' ";
+		$data .= ", zip_code = '$customer_zip_code' ";
+		$data .= ", address_abroad = '$customer_address_2' ";
+		$data .= ", birthdate = '$birth_day' ";
+		$data .= ", age = '$customer_age' ";
+		$data .= ", gender = '$customer_gender' ";
+		$data .= ", viber = '$customer_viber' ";
+		$data .= ", civil_status = '$civil_status' ";
+		$data .= ", citizenship = '$citizenship' ";
+		$data .= ", email = '$customer_email' ";
+		$data .= ", contact_no = '$contact_no' ";
+
+		
+		$check = $this->conn->query("SELECT * FROM `family_members` where `last_name` = '{$customer_last_name}' and
+		 `first_name` = '{$customer_first_name}' and `middle_name` = '{$customer_middle_name}' ".(!empty($member_id) ? " and member_id != {$member_id} " : "")." ")->num_rows;
+		if($this->capture_err())
+			return $this->capture_err();
+		if($check > 0){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Member already exist.";
+			return json_encode($resp);
+			exit;
+		} 
+		if(empty($member_id)){
+			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$sql = "INSERT INTO family_members set ".$data;
+			$save = $this->conn->query($sql);
+		}else{
+			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$sql = "UPDATE family_members set ".$data." where member_id = ".$member_id;
+			$save = $this->conn->query($sql);
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($member_id))
+				$this->settings->set_flashdata('success',"New Buyer successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Buyer successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+
+
 
 }
 
@@ -2418,13 +2505,18 @@ switch ($action) {
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
 	break;
-
 	case 'delete_all_invoice':
 		echo $Master->delete_all_invoice();
 	break;
-
 	case 'credit_principal':
 		echo $Master->credit_principal();
+	break;
+	case 'update_prop_client':
+		echo $Master->update_prop_client();
+	break;
+
+	case 'save_member':
+		echo $Master->save_member();
 	break;
 	
 	default:

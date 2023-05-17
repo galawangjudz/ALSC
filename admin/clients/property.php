@@ -88,7 +88,7 @@ body{
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
       <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-default btn-flat border-primary update_client" client-id="<?php echo $client_id; ?>" href=""><i class="fa fa-edit"></i> Update Details</a>
+				<a class="btn btn-block btn-sm btn-default btn-flat border-primary update_client" client-id="<?php echo $client_id; ?>"><i class="fa fa-edit"></i> Update Details</a>
 			</div>
 	</div>
   
@@ -131,9 +131,11 @@ body{
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
+            <a class="btn btn-primary add_member" client-id="<?php echo $client_id; ?>" >Add Member</a>
               <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
                 if($qry2->num_rows <= 0){
-                    echo "No Details founds";
+                    
+                    echo " No Family Member Found";
                 }else{ ?> 
                 <table class="table2 table-bordered table-stripped">
                  
@@ -145,6 +147,7 @@ body{
                         <th style="text-align:center;font-size:13px;">CONTACT NO</th>
                         <th style="text-align:center;font-size:13px;">EMAIL ADDRESS</th>
                         <th style="text-align:center;font-size:13px;">RELATIONSHIP</th>
+                        <th style="text-align:center;font-size:13px;">ACTION</th>
                   
                         </tr>
                     </thead>
@@ -168,9 +171,12 @@ body{
                             <td class="text-center"><span class="badge badge-primary">Married To</span></td>
                         <?php }elseif($row['relationship'] == 4){ ?>
                             <td class="text-center"><span class="badge badge-primary">Minor/Represented by Legal Guardian</span></td>
-                        <?php }
-                      endwhile; }?>
+                        <?php } ?>
+                        <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-success btn-s update_family_mem" style="font-weight:bold;font-size:12px;height:30px;width:100px;" data-id="<?php echo $row['member_id'] ?>">Update</a></td>
 
+                          <?php
+                      endwhile; }?>
+                     
                       </tr>
 
                     </tbody>
@@ -216,7 +222,8 @@ body{
                                 <td class="text-center" style="width:20%;"><span class="badge badge-primary">Add Cost</span></td>
                             <?php } ?>        
                             <td class="text-center" style="font-size:13px;width:20%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
-                            <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-success btn-s view_data" style="font-weight:bold;font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>">View</a></td>
+                            <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-success btn-s view_data" style="font-weight:bold;font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>">View</a>
+                            <a class="btn btn-primary btn-s restructured_data" style="font-weight:bold;font-size:10px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>">Restructuring</a></td>
                             <?php endwhile; }?>
                           </tr>
 
@@ -491,6 +498,13 @@ $(document).ready(function() {
 
 	})
 
+
+  $('.restructured_data').click(function(){
+		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
+	  uni_modal_right("<i class='fa fa-info'></i> Restructuring",'clients/property_restructuring.php?id='+$(this).attr('data-id'),"mid-large")
+
+	})
+
   
   $('.add_payment').click(function(){
 		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
@@ -532,25 +546,7 @@ $(document).ready(function() {
   })
 });
 
-$(document).ready(function() {
 
-
-
-  $('#uni_modal').on('shown.bs.modal', function (){
-       check_paydate();
-    });
-      
-
-    $(document).on('keyup', ".pay-date", function(e) {
-        e.preventDefault();
-        check_paydate();
-
-
-    });	
-
-
-
- });
 
 
   function delete_last_or($prop_id){
@@ -576,109 +572,26 @@ $(document).ready(function() {
         })
     }
 
-  function check_paydate(){
 
-      const due_date = new Date($('.due-date').val());
-      const pay_date = new Date($('.pay-date').val());
-      const payment_type2 = $('.payment-type2').val();
-      const pay_status = $('.pay-stat').val();
-      const pay_stat_acro = pay_status.substring(0, 2);
-      const interest_rate =  $('.int-rate').val();
-      const underpay =  $('.under-pay').val();
-      const excess =  $('.excess').val();
-      const over_due_mode =  $('.over-due-mode').val();
-      const monthly_payment =  $('.monthly-pay').val();
-      const numStr = $('.amt-due').val();
-      const monthly_pay  = parseFloat(numStr.replace(",", ""));
+    $('.update_client').click(function(){
+      //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
+      uni_modal("<i class='fa fa-paint-brush'></i> Edit Client",'clients/client_update.php?id='+$(this).attr('client-id'),"mid-large")
 
-
-      //console.log(pay_stat_acro);
-      if (pay_date > due_date) {
-          const timeDiff = Math.abs(pay_date.getTime() - due_date.getTime());
-          const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-          //console.log(monthly_pay);
-          const l_sur = (monthly_pay * ((0.6/360) * diffDays));
-
-          const tot_amt_due = monthly_pay + l_sur;
-          //console.log(tot_amt_due);
-          $('#surcharge').val(l_sur.toFixed(2));
-          $('#rebate_amt').val('0.0');
-          $('#tot_amount_due').val(tot_amt_due.toFixed(2));
-         // $('#amount_paid').val(tot_amt_due.toFixed(2));
-          //console.log(`${pa_status.substr(0,2)}`);
-          //console.log(pay_status);
-          console.log(`The payment is ${diffDays} days late. The late surcharge is ${l_sur}.`);
-
-        
-      }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
-
-        console.log(interest_rate);
-        const timeDiff = Math.abs(due_date.getTime() - pay_date.getTime());
-        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-
-        
-        if (interest_rate == 12){
-              l_rebate_value = 0.02;
-        }else if (interest_rate == 14){
-              l_rebate_value = 0.0225;
-        }else if (interest_rate == 15){
-              l_rebate_value = 0.0225;
-        } else if (interest_rate == 16){
-              l_rebate_value = 0.025;
-        } else if (interest_rate == 17){
-              l_rebate_value = 0.025;
-        } else if (interest_rate == 18){
-              l_rebate_value = 0.025;
-        }else if (interest_rate == 19){
-              l_rebate_value = 0.025;
-        }else if (interest_rate == 20){
-              l_rebate_value = 0.025;
-        }else if (interest_rate == 21){
-              l_rebate_value = 0.025;
-        } else if (interest_rate == 22){
-              l_rebate_value = 0.0275;
-        } else if (interest_rate == 23){
-              l_rebate_value = 0.0275;
-        }else if (interest_rate == 24){
-              l_rebate_value = 0.03;
-        }else{
-              l_rebate_value = 0;
-        }
-        if (diffDays > 2){
-              if (underpay == 1){
-                  l_rebate = (monthly_payment * l_rebate_value);
-              }else{
-                  l_rebate = (monthly_pay * l_rebate_value);
-              }
-
-        }else{
-              l_rebate = 0;
-        }
-
-        console.log(diffDays);
-        console.log(l_rebate);
-        $('#rebate_amt').val(l_rebate.toFixed(2));
-        l_monthly = (monthly_pay - l_rebate);
-        $('#tot_amount_due').val(l_monthly.toFixed(2));
-        //$('#amount_paid').val(l_monthly.toFixed(2));
-
-      }else{
-          if ((excess != -1) && (over_due_mode == 0)){
-              return;
-          }
-          $('#tot_amount_due').val(monthly_pay.toFixed(2));
-         // $('#amount_paid').val(monthly_pay.toFixed(2));
-          $('#surcharge').val('0.0');
-          $('#rebate_amt').val('0.0');
-      }
-
-
-      }
-
-      $('.update_client').click(function(){
-        uni_modal("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client.php?id='+$(this).attr('client-id'),"mid-large")
     })
 
+    
+    $('.add_member').click(function(){
+      //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
+      uni_modal("<i class='fa fa-paint-brush'></i> Add Member",'clients/save_member.php?cid='+$(this).attr('client-id'),"mid-large")
+
+    })
+
+        
+    $('.update_family_mem').click(function(){
+      //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
+      uni_modal("<i class='fa fa-paint-brush'></i> Update Member",'clients/save_member.php?id='+$(this).attr('data-id'),"mid-large")
+
+    })
 
 
 
