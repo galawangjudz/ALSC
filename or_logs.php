@@ -240,16 +240,30 @@ class Login extends DBConnection
                                                 style="padding:3px;border-radius:3px;border:0px;border:1px solid gainsboro;width:100%;">
                                         </td>
                                         <td width="8%;text-align:center;"><label
-                                                style="text-align:center;width:100%;">Preparer: </label></td>
+                                                style="text-align:center;width:100%;">Encoder: </label></td>
                                         <td width="14%;text-align:center;"><input type="text" name="preparer"
                                                 id="preparer" value="<?php if (isset($_GET['preparer'])) {
                                                     echo $_GET['preparer'];
                                                 } ?>"
                                                 style="padding:3px;border-radius:3px;border:0px;border:1px solid gainsboro;width:100%;">
                                         </td>
+                                        <td width="8%;text-align:center;"><label
+                                                style="text-align:center;width:100%;">Mode of Payment: </label></td>
+                                        <td width="14%;text-align:center;">
+                                            
+                                        
+                                        <select required name="mode_of_payment" id="mode_of_payment" class="form-control required" >
+                                             <option value="">Select an option</option>
+                                            <option value="-1">CASH</option>
+                                            <option value="0">CHECK</option>
+                                            <option value="1">THRU BANK</option>
+                                            
+                                        </select>
 
+                                        </td>
                                         <td width="14%;text-align:center;"><button type="submit"
-                                                class="btn btn-info btn-sm" style="width:100%;">Filter</button></td>
+                                                class="btn btn-info btn-sm" style="width:100%;">Filter</button>
+                                        </td>
                                     </tr>
                                 </table>
                             </form>
@@ -263,8 +277,9 @@ class Login extends DBConnection
                                     <th>OR No.</th>
                                     <th>Pay Date</th>
                                     <th>Amt Paid</th>
-                                    <th>Preparer</th>
-                                    <th>Date Prepared</th>
+                                    <th>Encoder</th>
+                                    <th>Mode of Payment</th>
+                                    <th>Date Encoded</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -272,14 +287,21 @@ class Login extends DBConnection
                                 <?php
                                 $i = 1;
                                 $con = mysqli_connect("localhost", "root", "", "alscdb");
-
-                                if (isset($_GET['from_date']) && isset($_GET['to_date']) && isset($_GET['preparer'])) {
+                                $from_date = '0000-00-00';
+                                $to_date = '0000-00-00';
+                                $preparer = '';
+                                $mode_of_payment = '';
+                                $lname = '';
+                                $fname = '';
+                                $username = '';
+                                if (isset($_GET['from_date']) && isset($_GET['to_date']) && isset($_GET['preparer']) && isset($_GET['mode_of_payment'])) {
 
                                     $from_date = $_GET['from_date'];
                                     $to_date = $_GET['to_date'];
                                     $preparer = $_GET['preparer'];
+                                    $mode_of_payment = $_GET['mode_of_payment'];
 
-                                    $query = "SELECT * FROM or_logs WHERE user = '$preparer' AND status = 0 AND gen_time BETWEEN '$from_date' AND '$to_date'";
+                                    $query = "SELECT * FROM or_logs WHERE (user = '$preparer' AND mode_of_payment = '$mode_of_payment' AND status = 1) AND gen_time BETWEEN '$from_date' AND '$to_date'";
                                     //$query1 = "SELECT or_id,property_id,or_no,pay_date,user,gen_time,amount_paid, SUM(amount_paid) as amt_paid FROM or_logs WHERE user = '$preparer' AND gen_time BETWEEN '$from_date' AND '$to_date' GROUP BY $preparer";
                                     $query_run = mysqli_query($con, $query);
 
@@ -304,6 +326,17 @@ class Login extends DBConnection
                                                 </td>
                                                 <td>
                                                     <?= $row['user']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                        if ($row['mode_of_payment'] == '-1') {
+                                                            echo 'CASH';
+                                                        } else if ($row['mode_of_payment'] == '0') {
+                                                            echo 'CHECK';
+                                                        } else {
+                                                            echo 'THRU BANK';
+                                                        }
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <?= $row['gen_time']; ?>
@@ -335,12 +368,13 @@ class Login extends DBConnection
                             <table class="table table-bordered table-stripped" id="data-table"
                                 style="text-align:center;">
                                 <?php
-                                $query1 = "SELECT or_id,property_id,or_no,pay_date,user,gen_time,amount_paid, SUM(amount_paid) as amt_paid FROM or_logs WHERE user = '$preparer' AND status = 1 AND gen_time BETWEEN '$from_date' AND '$to_date' GROUP BY '$preparer'";
-                                $query_run1 = mysqli_query($con, $query1);
-                                while ($row1 = mysqli_fetch_assoc($query_run1)) {
-                                    $amt_pd = number_format($row1['amt_paid'], 2) . '<br>';
-                                }
+                                    $amt_paid = '0';
 
+                                    $query1 = "SELECT or_id,property_id,or_no,pay_date,user,gen_time,amount_paid, SUM(amount_paid) as amt_paid FROM or_logs WHERE user = '$preparer' AND status = 1 AND mode_of_payment = '$mode_of_payment' AND gen_time BETWEEN '$from_date' AND '$to_date' GROUP BY '$preparer'";
+                                    $query_run1 = mysqli_query($con, $query1);
+                                    while ($row1 = mysqli_fetch_assoc($query_run1)) {
+                                        $amt_paid = number_format($row1['amt_paid'], 2) . '<br>';
+                                    }
                                 ?>
                                 <?php
                                 $query2 = "SELECT * FROM users WHERE username = '$preparer'";
@@ -374,7 +408,9 @@ class Login extends DBConnection
                                     <tr>
                                         <td style="width:50%;"><label>TOTAL COLLECTION:</label></td>
                                         <td>
-                                            <?php echo $amt_pd; ?>
+                                            <?php 
+                                                echo $amt_paid ;
+                                            ?>
                                         </td>
                                     </tr>
                                 </table>

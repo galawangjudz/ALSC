@@ -19,8 +19,7 @@ if(isset($_GET['id'])){
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
-
-<body onload="dueTotal();">
+<body onload="">
 <div class="card-body">
     <div class="divBtnOverdue">
         <button class="btn btn-light" id="overduebtn" style="float:right;margin-top:5px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
@@ -204,11 +203,10 @@ body{
                         <?php 
                             //echo $last_excess ;
                             $trans_date_ent = $last_trans_date;
-                            $pay_date_ent = $last_or_date;
+                            $or_date_ent = $last_or_date;
                             if ($last_excess != -1 && $last_excess != 0){
                                 $amount_paid_ent = number_format($last_excess,2,'.',',');
                                 $or_ent = $last_or_ent;
-                                
                                 
                                 
                                 }
@@ -287,7 +285,7 @@ body{
                                 </table>
                             </td>   
 
-                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" ></td>
+                            <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom surcharge-amt" id="surcharge" name="surcharge" value="<?php echo isset($surcharge_ent) ? $surcharge_ent : 0.00; ?>" style="width:100%;" readonly></td>
                        
 
                         </tr>
@@ -316,7 +314,7 @@ body{
                             
                         </tr>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" style="width:100%;"></td>
+                            <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom tot-amt-due"  id="tot_amount_due" name="tot_amount_due" value="<?php echo isset($total_amount_due_ent) ? $total_amount_due_ent : 0.00; ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom balance-amt"  id="balance" name="balance" value="<?php echo $balance_ent; ?>" style="width:100%;" readonly></td>
                         </tr>
                         <tr>
@@ -328,7 +326,6 @@ body{
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom or-no"  id="or_no_ent" name="or_no_ent" value="<?php echo isset($or_ent) ? $or_ent : ''; ?>" style="width:100%;" required ></td>
                         </tr>
                     </table>
-                    <input type="hidden" class="form-control-sm margin-bottom due-date2" name="due_date2" value="<?php echo date("Y-m-d", strtotime($due_date)); ?>" style="width:100%;" readonly>
                     <input type="hidden" class="form-control-sm margin-bottom int-rate"  id="interest_rate" name="interest_rate" value="<?php echo $interest_rate; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
@@ -480,12 +477,7 @@ body{
                         $row_int = mysqli_fetch_assoc($result_int);
                     ?>
                     <?php 
-                        $sql_pd = "SELECT SUM(payment_amount) AS total_amt_paid FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
-                        $result_pd = mysqli_query($conn, $sql_pd);
-                        $row_pd = mysqli_fetch_assoc($result_pd);
-                    ?>
-                    <?php 
-                        $sql_due = "SELECT status, MAX(amount_due) AS amount_due FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' GROUP BY status;";
+                        $sql_due = "SELECT SUM(payment_amount) AS total_amt_paid FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' ";
                         $result_due = mysqli_query($conn, $sql_due);
                         $row_due = mysqli_fetch_assoc($result_due);
                     ?>
@@ -514,7 +506,7 @@ body{
                         <tr>  
 
                             <td style="font-size:12px;"><label>Total Amount to be Paid: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_amt_pd" id="tot_amt_pd" value="<?php echo (number_format($row_pd['total_amt_paid'],2)) ? (number_format($row_pd['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
+                            <td><input type="text" class= "form-control-sm" name="tot_amt_pd" id="tot_amt_pd" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
 
                             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
                         </tr>
@@ -549,28 +541,8 @@ body{
                         $result_sur = mysqli_query($conn, $sql_sur);
                         $row_sur = mysqli_fetch_assoc($result_sur);
                     ?>
-                    <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
-                      
-                        <?php
-                        $qry4 = $conn->query("SELECT status, MAX(amount_due) AS amount_due FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}' GROUP BY status;");
-                        $sum = 0;
-
-                        while ($row = $qry4->fetch_assoc()) {
-                            $sum += $row['amount_due'];
-                        }
-                        ?>
-                            <?php while ($row = $qry4->fetch_assoc()): ?>
-                                <tr>
-                               
-                                    <td><?= $row['amount_due'] ?></td>
-                                </tr>
-                            <?php endwhile; ?>
-                            <tr>
-                                <td><input type="hidden" class= "form-control-sm" value="<?= $sum ?>" name="due_total" id="due_total"></td>
-                            </tr>
-                        </table>
                     <input type="hidden" id="or_no" name="or_no" value="<?php echo $row_or['or_no'] ? $row_or['or_no']: ''; ?>" style="width:100%;" required>
-                    <input type="hidden" id="amt_pd" name="amt_pd" value="<?php echo ($row_pd['total_amt_paid']) ? ($row_pd['total_amt_paid']) : ''; ?>" style="width:100%;" required>
+                    <input type="hidden" id="amt_pd" name="amt_pd" value="<?php echo ($row_due['total_amt_paid']) ? ($row_due['total_amt_paid']) : ''; ?>" style="width:100%;" required>
                     <input type="hidden" id="amt_due" name="amt_due" value="<?php echo isset($total_amount_due_ent) ? str_replace(',', '', $total_amount_due_ent) : '0.00'; ?>" style="width:100%;" readonly>
                     <input type="hidden" name="amt_surcharge" id="amt_surcharge" value="<?php echo ($row_sur['total_surcharge']) ? ($row_sur['total_surcharge']) : ''; ?>" style="width:100%;" readonly>
                     <input type="hidden" class= "form-control-sm" name="amt_interest" id="amt_interest" value="<?php echo ($row_int['total_interest']) ? ($row_int['total_interest']) : ''; ?>" style="width:100%;" readonly>
@@ -652,7 +624,7 @@ body{
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                             <tr>
-                                <td><a href="<?php echo base_url ?>or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
+                                <td><a href="<?php echo base_url ?>/or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
                             </tr>
                         </table>
                 </form>
@@ -681,9 +653,8 @@ body{
                             <th>Mode of Payment</th>
                             <th>Check Date</th>
                             <th>Branch</th> -->
-                            <th style="text-align:center;font-size:11px;width:8%">ENCODER</th>
-                            <th style="text-align:center;font-size:11px;width:12%">DATE ENCODED</th>
-                            <th style="text-align:center;font-size:11px;width:12%">OR STATUS</th>
+                            <th style="text-align:center;font-size:11px;width:8%">PREPARER</th>
+                            <th style="text-align:center;font-size:11px;width:12%">DATE PREPARED</th>
                             <th style="text-align:center;font-size:11px;width:8%">ACTION</th>   
                         </tr>
 
@@ -691,37 +662,27 @@ body{
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' ORDER by gen_time DESC");
+                            $qry = $conn->query("SELECT * FROM or_logs where md5(property_id) = '{$_GET['id']}' AND status = 1 ORDER by gen_time DESC");
                             while($row = $qry->fetch_assoc()):
                         ?>
-
                         <tr id="<?php echo $i; ?>">
-                        <td class="text-center" style="font-size:13px;width:5%;"><?php echo $i ?></td>
-                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
-                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
-
-                                
-                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["amount_paid"] ?></td>
-                                <!-- <td><?php echo $row["amount_due"] ?></td>
-                                <td><?php echo $row["surcharge"] ?></td>
-                                <td><?php echo $row["interest"] ?></td>
-                                <td><?php echo $row["principal"] ?></td>
-                                <td><?php echo $row["rebate"] ?></td>
-                                <td><?php echo $row["remaining_balance"] ?></td>
-                                <td><?php echo $row["mode_of_payment"] ?></td>
-                                <td><?php echo $row["check_date"] ?></td>
-                                <td><?php echo $row["branch"] ?></td> -->
-
-
-                                <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
-                                <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
-                                <?php if($row['status'] == 1){ ?> 
-                                    <td class="text-center" style="font-size:13px;width:12%;"><span class="badge badge-success">Active</span></td>
-                                <?php }elseif($row['status'] == 0){ ?>
-                                    <td class="text-center" style="font-size:13px;width:12%;"><span class="badge badge-danger">Cancelled</span></td>
-                                <?php } ?>
-                          
-                                <td class="text-center" style="font-size:13px;width:8%;">
+                            <td class="text-center" style="font-size:13px;width:5%;"><?php echo $i ?></td>
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["or_no"] ?></td>
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["pay_date"] ?></td>
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo number_format($row["amount_paid"]); ?></td>
+                            <!-- <td><?php echo $row["amount_due"] ?></td>
+                            <td><?php echo $row["surcharge"] ?></td>
+                            <td><?php echo $row["interest"] ?></td>
+                            <td><?php echo $row["principal"] ?></td>
+                            <td><?php echo $row["rebate"] ?></td>
+                            <td><?php echo $row["remaining_balance"] ?></td>
+                            <td><?php echo $row["mode_of_payment"] ?></td>
+                            <td><?php echo $row["check_date"] ?></td>
+                            <td><?php echo $row["branch"] ?></td> -->
+                            <td class="text-center" style="font-size:13px;width:8%;"><?php echo $row["user"] ?></td>
+                            <td class="text-center" style="font-size:13px;width:12%;"><?php echo $row["gen_time"] ?></td>
+                            
+                            <td class="text-center" style="font-size:13px;width:8%;">
                                 <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
                                 <form method="post" action="payment_mail.php">
                                     
@@ -733,7 +694,6 @@ body{
                                 </form>
                                 <button onclick="getTableRowId(<?php echo $i; ?>)" class="btn btn-warning btn-sm" style="width:100%;margin-top:2px;">Email</button>
                             </td>
-
                         </tr>
                         <?php $i++; ?>
                     <?php endwhile; ?>
@@ -809,7 +769,7 @@ body{
                                 $mail->Body = "Dear " . $m_fname." ".$m_mname." ".$m_lname." ".$m_sname . ",<br><br>";
                                 $mail->Body .= "Warm greetings from Asian Land!" . "<br>";
                                 $mail->Body .= "Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us." . "<br>";
-                                $mail->Body .= "As a reminder, the payment amount was " . "<b>".$m_p_amt."</b>" .", which was applied to your account on "."<b>".$m_p_date.".</b><br>";
+                                $mail->Body .= "As a reminder, the payment amount was " . "<b>".$m_p_amt."00</b>" .", which was applied to your account on "."<b>".$m_p_date.".</b><br>";
                                 $mail->Body .= "If you have any questions or concerns about your account, please don't hesitate to contact us at <b>0917-523-7373</b>." . "<br>";
                                 $mail->Body .= "Once again, thank you for your payment and we look forward to serving you in the future." . "<br><br>";
                                 $mail->Body .= "----------" . "<br>";
@@ -820,7 +780,7 @@ body{
                                 if($mail->send()){?>
                                     <script>
                                         alert("Email Sent!");
-                                        location.href="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo md5($prop_id); ?>";
+                                        location.href="?page=ra";
                                     </script>
                                 <?php
                                 }else{
@@ -846,70 +806,72 @@ body{
                                 <div class="container-fluid">
                                 <h3 class="card-title"><b>PREVIEW EMAIL</b></h3>
                                 <br><hr style="height:1px;border-width:0;color:gray;background-color:gray">
-                                    <form class="" method="post" enctype="multipart/form-data">
-                                        <div class="box_big1">
-                                            <div class="main_box">
-                                                <div class="row">
-                                                    <div class="col-xs-12" style="width:100%;">		
-                                                        <div class="form-group">
-                                                            <label class="control-label">To: </label>
-                                                            <textarea class="form-control required textarea" type="text" name="email"><?php echo $eadd; ?></textarea><br/>
+                                    <body>
+                                        <form class="" method="post" enctype="multipart/form-data">
+                                            <div class="box_big1">
+                                                <div class="main_box">
+                                                    <div class="row">
+                                                        <div class="col-xs-12" style="width:100%;">		
+                                                            <div class="form-group">
+                                                                <label class="control-label">To: </label>
+                                                                <textarea class="form-control required textarea" type="text" name="email"><?php echo $eadd; ?></textarea><br/>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12" style="width:100%;">		
-                                                        <div class="form-group">
-                                                        <label class="control-label">Subject: </label>
-                                                        <input type="text" name="subject" class="form-control required" value="PAYMENT RECEIVED - <?php echo $prop_id; ?>" style="font-weight:bold;">
+                                                    <div class="row">
+                                                        <div class="col-xs-12" style="width:100%;">		
+                                                            <div class="form-group">
+                                                            <label class="control-label">Subject: </label>
+                                                            <input type="text" name="subject" class="form-control required" value="PAYMENT RECEIVED - <?php echo $prop_id; ?>" style="font-weight:bold;">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12">		
-                                                        <div class="form-group">
-                                                            <label class="control-label">Message: </label>
-                                                            <textarea class="form-control required" id='makeMeSummernote' name="message" rows="3">
-                                                            <br>
-                                                            <div style="text-align:justify">Dear <?php echo strtoupper($fname); ?> <?php echo strtoupper($mname); ?> <?php echo strtoupper($lname); ?> <?php echo strtoupper($sname); ?>,
+                                                    <div class="row">
+                                                        <div class="col-xs-12">		
+                                                            <div class="form-group">
+                                                                <label class="control-label">Message: </label>
+                                                                <textarea class="form-control required" id='makeMeSummernote' name="message" rows="3">
+                                                                <br>
+                                                                <div style="text-align:justify">Dear <?php echo strtoupper($fname); ?> <?php echo strtoupper($mname); ?> <?php echo strtoupper($lname); ?> <?php echo strtoupper($sname); ?>,
+                                                                </div>
+                                                                <br>
+                                                 
+                                                                <div style="text-align:justify">Warm greetings from Asian Land!
+                                                                </div>
+                                                                <div style="text-align:justify">Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us.
+                                                                </div>
+                                                                <div style="text-align:justify">As a reminder, the payment amount was <b><input type='text' id='p_amt' name='p_amt' style='width:auto;text-align:center;font-weight:bold;' readonly/></b>, which was applied to your account on <b><input type='text' id='p_date' name='p_date' style='width:auto;text-align:center;font-weight:bold;' readonly/></b>.
+                                                                </div>
+                                                                <div style="text-align:justify">If you have any questions or concerns about your account, please don't hesitate to contact us at <b>0917-523-7373</b>.
+                                                                </div>
+                                                                <div style="text-align:justify">Once again, thank you for your payment and we look forward to serving you in the future.
+                                                                </div><br>
+                                                                <input type="text" id="inside_txtbox" disabled style="border:none" value="----------"><br>
+                                                                <div style="text-align:justify"><b>ASIAN LAND STRATEGIES CORPORATION</b>
+                                                                </div>
+                                                                <br>
+                                                                <div style="text-align:justify">
+                                                                <i>** This Electronic Mail is system-generated. Please do not reply. **</i>
+                                                                </div>
+                                                                </textarea>
+                                                                <input type='hidden' id='p_sname' name='p_sname' style='width:auto;' value='<?php echo $sname; ?>'>
+                                                                <input type='hidden' id='p_mname' name='p_mname' style='width:auto;' value='<?php echo $mname; ?>'>
+                                                                <input type='hidden' id='p_fname' name='p_fname' style='width:auto;' value='<?php echo $fname; ?>'>
+                                                                <input type='hidden' id='p_lname' name='p_lname' style='width:auto;' value='<?php echo $lname; ?>'>
                                                             </div>
-                                                            <br>
-                                                
-                                                            <div style="text-align:justify">Warm greetings from Asian Land!
-                                                            </div>
-                                                            <div style="text-align:justify">Thank you for your recent payment, which we have successfully received. We appreciate your promptness in settling your account with us.
-                                                            </div>
-                                                            <div style="text-align:justify">As a reminder, the payment amount was <b><input type='text' id='p_amt' name='p_amt' style='width:auto;text-align:center;font-weight:bold;' readonly/></b>, which was applied to your account on <b><input type='text' id='p_date' name='p_date' style='width:auto;text-align:center;font-weight:bold;' readonly/></b>.
-                                                            </div>
-                                                            <div style="text-align:justify">If you have any questions or concerns about your account, please don't hesitate to contact us at <b>0917-523-7373</b>.
-                                                            </div>
-                                                            <div style="text-align:justify">Once again, thank you for your payment and we look forward to serving you in the future.
-                                                            </div><br>
-                                                            <input type="text" id="inside_txtbox" disabled style="border:none" value="----------"><br>
-                                                            <div style="text-align:justify"><b>ASIAN LAND STRATEGIES CORPORATION</b>
-                                                            </div>
-                                                            <br>
-                                                            <div style="text-align:justify">
-                                                            <i>** This Electronic Mail is system-generated. Please do not reply. **</i>
-                                                            </div>
-                                                            </textarea>
-                                                            <input type='hidden' id='p_sname' name='p_sname' style='width:auto;' value='<?php echo $sname; ?>'>
-                                                            <input type='hidden' id='p_mname' name='p_mname' style='width:auto;' value='<?php echo $mname; ?>'>
-                                                            <input type='hidden' id='p_fname' name='p_fname' style='width:auto;' value='<?php echo $fname; ?>'>
-                                                            <input type='hidden' id='p_lname' name='p_lname' style='width:auto;' value='<?php echo $lname; ?>'>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12">		
-                                                        <div class="form-group">
-                                                            <button type="submit" name="send" id="btnSend" class="btn btn-success">Send Mail</button>
+                                                    <div class="row">
+                                                        <div class="col-xs-12">		
+                                                            <div class="form-group">
+                                                                <button type="submit" name="send" id="btnSend" class="btn btn-success">Send Mail</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </body>
                                 </div>
                             </div>
                 </div>
@@ -918,7 +880,7 @@ body{
         </div>
     </div>
 </div>
-<button onclick='dueTotal()'>TEST</button>
+
 <script>
 $('#makeMeSummernote').summernote({
     height:200,
@@ -1008,7 +970,7 @@ function formatCurrency(amount) {
 
 function check_paydate(){
 
-    const due_date = new Date($('.due-date2').val());
+    const due_date = new Date($('.due-date').val());
     const pay_date = new Date($('.trans-date').val());
     const payment_type2 = $('.payment-type2').val();
     const pay_status = $('.pay-stat').val();
@@ -1025,12 +987,12 @@ function check_paydate(){
     //console.log(monthly_pay);
 
 
-  
+    //console.log(pay_stat_acro);
     if (pay_date > due_date) {
         const timeDiff = Math.abs(pay_date.getTime() - due_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
         
-        console.log(diffDays);
+        //console.log(monthly_pay);
     
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
    
@@ -1060,7 +1022,7 @@ function check_paydate(){
 
     }else if ((pay_stat_acro == 'MA') || ((pay_status == 'FPD') && (payment_type2 == 'Monthy Amortization')) && (pay_date < due_date)) {
 
-        //console.log(interest_rate);
+        console.log(interest_rate);
         const timeDiff = Math.abs(due_date.getTime() - pay_date.getTime());
         const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
@@ -1175,12 +1137,6 @@ function deleteRow(rowId) {
             }
     });
 }  
-function dueTotal(){
-    var a = document.getElementById("tot_amt_due1").value;
-    var b = document.getElementById("due_total").value;
-    var cd = document.getElementById("tot_amt_due1").value = document.getElementById("due_total").value;
-
-}
 function CreditPrincipal() {
     $('#status').val('Credit to Principal');
     $('#surcharge').val('0.0');
@@ -1229,7 +1185,6 @@ function PaymentofBalance() {
     $('#rebate_amt').val(l_rebate);
     $('#tot_amount_due').val(tot_amt_due);
     $('#amount_due').val(tot_amt_due);
-    $('#amount_paid').val(tot_amt_due);
     const last_due_date = new Date($('.last-due').val());
     const last_stat_count = $('.last-stat-count').val();
     $('#status_count').val(last_stat_count);
@@ -1368,10 +1323,6 @@ $(document).ready(function(){
             $(".required").parent().removeClass("has-error")
         }    
         
-        var result = confirm('Are you sure you want to save the payment?');
-  
-        if (result == true) {
-
         $.ajax({
             url:_base_url_+'classes/Master.php?f=save_or_logs',
             method:'POST',
@@ -1398,12 +1349,6 @@ $(document).ready(function(){
                 }
             }
         })
-    }else{
-
-         // If the user clicked "Cancel", do nothing
-        return false;
-    }
-
     })
 
     $('#save_payment').submit(function(e){
@@ -1630,6 +1575,12 @@ $(document).ready(function(){
     $('.table').dataTable(); 
 })
 
+function sendData() {
+
+    document.getElementById("p_amt").value = document.getElementById("p-amount").value;
+    document.getElementById("p_date").value = document.getElementById("p-date").value;
+
+}
 
 function getTableRowId(rowNum) {
     var getDiv = document.getElementById("composeEmail");

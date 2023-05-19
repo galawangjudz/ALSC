@@ -225,15 +225,16 @@ body{
             </div>
 
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
-              <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+              <div class="container" style="background-color:#F5F5F5;float:left;margin-bottom:20px;border-radius:5px;padding:5px;margin-left:0px;">
                 <!-- <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>    -->
                 <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
                 <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span></a>            
                 <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
                 <a class="btn btn-danger delete-last-or" prop-id="<?php echo $property_id; ?>" >Delete Last OR</a>
+                <a class="btn btn-danger undo-delete-last-or" prop-id="<?php echo $property_id; ?>" >Undo</a>
               </div>  
                     <table class="table2 table-bordered table-stripped">
-                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
+                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' AND payment_status = 1 ORDER by due_date, pay_date, payment_count ASC");
                      if($qry4->num_rows <= 0){
                            echo "No Payment Records";
                      }else{  ?>      
@@ -371,15 +372,15 @@ body{
                                   echo "No results found.";
                               }
                               ?>
-                              <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
+                              <td style="font-size:12px;"><label class="control-label" style="width:100%;">Total Principal: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
+                              <td style="font-size:12px;"><label class="control-label" style="width:100%;">Total Rebate: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+                              <td style="font-size:12px;"><label class="control-label" style="width:100%;">Total Surcharge: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+                              <td style="font-size:12px;"><label class="control-label" style="width:100%;">Total Interest: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label>Total Amount Due: </label></td>
+                              <td style="font-size:12px;"><label style="width:100%;">Total Amount Due: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width:125px;"></td>
                           </tr>
                       </table>
@@ -514,10 +515,12 @@ $(document).ready(function() {
   
 
   $('.delete-last-or').click(function(){
-        _conf("Are you sure to delete this Lot?","delete_last_or",[$(this).attr('prop-id')])
+        _conf("Are you sure you want to delete this payment record?","delete_last_or",[$(this).attr('prop-id')])
     }) 
 
-
+    $('.undo-delete-last-or').click(function(){
+        _conf("Are you sure you want to undo delete the last payment record?","undo_delete_last_or",[$(this).attr('prop-id')])
+    }) 
 	
  
    
@@ -557,6 +560,29 @@ $(document).ready(function() {
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=delete_payment",
+            method:"POST",
+            data:{prop_id: $prop_id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occured.",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+
+    function undo_delete_last_or($prop_id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=undo_delete_payment",
             method:"POST",
             data:{prop_id: $prop_id},
             dataType:"json",
