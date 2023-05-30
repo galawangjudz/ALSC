@@ -305,13 +305,7 @@ body{
                     </tbody>
                 </table>
 
-                <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">         
-        
-                         
-                    </div>
-                </div>
+              
                 <div class="col-md-12">
                     <div class="form-group">
                       <table>
@@ -378,15 +372,15 @@ body{
                                   echo "No results found.";
                               }
                               ?>
-                              <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
+                              <td style="font-size:12px;"><label for="tot_prin" class="control-label">Total Principal: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
+                              <td style="font-size:12px;"><label for="tot_reb" class="control-label">Total Rebate: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+                              <td style="font-size:12px;"><label for="tot_sur" class="control-label">Total Surcharge: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+                              <td style="font-size:12px;"><label for="tot_int" class="control-label">Total Interest: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label>Total Amount Due: </label></td>
+                              <td style="font-size:12px;"><label for="tot_amt_due">Total Amount Due: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width:125px;"></td>
                           </tr>
                       </table>
@@ -463,14 +457,14 @@ body{
                     <div class="form-group">
                       <table>
                           <tr>
-                              <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
-                              <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
-                              <td style="font-size:12px;"><label>Total Amount Due: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label for="tot_prin2" class="control-label">Total Principal: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_prin2" id="tot_prin2" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label for="tot_sur2" class="control-label">Total Surcharge: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_sur2" id="tot_sur2" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label for="tot_int2" class="control-label">Total Interest: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_int2" id="tot_int2" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
+                              <td style="font-size:12px;"><label for="tot_amt_due2">Total Amount Due: </label></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_amt_due2" id="tot_amt_due2" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
                           </tr>
                       </table>
                     </div>
@@ -501,7 +495,7 @@ $(document).ready(function() {
 
   $('.restructured_data').click(function(){
 		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
-	  uni_modal_right("<i class='fa fa-info'></i> Restructuring",'clients/property_restructuring.php?id='+$(this).attr('data-id'),"mid-large")
+	  uni_modal("<i class='fa fa-info'></i> Restructuring",'clients/property_restructuring.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
 

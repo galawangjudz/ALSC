@@ -2398,12 +2398,115 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function save_restructured(){
+		extract($_POST);
+			
+		$prop_id = $_POST['prop_id'];
+		$payment_type1 = $_POST['payment_type1'];
+		$payment_type2 = $_POST['payment_type2'];
+		$dp_bal = $_POST['dp_bal'];
 
+		$acc_surcharge1 = $_POST['acc_surcharge1'];
+
+		$dp_sur = $dp_bal + $acc_surcharge1;
+		$no_payment = $_POST['no_payment'];
+		$monthly_down = $_POST['monthly_down'];
+
+		$first_dp_date = $_POST['first_dp_date'];
+		$full_down_date = $_POST['full_down_date'];
+
+		$adj_prin_bal = $_POST['adj_prin_bal'];
+		$terms= $_POST['terms'];
+		$interest_rate = $_POST['interest_rate'];
+		$fixed_factor = $_POST['fixed_factor'];
+		$start_date = $_POST['start_date'];
+		$monthly_amortization = $_POST['monthly_amortization'];
+		$mode = '1';
+		$acc_status = $_POST['acc_stat'];
+		$acc_surcharge2 = $_POST['acc_surcharge2'];
+		$acc_interest = $_POST['acc_interest'];
+		$total_sur = $acc_surcharge1 + $acc_surcharge2;
+		$amt_to_be_financed = $_POST['amt_to_be_financed'];
+		$balance = $_POST['balance'];
+		$total_balance = $balance + $acc_interest + $acc_surcharge2;
+		$restructured_date = $_POST['restructured_date'];
+		$amount_due = $acc_interest + $total_sur;
+		
+		//echo $acc_status;
+	
+			
+		$data = " c_payment_type1 = '$payment_type1' ";
+		$data .= ", c_payment_type2 = '$payment_type2' ";
+		$data .= ", c_net_dp = '$net_dp' ";
+		$data .= ", c_no_payments = '$no_payment' ";
+		$data .= ", c_monthly_down = '$monthly_down' ";
+		$data .= ", c_first_dp = '$first_dp_date' ";
+		$data .= ", c_full_down = '$full_down_date' ";
+		$data .= ", c_amt_financed = '$amt_to_be_financed' ";
+		$data .= ", c_terms = '$terms' ";
+		$data .= ", c_interest_rate = '$interest_rate' ";
+		$data .= ", c_fixed_factor = '$fixed_factor' ";
+		$data .= ", c_monthly_payment = '$monthly_amortization' ";
+		$data .= ", c_start_date = '$start_date' ";
+		$data .= ", c_account_status = '$acc_status'";
+		$data .= ", c_restructured = $mode ";
+
+		$save = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
+	
+
+
+		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$sql = $this->conn->query($qry);
+		$l_last = $sql->num_rows - 1;
+		$payments_data = array(); 
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet!';
+			return json_encode($resp);
+        } 
+		while($row = $sql->fetch_assoc()) {
+		  $payments_data[] = $row; 
+
+		}
+
+		$last_row = $payments_data[$l_last];
+		$due_date = $last_row['due_date'];
+		$pay_count = $last_row['payment_count'] + 1;
+
+		$data2 = "property_id = '$prop_id' ";
+		$data2 .= ", due_date = '$due_date' ";
+		$data2 .= ", pay_date = '$restructured_date' ";
+		$data2 .= ", or_no = '******' ";
+		$data2 .= ", payment_amount = '0' ";
+		$data2 .= ", amount_due = '$amount_due' ";
+		$data2 .= ", rebate = '0' ";
+		$data2 .= ", surcharge = '$total_sur' ";
+		$data2 .= ", interest = '$acc_interest' ";
+		$data2 .= ", principal = '0' ";
+		$data2 .= ", remaining_balance = '$total_balance' ";
+		$data2 .= ", status = 'RESTRUCTURED' ";
+		$data2 .= ", status_count = '0' ";
+		$data2 .= ", payment_count = '$pay_count' ";
+
+		$save2 = $this->conn->query("INSERT INTO property_payments set ".$data2);
+
+
+
+		if($save & $save2){
+			$resp['status'] = 'success';
+	
+			$this->settings->set_flashdata('success',"Restructuring successfully saved.");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
 
 
 }
-
-
+	
 
 $Master = new Master();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
@@ -2517,6 +2620,10 @@ switch ($action) {
 
 	case 'save_member':
 		echo $Master->save_member();
+	break;
+
+	case 'save_restructured':
+		echo $Master->save_restructured();
 	break;
 	
 	default:

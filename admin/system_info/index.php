@@ -43,11 +43,11 @@ if ($user_role != 'IT Admin') {
 			</div> -->
 		</div>
 		<div class="card-body">
-			<form action="" id="system-frm">
+			<form id="system-frm">
 				<div id="msg" class="form-group"></div>
 				<div class="form-group">
 					<label for="name" class="control-label">System Name</label>
-					<input type="text" class="form-control form-control-sm" name="name" id="name" value="<?php echo $_settings->info('name') ?>">
+					<input type="text" class="form-control form-control-sm" name="name" id="name" value="<?php echo $_settings->info('name') ?>" autocomplete="off">
 				</div>
 				<div class="form-group">
 					<label for="short_name" class="control-label">System Short Name</label>
@@ -58,7 +58,7 @@ if ($user_role != 'IT Admin') {
 					<input type="text" class="form-control form-control-sm" name="tax_rate" id="tax_rate" value="<?php echo  $_settings->info('tax_rate') ?>">
 				</div>
 			<div class="form-group">
-				<label for="" class="control-label">System Logo</label>
+				<label for="customFile" class="control-label">System Logo</label>
 				<div class="custom-file">
 	              <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
 	              <label class="custom-file-label" for="customFile">Choose file</label>

@@ -597,10 +597,8 @@ function updateTotals(elem) {
 		payment_type1_changed();
 
 
-
 	});
 
-	
 
 
 	$(document).on('change', ".payment-type2", function(e) {
@@ -616,6 +614,37 @@ function updateTotals(elem) {
 
 	});
 
+
+
+	$(document).on('change', ".acc-interest", function(e) {
+		e.preventDefault();
+		compute_adj_prin();
+
+
+	});
+
+	
+
+  $(document).on('change', ".acc-surcharge2", function(e) {
+		e.preventDefault();
+		compute_adj_prin();
+
+
+	});
+
+
+
+  function compute_adj_prin(){
+    var balance = $('.amt-to-be-financed').val();
+    var acc_sur = $('.acc-surcharge2').val();
+    var acc_int = $('.acc-interest').val();
+
+    total =  parseFloat(balance) +  parseFloat(acc_sur) +  parseFloat(acc_int);
+
+    $("#adj_prin_bal").val(total);
+	compute_monthly_payments();
+  
+  }
 
 	function payment_type1_changed(){
 
@@ -999,7 +1028,7 @@ function updateTotals(elem) {
 			var l_net_tcp = $('.net-tcp').val();
 			var l_rsv_fee = $('.reservation-fee').val();
 			l_amt_2b_finance = parseFloat(l_net_tcp) - parseFloat(l_rsv_fee);
-			$("#fixed_facotr").val(0);
+			$("#fixed_factor").val(0);
 			$("#mothly_amortization").val(0);	
 			$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));		
 		}else if(l_payment_type2 == "Deferred Cash Payment"){
