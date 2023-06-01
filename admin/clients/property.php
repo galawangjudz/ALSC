@@ -238,6 +238,7 @@ body{
                 <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span></a>            
                 <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
                 <a class="btn btn-danger delete-last-or" prop-id="<?php echo $property_id; ?>" >Delete Last OR</a>
+                <a class="btn btn-danger undo-delete-last-or" prop-id="<?php echo $property_id; ?>" >Undo</a>
               </div>  
                     <table class="table2 table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
@@ -522,10 +523,12 @@ $(document).ready(function() {
   
 
   $('.delete-last-or').click(function(){
-        _conf("Are you sure to delete this Lot?","delete_last_or",[$(this).attr('prop-id')])
+        _conf("Are you sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
     }) 
 
-
+    $('.undo-delete-last-or').click(function(){
+        _conf("Are you sure you want to undo delete this OR?","undo_delete_last_or",[$(this).attr('prop-id')])
+    }) 
 	
  
    
@@ -542,6 +545,28 @@ $(document).ready(function() {
 
 
 
+ function undo_delete_last_or($prop_id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=undo_delete_payment",
+            method:"POST",
+            data:{prop_id: $prop_id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("Can't delete last payment!",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
 
   function delete_last_or($prop_id){
         start_loader();
@@ -552,14 +577,15 @@ $(document).ready(function() {
             dataType:"json",
             error:err=>{
                 console.log(err)
-                alert_toast("An error occured.",'error');
+                alert_toast("Can't delete last payment!",'error');
                 end_loader();
             },
             success:function(resp){
+                console.log(resp)
                 if(typeof resp== 'object' && resp.status == 'success'){
                     location.reload();
                 }else{
-                    alert_toast("An error occured.",'error');
+                    alert_toast("Can't delete last payment!",'error');
                     end_loader();
                 }
             }

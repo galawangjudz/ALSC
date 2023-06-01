@@ -1477,6 +1477,8 @@ Class Master extends DBConnection {
 			$data .= ", status = '$status' ";
 			$data .= ", status_count = '$status_count' ";
 			$data .= ", payment_count = '$payment_count' ";
+			$data .= ", excess = '$excess' ";
+			$data .= ", account_status = '$l_status' ";
 
 			$save = $this->conn->query("INSERT INTO property_payments set ".$data);
 
@@ -2019,7 +2021,6 @@ Class Master extends DBConnection {
 
 		}
 		
-	 
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
@@ -2064,9 +2065,6 @@ Class Master extends DBConnection {
 			'surcharge_percent'=>  $sur_percent
 		  );
 		
-
-
-
 		if($resp['data'] ){
 			$resp['status'] = 'success';
 		}else{
@@ -2076,7 +2074,7 @@ Class Master extends DBConnection {
 		
 		return json_encode($resp);
 	}
-	
+
 	function delete_payment(){
 		extract($_POST);
 		$qry = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
@@ -2107,15 +2105,13 @@ Class Master extends DBConnection {
 		$l_last_or_no = $last_row['or_no'];
 		$l_last_pay_cnt = $last_row['payment_count'];
 
-
-		if ($l_last_status == 'RETENTION' or $l_last_status = 'RECOMPUTED' or $l_last_status = 'ADDITIONAL'){
-			$resp['status'] = 'Cant Delete Last Payment';
-			$resp['err'] = $this->conn->error."[{$qry}]";
-	
+		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL'){
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+			// return json_encode($resp);
 		}
 
-
-		$query = "UPDATE or_logs SET status = 0 WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
+		$query = "DELETE FROM or_logs WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
 		$query1 = "DELETE FROM property_payments WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
 		
 		$delete = $this->conn->query($query);
@@ -2155,16 +2151,17 @@ Class Master extends DBConnection {
 			elseif($l_status == 'C PR' or $l_status == 'DISC' or $l_status == 'FPD/'):
 					continue;
 			else:
-					continue;
+				continue;
 			endif;		
 		}
 
 		$updating = $this->conn->query($update);
 
 		
+
 		if ($delete && $delete1 && $updating) {
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"New payments successfully deleted.");	
+			$this->settings->set_flashdata('success',"Last OR deleted successfully.");	
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
@@ -2173,6 +2170,138 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+
+	function undo_delete_payment(){
+		extract($_POST);
+
+		$qry = ("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$sql = $this->conn->query($qry);
+		$l_last = $sql->num_rows - 1;
+		$payments_data = array(); 
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet!';
+			return json_encode($resp);
+        } 
+
+		while($row = $sql->fetch_assoc()) {
+		  $payments_data[] = $row;
+		}
+		$last_row = $payments_data[$l_last]; 
+		$pay_date = $last_row['pay_date'];
+		$or_no_ent = $last_row['or_no'];
+
+		$qry2 = ("SELECT * FROM property_payments where property_id =".$prop_id." and pay_date = '".$pay_date."' and or_no ='".$or_no_ent."' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$sql = $this->conn->query($qry2);
+		#$l_last = $sql->num_rows - 1;
+		$payments_data = array(); 
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet!';
+			return json_encode($resp);
+        } 
+
+		while($row = $sql->fetch_assoc()) {
+		  $payments_data[] = $row; 
+		  #$last_row = $payments_data[$l_last];
+		  $prod_id = $row['property_id'];
+		  $amount_paid = $row['payment_amount'];
+		  $pay_date = $row['pay_date'];
+		  $due_date = $row['due_date'];
+		  $or_no_ent = $row['or_no'];
+		  $tot_amount_due = $row['amount_due'];
+		  $rebate = $row['rebate'];
+		  $surcharge = $row['surcharge'];
+		  $interest = $row['interest'];
+		  $principal = $row['principal'];
+		  $balance = $row['remaining_balance'];
+		  $status = $row['status'];
+		  $status_count = $row['status_count'];
+		  $payment_count = $row['payment_count'];
+		  $excess = $row['excess'];
+		  $l_status = $row['account_status'];
+		  $date = date('Y-m-d');
+
+		    if ($status == 'RETENTION' || $status == 'RECOMPUTED' || $status == 'ADDITIONAL'){
+				$resp['status'] = 'failed';
+				$resp['err'] = $this->conn->error."[{$sql}]";
+				return json_encode($resp);
+			}
+			if ($pay_date != $date){
+				$resp['status'] = 'failed';
+				$resp['err'] = $this->conn->error."[{$sql}]";
+				return json_encode($resp);
+			}
+		
+			$query1 = "INSERT INTO t_invoice (property_id,payment_amount,pay_date,due_date,or_no,amount_due,rebate,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status)VALUES($prod_id,$amount_paid,'$pay_date','$due_date',$or_no_ent,$tot_amount_due,$rebate,$surcharge,$interest,$principal,$balance,'$status',$status_count,$payment_count,$excess,'$l_status')";
+			$save1 = $this->conn->query($query1);
+
+			if ($l_status == ''){
+					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
+			}else{
+					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id);
+			}
+
+		}
+
+
+		$query_payments = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count DESC";
+		$qry_pay = $this->conn->query($query_payments);
+		while($pay = $qry_pay->fetch_assoc()){
+			$l_status = substr($pay['status'],0,4);
+			$l_bal = $pay['remaining_balance'];
+			if ($l_status == 'MA -'):
+					$l_status1 = 'Monthly Amortization';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'DFC'):
+					$l_status1 = 'Deferred Cash Payment';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'FD'):
+					$l_status1 = 'Full DownPayment';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'RES'):
+					$l_status1 = 'Reservation';
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					$updating = $this->conn->query($update);
+					break;
+			elseif($l_status == 'PD -' or $l_status == 'PD'):
+					$l_status1 = 'Partial DownPayment';	
+					$update  = "UPDATE properties SET c_account_status = '$l_status1', c_balance = '$l_bal' WHERE property_id ='$prop_id'";
+					//echo $update;
+					$updating = $this->conn->query($update);
+					break;	
+			elseif($l_status == 'C PR' or $l_status == 'DISC' or $l_status == 'FPD/'):
+					continue;
+			else:
+				continue;
+			endif;		
+		}
+
+		$updating = $this->conn->query($update);
+
+
+		if($save1 && $l_sql && $updating){
+			$delete = $this->conn->query("DELETE FROM property_payments WHERE pay_date = '".$pay_date."' and or_no ='".$or_no_ent."' and property_id = '".$prop_id."'");
+			if ($delete){
+				$resp['status'] = 'success';
+				$this->settings->set_flashdata('success',"Last action successfully undone.");
+			}
+			
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+
+		return json_encode($resp);
+	}
+	
+	
 	function delete_invoice(){
 		
 		extract($_POST);
@@ -2604,6 +2733,9 @@ switch ($action) {
 	break;
 	case 'delete_payment':
 		echo $Master->delete_payment();
+	break;
+	case 'undo_delete_payment':
+		echo $Master->undo_delete_payment();
 	break;
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
