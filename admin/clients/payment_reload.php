@@ -440,7 +440,7 @@ if(isset($_GET['id'])){
             endif;
             
                 
-        elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || $acc_status == 'Monthly Amortization'):
+        elseif (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')):
                 $l_date = date('Y-m-d', strtotime($start_date));
                 $day = date('d', strtotime($l_date));
                 $monthly_pay = $monthly_payment;
@@ -491,6 +491,7 @@ if(isset($_GET['id'])){
                     $day = date('d', strtotime($l_date));
                     $t_day = validate_date($t_year,$t_month,$day);
                     $due_date_ent = $t_year .'/'. $t_month .'/'. $t_day;
+            
                     //under_pay
                     if ($last_payment['payment_amount'] < $last_payment['amount_due']):
                         $l_surcharge = 0;

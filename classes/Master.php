@@ -2352,16 +2352,23 @@ Class Master extends DBConnection {
 		$interval = $datetime1->diff($datetime2);
 		$l_days = $interval->days;
 
+		//echo $l_days;
+
 		if ($amount_paid < ($monthly_pay * 3)){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Credit Principal Amount is not enough !!" ;
 			return json_encode($resp);
-		}elseif($l_days >= 30){
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
-			return json_encode($resp);
-
-		}elseif($tot_amount_due == $amount_paid){
+		}
+		
+		if($datetime2 > $datetime1){
+			if($l_days >= 30){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
+				return json_encode($resp);
+			}
+		}
+		
+		if($tot_amount_due == $amount_paid){
 			if ($status == 'Payment of Balance'){
 				$status = 'C PRIN';
 			}
@@ -2435,10 +2442,200 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function update_prop_client(){
+		extract($_POST);
+		$data = " last_name = '$customer_last_name' ";
+		$data .= ", first_name = '$customer_first_name' ";
+		$data .= ", middle_name = '$customer_middle_name' ";
+		$data .= ", suffix_name = '$customer_suffix_name' ";
+		$data .= ", address = '$customer_address' ";
+		$data .= ", zip_code = '$customer_zip_code' ";
+		$data .= ", address_abroad = '$customer_address_2' ";
+		$data .= ", birthdate = '$birth_day' ";
+		$data .= ", age = '$customer_age' ";
+		$data .= ", gender = '$customer_gender' ";
+		$data .= ", viber = '$customer_viber' ";
+		$data .= ", civil_status = '$civil_status' ";
+		$data .= ", citizenship = '$citizenship' ";
+		$data .= ", email = '$customer_email' ";
+		$data .= ", contact_no = '$contact_no' ";
+
+
+		$sql = "UPDATE property_clients set ".$data." where client_id = ".$client_id;
+		$save = $this->conn->query($sql);
+		
+		if($save){
+			$resp['status'] = 'success';
+		
+			$this->settings->set_flashdata('success',"Client Details successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function save_member(){
+		extract($_POST);
+		$data = " client_id = '$client_id' ";
+		$data .= ", last_name = '$customer_last_name' ";
+		$data .= ", first_name = '$customer_first_name' ";
+		$data .= ", middle_name = '$customer_middle_name' ";
+		$data .= ", suffix_name = '$customer_suffix_name' ";
+		$data .= ", address = '$customer_address' ";
+		$data .= ", zip_code = '$customer_zip_code' ";
+		$data .= ", address_abroad = '$customer_address_2' ";
+		$data .= ", birthdate = '$birth_day' ";
+		$data .= ", age = '$customer_age' ";
+		$data .= ", gender = '$customer_gender' ";
+		$data .= ", viber = '$customer_viber' ";
+		$data .= ", civil_status = '$civil_status' ";
+		$data .= ", citizenship = '$citizenship' ";
+		$data .= ", email = '$customer_email' ";
+		$data .= ", contact_no = '$contact_no' ";
+
+		
+		$check = $this->conn->query("SELECT * FROM `family_members` where `last_name` = '{$customer_last_name}' and
+		 `first_name` = '{$customer_first_name}' and `middle_name` = '{$customer_middle_name}' ".(!empty($member_id) ? " and member_id != {$member_id} " : "")." ")->num_rows;
+		if($this->capture_err())
+			return $this->capture_err();
+		if($check > 0){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Member already exist.";
+			return json_encode($resp);
+			exit;
+		} 
+		if(empty($member_id)){
+			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$sql = "INSERT INTO family_members set ".$data;
+			$save = $this->conn->query($sql);
+		}else{
+			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$sql = "UPDATE family_members set ".$data." where member_id = ".$member_id;
+			$save = $this->conn->query($sql);
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($member_id))
+				$this->settings->set_flashdata('success',"New Buyer successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Buyer successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function save_restructured(){
+		extract($_POST);
+			
+		$prop_id = $_POST['prop_id'];
+		$payment_type1 = $_POST['payment_type1'];
+		$payment_type2 = $_POST['payment_type2'];
+		$dp_bal = $_POST['dp_bal'];
+
+		$acc_surcharge1 = $_POST['acc_surcharge1'];
+
+		$dp_sur = $dp_bal + $acc_surcharge1;
+		$no_payment = $_POST['no_payment'];
+		$monthly_down = $_POST['monthly_down'];
+
+		$first_dp_date = $_POST['first_dp_date'];
+		$full_down_date = $_POST['full_down_date'];
+
+		$adj_prin_bal = $_POST['adj_prin_bal'];
+		$terms= $_POST['terms'];
+		$interest_rate = $_POST['interest_rate'];
+		$fixed_factor = $_POST['fixed_factor'];
+		$start_date = $_POST['start_date'];
+		$monthly_amortization = $_POST['monthly_amortization'];
+		$mode = '1';
+		$acc_status = $_POST['acc_stat'];
+		$acc_surcharge2 = $_POST['acc_surcharge2'];
+		$acc_interest = $_POST['acc_interest'];
+		$total_sur = $acc_surcharge1 + $acc_surcharge2;
+		$amt_to_be_financed = $_POST['amt_to_be_financed'];
+		$balance = $_POST['balance'];
+		$total_balance = $balance + $acc_interest + $acc_surcharge2;
+		$restructured_date = $_POST['restructured_date'];
+		$amount_due = $acc_interest + $total_sur;
+		
+		//echo $acc_status;
+	
+			
+		$data = " c_payment_type1 = '$payment_type1' ";
+		$data .= ", c_payment_type2 = '$payment_type2' ";
+		$data .= ", c_net_dp = '$net_dp' ";
+		$data .= ", c_no_payments = '$no_payment' ";
+		$data .= ", c_monthly_down = '$monthly_down' ";
+		$data .= ", c_first_dp = '$first_dp_date' ";
+		$data .= ", c_full_down = '$full_down_date' ";
+		$data .= ", c_amt_financed = '$amt_to_be_financed' ";
+		$data .= ", c_terms = '$terms' ";
+		$data .= ", c_interest_rate = '$interest_rate' ";
+		$data .= ", c_fixed_factor = '$fixed_factor' ";
+		$data .= ", c_monthly_payment = '$monthly_amortization' ";
+		$data .= ", c_start_date = '$start_date' ";
+		$data .= ", c_account_status = '$acc_status'";
+		$data .= ", c_restructured = $mode ";
+
+		$save = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
+	
+
+
+		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$sql = $this->conn->query($qry);
+		$l_last = $sql->num_rows - 1;
+		$payments_data = array(); 
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet!';
+			return json_encode($resp);
+        } 
+		while($row = $sql->fetch_assoc()) {
+		  $payments_data[] = $row; 
+
+		}
+
+		$last_row = $payments_data[$l_last];
+		$due_date = $last_row['due_date'];
+		$pay_count = $last_row['payment_count'] + 1;
+
+		$data2 = "property_id = '$prop_id' ";
+		$data2 .= ", due_date = '$due_date' ";
+		$data2 .= ", pay_date = '$restructured_date' ";
+		$data2 .= ", or_no = '******' ";
+		$data2 .= ", payment_amount = '0' ";
+		$data2 .= ", amount_due = '$amount_due' ";
+		$data2 .= ", rebate = '0' ";
+		$data2 .= ", surcharge = '$total_sur' ";
+		$data2 .= ", interest = '$acc_interest' ";
+		$data2 .= ", principal = '0' ";
+		$data2 .= ", remaining_balance = '$total_balance' ";
+		$data2 .= ", status = 'RESTRUCTURED' ";
+		$data2 .= ", status_count = '0' ";
+		$data2 .= ", payment_count = '$pay_count' ";
+
+		$save2 = $this->conn->query("INSERT INTO property_payments set ".$data2);
+
+
+
+		if($save & $save2){
+			$resp['status'] = 'success';
+	
+			$this->settings->set_flashdata('success',"Restructuring successfully saved.");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
 
 }
-
-
+	
 
 $Master = new Master();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
@@ -2543,13 +2740,22 @@ switch ($action) {
 	case 'delete_invoice':
 		echo $Master->delete_invoice();
 	break;
-
 	case 'delete_all_invoice':
 		echo $Master->delete_all_invoice();
 	break;
-
 	case 'credit_principal':
 		echo $Master->credit_principal();
+	break;
+	case 'update_prop_client':
+		echo $Master->update_prop_client();
+	break;
+
+	case 'save_member':
+		echo $Master->save_member();
+	break;
+
+	case 'save_restructured':
+		echo $Master->save_restructured();
 	break;
 	
 	default:
