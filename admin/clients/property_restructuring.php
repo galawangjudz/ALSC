@@ -310,7 +310,7 @@ input{
                 <div class="col-md-6">	
                     <div class="form-group">
                         <label class="control-label">Account Status: </label>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <style>
                               select:invalid { color: gray; }
                           </style>
@@ -319,8 +319,8 @@ input{
                               <option name="payment_type1" value="Monthly Amortization" <?php echo isset($account_status) && $account_status == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
                               <option name="payment_type1" value="Deferred Cash Payment" <?php echo isset($account_status) && $account_status == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
                           </select>	
-                        </div>	
-                       <!--  <input type="text" class="form-control margin-bottom required acc-status" name="acc_stat" id="acc_stat" value="<?php echo isset($account_status) ? $account_status : 0; ?>" tabindex ="1" > -->
+                        </div>	 -->
+                        <input type="text" class="form-control margin-bottom required acc-status" name="acc_stat" id="acc_stat" value="<?php echo isset($account_status) ? $account_status : 0; ?>" tabindex ="1" >
                     </div>
                 </div>
             </div>

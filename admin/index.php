@@ -60,6 +60,20 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="uni_modal_2" role='dialog'>
+    <div class="modal-dialog modal-full-height  modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="fa fa-times"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="uni_modal_right" role='dialog'>
     <div class="modal-dialog modal-full-height  modal-md" role="document">
       <div class="modal-content">

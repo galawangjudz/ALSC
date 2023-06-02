@@ -84,7 +84,11 @@ body{
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
   $client_id = $row['client_id'];
+  $acc_stat = $row['c_reopen'];
+
 ?>
+
+<body onload="check_reopen()">
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
       <div class="card-tools">
@@ -118,6 +122,7 @@ body{
         <tr><th style="padding-left:5px;">Contact No: </th><td><?php echo $row['contact_no'];?></td></tr>
         <tr><th style="padding-left:5px;">Contact Abroad: </th><td><?php echo $row['contact_abroad'];?></td></tr>
         <tr><th style="padding-left:5px;">Email Address: </th><td><?php echo $row['email'];?></td></tr>
+        <input type="hidden" value="<?php echo $row['c_reopen'];?>" id="txt_reopen"/>
         </table>
 
         <hr>
@@ -131,7 +136,7 @@ body{
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
-            <a class="btn btn-primary add_member" client-id="<?php echo $client_id; ?>" >Add Member</a>
+              <a class="btn btn-primary add_member" id="add_member_btn" client-id="<?php echo $client_id; ?>">Add Member</a>
               <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
                 if($qry2->num_rows <= 0){
                     
@@ -239,6 +244,7 @@ body{
                 <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
                 <a class="btn btn-danger delete-last-or" prop-id="<?php echo $property_id; ?>" >Delete Last OR</a>
                 <a class="btn btn-danger undo-delete-last-or" prop-id="<?php echo $property_id; ?>" >Undo</a>
+                <a class="btn btn-primary new_av" prop-id="<?php echo $property_id; ?>">AV</a>
               </div>  
                     <table class="table2 table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
@@ -520,17 +526,14 @@ $(document).ready(function() {
   }); 
 
 
-  
-
-  $('.delete-last-or').click(function(){
+   $('.delete-last-or').click(function(){
         _conf("Are you sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
     }) 
 
     $('.undo-delete-last-or').click(function(){
         _conf("Are you sure you want to undo delete this OR?","undo_delete_last_or",[$(this).attr('prop-id')])
     }) 
-	
- 
+
    
   $('.tab-link').click(function() {
     var tab_id = $(this).attr('data-tab');
@@ -567,6 +570,30 @@ $(document).ready(function() {
             }
         })
     }
+
+    // function move_to_av($prop_id){
+    //     start_loader();
+    //     $.ajax({
+    //         url:_base_url_+"classes/Master.php?f=move_to_av",
+    //         method:"POST",
+    //         data:{prop_id: $prop_id},
+    //         dataType:"json",
+    //         error:err=>{
+    //             console.log(err)
+    //             alert_toast("An error occured!",'error');
+    //             end_loader();
+    //         },
+    //         success:function(resp){
+    //             if(typeof resp== 'object' && resp.status == 'success'){
+    //                 location.reload();
+    //             }else{
+    //                 alert_toast("An error occured.",'error');
+    //                 end_loader();
+    //             }
+    //         }
+    //     })
+    // }
+
 
   function delete_last_or($prop_id){
         start_loader();
@@ -606,13 +633,24 @@ $(document).ready(function() {
 
     })
 
-        
+    $('.new_av').click(function(){
+        uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/av_payment.php?id='+$(this).attr('prop-id'),"mid-large")
+    })
+ 
     $('.update_family_mem').click(function(){
       //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
       uni_modal("<i class='fa fa-paint-brush'></i> Update Member",'clients/save_member.php?id='+$(this).attr('data-id'),"mid-large")
 
     })
+    
+    function check_reopen(){
+    var reopen_stat = document.getElementById('txt_reopen').value;
+  
+    if (reopen_stat == '1'){
+      alert('This account is for reopen!');
+      //document.getElementById('add_member_btn').disabled = true;
 
-
+    }
+  }
 
 </script>
