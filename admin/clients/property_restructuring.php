@@ -435,16 +435,17 @@ $(document).ready(function() {
     <?php if ($account_status == 'Monthly Amortization' || $account_status == 'Full DownPayment' || $account_status == 'No DownPayment' || $account_status == 'Deferred Cash Payment'): ?>
       $('#down_frm').hide();
       
-       /*  $('#net_dp').hide();
+        $('#net_dp').hide();
         $('#less_paymt_dte').hide();
         $('#dp_bal').hide();
         $('#acc_surcharge1').hide();
         $('#no_payment').hide();
         $('#monthly_down').hide();
         $('#first_dp_date').hide();
-        $('#full_down_date').hide(); */
+        $('#full_down_date').hide();
         
-
+        $('#p1').hide();
+        $('#p1_box').hide();
         <?php if ($account_status == 'Deferred Cash Payment'):?>
               $("#interest_rate").val(0);
               $("#fixed_factor").val(0);
@@ -606,10 +607,13 @@ $(document).on('change', ".acc-interest", function(e) {
           $("#interest_rate").val(0);
           $("#fixed_factor").val(0);
 
+          $('#rate_text').hide();
           $('#interest_rate').hide();
+          $('#factor_text').hide();
           $('#fixed_factor').hide();
 		}else{
-     
+          $('#rate_text').show();
+          $('#factor_text').show();
           $('#interest_rate').show();
           $('#fixed_factor').show();
     }
