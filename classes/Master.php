@@ -20,6 +20,9 @@ Class Master extends DBConnection {
 			exit;
 		}
 	}
+
+
+
 	function save_lot(){
 		extract($_POST);
 		$data = " c_site = '$prod_code' ";
@@ -2332,8 +2335,7 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);	
 	}
-
-
+	
 	function credit_principal(){
 		extract($_POST);
 
@@ -2633,7 +2635,100 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function save_av(){
+		extract($_POST);
+		$data = " c_av_no = '$av_no' ";
+		$data .= ", property_id = '$p_id' ";	 
+		$data .= ", c_av_date = '$av_date' ";	 
+	 	$data .= ", c_av_amount = '$av_amount' ";
+		$data .= ", c_surcharge = '$av_sur' ";
+		$data .= ", c_interest = '$av_int' ";
+		$data .= ", c_rebate = '$av_reb' ";
+		$data .= ", c_new_acc_no = '$new_acc_no' "; 
+		$data .= ", c_remarks = '$remarks' ";
 
+		$save = $this->conn->query("INSERT INTO t_av_payment set ".$data);
+		
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($prop_id))
+				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+			
+	}
+	function move_av(){
+		extract($_POST);
+		$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$prop_id."");
+		
+		if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet! Please add to proceed with payments';
+			return json_encode($resp);
+        } 
+		while($row = $sql->fetch_array()):	
+			$prop_id = $row['property_id'];
+			$pay_date = $row['pay_date'];
+			$or_no_ent = $row['or_no'];
+			$amount_paid = $row['payment_amount'];
+			$due_date = $row['due_date'];
+			$tot_amount_due = $row['amount_due'];
+			$rebate = $row['rebate'];
+			$surcharge = $row['surcharge'];
+			$interest = $row['interest'];
+			$principal = $row['principal'];
+			$balance = $row['remaining_balance'];
+			$status = $row['status'];
+			$status_count = $row['status_count'];
+			$payment_count = $row['payment_count'];
+			$excess = $row['excess'];
+			$l_status = $row['account_status'];
+			$gentime = $row['gen_time'];
+			$transdate = $row['trans_date'];
+			$surchargepercent = $row['surcharge_percent'];
+
+
+			$data = " property_id = '$prop_id' ";
+			$data .= ", pay_date = '$pay_date' ";
+			$data .= ", or_no = '$or_no_ent' " ;
+			$data .= ", payment_amount = '$amount_paid' ";
+			$data .= ", due_date = '$due_date' ";
+			$data .= ", amount_due = '$tot_amount_due' ";
+			$data .= ", rebate = '$rebate' ";
+			$data .= ", surcharge = '$surcharge' ";
+			$data .= ", interest = '$interest' ";
+			$data .= ", principal = '$principal' ";
+			$data .= ", remaining_balance = '$balance' ";
+			$data .= ", status = '$status' ";
+			$data .= ", status_count = '$status_count' ";
+			$data .= ", payment_count = '$payment_count' ";
+			$data .= ", excess = '$excess' ";
+			$data .= ", account_status = '$l_status' ";
+			$data .= ", gen_time = '$gentime' ";
+			$data .= ", trans_date = '$transdate' ";
+			$data .= ",surcharge_percent = '$surchargepercent' ";
+
+			$save = $this->conn->query("INSERT INTO t_moved_av set ".$data);
+
+		endwhile;
+
+		if($save){
+			
+				$resp['status'] = 'success';
+				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
+			
+			
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+
+		return json_encode($resp);
+	}
 }
 	
 
@@ -2756,6 +2851,13 @@ switch ($action) {
 
 	case 'save_restructured':
 		echo $Master->save_restructured();
+	break;
+
+	case 'save_av':
+		echo $Master->save_av();
+	break;
+	case 'move_av':
+		echo $Master->move_av();
 	break;
 	
 	default:

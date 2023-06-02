@@ -310,7 +310,9 @@ input{
                 <div class="col-md-6">	
                     <div class="form-group">
                         <label class="control-label">Account Status: </label>
+
                        <!--  <div class="form-group">
+
                           <style>
                               select:invalid { color: gray; }
                           </style>

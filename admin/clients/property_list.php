@@ -136,7 +136,7 @@
                                 
                         ?>
                         <tr>
-                        <?php if ($usertype == 'IT Admin' || $usertype == 'Cashiergi'): ?>
+                        <?php if ($usertype == 'IT Admin' || $usertype == 'Cashier'): ?>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action

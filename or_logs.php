@@ -51,7 +51,9 @@ class Login extends DBConnection
         color: white !important;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
     }
-
+    .nav-logs:hover {
+        background-color: #007bff !important;
+    }
     .form_cont {
         padding: 10px;
         background-color: #F5F5F5;
@@ -59,11 +61,6 @@ class Login extends DBConnection
         padding-bottom: -5% !important;
         border-radius: 5px;
     }
-
-    .nav-logs:hover {
-        background-color: #007bff !important;
-    }
-
     .footer {
         width: auto;
         margin-left: -250px !important;
@@ -153,6 +150,14 @@ class Login extends DBConnection
                                                 </p>
                                             </a>
                                         </li>
+                                        <li class="nav-item dropdown">
+                                            <a href="<?php echo base_url ?>admin/?page=clients/av_logs" class="nav-link nav-av">
+                                            <i class="nav-icon fas fa-receipt"></i>
+                                                <p>
+                                                AV Logs
+                                                </p>
+                                            </a>
+                                        </li> 
                                     <?php endif; ?>
 
                                     <li class="nav-header">Others</li>
