@@ -2108,10 +2108,10 @@ Class Master extends DBConnection {
 		$l_last_or_no = $last_row['or_no'];
 		$l_last_pay_cnt = $last_row['payment_count'];
 
-		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL'){
+		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL' || $status == 'RESTRUCTURED'){
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
-			// return json_encode($resp);
+		
 		}
 
 		$query = "DELETE FROM or_logs WHERE pay_date = '".$l_last_pay_date."' and or_no ='".$l_last_or_no."' and property_id = '".$prop_id."'";
@@ -2225,7 +2225,7 @@ Class Master extends DBConnection {
 		  $l_status = $row['account_status'];
 		  $date = date('Y-m-d');
 
-		    if ($status == 'RETENTION' || $status == 'RECOMPUTED' || $status == 'ADDITIONAL'){
+		    if ($status == 'RETENTION' || $status == 'RECOMPUTED' || $status == 'ADDITIONAL' || $status == 'RESTRUCTURED'){
 				$resp['status'] = 'failed';
 				$resp['err'] = $this->conn->error."[{$sql}]";
 				return json_encode($resp);
