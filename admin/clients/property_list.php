@@ -131,7 +131,7 @@
                             z.c_block, z.c_lot FROM properties x, property_clients y , t_lots z, t_projects q WHERE 
                             x.property_id = y.property_id
                             and x.c_lot_lid = z.c_lid 
-                            and z.c_site = q.c_code ORDER BY x.c_date_of_sale DESC") ;
+                            and z.c_site = q.c_code and c_active = 1 ORDER BY x.c_date_of_sale DESC") ;
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>
