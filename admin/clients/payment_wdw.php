@@ -1382,6 +1382,15 @@ $(document).ready(function(){
 
             var statusValue = $("#status").val();
 
+            var sur_amt = $("#surcharge").val();
+            var amt_paid = $("#amount_paid").val();
+
+            if (amt_paid < sur_amt){
+                alert_toast("Amount must be higher or equal to surcharge","warning");	  
+                 return false;
+
+            }
+
             var errorCounter = validateForm();
             if (errorCounter > 0) {
             alert_toast("It appear's you have forgotten to complete something!","warning");	  

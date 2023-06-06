@@ -6,6 +6,12 @@
     <div class="wrapper">
      <?php require_once('inc/topBarNav.php') ?>
       <?php require_once('inc/navigation.php') ?>
+    <?php if($_settings->chk_flashdata('success')): ?>
+    <script>
+      alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
+    </script>
+    <?php endif;?>    
+
 
               
      <?php $page = isset($_GET['page']) ? $_GET['page'] : 'home';  ?>

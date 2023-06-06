@@ -203,6 +203,36 @@
                     </li>
                   
                     <?php if ($usertype == "IT Admin"): ?>
+
+
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link nav-journals">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                          Journal Entries
+                        </p>
+                      </a>
+                    </li>  
+
+
+
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=groups" class="nav-link nav-groups">
+                        <i class="nav-icon fas fa-th-list"></i>
+                        <p>
+                          Group List
+                        </p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=accounts" class="nav-link nav-accounts">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                          Accounts List
+                        </p>
+                      </a>
+                    </li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=agents/agents_list" class="nav-link nav-agents">
                         <i class="nav-icon fa fa-id-card"></i>
