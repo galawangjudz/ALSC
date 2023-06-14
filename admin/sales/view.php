@@ -153,8 +153,8 @@
   font-weight:bold;
 }
 #uni_modal{
-    width:500px;
-    margin-left:35%;
+    width:100%;
+    margin-left:auto;
 }
 </style>
 <?php 
@@ -262,7 +262,7 @@ if($csr->num_rows > 0){
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-	<h3 class="card-title">Reference #<?php echo $refno; ?></h3>
+	<i><h3 class="card-title"><b>Reference #<?php echo $refno; ?></b></h3></i>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -277,33 +277,43 @@ if($csr->num_rows > 0){
 
                         
                        <!-- hide ko muna to  <a href="?page=mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-info"> E-mail <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
-                 -->
-                        &nbsp;<button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                    Print
-                        <span class="sr-only">Toggle Dropdown</span>
-                        </button>
+                 -->    <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
+                                    <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
                         
                         <div class="dropdown-menu" role="menu">   
-                            <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
+                            <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                            <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                            <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
                         </div>
            
 
                         <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 
-                            
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="1" class="btn btn-success btn-lg btn-block sm-verification">Verified <span class="fa fa-check" aria-hidden="true"> </button>                            
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="2" class="btn btn-danger btn-lg btn-block sm-verification2">Void <span class="fa fa-times" aria-hidden="true"> </button>                            
+                            </td>
+                                    <td>
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="1" class="btn btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verified</button>                            
+                            </td>
+                                    <td>
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="2" class="btn btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
                         <?php } ?>
 
                         <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "COO" or $usertype == "IT Admin" )){ ?>
-                            <button type="button" data-csr-id =<?php echo $getID; ?> class="btn btn-success btn-lg btn-block new-coo-approval">COO Approved <span class="fa fa-check" aria-hidden="true"> </button>
-                            
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-lg btn-block coo-disapproval">COO DisApproved <span class="fa fa-times" aria-hidden="true"> </button>
-                            
-                        <?php } ?>    
+                                    </td>
+                                    <td>
+                                        <button type="button" data-csr-id =<?php echo $getID; ?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO DisApproved</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        <?php } ?>     
                     </div>
 
                     <div class="titles"> Buyer's Profile</div>
@@ -874,7 +884,9 @@ if($csr->num_rows > 0){
                                     <input type="hidden" class="form-control required" name="name" value= "">
                                     <div class="title_comment">Comment:</div>
                                         <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
-                                        <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
+                                        <button type="submit" id="action_add_comment" class="btn btn-flat btn-success float-right" style="font-size:14px;">
+                                        <i class="fa fa-comment" aria-hidden="true"></i>&nbsp;&nbsp;Add Comment
+                                        </button>
                                 </form>
                             </div>  
 
@@ -952,15 +964,15 @@ if($csr->num_rows > 0){
     
 
     $('.coo-disapproval').click(function(){
-		_conf("Are you sure to disapproved this csr?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to disapproved this CSR?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
 	})
 
     $('.sm-verification').click(function(){
-		_conf("Are you sure to verified this csr?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to verify this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
 	})
 
     $('.sm-verification2').click(function(){
-		_conf("Are you sure to void this csr?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to void this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
 	})
 
 

@@ -231,7 +231,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 }
 #btnfind{
   margin-left:25px;
-  font-weight:bold;
+  margin-top:29px;
+  width:100px;
+  color:white!important;
+  font-size:14px;
 }
 #invoice_totals{
   width:100%;
@@ -448,7 +451,7 @@ input{
 <div class="card card-outline rounded-0 card-blue">
 	<div class="card-header">
 			<!-- <h3 class="card-title"><?php echo !isset($_GET['id']) ? "New Invoice" :"Edit Invoice" ?></h3> -->
-		<h3 class="card-title">New Reservation Application</h3>
+		<h3 class="card-title"><b><i>New Reservation Application</b></i></h3>
 		<div class="card-tools">
 				<!-- <a href="./?page=sales/create" class="btn btn-flat btn-default bg-blue"><span class="fas fa-plus"></span>  Select Existing Client</a> -->
 		</div>
@@ -456,10 +459,10 @@ input{
 	<div class="card-body">
 	<div class="container-fluid">
 		<div class="tab">
-			<button class="tablinks" onclick="opentab(event, 'Buyer')" id="onlink1" onkeyup="tabclicked1()">Buyer's Profile</button>
-			<button class="tablinks" onclick="opentab(event, 'Investment')" id="onlink2" onkeyup="tabclicked2()">Investment Value</button>
-			<button class="tablinks" onclick="opentab(event, 'Payment')" id="onlink3" onkeyup="tabclicked3()">Payment Computation</button>
-			<button class="tablinks" onclick="opentab(event, 'Agents and Commission')" id="onlink4" onkeyup="tabclicked4()">Agents and Commission</button>
+			<button class="tablinks" onclick="opentab(event, 'Buyer')" id="onlink1" onkeyup="tabclicked1()"><b><i>Buyer's Profile</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Investment')" id="onlink2" onkeyup="tabclicked2()"><b><i>Investment Value</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Payment')" id="onlink3" onkeyup="tabclicked3()"><b><i>Payment Computation</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Agents and Commission')" id="onlink4" onkeyup="tabclicked4()"><b><i>Agents and Commission</b></i></button>
 		</div>
 		<form method="" id="save_csr">
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
@@ -474,7 +477,7 @@ input{
 										<tr>
 											<th>
 											<div class="panel-heading">
-												<a href="#" class="btn btn-primary float-left btn-md add-buyer-row"><span class="fa fa-plus" aria-hidden="true"></span></a>
+												<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
 												<div class="titles"><center> Buyer's Information Details</center></div>
 												<div class="clear"></div>
 											</div>
@@ -516,9 +519,9 @@ input{
 											<td>
 												<div class="form-group form-group-sm  no-margin-bottom">
 													<div class="card-tools">
-													<a href="#" class="btn btn-danger float-right btn-md delete-buyer-row"><span class="fa fa-times" aria-hidden="true"></span></a>
+													<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 													</div>
-													<p class="select-customer"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-plus" aria-hidden="true"></span> Select Existing Client</a></p>
+													<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
 												</div>
 												<div class="main_box">
 													<div class="row">
@@ -687,10 +690,10 @@ input{
 											
 												<td>
 													<div class="form-group form-group-sm  no-margin-bottom">
-														<div class="card-tools">
-														<a href="#" class="btn btn-danger float-right btn-md delete-buyer-row"><span class="fa fa-times" aria-hidden="true"></span></a>
+														<div class="card-tools" style="margin-top:5px;">
+														<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 														</div>
-														<p class="select-customer"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-plus" aria-hidden="true"></span> Select Existing Client</a></p>
+														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
 											
 													</div>
 													<div class="main_box">
@@ -876,7 +879,7 @@ input{
 					<div class="col-md-12">
 						<div class="panel panel-default">
 								<div class="panel-heading">
-									<div class="titles"></a><center><h4>Investment Value<h4></center></div>
+									<div class="titles"></a><center>Investment Value</center></div>
 									<div class="lot_box" style="width:100%;padding-top:10px;height:45px;"><div class="type-title" style="margin-left:60px;"><b>Type: </b></div>
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
@@ -958,8 +961,9 @@ input{
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<br>
-												<input type="submit" class="btn btn-success float-right select-lot" value="Find Lot" data-loading-text="Finding..." id="btnfind" style="margin-top:5px;width:100px;">
+												<button type="submit" class="btn btn-flat btn-success float-right select-lot" data-loading-text="Finding..." id="btnfind">
+													<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Find Lot
+												</button>
 											</div>
 										</div>
 									</div>
@@ -1387,7 +1391,7 @@ input{
 					<div class="col-md-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<div class="titles"><center><h4>Payment Computation<h4></center></div>
+								<div class="titles"><center>Payment Computation</center></div>
 							</div>
 							<div class="panel-body form-group form-group-sm">
 								<div class="main_box">
@@ -1494,7 +1498,7 @@ input{
 					<div class="col-md-12">
 						<div class="panel panel-default">
 								<div class="panel-heading">
-								<div class="titles"><center><h4>Agent and Commission<h4></center></div>
+								<div class="titles"><center>Agent and Commission</center></div>
 									<div class="clear"></div>
 								</div>
 							<div class="panel-body form-group form-group-sm">
@@ -1502,7 +1506,7 @@ input{
 									<thead>
 										<tr>
 											<th width="20">
-												<a href="#" class="btn btn-success btn-md add-row"><span class="fa fa-plus" aria-hidden="true"></span></a>
+												<a href="#" class="btn btn-flat btn-primary btn-md add-row" style="font-size:14px;margin-left:5px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
 											</th>
 											<th width="500">
 												<label class="control-label">&nbsp;Agents</label>
@@ -1534,14 +1538,14 @@ input{
 										?>
 										<tr>
 											<td>
-												<a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" ></span></a>
+												<a href="#" class="btn btn-danger delete-row" style="font-size:14px;"><span class="fa fa-times" ></span></a>
 											</td>
 											<td style="padding-top:10px;">
 												<!-- <a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" aria-hidden="true"></span></a> -->
 												
 												<div class="form-group form-group-sm">
 													<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
-													<p class="item-select"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-search" aria-hidden="true"></span> Select Existing Agent</a></p>
+													<p class="item-select"> <a href="#"  class="btn btn-flat btn-md bg-maroon" style="font-size:14px;"><span class="fa fa-search" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Agent</a></p>
 									
 												</div>
 											</td>
@@ -1562,14 +1566,14 @@ input{
 										
 										}else{ ?>
 											<tr><td>
-												<a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" ></span></a>
+												<a href="#" class="btn btn-flat btn-danger delete-row" style="font-size:14px;margin-left:5px;"><span class="fa fa-times" ></span></a>
 											</td>
 											<td style="padding-top:10px;">
 												<!-- <a href="#" class="btn btn-danger btn-md delete-row"><span class="fa fa-times" aria-hidden="true"></span></a> -->
 												
 												<div class="form-group form-group-sm no-margin-bottom">
 													<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
-													<p class="item-select"> <a href="#"  class="btn btn-flat btn-md bg-maroon" ><span class="fa fa-search" aria-hidden="true"></span> Select Existing Agent</a></p>
+													<p class="item-select" style="margin-top:5px;"> <a href="#"  class="btn btn-flat btn-md bg-maroon" style="font-size:14px;"><span class="fa fa-search" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Agent</a></p>
 									
 												</div>
 											</td>
@@ -1626,8 +1630,16 @@ input{
 		</form>
 	</div>	<!-- /.card-body -->
 	<div class="card-footer">
-			<button class="btn btn-flat btn-sm btn-default bg-maroon" form="save_csr">Save</button>
-			<a class="btn btn-flat btn-sm btn-default" href="./?page=sales">Cancel</a>
+		<table style="width:100%;">
+			<tr>
+				<td>
+					<button class="btn btn-flat btn-default bg-maroon" form="save_csr" style="width:100%;margin-right:5px;font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
+				</td>
+				<td>
+					<a class="btn btn-flat btn-default" href="./?page=sales" style="width:100%;margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>	<!-- /.container-fluid -->
 </div>	<!-- /.card -->
@@ -1635,19 +1647,19 @@ input{
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Select An Existing Customer</h4>
+				<h5 class="modal-title">Select An Existing Customer</h5>
 			</div>
 			<div class="modal-body">
-				<table class="table2 table-bordered table-stripped" style="width:100%;">
+				<table class="table2 table-bordered table-stripped" style="width:100%;font-size:16px;">
 					<thead>
 						<tr>
 
-						<th>Last Name</th>
-						<th>First Name</th>
-						<th>Middle Name</th>
-						<th>Email</th>
-						<th>Phone</th>
-						<th>Actions</th>
+						<th style="text-align:center;">Last Name</th>
+						<th style="text-align:center;">First Name</th>
+						<th style="text-align:center;">Middle Name</th>
+						<th style="text-align:center;">Email</th>
+						<th style="text-align:center;">Phone</th>
+						<th style="text-align:center;">Actions</th>
 
 						</tr>
 					</thead>
@@ -1668,19 +1680,19 @@ input{
 					while($row = $query->fetch_assoc()): ?>
 
 						<tr>
-							<td><?php echo $row["last_name"] ?></td>
-							<td><?php echo $row["first_name"] ?></td>
-							<td><?php echo $row["middle_name"] ?></td>
-							<td><?php echo $row["email"] ?></td>
-							<td><?php echo $row["contact_no"] ?></td>
-							<td><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-civil="<?php echo $row['civil_status']?>" data-customer-gender="<?php echo $row['gender'] ?>" data-customer-age="<?php echo $row['age'] ?>" data-customer-birthday="<?php echo $row['birthdate'] ?>" data-customer-viber="<?php echo $row['viber'] ?>" data-customer-address-1="<?php echo $row['address'] ?>" data-customer-zip-code="<?php echo $row['zip_code'] ?>"  data-customer-address-abroad="<?php echo $row['address_abroad'] ?>" data-customer-lname="<?php echo $row['last_name'] ?>" data-customer-fname="<?php echo $row['first_name'] ?>" data-customer-mname="<?php echo $row['middle_name'] ?>" data-customer-sname="<?php echo $row['suffix_name'] ?>" data-customer-email="<?php echo $row['email'] ?>" data-customer-phone="<?php echo $row['contact_no'] ?>" data-customer-ctzn="<?php echo $row['citizenship'] ?>">Select</a></td>
+							<td style="text-align:center;"><?php echo $row["last_name"] ?></td>
+							<td style="text-align:center;"><?php echo $row["first_name"] ?></td>
+							<td style="text-align:center;"><?php echo $row["middle_name"] ?></td>
+							<td style="text-align:center;"><?php echo $row["email"] ?></td>
+							<td style="text-align:center;"><?php echo $row["contact_no"] ?></td>
+							<td style="text-align:center;"><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-civil="<?php echo $row['civil_status']?>" data-customer-gender="<?php echo $row['gender'] ?>" data-customer-age="<?php echo $row['age'] ?>" data-customer-birthday="<?php echo $row['birthdate'] ?>" data-customer-viber="<?php echo $row['viber'] ?>" data-customer-address-1="<?php echo $row['address'] ?>" data-customer-zip-code="<?php echo $row['zip_code'] ?>"  data-customer-address-abroad="<?php echo $row['address_abroad'] ?>" data-customer-lname="<?php echo $row['last_name'] ?>" data-customer-fname="<?php echo $row['first_name'] ?>" data-customer-mname="<?php echo $row['middle_name'] ?>" data-customer-sname="<?php echo $row['suffix_name'] ?>" data-customer-email="<?php echo $row['email'] ?>" data-customer-phone="<?php echo $row['contact_no'] ?>" data-customer-ctzn="<?php echo $row['citizenship'] ?>"  style="width:100%;">Select</a></td>
 						</tr>
 					<?php endwhile; ?>
 					</tbody>
 				</table>
 			</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default" data-dismiss="modal" style="width:100%; margin-left:5px;">Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -1696,12 +1708,12 @@ input{
 			<table class="table table-bordered table-stripped">
 				<thead>
 					<tr>
-						<th>Lot ID</th>
-						<th>Project</th>
-						<th>Block</th>
-						<th>Lot</th>
-						<th>Status </th>
-						<th>Actions</th>
+						<th style="text-align:center;">Lot ID</th>
+						<th style="text-align:center;">Project</th>
+						<th style="text-align:center;">Block</th>
+						<th style="text-align:center;">Lot</th>
+						<th style="text-align:center;">Status </th>
+						<th style="text-align:center;">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -1718,19 +1730,19 @@ input{
 
 				while($row = $query->fetch_assoc()): ?>
 					<tr>
-						<td><?php echo $row["c_lid"] ?></td>
-						<td><?php echo $row["c_acronym"] ?></td>
-						<td><?php echo $row["c_block"] ?></td>
-						<td><?php echo $row["c_lot"] ?></td>
-						<td><?php echo $row["c_status"] ?></td>
-						<td><a href="#" class="btn btn-primary btn-md lot-select" data-lot-lid="<?php echo $row['c_lid'] ?>" data-house-lid="<?php echo $row['c_house_lid'] ?>" data-floor-area="<?php echo $row['c_floor_area'] ?>" data-house-price="<?php echo $row['c_h_price_sqm'] ?>" data-house-model="<?php echo $row['c_house_model'] ?>" data-lot-site="<?php echo $row['c_acronym'] ?>" data-lot-block="<?php echo $row['c_block'] ?>" data-lot-lot="<?php echo $row['c_lot'] ?>" data-lot-lot-area="<?php echo $row['c_lot_area'] ?>" data-lot-per-sqm="<?php echo $row['c_price_sqm'] ?>"><center>Select</center></a></td>
+						<td style="text-align:center;"><?php echo $row["c_lid"] ?></td>
+						<td style="text-align:center;"><?php echo $row["c_acronym"] ?></td>
+						<td style="text-align:center;"><?php echo $row["c_block"] ?></td>
+						<td style="text-align:center;"><?php echo $row["c_lot"] ?></td>
+						<td style="text-align:center;"><?php echo $row["c_status"] ?></td>
+						<td style="text-align:center;"><a href="#" class="btn btn-primary btn-xs lot-select" data-lot-lid="<?php echo $row['c_lid'] ?>" data-house-lid="<?php echo $row['c_house_lid'] ?>" data-floor-area="<?php echo $row['c_floor_area'] ?>" data-house-price="<?php echo $row['c_h_price_sqm'] ?>" data-house-model="<?php echo $row['c_house_model'] ?>" data-lot-site="<?php echo $row['c_acronym'] ?>" data-lot-block="<?php echo $row['c_block'] ?>" data-lot-lot="<?php echo $row['c_lot'] ?>" data-lot-lot-area="<?php echo $row['c_lot_area'] ?>" data-lot-per-sqm="<?php echo $row['c_price_sqm'] ?>" style="width:100%;"><center>Select</center></a></td>
 					</tr>
 				<?php endwhile; ?>
 				</tbody>
 			</table>
 		</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default"  style="width:100%; margin-left:5px;">Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->	
@@ -1758,8 +1770,16 @@ input{
 				</div>
 			</div>
 			<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn btn-primary" id="selected">Add</button>
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+				<table style="width:100%;">
+					<tr>
+						<td>
+							<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default bg-primary" id="selected" style="width:100%; margin-right:5px;">Add</button>
+						</td>
+						<td>
+							<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default" style="width:100%; margin-right:5px;">Cancel</button>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

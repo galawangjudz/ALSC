@@ -33,15 +33,23 @@
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title">Confirmation</h5>
+        <h5 class="modal-title"><i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp;&nbsp;Confirmation</h5>
       </div>
       <div class="modal-body">
         <div id="delete_content"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default bg-maroon" id='confirm' onclick="">Continue</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+        <table style="width:100%;">
+          <tr>
+            <td>
+              <button type="button" class="btn btn-flat btn-default bg-maroon" id='confirm' onclick="" style="width:100%;font-size:14px;margin-right:5px;"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Continue</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-flat btn-default" data-dismiss="modal" style="width:100%;font-size:14px;margin-left:5px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </td>
+          </tr>
+        </table>
+        </div>
       </div>
     </div>
   </div>
@@ -54,8 +62,16 @@
       <div class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default bg-maroon" id='submit' onclick="$('#uni_modal form').submit()">Save</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <table style="width:100%;">
+          <tr>
+            <td>
+              <button type="button" class="btn btn-flat btn-default bg-maroon" id='submit' onclick="$('#uni_modal form').submit()" style="width:100%; margin-right:5px;font-size:14px;"><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp;Save</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-flat btn-default" data-dismiss="modal" style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </td>
+          </tr>
+        </table>
       </div>
       </div>
     </div>

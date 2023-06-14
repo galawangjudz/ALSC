@@ -2563,8 +2563,11 @@ Class Master extends DBConnection {
 		$restructured_date = $_POST['restructured_date'];
 		$amount_due = $acc_interest + $total_sur;
 		
-		//echo $acc_status;
-	
+		echo $total_balance;
+		//$amt_to_be_financed1 = (float) str_replace(",", "", $amt_to_be_financed);
+		//$adj_prin_bal1 = (float) str_replace(",", "", $adj_prin_bal);
+		//$monthly_amortization1 = (float) str_replace(",", "", $monthly_amortization);
+		//$balance1 = (float) str_replace(",", "", $balance);
 			
 		$data = " c_payment_type1 = '$payment_type1' ";
 		$data .= ", c_payment_type2 = '$payment_type2' ";

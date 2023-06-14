@@ -223,7 +223,7 @@ class Login extends DBConnection
             <div class="card-body">
                 <div class="card card-outline rounded-0 card-maroon" style="padding-bottom:20px;">
                     <div class="card-header">
-                        <h3 class="card-title">OR Logs</h3>
+                        <h3 class="card-title"><b><i>OR Logs</b></i></h3>
                     </div>
                     <div class="container-fluid">
                         <div class="form_cont">
@@ -254,7 +254,7 @@ class Login extends DBConnection
                                         </td>
 
                                         <td width="14%;text-align:center;"><button type="submit"
-                                                class="btn btn-info btn-sm" style="width:100%;">Filter</button></td>
+                                                class="btn btn-flat btn-sm btn-info" style="width:100%;font-size:14px;margin-left:5px;"><i class="fa fa-filter" aria-hidden="true"></i>&nbsp;&nbsp;Filter</button></td>
                                     </tr>
                                 </table>
                             </form>
@@ -315,7 +315,7 @@ class Login extends DBConnection
                                                 </td>
                                                 <td>
                                                     <a href="/ALSC//report/print_soa.php?id=<?php echo $row["or_id"]; ?>" ,
-                                                        target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print
+                                                        target="_blank" class="btn btn-flat btn-primary btn-sm" style="width:100%;font-size:14px;"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
                                                         OR</a>
                                                 </td>
                                             </tr>
@@ -332,8 +332,12 @@ class Login extends DBConnection
                         </table>
                     </div>
                 </div>
-
-
+                <?php
+                    $lname = "";
+                    $fname = "";
+                    $username = "";
+                    $amt_pd=0;
+                ?>
                 <div class="card card-outline rounded-0 card-maroon" id="div_tally">
                     <div class="card-body">
                         <div class="container-fluid">

@@ -7,9 +7,9 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">User List</h5>
+			<h5 class="card-title"><b><i>User List</b></i></h5>
 			<div class="card-tools">
-				<a class="btn btn-flat btn-default bg-maroon" href="<?php echo base_url.'admin/?page=user/manage_user' ?>"><i class="fa fa-plus"></i> Add New</a>
+				<a class="btn btn-flat btn-default bg-primary" href="<?php echo base_url.'admin/?page=user/manage_user' ?>" style="font-size:14px;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</a>
 			</div>
 		</div>
 		<div class="card-body">
@@ -45,13 +45,13 @@
                         <?php if($row['type'] == 1): ?>
                             <td class="text-center"><span class="badge badge-primary">Admin</span></td>
                         <?php elseif($row['type'] == 2): ?>
-                            <td class="text-center"><span class="badge badge-primary">COO</span></td>
+                            <td class="text-center"><span class="badge badge-success">COO</span></td>
                         <?php elseif($row['type'] == 3): ?>
-                            <td class="text-center"><span class="badge badge-primary">Manager</span></td>
+                            <td class="text-center"><span class="badge badge-secondary">Manager</span></td>
                         <?php elseif($row['type'] == 4): ?>
-                            <td class="text-center"><span class="badge badge-primary">Supervisor</span></td>
+                            <td class="text-center"><span class="badge badge-info">Supervisor</span></td>
                         <?php elseif($row['type'] == 5): ?>
-                            <td class="text-center"><span class="badge badge-primary">Employee</span></td>
+                            <td class="text-center"><span class="badge badge-danger">Employee</span></td>
                         <?php endif; ?>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -108,7 +108,7 @@
 	})
 
     $('.delete_data').click(function(){
-            _conf("Are you sure to delete this user?","delete_user",[$(this).attr('data-id')])
+            _conf("Are you sure you want to delete this user information??","delete_user",[$(this).attr('data-id')])
     })
 
     function delete_user($id){

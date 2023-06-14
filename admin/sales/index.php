@@ -99,9 +99,9 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">List of Pending RA</h3>
+		<h3 class="card-title"><b><i>List of Pending RA</b></i></h3>
 		<div class="card-tools">
-			<a href="./?page=sales/create" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Create New</a>
+			<a href="./?page=sales/create" class="btn btn-flat btn-default bg-primary border-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -218,7 +218,7 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
+			_conf("Are you sure you want to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
 		})
 		$('.table').dataTable(
 			{"ordering":false}

@@ -114,7 +114,7 @@ if(isset($_GET['id'])){
 </style>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-	<h3 class="card-title"><?php echo !isset($_GET['id']) ? "Approval" :"Approval" ?></h3>
+	<h3 class="card-title">&nbsp;&nbsp;<?php echo !isset($_GET['id']) ? "<b><i>Approval</b></i>" :"<b><i>Approval</b></i>" ?></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
@@ -179,7 +179,7 @@ if(isset($_GET['id'])){
                 </td>
                 <td>
                     <?php endif;?>
-                    <button type="button" style="width:100%" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
+                    <button type="button" style="width:100%" class="btn btn-flat btn-secondary" data-dismiss="modal" style="font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Close</button>
                 </td>
             </tr>
         </table>

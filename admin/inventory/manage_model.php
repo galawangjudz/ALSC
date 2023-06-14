@@ -47,7 +47,7 @@ if ($user_role != 'IT Admin') {
 </style>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-	<h3 class="card-title"><?php echo !isset($_GET['id']) ? "Add House Model" :"Edit House Model" ?></h3>
+	<h3 class="card-title"><?php echo !isset($_GET['id']) ? "<b><i>Add House Model</b></i>" :"<b><i>Edit House Model</b></i>" ?></h3>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -69,8 +69,16 @@ if ($user_role != 'IT Admin') {
         
 		</div>
 		<div class="card-footer">
-				<button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-model-h">Save</button>
-				<a class="btn btn-flat btn-sm btn-default" href="./?page=inventory/model-list">Cancel</a>
+			<table style="width:100%;">
+				<tr>
+					<td>
+						<button class="btn btn-flat btn-default bg-maroon" form="manage-model-h" style="width:100%; margin-right:5px;font-size:14px;"><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp;Save</button>
+					</td>
+					<td>
+						<a class="btn btn-flat btn-default" href="./?page=inventory/model-list" style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </div>

@@ -27,7 +27,7 @@ foreach($client->fetch_array() as $k =>$v){
 </style>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">New Client</h3>
+		<h3 class="card-title"><b><i>New Client</i></b></h3>
 		
 	</div>
 <div class="card-body">
@@ -174,8 +174,16 @@ foreach($client->fetch_array() as $k =>$v){
 	</form>
 </div>
     <div class="card-footer">
-        <button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-client">Save</button>
-        <a class="btn btn-flat btn-sm btn-default" href="./?page=sales">Cancel</a>
+        <table style="width:100%;">
+			<tr>
+				<td>
+                    <button class="btn btn-flat btn-default bg-maroon" form="manage-client" style="width:100%;margin-right:5px;font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
+                </td>
+                <td>
+                    <a class="btn btn-flat btn-default" href="./?page=sales" style="width:100%;margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 </div>

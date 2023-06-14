@@ -66,9 +66,11 @@
 		pointer-events: none;
 	}
     #uni_modal_2{
-        width:100%;
-        height:auto;
+        width:150%;
+        height:100%;
         margin:auto;
+		margin-left:-25%;
+		margin-right:auto;
     } 
     .nav-av {
     background-color: #007bff;
@@ -82,13 +84,11 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<!-- <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_lot" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
-			</div> -->
+			<h3 class="card-title"><b><i>AV Logs</b></i></h3>
 		</div>
 		<div class="card-body">
             <div class="container-fluid">
-            <div class="container-fluid">
+			<div class="table-responsive">
                 <table class="table table-bordered table-stripped" style="text-align:center;">
                     <thead>
                         <tr>
@@ -119,12 +119,11 @@
                         <td><?php echo number_format($row["c_surcharge"],2) ?></td>
                         <td><?php echo $row["c_new_acc_no"] ?></td>
                         <td><?php echo $row["c_remarks"] ?></td>
-                        <td><a class="btn btn-link view_av" data-id="<?php echo $row['property_id'] ?>">Details</td>
+                        <td><a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['property_id'] ?>"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</td>
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>
-           
-	        </div>                
+					</div>                     
             </div>
 
 	</div>
@@ -137,6 +136,6 @@ $(document).ready(function() {
     ); 
 });
 $('.view_av').click(function(){
-    uni_modal_2("View AV",'clients/av_modal.php?id='+$(this).attr('data-id'),"mid-large")
+	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
 })
 </script>
