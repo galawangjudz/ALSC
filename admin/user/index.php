@@ -80,7 +80,7 @@ if ($user_role != 'IT Admin') {
 	<div class="card-footer">
 			<div class="col-md-12">
 				<div class="row">
-					<button class="btn btn-sm btn-default bg-maroon" form="manage-user">Update</button>
+					<button class="btn btn-sm btn-default bg-maroon" form="manage-user" style="width:100%;">Update</button>
 				</div>
 			</div>
 		</div>

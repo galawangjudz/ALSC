@@ -32,8 +32,8 @@ if(isset($_GET['id'])){
 <div class="card card-outline rounded-0 card-maroon">
     
 <div class="card-header">
-		<h1 class="card-title" style="font-size:22px;"><b>Client Information</b></h1>
-</div>
+    <i><h3 class="card-title"><b>Client Information</b></h3></i>
+    </div>
 	<div class="container-fluid">
 	<form action="" id="update-client">
         <?php $id = $_GET['cid'] ?? ''; ?>

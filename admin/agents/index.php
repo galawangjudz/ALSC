@@ -33,7 +33,7 @@ if ($user_role != 'IT Admin') {
 </style>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-	<h3 class="card-title">Agent List</h3>
+	<h3 class="card-title"><b><i>Agent List</b></i></h3>
 	<div class="card-tools">
 		<a href="" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Create New</a>
 	</div>

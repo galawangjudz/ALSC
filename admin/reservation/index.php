@@ -118,9 +118,9 @@ if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">Reservation List</h3>
+		<h3 class="card-title"><b><i>Reservation List</b></i></h3>
 		<div class="card-tools">
-			<a href="./?page=reservation/manage-res" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Add Reservation</a>
+			<a href="./?page=reservation/manage-res" class="btn btn-flat btn-default bg-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add Reservation</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -173,7 +173,7 @@ if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this payment permanently?","delete_reservation",[$(this).attr('data-id'),$(this).attr('ra_no'),$(this).attr('lid')])
+			_conf("Are you sure you want to delete this payment permanently?","delete_reservation",[$(this).attr('data-id'),$(this).attr('ra_no'),$(this).attr('lid')])
 		})
 		$('.table').dataTable(
 			{"ordering":false}

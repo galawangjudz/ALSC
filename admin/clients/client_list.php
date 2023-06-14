@@ -87,7 +87,7 @@
 
 
     $('.delete-lot').click(function(){
-        _conf("Are you sure to delete this Lot?","delete_lot",[$(this).attr('data-lot-id')])
+        _conf("Are you sure you want to delete this lot information??","delete_lot",[$(this).attr('data-lot-id')])
     }) 
 
     function delete_lot($id){

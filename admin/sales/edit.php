@@ -175,6 +175,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 #btnfind{
   margin-left:25px;
   font-weight:bold;
+  color:white!important;
 }
 #invoice_totals{
   width:100%;
@@ -1099,8 +1100,16 @@ input{
 		</form>
 	</div>	<!-- /.card-body -->
 	<div class="card-footer">
-			<button class="btn btn-flat btn-sm btn-default bg-maroon" form="update_csr">Save</button>
-			<a class="btn btn-flat btn-sm btn-default" href="./?page=sales">Cancel</a>
+		<table>
+			<tr>
+				<td>
+					<button class="btn btn-flat btn-sm btn-default bg-maroon" form="update_csr">Save</button>
+				</td>
+				<td>
+					<a class="btn btn-flat btn-sm btn-default" href="./?page=sales">Cancel</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>	<!-- /.container-fluid -->
 </div>	<!-- /.card -->
@@ -1144,7 +1153,7 @@ input{
 
 			</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn" style="width:100%";>Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -1200,7 +1209,7 @@ input{
 			
 		</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn" style="width:100%;">Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->	
@@ -1233,8 +1242,16 @@ input{
 			
 			</div>
 			<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn btn-primary" id="selected">Add</button>
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+				<table>
+					<tr>
+						<td style="width:100%;">
+							<button type="button" data-dismiss="modal" class="btn btn-primary" id="selected">Add</button>
+						</td>
+						<td style="width:100%;">
+							<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

@@ -45,9 +45,9 @@ foreach($res->fetch_array() as $k =>$v){
 </style>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">New Reservation</h3>
+		<h3 class="card-title"><b><i>New Reservation</b></i></h3>
 		<div class="card-tools">
-            <a class="btn btn-block btn-sm btn-primary btn-flat border-primary select-ra" href="javascript:void(0)"><i class="fa fa-plus"></i> Select Existing RA</a>
+            <a class="btn btn-block btn-primary btn-flat border-primary select-ra" href="javascript:void(0)" style="font-size:14px;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Select Existing RA</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -123,8 +123,16 @@ foreach($res->fetch_array() as $k =>$v){
 						</div>
 					</div>      
 					<div class="card-footer">
-						<button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-reservation">Save</button>
-						<a class="btn btn-flat btn-sm btn-default" href="./?page=reservation">Cancel</a>
+						<table style="width:100%;">
+							<tr>
+								<td>
+									<button class="btn btn-flat btn-default bg-maroon" form="manage-reservation" style="width:100%; margin-right:5px;font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
+								</td>
+								<td>
+									<a class="btn btn-flat btn-default" href="./?page=reservation" style="width:100%; margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+								</td>
+							</tr>
+						</table>
 					</div> 
 
 				</div>
@@ -207,8 +215,7 @@ foreach($res->fetch_array() as $k =>$v){
 						<td><?php echo $row["c_lot"] ?></td>
 						<td><?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?> </td>
 					
-					
-						
+
 						<td><a href="#" class="btn btn-primary btn-xs ra-select" data-ra-no="<?php echo $row['ra_id'] ?>" data-ra-lot-lid="<?php echo $row['c_lot_lid'] ?>" data-csr-no="<?php echo $row['c_csr_no'] ?>" data-ra-site="<?php echo $row['c_acronym'] ?>" data-ra-block="<?php echo $row['c_block'] ?>" data-ra-lot="<?php echo $row['c_lot'] ?>" data-res-remaining="<?php echo $remaining_res ?>" data-ra-res="<?php echo $row['c_reservation_amt'] ?>" data-ra-fname="<?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?>">Select</a></td>
 				   
 					</tr>
@@ -218,7 +225,7 @@ foreach($res->fetch_array() as $k =>$v){
 			
 		</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default" style="width:100%;">Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->	

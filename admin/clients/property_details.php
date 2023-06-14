@@ -78,11 +78,10 @@ if(isset($_GET['id'])){
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
-	<h3 class="card-title"><b>Property ID# <i><?php echo $prop_id ?></i> </b></h3>
+	<h3 class="card-title"><b>Property ID#: <i><?php echo $prop_id ?></i> </b></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
-    <br>
         <h5 style="text-align:center;">Lot Details</h5>
         <hr>
         <table class="table table-striped table-hover table-bordered" style="width: 100%">

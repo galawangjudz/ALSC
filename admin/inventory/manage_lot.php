@@ -58,7 +58,7 @@ if(isset($_GET['id'])){
 <body onload="lcp()">
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-	<h3 class="card-title"><?php echo !isset($_GET['id']) ? "Add Lot" :"Edit Lot" ?></h3>
+	<h3 class="card-title"><b><i><?php echo !isset($_GET['id']) ? "Add Lot" :"Edit Lot" ?></b></i></h3>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -125,8 +125,16 @@ if(isset($_GET['id'])){
             </form>
 		</div>
 		<div class="card-footer">
-				<button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-lot">Save</button>
-				<a class="btn btn-flat btn-sm btn-default" href="./?page=inventory/lot-list">Cancel</a>
+            <table style="width:100%;">
+                <tr>
+                    <td>
+				        <button class="btn btn-flat btn-default bg-maroon" form="manage-lot"  style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                    </td>
+                    <td>
+				        <a class="btn btn-flat btn-default" href="./?page=inventory/lot-list" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+                    </td>
+                </tr>
+            </table>
 		</div>
 	</div>
 </div>

@@ -60,10 +60,10 @@ if ($user_role != 'IT Admin') {
 ?>
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">Project List</h5>
+			<h5 class="card-title"><b><i>Project List</b></i></h5>
 			    <div class="card-tools">
 				<!-- <a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a> -->
-                <a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_project" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-block btn-primary btn-flat border-primary new_project" href="javascript:void(0)" style="font-size:14px;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</a>
 			    </div> 
 		</div>
 		<div class="card-body">
@@ -135,7 +135,7 @@ if ($user_role != 'IT Admin') {
 
 
     $('.delete_data').click(function(){
-        _conf("Are you sure to delete this Lot?","delete_project",[$(this).attr('data-id')])
+        _conf("Are you sure to you want to delete this lot information??","delete_project",[$(this).attr('data-id')])
     }) 
 
     function delete_project($id){

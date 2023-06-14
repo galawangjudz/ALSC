@@ -57,10 +57,10 @@ if ($user_role != 'IT Admin') {
 ?>
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">House Model List</h5>
+			<h5 class="card-title"><b><i>House Model List</b></i></h5>
 			 <div class="card-tools">
 				<!-- <a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a> -->
-                <a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_model" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-block btn-primary btn-flat border-primary new_model" href="javascript:void(0)" style="font-size:14px;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</a>
 			</div>
 		</div>
 		<div class="card-body">
@@ -120,7 +120,7 @@ if ($user_role != 'IT Admin') {
         uni_modal("<i class='fa fa-paint-brush'></i> Edit House Model",'inventory/manage_model.php?id='+$(this).attr('data-id'),"mid-large")
     })
     $('.delete_data').click(function(){
-        _conf("Are you sure to delete this house model?","delete_model",[$(this).attr('data-id')])
+        _conf("Are you sure you want to delete this house model?","delete_model",[$(this).attr('data-id')])
     }) 
 
     function delete_model($id){

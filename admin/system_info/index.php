@@ -37,7 +37,7 @@ if ($user_role != 'IT Admin') {
 <div class="col-lg-12">
 	<div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">System Information</h5>
+			<h5 class="card-title"><b><i>System Information</b></i></h5>
 			<!-- <div class="card-tools">
 				<a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
 			</div> -->
@@ -72,7 +72,7 @@ if ($user_role != 'IT Admin') {
 		<div class="card-footer">
 			<div class="col-md-12">
 				<div class="row">
-					<button class="btn btn-sm btn-default bg-maroon" form="system-frm">Update</button>
+					<button class="btn btn-flat btn-default bg-maroon" form="system-frm" style="width:100%;font-size:14px;"><i class="fa fa-edit"></i>&nbsp;&nbsp;Update Details</button>
 				</div>
 			</div>
 		</div>
