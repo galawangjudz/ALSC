@@ -1461,7 +1461,7 @@ Class Master extends DBConnection {
 			$status = $row['status'];
 			$status_count = $row['status_count'];
 			$payment_count = $row['payment_count'];
-			$excess = $row['excess'];
+			//$excess = $row['excess'];
 			$l_status = $row['account_status'];
 
 
@@ -1480,8 +1480,8 @@ Class Master extends DBConnection {
 			$data .= ", status = '$status' ";
 			$data .= ", status_count = '$status_count' ";
 			$data .= ", payment_count = '$payment_count' ";
-			$data .= ", excess = '$excess' ";
-			$data .= ", account_status = '$l_status' ";
+			//$data .= ", excess = '$excess' ";
+			//$data .= ", account_status = '$l_status' ";
 
 			$save = $this->conn->query("INSERT INTO property_payments set ".$data);
 
