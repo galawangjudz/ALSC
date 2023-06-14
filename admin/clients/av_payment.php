@@ -71,8 +71,8 @@ if (isset($_GET['id'])) {
 	<div class="card-body">
 		<div class="container-fluid">
             <form action="" id="manage-av">
-                <input type="text" name="av_id" id="av_id" value="<?php echo isset($meta['property_id']) ? md5($meta['property_id']) : ''; ?>">
-                <input type="text" name="p_id" id="p_id" value="<?php echo isset($prop_id) ? $prop_id : '' ?>">
+                <input type="hidden" name="av_id" id="av_id" value="<?php echo isset($meta['property_id']) ? md5($meta['property_id']) : ''; ?>">
+                <input type="hidden" name="p_id" id="p_id" value="<?php echo isset($prop_id) ? $prop_id : '' ?>">
                 <div class="form-group">
                     <label class="control-label">AV No: </label>
                     <input type="text" class="form-control required" name="av_no" id="av_no">
@@ -127,9 +127,16 @@ if (isset($_GET['id'])) {
             </form>
 		</div>
 		<div class="card-footer">
-				<button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-av">Save</button>
-				<a class="btn btn-flat btn-sm btn-default" href="./?page=clients/property&id=<?php echo md5($meta['property_id']) ?>">Cancel</a>
-		</div>
+            <table style="width:100%;">
+                <tr>
+                    <td>
+				        <button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-av" style="width:100%; margin-right:5px;">Save</button>
+                    </td>
+                    <td>
+				        <a class="btn btn-flat btn-sm btn-default" href="./?page=clients/property&id=<?php echo md5($meta['property_id']) ?>" style="width:100%; margin-left:5px;">Cancel</a>
+                    </td>
+            </table>
+        </div>
 	</div>
 </div>
 </body>

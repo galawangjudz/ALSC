@@ -102,7 +102,7 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">Properties</h5>
+			<h5 class="card-title"><b><i>Properties</b></i></h5>
 			<!-- <div class="card-tools">
 				<a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_lot" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
 			</div> -->

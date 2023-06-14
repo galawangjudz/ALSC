@@ -38,7 +38,7 @@
 <body>
 <div class="card card-outline rounded-0 card-maroon" style="height:500px;">
     <div class="card-header">
-    <h3 class="card-title">Loan Calculator</h3>
+    <h3 class="card-title"><b><i>Loan Calculator</b></i></h3>
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -71,7 +71,15 @@
 						<td><input type="text" size="8" style="width:250px;" name="numOfMonths" id="numOfMonths" value="<?php if (isset($numOfMonths)) { echo $numOfMonths; } ?>" />
 							<?php if (isset($errorArray[2])) { echo $errorArray[2]; } ?></td>
 					</tr>
-					<input type="submit" name="submit" value="Submit" class="btn btn-primary" style="width:70%;position:absolute;margin-top:170px;margin-left:12%;margin-right:12%;" />
+					<input type="submit" name="submit" value="" class="btn btn-flat btn-sm btn-info" style="width:70%;position:absolute;margin-top:170px;margin-left:12%;margin-right:12%;">
+<span style="position:absolute;margin-top:173px;margin-left:12%;margin-right:12%;text-align:center;color:white;width:70%;">
+  <span>
+  <i class="fa fa-calculator" aria-hidden="true"></i>
+  </span>
+  &nbsp;&nbsp;Compute
+</span>
+
+
 				</table>
 			</form>
 			<div id="result" class="result">

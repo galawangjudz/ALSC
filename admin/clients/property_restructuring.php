@@ -224,8 +224,8 @@ if(isset($_GET['id'])){
 	text-align:center;
   font-size:20px;
   padding-top:5px;
-  padding-bottom:15px;
-  margin-top:10px;
+  padding-bottom:5px;
+  margin-top:5px;
 }
 .control-label{
   display: inline-block;
@@ -285,13 +285,13 @@ input{
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
-	<h3 class="card-title"><b>Property ID# <i><?php echo $prop_id ?></i> </b></h3>
+	<h3 class="card-title"><b>Property ID#: <i><?php echo $prop_id ?></i> </b></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
  
     <div class="panel-heading">
-        <div class="titles"><center><h4>Payment Computation<h4></center></div>
+        <div class="titles"><center><h5>Payment Computation<h5></center></div>
     </div>
 
     <form action="" id="restructuring">
@@ -304,7 +304,7 @@ input{
                         <input type="hidden" class="form-control margin-bottom required prop-id" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : 0; ?>">
      
                         <label class="control-label">Balance:</label>
-                        <input type="text" class="form-control margin-bottom required balance" name="balance" id="balance" value="<?php echo isset($balance) ? $balance : 0; ?>" tabindex = "1" >
+                        <input type="text" class="form-control margin-bottom required balance" name="balance" id="balance" value="<?php echo isset($balance) ? number_format($balance,2) : 0; ?>" tabindex = "1" >
                     </div>
                 </div>
                 <div class="col-md-6">	
@@ -327,12 +327,13 @@ input{
                 </div>
             </div>
             <div class="row">
-            <div class="form-group">
+              <div class="col-md-12">	
+                  <div class="form-group">
                     <label class="control-label">Restructuring Date: </label>
                     <input type="date" class="form-control restructured-date" name="restructured_date" id="restructured_date" value="<?php echo date('Y-m-d'); ?>" >
-                    </div>
-            </div>
-        </div>
+                  </div>
+              </div>
+          </div>
     <div class="space"></div>
     <div class="payment_box" id = "p1_box">
         <div class="col-md-12"  id = "pay_type1">	
@@ -341,15 +342,22 @@ input{
             <style>
                 select:invalid { color: gray; }
             </style>
+            
             <select name="payment_type1" id="payment_type1" class="form-control required pay-type1" tabindex = "2">
+            <?php if ($account_status == 'Monthly Amortization'): ?>
+                <option name="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Partial DownPayment</option>
+                <option name="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Full DownPayment</option>
+                <option name="payment_type1" value="No DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "No DownPayment" ? 'selected' : '' ?>>No DownPayment</option>
+            <?php elseif ($account_status == 'Partial DownPayment'): ?>
                 <option name="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?>>Partial DownPayment</option>
                 <option name="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?>>Full DownPayment</option>
                 <option name="payment_type1" value="No DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "No DownPayment" ? 'selected' : '' ?>>No DownPayment</option>
-            </select>	
+            <?php endif; ?>
+              </select>	
           </div>	
       </div>
     </div>
-    <div class="payment_box2">
+    <div class="payment_box2" id = "p2_box">
         <div class="col-md-12" id= "pay_type2">
             <label class="control-label">Payment Type 2: </label>
             <div class="form-group">
@@ -357,8 +365,16 @@ input{
                     select:invalid { color: gray; }
                 </style>
                 <select name="payment_type2" id="payment_type2" class="form-control required pay-type2" tabindex = "3" >
+                <?php if ($account_status == 'Deferred Cash Payment'): ?>
                     <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-                    <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
+                    <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Deferred Cash Payment</option>
+                <?php elseif ($account_status == 'Monthly Amortization'): ?>
+                    <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
+                    <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Deferred Cash Payment</option>
+                <?php elseif ($account_status == 'Partial DownPayment'): ?>
+                    <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
+                    <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
+                <?php endif; ?>
                 </select>	
             </div>
         </div>
@@ -447,7 +463,10 @@ $(document).ready(function() {
         $('#full_down_date').hide();
         
         $('#p1').hide();
+        $('#p1').hide();
         $('#p1_box').hide();
+        $('#p2_box').width('65%');
+        $('#p2').width('65%');
         <?php if ($account_status == 'Deferred Cash Payment'):?>
               $("#interest_rate").val(0);
               $("#fixed_factor").val(0);

@@ -31,7 +31,7 @@ if(isset($_GET['id'])){
 <div class="card card-outline rounded-0 card-maroon">
     
 <div class="card-header">
-		<h1 class="card-title" style="font-size:22px;"><b>Client Information</b></h1>
+		<h1 class="card-title" style="font-size:18px;"><b>Client Information</b></h1>
 </div>
 	<div class="container-fluid">
 	<form action="" id="update-client">

@@ -22,7 +22,7 @@ if(isset($_GET['id'])){
 <body onload="">
 <div class="card-body">
     <div class="divBtnOverdue">
-        <button class="btn btn-light" id="overduebtn" style="float:right;margin-top:5px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+        <button class="btn btn-flat btn-light" id="overduebtn" style="float:right;margin-top:5px;font-size:14px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
         </svg>
@@ -39,7 +39,7 @@ if(isset($_GET['id'])){
             <div class="card card-outline rounded-0 card-maroon"> 
                 <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
-                    <button type="submit" name="submit" class="btn btn-primary btn-sm">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><i class="fa fa-arrow-right" aria-hidden="true"></i>&nbsp;&nbsp;Submit</button>
                 </form>
             <?php include 'over_due_details.php'; ?>
             </div>
@@ -348,10 +348,10 @@ body{
                             <td>
                                 <?php 
                                     if ($acc_status == 'Fully Paid'){
-                                        echo ' <input type="submit" name="submit" value="Add to List &#43;" class="btn btn-secondary not-clickable" disabled style="width:100%;font-size:15px;">';
+                                        echo ' <input type="submit" name="submit" value="&#43;&nbsp;&nbsp;Add to List" class="btn btn-flat btn-secondary not-clickable" disabled style="width:100%;font-size:14px;">';
                                         
                                     }else{
-                                        echo '<input type="submit" name="submit" value="Add to List &#43;" class="btn btn-info" style="width:100%;font-size:15px;">';
+                                        echo '<input type="submit" name="submit" value=" &#43;&nbsp;&nbsp;Add to List" class="btn btn-flat btn-info" style="width:100%;font-size:14px;">';
                                     }
                                 ?>
                             </td>
@@ -360,7 +360,7 @@ body{
                             <td>
                                 <?php 
                                     if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
-                                        echo '<a href="#" class="btn btn-success btn-md credit-pri" id="credit_principal" style="width:100%;font-size:15px;">Credit to Principal <i class="fa fa-wallet"></i></a> ';
+                                        echo '<a href="#" class="btn btn-success btn-flat credit-pri" id="credit_principal" style="width:100%;font-size:14px;"><i class="fa fa-wallet"></i>&nbsp;&nbsp;Credit to Principal</a> ';
                                     }
                                 ?>
                             </td>
@@ -368,7 +368,7 @@ body{
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
-                                <a href="#" class="btn btn-secondary btn-md add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Payment of Balance <i class='fa fa-coins'></i></a> 
+                                <a href="#" class="btn btn-secondary btn-flat add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:14px;"><i class='fa fa-coins'></i>&nbsp;&nbsp;Payment of Balance</a> 
                             </td>
                         </tr>
 
@@ -380,7 +380,7 @@ body{
                         </tr>
                         <tr>
                             <td>
-                                <a href="#" class="btn btn-danger btn-md delete-all" id="delete_all" style="width:100%;font-size:15px;">Delete All <i class='fa fa-trash'></i></a> 
+                                <a href="#" class="btn btn-danger btn-flat delete-all" id="delete_all" style="width:100%;font-size:14px;"><i class='fa fa-trash'></i>&nbsp;&nbsp;Delete All</a> 
                             </td>
                         </tr>
                     </table>
@@ -624,17 +624,19 @@ body{
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                         <tr>
                             <td>
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-s" style="width:100%;font-size:15px;" >
+                            <button type="submit" name="submit" class="btn btn-flat btn-primary" style="width: 100%; font-size: 14px;">
+                            <i class="fas fa-save"></i>&nbsp;&nbsp;Save
+                            </button>
                             </td>
                             <td>
-                                <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-success pull-right" style="width:100%;font-size:15px;">Print&nbsp;&nbsp;</a>
+                                <a href="<?php echo base_url ?>/report/print_payment.php?id=<?php echo md5($prop_id); ?>", target="_blank" class="btn btn-flat btn-success pull-right" style="width:100%;font-size:14px;"><i class="fas fa-print"></i>&nbsp;&nbsp;Print</a>
                             </td>
                         </tr>
                         
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                             <tr>
-                                <td><a href="<?php echo base_url ?>or_logs.php", class="btn btn-dark" style="width:100%;font-size:15px;">OR Logs</a></td>
+                                <td><a href="<?php echo base_url ?>or_logs.php", class="btn btn-flat btn-dark" style="width:100%;font-size:14px;"><i class="nav-icon fas fa-book"></i>&nbsp;&nbsp;OR Logs</a></td>
                             </tr>
                         </table>
                 </form>
@@ -665,8 +667,8 @@ body{
                             <th>Branch</th> -->
                             <th style="text-align:center;font-size:11px;width:8%">PREPARER</th>
                             <th style="text-align:center;font-size:11px;width:12%">DATE PREPARED</th>
-                            <th style="text-align:center;font-size:11px;width:12%">OR STATUS</th>
-                            <th style="text-align:center;font-size:11px;width:8%">ACTION</th>   
+                            <th style="text-align:center;font-size:11px;width:8%">OR STATUS</th>
+                            <th style="text-align:center;font-size:11px;width:12%">ACTION</th>   
                         </tr>
 
                     </thead>    
@@ -702,7 +704,7 @@ body{
                                 <?php } ?>
                           
                                 <td class="text-center" style="font-size:13px;width:8%;">
-                                <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-primary btn-sm" style="width:100%;">Print OR <i class="fa fa-receipt"></i></a>
+                                <a href="<?php echo base_url ?>/report/print_soa.php?id=<?php echo $row["or_id"]; ?>", target="_blank" class="btn btn-flat btn-primary btn-sm" style="width:100%;font-size:14px;"><i class="fa fa-receipt"></i>&nbsp;&nbsp;Print OR</a>
                                 <form method="post" action="payment_mail.php">
                                     
                                     <input type="hidden" id="p-amount<?php echo $i; ?>" name="p-amount" value="<?php echo $row["amount_paid"]; ?>">
@@ -711,7 +713,7 @@ body{
                                     <!-- <a class="btn btn-warning btn-sm send-mail" style="width:100%;">Send to Email <i class="fa fa-envelope"></i></a> -->
                                     <!-- <button type="submit" name="submit" class="btn btn-warning btn-sm">Send to Email</button> -->
                                 </form>
-                                <button onclick="getTableRowId(<?php echo $i; ?>)" class="btn btn-warning btn-sm" style="width:100%;margin-top:2px;">Email</button>
+                                <button onclick="getTableRowId(<?php echo $i; ?>)" class="btn btn-flat btn-warning btn-sm" style="width:100%;margin-top:2px;font-size:14px;"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Email</button>
                             </td>
 
                         </tr>

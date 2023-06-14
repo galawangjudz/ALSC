@@ -47,9 +47,9 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title">Lot List</h5>
+			<h5 class="card-title"><b><i>Lot List</b></i></h5>
 			<div class="card-tools">
-				<a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_lot" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
+				<a class="btn btn-primary btn-flat border-primary new_lot" href="javascript:void(0)" style="font-size:14px;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</a>
 			</div>
 		</div>
 		<div class="card-body">
@@ -127,16 +127,16 @@
 	})
   
     $('.new_lot').click(function(){
-        uni_modal("<i class='fa fa-plus'></i> New Lot",'inventory/manage_lot.php',"mid-large")
+        uni_modal("<i class='fa fa-plus'></i>&nbsp;&nbsp;New Lot",'inventory/manage_lot.php',"mid-large")
     })
 
     $('.edit-lot').click(function(){
-        uni_modal("<i class='fa fa-paint-brush'></i> Edit Lot",'inventory/manage_lot.php?id='+$(this).attr('data-lot-id'),"mid-large")
+        uni_modal("<i class='fa fa-paint-brush'></i>&nbsp;&nbsp;Edit Lot",'inventory/manage_lot.php?id='+$(this).attr('data-lot-id'),"mid-large")
     })
 
 
     $('.delete-lot').click(function(){
-        _conf("Are you sure to delete this Lot?","delete_lot",[$(this).attr('data-lot-id')])
+        _conf("Are you sure you want to delete this lot information?","delete_lot",[$(this).attr('data-lot-id')])
     }) 
 
     function delete_lot($id){

@@ -100,7 +100,7 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">CFO Approval List</h3>
+		<h3 class="card-title"><b><i>CFO Approval List</b></i></h3>
 		
 	</div>
 	<div class="card-body">

@@ -31,10 +31,9 @@ if(isset($_GET['id'])){
 ?>
 
 <div class="card card-outline rounded-0 card-maroon">
-<h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Property ID# <i><?php echo $prop_id ?></i> </b></h3>
+<h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Property ID#: <i><?php echo $prop_id ?></i> </b></h3>
     <div class="table-responsive">
         <table class="table table-bordered table-stripped" style="text-align:center;">
-        
         <br>
             <thead style="font-size:14px;">
                 <tr>

@@ -89,7 +89,7 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">List of Approved RA</h3>
+		<h3 class="card-title"><b><i>List of Approved RA</b></i></h3>
 		
 	</div>
 	<div class="card-body">
@@ -298,7 +298,7 @@
 
 
 	$('.delete_data').click(function(){
-		_conf("Are you sure to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
+		_conf("Are you sure you want to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
 	})
 
 	$('#uni_modal').on('shown.bs.modal', function() {
@@ -325,7 +325,7 @@
     })
 
 	$('.cancel_data').click(function(){
-        _conf("Are you sure to cancel this Approval?","cancel_approval",[$(this).attr('data-id'),$(this).attr('lid')])
+        _conf("Are you sure you want to cancel this approval?","cancel_approval",[$(this).attr('data-id'),$(this).attr('lid')])
     }) 
 	
 	function extend_approval($id){

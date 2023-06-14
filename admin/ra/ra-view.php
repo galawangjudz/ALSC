@@ -297,7 +297,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-	<h3 class="card-title">Reservation Application #<?php echo $ra_id; ?></h3>
+	<i><h3 class="card-title"><b>Reservation Application #<?php echo $ra_id; ?></b></h3></i>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -321,24 +321,31 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                       
                             <div class="buttons">
                             <!-- hide ko muna   <a href="?page=mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-info"> E-mail&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
- -->
+ -->                            
                                 <!-- Navbar Right Menu -->
-                                <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                    Print
-                                <span class="sr-only">Toggle Dropdown</span>
-                                </button>  
-                                <div class="dropdown-menu" role="menu">   
-                                    <a class="dropdown-item" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
-                                </div>
-                                
-                                <?php if($c_ca_status == 0){?>
-                                    <a attachment-id="<?php echo $getID; ?>" class="btn btn-primary" data-toggle="modal" id="upload_file">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
-                                <?php } ?>
-                                <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-primary"> E-mail&nbsp;&nbsp;<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
+                            <table style="width:100%;">
+                                <tr>
+                                    <td>
+                                    <button type="button" style="width:100%;" class="btn btn-flat btn-sm btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" style="width:50%;font-size:14px;">
+                                    <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                    </button>  
+                                    <div class="dropdown-menu" role="menu">   
+                                        <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                                    </div>
+                                    </td>
+                                    <td>
+                                    <?php if($c_ca_status == 0){?>
+                                        <a attachment-id="<?php echo $getID; ?>" class="btn btn-flat btn-primary" data-toggle="modal" id="upload_file" style="width:100%;margin-right:5px;font-size:14px;">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
+                                    <?php } ?>
+                                    <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-flat btn-sm btn-primary" style="width:100%;margin-left:5px;font-size:14px;"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;E-mail</a>
+                                    </td>
+                                </tr>
+                            </table>
                             </div>
                             
                             <div class="titles"> Buyer's Profile</div>
@@ -957,10 +964,12 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                             <form  method="POST" id="add_comment">
                                 <input type="hidden" name="action" value="add_comment">
                                 <input type="hidden" class="form-control required" name="csr_id" value="<?php echo $getID; ?>">
-                                <input type="hidden" class="form-control required" name="name" value= "<?php echo $_settings->userdata('username'); ?>">
+                                <input type="hidden" class="form-control required" name="name" value= "">
                                 <div class="title_comment">Comment:</div>
                                     <textarea name="comment" id="txtarea_comment" rows="4" cols="50"></textarea>
-                                    <input type="submit" id="action_add_comment" class="btn btn-success float-right" value="Add Comment">
+                                    <button type="submit" id="action_add_comment" class="btn btn-flat btn-success float-right" style="font-size:14px;">
+                                    <i class="fa fa-comment" aria-hidden="true"></i>&nbsp;&nbsp;Add Comment
+                                    </button>
                             </form>
                         </div>  
                         <?php
@@ -1201,7 +1210,7 @@ function showReplyForm(self) {
 		});
 	});
     $('#delete_upload').click(function(){
-        _conf("Are you sure to delete this file?","delete_upload",[$(this).attr('data-upload-id')])
+        _conf("Are you sure you want to delete this file?","delete_upload",[$(this).attr('data-upload-id')])
     }) 
 
     function delete_upload($id){
@@ -1300,15 +1309,15 @@ function showReplyForm(self) {
 <script>
 
     $('.coo-disapproval').click(function(){
-		_conf("Are you sure to disapproved this csr?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to disapproved this CSR?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
 	})
 
     $('.sm-verification').click(function(){
-		_conf("Are you sure to verified this csr?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to verify this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
 	})
 
     $('.sm-verification2').click(function(){
-		_conf("Are you sure to void this csr?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to void this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
 	})
 
 

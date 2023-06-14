@@ -16,7 +16,7 @@
 		<hr style="border-top:1px dotted #ccc;" />
 		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-plus"></span> Add Product</button>
 		<br /><br />
-		<a href="print.php" target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
+		<a href="print.php" target="_blank" class="btn btn-secondary pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
 		<br />
 		<br />
 		<table class="table table-bordered">

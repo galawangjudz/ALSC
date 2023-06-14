@@ -34,7 +34,10 @@ table td{
   margin: 0;
   padding: 0;
 }
-
+/* #uni_modal .modal-footer{
+		font-size:12px!important;
+    font-weight: bold;
+	}  */
 .tab-link {
   display: inline-block;
   margin: 0;
@@ -48,9 +51,9 @@ table td{
   background-color: #F0F0F0;
 }
 .modal-content{
-    width:1200px;
-    margin-right:0px;
-    margin-left:0px;
+    width:100%;
+    margin-right:auto;
+    margin-left:auto;
     height:auto;
     display: block!important; /* remove extra space below image */
     }
@@ -92,12 +95,12 @@ body{
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
       <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-default btn-flat border-primary update_client" client-id="<?php echo $client_id; ?>"><i class="fa fa-edit"></i> Update Details</a>
+				<a class="btn btn-block btn-default btn-flat bg-maroon update_client" client-id="<?php echo $client_id; ?>" style="font-size:14px;"><i class="fa fa-edit"></i>&nbsp;&nbsp;Update Details</a>
 			</div>
 	</div>
   
 <div class="card-header">
-		<h1 class="card-title" style="font-size:22px;"><b>Client Information</b></h1>
+<h5 class="card-title"><b><i>Client Information</b></i></h5>
 </div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -136,7 +139,7 @@ body{
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
-              <a class="btn btn-primary add_member" id="add_member_btn" client-id="<?php echo $client_id; ?>">Add Member</a>
+              <a class="btn btn-flat btn-primary add_member" id="add_member_btn" client-id="<?php echo $client_id; ?>" style="margin-bottom:10px;font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add Member</a>
               <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
                 if($qry2->num_rows <= 0){
                     
@@ -177,7 +180,7 @@ body{
                         <?php }elseif($row['relationship'] == 4){ ?>
                             <td class="text-center"><span class="badge badge-primary">Minor/Represented by Legal Guardian</span></td>
                         <?php } ?>
-                        <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-success btn-s update_family_mem" style="font-weight:bold;font-size:12px;height:30px;width:100px;" data-id="<?php echo $row['member_id'] ?>">Update</a></td>
+                        <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-flat btn-success btn-s update_family_mem" style="font-size:12px;height:30px;width:100px;" data-id="<?php echo $row['member_id'] ?>"><i class="fa fa-edit"></i>&nbsp;&nbsp;Update</a></td>
 
                           <?php
                       endwhile; }?>
@@ -226,9 +229,9 @@ body{
                             <?php }elseif($row['c_type'] == 5){ ?>
                                 <td class="text-center" style="width:20%;"><span class="badge badge-primary">Add Cost</span></td>
                             <?php } ?>        
-                            <td class="text-center" style="font-size:13px;width:20%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
-                            <td class="text-center" style="font-size:12px;width:20%;"><a class="btn btn-success btn-s view_data" style="font-weight:bold;font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>">View</a>
-                            <a class="btn btn-primary btn-s restructured_data" style="font-weight:bold;font-size:10px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>">Restructuring</a></td>
+                            <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
+                            <td class="text-center" style="font-size:12px;width:30%;"><a class="btn btn-flat btn-success btn-s view_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View</a>
+                            <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-redo" aria-hidden="true"></i>&nbsp;&nbsp;Restructuring</a></td>
                             <?php endwhile; }?>
                           </tr>
 
@@ -237,14 +240,27 @@ body{
             </div>
 
             <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;">  
-              <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+              <div style="background-color:#F5F5F5;margin-bottom:20px;border-radius:5px;padding:5px;">
                 <!-- <button type="button" class="btn btn-primary add_payment" data-id="<?php echo md5($property_id)  ?>"><span class="fa fa-plus"> Add Payments </span></button>    -->
-                <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">New Payment</span> </a>              
-                <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print">Print</span></a>            
-                <a href="http://localhost/ALSC/admin/?page=clients/test.php?id=<?php echo md5($property_id)  ?>" class="btn btn-primary"> E-mail</a>
-                <a class="btn btn-danger delete-last-or" prop-id="<?php echo $property_id; ?>" >Delete Last OR</a>
-                <a class="btn btn-danger undo-delete-last-or" prop-id="<?php echo $property_id; ?>" >Undo</a>
-                <a class="btn btn-primary new_av" prop-id="<?php echo $property_id; ?>">AV</a>
+                <table style="width:100%;">
+                  <tr style="width:100%;">
+                    <td style="width:10%;">
+                      <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-success pull-right" style="width:100%; font-size:13px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;New Payment</a>              
+                    </td>
+                    <td style="width:10%;">
+                      <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-secondary pull-right"  style="width:100%;font-size:13px;"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>            
+                    </td>
+                    <td style="width:10%;">
+                      <a class="btn btn-flat btn-danger delete-last-or" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-trash"></span>&nbsp;&nbsp;Delete Last OR</a>
+                    </td>
+                    <td style="width:10%;">
+                      <a class="btn btn-flat btn-info undo-delete-last-or" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-undo"></span>&nbsp;&nbsp;Undo</a>
+                    </td>
+                    <td style="width:10%;">
+                      <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
+                    </td>
+                  </tr>
+                </table>
               </div>  
                     <table class="table2 table-bordered table-stripped">
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
@@ -399,7 +415,7 @@ body{
             </div>
      
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
-              <div class="container" style="background-color:#F5F5F5;float:right;margin-bottom:20px;border-radius:5px;padding:5px;">
+              
           
               <?php
                       
@@ -414,8 +430,8 @@ body{
 
                 ?>
             
-              <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
-            </div>
+              <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-secondary pull-right" style="margin-bottom:10px;font-size:13px;"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>
+           
               <table class="table2 table-bordered table-stripped">
                   <thead> 
                       <tr>
@@ -531,7 +547,7 @@ $(document).ready(function() {
     }) 
 
     $('.undo-delete-last-or').click(function(){
-        _conf("Are you sure you want to undo delete this OR?","undo_delete_last_or",[$(this).attr('prop-id')])
+        _conf("Are you sure you want to undo the deletion of this OR?","undo_delete_last_or",[$(this).attr('prop-id')])
     }) 
 
    

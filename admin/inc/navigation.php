@@ -234,7 +234,7 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=agents/agents_list" class="nav-link nav-agents">
+                      <a href="<?php echo base_url ?>admin/?page=agents_list/list" class="nav-link nav-agents">
                         <i class="nav-icon fa fa-id-card"></i>
                         <p>
                           Agent List

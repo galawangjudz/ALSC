@@ -100,7 +100,7 @@
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">Credit Assessment List</h3>
+		<h3 class="card-title"><b><i>Credit Assessment List</b></i></h3>
 		
 	</div>
 	<div class="card-body">
@@ -230,9 +230,9 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> Evaluation</a>
+				                    <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span>&nbsp;&nbsp;Evaluation</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item ca_approval" data-id="<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-check text-success"></span> CA Approval</a>
+									<a class="dropdown-item ca_approval" data-id="<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-check text-success"></span>&nbsp;&nbsp;CA Approval</a>
 								  </div>
 							</td>
 							<?php endif; ?>	

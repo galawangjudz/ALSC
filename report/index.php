@@ -52,7 +52,7 @@ $type_arr = ['all'=>"All", "1"=>"Sales Invoices", "2" => "Services Invoices" ];
 	<div class="card-header">
 		<h3 class="card-title">Report</h3>
 		<div class="card-tools">
-			<button class="btn btn-default border rounded-0" type="button" id="print"><i class="fa fa-print"></i> Print</button>
+			<button class="btn btn-secondary border rounded-0" type="button" id="print"><i class="fa fa-print"></i> Print</button>
 		</div>
 	</div>
 	<div class="card-body">
