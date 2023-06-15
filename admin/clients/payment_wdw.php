@@ -214,18 +214,18 @@ body{
                 
                          ?>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><label for="due_date_label">Due Date:</label></td> 
+                            <td style="width:25%;font-size:13px;"><label for="due_date">Due Date:</label></td> 
                             <td style="width:25%;font-size:13px;"><label for="amount_due">Amount Due:</label></td>
                            
                         </tr>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom due-date" id = "due_date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
                           
                         </tr>
                         <tr>
-                        <td style="width:25%;font-size:13px;"><label for="pay_date">Transaction Date: </label></td>
-                            <td style="width:25%;font-size:13px;"><label for="due_date_label">OR Date:</label></td> 
+                        <td style="width:25%;font-size:13px;"><label for="trans_date_ent">Transaction Date: </label></td>
+                            <td style="width:25%;font-size:13px;"><label for="or_date_ent">OR Date:</label></td> 
                            
                         </tr>
                         <tr>
@@ -243,7 +243,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="0" id="radio0">
                                             </div>
                                             <div style="float:left">
-                                                <label class="light">0%<label>
+                                                <label for="radio0">0%<label>
                                             </div>
                                         </td>
                                         <td>
@@ -259,7 +259,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="50" id="radio50">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio25">50%</label>
+                                                <label for="radio50">50%</label>
                                             </div>
                                         </td>
                                     </tr>
@@ -271,7 +271,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="75" id="radio75">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio25">75%</label>
+                                                <label for="radio75">75%</label>
                                             </div>
                                         </td>
                                         <td>
@@ -279,7 +279,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="100" id="radio100">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio25">100%</label>
+                                                <label for="radio100">100%</label>
                                             </div>
                                         </td>
                                     </tr>
@@ -293,7 +293,7 @@ body{
                         
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="status">Status:</label></td>
-                            <td style="width:25%;font-size:13px;"><label for="rebate">Rebate:</label></td>
+                            <td style="width:25%;font-size:13px;"><label for="rebate_amt">Rebate:</label></td>
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
@@ -320,7 +320,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="amount_paid">Amount Paid:</label></td>
-                            <td style="width:25%;font-size:13px;padding-left:10px;"><label for="or_no">OR #:</label></td>
+                            <td style="width:25%;font-size:13px;padding-left:10px;"><label for="or_no_ent">OR #:</label></td>
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td>
@@ -508,24 +508,24 @@ body{
                     ?>
                     <table style="width:30%;float:right;table-layout: fixed;">
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
+                            <td style="font-size:12px;"><label for="tot_prin" class="control-label">Total Principal: </label></td>
+                            <td><input type="text" class="form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+                            <td style="font-size:12px;"><label for="tot_sur" class="control-label">Total Surcharge: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+                            <td style="font-size:12px;"><label for="tot_int" class="control-label">Total Interest: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
+                            <td style="font-size:12px;"><label for="tot_rebate" class="control-label">Total Rebate: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>  
                         <tr>  
 
-                            <td style="font-size:12px;"><label>Total Amount to be Paid: </label></td>
+                            <td style="font-size:12px;"><label for="tot_amt_pd">Total Amount to be Paid: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_amt_pd" id="tot_amt_pd" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
 
                             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
@@ -599,14 +599,14 @@ body{
                 <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;" id="myTable">
                     <tr class="default-hide">
                         <td>
-                            <label>Check Date: </label>
+                            <label for="check_date">Check Date: </label>
                         <td>
                             <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="" style="width:100%;">
                         </td>
                     </tr>
                     <tr class="default-hide">
                         <td>
-                            <label>Check Number: </label>
+                            <label for="check_number">Check Number: </label>
                         <td>
                             <input type="number" class= "form-control-sm" name="check_number" id="check_number" style="width:100%;">
                         </td>
@@ -614,7 +614,7 @@ body{
                     </tr>
                     <tr class="default-hide">
                         <td>
-                            <label>Bank/Branch: </label>
+                            <label for="branch">Bank/Branch: </label>
                         </td>
                         <td>
                             <input type="text" class= "form-control-sm" name="branch" id="branch" style="width:100%;">
