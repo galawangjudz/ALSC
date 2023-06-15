@@ -67,9 +67,12 @@
                         </p>
                       </a>
                     </li> 
+
+                    <li class="nav-header">Report</li>
+
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>or_logs.php" class="nav-link nav-logs">
+                      <a href="<?php echo base_url ?>admin/?page=reports/or_logs" class="nav-link nav-or">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                           OR Logs
@@ -77,122 +80,14 @@
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=clients/av_logs" class="nav-link nav-av">
+                      <a href="<?php echo base_url ?>admin/?page=reports/av_logs" class="nav-link nav-av">
                       <i class="nav-icon fas fa-receipt"></i>
                         <p>
                           AV Logs
                         </p>
                       </a>
                     </li> 
-                    <?php endif ; ?>
-                    
 
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
-                        <i class="nav-icon fas fa-file-invoice"></i>
-                        <p>
-                          RA List (Pending)
-                        </p>
-                      </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=revision" class="nav-link nav-revision">
-                        <i class="nav-icon fas fa-file-invoice"></i>
-                        <p>
-                          RA List (Revision)
-                        </p>
-                      </a>
-                    </li> -->
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=ra" class="nav-link nav-ra">
-                        <i class="nav-icon fas fa-th-list"></i>
-                        <p>
-                          RA List (Approved)
-                        </p>
-                      </a>
-                    </li>
-                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
-                      
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=reservation" class="nav-link nav-reservation">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                          Reservation List
-                        </p>
-                      </a>
-                    </li>
-                    <?php endif ; ?>
-                
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=credit_assestment" class="nav-link nav-credit_assestment">
-                        <i class="nav-icon fas fa-hands-helping"></i>
-                        <p>
-                          Credit Assessment List
-                        </p>
-                      </a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=final_approval" class="nav-link nav-final_approval">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          CFO Approval List
-                        </p>
-                      </a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=clients/property_list" class="nav-link nav-property_list">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Property Accounts
-                        </p>
-                      </a>
-                    </li> -->
-                
-                   <!--  <li class="nav-header">Report</li>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=report" class="nav-link nav-report">
-                        <i class="nav-icon fas fa-calendar-week"></i>
-                        <p>
-                          Generate Report
-                        </p>
-                      </a>
-                    </li> -->
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="nav-link">
-                        <i class="nav-icon fas fa-cube"></i>
-                        <p>
-                          Lot Inventory
-                        </p>
-                      </a>
-                    </li> -->
-                   <!--  <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=inventory/houses" class="nav-link">
-                        <i class="nav-icon fas fa-home"></i>
-                        <p>
-                          House Inventory
-                          
-                        </p>
-                      </a>
-                    </li> -->
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="nav-link">
-                        <i class="nav-icon fas fa-th-large"></i>
-                        <p>
-                          House Model List
-                        </p>
-                      </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="nav-link">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Projects List
-                        </p>
-                      </a>
-                    </li> -->
-                    <li class="nav-header">Others</li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=loan-calcu" class="nav-link nav-loan-calcu">
                         <i class="nav-icon fas fa-calculator"></i>
@@ -201,9 +96,7 @@
                         </p>
                       </a>
                     </li>
-                  
-                    <?php if ($usertype == "IT Admin"): ?>
-
+                    <?php endif ; ?>
 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link nav-journals">
@@ -214,6 +107,15 @@
                       </a>
                     </li>  
 
+                    
+
+                    <li class="nav-header">Maintenance</li>
+                  
+                  
+                    <?php if ($usertype == "IT Admin"): ?>
+
+
+                    
 
 
                     <li class="nav-item dropdown">
@@ -234,7 +136,7 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=agents_list/list" class="nav-link nav-agents">
+                      <a href="<?php echo base_url ?>admin/?page=agents_list/list" class="nav-link nav-agents_list">
                         <i class="nav-icon fa fa-id-card"></i>
                         <p>
                           Agent List
