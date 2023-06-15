@@ -28,7 +28,6 @@ foreach($client->fetch_array() as $k =>$v){
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>New Client</i></b></h3>
-		
 	</div>
 <div class="card-body">
 <div class="container-fluid">

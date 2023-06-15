@@ -13,9 +13,9 @@ function format_num($number){
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Journal Entries</h3>
+		<h3 class="card-title"><b><i>Journal Entries</b></i></h3>
 		<div class="card-tools">
-			<button class="btn btn-primary btn-flat btn-sm" id="create_new" type="button"><i class="fa fa-pen-square"></i> Add New Journal Entry</button>
+			<button class="btn btn-primary btn-flat" id="create_new" type="button" style="font-size:14px;"><i class="fa fa-pen-square"></i>&nbsp;&nbsp;Add New Journal Entry</button>
 		</div>
 	</div>
 	<div class="card-body">

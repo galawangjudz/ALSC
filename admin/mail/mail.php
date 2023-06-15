@@ -34,6 +34,19 @@ if($result) {
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
+    .box_big1{
+        width:100%;
+        height:auto;
+        margin-left:auto;
+        margin-right:auto;
+        background-color:#ffffff;
+        border:none;
+        float:left;
+        padding:25px;
+        border-radius:5px;
+        border: 1px solid black;
+        padding-left:5%;
+    }
 </style>
 <?php
     use PhpMailer\PhpMailer\PhpMailer;
@@ -98,16 +111,18 @@ if($result) {
 ?>
 
 <div class="card card-outline rounded-0 card-maroon">
+    <div class="card-header">
+        <h3 class="card-title"><b><i>Compose Email</i></b></h3>
+    </div>
     <div class="card-body">
         <div class="container-fluid">
-            <h2>Compose Email</h2>
-            <hr>
             <body>
+            <div class="main_box">
                 <form class="" method="post" enctype="multipart/form-data">
                     <div class="box_big1">
                         <div class="main_box">
                             <div class="row">
-                                <div class="col-xs-12" style="width:86%;">		
+                                <div class="col-xs-12" style="width:100%;">		
                                     <div class="form-group">
                                         <label class="control-label">To: </label>
                                         <textarea class="form-control required textarea" type="text" name="email">donitarosetantoco2028@gmail.com</textarea><br/>
@@ -115,7 +130,7 @@ if($result) {
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12" style="width:86%;">		
+                                <div class="col-xs-12" style="width:100%;">		
                                     <div class="form-group">
                                     <label class="control-label">Subject: </label>
                                     <input type="text" name="subject" class="form-control required" value="APPROVAL FOR CSR #<?php echo $getID; ?>">
@@ -137,7 +152,7 @@ if($result) {
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12" style="width:86%;">		
+                                <div class="col-xs-12" style="width:100%;">		
                                     <div class="form-group">
                                         <label class="control-label">Attachment/s: </label>
                                         <input name="file[]" multiple="multiple" class="form-control" type="file" id="file">
@@ -147,13 +162,14 @@ if($result) {
                             <div class="row">
                                 <div class="col-xs-12">		
                                     <div class="form-group">
-                                        <button type="submit" name="send" id="btnSend" class="btn btn-success">Send</button>
+                                        <button type="submit" name="send" id="btnSend" class="btn btn-flat btn-success"><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;&nbsp;Send</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+            </div>
             </body>
         </div>
     </div>

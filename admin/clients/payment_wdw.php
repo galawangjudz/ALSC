@@ -375,7 +375,7 @@ body{
                         <tr>
                             <td>
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
-                                <a href="#" class="btn btn-secondary btn-md adjustment" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:15px;">Adjustment <i class='fa fa-adjust'></i></a> 
+                                <a href="#" class="btn btn-warning btn-flat adjustment" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:14px;"><i class='fa fa-adjust'></i>&nbsp;&nbsp;Adjustment</a> 
                             </td>
                         </tr>
                         <tr>
@@ -825,7 +825,7 @@ body{
                             }
                         ?>
                         <div class="card-body">
-                                <div class="container-fluid">
+                            <div class="container-fluid">
                                 <h3 class="card-title"><b>PREVIEW EMAIL</b></h3>
                                 <br><hr style="height:1px;border-width:0;color:gray;background-color:gray">
                                     <body>
@@ -886,7 +886,7 @@ body{
                                                     <div class="row">
                                                         <div class="col-xs-12">		
                                                             <div class="form-group">
-                                                                <button type="submit" name="send" id="btnSend" class="btn btn-success">Send Mail</button>
+                                                                <button type="submit" name="send" id="btnSend" class="btn btn-flat btn-success"><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;&nbsp;Send Mail</button>
                                                             </div>
                                                         </div>
                                                     </div>

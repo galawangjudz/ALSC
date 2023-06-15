@@ -36,7 +36,7 @@
 	}
 </style>
 <body>
-<div class="card card-outline rounded-0 card-maroon" style="height:500px;">
+<div class="card card-outline rounded-0 card-maroon" style="height:520px;">
     <div class="card-header">
     <h3 class="card-title"><b><i>Loan Calculator</b></i></h3>
     </div>
@@ -55,7 +55,7 @@
 			</ul>
 			<br>
 			<form method="post" id="loanCalcForm" role="">
-				<table style="margin-left:15.5%;margin-right:30%;width:800px;">
+				<table class="table table-bordered" style="margin-left:15.5%;margin-right:30%;width:800px;">
 					<tr>
 						<td style="max-width:75%;"><label for="loanAmount">Loan Amount: </label></td>
 						<td><input type="text" size="8" style="width:250px;" name="loanAmount" id="loanAmount" value="<?php if (isset($loanAmount)) { echo $loanAmount; } ?>" />
@@ -71,15 +71,13 @@
 						<td><input type="text" size="8" style="width:250px;" name="numOfMonths" id="numOfMonths" value="<?php if (isset($numOfMonths)) { echo $numOfMonths; } ?>" />
 							<?php if (isset($errorArray[2])) { echo $errorArray[2]; } ?></td>
 					</tr>
-					<input type="submit" name="submit" value="" class="btn btn-flat btn-sm btn-info" style="width:70%;position:absolute;margin-top:170px;margin-left:12%;margin-right:12%;">
-<span style="position:absolute;margin-top:173px;margin-left:12%;margin-right:12%;text-align:center;color:white;width:70%;">
-  <span>
-  <i class="fa fa-calculator" aria-hidden="true"></i>
-  </span>
-  &nbsp;&nbsp;Compute
-</span>
-
-
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" name="submit" value="" class="btn btn-flat btn-sm btn-info" style="width:70%;color:white;">
+								<div style="margin-left:130px;margin-top:-28px;color:white;"><i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;&nbsp;Compute</div>
+						</td>
+					</tr>
 				</table>
 			</form>
 			<div id="result" class="result">
