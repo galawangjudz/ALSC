@@ -1540,6 +1540,8 @@ Class Master extends DBConnection {
 		//rem set to zero for cts
 		$rem_prcnt = 0;
 		//echo $status;
+	
+		
 
 		if ((($payment_type1 == 'Partial DownPayment') && ($acc_status == 'Reservation') || ($acc_status == 'Partial DownPayment')) || ($payment_type1 == 'Full DownPayment') && ($acc_status == 'Full DownPayment') && ($acc_status == 'Partial DownPayment')){
 			$rebate = 0;
@@ -2016,6 +2018,7 @@ Class Master extends DBConnection {
 				endif;
 			endif;
 
+		
 			// lagay ako dito condition para sa payment of balance
 
 						//$principal = $amount_paid - $rebate;
@@ -2023,7 +2026,12 @@ Class Master extends DBConnection {
 					///
 
 		}
-		
+		if ($retention == '1'){
+			$status = 'RETENTION';
+			
+		}
+
+
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
@@ -2381,6 +2389,8 @@ Class Master extends DBConnection {
 			$status = 'C PRIN';
 		}
 
+	
+
 
 		$principal = $amount_paid + $rebate;
 		$balance = $balance - $principal;
@@ -2733,6 +2743,22 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+
+	function set_retention(){
+		extract($_POST);
+		$ret = $this->conn->query("UPDATE properties set c_retention = '1' where property_id = ".$prop_id);
+		//echo $ret;
+		if($ret){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Property successfully set to Retention.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+			
+	}
+
 	function save_group(){
 		extract($_POST);
 		$data = "";
@@ -3064,6 +3090,10 @@ switch ($action) {
 
 	case 'save_restructured':
 		echo $Master->save_restructured();
+	break;
+
+	case 'set_retention':
+		echo $Master->set_retention();
 	break;
 
 	case 'save_av':

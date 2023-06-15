@@ -148,6 +148,7 @@ if(isset($_GET['id'])){
             $total_amount_due_ent = '0.00';
             $due_date_ent = $l_date;
             $payment_status_ent = 'RETENTION';
+            
 
         elseif(($p1 == 'Partial DownPayment') && ($acc_status == 'Reservation' || $acc_status == 'Partial DownPayment') || ($p1 == 'Full DownPayment' && $acc_status == 'Partial DownPayment')):
             //$rebate_ent->set_sensitive(0);

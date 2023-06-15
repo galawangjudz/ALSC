@@ -203,6 +203,7 @@ body{
                           <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
                           <th style="text-align:center;font-size:13px;">LOCATION</th>
                           <th style="text-align:center;font-size:13px;">TYPE</th>
+                          <th style="text-align:center;font-size:13px;">RENTETION STATUS</th>
                           <th style="text-align:center;font-size:13px;">NET TCP</th>  
                           <th style="text-align:center;font-size:13px;">ACTION</th>          
                         </tr>
@@ -219,18 +220,24 @@ body{
                             <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
                             <td class="text-center" style="font-size:13px;width:20%;"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                             <?php if($row['c_type'] == 1){ ?>
-                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Lot Only</span></td>
+                                <td class="text-center" style="width:15%;"><span class="badge badge-primary">Lot Only</span></td>
                             <?php }elseif($row['c_type'] == 2){ ?>
-                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">House Only</span></td>
+                                <td class="text-center" style="width:15%;"><span class="badge badge-primary">House Only</span></td>
                             <?php }elseif($row['c_type'] == 3){ ?>
-                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Packaged</span></td>         
+                                <td class="text-center" style="width:15%;"><span class="badge badge-primary">Packaged</span></td>         
                             <?php }elseif($row['c_type'] == 4){ ?>
-                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Fence</span></td>
+                                <td class="text-center" style="width:15%;"><span class="badge badge-primary">Fence</span></td>
                             <?php }elseif($row['c_type'] == 5){ ?>
-                                <td class="text-center" style="width:20%;"><span class="badge badge-primary">Add Cost</span></td>
-                            <?php } ?>        
+                                <td class="text-center" style="width:15%;"><span class="badge badge-primary">Add Cost</span></td>
+                            <?php } ?>      
+                            <?php if($row['c_retention'] == 1){ ?>
+                                <td class="text-center" style="width:10%;"><span class="badge badge-danger">Retention</span></td>
+                            <?php }elseif($row['c_retention'] == 0){ ?>
+                                <td class="text-center" style="width:10%;"><span class="badge badge-primary">Regular</span></td>
+                            <?php } ?>  
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
-                            <td class="text-center" style="font-size:12px;width:30%;"><a class="btn btn-flat btn-success btn-s view_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View</a>
+                            <td class="text-center" style="font-size:12px;width:30%;"><a class="btn btn-flat btn-success btn-s view_data" style="font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View</a>
+                            <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-magnet" aria-hidden="true"></i>&nbsp;&nbsp;Set Retention</a>
                             <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-redo" aria-hidden="true"></i>&nbsp;&nbsp;Restructuring</a></td>
                             <?php endwhile; }?>
                           </tr>
@@ -541,8 +548,11 @@ $(document).ready(function() {
 
   }); 
 
+    $('.retention_acc').click(function(){
+        _conf("Are you sure you want to retention?","retention_acc",[$(this).attr('prop-id')])
+    }) 
 
-   $('.delete-last-or').click(function(){
+    $('.delete-last-or').click(function(){
         _conf("Are you sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
     }) 
 
@@ -574,6 +584,29 @@ $(document).ready(function() {
             error:err=>{
                 console.log(err)
                 alert_toast("Can't delete last payment!",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+
+    function retention_acc($prop_id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=set_retention",
+            method:"POST",
+            data:{prop_id: $prop_id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("Can't Retention!",'error');
                 end_loader();
             },
             success:function(resp){

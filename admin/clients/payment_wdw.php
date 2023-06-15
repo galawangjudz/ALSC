@@ -333,6 +333,7 @@ body{
                     <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom last-excess"  id="last_excess" name="last_excess" value="<?php echo $last_excess; ?>"> 
+                    <input type="hidden" class="form-control-sm margin-bottom retention"  id="retention" name="retention" value="<?php echo $retention; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
                     <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_pay" name="monthly_pay" value="<?php echo $monthly_pay; ?>">   
                     <input type="hidden" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
@@ -359,7 +360,7 @@ body{
                         <tr>
                             <td>
                                 <?php 
-                                    if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
+                                    if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization') && ($retention == '0')){
                                         echo '<a href="#" class="btn btn-success btn-flat credit-pri" id="credit_principal" style="width:100%;font-size:14px;"><i class="fa fa-wallet"></i>&nbsp;&nbsp;Credit to Principal</a> ';
                                     }
                                 ?>
@@ -367,15 +368,24 @@ body{
                         </tr>
                         <tr>
                             <td>
-                            <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+                                <?php 
+                                if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization') && ($retention == '0')){ ?>
+                        
                                 <a href="#" class="btn btn-secondary btn-flat add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:14px;"><i class='fa fa-coins'></i>&nbsp;&nbsp;Payment of Balance</a> 
-                            </td>
+                                
+                                <?php } ?>
+                              </td>
+
                         </tr>
 
                         <tr>
                             <td>
+                            <?php 
+                                if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization') && ($retention == '0')){ ?>
+                        
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
                                 <a href="#" class="btn btn-warning btn-flat adjustment" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:14px;"><i class='fa fa-adjust'></i>&nbsp;&nbsp;Adjustment</a> 
+                                <?php } ?>
                             </td>
                         </tr>
                         <tr>
