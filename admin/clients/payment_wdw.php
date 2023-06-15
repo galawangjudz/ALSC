@@ -1494,7 +1494,7 @@ $(document).ready(function(){
         }
 
 
-        if (statusValue === "Credit to Principal" || statusValue === 'Payment of Balance') {
+        if (statusValue === "Credit to Principal" || statusValue === 'Payment of Balance' || statusValue === 'RETENTION') {
             CreditPrincipalForm();
         }else{
             addPaymentForm();
