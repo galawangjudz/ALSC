@@ -268,54 +268,46 @@ if($csr->num_rows > 0){
 		<div class="container-fluid">
                 <input type="hidden" value="<?php echo $p1; ?>" id="p1">
                 <input type="hidden" value="<?php echo $p2; ?>" id="p2">
+                <table style="width:100%;">
+                    <tr>
                     <div class="row">
-                
-                        <?php if($verify == 0){?>
-                        <a href="?page=sales/create&id=<?php echo md5($getID); ?>" class="btn btn-primary">Edit<span class="fa fa-edit"></span></a>
-                      
-                        <?php } ?>
-
-                        
-                       <!-- hide ko muna to  <a href="?page=mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-info"> E-mail <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </a>
-                 -->    <table style="width:100%;">
-                            <tr>
-                                <td>
-                                    <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
-                                    <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                        
-                        <div class="dropdown-menu" role="menu">   
-                            <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
-                        </div>
-           
-
+                        <td> 
+                            <?php if($verify == 0){?>
+                                <a href="?page=sales/create&id=<?php echo md5($getID); ?>" class="btn btn-flat btn-primary" style="font-size:14px;width:100%;margin-top:5px;"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit</a>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
+                                <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">   
+                                <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                            </div>
+                        </td>           
+                        <td>
                         <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 
-                            </td>
-                                    <td>
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="1" class="btn btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verified</button>                            
-                            </td>
-                                    <td>
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="2" class="btn btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="1" class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verified</button>  
+                        </td>
+                        <td>                          
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="2" class="btn btn-flat btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times-circle" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
                         <?php } ?>
-
+                        </td>
+                        <td>
                         <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "COO" or $usertype == "IT Admin" )){ ?>
-                                    </td>
-                                    <td>
-                                        <button type="button" data-csr-id =<?php echo $getID; ?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
-                                    </td>
-                                    <td>
-                                        <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO DisApproved</button>
-                                    </td>
-                                </tr>
-                            </table>
+                            <button type="button" data-csr-id =<?php echo $getID; ?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
+                        </td>
+                        <td>
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO Disapproved</button>
+                        </td>
                         <?php } ?>     
                     </div>
-
+                    </tr>
+                        </table>
                     <div class="titles"> Buyer's Profile</div>
                         <br>
                         <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;

@@ -108,7 +108,7 @@ $('.edit-agent').click(function(){
 
 
 $('.delete-agent').click(function(){
-		_conf("Are you sure to delete this agent?","delete_agent",[$(this).attr('data-agent-id')])
+		_conf("Are you sure you want to delete this agent information?","delete_agent",[$(this).attr('data-agent-id')])
 	})
 
 function delete_agent($id){

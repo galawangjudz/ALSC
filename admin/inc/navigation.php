@@ -207,7 +207,7 @@
 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link nav-journals">
-                        <i class="nav-icon fas fa-book"></i>
+                        <i class="nav-icon fas fa-folder"></i>
                         <p>
                           Journal Entries
                         </p>

@@ -836,14 +836,11 @@ function getRAs() {
 				<th>CA Status</th>
 				<th class="actions">Actions</th>
 			  </tr></thead><tbody>';
-
 		while($row = $results->fetch_assoc()) {
 			$status=$row["c_csr_status"];
 			$date_created=$row["c_date_created"];
 			$id=$row["c_csr_no"];
 			$lid = $row["c_lot_lid"];
-
-
 			$exp_date=new DateTime($row["c_duration"]);
 			$exp_date_str=$row["c_duration"];
 			$exp_date_only=date("Y-m-d",strtotime($exp_date_str));

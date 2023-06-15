@@ -1685,14 +1685,14 @@ input{
 							<td style="text-align:center;"><?php echo $row["middle_name"] ?></td>
 							<td style="text-align:center;"><?php echo $row["email"] ?></td>
 							<td style="text-align:center;"><?php echo $row["contact_no"] ?></td>
-							<td style="text-align:center;"><a href="#" class="btn btn-primary btn-xs customer-select" data-customer-civil="<?php echo $row['civil_status']?>" data-customer-gender="<?php echo $row['gender'] ?>" data-customer-age="<?php echo $row['age'] ?>" data-customer-birthday="<?php echo $row['birthdate'] ?>" data-customer-viber="<?php echo $row['viber'] ?>" data-customer-address-1="<?php echo $row['address'] ?>" data-customer-zip-code="<?php echo $row['zip_code'] ?>"  data-customer-address-abroad="<?php echo $row['address_abroad'] ?>" data-customer-lname="<?php echo $row['last_name'] ?>" data-customer-fname="<?php echo $row['first_name'] ?>" data-customer-mname="<?php echo $row['middle_name'] ?>" data-customer-sname="<?php echo $row['suffix_name'] ?>" data-customer-email="<?php echo $row['email'] ?>" data-customer-phone="<?php echo $row['contact_no'] ?>" data-customer-ctzn="<?php echo $row['citizenship'] ?>"  style="width:100%;">Select</a></td>
+							<td style="text-align:center;"><a href="#" class="btn btn-flat btn-primary btn-xs customer-select" data-customer-civil="<?php echo $row['civil_status']?>" data-customer-gender="<?php echo $row['gender'] ?>" data-customer-age="<?php echo $row['age'] ?>" data-customer-birthday="<?php echo $row['birthdate'] ?>" data-customer-viber="<?php echo $row['viber'] ?>" data-customer-address-1="<?php echo $row['address'] ?>" data-customer-zip-code="<?php echo $row['zip_code'] ?>"  data-customer-address-abroad="<?php echo $row['address_abroad'] ?>" data-customer-lname="<?php echo $row['last_name'] ?>" data-customer-fname="<?php echo $row['first_name'] ?>" data-customer-mname="<?php echo $row['middle_name'] ?>" data-customer-sname="<?php echo $row['suffix_name'] ?>" data-customer-email="<?php echo $row['email'] ?>" data-customer-phone="<?php echo $row['contact_no'] ?>" data-customer-ctzn="<?php echo $row['citizenship'] ?>"  style="width:100%;font-size:14px;"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</a></td>
 						</tr>
 					<?php endwhile; ?>
 					</tbody>
 				</table>
 			</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default" data-dismiss="modal" style="width:100%; margin-left:5px;">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn btn-flat btn-default" data-dismiss="modal" style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -1735,14 +1735,14 @@ input{
 						<td style="text-align:center;"><?php echo $row["c_block"] ?></td>
 						<td style="text-align:center;"><?php echo $row["c_lot"] ?></td>
 						<td style="text-align:center;"><?php echo $row["c_status"] ?></td>
-						<td style="text-align:center;"><a href="#" class="btn btn-primary btn-xs lot-select" data-lot-lid="<?php echo $row['c_lid'] ?>" data-house-lid="<?php echo $row['c_house_lid'] ?>" data-floor-area="<?php echo $row['c_floor_area'] ?>" data-house-price="<?php echo $row['c_h_price_sqm'] ?>" data-house-model="<?php echo $row['c_house_model'] ?>" data-lot-site="<?php echo $row['c_acronym'] ?>" data-lot-block="<?php echo $row['c_block'] ?>" data-lot-lot="<?php echo $row['c_lot'] ?>" data-lot-lot-area="<?php echo $row['c_lot_area'] ?>" data-lot-per-sqm="<?php echo $row['c_price_sqm'] ?>" style="width:100%;"><center>Select</center></a></td>
+						<td style="text-align:center;"><a href="#" class="btn btn-flat btn-primary btn-xs lot-select" data-lot-lid="<?php echo $row['c_lid'] ?>" data-house-lid="<?php echo $row['c_house_lid'] ?>" data-floor-area="<?php echo $row['c_floor_area'] ?>" data-house-price="<?php echo $row['c_h_price_sqm'] ?>" data-house-model="<?php echo $row['c_house_model'] ?>" data-lot-site="<?php echo $row['c_acronym'] ?>" data-lot-block="<?php echo $row['c_block'] ?>" data-lot-lot="<?php echo $row['c_lot'] ?>" data-lot-lot-area="<?php echo $row['c_lot_area'] ?>" data-lot-per-sqm="<?php echo $row['c_price_sqm'] ?>" style="width:100%;font-size:14px;"><center><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</center></a></td>
 					</tr>
 				<?php endwhile; ?>
 				</tbody>
 			</table>
 		</div>
 		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default"  style="width:100%; margin-left:5px;">Cancel</button>
+			<button type="button" data-dismiss="modal" class="btn btn-flat btn-default"  style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>
 		</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->	
@@ -1773,10 +1773,10 @@ input{
 				<table style="width:100%;">
 					<tr>
 						<td>
-							<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default bg-primary" id="selected" style="width:100%; margin-right:5px;">Add</button>
+							<button type="button" data-dismiss="modal" class="btn btn-flat btn-default bg-primary" id="selected" style="width:100%; margin-right:5px;font-size:14px;"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add</button>
 						</td>
 						<td>
-							<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default" style="width:100%; margin-right:5px;">Cancel</button>
+							<button type="button" data-dismiss="modal" class="btn btn-flat btn-default" style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>
 						</td>
 					</tr>
 				</table>
