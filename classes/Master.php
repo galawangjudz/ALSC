@@ -1489,7 +1489,7 @@ Class Master extends DBConnection {
 			if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
 			}else{
-					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id);
+					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
 			}
 		endwhile;
 
@@ -2553,20 +2553,11 @@ Class Master extends DBConnection {
 		extract($_POST);
 			
 		$prop_id = $_POST['prop_id'];
-		$payment_type1 = $_POST['payment_type1'];
+		
 		$payment_type2 = $_POST['payment_type2'];
-		$dp_bal = $_POST['dp_bal'];
 
-		$acc_surcharge1 = $_POST['acc_surcharge1'];
-
-		$dp_sur = $dp_bal + $acc_surcharge1;
-		$no_payment = $_POST['no_payment'];
-		$monthly_down = $_POST['monthly_down'];
-
-		$first_dp_date = $_POST['first_dp_date'];
-		$full_down_date = $_POST['full_down_date'];
-
-		$adj_prin_bal = $_POST['adj_prin_bal'];
+	
+		
 		$terms= $_POST['terms'];
 		$interest_rate = $_POST['interest_rate'];
 		$fixed_factor = $_POST['fixed_factor'];
@@ -2579,23 +2570,32 @@ Class Master extends DBConnection {
 		$total_sur = $acc_surcharge1 + $acc_surcharge2;
 		$amt_to_be_financed = $_POST['amt_to_be_financed'];
 		$balance = $_POST['balance'];
+		$balance = (float) str_replace(",", "", $balance);
 		$total_balance = $balance + $acc_interest + $acc_surcharge2;
 		$restructured_date = $_POST['restructured_date'];
 		$amount_due = $acc_interest + $total_sur;
 		
-		echo $total_balance;
-		//$amt_to_be_financed1 = (float) str_replace(",", "", $amt_to_be_financed);
-		//$adj_prin_bal1 = (float) str_replace(",", "", $adj_prin_bal);
-		//$monthly_amortization1 = (float) str_replace(",", "", $monthly_amortization);
-		//$balance1 = (float) str_replace(",", "", $balance);
+	
+		$data = "c_payment_type2 = '$payment_type2' ";
+		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
+				
+				$payment_type1 = $_POST['payment_type1'];
+				$dp_bal = $_POST['dp_bal'];
+				$acc_surcharge1 = $_POST['acc_surcharge1'];
+				$dp_sur = $dp_bal + $acc_surcharge1;
+				$no_payment = $_POST['no_payment'];
+				$monthly_down = $_POST['monthly_down'];
+				$first_dp_date = $_POST['first_dp_date'];
+				$full_down_date = $_POST['full_down_date'];
+				$adj_prin_bal = $_POST['adj_prin_bal'];
 			
-		$data = " c_payment_type1 = '$payment_type1' ";
-		$data .= ", c_payment_type2 = '$payment_type2' ";
-		$data .= ", c_net_dp = '$net_dp' ";
-		$data .= ", c_no_payments = '$no_payment' ";
-		$data .= ", c_monthly_down = '$monthly_down' ";
-		$data .= ", c_first_dp = '$first_dp_date' ";
-		$data .= ", c_full_down = '$full_down_date' ";
+				$data .= ", c_payment_type1 = '$payment_type1' ";
+				$data .= ", c_net_dp = '$net_dp' ";
+				$data .= ", c_monthly_down = '$monthly_down' ";
+				$data .= ", c_no_payments = '$no_payment' ";
+				$data .= ", c_first_dp = '$first_dp_date' ";
+				$data .= ", c_full_down = '$full_down_date' ";
+			}
 		$data .= ", c_amt_financed = '$amt_to_be_financed' ";
 		$data .= ", c_terms = '$terms' ";
 		$data .= ", c_interest_rate = '$interest_rate' ";
@@ -2648,7 +2648,6 @@ Class Master extends DBConnection {
 
 		if($save & $save2){
 			$resp['status'] = 'success';
-	
 			$this->settings->set_flashdata('success',"Restructuring successfully saved.");
 
 		}else{

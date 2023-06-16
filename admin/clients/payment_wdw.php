@@ -35,8 +35,10 @@ if(isset($_GET['id'])){
     </div> -->
     <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
     <div class="top_table"> 
-        <div id='overduediv' style="display:none;">
+        <div id='overduediv' style="display:block;">
             <div class="card card-outline rounded-0 card-maroon"> 
+            
+
                 <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
                     <button type="submit" name="submit" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><i class="fa fa-arrow-right" aria-hidden="true"></i>&nbsp;&nbsp;Submit</button>

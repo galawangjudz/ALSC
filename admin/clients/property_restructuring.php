@@ -1,12 +1,5 @@
 <?php 
-include '../../config.php';
-if($_settings->chk_flashdata('success')): ?>
-<script>
-	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
-</script>
-<?php endif;?>
-<?php
-
+require_once('../../config.php');
 
 if(isset($_GET['id'])){
     $prop = $conn->query("SELECT property_id ,c_account_type1, c_date_of_sale, c_account_status, c_payment_type1, c_payment_type2
@@ -34,11 +27,7 @@ if(isset($_GET['id'])){
         $net_dp = $row['c_net_dp'];
         $start_date = $row['c_start_date'];
 
-        
-      /*   
-        $acronym = $row['c_acronym'];
-        $block = $row['c_block'];
-        $lot = $row['c_lot']; */
+
         }
 
     }
@@ -371,7 +360,7 @@ input{
                 <?php elseif ($account_status == 'Monthly Amortization'): ?>
                     <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
                     <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Deferred Cash Payment</option>
-                <?php elseif ($account_status == 'Partial DownPayment'): ?>
+                <?php elseif ($account_status == 'Partial DownPayment' || $account_status == 'Full DownPayment'): ?>
                     <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
                     <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
                 <?php endif; ?>
@@ -707,7 +696,7 @@ $(document).on('change', ".acc-interest", function(e) {
 
     $(document).ready(function(){
 
-        $('#restructuring').submit(function(e){
+      $('#restructuring').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
 		 	$('.err-msg').remove();

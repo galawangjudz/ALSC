@@ -410,7 +410,7 @@ body{
                               <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width:125px;"></td>
                               <td style="font-size:12px;"><label for="tot_int" class="control-label">Total Interest: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label for="tot_amt_due">Total Amount Due: </label></td>
+                              <td style="font-size:12px;"><label for="tot_amt_due" class="control-label">Total Amount Due: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width:125px;"></td>
                           </tr>
                       </table>

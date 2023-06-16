@@ -46,28 +46,28 @@ if(isset($_GET['id'])){
                         <div class="col-md-4">		
                             <div class="form-group">
                                 <label class="control-label">Last Name: </label>
-                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_last_name" id="customer_last_name" value="<?php echo isset($meta['last_name']) ? $meta['last_name']: '' ?>">
+                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_last_name" id="customer_last_name" value="<?php echo isset($meta['last_name']) ? $meta['last_name']: '' ?>"readonly>
                             </div>
                            
                         </div>
                         <div class="col-md-3">		
                             <div class="form-group">
                                 <label class="control-label">First Name: </label>
-                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_first_name" id="customer_first_name" value="<?php echo isset($meta['first_name']) ? $meta['first_name']: '' ?>">	
+                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_first_name" id="customer_first_name" value="<?php echo isset($meta['first_name']) ? $meta['first_name']: '' ?>"readonly>	
                             </div>
                            
                         </div>
                         <div class="col-md-3">		
                             <div class="form-group">
                                 <label class="control-label">Middle Name: </label>
-                                <input type="text" class="form-control margin-bottom copy-input" name="customer_middle_name" id="customer_middle_name" value="<?php echo isset($meta['middle_name']) ? $meta['middle_name']: '' ?>">	
+                                <input type="text" class="form-control margin-bottom copy-input" name="customer_middle_name" id="customer_middle_name" value="<?php echo isset($meta['middle_name']) ? $meta['middle_name']: '' ?>"readonly>	
                             </div>
                          
                         </div>
                         <div class="col-md-2">		
                             <div class="form-group">
                                 <label class="control-label">Suffix Name: </label>
-                                <input type="text" class="form-control margin-bottom copy-input" name="customer_suffix_name" id="customer_suffix_name" value="<?php echo isset($meta['suffix_name']) ? $meta['suffix_name']: '' ?>">	
+                                <input type="text" class="form-control margin-bottom copy-input" name="customer_suffix_name" id="customer_suffix_name" value="<?php echo isset($meta['suffix_name']) ? $meta['suffix_name']: '' ?>"readonly>	
                             </div>
                          
                         </div>

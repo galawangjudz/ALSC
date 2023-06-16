@@ -206,14 +206,25 @@
 						
 						// Display the result in the element with id="demo"
 						
-						document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
+						//document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
 						
 						// If the count down is finished, write some text
 						if (distance<?php echo $id ?> < 0) {
 							clearInterval(x<?php echo $id ?>);
-							document.getElementById("demo<?php echo $id ?>").innerHTML = " Expired";
+							var element = document.getElementById("demo<?php echo $id ?>");
+							if (element !== null) {
+								element.innerHTML = "Expired";
+							}
+					
+						
+						}else{
+							var element = document.getElementById("demo<?php echo $id ?>");
+							if (element !== null) {
+								element.innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
+								}
 						
 						}
+
 						}, 1000);
 
 						
