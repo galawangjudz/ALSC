@@ -329,19 +329,15 @@ input{
 </style>
 <script type="text/javascript">
 	function opentab(evt, tabName) {
-		// Declare all variables
 		var i, tabcontent, tablinks;
-		// Get all elements with class="tabcontent" and hide them
 		tabcontent = document.getElementsByClassName("tabcontent");
 		for (i = 0; i < tabcontent.length; i++) {
 		  tabcontent[i].style.display = "none";
 		}
-		// Get all elements with class="tablinks" and remove the class "active"
 		tablinks = document.getElementsByClassName("tablinks");
 		for (i = 0; i < tablinks.length; i++) {
 		  tablinks[i].className = tablinks[i].className.replace(" active", "");
 		}
-		// Show the current tab, and add an "active" class to the button that opened the tab
 		document.getElementById(tabName).style.display = "block";
 		evt.currentTarget.className += " active";
 	  }
@@ -884,7 +880,6 @@ input{
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
 										<label>
-											
 											<input type="radio" name="chkOption3" value="1" <?php echo isset($csr_type)&&$csr_type == 1 ? 'checked' : ''; ?>>
 											<!-- 	Lot Only -->
 										</label>
@@ -925,7 +920,7 @@ input{
 											<label class="light" style="font-weight:normal;">Add Cost<label>
 										</div>
 									</div>
-									<input type="hidden" id="type_text" name="type_text">
+									<input type="text" id="type_text" name="type_text">
 									<br><br><br></hr>
 									<!-- <a href="#" class="float-right select-customer"><b>OR</b> Select Existing Customer</a>  -->
 									

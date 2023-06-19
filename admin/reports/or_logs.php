@@ -9,35 +9,68 @@ $from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-
 $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
 $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
 ?>
-<div class="card card-outline card-primary">
+<style>
+    .nav-or {
+        background-color: #007bff;
+        color: white !important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-or:hover {
+        background-color: #007bff !important;
+    }
+</style>
+<div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title">OR Logs</h3>
+		<h3 class="card-title"><b><i>OR Logs</i></b></h3>
 		<div class="card-tools">
 		</div>
 	</div>
 	<div class="card-body">
-        <div class="callout border-primary shadow rounded-0">
-            <h4 class="text-muted">Filter Date</h4>
-            <form action="" id="filter">
-            <div class="row align-items-end">
-                <div class="col-md-4 form-group">
-                    <label for="from" class="control-label">Date From</label>
-                    <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
-                </div>
-                <div class="col-md-4 form-group">
-                    <label for="to" class="control-label">Date To</label>
-                    <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
-                </div>
-                <div class="col-md-4 form-group">
-                    <label for="preparer" class="control-label">Preparer</label>
-                    <input type="text" id="preparer" name="preparer" value="<?= $preparer ?>" class="form-control form-control-sm rounded-0">
-                </div>
-                <div class="col-md-4 form-group">
-                    <button class="btn btn-default bg-gradient-navy btn-flat btn-sm"><i class="fa fa-filter"></i> Filter</button>
-			        <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="fa fa-print"></i> Print</button>
+        <div class="card card-outline rounded-0 card-maroon">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <h4><b><center>FILTER DATE</center></b></h4>
+                    <hr>
+                    <form action="" id="filter">
+                    <div class="row align-items-end">
+                        <div class="col-md-4 form-group">
+                            <label for="from" class="control-label">Date From:</label>
+                            <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="to" class="control-label">Date To:</label>
+                            <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
+                        </div>
+                        <?php
+                            $query = "SELECT DISTINCT user FROM or_logs";
+                            $result = mysqli_query($conn, $query);
+                            $columns = array();
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $columns[] = $row['user'];
+                            }
+
+                            // mysqli_close($conn);
+                        ?>
+                        <div class="col-md-4 form-group">
+                            <label for="preparer" class="control-label">Preparer:</label>
+                            <!-- <input type="text" id="preparer" name="preparer" value="<?= $preparer ?>" class="form-control form-control-sm rounded-0"> -->
+                            <select id="preparer" name="preparer" style="width:100%;height:30.5px;border:solid 1px #D3D3D3;">
+                            <?php
+                            // Populate the listbox with the column values
+                            foreach ($columns as $column) {
+                                echo "<option>$column</option>";
+                            }
+                            ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <button class="btn btn-info btn-flat" style="font-size:14px;"><i class="fa fa-filter"></i>&nbsp;&nbsp;Filter</button>
+                            <button class="btn btn-secondary border btn-flat" id="print" type="button" style="font-size:14px;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
             </div>
-            </form>
         </div>
         <div class="container-fluid" id="outprint">
             <style>
@@ -45,89 +78,100 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
                     padding: 0 !important;
                 }
             </style>
-            <h3 class="text-center"><b><?= $_settings->info('name') ?></b></h3>
-            <h4 class="text-center"><b>OR logs</b></h4>
+            <!-- <h3 class="text-center"><b><?= $_settings->info('name') ?></b></h3> -->
+            <!-- <h4 class="text-center"><b><i>OR logs</i></b></h4> -->
             <?php if($from == $to): ?>
-            <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)) ?></p>
+                <h4><p class="m-0 text-center"><b>OR Logs for the day of <?= date("F d, Y" , strtotime($from)) ?></b></h4>
             <?php else: ?>
-            <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)). ' - '.date("M d, Y" , strtotime($to)) ?></p>
+                <h4><p class="m-0 text-center"><b>OR Logs from&nbsp;<?= date("F d, Y" , strtotime($from)). ' - '.date("F d, Y" , strtotime($to)) ?></b></h4>
             <?php endif; ?>
             <hr>
-			<table class="table table-hover table-bordered">
-                <colgroup>
-					<col width="10%">
-					<col width="10%">
-					<col width="10%">
-				</colgroup>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Property ID</th>
+            <div class="card card-outline rounded-0 card-maroon" style="font-size:14px;">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <table class="table table-hover table-bordered" style="text-align:center;">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%">
+                                <col width="10%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Property ID</th>
 
-                        <th>OR No.</th>
-                        <th>Pay Date</th>
-                        <th>Amt Paid</th>
-                        <th>Preparer</th>
-                        <th>Date Prepared</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-					<?php 
-                    $i = 1;
-					$total_debit = 0;
-					$total_credit = 0;
-                    echo $preparer;
-                    //SELECT * FROM or_logs WHERE user = '$preparer' AND status = 0 AND gen_time BETWEEN '$from_date' AND '$to_date'
-					$query = $conn->query("SELECT * FROM `or_logs` where user = '$preparer' and status = '1' and date(gen_time) BETWEEN '{$from}' and '{$to}' order by date(pay_date) asc");
-					while($row = $query->fetch_assoc()):
-					?>
-					<tr>
-                    <td>
-                        <?= $i++; ?>
-                    </td>
-                    <td>
-                        <?= $row['property_id']; ?>
-                    </td>
-                    <td>
-                        <?= $row['or_no']; ?>
-                    </td>
-                    <td>
-                        <?= $row['pay_date']; ?>
-                    </td>
-                    <td>
-                        <?= $row['amount_paid']; ?>
-                    </td>
-                    <td>
-                        <?= $row['user']; ?>
-                    </td>
-                    <td>
-                        <?= $row['gen_time']; ?>
-                    </td>
-                    <td>
-                        <a href="/ALSC//report/print_soa.php?id=<?php echo $row["or_id"]; ?>" ,
-                            target="_blank" class="btn btn-flat btn-primary btn-sm" style="width:100%;font-size:14px;"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-                            OR</a>
-                    </td>
-					</tr>
-					<?php endwhile; ?>
-				</tbody>
-              
-			</table>
-
-                <?php
-                $lname = "";
-                $fname = "";
-                $username = "";
-                $amt_pd=0;
-            ?>
+                                    <th>OR No.</th>
+                                    <th>Pay Date</th>
+                                    <th>Amt Paid</th>
+                                    <th>Preparer</th>
+                                    <th>Date Prepared</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $i = 1;
+                                $total_debit = 0;
+                                $total_credit = 0;
+                                //SELECT * FROM or_logs WHERE user = '$preparer' AND status = 0 AND gen_time BETWEEN '$from_date' AND '$to_date'
+                                $query = $conn->query("SELECT * FROM `or_logs` where user = '$preparer' and status = '1' and date(gen_time) BETWEEN '{$from}' and '{$to}' order by date(pay_date) asc");
+                                while($row = $query->fetch_assoc()):
+                                ?>
+                                <tr>
+                                <td>
+                                    <?= $i++; ?>
+                                </td>
+                                <td>
+                                    <?= $row['property_id']; ?>
+                                </td>
+                                <td>
+                                    <?= $row['or_no']; ?>
+                                </td>
+                                <td>
+                                    <?= $row['pay_date']; ?>
+                                </td>
+                                <td>
+                                    <?= $row['amount_paid']; ?>
+                                </td>
+                                <td>
+                                    <?= $row['user']; ?>
+                                </td>
+                                <td>
+                                    <?= $row['gen_time']; ?>
+                                </td>
+                                <td>
+                                    <a href="/ALSC//report/print_soa.php?id=<?php echo $row["or_id"]; ?>" ,
+                                        target="_blank" class="btn btn-flat btn-sm btn-primary" style="width:100%;font-size:13px;"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+                                        OR</a>
+                                </td>
+                                </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        
+                        </table>
+            
+                    <?php
+                        $lname = "";
+                        $fname = "";
+                        $username = "";
+                        $amt_pd=0;
+                    ?>
+                    </div>
+                </div>
+            </div>
             <div class="card card-outline rounded-0 card-maroon" id="div_tally">
                 <div class="card-body">
                     <div class="container-fluid">
                         <table class="table table-bordered table-stripped" id="data-table"
                             style="text-align:center;">
                             <?php
-                            $query1 = "SELECT or_id,property_id,or_no,pay_date,user,gen_time,amount_paid, SUM(amount_paid) as amt_paid FROM or_logs WHERE status = 1 AND gen_time BETWEEN '{$from}' and '{$to}'";
+                            $query1 = "SELECT or_id, property_id, or_no, pay_date, user, gen_time, amount_paid, SUM(amount_paid) AS amt_paid
+                            FROM or_logs
+                            WHERE status = 1
+                              AND user = '{$preparer}'
+                              AND ((LEFT(gen_time, 10) >= '{$from}' AND LEFT(gen_time, 10) <= '{$to}')) OR ((LEFT(gen_time, 10)) = '{$from}' AND (LEFT(gen_time, 10)) = '{$to}');                
+                            ";
+
                             $query_run1 = mysqli_query($conn, $query1);
                             while ($row1 = mysqli_fetch_assoc($query_run1)) {
                                 $amt_pd = number_format($row1['amt_paid'], 2) . '<br>';
@@ -148,7 +192,7 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
                             ?>
                             <label style="text-align:center;width:100%;">CASHIER SALES TALLY</label>
                             <br>
-                            <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+                            <!-- <hr style="height:1px;border-width:0;color:gray;background-color:gray"> -->
                             <table class="table table-bordered table-stripped" id="data-table"
                                 style="text-align:center;">
                                 <tr>
@@ -167,7 +211,7 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
                                 <tr>
                                     <td style="width:50%;"><label>TOTAL COLLECTION:</label></td>
                                     <td>
-                                        <?php echo $amt_pd; ?>
+                                        <b><?php echo $amt_pd; ?></b>
                                     </td>
                                 </tr>
                             </table>
@@ -193,17 +237,11 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
                     </div>
                 </div>
             </div>
-
-
-            
-
-
 		</div>
 	</div>
+</div>
+</div>
 
-    
-</div>
-</div>
 <script>
 	$(document).ready(function(){
         $('#filter').submit(function(e){
@@ -232,6 +270,12 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
         })
 		
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
+        $(document).ready(function(){
+		
+		$('.table').dataTable();
+
+		
+	})
 	})
 	
 </script>

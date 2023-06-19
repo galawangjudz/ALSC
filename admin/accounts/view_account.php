@@ -17,32 +17,46 @@ if(isset($_GET['id'])){
     }
 </style>
 <div class="container-fluid">
-    <dl>
-        <dt class="text-muted">account</dt>
-        <dd class='pl-4 fs-4 fw-bold'><?= isset($name) ? $name : '' ?></dd>
-        <dt class="text-muted">Description</dt>
-        <dd class='pl-4'>
-            <p class=""><small><?= isset($description) ? html_entity_decode($description) : '' ?></small></p>
-        </dd>
-        <dt class="text-muted">Status</dt>
-        <dd class='pl-4 fs-4 fw-bold'>
-            <?php 
-            $status = isset($status) ? $status : 0;
-                switch($status){
-                    case 0:
-                        echo '<span class="badge badge-danger bg-gradient-danger px-3 rounded-pill">Inactive</span>';
-                        break;
-                    case 1:
-                        echo '<span class="badge badge-primary bg-gradient-primary px-3 rounded-pill">Active</span>';
-                        break;
-                    default:
-                        echo '<span class="badge badge-default border px-3 rounded-pill">N/A</span>';
+    <table class="table table-striped table-hover table-bordered" id="data-table">
+        <tr>
+            <td>
+                <b>Account:</b>
+            </td>
+            <td>
+                <?= isset($name) ? $name : '' ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Description:</b>
+            </td>
+            <td>
+                <?= isset($description) ? html_entity_decode($description) : '' ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Status:</b>
+            </td>
+            <td>
+                <?php 
+                $status = isset($status) ? $status : 0;
+                    switch($status){
+                        case 0:
+                            echo '<span class="badge badge-danger bg-gradient-danger px-3 rounded-pill">Inactive</span>';
                             break;
-                }
-            ?>
-        </dd>
-    </dl>
-    <div class="col-12 text-right">
-        <button class="btn btn-flat btn-sm btn-dark" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        case 1:
+                            echo '<span class="badge badge-primary bg-gradient-primary px-3 rounded-pill">Active</span>';
+                            break;
+                        default:
+                            echo '<span class="badge badge-default border px-3 rounded-pill">N/A</span>';
+                                break;
+                    }
+                ?>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <button type="button" class="btn btn-flat btn-danger" data-dismiss="modal" style="width:100%;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
     </div>
 </div>

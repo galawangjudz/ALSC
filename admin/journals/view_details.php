@@ -75,7 +75,7 @@ if(isset($_GET['id'])){
     <div class="clear-fix my-2"></div>
     <div class="text-right">
         <button class="btn btn-sm btn-flat btn-primary" type="button" id="edit_booking"><i class="fa fa-edit"></i> Edit</button>
-        <button class="btn btn-sm btn-flat btn-dark" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+        <button class="btn btn-sm btn-flat btn-secondary" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
     </div>
 </div>
 

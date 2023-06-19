@@ -5,6 +5,7 @@
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
+
 </style>
 <?php $usertype = $_settings->userdata('user_type'); ?>
 <!-- Main Sidebar Container -->
@@ -67,8 +68,16 @@
                         </p>
                       </a>
                     </li> 
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=clients/family_members" class="nav-link nav-members">
+                      <i class="nav-icon fas fa-cube"></i>
+                        <p>
+                          Family Members
+                        </p>
+                      </a>
+                    </li>  -->
 
-                    <li class="nav-header">Report</li>
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>
 
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
                     <li class="nav-item dropdown">
@@ -106,16 +115,11 @@
                         </p>
                       </a>
                     </li>  
-
-                    
-
-                    <li class="nav-header">Maintenance</li>
-                  
                   
                     <?php if ($usertype == "IT Admin"): ?>
 
 
-                    
+                      <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
 
 
                     <li class="nav-item dropdown">

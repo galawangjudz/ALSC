@@ -110,7 +110,43 @@ Class Master extends DBConnection {
 		return json_encode($resp);	
 	}
 	//////////////////
+	function delete_data(){
+		extract($_POST);
+		$del = $this->conn->query("UPDATE family_members SET status=2 where member_id = ".$id);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Information successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
+	}
+	function delete_inactive(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM family_members where member_id = ".$id);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Information successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
+	}
 
+	function add_data(){
+		extract($_POST);
+		$del = $this->conn->query("UPDATE family_members SET status=1 where member_id = ".$id);
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Information successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);	
+	}
 	function delete_lot(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM t_lots where c_lid = ".$id);
@@ -3093,6 +3129,15 @@ switch ($action) {
 	break;
 	case 'cancel_journal':
 		echo $Master->cancel_journal();
+	break;
+	case 'delete_data':
+		echo $Master->delete_data();
+	break;
+	case 'add_data':
+		echo $Master->add_data();
+	break;
+	case 'delete_inactive':
+		echo $Master->delete_inactive();
 	break;
 	
 	default:

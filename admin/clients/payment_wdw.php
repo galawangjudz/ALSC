@@ -243,7 +243,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="0" id="radio0">
                                             </div>
                                             <div style="float:left">
-                                                <label class="light">0%<label>
+                                                <label for="radio0" class="light">0%<label>
                                             </div>
                                         </td>
                                         <td>
@@ -259,7 +259,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="50" id="radio50">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio25">50%</label>
+                                                <label for="radio50">50%</label>
                                             </div>
                                         </td>
                                     </tr>
@@ -271,7 +271,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="75" id="radio75">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio25">75%</label>
+                                                <label for="radio75">75%</label>
                                             </div>
                                         </td>
                                         <td>
@@ -279,7 +279,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="100" id="radio100">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio25">100%</label>
+                                                <label for="radio100">100%</label>
                                             </div>
                                         </td>
                                     </tr>
