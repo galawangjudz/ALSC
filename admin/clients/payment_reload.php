@@ -69,7 +69,7 @@ if(isset($_GET['id'])){
 
 
 
-        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no, NULL as trans_date FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no,trans_date FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+        $invoices = $conn->query("SELECT due_date,pay_date, payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count, 0 AS excess, NULL as account_status, or_no, NULL as trans_date FROM property_payments WHERE md5(property_id) = '{$_GET['id']}'  UNION SELECT due_date,pay_date,payment_amount,amount_due,surcharge,interest,principal,remaining_balance,status,status_count,payment_count,excess,account_status,or_no,trans_date FROM t_invoice WHERE md5(property_id) = '{$_GET['id']}'  ORDER by payment_count");
         $l_last = $invoices->num_rows - 1;
         $payments_data = array(); 
         if($invoices->num_rows <= 0){
