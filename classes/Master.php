@@ -875,7 +875,6 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$data = "c_duration = DATE_ADD('$ext_duration',INTERVAL $duration DAY)";
 		$save = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
-				
 		if($save){
 			$resp['status'] = 'success';
 		
@@ -1489,7 +1488,7 @@ Class Master extends DBConnection {
 			if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
 			}else{
-					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' WHERE property_id =".$prop_id);
+					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
 			}
 		endwhile;
 
@@ -1540,6 +1539,8 @@ Class Master extends DBConnection {
 		//rem set to zero for cts
 		$rem_prcnt = 0;
 		//echo $status;
+	
+		
 
 		if ((($payment_type1 == 'Partial DownPayment') && ($acc_status == 'Reservation') || ($acc_status == 'Partial DownPayment')) || ($payment_type1 == 'Full DownPayment') && ($acc_status == 'Full DownPayment') && ($acc_status == 'Partial DownPayment')){
 			$rebate = 0;
@@ -2016,6 +2017,7 @@ Class Master extends DBConnection {
 				endif;
 			endif;
 
+		
 			// lagay ako dito condition para sa payment of balance
 
 						//$principal = $amount_paid - $rebate;
@@ -2023,7 +2025,12 @@ Class Master extends DBConnection {
 					///
 
 		}
-		
+		if ($retention == '1'){
+			$status = 'RETENTION';
+
+		}
+
+
 
 		$data = " property_id = '$prop_id' ";
 		$data .= ", payment_amount = '$amount_paid' ";
@@ -2356,32 +2363,44 @@ Class Master extends DBConnection {
 
 		//echo $l_days;
 
-		if ($amount_paid < ($monthly_pay * 3)){
-			$mustbe = number_format($monthly_pay * 3,2);
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Credit Principal Amount must be P " . $mustbe . " or more." ;
-			return json_encode($resp);
-		}
-		
-		if($datetime2 > $datetime1){
-			if($l_days >= 30){
+		if ($retention == 0){
+
+	
+
+			if ($amount_paid < ($monthly_pay * 3)){
+				$mustbe = number_format($monthly_pay * 3,2);
 				$resp['status'] = 'failed';
-				$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
+				$resp['msg'] = "Credit Principal Amount must be P " . $mustbe . " or more." ;
 				return json_encode($resp);
 			}
-		}
-		
-		if($tot_amount_due == $amount_paid){
-			if ($status == 'Payment of Balance'){
+			
+			if($datetime2 > $datetime1){
+				if($l_days >= 30){
+					$resp['status'] = 'failed';
+					$resp['msg'] = "Account is not Full Update cannot insert into Principal !!" ;
+					return json_encode($resp);
+				}
+			}
+
+
+			if($tot_amount_due == $amount_paid){
+				if ($status == 'Payment of Balance'){
+					$status = 'C PRIN';
+				}
+			}
+	
+			if ($status == 'Credit to Principal'){
 				$status = 'C PRIN';
 			}
+
+		}else{
+			
+			if ($status == 'RETENTION'){
+				$status = 'RETENTION';
+			}
+
 		}
-
-		if ($status == 'Credit to Principal'){
-			$status = 'C PRIN';
-		}
-
-
+		
 		$principal = $amount_paid + $rebate;
 		$balance = $balance - $principal;
 		$status_count = $status_count ;
@@ -2533,20 +2552,11 @@ Class Master extends DBConnection {
 		extract($_POST);
 			
 		$prop_id = $_POST['prop_id'];
-		$payment_type1 = $_POST['payment_type1'];
+		
 		$payment_type2 = $_POST['payment_type2'];
-		$dp_bal = $_POST['dp_bal'];
 
-		$acc_surcharge1 = $_POST['acc_surcharge1'];
-
-		$dp_sur = $dp_bal + $acc_surcharge1;
-		$no_payment = $_POST['no_payment'];
-		$monthly_down = $_POST['monthly_down'];
-
-		$first_dp_date = $_POST['first_dp_date'];
-		$full_down_date = $_POST['full_down_date'];
-
-		$adj_prin_bal = $_POST['adj_prin_bal'];
+	
+		
 		$terms= $_POST['terms'];
 		$interest_rate = $_POST['interest_rate'];
 		$fixed_factor = $_POST['fixed_factor'];
@@ -2559,23 +2569,32 @@ Class Master extends DBConnection {
 		$total_sur = $acc_surcharge1 + $acc_surcharge2;
 		$amt_to_be_financed = $_POST['amt_to_be_financed'];
 		$balance = $_POST['balance'];
+		$balance = (float) str_replace(",", "", $balance);
 		$total_balance = $balance + $acc_interest + $acc_surcharge2;
 		$restructured_date = $_POST['restructured_date'];
 		$amount_due = $acc_interest + $total_sur;
 		
-		echo $total_balance;
-		//$amt_to_be_financed1 = (float) str_replace(",", "", $amt_to_be_financed);
-		//$adj_prin_bal1 = (float) str_replace(",", "", $adj_prin_bal);
-		//$monthly_amortization1 = (float) str_replace(",", "", $monthly_amortization);
-		//$balance1 = (float) str_replace(",", "", $balance);
+	
+		$data = "c_payment_type2 = '$payment_type2' ";
+		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
+				
+				$payment_type1 = $_POST['payment_type1'];
+				$dp_bal = $_POST['dp_bal'];
+				$acc_surcharge1 = $_POST['acc_surcharge1'];
+				$dp_sur = $dp_bal + $acc_surcharge1;
+				$no_payment = $_POST['no_payment'];
+				$monthly_down = $_POST['monthly_down'];
+				$first_dp_date = $_POST['first_dp_date'];
+				$full_down_date = $_POST['full_down_date'];
+				$adj_prin_bal = $_POST['adj_prin_bal'];
 			
-		$data = " c_payment_type1 = '$payment_type1' ";
-		$data .= ", c_payment_type2 = '$payment_type2' ";
-		$data .= ", c_net_dp = '$net_dp' ";
-		$data .= ", c_no_payments = '$no_payment' ";
-		$data .= ", c_monthly_down = '$monthly_down' ";
-		$data .= ", c_first_dp = '$first_dp_date' ";
-		$data .= ", c_full_down = '$full_down_date' ";
+				$data .= ", c_payment_type1 = '$payment_type1' ";
+				$data .= ", c_net_dp = '$net_dp' ";
+				$data .= ", c_monthly_down = '$monthly_down' ";
+				$data .= ", c_no_payments = '$no_payment' ";
+				$data .= ", c_first_dp = '$first_dp_date' ";
+				$data .= ", c_full_down = '$full_down_date' ";
+			}
 		$data .= ", c_amt_financed = '$amt_to_be_financed' ";
 		$data .= ", c_terms = '$terms' ";
 		$data .= ", c_interest_rate = '$interest_rate' ";
@@ -2628,7 +2647,6 @@ Class Master extends DBConnection {
 
 		if($save & $save2){
 			$resp['status'] = 'success';
-	
 			$this->settings->set_flashdata('success',"Restructuring successfully saved.");
 
 		}else{
@@ -2731,6 +2749,40 @@ Class Master extends DBConnection {
 		}
 
 		return json_encode($resp);
+	}
+
+
+	function set_retention(){
+		extract($_POST);
+		$ret = $this->conn->query("UPDATE properties set c_retention = '1' where property_id = ".$prop_id);
+		//echo $ret;
+		if($ret){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Property successfully set to Retention.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+			
+	}
+
+	function backout_acc(){
+		extract($_POST);
+		$backout = $this->conn->query("UPDATE properties set c_active = '0', c_backout_date = DATE(CURRENT_TIMESTAMP()) where property_id = ".$prop_id);
+		$lid = substr($prop_id,2,8);
+		$update_lot = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =". $lid);
+
+		//echo $ret;
+		if($backout && $update_lot){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Property successfully Backout.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+			
 	}
 
 	function save_group(){
@@ -3064,6 +3116,14 @@ switch ($action) {
 
 	case 'save_restructured':
 		echo $Master->save_restructured();
+	break;
+
+	case 'set_retention':
+		echo $Master->set_retention();
+	break;
+
+	case 'backout_acc':
+		echo $Master->backout_acc();
 	break;
 
 	case 'save_av':

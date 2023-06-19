@@ -206,14 +206,25 @@
 						
 						// Display the result in the element with id="demo"
 						
-						document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
+						//document.getElementById("demo<?php echo $id ?>").innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
 						
 						// If the count down is finished, write some text
 						if (distance<?php echo $id ?> < 0) {
 							clearInterval(x<?php echo $id ?>);
-							document.getElementById("demo<?php echo $id ?>").innerHTML = " Expired";
+							var element = document.getElementById("demo<?php echo $id ?>");
+							if (element !== null) {
+								element.innerHTML = "Expired";
+							}
+					
+						
+						}else{
+							var element = document.getElementById("demo<?php echo $id ?>");
+							if (element !== null) {
+								element.innerHTML = " Time Left: " + days<?php echo $id ?>+ "d " + hours<?php echo $id ?> + "h " + minutes<?php echo $id?> + "m " + seconds<?php echo $id ?> + "s ";
+								}
 						
 						}
+
 						}, 1000);
 
 						
@@ -270,7 +281,7 @@
 								<a class="dropdown-item view_data" href="./?page=ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
 								
 								
-								<?php if (($usertype == 'IT Admin' || $usertype == 'COO')): ?>	
+								<?php if (($usertype == 'IT Admin' || $usertype == 'COO') && ($status == 1 || $status == 0)): ?>	
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item extend_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no']?>"><span class="fa fa-hourglass text-success"></span> Extend</a>
 									<div class="dropdown-divider"></div>

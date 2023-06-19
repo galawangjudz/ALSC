@@ -62,7 +62,11 @@ if(isset($_GET['id'])){
     }
 ?>
 <?php
-$pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pay_date_input'])) : date("Y-m-d");;
+
+
+//$to = isset($_GET['pay_date_input']) ? $_GET['pay_date_input'] : date("Y-m-d");
+
+$pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pay_date_input'])) : date("Y-m-d");
 //$pay_date = date('Y-m-d');
 
 ?>

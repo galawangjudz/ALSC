@@ -103,7 +103,7 @@ $('#new_agent').click(function(){
 })
 
 $('.edit-agent').click(function(){
-	uni_modal('Edit Client','manage_agent.php?id='+$(this).attr('data-agent-id'))
+	uni_modal('Edit Agent','manage_agent.php?id='+$(this).attr('data-agent-id'))
 })
 
 
