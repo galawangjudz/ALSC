@@ -35,8 +35,10 @@ if(isset($_GET['id'])){
     </div> -->
     <!-- <label style="float:left;height:30px;width:100px;;background-color:red;">Set Due Date: </label> -->
     <div class="top_table"> 
-        <div id='overduediv' style="display:none;">
+        <div id='overduediv' style="display:block;">
             <div class="card card-outline rounded-0 card-maroon"> 
+            
+
                 <form action="<?php echo base_url ?>admin/?page=clients/payment_wdw&id=<?php echo $getID ?>" method="post" style="padding-top:15px;padding-left:15px;">
                     <input type="date" name="pay_date_input" id="pay_date_input" value="<?php echo isset($pay_date_ent) ? date("Y-m-d", strtotime($pay_date_ent)) : date("Y-m-d");?>">
                     <button type="submit" name="submit" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><i class="fa fa-arrow-right" aria-hidden="true"></i>&nbsp;&nbsp;Submit</button>
@@ -214,18 +216,18 @@ body{
                 
                          ?>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><label for="due_date_label">Due Date:</label></td> 
+                            <td style="width:25%;font-size:13px;"><label for="due_date">Due Date:</label></td> 
                             <td style="width:25%;font-size:13px;"><label for="amount_due">Amount Due:</label></td>
                            
                         </tr>
                         <tr>
-                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom due-date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
+                            <td style="width:25%;font-size:13px;"><input type="date" class="form-control-sm margin-bottom due-date" id = "due_date" name="due_date" value="<?php echo date("Y-m-d", strtotime($due_date_ent)); ?>" style="width:100%;" readonly></td>
                             <td style="width:25%;font-size:13px;" readonly><input type="text" class="form-control-sm margin-bottom amt-due"  id="amount_due" name="amount_due" value="<?php echo $amount_ent; ?>" style="width:100%;" readonly></td>
                           
                         </tr>
                         <tr>
-                        <td style="width:25%;font-size:13px;"><label for="pay_date">Transaction Date: </label></td>
-                            <td style="width:25%;font-size:13px;"><label for="due_date_label">OR Date:</label></td> 
+                        <td style="width:25%;font-size:13px;"><label for="trans_date_ent">Transaction Date: </label></td>
+                            <td style="width:25%;font-size:13px;"><label for="or_date_ent">OR Date:</label></td> 
                            
                         </tr>
                         <tr>
@@ -243,7 +245,7 @@ body{
                                                 <input type="radio" name="surcharge_percent" value="0" id="radio0">
                                             </div>
                                             <div style="float:left">
-                                                <label for="radio0" class="light">0%<label>
+                                                <label for="radio0">0%<label>
                                             </div>
                                         </td>
                                         <td>
@@ -293,7 +295,7 @@ body{
                         
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="status">Status:</label></td>
-                            <td style="width:25%;font-size:13px;"><label for="rebate">Rebate:</label></td>
+                            <td style="width:25%;font-size:13px;"><label for="rebate_amt">Rebate:</label></td>
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom pay-stat"  id="status" name="status" value="<?php echo $payment_status_ent; ?>" style="width:100%;" readonly></td>
@@ -320,7 +322,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="amount_paid">Amount Paid:</label></td>
-                            <td style="width:25%;font-size:13px;padding-left:10px;"><label for="or_no">OR #:</label></td>
+                            <td style="width:25%;font-size:13px;padding-left:10px;"><label for="or_no_ent">OR #:</label></td>
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td>
@@ -333,6 +335,7 @@ body{
                     <input type="hidden" class="form-control-sm margin-bottom under-pay"  id="under_pay" name="under_pay" value="<?php echo $underpay; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom excess"  id="excess" name="excess" value="<?php echo $excess; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom last-excess"  id="last_excess" name="last_excess" value="<?php echo $last_excess; ?>"> 
+                    <input type="hidden" class="form-control-sm margin-bottom retention"  id="retention" name="retention" value="<?php echo $retention; ?>"> 
                     <input type="hidden" class="form-control-sm margin-bottom over-due-mode"  id="over_due_mode" name="over_due_mode" value="<?php echo $over_due_mode_upay; ?>">   
                     <input type="hidden" class="form-control-sm margin-bottom monthly-pay"  id="monthly_pay" name="monthly_pay" value="<?php echo $monthly_pay; ?>">   
                     <input type="hidden" class="form-control-sm margin-bottom status-count"  id="status_count" name="status_count" value="<?php echo $count; ?>">   
@@ -359,7 +362,7 @@ body{
                         <tr>
                             <td>
                                 <?php 
-                                    if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization')){
+                                    if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization') && ($retention == '0')){
                                         echo '<a href="#" class="btn btn-success btn-flat credit-pri" id="credit_principal" style="width:100%;font-size:14px;"><i class="fa fa-wallet"></i>&nbsp;&nbsp;Credit to Principal</a> ';
                                     }
                                 ?>
@@ -367,15 +370,24 @@ body{
                         </tr>
                         <tr>
                             <td>
-                            <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
+                                <?php 
+                                if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization') && ($retention == '0')){ ?>
+                        
                                 <a href="#" class="btn btn-secondary btn-flat add-payment-bal" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:14px;"><i class='fa fa-coins'></i>&nbsp;&nbsp;Payment of Balance</a> 
-                            </td>
+                                
+                                <?php } ?>
+                              </td>
+
                         </tr>
 
                         <tr>
                             <td>
+                            <?php 
+                                if (($acc_status == 'Full DownPayment' && $p2 == 'Monthly Amortization') || ($p1 == 'No DownPayment' && $p2 == 'Monthly Amortization') || ($acc_status == 'Monthly Amortization') && ($retention == '0')){ ?>
+                        
                             <!-- <a href="#" class="btn btn-success btn-md move-in" id="move_in">Move In Fee</a>  -->
                                 <a href="#" class="btn btn-warning btn-flat adjustment" data-id="<?php echo md5($prop_id) ?>" style="width:100%;font-size:14px;"><i class='fa fa-adjust'></i>&nbsp;&nbsp;Adjustment</a> 
+                                <?php } ?>
                             </td>
                         </tr>
                         <tr>
@@ -498,24 +510,24 @@ body{
                     ?>
                     <table style="width:30%;float:right;table-layout: fixed;">
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Principal: </label></td>
-                            <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
+                            <td style="font-size:12px;"><label for="tot_prin" class="control-label">Total Principal: </label></td>
+                            <td><input type="text" class="form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo (number_format($row_prin['total_principal'],2)) ? (number_format($row_prin['total_principal'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Surcharge: </label></td>
+                            <td style="font-size:12px;"><label for="tot_sur" class="control-label">Total Surcharge: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo (number_format($row_sur['total_surcharge'],2)) ? (number_format($row_sur['total_surcharge'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Interest: </label></td>
+                            <td style="font-size:12px;"><label for="tot_int" class="control-label">Total Interest: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo (number_format($row_int['total_interest'],2)) ? (number_format($row_int['total_interest'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>   
                         <tr>
-                            <td style="font-size:12px;"><label class="control-label">Total Rebate: </label></td>
+                            <td style="font-size:12px;"><label for="tot_rebate" class="control-label">Total Rebate: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_rebate" id="tot_rebate" value="<?php echo (number_format($row_rebate['total_rebate'],2)) ? (number_format($row_rebate['total_rebate'],2)): ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
                         </tr>  
                         <tr>  
 
-                            <td style="font-size:12px;"><label>Total Amount to be Paid: </label></td>
+                            <td style="font-size:12px;"><label for="tot_amt_pd">Total Amount to be Paid: </label></td>
                             <td><input type="text" class= "form-control-sm" name="tot_amt_pd" id="tot_amt_pd" value="<?php echo (number_format($row_due['total_amt_paid'],2)) ? (number_format($row_due['total_amt_paid'],2)) : ''; ?>" style="width:70%;float:right;text-align:right;font-weight:bold;font-size:12px;" readonly></td>
 
                             <!-- <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" disabled></td> -->
@@ -589,14 +601,14 @@ body{
                 <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;" id="myTable">
                     <tr class="default-hide">
                         <td>
-                            <label>Check Date: </label>
+                            <label for="check_date">Check Date: </label>
                         <td>
                             <input type="date" class= "form-control-sm" name="check_date" id="check_date" value="" style="width:100%;">
                         </td>
                     </tr>
                     <tr class="default-hide">
                         <td>
-                            <label>Check Number: </label>
+                            <label for="check_number">Check Number: </label>
                         <td>
                             <input type="number" class= "form-control-sm" name="check_number" id="check_number" style="width:100%;">
                         </td>
@@ -604,7 +616,7 @@ body{
                     </tr>
                     <tr class="default-hide">
                         <td>
-                            <label>Bank/Branch: </label>
+                            <label for="branch">Bank/Branch: </label>
                         </td>
                         <td>
                             <input type="text" class= "form-control-sm" name="branch" id="branch" style="width:100%;">
@@ -1484,7 +1496,7 @@ $(document).ready(function(){
         }
 
 
-        if (statusValue === "Credit to Principal" || statusValue === 'Payment of Balance') {
+        if (statusValue === "Credit to Principal" || statusValue === 'Payment of Balance' || statusValue === 'RETENTION') {
             CreditPrincipalForm();
         }else{
             addPaymentForm();

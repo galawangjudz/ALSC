@@ -81,14 +81,6 @@
 
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier'): ?>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=reports/or_logs" class="nav-link nav-or">
-                      <i class="nav-icon fas fa-book"></i>
-                        <p>
-                          OR Logs
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=reports/av_logs" class="nav-link nav-av">
                       <i class="nav-icon fas fa-receipt"></i>
                         <p>
@@ -96,6 +88,16 @@
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=reports/or_logs" class="nav-link nav-or">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                          OR Logs
+                        </p>
+                      </a>
+                    </li> 
+
+                    
 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=loan-calcu" class="nav-link nav-loan-calcu">
@@ -114,7 +116,14 @@
                           Journal Entries
                         </p>
                       </a>
-                    </li>  
+
+                    </li> 
+
+                    
+
+                    
+
+                    <li class="nav-header">Maintenance</li>
                   
                     <?php if ($usertype == "IT Admin"): ?>
 

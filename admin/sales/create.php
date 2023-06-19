@@ -1783,6 +1783,18 @@ input{
 <script>
 		
 	$(document).ready(function(){
+
+		$(document).on('blur', ".buyer-bday", function(e) {
+		e.preventDefault();
+  		var dob = $(this).val();
+		//var dob = document.getElementById('birth_day').value;
+		dob = new Date(dob);
+		var today = new Date();
+		var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+		$('.buyer-age').val(age);
+		});
+
+
 		
 		$('.table').dataTable();
 
