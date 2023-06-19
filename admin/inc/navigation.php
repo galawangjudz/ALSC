@@ -119,11 +119,6 @@
 
                     </li> 
 
-                    
-
-                    
-
-                    <li class="nav-header">Maintenance</li>
                   
                     <?php if ($usertype == "IT Admin"): ?>
 
