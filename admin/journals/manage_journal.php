@@ -25,20 +25,20 @@ function format_num($number){
     <form action="" id="journal-form">
         <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
         <div class="row">
-            <div class="col-md-6 form-group">
-                <label for="journal_date" class="control-label">Entry Date</label>
+            <div class="col-md-12 form-group">
+                <label for="journal_date" class="control-label">Entry Date:</label>
                 <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 form-group">
-                <label for="description" class="control-label">Entry Description</label>
+            <div class="col-md-12 form-group">
+                <label for="description" class="control-label">Entry Description:</label>
                 <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6">
-                <label for="account_id" class="control-label">Account</label>
+                <label for="account_id" class="control-label">Account:</label>
                 <select id="account_id" class="from-control form-control-sm form-control-border select2">
                     <option value="" disabled selected></option>
                     <?php 
@@ -52,7 +52,7 @@ function format_num($number){
                 </select>
             </div>
             <div class="form-group col-md-6">
-                <label for="group_id" class="control-label">Account Group</label>
+                <label for="group_id" class="control-label">Account Group:</label>
                 <select id="group_id" class="from-control form-control-sm form-control-border select2">
                     <option value="" disabled selected></option>
                     <?php 
@@ -67,12 +67,12 @@ function format_num($number){
             </div>
         </div>
         <div class="row align-items-end">
-            <div class="form-group col-md-6">
-                <label for="amount" class="control-label">Amount</label>
+            <div class="form-group col-md-12">
+                <label for="amount" class="control-label">Amount:</label>
                 <input type="number" step="any" id="amount" class="form-control form-control-sm form-control-border text-right">
             </div>
             <div class="form-group col-md-6">
-                <button class="btn btn-default bg-gradient-navy btn-flat btn-sm" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
+                <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
             </div>
         </div>
         <table id="account_list" class="table table-stripped table-bordered">
@@ -84,7 +84,7 @@ function format_num($number){
                 <col width="20%">
             </colgroup>
             <thead>
-                <tr class="bg-gradient-primary">
+                <tr>
                     <th class="text-center"></th>
                     <th class="text-center">Account</th>
                     <th class="text-center">Group</th>

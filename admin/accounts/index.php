@@ -6,7 +6,7 @@
         object-position:center center;
     }
 </style>
-<div class="card card-outline card-primary rounded-0 shadow">
+<div class="card card-outline rounded-0 card-maroon" style="padding:5px;">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>List of Accounts</b></i></h3>
 		<div class="card-tools">
@@ -16,7 +16,7 @@
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
-			<table class="table table-bordered table-hover table-striped">
+			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
 				<colgroup>
 					<col width="5%">
 					<col width="20%">
@@ -26,7 +26,7 @@
 					<col width="15%">
 				</colgroup>
 				<thead>
-					<tr class="bg-gradient-primary text-light">
+					<tr>
 						<th>#</th>
 						<th>Date Created</th>
 						<th>Account</th>

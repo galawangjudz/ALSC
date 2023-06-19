@@ -73,7 +73,7 @@
 					</div>
 					<div style="clear:both;"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
 						<button name="save" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Submit</button>
 					</div>
 				</div>

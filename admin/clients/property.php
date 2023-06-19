@@ -140,11 +140,19 @@ body{
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
               <a class="btn btn-flat btn-primary add_member" id="add_member_btn" client-id="<?php echo $client_id; ?>" style="margin-bottom:10px;font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add Member</a>
-              <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id ");
-                if($qry2->num_rows <= 0){
-                    
-                    echo " No Family Member Found";
-                }else{ ?> 
+              <?php $qry2 = $conn->query("SELECT * FROM family_members where client_id = $client_id and status=1");
+                    $qry9 = $conn->query("SELECT * FROM family_members where client_id = $client_id and status=0");
+                    $qry8 = $conn->query("SELECT * FROM family_members where client_id = $client_id and status=2");
+                if($qry8->num_rows > 0){
+                  echo "<a class='btn btn-flat bg-secondary' client-id='' style='margin-bottom:10px;font-size:14px;margin-right:3px;' href='" . base_url . "admin/?page=clients/family_members/inactive_list&id=$client_id'><span class='fas fa-minus'></span>&nbsp;&nbsp;View Inactive Members List</a>";
+                }
+                if($qry9->num_rows > 0){
+                  echo "<a class='btn btn-flat bg-maroon' client-id='' style='margin-bottom:10px;font-size:14px;' href='" . base_url . "admin/?page=clients/family_members&id=$client_id'><span class='fas fa-eye'></span>&nbsp;&nbsp;View Pending List</a>";
+                }
+                if($qry2->num_rows <= 0 and $qry9->num_rows <= 0){
+                  echo " No Family Member Found";
+                }
+                else if($qry2->num_rows > 0){ ?> 
                 <table class="table2 table-bordered table-stripped">
                  
                     <thead style="text-align:center;"> 
