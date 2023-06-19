@@ -210,6 +210,20 @@ foreach($client->fetch_array() as $k =>$v){
 
     $(document).ready(function(){
 
+
+        $(document).on('blur', ".birth_day", function(e) {
+		e.preventDefault();
+  		var dob = $(this).val();
+		//var dob = document.getElementById('birth_day').value;
+		dob = new Date(dob);
+		var today = new Date();
+		var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+		$('#customer_age').val(age);
+	    });
+
+
+
+
         $('#manage-client').submit(function(e){
 			e.preventDefault();
             var _this = $(this)

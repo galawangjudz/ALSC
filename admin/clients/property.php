@@ -238,7 +238,8 @@ body{
                             <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
                             <td class="text-center" style="font-size:12px;width:30%;"><a class="btn btn-flat btn-success btn-s view_data" style="font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View</a>
                             <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-magnet" aria-hidden="true"></i>&nbsp;&nbsp;Set Retention</a>
-                            <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-redo" aria-hidden="true"></i>&nbsp;&nbsp;Restructuring</a></td>
+                            <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-redo" aria-hidden="true"></i>&nbsp;&nbsp;Restructuring</a>
+                            <a class="btn btn-danger btn-flat backout_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Backout</a></td>
                             <?php endwhile; }?>
                           </tr>
 
@@ -252,7 +253,7 @@ body{
                 <table style="width:100%;">
                   <tr style="width:100%;">
                     <td style="width:10%;">
-                      <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-success pull-right" style="width:100%; font-size:13px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;New Payment</a>              
+                      <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>" class="btn btn-flat btn-success pull-right" style="width:100%; font-size:13px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;New Payment</a>              
                     </td>
                     <td style="width:10%;">
                       <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-secondary pull-right"  style="width:100%;font-size:13px;"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>            
@@ -529,12 +530,7 @@ $(document).ready(function() {
 
 	})
 
-  
-  $('.add_payment').click(function(){
-		/* uni_modal('Add Payment','payments.php?id='+$(this).attr('data-id')) */
-	  uni_modal("<i class='fa fa-plus'></i> Add Payments",'clients/payments.php?id='+$(this).attr('data-id'),"mid-large")
 
-	})
 
   $('.new_payment').click(function(){
 		
@@ -551,6 +547,11 @@ $(document).ready(function() {
     $('.retention_acc').click(function(){
         _conf("Are you sure you want to retention?","retention_acc",[$(this).attr('prop-id')])
     }) 
+
+    $('.backout_acc').click(function(){
+        _conf("Are you sure you want to backout ?","backout_acc",[$(this).attr('prop-id')])
+    }) 
+
 
     $('.delete-last-or').click(function(){
         _conf("Are you sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
@@ -607,6 +608,30 @@ $(document).ready(function() {
             error:err=>{
                 console.log(err)
                 alert_toast("Can't Retention!",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+
+
+    function backout_acc($prop_id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=backout_acc",
+            method:"POST",
+            data:{prop_id: $prop_id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("Can't Backout!",'error');
                 end_loader();
             },
             success:function(resp){

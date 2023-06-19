@@ -875,7 +875,6 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$data = "c_duration = DATE_ADD('$ext_duration',INTERVAL $duration DAY)";
 		$save = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
-				
 		if($save){
 			$resp['status'] = 'success';
 		
@@ -2768,6 +2767,24 @@ Class Master extends DBConnection {
 			
 	}
 
+	function backout_acc(){
+		extract($_POST);
+		$backout = $this->conn->query("UPDATE properties set c_active = '0', c_backout_date = DATE(CURRENT_TIMESTAMP()) where property_id = ".$prop_id);
+		$lid = substr($prop_id,2,8);
+		$update_lot = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =". $lid);
+
+		//echo $ret;
+		if($backout && $update_lot){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Property successfully Backout.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+			
+	}
+
 	function save_group(){
 		extract($_POST);
 		$data = "";
@@ -3103,6 +3120,10 @@ switch ($action) {
 
 	case 'set_retention':
 		echo $Master->set_retention();
+	break;
+
+	case 'backout_acc':
+		echo $Master->backout_acc();
 	break;
 
 	case 'save_av':
