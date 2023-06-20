@@ -62,8 +62,15 @@ if(isset($_GET['id'])){
                 </div>
             </form>
             <div class="row-xs-3"> 
-                <button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-booked">Save</button>
-                <button type="button" class="btn btn-secondary btn-s" data-dismiss="modal">Close</button>
+                <table style="width:100%;">
+                    <tr>
+                        <td>
+                            <button class="btn btn-flat btn-default bg-maroon" form="manage-booked" style="width:100%; font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-flat btn-secondary" data-dismiss="modal" style="width:100%; font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Close</button>
+                        </td>
+                </table>
             </div>
         </div>
 

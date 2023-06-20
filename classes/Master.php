@@ -2550,6 +2550,7 @@ Class Master extends DBConnection {
 		$data .= ", citizenship = '$citizenship' ";
 		$data .= ", email = '$customer_email' ";
 		$data .= ", contact_no = '$contact_no' ";
+		$data .= ", status = 0 ";
 
 		
 		$check = $this->conn->query("SELECT * FROM `family_members` where `last_name` = '{$customer_last_name}' and

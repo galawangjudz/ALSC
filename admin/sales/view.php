@@ -299,7 +299,7 @@ if($csr->num_rows > 0){
                         </td>
                         <td>
                         <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "COO" or $usertype == "IT Admin" )){ ?>
-                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID; ?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
+                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
                         </td>
                         <td>
                             <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO Disapproved</button>
@@ -1033,7 +1033,7 @@ if($csr->num_rows > 0){
 
 
     $('.new-coo-approval').click(function(){   
-        uni_modal("<i class='fa fa-plus'></i> Coo Approval",'sales/approval.php?id='+$(this).attr('data-csr-id'),"mid-small")
+        uni_modal("<i class='fa fa-plus'></i> COO Approval",'sales/approval.php?id='+$(this).attr('data-csr-id'),"mid-small")
     })
 
 
