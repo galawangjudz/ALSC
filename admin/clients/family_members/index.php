@@ -13,7 +13,6 @@
 		color:black!important;
 		border-right:solid 3px white;
 	}
-
 	#container{
 		margin-right:auto;
 		margin-left:auto;
