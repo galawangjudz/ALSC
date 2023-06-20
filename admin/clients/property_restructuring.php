@@ -444,8 +444,7 @@ $(document).ready(function() {
 
 
     <?php if ($account_status == 'Monthly Amortization' || $account_status == 'Full DownPayment' || $account_status == 'No DownPayment' || $account_status == 'Deferred Cash Payment'): ?>
-      $('#down_frm').hide();
-      
+        $('#down_frm').hide();
         $('#net_dp').hide();
         $('#less_paymt_dte').hide();
         $('#dp_bal').hide();
