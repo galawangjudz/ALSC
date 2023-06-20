@@ -265,7 +265,7 @@ body{
                               <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-redo" aria-hidden="true"></i>
                                 <span class="tooltip">Restructuring</span></a>
-                              <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" id="view_tooltip">
+                              <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no'] ?>" id="view_tooltip">
                                 <i class="fa fa-archive" aria-hidden="true"></i>
                                 <span class="tooltip">Backout</span>
                               </a>
