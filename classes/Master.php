@@ -1131,7 +1131,7 @@ Class Master extends DBConnection {
 			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
 		elseif ($value == 3):
-			/* $save = $this->conn->query("UPDATE t_csr SET c_verify = 0, coo_approval = 0, c_revised = 1 where c_csr_no = ".$id); */
+			$save = $this->conn->query("UPDATE t_csr SET c_verify = 0, coo_approval = 0, c_revised = 1 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
 		endif;
 
@@ -2807,6 +2807,7 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$backout = $this->conn->query("UPDATE properties set c_active = '0', c_backout_date = DATE(CURRENT_TIMESTAMP()) where property_id = ".$prop_id);
 		$lid = substr($prop_id,2,8);
+		$inactive_csr = $this->conn->query("UPDATE t_csr set c_active = '0' where c_csr_no =". $csr_no);
 		$update_lot = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =". $lid);
 
 		//echo $ret;

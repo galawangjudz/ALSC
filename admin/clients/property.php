@@ -247,7 +247,7 @@ body{
                             <td class="text-center" style="font-size:12px;width:30%;"><a class="btn btn-flat btn-success btn-s view_data" style="font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View</a>
                             <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-magnet" aria-hidden="true"></i>&nbsp;&nbsp;Set Retention</a>
                             <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-redo" aria-hidden="true"></i>&nbsp;&nbsp;Restructuring</a>
-                            <a class="btn btn-danger btn-flat backout_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Backout</a></td>
+                            <a class="btn btn-danger btn-flat backout_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no']?> "><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Backout</a></td>
                             <?php endwhile; }?>
                           </tr>
 
@@ -557,7 +557,7 @@ $(document).ready(function() {
     }) 
 
     $('.backout_acc').click(function(){
-        _conf("Are you sure you want to backout ?","backout_acc",[$(this).attr('prop-id')])
+        _conf("Are you sure you want to backout ?","backout_acc",[$(this).attr('prop-id'),$(this).attr('csr-no')])
     }) 
 
 
@@ -630,12 +630,12 @@ $(document).ready(function() {
     }
 
 
-    function backout_acc($prop_id){
+    function backout_acc($prop_id,$csr_no){
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=backout_acc",
             method:"POST",
-            data:{prop_id: $prop_id},
+            data:{prop_id: $prop_id, csr_no: $csr_no},
             dataType:"json",
             error:err=>{
                 console.log(err)
