@@ -82,6 +82,16 @@ body{
   height:auto;
   width:100%;
 }
+#view_tooltip:hover span {
+    opacity:1;
+    width: auto;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding:5px;
+    transition: opacity 0.5s ease;
+}
 
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
@@ -247,7 +257,7 @@ body{
                             <td class="text-center" style="font-size:12px;width:30%;"><a class="btn btn-flat btn-success btn-s view_data" style="font-size:12px;height:30px;width:100px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View</a>
                             <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-magnet" aria-hidden="true"></i>&nbsp;&nbsp;Set Retention</a>
                             <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:150px;" data-id="<?php echo md5($row['property_id']) ?>"><i class="fa fa-redo" aria-hidden="true"></i>&nbsp;&nbsp;Restructuring</a>
-                            <a class="btn btn-danger btn-flat backout_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no']?> "><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Backout</a></td>
+                            <a class="btn btn-danger btn-flat backout_acc" style="font-size:12px;height:30px;width:150px;" prop-id="<?php echo $row['property_id'] ?>"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;Backout</a></td>
                             <?php endwhile; }?>
                           </tr>
 

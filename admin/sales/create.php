@@ -880,7 +880,7 @@ input{
 										<div class="panel-body form-group form-group-sm" style="margin-left:100px;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 										<div style="float:left;margin-right:2px;margin-top:3px;">
 										<label>
-											<input type="radio" name="chkOption3" value="1" <?php echo isset($csr_type)&&$csr_type == 1 ? 'checked' : ''; ?>>
+										<input type="radio" name="chkOption3" value="1" <?php echo (isset($csr_type) && $csr_type == 1) ? 'checked="checked"' : 'checked'; ?>>
 											<!-- 	Lot Only -->
 										</label>
 											<!-- <input id="lotonly" type="radio" name="chkOption3" onchange="getCtype(this);"/> -->
