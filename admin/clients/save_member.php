@@ -27,6 +27,7 @@ if(isset($_GET['id'])){
 }
 
 
+
 </style>
 
 <div class="card card-outline rounded-0 card-maroon">
