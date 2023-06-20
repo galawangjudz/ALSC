@@ -444,8 +444,7 @@ $(document).ready(function() {
 
 
     <?php if ($account_status == 'Monthly Amortization' || $account_status == 'Full DownPayment' || $account_status == 'No DownPayment' || $account_status == 'Deferred Cash Payment'): ?>
-      $('#down_frm').hide();
-      
+        $('#down_frm').hide();
         $('#net_dp').hide();
         $('#less_paymt_dte').hide();
         $('#dp_bal').hide();
@@ -606,6 +605,7 @@ $(document).on('change', ".acc-interest", function(e) {
 
   function payment_type2_changed(){
 		var l_payment_type2 = $('.pay-type2').val();
+    var acc_stat = $('.acc-status').val();
 		$('#loan_text').text("Amount to be financed :");
 		$('#interest_rate').show();
 		$('#fixed_factor').show();
@@ -613,8 +613,10 @@ $(document).on('change', ".acc-interest", function(e) {
 		$('#rate_text').show()
 		$('#factor_text').show()
 		$('#ma_text').text("Monthly Amortization ");
-    $('.acc-status').val("Monthly Amortization");
-		if (l_payment_type2 == "Deferred Cash Payment"){
+    if (acc_Stat == 'Monthly Amortization' or acc_stat == 'Deferred Cash Payment'){
+          $('.acc-status').val("Monthly Amortization");
+    }
+		if (l_payment_type2 == "Deferred Cash Payment" && (acc_Stat == 'Monthly Amortization' or acc_stat == 'Deferred Cash Payment')){
           $('#ma_text').text("Deferred Cash Payment ");
           $('.acc-status').val("Deferred Cash Payment");
           $('#loan_text').text("Deferred Amount:");

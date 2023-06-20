@@ -265,12 +265,12 @@ body{
                               <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-redo" aria-hidden="true"></i>
                                 <span class="tooltip">Restructuring</span></a>
-                              <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" id="view_tooltip">
+                              <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no'] ?>" id="view_tooltip">
                                 <i class="fa fa-archive" aria-hidden="true"></i>
                                 <span class="tooltip">Backout</span>
                               </a>
-                            </td>
-                            <?php endwhile; }?>
+                            </td>                            
+                            <?php endwhile; }?>                          
                           </tr>
 
                     </tbody>
@@ -579,7 +579,7 @@ $(document).ready(function() {
     }) 
 
     $('.backout_acc').click(function(){
-        _conf("Are you sure you want to backout ?","backout_acc",[$(this).attr('prop-id')])
+        _conf("Are you sure you want to backout ?","backout_acc",[$(this).attr('prop-id'),$(this).attr('csr-no')])
     }) 
 
 
@@ -652,12 +652,12 @@ $(document).ready(function() {
     }
 
 
-    function backout_acc($prop_id){
+    function backout_acc($prop_id,$csr_no){
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=backout_acc",
             method:"POST",
-            data:{prop_id: $prop_id},
+            data:{prop_id: $prop_id, csr_no: $csr_no},
             dataType:"json",
             error:err=>{
                 console.log(err)

@@ -109,7 +109,7 @@
                     </li>
                     <?php endif ; ?>
 
-                    <li class="nav-item">
+                 <!--    <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link nav-journals">
                         <i class="nav-icon fas fa-folder"></i>
                         <p>
@@ -117,13 +117,8 @@
                         </p>
                       </a>
 
-                    </li> 
+                    </li>  -->
 
-                    
-
-                    
-
-                    <li class="nav-header">Maintenance</li>
                   
                     <?php if ($usertype == "IT Admin"): ?>
 
@@ -131,7 +126,7 @@
                       <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
 
 
-                    <li class="nav-item dropdown">
+                 <!--    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=groups" class="nav-link nav-groups">
                         <i class="nav-icon fas fa-th-list"></i>
                         <p>
@@ -139,15 +134,15 @@
                         </p>
                       </a>
                     </li>
-
-                    <li class="nav-item dropdown">
+ -->
+                   <!--  <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=accounts" class="nav-link nav-accounts">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                           Accounts List
                         </p>
                       </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=agents_list/list" class="nav-link nav-agents_list">
                         <i class="nav-icon fa fa-id-card"></i>

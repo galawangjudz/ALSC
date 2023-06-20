@@ -25,6 +25,7 @@ if(isset($_GET['id'])){
     echo $prop_id;
 ?>
 <?php
+
 // Check if the textbox value was passed
 if (isset($_GET['textboxValue'])) {
   // Retrieve the textbox value from the GET parameters
