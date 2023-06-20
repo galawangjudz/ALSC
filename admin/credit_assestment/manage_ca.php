@@ -169,17 +169,17 @@ if(isset($_GET['id'])){
             <tr>
             <?php if ($cfo_stat == 0):?>
                 <td>
-                    <button type="button" style="width:100%" class="btn btn-success btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 1>Approved</button>
+                    <button type="button" style="width:100%;font-size:14px;" class="btn btn-success btn-flat ca_approved" csr-id ="<?php $csr_no ?>"  value= 1><i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;Approved</button>
                 </td>
                 <td>
-                    <button type="button" style="width:100%" class="btn btn-danger btn-s ca_approved" csr-id ="<?php $csr_no ?>"  value= 2>Disapproved</button>
+                    <button type="button" style="width:100%;font-size:14px;" class="btn btn-danger btn-flat ca_approved" csr-id ="<?php $csr_no ?>"  value= 2><i class="fa fa-thumbs-down" aria-hidden="true"></i>&nbsp;&nbsp;Disapproved</button>
                 </td>
                 <td>
-                    <button type="button" style="width:100%" class="btn btn-warning btn-s ca_approved" csr-id ="<?php $csr_no ?>" value= 3>For Revision</button>
+                    <button type="button" style="width:100%;font-size:14px;" class="btn btn-warning btn-flat ca_approved" csr-id ="<?php $csr_no ?>" value= 3><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;For Revision</button>
                 </td>
                 <td>
                     <?php endif;?>
-                    <button type="button" style="width:100%" class="btn btn-flat btn-secondary" data-dismiss="modal" style="font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Close</button>
+                    <button type="button" style="width:100%;font-size:14px;" class="btn btn-flat btn-secondary" data-dismiss="modal" style="font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close</button>
                 </td>
             </tr>
         </table>

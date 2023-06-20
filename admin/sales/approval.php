@@ -15,20 +15,19 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
     }
 
-$getID = $_GET['id'];
-echo $getID;
+
 ?>
 
 <div class="container-fluid">
 	<form action="" id="approval-form">
-		<input type="text" name="id"  id="id" value="<?php echo $getID; ?>">
-		<input type="text" name="lid" id="lid" value="<?php echo isset($meta['c_lot_lid']) ? $meta['c_lot_lid']: '' ?>">
-		<input type="text" name="reservation_amt" id="reservation_amt" value="<?php  echo isset($meta['c_reservation']) ? $meta['c_reservation']: '' ?>">
-		<input type="text" name="value" id="value" value="1">
+		<input type="hidden" name="id"  id="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
+		<input type="hidden" name="lid" id="lid" value="<?php echo isset($meta['c_lot_lid']) ? $meta['c_lot_lid']: '' ?>">
+		<input type="hidden" name="reservation_amt" id="reservation_amt" value="<?php  echo isset($meta['c_reservation']) ? $meta['c_reservation']: '' ?>">
+		<input type="hidden" name="value" id="value" value="1">
 
-      	<p><b>Location: </b><?php echo isset($meta['c_acronym']) ?> <?php echo isset($meta['c_block']) ?> <?php echo isset($meta['c_lot']) ?></p>
-        <p><b>Buyer's Name: </b><?php echo isset($meta['last_name']) ?> ,<?php echo isset($meta['first_name']) ?></p>
-        <p><b>NET TCP: </b><?php echo 'P'.number_format(isset($meta['c_net_tcp']),2) ?></p>
+      	<p><b>Location : </b><?php echo $meta['c_acronym'] ?> <?php echo $meta['c_block'] ?> <?php echo $meta['c_lot'] ?></p>
+        <p><b>Buyer's Name : </b><?php echo $meta['last_name']?> ,<?php echo $meta['first_name'] ?></p>
+        <p><b>NET TCP : </b><?php echo 'P'.number_format($meta['c_net_tcp'],2) ?></p>
 
 
 		<div class="form-group">
@@ -89,5 +88,4 @@ echo $getID;
 
 
 </script>
-
 
