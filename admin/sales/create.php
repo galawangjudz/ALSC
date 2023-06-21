@@ -920,7 +920,7 @@ input{
 											<label class="light" style="font-weight:normal;">Add Cost<label>
 										</div>
 									</div>
-									<input type="text" id="type_text" name="type_text">
+									<input type="hidden" id="type_text" name="type_text">
 									<br><br><br></hr>
 									<!-- <a href="#" class="float-right select-customer"><b>OR</b> Select Existing Customer</a>  -->
 									

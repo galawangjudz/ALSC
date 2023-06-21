@@ -360,7 +360,7 @@ input{
                     <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 =! "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
                 <?php elseif ($account_status == 'Reservation'): ?>
                     <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
-                    <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 =! "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
+                    <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
                 <?php elseif ($account_status == 'Monthly Amortization'): ?>
                     <option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
                     <option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Deferred Cash Payment</option>
@@ -616,7 +616,7 @@ $(document).on('change', ".acc-interest", function(e) {
     if (acc_stat == 'Monthly Amortization' || acc_stat == 'Deferred Cash Payment'){
           $('.acc-status').val("Monthly Amortization");
     }
-		if (l_payment_type2 == "Deferred Cash Payment" && (acc_stat == 'Monthly Amortization' || acc_stat == 'Deferred Cash Payment')){
+		if (l_payment_type2 == "Deferred Cash Payment" && (acc_stat == 'Monthly Amortization' || acc_stat == 'Deferred Cash Payment' || acc_stat == 'Full DownPayment' || acc_stat == 'Partial DownPayment')){
           $('#ma_text').text("Deferred Cash Payment ");
           $('.acc-status').val("Deferred Cash Payment");
           $('#loan_text').text("Deferred Amount:");

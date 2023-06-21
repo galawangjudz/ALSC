@@ -2123,7 +2123,7 @@ Class Master extends DBConnection {
 
 	function delete_payment(){
 		extract($_POST);
-		$qry = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$qry = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2151,7 +2151,7 @@ Class Master extends DBConnection {
 		$l_last_or_no = $last_row['or_no'];
 		$l_last_pay_cnt = $last_row['payment_count'];
 
-		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL' || $status == 'RESTRUCTURED'){
+		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL' || $l_last_status == 'RESTRUCTURED'){
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
 		
@@ -2220,7 +2220,7 @@ Class Master extends DBConnection {
 	function undo_delete_payment(){
 		extract($_POST);
 
-		$qry = ("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$qry = ("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count");
 		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2237,7 +2237,7 @@ Class Master extends DBConnection {
 		$pay_date = $last_row['pay_date'];
 		$or_no_ent = $last_row['or_no'];
 
-		$qry2 = ("SELECT * FROM property_payments where property_id =".$prop_id." and pay_date = '".$pay_date."' and or_no ='".$or_no_ent."' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$qry2 = ("SELECT * FROM property_payments where property_id =".$prop_id." and pay_date = '".$pay_date."' and or_no ='".$or_no_ent."' ORDER by  payment_count");
 		$sql = $this->conn->query($qry2);
 		#$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2291,7 +2291,7 @@ Class Master extends DBConnection {
 		}
 
 
-		$query_payments = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count DESC";
+		$query_payments = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 		$qry_pay = $this->conn->query($query_payments);
 		while($pay = $qry_pay->fetch_assoc()){
 			$l_status = substr($pay['status'],0,4);
@@ -2645,7 +2645,7 @@ Class Master extends DBConnection {
 	
 
 
-		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
