@@ -53,6 +53,7 @@
 		text-align:center;
 		color:black!important;
 	}
+
 	.dropdown-menu li a{
 		color:black!important;
 		border:gainsboro 1px solid;
@@ -96,7 +97,17 @@
 		
 		<a href="<?php echo base_url ?>admin/?page=credit_assestment" class="main_menu" id="ca-link" onclick="highlightLink('ca-link')"><i class="nav-icon fas fa-hands-helping"></i>&nbsp;&nbsp;&nbsp;Credit Assessment List</a>
 		<a href="<?php echo base_url ?>admin/?page=final_approval" class="main_menu" id="fa-link" onclick="highlightLink('fa-link')"><i class="nav-icon fas fa-file"></i>&nbsp;&nbsp;&nbsp;CFO Approval List</a>
-		<a href="<?php echo base_url ?>admin/?page=clients/property_list" class="main_menu" id="pl-link" onclick="highlightLink('pl-link')"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;Property Accounts</a>
+		
+		<div class="dropdown">
+			<a href="#" class="main_menu dropdown-toggle" id="pl-link" style="border-left:solid 3px white;" onclick="highlightLink('pl-link')"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;Property Accounts</a>
+			<!-- <a href="#" class="main_menu dropdown-toggle" id="ra-link" style="border-left:solid 3px white;" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-list"></i>&nbsp;&nbsp;&nbsp;RA List</a>
+			 -->	<ul class="dropdown-menu">	
+					<li><a href="<?php echo base_url ?>admin/?page=clients/property_list"><i class="nav-icon fas fa-clock"></i>&nbsp;&nbsp;&nbsp;Active</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=transfer"><i class="nav-icon fa fa-pen"></i>&nbsp;&nbsp;&nbsp;Transfer</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=backout"><i class="nav-icon fas fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Backout</a></li>
+				</ul>
+		</div>
+		
 	</div>
 </div>
 
