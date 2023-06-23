@@ -815,7 +815,7 @@ Class Master extends DBConnection {
 			if ($value == 2){
 				$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			}
-			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
+			$save = $this->conn->query("UPDATE t_csr SET c_revised=0, c_verify = ".$value." where c_csr_no = ".$id);
 			}
 		else{
 			if ($value == 2){
@@ -1126,6 +1126,8 @@ Class Master extends DBConnection {
 		$data = " c_ca_status = '$value' ";
 		if ($value == 1):
 			$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
+			//$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
+			$save = $this->conn->query("UPDATE t_csr SET c_verify = 1, coo_approval = 1, c_revised = 0 where c_csr_no = ".$id);
 		elseif ($value == 2):
 			$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
@@ -2585,26 +2587,71 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function res_approval(){
+		extract($_POST);
+		if ($value == 4):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl1='1' where property_id = ".$data_id);
+		elseif($value == 3):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl2='1' where property_id = ".$data_id);
+		elseif($value == 2):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl3='1' where property_id = ".$data_id);
+		elseif($value == 1):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl3='1',lvl2='1',lvl1='1' where property_id = ".$data_id);
+		endif;
+
+		if($update){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Restructuring for this account successfully approved!");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	function res_disapproval(){
+		extract($_POST);
+		if ($value == 4):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl1='2' where property_id = ".$data_id);
+		elseif($value == 3):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl2='2' where property_id = ".$data_id);
+		elseif($value == 2):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl3='2' where property_id = ".$data_id);
+		elseif($value == 1):
+			$update = $this->conn->query("UPDATE tbl_restructuring set lvl3='2',lvl2='2',lvl1='2' where property_id = ".$data_id);
+		endif;
+
+		if($update){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Restructuring for this account successfully disapproved!");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
 	function save_restructured(){
 		extract($_POST);
-			
+		
+
 		$prop_id = $_POST['prop_id'];
 		
-		$payment_type2 = $_POST['payment_type2'];
+		// $payment_type2 = $_POST['payment_type2'];
 
 	
 		
-		$terms= $_POST['terms'];
-		$interest_rate = $_POST['interest_rate'];
-		$fixed_factor = $_POST['fixed_factor'];
-		$start_date = $_POST['start_date'];
-		$monthly_amortization = $_POST['monthly_amortization'];
-		$mode = '1';
-		$acc_status = $_POST['acc_stat'];
+		// $terms= $_POST['terms'];
+		// $interest_rate = $_POST['interest_rate'];
+		// $fixed_factor = $_POST['fixed_factor'];
+		// $start_date = $_POST['start_date'];
+		// $monthly_amortization = $_POST['monthly_amortization'];
+		// $mode = '1';
+		// $acc_status = $_POST['acc_stat'];
 		$acc_surcharge2 = $_POST['acc_surcharge2'];
 		$acc_interest = $_POST['acc_interest'];
 		$total_sur = $acc_surcharge1 + $acc_surcharge2;
-		$amt_to_be_financed = $_POST['amt_to_be_financed'];
+		// $amt_to_be_financed = $_POST['amt_to_be_financed'];
 		$balance = $_POST['balance'];
 		$balance = (float) str_replace(",", "", $balance);
 		$total_balance = $balance + $acc_interest + $acc_surcharge2;
@@ -2612,38 +2659,37 @@ Class Master extends DBConnection {
 		$amount_due = $acc_interest + $total_sur;
 		
 	
-		$data = "c_payment_type2 = '$payment_type2' ";
-		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
+		// $data = "c_payment_type2 = '$payment_type2' ";
+		// if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
 				
-				$payment_type1 = $_POST['payment_type1'];
-				$dp_bal = $_POST['dp_bal'];
-				$acc_surcharge1 = $_POST['acc_surcharge1'];
-				$dp_sur = $dp_bal + $acc_surcharge1;
-				$no_payment = $_POST['no_payment'];
-				$monthly_down = $_POST['monthly_down'];
-				$first_dp_date = $_POST['first_dp_date'];
-				$full_down_date = $_POST['full_down_date'];
-				$adj_prin_bal = $_POST['adj_prin_bal'];
+		// 		$payment_type1 = $_POST['payment_type1'];
+		// 		$dp_bal = $_POST['dp_bal'];
+		// 		$acc_surcharge1 = $_POST['acc_surcharge1'];
+		// 		$dp_sur = $dp_bal + $acc_surcharge1;
+		// 		$no_payment = $_POST['no_payment'];
+		// 		$monthly_down = $_POST['monthly_down'];
+		// 		$first_dp_date = $_POST['first_dp_date'];
+		// 		$full_down_date = $_POST['full_down_date'];
+		// 		$adj_prin_bal = $_POST['adj_prin_bal'];
 			
-				$data .= ", c_payment_type1 = '$payment_type1' ";
-				$data .= ", c_net_dp = '$net_dp' ";
-				$data .= ", c_monthly_down = '$monthly_down' ";
-				$data .= ", c_no_payments = '$no_payment' ";
-				$data .= ", c_first_dp = '$first_dp_date' ";
-				$data .= ", c_full_down = '$full_down_date' ";
-			}
-		$data .= ", c_amt_financed = '$amt_to_be_financed' ";
-		$data .= ", c_terms = '$terms' ";
-		$data .= ", c_interest_rate = '$interest_rate' ";
-		$data .= ", c_fixed_factor = '$fixed_factor' ";
-		$data .= ", c_monthly_payment = '$monthly_amortization' ";
-		$data .= ", c_start_date = '$start_date' ";
-		$data .= ", c_account_status = '$acc_status'";
-		$data .= ", c_restructured = $mode ";
+		// 		$data .= ", c_payment_type1 = '$payment_type1' ";
+		// 		$data .= ", c_net_dp = '$net_dp' ";
+		// 		$data .= ", c_monthly_down = '$monthly_down' ";
+		// 		$data .= ", c_no_payments = '$no_payment' ";
+		// 		$data .= ", c_first_dp = '$first_dp_date' ";
+		// 		$data .= ", c_full_down = '$full_down_date' ";
+		// 	}
+		// $data .= ", c_amt_financed = '$amt_to_be_financed' ";
+		// $data .= ", c_terms = '$terms' ";
+		// $data .= ", c_interest_rate = '$interest_rate' ";
+		// $data .= ", c_fixed_factor = '$fixed_factor' ";
+		// $data .= ", c_monthly_payment = '$monthly_amortization' ";
+		// $data .= ", c_start_date = '$start_date' ";
+		// $data .= ", c_account_status = '$acc_status'";
+		// $data .= ", c_restructured = $mode ";
 
-		$save = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
-	
-
+		// //$save = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
+		
 
 		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
 		$sql = $this->conn->query($qry);
@@ -2677,44 +2723,55 @@ Class Master extends DBConnection {
 		$data2 .= ", status = 'RESTRUCTURED' ";
 		$data2 .= ", status_count = '0' ";
 		$data2 .= ", payment_count = '$pay_count' ";
+		$data2 .= ", c_account_status = '$acc_stat'";
+		$data2 .= ", c_payment_type1 = '$payment_type1' ";
+		$data2 .= ", c_payment_type2 = '$payment_type2' ";
 
-		$save2 = $this->conn->query("INSERT INTO property_payments set ".$data2);
+		//$save2 = $this->conn->query("INSERT INTO property_payments set ".$data2);
+		$save2 = $this->conn->query("INSERT INTO tbl_restructuring set ".$data2);
 
+			if($save2){
+			//if($save & $save2){
+				$resp['status'] = 'success';
+				$this->settings->set_flashdata('success',"Restructuring successfully saved.");
 
-
-		if($save & $save2){
-			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Restructuring successfully saved.");
-
-		}else{
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
-		}
-		return json_encode($resp);
+			}else{
+				$resp['status'] = 'failed';
+				$resp['err'] = $this->conn->error."[{$sql}]";
+			}
+			return json_encode($resp);
 	}
-
 	function save_av(){
 		extract($_POST);
 		$data = " c_av_no = '$av_no' ";
 		$data .= ", property_id = '$p_id' ";	 
 		$data .= ", c_av_date = '$av_date' ";	 
-	 	$data .= ", c_av_amount = '$av_amount' ";
+	 	$data .= ", c_av_amount = '$total_av' ";
+		$data .= ", c_deductions = '$av_deduc' ";
+		$data .= ", c_principal = '$av_prin' ";
 		$data .= ", c_surcharge = '$av_sur' ";
 		$data .= ", c_interest = '$av_int' ";
 		$data .= ", c_rebate = '$av_reb' ";
 		$data .= ", c_new_acc_no = '$new_acc_no' "; 
 		$data .= ", c_remarks = '$remarks' ";
-
-		$save = $this->conn->query("INSERT INTO t_av_payment set ".$data);
 		
-		if($save){
-			$resp['status'] = 'success';
-			if(empty($prop_id))
-				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
-
-		}else{
+		$check = $this->conn->query("SELECT * FROM `t_av_payment` where `c_av_no` ='{$av_no}'")->num_rows;
+		if($check > 0){
 			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
+			$resp['msg'] = " AV already exists.";
+			return json_encode($resp);
+		}else{
+			$save = $this->conn->query("INSERT INTO t_av_payment set ".$data);
+			
+			if($save){
+				$resp['status'] = 'success';
+				if(empty($prop_id))
+					$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
+
+			}else{
+				$resp['status'] = 'failed';
+				$resp['err'] = $this->conn->error."[{$sql}]";
+			}
 		}
 		return json_encode($resp);
 			
@@ -3151,7 +3208,6 @@ switch ($action) {
 	case 'save_member':
 		echo $Master->save_member();
 	break;
-
 	case 'save_restructured':
 		echo $Master->save_restructured();
 	break;
@@ -3170,7 +3226,6 @@ switch ($action) {
 	case 'move_av':
 		echo $Master->move_av();
 	break;
-
 	case 'save_group':
 		echo $Master->save_group();
 	break;
@@ -3200,6 +3255,12 @@ switch ($action) {
 	break;
 	case 'delete_inactive':
 		echo $Master->delete_inactive();
+	break;
+	case 'res_approval':
+		echo $Master->res_approval();
+	break;
+	case 'res_disapproval':
+		echo $Master->res_disapproval();
 	break;
 	
 	default:

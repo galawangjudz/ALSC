@@ -41,27 +41,44 @@ $getID = $_GET['id'];
     	<body>
         <!-- Modal -->
 		<form action="" method="post" enctype="multipart/form-data" id="upload-file">
-		<input id="id" type="hidden" name="id" value= "<?php echo $getID ?>" />
-		<input type="hidden" name="getFileName" id="getFileName" class="form-control required">	
-		<table>
-			<tr>
-				<td>
-				<label class="control-label">Select file:</label>
-				<input id="file" type="file" name="fileRA" class='form-control required' style="margin-bottom:15px;" onchange="moveToFolder()" multiple/>
-				</td>
-				<td>
-					<label class="control-label">File Name:</label>
-					<input type="text" name="title" id="title" class="form-control required" style="margin-bottom:15px;" onchange="moveToFolder()">
-				</td>
+			<input id="id" type="hidden" name="id" value= "<?php echo $getID ?>" />
+			<input type="hidden" name="getFileName" id="getFileName" class="form-control required">	
+			<table>
+				<tr>
+					<td>
+					<label class="control-label">Select file:</label>
+					<input id="file" type="file" name="fileRA" class='form-control required' style="margin-bottom:15px;" onchange="moveToFolder()" multiple/>
+					</td>
+					<td>
+						<label class="control-label">File Name:</label>
+						<input type="text" name="title" id="title" class="form-control required" style="margin-bottom:15px;" onchange="moveToFolder()">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button id="upload" style="width:100%;font-size:14px;" class="btn btn-flat bg-info" disabled><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;&nbsp;Upload</button>
+					</td>
+					<td>
+						<button type="button" class="btn btn-flat bg-maroon" data-dismiss="modal" style="width:100%; font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Close</button>
+                    </td>
 				</tr>
 			</table>	
-			<button id="upload">Upload</button>
 		</form>	
-
     </body>
 </html>
 
+<script>
+    var titleInput = document.getElementById("title");
+    var uploadButton = document.getElementById("upload");
 
+    titleInput.addEventListener("input", function() {
+      if (titleInput.value.trim() === "") {
+        uploadButton.disabled = true;
+      } else {
+        uploadButton.disabled = false;
+      }
+    });
+  </script>
 <script>
 	$('#upload').on('click', function() {
     var file_data = $('#file').prop('files')[0]; 

@@ -87,7 +87,7 @@
 					<li><a href="<?php echo base_url ?>admin/?page=ra"><i class="nav-icon fas fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Approved</a></li>
 				</ul>
 		</div>
-		<?php if ($usertype == "IT Admin" || $usertype == 'Cashier'){ ?>
+		<?php if ($usertype == 'IT Admin' || $usertype == 'Cashier' || $usertype == 'Billing'){ ?>
 		<a href="<?php echo base_url ?>admin/?page=reservation" class="main_menu" id="res-link" onclick="highlightLink('res-link')"><i class="nav-icon fas fa-calendar"></i>&nbsp;&nbsp;&nbsp;Reservation List</a>
 		
 		<?php }else{ ?>
@@ -113,7 +113,7 @@
                 <table class="table table-bordered table-stripped" style="text-align:center;">
                     <thead>
                         <tr>
-                        <?php if ($usertype == 'IT Admin' || $usertype == 'Cashier'): ?>
+                        <?php if ($usertype == 'IT Admin' || $usertype == 'Cashier' || $usertype == 'Billing'): ?>
 				        <th>Actions</th>
                         <?php endif?>
                         <th>Property ID</th>
@@ -136,7 +136,7 @@
                                 
                         ?>
                         <tr>
-                        <?php if ($usertype == 'IT Admin' || $usertype == 'Cashier'): ?>
+                        <?php if ($usertype == 'IT Admin' || $usertype == 'Cashier' || $usertype == 'Billing'): ?>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
