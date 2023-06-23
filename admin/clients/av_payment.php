@@ -63,7 +63,7 @@ if (isset($_GET['id'])) {
     display: none;
 } 
 </style>
-<body>
+<body onload = "getTotalAV();">
 <div class="card card-outline rounded-0 card-maroon" style="width:100%;">
 	<div class="card-header">
 	    <h3 class="card-title"><?php echo !isset($_GET['id']) ? "Move to AV" :"Move to AV" ?></h3>
@@ -73,37 +73,79 @@ if (isset($_GET['id'])) {
             <form action="" id="manage-av">
                 <input type="hidden" name="av_id" id="av_id" value="<?php echo isset($meta['property_id']) ? md5($meta['property_id']) : ''; ?>">
                 <input type="hidden" name="p_id" id="p_id" value="<?php echo isset($prop_id) ? $prop_id : '' ?>">
-                <div class="form-group">
-                    <label class="control-label">AV No: </label>
-                    <input type="text" class="form-control required" name="av_no" id="av_no">
-                </div> 
-                <div class="form-group">
-                    <label class="control-label">AV Date: </label>
-                    <input type="date" class="form-control required" name="av_date" id="av_date">
+                <div class="card card-outline rounded-0">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label class="control-label">AV No: </label>
+                                <input type="text" class="form-control required" name="av_no" id="av_no">
+                            </div> 
+                            <div class="form-group">
+                                <label class="control-label">AV Date: </label>
+                                <input type="date" class="form-control required" name="av_date" id="av_date">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="name">AV Amount: </label>
-                    <input type="text" class="form-control required" name="av_amount" id="av_amount" value="<?php echo isset($sumPrin) ? $sumPrin : '' ?>" readonly>
+                <div class="card card-outline rounded-0">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="name">Total Interest: </label>
+                                <input type="text" class="form-control required" name="av_int" id="av_int" value="<?php echo isset($sumInt) ? $sumInt : '' ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Total Surcharge: </label>
+                                <input type="text" class="form-control required" name="av_sur" id="av_sur" value="<?php echo isset($sumSur) ? $sumSur : '' ?>" readonly>
+                            </div>   
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="name">Interest: </label>
-                    <input type="text" class="form-control required" name="av_int" id="av_int" value="<?php echo isset($sumInt) ? $sumInt : '' ?>" readonly>
+
+                <div class="card card-outline rounded-0">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="name">Total Principal: </label>
+                                <input type="text" class="form-control required" name="av_prin" id="av_prin" value="<?php echo isset($sumPrin) ? $sumPrin : '' ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Total Rebate: </label>
+                                <input type="text" class="form-control required" name="av_reb" id="av_reb" value="<?php echo isset($sumReb) ? $sumReb : '' ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Total of Other Deductions: </label>
+                                <input type="text" class="form-control required" name="av_deduc" id="av_deduc" oninput = "getTotalAV();" required>
+                            </div>
+
+                            <table style="border:solid 1px black;width:100%;background-color:whitesmoke;">
+                                <tr>
+                                    <td>
+                                        <div class="container-fluid">
+                                            <div class="form-group">
+                                                <label for="name">AV AMOUNT : </label>
+                                                <input type="text" class="form-control required" name="total_av" id="total_av">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="name">Surcharge: </label>
-                    <input type="text" class="form-control required" name="av_sur" id="av_sur" value="<?php echo isset($sumSur) ? $sumSur : '' ?>" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="name">Rebate: </label>
-                    <input type="text" class="form-control required" name="av_reb" id="av_reb" value="<?php echo isset($sumReb) ? $sumReb : '' ?>" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="name">New Account Number: </label>
-                    <input type="number" class="form-control" name="new_acc_no"  id="new_acc_no">
-                </div>
-                <div class="form-group">
-                    <label for="name">Remarks: </label>
-                    <input type="text" class="form-control required" name="remarks" id="remarks">
+                <div class="card card-outline rounded-0">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="name">New Account Number: </label>
+                                <input type="number" class="form-control" name="new_acc_no"  id="new_acc_no">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Remarks: </label>
+                                <input type="text" class="form-control required" name="remarks" id="remarks">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <input type="hidden" class="form-control" name="paymentamt" id="paymentamt" value="<?php echo isset($meta['payment_amount']) ? ($meta['payment_amount']) : ''; ?>">
@@ -130,10 +172,10 @@ if (isset($_GET['id'])) {
             <table style="width:100%;">
                 <tr>
                     <td>
-				        <button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-av" style="width:100%; margin-right:5px;">Save</button>
+				        <button class="btn btn-flat btn-sm btn-default bg-maroon" form="manage-av" style="width:100%; margin-right:5px;font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
                     </td>
                     <td>
-				        <a class="btn btn-flat btn-sm btn-default" href="./?page=clients/property&id=<?php echo md5($meta['property_id']) ?>" style="width:100%; margin-left:5px;">Cancel</a>
+				        <a class="btn btn-flat btn-sm btn-default" href="./?page=clients/property&id=<?php echo md5($meta['property_id']) ?>" style="width:100%; margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
                     </td>
             </table>
         </div>
@@ -141,8 +183,22 @@ if (isset($_GET['id'])) {
 </div>
 </body>
 <script>
+
+
+
+function getTotalAV() {
+      var prin = parseFloat(document.getElementById('av_prin').value);
+      var reb = parseFloat(document.getElementById('av_reb').value);
+      var deduc = parseFloat(document.getElementById('av_deduc').value);
+
+      var res = (prin + reb) - deduc;
+
+      document.getElementById('total_av').value = res;
+    }
+  </script>
+<script>
+
 function validateForm() {
-	    // error handling
 	    var errorCounter = 0;
 
 	    $(".required").each(function(i, obj) {
@@ -205,7 +261,6 @@ function validateForm() {
             })
         })
 
-
 function move_av(){
     start_loader();
     $.ajax({
@@ -232,26 +287,14 @@ function move_av(){
         }
     })
 }
-// function new_av($prop_id){
-//         start_loader();
-//         $.ajax({
-//             url:_base_url_+"classes/Master.php?f=save_av",
-//             method:"POST",
-//             data:{prop_id: $prop_id},
-//             dataType:"json",
-//             error:err=>{
-//                 console.log(err)
-//                 alert_toast("An error occured!",'error');
-//                 end_loader();
-//             },
-//             success:function(resp){
-//                 if(typeof resp== 'object' && resp.status == 'success'){
-//                     location.reload();
-//                 }else{
-//                     alert_toast("An error occured.",'error');
-//                     end_loader();
-//                 }
-//             }
-//         })
-//     }
+</script>
+<script>
+  var currentDate = new Date();
+
+  var year = currentDate.getFullYear();
+  var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  var day = currentDate.getDate().toString().padStart(2, '0');
+  var formattedDate = year + '-' + month + '-' + day;
+
+  document.getElementById('av_date').value = formattedDate;
 </script>

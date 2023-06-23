@@ -89,15 +89,18 @@
 		<div class="card-body">
             <div class="container-fluid">
 			<div class="table-responsive">
-                <table class="table table-bordered table-stripped" style="text-align:center;">
+                <table class="table table-bordered table-stripped" style="text-align:center;font-size:14px;">
                     <thead>
                         <tr>
                         <th>AV No.</th>
+						<th>Property ID</th>
                         <th>AV Date</th>
                         <th>AV Amount</th>
-                        <th>Interest</th>
-                        <th>Rebate</th>
-						<th>Surcharge</th>
+						<th>Total Principal</th>
+                        <th>Total Interest</th>
+                        <th>Total Rebate</th>
+						<th>Total Surcharge</th>
+						<th>Other Deductions</th>
                         <th>New Account No</th>
                         <th>Remarks</th>
                         <th>Action</th>
@@ -112,11 +115,14 @@
                         ?>
                         <tr>
                         <td><?php echo $row["c_av_no"] ?></a></td>
+						<td><?php echo $row["property_id"] ?></a></td>
                         <td><?php echo $row["c_av_date"] ?></td>
                         <td><?php echo number_format($row["c_av_amount"],2) ?></td>
+						<td><?php echo number_format($row["c_principal"],2) ?></td>
 						<td><?php echo number_format($row["c_interest"],2) ?></td>
                         <td><?php echo number_format($row["c_rebate"],2) ?></td>
                         <td><?php echo number_format($row["c_surcharge"],2) ?></td>
+						<td><?php echo number_format($row["c_deductions"],2) ?></td>
                         <td><?php echo $row["c_new_acc_no"] ?></td>
                         <td><?php echo $row["c_remarks"] ?></td>
                         <td><a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['property_id'] ?>"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</td>

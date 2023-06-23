@@ -5,6 +5,11 @@
 <?php endif;?>
 
 <style>
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: default;
+}
 table tr{
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -221,7 +226,7 @@ body{
                           <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
                           <th style="text-align:center;font-size:13px;">LOCATION</th>
                           <th style="text-align:center;font-size:13px;">TYPE</th>
-                          <th style="text-align:center;font-size:13px;">RENTETION STATUS</th>
+                          <th style="text-align:center;font-size:13px;">RETETION STATUS</th>
                           <th style="text-align:center;font-size:13px;">NET TCP</th>  
                           <th style="text-align:center;font-size:13px;">ACTION</th>          
                         </tr>
@@ -283,7 +288,15 @@ body{
                 <table style="width:100%;">
                   <tr style="width:100%;">
                     <td style="width:10%;">
-                      <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>" class="btn btn-flat btn-success pull-right" style="width:100%; font-size:13px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;New Payment</a>              
+                    <?php
+                      $qry11 = $conn->query("SELECT * FROM tbl_restructuring where md5(property_id) = '{$_GET['id']}' and lvl3 = 0");
+                      if($qry11->num_rows > 0){
+                        echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for Restructuring</a>';
+                      }else{
+                        echo "<a href='./?page=clients/payment_wdw&id=" . md5($property_id) . "' class='btn btn-flat btn-success pull-right' style='width:100%; font-size:13px;'><span class='fas fa-plus'></span>&nbsp;&nbsp;New Payment</a>";
+
+                      }
+                    ?>
                     </td>
                     <td style="width:10%;">
                       <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-secondary pull-right"  style="width:100%;font-size:13px;"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>            
@@ -371,7 +384,7 @@ body{
                     <div class="form-group">
                       <table>
                           <tr>
-                          <?php $qry_prin = "SELECT SUM(payment_amount) AS p_amnt_total FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+                          <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}'";
 
                             $result = mysqli_query($conn, $qry_prin);
 
@@ -380,7 +393,7 @@ body{
                                 // Fetch the result as an associative array
                                 $row = mysqli_fetch_assoc($result);
                                 // Get the sum value
-                                $total_prin = $row["p_amnt_total"];
+                                $total_prin = $row["p_principal"];
                                 // Display the sum value
                             } else {
                                 echo "No results found.";
@@ -519,7 +532,7 @@ body{
                       <table>
                           <tr>
                               <td style="font-size:12px;"><label for="tot_prin2" class="control-label">Total Principal: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_prin2" id="tot_prin2" value="<?php echo isset($total_principal) ? $total_principal: ''; ?>" disabled></td>
+                              <td><input type="text" class= "form-control-sm" name="tot_prin2" id="tot_prin2" value="<?php echo isset($total_prin) ? number_format($total_prin): ''; ?>.00" disabled></td>
                               <td style="font-size:12px;"><label for="tot_sur2" class="control-label">Total Surcharge: </label></td>
                               <td><input type="text" class= "form-control-sm" name="tot_sur2" id="tot_sur2" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
                               <td style="font-size:12px;"><label for="tot_int2" class="control-label">Total Interest: </label></td>

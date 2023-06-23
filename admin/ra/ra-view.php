@@ -136,10 +136,10 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
     font-weight:bold;
     }
     .modal-content{
-    width:1035px;
+    width:auto;
     height:auto;
     margin-left:auto;
-    max-width:1035px;
+    //max-width:1035px;
     display: block!important; /* remove extra space below image */
     }
     .titles{
@@ -326,7 +326,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                             <table style="width:100%;">
                                 <tr>
                                     <td>
-                                    <button type="button" style="width:100%;" class="btn btn-flat btn-sm btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" style="width:50%;font-size:14px;">
+                                    <button type="button" style="width:100%;" class="btn btn-flat btn-sm btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="width:50%;font-size:14px;">
                                     <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
                                     <span class="sr-only">Toggle Dropdown</span>
                                     </button>  
@@ -340,9 +340,11 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </td>
                                     <td>
                                     <?php if($c_ca_status == 0){?>
-                                        <a attachment-id="<?php echo $getID; ?>" class="btn btn-flat btn-primary" data-toggle="modal" id="upload_file" style="width:100%;margin-right:5px;font-size:14px;">For Revision&nbsp;&nbsp;<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></a>
+                                        <a attachment-id="<?php echo $getID; ?>" class="btn btn-flat btn-sm btn-success" data-toggle="modal" id="upload_file" style="width:100%;margin-right:5px;font-size:14px;"><i class="fas fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;For Revision</a>
                                     <?php } ?>
-                                    <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-flat btn-sm btn-primary" style="width:100%;margin-left:5px;font-size:14px;"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;E-mail</a>
+                                    </td>
+                                    <td>
+                                        <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-flat btn-sm btn-primary" style="width:100%;font-size:14px;"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;E-mail</a>
                                     </td>
                                 </tr>
                             </table>
@@ -943,8 +945,8 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                     <td><span class="badge badge-warning"> Pending </span></td>
                                                     <?php if ($usertype == 'IT Admin' || $usertype == 'SOS'): ?>
                                                         <td class="actions">
-                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs approved-upload">Approved<span class="fa fa-check"></a> 
-                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-xs" id="delete_upload">Delete<span class="fa fa-trash"></a>
+                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-primary btn-xs btn-flat approved-upload"><i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;Approved</a> 
+                                                        <a data-upload-id="<?php echo $row1['id'] ?>" class="btn btn-danger btn-flat btn-xs" id="delete_upload"><span class="fa fa-trash"></span>&nbsp;&nbsp;Delete</a>
                                                         </td>
                                                         <?php endif; ?>
                                                 <?php endif; ?>
@@ -1046,13 +1048,13 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">File Preview</h4>
+				<div class="modal-title" style="font-size:18px;"><b>File Preview</b></div>
 				<button type="button" class="close" data-dismiss="modal"></button>
 			</div>
 			<div class="modal-body">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn bg-maroon btn-flat btn-sm" data-dismiss="modal" style="width:100%;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Close</button>
 			</div>
 		</div>
 	</div>
@@ -1061,7 +1063,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 
 </body>
 <script>                                
-
 function showReplyForm(self) {
         var commentId = self.getAttribute("data-id");
         if (document.getElementById("form-" + commentId).style.display == "") {
@@ -1157,7 +1158,7 @@ function showReplyForm(self) {
 
 
     $('#upload_file').click(function(){
-        uni_modal("<i class='fa fa-upload'></i> Upload Old RA",'upload_ra/upload_files.php?id='+$(this).attr('attachment-id'))
+        uni_modal("<i class='fa fa-upload'></i>&nbsp;&nbsp;Upload Old RA",'upload_ra/upload_files.php?id='+$(this).attr('attachment-id'))
     })
    /*  $('#upload_file').click(function(){
 	uni_modal('Upload File','ra/upload_files.php?id='+$(this).attr('attachment-id'));
