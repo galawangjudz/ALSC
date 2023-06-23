@@ -648,7 +648,7 @@ body{
                     </table>
                     <table class="table2 table-bordered table-stripped" style="width:100%;table-layout: fixed;">
                             <tr>
-                                <td><a href="<?php echo base_url ?>or_logs.php", class="btn btn-flat btn-dark" style="width:100%;font-size:14px;"><i class="nav-icon fas fa-book"></i>&nbsp;&nbsp;OR Logs</a></td>
+                                <td><a href="<?php echo base_url ?>admin/?page=reports/or_logs", class="btn btn-flat btn-dark" style="width:100%;font-size:14px;"><i class="nav-icon fas fa-book"></i>&nbsp;&nbsp;OR Logs</a></td>
                             </tr>
                         </table>
                 </form>

@@ -313,6 +313,7 @@ Class Master extends DBConnection {
 
 			//lot computation
 			$username =  $_POST['username'];
+			$prop_id = $_POST['prop_id'];
 			$lot_lid = $_POST['l_lid'];
 			$lot_area = $_POST['lot_area'];
 			$price_sqm = $_POST['price_per_sqm'];
@@ -388,6 +389,7 @@ Class Master extends DBConnection {
 			$data .= ", c_verify = 0 ";
 			$data .= ", coo_approval = 0";
 			$data .= ", c_revised = 0";
+			$data .= ", old_property_id = '$prop_id'";
 
 
 			$i = 1;
@@ -816,6 +818,7 @@ Class Master extends DBConnection {
 				$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			}
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
+
 			}
 		else{
 			if ($value == 2){
@@ -831,9 +834,9 @@ Class Master extends DBConnection {
 				$this->settings->set_flashdata('success',"RA successfully verified.");
 			}else{
 
+				$update = $this->conn->query("UPDATE t_approval_csr SET c_csr_status = 3 where c_csr_no = ".$id);
 				
 				$resp['status'] = 'success';
-			
 				$this->settings->set_flashdata('success',"RA successfully void.");
 			}
 		}else{
@@ -2123,7 +2126,7 @@ Class Master extends DBConnection {
 
 	function delete_payment(){
 		extract($_POST);
-		$qry = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$qry = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2151,7 +2154,7 @@ Class Master extends DBConnection {
 		$l_last_or_no = $last_row['or_no'];
 		$l_last_pay_cnt = $last_row['payment_count'];
 
-		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL' || $status == 'RESTRUCTURED'){
+		if ($l_last_status == 'RETENTION' || $l_last_status == 'RECOMPUTED' || $l_last_status == 'ADDITIONAL' || $l_last_status == 'RESTRUCTURED'){
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
 		
@@ -2220,7 +2223,7 @@ Class Master extends DBConnection {
 	function undo_delete_payment(){
 		extract($_POST);
 
-		$qry = ("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$qry = ("SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count");
 		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2237,7 +2240,7 @@ Class Master extends DBConnection {
 		$pay_date = $last_row['pay_date'];
 		$or_no_ent = $last_row['or_no'];
 
-		$qry2 = ("SELECT * FROM property_payments where property_id =".$prop_id." and pay_date = '".$pay_date."' and or_no ='".$or_no_ent."' ORDER by due_date, pay_date, payment_count, remaining_balance DESC");
+		$qry2 = ("SELECT * FROM property_payments where property_id =".$prop_id." and pay_date = '".$pay_date."' and or_no ='".$or_no_ent."' ORDER by  payment_count");
 		$sql = $this->conn->query($qry2);
 		#$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2291,7 +2294,7 @@ Class Master extends DBConnection {
 		}
 
 
-		$query_payments = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count DESC";
+		$query_payments = "SELECT * FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 		$qry_pay = $this->conn->query($query_payments);
 		while($pay = $qry_pay->fetch_assoc()){
 			$l_status = substr($pay['status'],0,4);
@@ -2645,7 +2648,7 @@ Class Master extends DBConnection {
 	
 
 
-		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by due_date, pay_date, payment_count, remaining_balance DESC";
+		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 		$sql = $this->conn->query($qry);
 		$l_last = $sql->num_rows - 1;
 		$payments_data = array(); 
@@ -2723,6 +2726,8 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$prop_id."");
 		
+		$sql2 = $this->conn->query("UPDATE property set c_reopen = 1 where property_id =".$prop_id."");
+
 		if($sql->num_rows <= 0){
 			$resp['status'] = 'failed';
 			$resp['err'] = 'No Payment Records yet! Please add to proceed with payments';
