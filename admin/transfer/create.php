@@ -1,20 +1,28 @@
-<?php if($_settings->chk_flashdata('success')): ?>
+<?php 
+
+if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+
+
 <?php 
 
 $username = $_settings->userdata('username'); 
+echo $_GET['id'];
+$prop_id = $_GET['prop_id'];
 
-/* $type = isset($_GET['type']) ? $_GET['type'] : 1 ; */
 if(isset($_GET['id']) && $_GET['id'] > 0){
+    
 	$csr = $conn->query("SELECT x.*, y.* FROM t_csr x inner join t_additional_cost y on x.c_csr_no = y.c_csr_no where md5(x.c_csr_no) = '{$_GET['id']}' ");
+
 
 	if($csr->num_rows > 0){
 		while($row = $csr->fetch_assoc()):
 			$c_csr_no =  $row['c_csr_no'];
 			$lot_id = $row['c_lot_lid'];
+          
 			$csr_type = $row['c_type'];
 			$lot_area = $row['c_lot_area'];
 			$price_sqm = $row['c_price_sqm'];
@@ -85,7 +93,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			}
 		endwhile;
 	}
-
+  
 	$qry = $conn->query("SELECT x.*, y.c_acronym FROM t_lots x LEFT join t_projects y on x.c_site = y.c_code WHERE c_lid ='" . $conn->real_escape_string($lot_id) ."'");
 	while($rows = $qry->fetch_assoc()):
 		$phase = $rows['c_acronym'];
@@ -446,7 +454,7 @@ input{
 <body onload="showTab()">
 <div class="card card-outline rounded-0 card-blue">
 	<div class="card-header">
-			<!-- <h3 class="card-title"><?php echo !isset($_GET['id']) ? "New Invoice" :"Edit Invoice" ?></h3> -->
+		
 		<h3 class="card-title"><b><i>New Reservation Application</b></i></h3>
 		<div class="card-tools">
 				<!-- <a href="./?page=sales/create" class="btn btn-flat btn-default bg-blue"><span class="fas fa-plus"></span>  Select Existing Client</a> -->
@@ -462,7 +470,8 @@ input{
 		</div>
 		<form method="" id="save_csr">
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
-			<input type="hidden" name="c_csr_no" value="<?php echo isset($c_csr_no) ? $c_csr_no : '';  ?>">
+			<input type="text" name="c_csr_no" value="">
+            <input type="text" name="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
 			<div id="Buyer" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">

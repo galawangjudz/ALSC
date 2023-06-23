@@ -32,7 +32,6 @@
         background-color:#E8E8E8;
     }   
 </style>
-
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h5 class="card-title"><b><i>Family Members List</b></i></h5>
@@ -70,8 +69,7 @@
                     <?php 
                         $i = 1;
                             $qry = $conn->query("SELECT * FROM family_members WHERE status=0 and client_id = '{$_GET['id']}'");
-                            while($row = $qry->fetch_assoc()):
-                                
+                            while($row = $qry->fetch_assoc()):    
                         ?>
                         <tr>
                         <td><?php echo $row["member_id"] ?></td>
@@ -90,7 +88,7 @@
                         <td><?php echo $row["contact_no"] ?></td>
                         <!-- <td><?php echo $row["relationship"] ?></td> -->
                         <?php if ($usertype == 'IT Admin'): ?>
-                        <td align="center">
+                            <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -101,10 +99,8 @@
                                 <a class="dropdown-item update_family_mem" data-id="<?php echo $row['member_id'] ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete-data" data-id="<?php echo $row['member_id'] ?>"><span class="fa fa-trash text-danger"></span>&nbsp;&nbsp;Delete</a>
-
-
                                 </div>
-                        </td>
+                            </td>
                         <?php endif; ?>
                         </tr>
                     <?php endwhile; ?>

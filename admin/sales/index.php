@@ -103,6 +103,9 @@
 		<div class="card-tools">
 			<a href="./?page=sales/create" class="btn btn-flat btn-default bg-primary border-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
 		</div>
+		<div class="card-tools">
+			<a href="./?page=transfer" class="btn btn-flat btn-default bg-secondary border-secondary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create Transfer</a>
+		</div>
 	</div>
 	<div class="card-body">
         <div class="container-fluid">
