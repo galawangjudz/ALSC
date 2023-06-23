@@ -1269,6 +1269,7 @@ Class Master extends DBConnection {
 			$start_date = $row['c_start_date'];
 			$remarks = $row['c_remarks'];
 			$active = $row['c_active'];
+			$old_prop_id = $row['old_prop_id'];
 			$code = substr($lot_lid, 0, 3);
 
 			$qry = $this->conn->query("SELECT c_project_code FROM t_projects where c_code =".$code);
@@ -1316,7 +1317,7 @@ Class Master extends DBConnection {
 			$data .= ", c_active = '$active' ";
 			$balance = ($net_tcp - $reservation);
 			$data .= ", c_balance = '$balance' ";
-
+			$data .= ", old_property_id = '$old_prop_id' ";
 
 			endwhile;
 
