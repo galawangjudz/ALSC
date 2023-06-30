@@ -1275,6 +1275,13 @@ Class Master extends DBConnection {
 			$old_prop_id = $row['old_prop_id'];
 			$code = substr($lot_lid, 0, 3);
 
+
+
+			$old_acct = $this->conn->query("SELECT c_date_of_sale from properties where old_prop_id =".$old_prop_id);
+			$old_data = $old_acct->fetch_array();
+			$old_date_of_sale = $old_data['date_of_sale'];
+
+
 			$qry = $this->conn->query("SELECT c_project_code FROM t_projects where c_code =".$code);
 			$proj_code = $qry->fetch_array();
 
