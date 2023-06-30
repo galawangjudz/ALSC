@@ -39,7 +39,7 @@
 		padding-right:50px;
 		background-color:transparent;
 	}
-	#pl-link{
+	#ra-link{
 		border-bottom: solid 2px blue;
 		background-color:#E8E8E8;
 	}
@@ -76,14 +76,39 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
+	.dropdown1:hover .dropdown-menu1 {
+		display: block;
+		margin-top:40px;
+		float:left;
+		width:227px;
+		height:130px;
+		line-height:30px;
+		text-align:center;
+		color:black!important;
+	}
 
+	.dropdown-menu1 li a{
+		color:black!important;
+		border:gainsboro 1px solid;
+		display: block;
+		height:40px;
+		line-height:40px;
+	}
+	.dropdown-menu1 li a:hover{
+		color:black!important;
+		border:gainsboro 1px solid;
+		display: block;
+		height:40px;
+		line-height:40px;
+		background-color:#E8E8E8;
+	}
 </style>
-<div class="card" id="container">
-    <div class="navbar-menu">
+<div class="card" id="container" style="display: flex; justify-content: center;">
+    <div class="navbar-menu" style="width:100%; margin-left: auto; margin-right: auto; max-width: 1200px;">
 		<div class="dropdown">
-			<a href="#" class="main_menu dropdown-toggle" id="ra-link" style="border-left:solid 3px white;" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-list"></i>&nbsp;&nbsp;&nbsp;RA List</a>
-				<ul class="dropdown-menu">
-					<li><a href="<?php echo base_url ?>admin/?page=sales"><i class="nav-icon fas fa-clock"></i>&nbsp;&nbsp;&nbsp;Pending</a></li>
+			<a href="#" class="main_menu dropdown-toggle" style="border-left:solid 3px white;" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-list"></i>&nbsp;&nbsp;&nbsp;RA List</a>
+				<ul class="dropdown-menu" style="border-radius:0px;height:122px;">
+					<li><a href="<?php echo base_url ?>admin/?page=sales" style="margin-top:-8px;"><i class="nav-icon fas fa-clock"></i>&nbsp;&nbsp;&nbsp;Pending</a></li>
 					<li><a href="<?php echo base_url ?>admin/?page=revision"><i class="nav-icon fa fa-pen"></i>&nbsp;&nbsp;&nbsp;Revision</a></li>
 					<li><a href="<?php echo base_url ?>admin/?page=ra"><i class="nav-icon fas fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Approved</a></li>
 				</ul>
@@ -98,16 +123,14 @@
 		<a href="<?php echo base_url ?>admin/?page=credit_assestment" class="main_menu" id="ca-link" onclick="highlightLink('ca-link')"><i class="nav-icon fas fa-hands-helping"></i>&nbsp;&nbsp;&nbsp;Credit Assessment List</a>
 		<a href="<?php echo base_url ?>admin/?page=final_approval" class="main_menu" id="fa-link" onclick="highlightLink('fa-link')"><i class="nav-icon fas fa-file"></i>&nbsp;&nbsp;&nbsp;CFO Approval List</a>
 		
-		<div class="dropdown">
-			<a href="#" class="main_menu dropdown-toggle" id="pl-link" style="border-left:solid 3px white;" onclick="highlightLink('pl-link')"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;Property Accounts</a>
-			<!-- <a href="#" class="main_menu dropdown-toggle" id="ra-link" style="border-left:solid 3px white;" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-list"></i>&nbsp;&nbsp;&nbsp;RA List</a>
-			 -->	<ul class="dropdown-menu">	
-					<li><a href="<?php echo base_url ?>admin/?page=clients/property_list"><i class="nav-icon fas fa-clock"></i>&nbsp;&nbsp;&nbsp;Active</a></li>
-					<li><a href="<?php echo base_url ?>admin/?page=transfer"><i class="nav-icon fa fa-pen"></i>&nbsp;&nbsp;&nbsp;Transfer</a></li>
-					<li><a href="<?php echo base_url ?>admin/?page=backout"><i class="nav-icon fas fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Backout</a></li>
+		<div class="dropdown" style="position: relative;">
+			<a href="#" class="main_menu dropdown-toggle" id="ra-link" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;Property Accounts</a>
+				<ul class="dropdown-menu" style="position: absolute; right: 0; transform: translateX(400%);height:122px;border-radius:0px;">
+					<li><a href="<?php echo base_url ?>admin/?page=clients/property_list" style="margin-top:-8px;"><i class="nav-icon fas fa-check-circle"></i>&nbsp;&nbsp;&nbsp;Active</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=transfer"><i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Transferred</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=backout"><i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Backout</a></li>
 				</ul>
 		</div>
-		
 	</div>
 </div>
 

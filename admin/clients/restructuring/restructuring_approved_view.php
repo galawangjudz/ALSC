@@ -1,35 +1,37 @@
 <?php 
 require_once('../../../config.php');
+if (isset($_GET['id'])) {
+    $prop = $conn->query("SELECT * FROM properties x INNER JOIN tbl_restructuring y ON x.property_id=y.property_id WHERE md5(x.property_id) = '{$_GET['id']}' ");
 
-if(isset($_GET['id'])){
-    $prop = $conn->query("SELECT * FROM pending_properties where md5(property_id) = '{$_GET['id']}' ");    
-    
-    while($row=$prop->fetch_assoc()){
-    
-        ///LOT
-        $prop_id = $row['property_id'];
-        $date_of_sale = $row['c_date_of_sale'];
-        $account_status = $row['c_account_status'];
-        $balance = $row['c_balance'];
-        $payment_type1 = $row['c_payment_type1'];
-        $payment_type2 = $row['c_payment_type2'];
-        $amt_fnanced = $row['c_amt_financed'];
-        $monthly_down = $row['c_monthly_down'];
-        $first_dp = $row['c_first_dp'];
-      
-        $full_down = $row['c_full_down'];
-        $terms = $row['c_terms'];
-        $interest_rate = $row['c_interest_rate'];
-        $fixed_factor = $row['c_fixed_factor'];
-        $monthly_payment = $row['c_monthly_payment'];
-        $no_payments = $row['c_no_payments'];
-        $net_dp = $row['c_net_dp'];
-        $start_date = $row['c_start_date'];
-
-
+    if ($prop !== false && $prop->num_rows > 0) {
+        while ($row = $prop->fetch_assoc()) {
+            ///LOT
+            $prop_id = $row['property_id'];
+            $res_id = $row['res_id'];
+            $date_of_sale = $row['c_date_of_sale'];
+            $account_status = $row['c_account_status'];
+            $balance = $row['c_balance'];
+            $payment_type1 = $row['c_payment_type1'];
+            $payment_type2 = $row['c_payment_type2'];
+            $amt_fnanced = $row['c_amt_financed'];
+            $monthly_down = $row['c_monthly_down'];
+            $first_dp = $row['c_first_dp'];
+            $full_down = $row['c_full_down'];
+            $terms = $row['c_terms'];
+            $interest_rate = $row['c_interest_rate'];
+            $fixed_factor = $row['c_fixed_factor'];
+            $monthly_payment = $row['c_monthly_payment'];
+            $no_payments = $row['c_no_payments'];
+            $net_dp = $row['c_net_dp'];
+            $start_date = $row['c_start_date'];
         }
-
+    } else {
+        echo 'No rows found!';
     }
+} else {
+    echo 'No id parameter provided!';
+}
+
 ?>
 
 <style>
@@ -275,6 +277,8 @@ input{
     
 	<div class="card-header">
 	<h3 class="card-title"><b>Property ID#: <i><?php echo $prop_id ?></i> </b></h3>
+    <h3 class="card-title" style="float:right;"><b>Restructure #: <i><?php echo $res_id ?></i> </b></h3>
+    
 	</div>
 	<div class="card-body">
     <div class="container-fluid">

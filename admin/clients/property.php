@@ -267,9 +267,20 @@ body{
                               <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:37px;" prop-id="<?php echo $row['property_id'] ?>" id="view_tooltip">
                                 <i class="fa fa-magnet" aria-hidden="true"></i>
                                 <span class="tooltip">Retention</span></a>
-                              <a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
-                                <i class="fa fa-redo" aria-hidden="true"></i>
-                                <span class="tooltip">Restructuring</span></a>
+                                <?php
+                                  $qry12 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=1 and status='RESTRUCTURED'");
+                                  if ($qry12->num_rows > 0) {
+                                      echo '<a class="btn btn-primary btn-flat restructured_data disabled" style="font-size:12px;height:30px;width:37px;" data-id="' . md5($row['property_id']) . '" id="view_tooltip" onclick="return false;">
+                                          <i class="fa fa-redo" aria-hidden="true"></i>
+                                          <span class="tooltip">Restructuring</span>
+                                      </a>';
+                                  } else {
+                                      echo '<a class="btn btn-primary btn-flat restructured_data" style="font-size:12px;height:30px;width:37px;" data-id="' . md5($row['property_id']) . '" id="view_tooltip">
+                                          <i class="fa fa-redo" aria-hidden="true"></i>
+                                          <span class="tooltip">Restructuring</span>
+                                      </a>';
+                                  }
+                                  ?>
                               <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no'] ?>" id="view_tooltip">
                                 <i class="fa fa-archive" aria-hidden="true"></i>
                                 <span class="tooltip">Backout</span>
@@ -289,7 +300,7 @@ body{
                   <tr style="width:100%;">
                     <td style="width:10%;">
                     <?php
-                      $qry11 = $conn->query("SELECT * FROM tbl_restructuring where md5(property_id) = '{$_GET['id']}' and lvl3 = 0");
+                      $qry11 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=1 and status='RESTRUCTURED'");
                       if($qry11->num_rows > 0){
                         echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for Restructuring</a>';
                       }else{
@@ -314,7 +325,7 @@ body{
                 </table>
               </div>  
                     <table class="table2 table-bordered table-stripped">
-                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' ORDER by due_date, pay_date, payment_count ASC");
+                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=0 ORDER by due_date, pay_date, payment_count ASC");
                      if($qry4->num_rows <= 0){
                            echo "No Payment Records";
                      }else{  ?>      
@@ -384,7 +395,7 @@ body{
                     <div class="form-group">
                       <table>
                           <tr>
-                          <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+                          <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=0";
 
                             $result = mysqli_query($conn, $qry_prin);
 
@@ -399,7 +410,7 @@ body{
                                 echo "No results found.";
                             }
                             ?>
-                            <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+                            <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=0";
 
                             $result = mysqli_query($conn, $qry_surcharge);
 
@@ -414,7 +425,7 @@ body{
                                 echo "No results found.";
                             }
                             ?>
-                            <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+                            <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=0";
 
                             $result = mysqli_query($conn, $qry_interest);
 
@@ -429,7 +440,7 @@ body{
                                 echo "No results found.";
                             }
                             ?>
-                            <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+                            <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}' and pending_status=0";
 
                               $result = mysqli_query($conn, $qry_amt_due);
 
