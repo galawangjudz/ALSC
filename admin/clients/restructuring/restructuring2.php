@@ -3,7 +3,7 @@ require_once('../../../config.php');
 
 if(isset($_GET['id'])){
     $prop = $conn->query("SELECT * FROM pending_properties where md5(property_id) = '{$_GET['id']}' ");    
-    
+
     while($row=$prop->fetch_assoc()){
     
         ///LOT
@@ -283,7 +283,7 @@ input{
         <div class="titles"><center><h5>Payment Computation<h5></center></div>
     </div>
 
-    <form action="" id="restructuring">
+    <form action="" id="restructuring2">
              
     <div class="panel-body form-group form-group-sm">
         <div class="main_box">
@@ -702,7 +702,7 @@ $(document).on('change', ".acc-interest", function(e) {
 
     $(document).ready(function(){
 
-      $('#restructuring').submit(function(e){
+      $('#restructuring2').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
 		 	$('.err-msg').remove();
@@ -716,7 +716,7 @@ $(document).on('change', ".acc-interest", function(e) {
             }    
             start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_restructured",
+				url:_base_url_+"classes/Master.php?f=save_restructured2",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

@@ -17,6 +17,7 @@ if(isset($_GET['id'])){
         $amt_fnanced = $row['c_amt_financed'];
         $monthly_down = $row['c_monthly_down'];
         $first_dp = $row['c_first_dp'];
+        $account_type1 = $row['c_account_type1'];
       
         $full_down = $row['c_full_down'];
         $terms = $row['c_terms'];

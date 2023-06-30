@@ -37,7 +37,6 @@
                             $qry = $conn->query("SELECT client_id, CONCAT_WS(' ',first_name, last_name) as full_name, gender, civil_status, 
                             birthdate, contact_no, email FROM property_clients ORDER BY last_name, first_name , middle_name");
                             while($row = $qry->fetch_assoc()):
-                                
                         ?>
                         <tr>
                         <?php if ($usertype == 'IT Admin'): ?>
@@ -70,7 +69,6 @@
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>
-           
 	        </div>                
             </div>
 

@@ -32,7 +32,7 @@
 		padding-right:50px;
 		background-color:transparent;
 	}
-	#pending-link{
+	#approved-link{
 		border-bottom: solid 2px blue;
 		background-color:#E8E8E8;
 	}
@@ -92,27 +92,15 @@
     border-radius: 6px;
     padding:5px;
     transition: opacity 0.5s ease;
-	}
-	.navbar-menu {
-        max-width: 1200px;
-    }
-
-    @media (max-width: 1200px) {
-        .navbar-menu {
-            flex-wrap: wrap;
-        }
-        .main_menu {
-            margin: 10px;
-        }
-    }
+}
 
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
     <div class="navbar-menu" style="max-width: 1200px; margin: 0 auto;">
-        <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_list" class="main_menu" style="border-left: solid 3px white;" id="pending-link" onclick="highlightLink('res-link')">
+        <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_list" class="main_menu" style="border-left: solid 3px white;" onclick="highlightLink('res-link')">
 			<i class="fa fa-clock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Pending List
         </a>
-        <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_approved_list" class="main_menu">
+        <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_approved_list" id="approved-link" class="main_menu">
 			<i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Approved List
 		</a>
         <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_disapproved_list" class="main_menu">
@@ -154,12 +142,12 @@
                     <tbody>
                     <?php                         
 					$i = 1;
-					if($usertype=='Billing' || $usertype=='IT Admin')
+					if($usertype=='Billing')
 					{
 						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
-						y.remaining_balance, y.payment_count,y.status,
-						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0 and y.status='RESTRUCTURED'
+						y.remaining_balance, y.payment_count,
+						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1
 						GROUP BY y.property_id;");
 
                             while($row = $qry->fetch_assoc()):   
@@ -187,7 +175,7 @@
 						<?php elseif ($row['lvl1'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl1'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <?php if($row['lvl2'] == 0): ?>
@@ -195,7 +183,7 @@
 						<?php elseif ($row['lvl2'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl2'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <?php if($row['lvl3'] == 0): ?>
@@ -203,7 +191,7 @@
 						<?php elseif ($row['lvl3'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl3'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <td>
@@ -211,7 +199,7 @@
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
-							<?php
+							<!-- <?php
 							?>
 							<?php 
 								if($usertype=="Billing"):
@@ -229,11 +217,11 @@
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
-								// elseif($usertype=="IT Admin"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								// 	echo '<span class="tooltip">Approved</span>';
-								// 	echo '</a>';
+								elseif($usertype=="IT Admin"):
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+									echo '<span class="tooltip">Approved</span>';
+									echo '</a>';
 								endif;
 							?>
 							<?php 
@@ -252,24 +240,24 @@
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
-							// elseif($usertype=="IT Admin"):
-							// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-							// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-							// 	echo '<span class="tooltip">Approved</span>';
-							// 	echo '</a>';
+							elseif($usertype=="IT Admin"):
+								echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+								echo '<span class="tooltip">Approved</span>';
+								echo '</a>';
 							endif;
-							?>
+							?> -->
                         	</td>
                         </tr>
                     <?php endwhile; ?>
 					<?php                         
 					}
-					elseif($usertype=='Manager' || $usertype=='IT Admin')
+					elseif($usertype=='Manager')
 					{
 						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
-						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=0 and y.status='RESTRUCTURED'
+						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1
 						GROUP BY y.property_id;");
 						
 								while($row = $qry->fetch_assoc()):   
@@ -297,7 +285,7 @@
 							<?php elseif ($row['lvl1'] == 1): ?>
 								<td><span class="badge badge-success">Approved </span></td>
 							<?php elseif ($row['lvl1'] == 2): ?>
-								<td><span class="badge badge-danger">Dispproved </span></td>
+								<td><span class="badge badge-danger">Disapproved </span></td>
 							<?php endif; ?>
 	
 							<?php if($row['lvl2'] == 0): ?>
@@ -305,7 +293,7 @@
 							<?php elseif ($row['lvl2'] == 1): ?>
 								<td><span class="badge badge-success">Approved </span></td>
 							<?php elseif ($row['lvl2'] == 2): ?>
-								<td><span class="badge badge-danger">Dispproved </span></td>
+								<td><span class="badge badge-danger">Disapproved </span></td>
 							<?php endif; ?>
 	
 							<?php if($row['lvl3'] == 0): ?>
@@ -313,7 +301,7 @@
 							<?php elseif ($row['lvl3'] == 1): ?>
 								<td><span class="badge badge-success">Approved </span></td>
 							<?php elseif ($row['lvl3'] == 2): ?>
-								<td><span class="badge badge-danger">Dispproved </span></td>
+								<td><span class="badge badge-danger">Disapproved </span></td>
 							<?php endif; ?>
 	
 							<td>
@@ -321,7 +309,7 @@
 									<i class="fa fa-eye" aria-hidden="true"></i>
 									<span class="tooltip">View</span>
 								</a>
-								<?php
+								<!-- <?php
 								?>
 								<?php 
 									if($usertype=="Billing"):
@@ -339,11 +327,11 @@
 										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 										echo '<span class="tooltip">Approved</span>';
 										echo '</a>';
-									// elseif($usertype=="IT Admin"):
-									// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-									// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-									// 	echo '<span class="tooltip">Approved</span>';
-									// 	echo '</a>';
+									elseif($usertype=="IT Admin"):
+										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+										echo '<span class="tooltip">Approved</span>';
+										echo '</a>';
 									endif;
 								?>
 								<?php 
@@ -362,33 +350,34 @@
 									echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Disapproved</span>';
 									echo '</a>';
-								// elseif($usertype=="IT Admin"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								// 	echo '<span class="tooltip">Approved</span>';
-								// 	echo '</a>';
+								elseif($usertype=="IT Admin"):
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+									echo '<span class="tooltip">Approved</span>';
+									echo '</a>';
 								endif;
-								?>
+								?> -->
 								</td>
 							</tr>
 						<?php endwhile; ?>
 					<?php                         
 					}
-					elseif($usertype=='COO' || $usertype=='IT Admin'){
+					elseif($usertype=='COO' || $usertype=='IT Admin')
+					{
 						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
-						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0 and y.status='RESTRUCTURED'
+						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=1
 						GROUP BY y.property_id;");
-                            while($row = $qry->fetch_assoc()):
+                            while($row = $qry->fetch_assoc()):   
 								  
                         ?>
                         <tr>
-						<td><?php echo $row["property_id"] ?></td>
+						<td><?php echo $row["property_id"] ?></a></td>
 						<?php $prop_id = $row["property_id"]; ?>
-						<td><?php echo $row["last_name"] ?></td>
-						<td><?php echo $row["first_name"] ?></td>
-						<td><?php echo $row["middle_name"] ?></td>
+						<td><?php echo $row["last_name"] ?></a></td>
+						<td><?php echo $row["first_name"] ?></a></td>
+						<td><?php echo $row["middle_name"] ?></a></td>
                         <!-- <td><?php echo number_format($row["payment_amount"],2) ?></td>
                         <td><?php echo $row["pay_date"] ?></td>
 						<td><?php echo $row["due_date"] ?></td>
@@ -405,7 +394,7 @@
 						<?php elseif ($row['lvl1'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl1'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <?php if($row['lvl2'] == 0): ?>
@@ -413,7 +402,7 @@
 						<?php elseif ($row['lvl2'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl2'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <?php if($row['lvl3'] == 0): ?>
@@ -421,7 +410,7 @@
 						<?php elseif ($row['lvl3'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl3'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <td>
@@ -429,7 +418,7 @@
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
-							<?php
+							<!-- <?php
 							?>
 							<?php 
 								if($usertype=="Billing"):
@@ -442,16 +431,16 @@
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
-								// elseif($usertype=="COO"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								// 	echo '<span class="tooltip">Approved</span>';
-								// 	echo '</a>';
-								// elseif($usertype=="IT Admin"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								// 	echo '<span class="tooltip">Approved</span>';
-								// 	echo '</a>';
+								elseif($usertype=="COO"):
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+									echo '<span class="tooltip">Approved</span>';
+									echo '</a>';
+								elseif($usertype=="IT Admin"):
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+									echo '<span class="tooltip">Approved</span>';
+									echo '</a>';
 								endif;
 							?>
 							<?php 
@@ -470,14 +459,14 @@
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
-							// elseif($usertype=="IT Admin"):
-							// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-							// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-							// 	echo '<span class="tooltip">Approved</span>';
-							// 	echo '</a>';
+							elseif($usertype=="IT Admin"):
+								echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+								echo '<span class="tooltip">Approved</span>';
+								echo '</a>';
 							endif;
-							?>
-                        	</td>
+							?> -->
+                        </td>
                         </tr>
 						<?php endwhile; ?>
 					<?php                         
@@ -493,16 +482,15 @@
 $(document).ready(function() {
     $('.table').dataTable(
         {
-                "ordering": false
+            "ordering": false
         }
     ); 
 });
-
+$('.view_res_coo').click(function(){
+	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_approved_view.php?id='+$(this).attr('data-id'),"mid-large")
+})
 $('.view_res').click(function(){
 	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id'),"mid-large")
-})
-$('.view_res_coo').click(function(){
-	uni_modal("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring2.php?id='+$(this).attr('data-id'),"mid-large")
 })
 $('.approved_res').click(function(){
 	_conf("Are you sure you want to restructure this account?","approved_res",[$(this).attr('data-id'),$(this).attr('value')])
