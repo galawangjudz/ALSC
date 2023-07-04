@@ -2692,7 +2692,6 @@ Class Master extends DBConnection {
 		
 	
 		$data = "c_payment_type2 = '$payment_type2' ";
-		$data3 = "c_payment_type2 = '$payment_type2' ";
 		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
 				
 				$payment_type1 = $_POST['payment_type1'];
@@ -2706,7 +2705,6 @@ Class Master extends DBConnection {
 				$adj_prin_bal = $_POST['adj_prin_bal'];
 			
 				$data .= ", c_payment_type1 = '$payment_type1' ";
-				$data3 .= ", c_payment_type1 = '$payment_type1' ";
 				$data .= ", c_net_dp = '$net_dp' ";
 				$data .= ", c_monthly_down = '$monthly_down' ";
 				$data .= ", c_no_payments = '$no_payment' ";
@@ -2779,8 +2777,6 @@ Class Master extends DBConnection {
 
 		$save2 = $this->conn->query("INSERT INTO property_payments set ".$data2);
 		//$save2 = $this->conn->query("INSERT INTO tbl_restructuring set ".$data3);
-
-
 
 		if($save & $save2){
 			$resp['status'] = 'success';

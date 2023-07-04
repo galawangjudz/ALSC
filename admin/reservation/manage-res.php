@@ -216,7 +216,7 @@ foreach($res->fetch_array() as $k =>$v){
 						<td><?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?> </td>
 					
 
-						<td><a href="#" class="btn btn-primary btn-xs ra-select" data-ra-no="<?php echo $row['ra_id'] ?>" data-ra-lot-lid="<?php echo $row['c_lot_lid'] ?>" data-csr-no="<?php echo $row['c_csr_no'] ?>" data-ra-site="<?php echo $row['c_acronym'] ?>" data-ra-block="<?php echo $row['c_block'] ?>" data-ra-lot="<?php echo $row['c_lot'] ?>" data-res-remaining="<?php echo $remaining_res ?>" data-ra-res="<?php echo $row['c_reservation_amt'] ?>" data-ra-fname="<?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?>">Select</a></td>
+						<td><a href="#" class="btn btn-primary btn-xs ra-select" style="width:100%;font-size:14px;" data-ra-no="<?php echo $row['ra_id'] ?>" data-ra-lot-lid="<?php echo $row['c_lot_lid'] ?>" data-csr-no="<?php echo $row['c_csr_no'] ?>" data-ra-site="<?php echo $row['c_acronym'] ?>" data-ra-block="<?php echo $row['c_block'] ?>" data-ra-lot="<?php echo $row['c_lot'] ?>" data-res-remaining="<?php echo $remaining_res ?>" data-ra-res="<?php echo $row['c_reservation_amt'] ?>" data-ra-fname="<?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?>"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</a></td>
 				   
 					</tr>
 				<?php endwhile; ?>

@@ -121,6 +121,39 @@
     </div>
 </div>
 
+<!-- 
+<div class="container-fluid">
+	<hr>
+	<form action="" id="filter">
+	<div class="row align-items-end">
+		
+		<?php
+			$query = "SELECT DISTINCT user FROM or_logs";
+			$result = mysqli_query($conn, $query);
+			$columns = array();
+			while ($row = mysqli_fetch_assoc($result)) {
+				$columns[] = $row['user'];
+			}
+
+			// mysqli_close($conn);
+		?>
+		<div class="col-md-4 form-group">
+			<label for="preparer" class="control-label">Preparer:</label>
+			<input type="text" id="preparer" name="preparer" value="<?= $preparer ?>" class="form-control form-control-sm rounded-0">
+			<select id="preparer" name="preparer" style="width:100%;height:30.5px;border:solid 1px #D3D3D3;">
+			
+			</select>
+		</div>
+		<div class="col-md-4 form-group">
+			<button class="btn btn-info btn-flat" style="font-size:14px;"><i class="fa fa-filter"></i>&nbsp;&nbsp;Filter</button>
+		</div>
+	</div>
+	</form>
+</div>
+
+ -->
+
+ 
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h3 class="card-title"><b><i>Restructuring List</b></i></h3>

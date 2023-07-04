@@ -297,7 +297,7 @@ input{
                         <input type="hidden" class="form-control margin-bottom required prop-id" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : 0; ?>">
      
                         <label class="control-label">Balance:</label>
-                        <input type="text" class="form-control margin-bottom required balance" name="balance" id="balance" value="<?php echo isset($balance) ? number_format($balance,2) : 0; ?>" tabindex = "1" >
+                        <input type="text" class="form-control margin-bottom required balance" name="balance" id="balance" value="<?php echo isset($balance) ? number_format($balance,2) : 0; ?>" tabindex = "1" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">	
@@ -315,7 +315,7 @@ input{
                               <option name="payment_type1" value="Deferred Cash Payment" <?php echo isset($account_status) && $account_status == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
                           </select>	
                         </div>	 -->
-                        <input type="text" class="form-control margin-bottom required acc-status" name="acc_stat" id="acc_stat" value="<?php echo isset($account_status) ? $account_status : 0; ?>" tabindex ="1" >
+                        <input type="text" class="form-control margin-bottom required acc-status" name="acc_stat" id="acc_stat" value="<?php echo isset($account_status) ? $account_status : 0; ?>" tabindex ="1" readonly>
                     </div>
                 </div>
             </div>
@@ -323,7 +323,7 @@ input{
               <div class="col-md-12">	
                   <div class="form-group">
                     <label class="control-label">Restructuring Date: </label>
-                    <input type="date" class="form-control restructured-date" name="restructured_date" id="restructured_date" value="<?php echo date('Y-m-d'); ?>" >
+                    <input type="date" class="form-control restructured-date" name="restructured_date" id="restructured_date" value="<?php echo date('Y-m-d'); ?>" readonly>
                   </div>
               </div>
           </div>
@@ -336,7 +336,7 @@ input{
                 select:invalid { color: gray; }
             </style>
             
-            <select name="payment_type1" id="payment_type1" class="form-control required pay-type1" tabindex = "2">
+            <select name="payment_type1" id="payment_type1" class="form-control required pay-type1" tabindex = "2" disabled>
             <?php if ($account_status == 'Monthly Amortization'): ?>
                 <option name="payment_type1" id="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Partial DownPayment</option>
                 <option name="payment_type1" id="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Full DownPayment</option>
@@ -358,7 +358,7 @@ input{
                 <style>
                     select:invalid { color: gray; }
                 </style>
-                <select name="payment_type2" id="payment_type2" class="form-control required pay-type2" tabindex = "3" >
+                <select name="payment_type2" id="payment_type2" class="form-control required pay-type2" tabindex = "3" disabled>
                 <?php if ($account_status == 'Deferred Cash Payment'): ?>
                     <option name="payment_type2" id="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
                     <option name="payment_type2" id="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 =! "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
@@ -381,24 +381,24 @@ input{
         <div class="col-md-12">
             <div class="form-group down-frm" id= "down_frm" >
                 <label for="net_dp" class="control-label">Total DP Due: </label>
-                <input type="text" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>">
+                <input type="text" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
                 <label for="less_paymt_dte" class="control-label" >Less Paym't to Date : </label>
-                <input type="text" class="form-control less-paymt-date" name="less_paymt_dte" id="less_paymt_dte" value="0">
+                <input type="text" class="form-control less-paymt-date" name="less_paymt_dte" id="less_paymt_dte" value="0" readonly>
                 <label for="dp_bal" class="control-label">DP Balance : </label>
-                <input type="text" class="form-control margin-bottom required dp-bal" name="dp_bal" id="dp_bal" value="0">
+                <input type="text" class="form-control margin-bottom required dp-bal" name="dp_bal" id="dp_bal" value="0" readonly>
                 <label for="acc_surcharge1" class="control-label" >Accrued Surcharge: </label>
-                <input type="text" class="form-control margin-bottom required acc-surcharge1" name="acc_surcharge1" id="acc_surcharge1" value="0">
+                <input type="text" class="form-control margin-bottom required acc-surcharge1" name="acc_surcharge1" id="acc_surcharge1" value="0" readonly>
                 <label class="control-label">Rem. DP Term/s : </label>
-                <input type="text" class="form-control margin-bottom required no-payment" name="no_payment" id="no_payment" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2">
+                <input type="text" class="form-control margin-bottom required no-payment" name="no_payment" id="no_payment" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2" readonly>
                 <label class="control-label" id = "mo_down_text">Monthly Down: </label>
-                <input type="text" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
+                <input type="text" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" readonly>
                 <label class="control-label">Commencing: </label>
-                <input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : ''; ?>">
+                <input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : ''; ?>" readonly>
                     
             
                 <label class="control-label">Until: </label>
                 
-                <input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : ''; ?>">
+                <input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : ''; ?>" readonly>
                     
                 
             </div>
@@ -407,27 +407,27 @@ input{
     <div class="payment_box2" id="p2">	
         <div class="col-md-12">
              <label class="control-label" id ="amt_tobe_financed_text" >Amount to be Financed:</label>
-             <input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($balance) ? $balance : 0; ?>">
+             <input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($balance) ? $balance : 0; ?>" readonly>
              <label class="control-label" id="acc_int_text">Acc. Interest:</label>
-             <input type="text" class="form-control margin-bottom required acc-interest" name="acc_interest" id="acc_interest" value="0">
+             <input type="text" class="form-control margin-bottom required acc-interest" name="acc_interest" id="acc_interest" value="0" readonly>
              <label class="control-label"  id="acc_sur_text" >Acc. Surcharge:</label>
-             <input type="text" class="form-control margin-bottom required acc-surcharge2" name="acc_surcharge2" id="acc_surcharge2" value="0">
+             <input type="text" class="form-control margin-bottom required acc-surcharge2" name="acc_surcharge2" id="acc_surcharge2" value="0" readonly>
              <label class="control-label"  id="adj_text" >Adj. Principal Balance:</label>
              <input type="text" class="form-control margin-bottom required adj-prin-bal" name="adj_prin_bal" id="adj_prin_bal" value="<?php echo isset($balance) ? $balance : 0; ?>" readonly>
            
              <div class="form-group monthly-frm" id = "monthly_frm">
                 <label class="control-label">Terms: </label>
-                <input type="text" class="form-control margin-bottom required term-days" name="terms" id="terms" value="<?php echo isset($terms) ? $terms : 1; ?>">
+                <input type="text" class="form-control margin-bottom required term-days" name="terms" id="terms" value="<?php echo isset($terms) ? $terms : 1; ?>" readonly>
                 <label class="control-label" id='rate_text'>Interest Rate: </label>
-                <input type="text" class="form-control margin-bottom required interest-rate" name="interest_rate" id="interest_rate" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>">
+                <input type="text" class="form-control margin-bottom required interest-rate" name="interest_rate" id="interest_rate" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>" readonly>
                 <label class="control-label" id='factor_text' >Fixed Factor: </label>
-                <input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>">
+                <input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>" readonly>
                 <label class="control-label">Monthly Payment: </label>
                 <input type="text" class="form-control margin-bottom required monthly-amor" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?> "readonly>	
             </div>
             <label class="control-label" id= "start_text">Start Date: </label>	
         
-            <input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : ''; ?>">
+            <input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : ''; ?>" readonly>
                 
             
         </div>
