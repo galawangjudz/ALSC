@@ -34,7 +34,7 @@ while( $row = mysqli_fetch_array($result) ){
         display: block!important; /* remove extra space below image */
     }
     .main_content1{
-        width:1000px!important;
+        width:47%!important;
         height:500px;
         display: block!important; /* remove extra space below image */
     }

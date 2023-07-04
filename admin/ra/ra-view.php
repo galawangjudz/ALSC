@@ -1051,7 +1051,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 				<div class="modal-title" style="font-size:18px;"><b>File Preview</b></div>
 				<button type="button" class="close" data-dismiss="modal"></button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="width:auto;">
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn bg-maroon btn-flat btn-sm" data-dismiss="modal" style="width:100%;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Close</button>
