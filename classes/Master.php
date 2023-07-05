@@ -1525,32 +1525,40 @@ Class Master extends DBConnection {
 			$data .= ", payment_count = '$payment_count' ";
 			//$data .= ", excess = '$excess' ";
 			//$data .= ", account_status = '$l_status' ";
+			$check = $this->conn->query("SELECT * FROM `property_payments` where `or_no` ='{$or_no_ent}'")->num_rows;
+			if($check > 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = " OR number already exists.";
+				return json_encode($resp);
+			}else{
+				$save = $this->conn->query("INSERT INTO property_payments set ".$data);
 
-			$save = $this->conn->query("INSERT INTO property_payments set ".$data);
-
-		
-			if ($l_status == ''){
+				if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
 					$l_sql = $this->conn->query("UPDATE pending_properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
-			}else{
-					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
-					$l_sql =  $this->conn->query("UPDATE pending_properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
+				}else{
+						$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
+						$l_sql =  $this->conn->query("UPDATE pending_properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
+				}
+				if($save && $l_sql){
+					$delete = $this->conn->query("DELETE FROM t_invoice where property_id =".$prop_id);
+					if ($delete){
+						$resp['status'] = 'success';
+						$this->settings->set_flashdata('success',"New payments successfully saved.");
+					}
+					
+				}else{
+					$resp['status'] = 'failed';
+					$resp['err'] = $this->conn->error."[{$sql}]";
+				}
+		
+				return json_encode($resp);
 			}
+
+			
 		endwhile;
 
-		if($save && $l_sql){
-			$delete = $this->conn->query("DELETE FROM t_invoice where property_id =".$prop_id);
-			if ($delete){
-				$resp['status'] = 'success';
-				$this->settings->set_flashdata('success',"New payments successfully saved.");
-			}
-			
-		}else{
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
-		}
-
-		return json_encode($resp);
+		
 	}
 	
 	function add_payment(){
@@ -2927,7 +2935,7 @@ Class Master extends DBConnection {
 		$check = $this->conn->query("SELECT * FROM `t_av_payment` where `c_av_no` ='{$av_no}'")->num_rows;
 		if($check > 0){
 			$resp['status'] = 'failed';
-			$resp['msg'] = " AV already exists.";
+			$resp['msg'] = " AV number already exists.";
 			return json_encode($resp);
 		}else{
 			$save = $this->conn->query("INSERT INTO t_av_payment set ".$data);
