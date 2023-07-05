@@ -2,29 +2,40 @@
 require_once('../../../config.php');
 
 if(isset($_GET['id'])){
-    $prop = $conn->query("SELECT * FROM pending_properties where md5(property_id) = '{$_GET['id']}' ");    
+    $prop = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' ");    
     
     while($row=$prop->fetch_assoc()){
     
         ///LOT
         $prop_id = $row['property_id'];
-        $date_of_sale = $row['c_date_of_sale'];
         $account_status = $row['c_account_status'];
-        $balance = $row['c_balance'];
         $payment_type1 = $row['c_payment_type1'];
-        $payment_type2 = $row['c_payment_type2'];
-        $amt_fnanced = $row['c_amt_financed'];
-        $monthly_down = $row['c_monthly_down'];
-        $first_dp = $row['c_first_dp'];
-      
-        $full_down = $row['c_full_down'];
-        $terms = $row['c_terms'];
-        $interest_rate = $row['c_interest_rate'];
-        $fixed_factor = $row['c_fixed_factor'];
-        $monthly_payment = $row['c_monthly_payment'];
-        $no_payments = $row['c_no_payments'];
-        $net_dp = $row['c_net_dp'];
-        $start_date = $row['c_start_date'];
+				$net_dp = $row['c_net_dp'];
+				$less_dp = $row['less_dp'];
+				$acc_surcharge1 = $row['acc_surcharge1'];
+				$new_net_dp = ($net_dp - $less_dp) + $acc_surcharge1;
+				$no_payments = $row['c_no_payments'];
+				$monthly_down = $row['c_monthly_down'];
+				$first_dp = $row['c_first_dp'];
+				$full_down = $row['c_full_down'];
+				$payment_type2 = $row['c_payment_type2'];	
+				$amt_to_be_financed = $row['c_amt_financed'];	
+				$acc_surcharge2 = $row['acc_surcharge2'];
+				$acc_interest = $row['acc_interest'];
+				$total_sur = $acc_surcharge1 + $acc_surcharge2;
+				$terms= $row['c_terms'];
+				$interest_rate = $row['c_interest_rate'];
+				$fixed_factor = $row['c_fixed_factor'];
+				$start_date = $row['c_start_date'];
+				$monthly_amortization = $row['c_monthly_payment'];
+				$mode = '1';
+				$acc_status = $row['c_account_status'];
+				$balance = $row['c_balance'];
+				$balance = (float) str_replace(",", "", $balance);
+				$new_amt_to_be_financed = $balance + $acc_interest + $acc_surcharge2;
+			  $total_balance = $acc_surcharge1 + $new_amt_to_be_financed;
+				$restructured_date = $row['c_restructured_date'];
+				$amount_due = $acc_interest + $total_sur;
 
 
         }
@@ -299,19 +310,7 @@ input{
                 <div class="col-md-6">	
                     <div class="form-group">
                         <label class="control-label">Account Status: </label>
-
-                       <!--  <div class="form-group">
-
-                          <style>
-                              select:invalid { color: gray; }
-                          </style>
-                          <select name="payment_type1" id="payment_type1" class="form-control required acc-status">
-                              <option name="payment_type1" value="Partial DownPayment" <?php echo isset($account_status) && $account_status == "Partial DownPayment" ? 'selected' : '' ?>>Partial DownPayment</option>
-                              <option name="payment_type1" value="Monthly Amortization" <?php echo isset($account_status) && $account_status == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-                              <option name="payment_type1" value="Deferred Cash Payment" <?php echo isset($account_status) && $account_status == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
-                          </select>	
-                        </div>	 -->
-                        <input type="text" class="form-control margin-bottom required acc-status" name="acc_stat" id="acc_stat" value="<?php echo isset($account_status) ? $account_status : 0; ?>" tabindex ="1" readonly>
+                        <input type="text" class="form-control margin-bottom required acc-status" name="acc_stat" id="acc_stat" value="<?php echo isset($account_status) ? $account_status : ''; ?>" tabindex ="1" readonly>
                     </div>
                 </div>
             </div>
@@ -326,50 +325,16 @@ input{
     <div class="space"></div>
     <div class="payment_box" id = "p1_box">
         <div class="col-md-12"  id = "pay_type1">	
-            <label class="control-label">Payment Type 1: </label>
-            <div class="form-group">
-            <style>
-                select:invalid { color: gray; }
-            </style>
-            
-            <select name="payment_type1" id="payment_type1" class="form-control required pay-type1" tabindex = "2" disabled> 
-            <?php if ($account_status == 'Monthly Amortization'): ?>
-                <option name="payment_type1" id="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Partial DownPayment</option>
-                <option name="payment_type1" id="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Full DownPayment</option>
-              <?php elseif ($account_status == 'Reservation'): ?>
-                <option name="payment_type1" id="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?>>Partial DownPayment</option>
-                <option name="payment_type1" id="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?>>Full DownPayment</option>
-            <?php elseif ($account_status == 'Partial DownPayment'): ?>
-                <option name="payment_type1" id="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?>>Partial DownPayment</option>
-                <option name="payment_type1" id="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?>>Full DownPayment</option>
-            <?php endif; ?>
-              </select>	
-          </div>	
-      </div>
+            <label for="p1" class="control-label">Payment Type 1: </label>
+            <input type="text" class="form-control margin-bottom required p1" name="p1_type" id="p1_type" value="<?php echo isset($payment_type1) ? $payment_type1 : ''; ?>" readonly>
+        </div>	
+      
     </div>
     <div class="payment_box2" id = "p2_box">
         <div class="col-md-12" id= "pay_type2">
-            <label class="control-label">Payment Type 2: </label>
-            <div class="form-group">
-                <style>
-                    select:invalid { color: gray; }
-                </style>
-                <select name="payment_type2" id="payment_type2" class="form-control required pay-type2" tabindex = "3" disabled>
-                <?php if ($account_status == 'Deferred Cash Payment'): ?>
-                    <option name="payment_type2" id="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
-                    <option name="payment_type2" id="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 =! "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-                <?php elseif ($account_status == 'Reservation'): ?>
-                    <option name="payment_type2" id="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
-                    <option name="payment_type2" id="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 =! "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-                <?php elseif ($account_status == 'Monthly Amortization'): ?>
-                    <option name="payment_type2" id="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-                    <option name="payment_type2" id="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?> disabled style="background-color: gainsboro; color: black;">Deferred Cash Payment</option>
-                <?php elseif ($account_status == 'Partial DownPayment' || $account_status == 'Full DownPayment'): ?>
-                    <option name="payment_type2" id="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-                    <option name="payment_type2" id="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 =! "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
-                <?php endif; ?>
-                </select>	
-            </div>
+            <label for="p2" class="control-label">Payment Type 2: </label>
+            <input type="text" class="form-control margin-bottom required p2" name="p2_type" id="p2_type" value="<?php echo isset($payment_type2) ? $payment_type2 : ''; ?>" readonly>
+          
         </div>
     </div>
     <div class="space"></div>
@@ -379,11 +344,11 @@ input{
                 <label for="net_dp" class="control-label">Total DP Due: </label>
                 <input type="text" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
                 <label for="less_paymt_dte" class="control-label" >Less Paym't to Date : </label>
-                <input type="text" class="form-control less-paymt-date" name="less_paymt_dte" id="less_paymt_dte" value="0" readonly>
+                <input type="text" class="form-control less-paymt-date" name="less_paymt_dte" id="less_paymt_dte" value="<?php echo isset($less_dp) ? $less_dp : 0; ?>" readonly>
                 <label for="dp_bal" class="control-label">DP Balance : </label>
-                <input type="text" class="form-control margin-bottom required dp-bal" name="dp_bal" id="dp_bal" value="0" readonly>
+                <input type="text" class="form-control margin-bottom required dp-bal" name="dp_bal" id="dp_bal" value="<?php echo isset($new_net_dp) ? $new_net_dp : 0; ?>" readonly>
                 <label for="acc_surcharge1" class="control-label" >Accrued Surcharge: </label>
-                <input type="text" class="form-control margin-bottom required acc-surcharge1" name="acc_surcharge1" id="acc_surcharge1" value="0" readonly>
+                <input type="text" class="form-control margin-bottom required acc-surcharge1" name="acc_surcharge1" id="acc_surcharge1" value="<?php echo isset($acc_surcharge1) ? $acc_surcharge1 : 0; ?>" readonly>
                 <label class="control-label">Rem. DP Term/s : </label>
                 <input type="text" class="form-control margin-bottom required no-payment" name="no_payment" id="no_payment" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2" readonly>
                 <label class="control-label" id = "mo_down_text">Monthly Down: </label>
@@ -403,13 +368,13 @@ input{
     <div class="payment_box2" id="p2">	
         <div class="col-md-12">
              <label class="control-label" id ="amt_tobe_financed_text" >Amount to be Financed:</label>
-             <input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($balance) ? $balance : 0; ?>" readonly>
+             <input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_to_be_financed) ? $amt_to_be_financed : 0; ?>" readonly>
              <label class="control-label" id="acc_int_text">Acc. Interest:</label>
-             <input type="text" class="form-control margin-bottom required acc-interest" name="acc_interest" id="acc_interest" value="0" readonly>
+             <input type="text" class="form-control margin-bottom required acc-interest" name="acc_interest" id="acc_interest" value="<?php echo isset($acc_interest) ? $acc_interest : 0; ?>" readonly>
              <label class="control-label"  id="acc_sur_text" >Acc. Surcharge:</label>
-             <input type="text" class="form-control margin-bottom required acc-surcharge2" name="acc_surcharge2" id="acc_surcharge2" value="0" readonly>
+             <input type="text" class="form-control margin-bottom required acc-surcharge2" name="acc_surcharge2" id="acc_surcharge2" value="<?php echo isset($acc_surcharge2) ? $acc_surcharge2 : 0; ?>" readonly>
              <label class="control-label"  id="adj_text" >Adj. Principal Balance:</label>
-             <input type="text" class="form-control margin-bottom required adj-prin-bal" name="adj_prin_bal" id="adj_prin_bal" value="<?php echo isset($balance) ? $balance : 0; ?>" readonly>
+             <input type="text" class="form-control margin-bottom required adj-prin-bal" name="adj_prin_bal" id="adj_prin_bal" value="<?php echo isset($new_amt_to_be_financed) ? $new_amt_to_be_financed : 0; ?>" readonly>
            
              <div class="form-group monthly-frm" id = "monthly_frm">
                 <label class="control-label">Terms: </label>
@@ -419,7 +384,7 @@ input{
                 <label class="control-label" id='factor_text' >Fixed Factor: </label>
                 <input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>" readonly>
                 <label class="control-label">Monthly Payment: </label>
-                <input type="text" class="form-control margin-bottom required monthly-amor" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?> "readonly>	
+                <input type="text" class="form-control margin-bottom required monthly-amor" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_amortization) ? $monthly_amortization : 0; ?> "readonly>	
             </div>
             <label class="control-label" id= "start_text">Start Date: </label>	
         
@@ -429,8 +394,6 @@ input{
         </div>
     </div>
 
-
-
     </div>
 	</div>
 </div>
@@ -438,315 +401,3 @@ input{
 </form>
 
 </body>
-<script>
-
-$(document).ready(function() {
-
-
-    <?php if (($account_status == 'Monthly Amortization') || ($account_status == 'Full DownPayment') || ($account_status == 'No DownPayment') || ($account_status == 'Deferred Cash Payment')): ?>
-        $('#down_frm').hide();
-        $('#net_dp').hide();
-        $('#less_paymt_dte').hide();
-        $('#dp_bal').hide();
-        $('#acc_surcharge1').hide();
-        $('#no_payment').hide();
-        $('#monthly_down').hide();
-        $('#first_dp_date').hide();
-        $('#full_down_date').hide();
-        
-        $('#p1').hide();
-        $('#p1').hide();
-        $('#p1_box').hide();
-        $('#p2_box').width('65%');
-        $('#p2').width('65%');
-        <?php if ($account_status == 'Deferred Cash Payment'):?>
-              $("#interest_rate").val(0);
-              $("#fixed_factor").val(0);
-
-              $('#interest_rate').hide();
-              $('#fixed_factor').hide();
-        <?php endif; ?>
-
-    <?php else: ?>
-      $('#down_frm').show();
-       /*  $('#net_dp').show();
-        $('#less_paymt_dte').show();
-        $('#dp_bal').show();
-        $('#acc_surcharge1').show();
-        $('#no_payment').show();
-        $('#monthly_down').show();
-        $('#first_dp_date').show();
-        $('#full_down_date').show(); */
-
-
-    <?php endif; ?>
-
-    var balance = <?php echo $balance; ?>; 
-    <?php if ($account_status == 'Monthly Amortization' || $account_status == 'Full DownPayment' || $account_status == 'Deferred Cash Payment'): ?>
-        $('#amt-to-be-financed').val(balance); 
-        $('#adj-prin-bal').val(balance); 
-    <?php endif; ?>
-
-
-       
-
-
-});
-
-
-$(document).on('change', ".acc-interest", function(e) {
-		e.preventDefault();
-		compute_adj_prin();
-
-
-	});
-
-	
-
-  $(document).on('change', ".acc-surcharge2", function(e) {
-		e.preventDefault();
-		compute_adj_prin();
-
-
-	});
-
-
-  $(document).on('change', ".term-days", function(e) {
-		e.preventDefault();
-		compute_adj_prin();
-
-
-	});
-
-  $(document).on('change', ".adj-prin-bal", function(e) {
-		e.preventDefault();
-		compute_adj_prin();
-
-
-	});
-
-  $(document).on('change', ".interest-rate", function(e) {
-		e.preventDefault();
-		compute_adj_prin();
-
-
-	});
-
-  $(document).on('change', ".pay-type2", function(e) {
-		e.preventDefault();
-   
-		payment_type2_changed();
-
-
-	});
-
-  $(document).on('change', ".pay-type1", function(e) {
-		e.preventDefault();
-   
-		payment_type1_changed();
-
-
-	});
-
-  function payment_type1_changed(){
-		var l_payment_type1 = $('.pay-type1').val();
-
-		$('#loan_text').text("Amount to be financed :");
-		$('#interest_rate').show();
-		$('#fixed_factor').show();
-    $('#down_frm').show();
-		$('#monthly_frm').show();
-		$('#rate_text').show();
-		$('#factor_text').show();
-		$('#ma_text').text("Monthly Amortization ");
-		if (l_payment_type1 == "Full DownPayment"){
-          $('#no_payment').val(1);
-          $('#no_payment').hide();
-          net_dp_ent = $('.net-dp').val();
-          $('#monthly_down').val(net_dp_ent);
-          $('#net_dp').show();
-          $('#less_paymt_dte').show();
-          $('#dp_bal').show();
-          $('#acc_surcharge1').show();
-          $('#no_payment').show();
-          $('#monthly_down').show();
-          $('#first_dp_date').hide();
-          $('#full_down_date').show();
-         
-    }else if (l_payment_type1 == "No DownPayment"){
-        /*   $('#net_dp').hide();
-          $('#less_paymt_dte').hide();
-          $('#dp_bal').hide();
-          $('#acc_surcharge1').hide();
-          $('#no_payment').hide();
-          $('#monthly_down').hide();
-          $('#first_dp_date').hide();
-          $('#full_down_date').hide(); */
-          $('#down_frm').hide();
-    }else{
-      $('#net_dp').show();
-      $('#less_paymt_dte').show();
-      $('#dp_bal').show();
-      $('#acc_surcharge1').show();
-      $('#no_payment').show();
-      $('#monthly_down').show();
-      $('#first_dp_date').show();
-      $('#full_down_date').show();
-    
-    }
-
-		compute_adj_prin();
-
-	}
-
-
-
-
-
-  function payment_type2_changed(){
-		var l_payment_type2 = $('.pay-type2').val();
-    var acc_stat = $('.acc-status').val();
-		$('#loan_text').text("Amount to be financed :");
-		$('#interest_rate').show();
-		$('#fixed_factor').show();
-		$('#monthly_frm').show();
-		$('#rate_text').show()
-		$('#factor_text').show()
-		$('#ma_text').text("Monthly Amortization ");
-    if (acc_stat == 'Monthly Amortization' || acc_stat == 'Deferred Cash Payment'){
-          $('.acc-status').val("Monthly Amortization");
-    }
-		if (l_payment_type2 == "Deferred Cash Payment" && (acc_stat == 'Monthly Amortization' || acc_stat == 'Deferred Cash Payment')){
-          $('#ma_text').text("Deferred Cash Payment ");
-          $('.acc-status').val("Deferred Cash Payment");
-          $('#loan_text').text("Deferred Amount:");
-          $("#interest_rate").val(0);
-          $("#fixed_factor").val(0);
-
-          $('#rate_text').hide();
-          $('#interest_rate').hide();
-          $('#factor_text').hide();
-          $('#fixed_factor').hide();
-		}else{
-          $('#rate_text').show();
-          $('#factor_text').show();
-          $('#interest_rate').show();
-          $('#fixed_factor').show();
-    }
-
-		compute_adj_prin();
-
-	}
-
-  function compute_adj_prin(){
-    var balance = $('.amt-to-be-financed').val();
-    var acc_sur = $('.acc-surcharge2').val();
-    var acc_int = $('.acc-interest').val();
-    var l_terms = $('.term-days').val();
-    let acc_stat = $('.acc-status').val();
-    var l_rate = $('.interest-rate').val();
-		l_x = '1200';
-		if (l_rate == 0){
-			l_rate_value = 0;
-		}else{
-			var l_rate_value = parseFloat(l_rate)/ parseFloat(l_x);
-		}
-
-    total =  parseFloat(balance) +  parseFloat(acc_sur) +  parseFloat(acc_int);
-
-    $("#adj_prin_bal").val(total);
-    if (acc_stat == "Deferred Cash Payment")
-      { 
-        if (l_terms == 0){
-          $("#monthly_amortization").val(0);
-        }
-        ma = total / l_terms;
-
-        $("#monthly_amortization").val(ma);
-
-    }else{
-    var l_factor = parseFloat(l_rate_value)/(1-(1+parseFloat(l_rate_value))**(-parseFloat(l_terms)));
-
-    if (l_factor == 0){
-      return
-    }
-
-    l_factor = isNaN(l_factor) ? 0 : l_factor;
-  
-    var monthly_ma = parseFloat(total)*parseFloat(l_factor);
-    monthly_ma = isFinite(monthly_ma) ? monthly_ma : 0;
-    $("#fixed_factor").val(l_factor.toFixed(8));
-    $("#monthly_amortization").val(monthly_ma.toFixed(2));
-  }
-  }
-
-
-  function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
-
-	    $(".required").each(function(i, obj) {
-
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
-	        }
-
-	    });
-		
-	    return errorCounter;
-
-	}
-
-    $(document).ready(function(){
-
-      $('#restructuring').submit(function(e){
-			e.preventDefault();
-            var _this = $(this)
-		 	$('.err-msg').remove();
-			
-             var errorCounter = validateForm();
-             if (errorCounter > 0) {
-                alert_toast("It appear's you have forgotten to complete something!","warning");	  
-                return false;
-            }else{
-                $(".required").parent().removeClass("has-error")
-            }    
-            start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_restructured",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-              location.reload();
-              end_loader();
-          }else{
-						alert_toast("An error occured",'error');
-						end_loader();
-            console.log(resp)
-					}
-				}
-			})
-		})
-        
-	})
-
-
-
-
-
-
-</script>
