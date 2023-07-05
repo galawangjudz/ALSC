@@ -378,23 +378,20 @@ input{
         <div class="col-md-12">
             <div class="form-group down-frm" id= "down_frm" >
                 <label for="net_dp" class="control-label">Total DP Due: </label>
-                <input type="text" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>">
+                <input type="text" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
                 <label for="less_paymt_dte" class="control-label" >Less Paym't to Date : </label>
                 <input type="text" class="form-control less-paymt-date" name="less_paymt_dte" id="less_paymt_dte" value="0">
                 <label for="dp_bal" class="control-label">DP Balance : </label>
-                <input type="text" class="form-control margin-bottom required dp-bal" name="dp_bal" id="dp_bal" value="0">
+                <input type="text" class="form-control margin-bottom required dp-bal" name="dp_bal" id="dp_bal" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
                 <label for="acc_surcharge1" class="control-label" >Accrued Surcharge: </label>
                 <input type="text" class="form-control margin-bottom required acc-surcharge1" name="acc_surcharge1" id="acc_surcharge1" value="0">
-                <label class="control-label">Rem. DP Term/s : </label>
-                <input type="text" class="form-control margin-bottom required no-payment" name="no_payment" id="no_payment" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2">
-                <label class="control-label" id = "mo_down_text">Monthly Down: </label>
-                <input type="text" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
+                <label for= "rem_dp" class="control-label">Rem. DP Term/s : </label>
+                <input type="text" class="form-control margin-bottom required rem-dp" name="rem_dp" id="rem_dp" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2">
+                <label for= "monthly_down" class="control-label" id ="mo_down_text">Monthly Down: </label>
+                <input type="text" class="form-control margin-bottom required monthly-down" name="monthly_down" id="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>"  >
                 <label class="control-label">Commencing: </label>
                 <input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : ''; ?>">
-                    
-            
-                <label class="control-label">Until: </label>
-                
+                <label class="control-label">Until: </label>        
                 <input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : ''; ?>">
                     
                 
@@ -404,7 +401,7 @@ input{
     <div class="payment_box2" id="p2">	
         <div class="col-md-12">
              <label class="control-label" id ="amt_tobe_financed_text" >Amount to be Financed:</label>
-             <input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($balance) ? $balance : 0; ?>">
+             <input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($balance) ? $balance : 0; ?>" readonly>
              <label class="control-label" id="acc_int_text">Acc. Interest:</label>
              <input type="text" class="form-control margin-bottom required acc-interest" name="acc_interest" id="acc_interest" value="0">
              <label class="control-label"  id="acc_sur_text" >Acc. Surcharge:</label>
@@ -418,7 +415,7 @@ input{
                 <label class="control-label" id='rate_text'>Interest Rate: </label>
                 <input type="text" class="form-control margin-bottom required interest-rate" name="interest_rate" id="interest_rate" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>">
                 <label class="control-label" id='factor_text' >Fixed Factor: </label>
-                <input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>">
+                <input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>" readonly>
                 <label class="control-label">Monthly Payment: </label>
                 <input type="text" class="form-control margin-bottom required monthly-amor" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?> "readonly>	
             </div>
@@ -502,6 +499,49 @@ $(document).on('change', ".acc-interest", function(e) {
 
 	});
 
+
+  $(document).on('change', ".less-paymt-date", function(e) {
+		e.preventDefault();
+    var net_dp = $('.net-dp').val();
+    var less = $('.less-paymt-date').val();
+    var acc_sur1 = $('.acc-surcharge1').val();
+    dp_bal =  parseFloat(net_dp) -  parseFloat(less) ;
+    total_dp_bal = dp_bal + parseFloat(acc_sur1);
+  
+    $("#dp_bal").val(total_dp_bal);
+
+    compute_rem_dp();
+	});
+
+
+  $(document).on('change', ".rem-dp", function(e) {
+		e.preventDefault();
+    compute_rem_dp();
+	});
+
+
+
+  $(document).on('change', ".first-dp-date", function(e) {
+		e.preventDefault();
+		auto_terms();
+
+
+	});
+
+
+  $(document).on('change', ".acc-surcharge1", function(e) {
+		e.preventDefault();
+    var net_dp = $('.net-dp').val();
+    var less = $('.less-paymt-date').val();
+    var acc_sur1 = $('.acc-surcharge1').val();
+    dp_bal =  parseFloat(net_dp) -  parseFloat(less) ;
+    total_dp_bal = dp_bal + parseFloat(acc_sur1);
+  
+    $("#dp_bal").val(total_dp_bal);
+    compute_rem_dp();
+
+	});
+ 
 	
 
   $(document).on('change', ".acc-surcharge2", function(e) {
@@ -515,6 +555,7 @@ $(document).on('change', ".acc-interest", function(e) {
   $(document).on('change', ".term-days", function(e) {
 		e.preventDefault();
 		compute_adj_prin();
+
 
 
 	});
@@ -565,6 +606,7 @@ $(document).on('change', ".acc-interest", function(e) {
           $('#no_payment').hide();
           net_dp_ent = $('.net-dp').val();
           $('#monthly_down').val(net_dp_ent);
+          $('#rem_dp').val(1);
           $('#net_dp').show();
           $('#less_paymt_dte').show();
           $('#dp_bal').show();
@@ -638,6 +680,48 @@ $(document).on('change', ".acc-interest", function(e) {
 		compute_adj_prin();
 
 	}
+
+
+  function compute_rem_dp(){
+		var l_no_pay = $('.rem-dp').val();
+		var l_net_dp = $('.dp-bal').val();
+
+		var l_mo_down = parseFloat(l_net_dp) / parseFloat(l_no_pay);
+		l_mo_down = isFinite(l_mo_down) ? l_mo_down : 0.0;
+		//alert(l_mo_down);
+		$("#monthly_down").val(l_mo_down.toFixed(2));		
+		auto_terms();
+	}
+
+	function auto_terms(){
+		var l_no_pay = $('.rem-dp').val();
+		var l_start_date = $('.first-dp-date').val();
+	
+		fd_dte = new Date(l_start_date);
+		if(l_no_pay == 0){
+			l_no_pay = 1
+		}
+		fd_dte.setMonth(fd_dte.getMonth()+ parseFloat(l_no_pay - 1));
+		
+		var fd_dte = fd_dte.toISOString().slice(0, 10);
+ 
+		$('#full_down_date').val(fd_dte);
+
+
+		var l_fd_dte = $('.full-down-date').val();
+
+		start_dte = new Date(l_fd_dte);
+
+		start_dte.setMonth(start_dte.getMonth()+ 1);
+		
+		var start_dte = start_dte.toISOString().slice(0, 10);
+
+		$('#start_date').val(start_dte);
+		//alert(end_dte);
+		
+
+	}
+
 
   function compute_adj_prin(){
     var balance = $('.amt-to-be-financed').val();
@@ -717,7 +801,7 @@ $(document).on('change', ".acc-interest", function(e) {
             }    
             start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_restructured",
+				url:_base_url_+"classes/Master.php?f=create_restructured",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

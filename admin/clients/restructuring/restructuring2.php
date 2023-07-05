@@ -2,13 +2,13 @@
 require_once('../../../config.php');
 
 if(isset($_GET['id'])){
-    $prop = $conn->query("SELECT * FROM pending_properties where md5(property_id) = '{$_GET['id']}' ");    
+    $prop = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' ");    
 
     while($row=$prop->fetch_assoc()){
     
         ///LOT
         $prop_id = $row['property_id'];
-        $date_of_sale = $row['c_date_of_sale'];
+       // $date_of_sale = $row['c_date_of_sale'];
         $account_status = $row['c_account_status'];
         $balance = $row['c_balance'];
         $payment_type1 = $row['c_payment_type1'];

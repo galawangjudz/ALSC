@@ -1277,9 +1277,9 @@ Class Master extends DBConnection {
 
 
 
-			$old_acct = $this->conn->query("SELECT c_date_of_sale from properties where old_prop_id =".$old_prop_id);
+			/* $old_acct = $this->conn->query("SELECT c_date_of_sale from properties where old_prop_id =".$old_prop_id);
 			$old_data = $old_acct->fetch_array();
-			$old_date_of_sale = $old_data['date_of_sale'];
+			$old_date_of_sale = $old_data['date_of_sale']; */
 
 
 			$qry = $this->conn->query("SELECT c_project_code FROM t_projects where c_code =".$code);
@@ -1343,7 +1343,7 @@ Class Master extends DBConnection {
  */
 		$update = $this->conn->query("UPDATE t_lots set c_status = 'Sold' where c_lid =".$lot_lid);
 		$save99 = $this->conn->query("INSERT INTO properties set ".$data);
-		$save = $this->conn->query("INSERT INTO pending_properties set ".$data);
+		
 
 		$find =  $this->conn->query("SELECT property_id FROM properties where c_csr_no =".$csr_no);
 		$row3 = $find->fetch_assoc();
@@ -1538,10 +1538,10 @@ Class Master extends DBConnection {
 		
 			if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
-					$l_sql = $this->conn->query("UPDATE pending_properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
+					
 			}else{
 					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
-					$l_sql =  $this->conn->query("UPDATE pending_properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
+					
 			}
 		endwhile;
 
@@ -2605,32 +2605,105 @@ Class Master extends DBConnection {
 	function res_approval(){
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE property_payments set lvl1='1' where status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where property_id = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE property_payments set lvl2='1' where status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where property_id = ".$data_id);
 		elseif($value == 2):
-
-			// extract($_POST);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where property_id = ".$data_id);
+			$qry1 = "SELECT * FROM pending_restructuring where property_id =".$data_id;
+			$sql1 = $this->conn->query($qry1);
+			while($row = $sql1->fetch_assoc()) {
+				$payment_type1 = $row['c_payment_type1'];
+				$net_dp = $row['c_net_dp'];
+				$less_dp = $row['less_dp'];
+				$acc_surcharge1 = $row['acc_surcharge1'];
+				$new_net_dp = ($net_dp - $less_dp) + $acc_surcharge1;
+				$no_payment = $row['c_no_payments'];
+				$monthly_down = $row['c_monthly_down'];
+				$first_dp_date = $row['c_first_dp'];
+				$full_down_date = $row['c_full_down'];
+				$payment_type2 = $row['c_payment_type2'];	
+				$amt_to_be_financed = $row['c_amt_financed'];	
+				$acc_surcharge2 = $row['acc_surcharge2'];
+				$acc_interest = $row['acc_interest'];
+				$total_sur = $acc_surcharge1 + $acc_surcharge2;
+				$terms= $row['c_terms'];
+				$interest_rate = $row['c_interest_rate'];
+				$fixed_factor = $row['c_fixed_factor'];
+				$start_date = $row['c_start_date'];
+				$monthly_amortization = $row['c_monthly_payment'];
+				$mode = '1';
+				$acc_status = $row['c_account_status'];
+				$balance = $row['c_balance'];
+				$balance = (float) str_replace(",", "", $balance);
+				$new_amt_to_be_financed = $balance + $acc_interest + $acc_surcharge2;
+				$total_balance = $acc_surcharge1 + $new_amt_to_be_financed;
+				$restructured_date = $row['c_restructured_date'];
+				$amount_due = $acc_interest + $total_sur;
 			
-			// $prop_id = $_POST['prop_id'];
-			// $payment_amount = $_POST['payment_amount'];
-			// $pay_date
-			// $due_date
-			// $amount_due
-			// $rebate
-			// $surcharge
-			// $interest
-			// $principal
-			// $remaining_balance
-			// $account_status
-			// $payment_type1
-			// $payment_type2
+				$data = "c_payment_type1 = '$payment_type1' ";
+				$data .= ", c_net_dp = '$new_net_dp' ";
+				$data .= ", c_no_payments = '$no_payment' ";
+				$data .= ", c_monthly_down = '$monthly_down' ";
+				$data .= ", c_first_dp = '$first_dp_date' ";
+				$data .= ", c_full_down = '$full_down_date' ";
+				$data .= ", c_payment_type2 = '$payment_type2' ";
+				$data .= ", c_amt_financed = '$new_amt_to_be_financed' ";
+				$data .= ", c_terms = '$terms' ";
+				$data .= ", c_interest_rate = '$interest_rate' ";
+				$data .= ", c_fixed_factor = '$fixed_factor' ";
+				$data .= ", c_monthly_payment = '$monthly_amortization' ";
+				$data .= ", c_start_date = '$start_date' ";
+				$data .= ", c_account_status = '$acc_status'";
+				$data .= ", c_balance = '$total_balance'";
+				$data .= ", c_restructured = '$mode'";
+				
+	
+				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$data_id);
 
-			$update = $this->conn->query("UPDATE property_payments set lvl3='1', pending_status='0' where status='RESTRUCTURED' and property_id = ".$data_id);
 
+			}
+		
+			$add = $this->conn->query("INSERT INTO tbl_restructuring set status = 1, property_id = ".$data_id);
+
+
+			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$data_id." ORDER by payment_count";
+			$sql = $this->conn->query($qry);
+			$l_last = $sql->num_rows - 1;
+			$payments_data = array(); 
+			if($sql->num_rows <= 0){
+				$resp['status'] = 'failed';
+				$resp['err'] = 'No Payment Records yet!';
+				return json_encode($resp);
+			} 
+			while($row = $sql->fetch_assoc()) {
+			$payments_data[] = $row; 
+
+			}
+
+			$last_row = $payments_data[$l_last];
+			$due_date = $last_row['due_date'];
+			$pay_count = $last_row['payment_count'] + 1;
+
+			$data2 = "property_id = '$data_id' ";
+			$data2 .= ", due_date = '$due_date' ";
+			$data2 .= ", pay_date = '$restructured_date' ";
+			$data2 .= ", or_no = '******' ";
+			$data2 .= ", payment_amount = '0' ";
+			$data2 .= ", amount_due = '$amount_due' ";
+			$data2 .= ", rebate = '0' ";
+			$data2 .= ", surcharge = '$total_sur' ";
+			$data2 .= ", interest = '$acc_interest' ";
+			$data2 .= ", principal = '0' ";
+			$data2 .= ", remaining_balance = '$total_balance' ";
+			$data2 .= ", status = 'RESTRUCTURED' ";
+			$data2 .= ", status_count = '0' ";
+			$data2 .= ", payment_count = '$pay_count' ";
+
+			$res_pay = $this->conn->query("INSERT INTO property_payments set ".$data2);
 
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE property_payments set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where  status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where property_id = ".$data_id);
 		endif;
 		
 
@@ -2647,13 +2720,13 @@ Class Master extends DBConnection {
 	function res_disapproval(){
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE property_payments set lvl1='2' where status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='2',  pending_status='1' and property_id = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE property_payments set lvl2='2' where status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl2='2', pending_status='1'  and property_id = ".$data_id);
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE property_payments set lvl3='2', pending_status='1' where status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='2', pending_status='1' and property_id = ".$data_id);
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE property_payments set lvl3='2',lvl2='2',lvl1='2', pending_status='1' where status='RESTRUCTURED' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='2',lvl2='2',lvl1='2', pending_status='1'  and property_id = ".$data_id);
 		endif;
 
 		if($update){
@@ -2666,121 +2739,101 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
-	function save_restructured(){
+	function create_restructured(){
 		extract($_POST);
 			
 		$prop_id = $_POST['prop_id'];
-		
-		$payment_type2 = $_POST['payment_type2'];
-		
-		$terms= $_POST['terms'];
-		$interest_rate = $_POST['interest_rate'];
-		$fixed_factor = $_POST['fixed_factor'];
-		$start_date = $_POST['start_date'];
-		$monthly_amortization = $_POST['monthly_amortization'];
-		$mode = '1';
+		$data = "property_id = '$prop_id' ";
 		$acc_status = $_POST['acc_stat'];
-		$acc_surcharge2 = $_POST['acc_surcharge2'];
-		$acc_interest = $_POST['acc_interest'];
-		$total_sur = $acc_surcharge1 + $acc_surcharge2;
-		$amt_to_be_financed = $_POST['amt_to_be_financed'];
-		$balance = $_POST['balance'];
-		$balance = (float) str_replace(",", "", $balance);
-		$total_balance = $balance + $acc_interest + $acc_surcharge2;
-		$restructured_date = $_POST['restructured_date'];
-		$amount_due = $acc_interest + $total_sur;
-		
 	
-		$data = "c_payment_type2 = '$payment_type2' ";
 		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
 				
 				$payment_type1 = $_POST['payment_type1'];
+				$less_paymt= $_POST['less_paymt_dte'];
 				$dp_bal = $_POST['dp_bal'];
 				$acc_surcharge1 = $_POST['acc_surcharge1'];
-				$dp_sur = $dp_bal + $acc_surcharge1;
-				$no_payment = $_POST['no_payment'];
+				$no_payment = $_POST['rem_dp'];
 				$monthly_down = $_POST['monthly_down'];
 				$first_dp_date = $_POST['first_dp_date'];
 				$full_down_date = $_POST['full_down_date'];
-				$adj_prin_bal = $_POST['adj_prin_bal'];
-			
+				
+		
 				$data .= ", c_payment_type1 = '$payment_type1' ";
 				$data .= ", c_net_dp = '$net_dp' ";
-				$data .= ", c_monthly_down = '$monthly_down' ";
+				$data .= ", less_dp = '$less_paymt' ";
+				$data .= ", acc_surcharge1 = '$acc_surcharge1' ";
 				$data .= ", c_no_payments = '$no_payment' ";
+				$data .= ", c_monthly_down = '$monthly_down' ";
+				$data .= ", c_full_down = '$full_down_date' ";
+				if ($no_payment == '1'){
+					$data .= ", c_first_dp = '$full_down_date' ";
+				}else{
+					$data .= ", c_first_dp = '$first_dp_date' ";
+				}
+
+		}else{
+			$select = "SELECT * from properties where property_id = ".$prop_id;
+			$sql = $this->conn->query($select);
+			while($row = $sql->fetch_assoc()) {
+				$payment_type1 = $row['c_payment_type1'];
+				$net_dp = $row['c_net_dp'];
+				$no_payment = $row['c_no_payments'];
+				$monthly_down = $row['c_monthly_down'];
+				$first_dp_date = $row['c_first_dp'];
+				$full_down = $row['c_full_down'];
+				$dp_bal = 0;
+				$acc_surcharge1 = 0;
+
+				$data .= ", c_payment_type1 = '$payment_type1' ";
+				$data .= ", c_net_dp = '$net_dp' ";
+				$data .= ", less_dp = 0 ";
+				$data .= ", acc_surcharge1 = 0 ";
+				$data .= ", c_no_payments = '$no_payment' ";
+				$data .= ", c_monthly_down = '$monthly_down' ";
 				$data .= ", c_first_dp = '$first_dp_date' ";
 				$data .= ", c_full_down = '$full_down_date' ";
+
 			}
+		}
+		$dp_sur = $dp_bal + $acc_surcharge1;
+		$payment_type2 = $_POST['payment_type2'];
+		$amt_to_be_financed = $_POST['amt_to_be_financed'];
+		$acc_interest = $_POST['acc_interest'];
+		$acc_surcharge2 = $_POST['acc_surcharge2'];
+		$adj_prin_bal = $_POST['adj_prin_bal'];
+		$terms= $_POST['terms'];
+		$interest_rate = $_POST['interest_rate'];
+		$fixed_factor = $_POST['fixed_factor'];
+		$monthly_amortization = $_POST['monthly_amortization'];
+		$start_date = $_POST['start_date'];		
+			
+		$total_sur = $acc_surcharge1 + $acc_surcharge2;
+		 $balance = $_POST['balance'];
+		$balance = (float) str_replace(",", "", $balance);
+		/*$total_balance = $balance + $acc_interest + $acc_surcharge2; */
+		$restructured_date = $_POST['restructured_date'];
+	/* 	$amount_due = $acc_interest + $total_sur; */
+
+		$data .= ", c_payment_type2 = '$payment_type2' ";
 		$data .= ", c_amt_financed = '$amt_to_be_financed' ";
+		$data .= ", acc_interest = '$acc_interest' ";
+		$data .= ", acc_surcharge2 = '$acc_surcharge2' ";
+		$data .= ", c_adj_prin_bal = '$adj_prin_bal' ";
 		$data .= ", c_terms = '$terms' ";
 		$data .= ", c_interest_rate = '$interest_rate' ";
 		$data .= ", c_fixed_factor = '$fixed_factor' ";
 		$data .= ", c_monthly_payment = '$monthly_amortization' ";
 		$data .= ", c_start_date = '$start_date' ";
 		$data .= ", c_account_status = '$acc_status'";
-		$data .= ", c_restructured = $mode ";
+		$data .= ", c_balance = '$balance'";
+		$data .= ", c_restructured_date = '$restructured_date'";
+		$data .= ", pending_status = '1'";
 
-		$save = $this->conn->query("UPDATE pending_properties set ".$data." where property_id = ".$prop_id);
-	
-
-
-		$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
-		$sql = $this->conn->query($qry);
-		$l_last = $sql->num_rows - 1;
-		$payments_data = array(); 
-		if($sql->num_rows <= 0){
-			$resp['status'] = 'failed';
-			$resp['err'] = 'No Payment Records yet!';
-			return json_encode($resp);
-        } 
-		while($row = $sql->fetch_assoc()) {
-		  $payments_data[] = $row; 
-
-		}
-
-		$last_row = $payments_data[$l_last];
-		$due_date = $last_row['due_date'];
-		$pay_count = $last_row['payment_count'] + 1;
-
-		$data2 = "property_id = '$prop_id' ";
-		$data2 .= ", due_date = '$due_date' ";
-		$data2 .= ", pay_date = '$restructured_date' ";
-		$data2 .= ", or_no = '******' ";
-		$data2 .= ", payment_amount = '0' ";
-		$data2 .= ", amount_due = '$amount_due' ";
-		$data2 .= ", rebate = '0' ";
-		$data2 .= ", surcharge = '$total_sur' ";
-		$data2 .= ", interest = '$acc_interest' ";
-		$data2 .= ", principal = '0' ";
-		$data2 .= ", remaining_balance = '$total_balance' ";
-		$data2 .= ", status = 'RESTRUCTURED' ";
-		$data2 .= ", status_count = '0' ";
-		$data2 .= ", payment_count = '$pay_count' ";
-		$data2 .= ", pending_status = '1' ";
-
-
-
-		$data3 = "property_id = '$prop_id' ";
-		$data3 .= ", payment_amount = '0' ";
-		$data3 .= ", pay_date = '$restructured_date' ";
-		$data3 .= ", due_date = '$due_date' ";
-		$data3 .= ", or_no = '******' ";
-		$data3 .= ", amount_due = '$amount_due' ";
-		$data3 .= ", rebate = '0' ";
-		$data3 .= ", surcharge = '$total_sur' ";
-		$data3 .= ", interest = '$acc_interest' ";
-		$data3 .= ", principal = '0' ";
-		$data3 .= ", remaining_balance = '$total_balance' ";
-		$data3 .= ", status = 'RESTRUCTURED' ";
-		$data3 .= ", status_count = '0' ";
-		$data3 .= ", payment_count = '$pay_count' ";
-
-		$save2 = $this->conn->query("INSERT INTO property_payments set ".$data2);
-		//$save2 = $this->conn->query("INSERT INTO tbl_restructuring set ".$data3);
-
-		if($save & $save2){
+		#donita binago ko to para mas malinis
+		$save = $this->conn->query("INSERT INTO pending_restructuring set ". $data);
+		if($save){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Restructuring successfully saved.");
+			$this->settings->set_flashdata('success',"Restructuring successfully created.");
 
 		}else{
 			$resp['status'] = 'failed';
@@ -3386,8 +3439,8 @@ switch ($action) {
 	case 'save_member':
 		echo $Master->save_member();
 	break;
-	case 'save_restructured':
-		echo $Master->save_restructured();
+	case 'create_restructured':
+		echo $Master->create_restructured();
 	break;
 
 	case 'set_retention':

@@ -144,12 +144,17 @@
 					$i = 1;
 					if($usertype=='Billing')
 					{
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+						/* $qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1
-						GROUP BY y.property_id;");
+						GROUP BY y.property_id;"); */
 
+
+
+						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1
+						GROUP BY y.property_id;");
                             while($row = $qry->fetch_assoc()):   
 								  
                         ?>
@@ -254,12 +259,17 @@
 					}
 					elseif($usertype=='Manager')
 					{
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+						/* $qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1
 						GROUP BY y.property_id;");
+						 */
+
 						
+						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1
+						GROUP BY y.property_id;");
 								while($row = $qry->fetch_assoc()):   
 									  
 							?>
@@ -364,10 +374,15 @@
 					}
 					elseif($usertype=='COO' || $usertype=='IT Admin')
 					{
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+					/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=1
+						GROUP BY y.property_id;"); */
+
+						
+						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=1
 						GROUP BY y.property_id;");
                             while($row = $qry->fetch_assoc()):   
 								  

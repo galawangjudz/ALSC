@@ -189,13 +189,18 @@
 					$i = 1;
 					if($usertype=='Billing' || $usertype=='IT Admin')
 					{
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+						/* $qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,y.status,
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0 and y.status='RESTRUCTURED'
+						GROUP BY y.property_id;"); */
+
+
+						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0
 						GROUP BY y.property_id;");
 
-                            while($row = $qry->fetch_assoc()):   
+                        while($row = $qry->fetch_assoc()):   
 								  
                         ?>
                         <tr>
@@ -299,11 +304,16 @@
 					}
 					elseif($usertype=='Manager' || $usertype=='IT Admin')
 					{
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+						/* $qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=0 and y.status='RESTRUCTURED'
+						GROUP BY y.property_id;"); */
+
+						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2 = 0
 						GROUP BY y.property_id;");
+
 						
 								while($row = $qry->fetch_assoc()):   
 									  
@@ -408,11 +418,16 @@
 					<?php                         
 					}
 					elseif($usertype=='COO' || $usertype=='IT Admin'){
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+					/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
 						y.remaining_balance, y.payment_count,
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0 and y.status='RESTRUCTURED'
+						GROUP BY y.property_id;"); */
+
+						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0
 						GROUP BY y.property_id;");
+
                             while($row = $qry->fetch_assoc()):
 								  
                         ?>
@@ -458,7 +473,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res_coo" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -475,16 +490,16 @@
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
-								// elseif($usertype=="COO"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								// 	echo '<span class="tooltip">Approved</span>';
-								// 	echo '</a>';
-								// elseif($usertype=="IT Admin"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								// 	echo '<span class="tooltip">Approved</span>';
-								// 	echo '</a>';
+								elseif($usertype=="COO"):
+								 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+								 	echo '<span class="tooltip">Approved</span>';
+								 	echo '</a>';
+								elseif($usertype=="IT Admin"):
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
+								 	echo '<span class="tooltip">Approved</span>';
+								 	echo '</a>';
 								endif;
 							?>
 							<?php 
