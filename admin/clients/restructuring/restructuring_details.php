@@ -286,7 +286,7 @@ input{
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
-	<h3 class="card-title"><b>Restructured ID#: <i><?php echo $cid ?></i> </b></h3>
+	<h3 class="card-title"><b>Restructured No: <i><?php echo $cid ?></i> </b></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
@@ -402,3 +402,72 @@ input{
 </form>
 
 </body>
+
+<script>
+
+$(document).ready(function() {
+
+  <?php if ($payment_type2 == 'Deferred Cash Payment' ):?>
+        $("#interest_rate").val(0);
+        $("#fixed_factor").val(0);
+        $('#interest_rate').hide();
+        $('#rate_text').hide();
+        $('#factor_text').hide();
+        $('#fixed_factor').hide();
+  <?php endif; ?> 
+
+
+    <?php if (($account_status == 'Monthly Amortization') || ($account_status == 'Full DownPayment') || ($account_status == 'No DownPayment') ): ?>
+        $('#down_frm').hide();
+        $('#net_dp').hide();
+        $('#less_paymt_dte').hide();
+        $('#dp_bal').hide();
+        $('#acc_surcharge1').hide();
+        $('#no_payment').hide();
+        $('#monthly_down').hide();
+        $('#first_dp_date').hide();
+        $('#full_down_date').hide();
+        
+        $('#p1').hide();
+        $('#p1').hide();
+        $('#p1_box').hide();
+        $('#p2_box').width('65%');
+        $('#p2').width('65%');
+      <?php elseif ($account_status == 'Deferred Cash Payment' ):?>
+            $('#down_frm').hide();
+            $('#net_dp').hide();
+            $('#less_paymt_dte').hide();
+            $('#dp_bal').hide();
+            $('#acc_surcharge1').hide();
+            $('#no_payment').hide();
+            $('#monthly_down').hide();
+            $('#first_dp_date').hide();
+            $('#full_down_date').hide();
+            $('#p1').hide();
+            $('#p1').hide();
+            $('#p1_box').hide();
+            $('#p2_box').width('65%');
+            $('#p2').width('65%');
+            $("#interest_rate").val(0);
+            $("#fixed_factor").val(0);
+            $('#interest_rate').hide();
+            $('#fixed_factor').hide();
+            $('#rate_text').hide();
+            $('#factor_text').hide();
+        
+
+      <?php else: ?>
+          $('#down_frm').show();
+        /*  $('#net_dp').show();
+          $('#less_paymt_dte').show();
+          $('#dp_bal').show();
+          $('#acc_surcharge1').show();
+          $('#no_payment').show();
+          $('#monthly_down').show();
+          $('#first_dp_date').show();
+          $('#full_down_date').show(); */
+    <?php endif; ?>
+
+});
+
+</script>
