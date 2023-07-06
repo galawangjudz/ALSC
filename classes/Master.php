@@ -2698,7 +2698,7 @@ Class Master extends DBConnection {
 			$data2 = "property_id = '$prop_id' ";
 			$data2 .= ", due_date = '$due_date' ";
 			$data2 .= ", pay_date = '$restructured_date' ";
-			$data2 .= ", or_no = '******' ";
+			$data2 .= ", or_no = 'RSTR-". $data_id ."'";
 			$data2 .= ", payment_amount = '0' ";
 			$data2 .= ", amount_due = '$amount_due' ";
 			$data2 .= ", rebate = '0' ";
