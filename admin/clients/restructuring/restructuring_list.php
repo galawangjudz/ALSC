@@ -196,7 +196,7 @@
 						GROUP BY y.property_id;"); */
 
 
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
 						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0
 						GROUP BY y.property_id;");
 
@@ -206,6 +206,7 @@
                         <tr>
 						<td><?php echo $row["property_id"] ?></a></td>
 						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
 						<td><?php echo $row["last_name"] ?></a></td>
 						<td><?php echo $row["first_name"] ?></a></td>
 						<td><?php echo $row["middle_name"] ?></a></td>
@@ -245,7 +246,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -360,7 +361,7 @@
 							<?php endif; ?>
 	
 							<td>
-								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
 									<i class="fa fa-eye" aria-hidden="true"></i>
 									<span class="tooltip">View</span>
 								</a>
@@ -473,7 +474,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -547,7 +548,7 @@ $(document).ready(function() {
 });
 
 $('.view_res').click(function(){
-	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id'),"mid-large")
+	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id') + '&cid=' + $(this).attr('cid') ,"mid-large")
 })
 $('.view_res_coo').click(function(){
 	uni_modal("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring2.php?id='+$(this).attr('data-id'),"mid-large")

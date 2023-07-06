@@ -1,12 +1,13 @@
 <?php 
 require_once('../../../config.php');
 
-if(isset($_GET['id'])){
-    $prop = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' ");    
+if(isset($_GET['id']) && ($_GET['cid'])) {
+    $prop = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' and id ='{$_GET['cid']}' ");    
     
     while($row=$prop->fetch_assoc()){
     
         ///LOT
+        $cid = $row['id'];
         $prop_id = $row['property_id'];
         $account_status = $row['c_account_status'];
         $payment_type1 = $row['c_payment_type1'];
@@ -285,7 +286,7 @@ input{
 <div class="card card-outline rounded-0 card-maroon">
     
 	<div class="card-header">
-	<h3 class="card-title"><b>Property ID#: <i><?php echo $prop_id ?></i> </b></h3>
+	<h3 class="card-title"><b>Restructured ID#: <i><?php echo $cid ?></i> </b></h3>
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
