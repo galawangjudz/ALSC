@@ -1267,7 +1267,7 @@ function payments(){
         dataType:"json",
         error:err=>{
             console.log(err)
-            alert_toast("An error occured",'error');
+            alert_toast("An error 2",'error');
             end_loader();
             },
         success:function(resp){

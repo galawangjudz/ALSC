@@ -135,7 +135,7 @@
                         <th>Rem Bal</th> -->
                         <th>Billing Status</th>
                         <th>FM Status</th>
-                        <th>COO Status</th>
+                        <th>CFO Status</th>
                         <th>Actions</th>
                         </tr>
                     </thead>
