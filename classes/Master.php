@@ -1540,11 +1540,9 @@ Class Master extends DBConnection {
 		
 			if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
-					$l_sql = $this->conn->query("UPDATE pending_properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
 			}else{
 					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
-					$l_sql =  $this->conn->query("UPDATE pending_properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
-			}
+					}
 		endwhile;
 
 		if($save && $l_sql){
