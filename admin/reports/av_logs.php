@@ -126,7 +126,7 @@
                      <!--    <td><?php echo $row["c_new_acc_no"] ?></td> -->
                         <td><?php echo $row["c_remarks"] ?></td>
                         <td><a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
-						<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+							<a class="btn btn-flat btn-primary btn-s approved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo $row['c_av_no'] ?>" id="view_tooltip">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
 										</a>
