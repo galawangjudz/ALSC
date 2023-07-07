@@ -1,5 +1,6 @@
 <?php 
-include '../../config.php';
+/* include '../../config.php'; */
+require_once('../../../config.php');
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -28,25 +29,32 @@ if ($user_role != 'IT Admin') {
 
 if (isset($_GET['id'])) {
     $prop_id = $_GET['id'];
-    $user = $conn->query("SELECT * FROM property_payments WHERE property_id =" . $prop_id);
-    $getPrin = $conn->query("SELECT SUM(principal) FROM property_payments WHERE property_id =" . $prop_id);
+    $total = $conn->query("SELECT property_id, sum(principal) as sumPrin,SUM(surcharge) as sumSur,SUM(rebate) as sumReb,SUM(interest) as sumInt FROM property_payments WHERE payment_amount != 0 and property_id =" . $prop_id);
+    /* $getPrin = $conn->query("SELECT SUM(principal) FROM property_payments WHERE property_id =" . $prop_id);
     $getSur = $conn->query("SELECT SUM(surcharge) FROM property_payments WHERE property_id =" . $prop_id);
     $getReb = $conn->query("SELECT SUM(rebate) FROM property_payments WHERE property_id =" . $prop_id);
-    $getInt = $conn->query("SELECT SUM(interest) FROM property_payments WHERE property_id =" . $prop_id);
+    $getInt = $conn->query("SELECT SUM(interest) FROM property_payments WHERE property_id =" . $prop_id); */
 
-    if ($user && $getPrin && $getSur && $getReb && $getInt) {
-        $userRow = $user->fetch_array();
+    /* if ($user && $getPrin && $getSur && $getReb && $getInt) { */
+    if ($total) {
+        $userRow = $total->fetch_array();
         foreach ($userRow as $k => $v) {
             $meta[$k] = $v;
         }
-        $sumRowPrin = $getPrin->fetch_array();
+/*         $sumRowPrin = $getPrin->fetch_array();
         $sumRowSur = $getSur->fetch_array();
         $sumRowReb = $getReb->fetch_array();
         $sumRowInt = $getInt->fetch_array();
         $sumPrin = $sumRowPrin[0];
         $sumSur = $sumRowSur[0];
         $sumReb = $sumRowReb[0];
-        $sumInt = $sumRowInt[0];
+        $sumInt = $sumRowInt[0]; */
+
+        $sumPrin = $meta['sumPrin'];
+        $sumSur =$meta['sumSur'];
+        $sumReb = $meta['sumReb'];
+        $sumInt = $meta['sumInt']; 
+
     } else {
         // Handle query errors here
     }
@@ -76,6 +84,15 @@ if (isset($_GET['id'])) {
                 <div class="card card-outline rounded-0">
                     <div class="card-body">
                         <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="av_type" class="control-label">Type of AV: </label>
+                                <select class="form-control required" name="av_type" id="av_type">
+                                    <option value="1">1-Relocation</option>
+                                    <option value="2">2-Transfer of Location</option>
+                                    <option value="3">3-Change of Model House</option>
+                                    <option value="4">4-Downgrade</option>
+                                </select>
+                            </div> 
                             <div class="form-group">
                                 <label class="control-label">AV No: </label>
                                 <input type="text" class="form-control required" name="av_no" id="av_no">
@@ -136,19 +153,20 @@ if (isset($_GET['id'])) {
                 <div class="card card-outline rounded-0">
                     <div class="card-body">
                         <div class="container-fluid">
-                            <div class="form-group">
+                          <!--   <div class="form-group">
                                 <label for="name">New Account Number: </label>
                                 <input type="number" class="form-control" name="new_acc_no"  id="new_acc_no">
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="name">Remarks: </label>
-                                <input type="text" class="form-control required" name="remarks" id="remarks">
+                                <textarea  class="form-control required" name="remarks" id="remarks" rows="4" cols="50"></textarea>
+                              <!--   <input type="text" class="form-control required" name="remarks" id="remarks"> -->
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <input type="hidden" class="form-control" name="paymentamt" id="paymentamt" value="<?php echo isset($meta['payment_amount']) ? ($meta['payment_amount']) : ''; ?>">
+              <!--   <input type="hidden" class="form-control" name="paymentamt" id="paymentamt" value="<?php echo isset($meta['payment_amount']) ? ($meta['payment_amount']) : ''; ?>">
                 <input type="hidden" class="form-control" name="paydate" id="paydate" value="<?php echo isset($meta['pay_date']) ? ($meta['pay_date']) : ''; ?>">
                 <input type="hidden" class="form-control" name="duedate" id="duedate" value="<?php echo isset($meta['due_date']) ? ($meta['due_date']) : ''; ?>">
                 <input type="hidden" class="form-control" name="orno" id="orno" value="<?php echo isset($meta['or_no']) ? ($meta['or_no']) : ''; ?>">
@@ -161,11 +179,7 @@ if (isset($_GET['id'])) {
                 <input type="hidden" class="form-control" name="stats" id="stats" value="<?php echo isset($meta['status']) ? ($meta['status']) : ''; ?>">
                 <input type="hidden" class="form-control" name="stats_count" id="stats_count" value="<?php echo isset($meta['status_count']) ? ($meta['status_count']) : ''; ?>">
                 <input type="hidden" class="form-control" name="p_count" id="p_count" value="<?php echo isset($meta['payment_count']) ? ($meta['payment_count']) : ''; ?>">
-                <input type="hidden" class="form-control" name="excess" id="excess" value="<?php echo isset($meta['excess']) ? ($meta['excess']) : ''; ?>">
-                <input type="hidden" class="form-control" name="acc_stats" id="acc_stats" value="<?php echo isset($meta['account_status']) ? ($meta['account_status']) : ''; ?>">
-                <input type="hidden" class="form-control" name="gentime" id="gentime" value="<?php echo isset($meta['gen_time']) ? ($meta['gen_time']) : ''; ?>">
-                <input type="hidden" class="form-control" name="transdate" id="transdate" value="<?php echo isset($meta['trans_date']) ? ($meta['trans_date']) : ''; ?>">
-                <input type="hidden" class="form-control" name="surchargepercent" id="surchargepercent" value="<?php echo isset($meta['surcharge_percent']) ? ($meta['surcharge_percent']) : ''; ?>">
+          -->
             </form>
 		</div>
 		<div class="card-footer">
@@ -244,7 +258,6 @@ function validateForm() {
                 },
                 success:function(resp){
                     if(typeof resp =='object' && resp.status == 'success'){
-                        move_av();
                         location.reload();
                     }else if(resp.status == 'failed' && !!resp.msg){
                         var el = $('<div>')
@@ -261,32 +274,6 @@ function validateForm() {
             })
         })
 
-function move_av(){
-    start_loader();
-    $.ajax({
-        url:_base_url_+'classes/Master.php?f=move_av',
-        method:'POST',
-        data:{prop_id:'<?php echo $prop_id ?>'},
-        dataType:"json",
-        error:err=>{
-            console.log(err)
-            alert_toast("An error occured",'error');
-            end_loader();
-            },
-        success:function(resp){
-            if(typeof resp =='object' && resp.status == 'success'){
-                // location.reload();
-                // redirectSoa();
-                location.reload();
-        
-            }else{
-                alert_toast(resp.err,'error');
-                end_loader();
-                //console.log(resp)
-            }
-        }
-    })
-}
 </script>
 <script>
   var currentDate = new Date();

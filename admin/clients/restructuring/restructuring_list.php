@@ -164,6 +164,7 @@
                 <table class="table table-bordered table-stripped" style="text-align:center;font-size:14px;">
                     <thead>
                         <tr>
+						<th>Restructured No.</th>
 						<th>Property ID</th>
 						<th>Last Name</th>
 						<th>First Name</th>
@@ -196,16 +197,17 @@
 						GROUP BY y.property_id;"); */
 
 
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
-						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0
-						GROUP BY y.property_id;");
+						$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y inner JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0 ");
 
                         while($row = $qry->fetch_assoc()):   
 								  
                         ?>
                         <tr>
+						<td><?php echo $row["id"]; ?> </a></td>
 						<td><?php echo $row["property_id"] ?></a></td>
 						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
 						<td><?php echo $row["last_name"] ?></a></td>
 						<td><?php echo $row["first_name"] ?></a></td>
 						<td><?php echo $row["middle_name"] ?></a></td>
@@ -245,7 +247,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -253,22 +255,22 @@
 							?>
 							<?php 
 								if($usertype=="Billing"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
 								elseif($usertype=="Manager"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
 								elseif($usertype=="COO"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
 								// elseif($usertype=="IT Admin"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 								// 	echo '<span class="tooltip">Approved</span>';
 								// 	echo '</a>';
@@ -276,22 +278,22 @@
 							?>
 							<?php 
 							if($usertype=="Billing"):
-                            	echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="4" id="view_tooltip">';
+                            	echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="4" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							elseif($usertype=="Manager"):	
-								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="3" id="view_tooltip">';
+								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="3" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							elseif($usertype=="COO"):	
-								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
+								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="2" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							// elseif($usertype=="IT Admin"):
-							// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+							// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 							// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 							// 	echo '<span class="tooltip">Approved</span>';
 							// 	echo '</a>';
@@ -310,17 +312,19 @@
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=0 and y.status='RESTRUCTURED'
 						GROUP BY y.property_id;"); */
 
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						$qry = $conn->query("SELECT  y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
 						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2 = 0
-						GROUP BY y.property_id;");
+						");
 
 						
 								while($row = $qry->fetch_assoc()):   
 									  
 							?>
 							<tr>
+							<td><?php echo $row["id"]; ?> </a></td>
 							<td><?php echo $row["property_id"] ?></a></td>
 							<?php $prop_id = $row["property_id"]; ?>
+							<?php $cid = $row["id"]; ?>
 							<td><?php echo $row["last_name"] ?></a></td>
 							<td><?php echo $row["first_name"] ?></a></td>
 							<td><?php echo $row["middle_name"] ?></a></td>
@@ -360,7 +364,7 @@
 							<?php endif; ?>
 	
 							<td>
-								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
 									<i class="fa fa-eye" aria-hidden="true"></i>
 									<span class="tooltip">View</span>
 								</a>
@@ -368,22 +372,22 @@
 								?>
 								<?php 
 									if($usertype=="Billing"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 										echo '<span class="tooltip">Approved</span>';
 										echo '</a>';
 									elseif($usertype=="Manager"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 										echo '<span class="tooltip">Approved</span>';
 										echo '</a>';
 									elseif($usertype=="COO"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 										echo '<span class="tooltip">Approved</span>';
 										echo '</a>';
 									// elseif($usertype=="IT Admin"):
-									// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									// 	echo '<span class="tooltip">Approved</span>';
 									// 	echo '</a>';
@@ -391,22 +395,22 @@
 								?>
 								<?php 
 								if($usertype=="Billing"):
-									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="4" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="4" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Disapproved</span>';
 									echo '</a>';
 								elseif($usertype=="Manager"):	
-									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="3" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="3" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Disapproved</span>';
 									echo '</a>';
 								elseif($usertype=="COO"):	
-									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="2" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Disapproved</span>';
 									echo '</a>';
 								// elseif($usertype=="IT Admin"):
-								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 								// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 								// 	echo '<span class="tooltip">Approved</span>';
 								// 	echo '</a>';
@@ -424,16 +428,18 @@
 						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0 and y.status='RESTRUCTURED'
 						GROUP BY y.property_id;"); */
 
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
 						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0
-						GROUP BY y.property_id;");
+						");
 
                             while($row = $qry->fetch_assoc()):
 								  
                         ?>
                         <tr>
+						<td><?php echo $row["id"]; ?> </a></td>
 						<td><?php echo $row["property_id"] ?></td>
 						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
 						<td><?php echo $row["last_name"] ?></td>
 						<td><?php echo $row["first_name"] ?></td>
 						<td><?php echo $row["middle_name"] ?></td>
@@ -473,7 +479,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -481,22 +487,22 @@
 							?>
 							<?php 
 								if($usertype=="Billing"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
 								elseif($usertype=="Manager"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
 								elseif($usertype=="COO"):
-								 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 								 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 								 	echo '<span class="tooltip">Approved</span>';
 								 	echo '</a>';
 								elseif($usertype=="IT Admin"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 								 	echo '<span class="tooltip">Approved</span>';
 								 	echo '</a>';
@@ -504,22 +510,22 @@
 							?>
 							<?php 
 							if($usertype=="Billing"):
-                            	echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="4" id="view_tooltip">';
+                            	echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="4" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							elseif($usertype=="Manager"):	
-								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="3" id="view_tooltip">';
+								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="3" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							elseif($usertype=="COO"):	
-								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
+								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['id'] . '" value="2" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							// elseif($usertype=="IT Admin"):
-							// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+							// 	echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 							// 	echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 							// 	echo '<span class="tooltip">Approved</span>';
 							// 	echo '</a>';
@@ -547,7 +553,7 @@ $(document).ready(function() {
 });
 
 $('.view_res').click(function(){
-	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id'),"mid-large")
+	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id') + '&cid=' + $(this).attr('cid') ,"mid-large")
 })
 $('.view_res_coo').click(function(){
 	uni_modal("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring2.php?id='+$(this).attr('data-id'),"mid-large")

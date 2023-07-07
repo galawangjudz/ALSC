@@ -199,7 +199,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -272,7 +272,7 @@ $(document).ready(function() {
 });
 
 $('.view_res').click(function(){
-	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id'),"mid-large")
+	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id') + '&cid=' + $(this).attr('cid'),"mid-large")
 })
 $('.approved_res').click(function(){
 	_conf("Are you sure you want to restructure this account?","approved_res",[$(this).attr('data-id'),$(this).attr('value')])

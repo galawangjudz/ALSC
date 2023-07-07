@@ -1,5 +1,6 @@
 <?php 
-include '../../config.php';
+/* include '../../config.php'; */
+require_once('../../../config.php');
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -23,7 +24,7 @@ if ($user_role != 'IT Admin') {
 <?php
 if(isset($_GET['id'])){
     $prop_id = $_GET['id'];
-    $user = $conn->query("SELECT * FROM t_av_payment where property_id =".$_GET['id']);
+    $user = $conn->query("SELECT * FROM t_av_summary where c_av_no =".$_GET['id']);
     foreach($user->fetch_array() as $k =>$v){
         $meta[$k] = $v;
     }
@@ -31,7 +32,7 @@ if(isset($_GET['id'])){
 ?>
 
 <div class="card card-outline rounded-0 card-maroon">
-<h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Property ID#: <i><?php echo $prop_id ?></i> </b></h3>
+<h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i><?php echo $prop_id ?></i> </b></h3>
     <div class="table-responsive">
         <table class="table table-bordered table-stripped" style="text-align:center;">
         <br>
@@ -48,13 +49,13 @@ if(isset($_GET['id'])){
                     <th>Principal</th>
                     <th>Remaining Balance</th>
                     <th>Status</th>
-                    <th>Account Status</th>
+                 
                 </tr>
             </thead>
         <tbody style="font-size:14px;">
             <?php 
                     $i = 1;
-                    $qry = $conn->query("SELECT * FROM t_moved_av WHERE property_id =".$_GET['id']." ORDER BY trans_date DESC") ;
+                    $qry = $conn->query("SELECT * FROM t_av_breakdown WHERE av_no =".$_GET['id']." ORDER BY payment_count ASC") ;
                         while($row = $qry->fetch_assoc()):
                     ?>
                 <tr>
@@ -69,7 +70,7 @@ if(isset($_GET['id'])){
                     <td><?php echo number_format($row["principal"],2) ?></td>
                     <td><?php echo number_format($row["remaining_balance"],2) ?></td>
                     <td><?php echo $row["status"] ?></td>
-                    <td><?php echo $row["account_status"] ?></td>
+                  
                 </tr>
                 <?php endwhile; ?>
             </tbody>

@@ -763,7 +763,7 @@ $(document).ready(function() {
     })
 
     $('.new_av').click(function(){
-        uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/av_payment.php?id='+$(this).attr('prop-id'),"mid-large")
+        uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/application_voucher/av_payment.php?id='+$(this).attr('prop-id'),"mid-large")
     })
  
     $('.update_family_mem').click(function(){

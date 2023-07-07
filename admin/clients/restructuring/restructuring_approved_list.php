@@ -119,6 +119,7 @@
                 <table class="table table-bordered table-stripped" style="text-align:center;font-size:14px;">
                     <thead>
                         <tr>
+						<th>Restructured No.</th>
 						<th>Property ID</th>
 						<th>Last Name</th>
 						<th>First Name</th>
@@ -152,15 +153,17 @@
 
 
 
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						$qry = $conn->query("SELECT  y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
 						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1
-						GROUP BY y.property_id;");
+						");
                             while($row = $qry->fetch_assoc()):   
 								  
                         ?>
                         <tr>
+						<td><?php echo $row["id"]; ?> </a></td>
 						<td><?php echo $row["property_id"] ?></a></td>
 						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
 						<td><?php echo $row["last_name"] ?></a></td>
 						<td><?php echo $row["first_name"] ?></a></td>
 						<td><?php echo $row["middle_name"] ?></a></td>
@@ -200,10 +203,10 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                                <span class="tooltip">View</span>
-                            </a>
+							<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+									<span class="tooltip">View</span>
+							</a>
 							<!-- <?php
 							?>
 							<?php 
@@ -267,15 +270,17 @@
 						 */
 
 						
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						$qry = $conn->query("SELECT  y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
 						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1
-						GROUP BY y.property_id;");
+						");
 								while($row = $qry->fetch_assoc()):   
 									  
 							?>
 							<tr>
+							<td><?php echo $row["id"]; ?> </a></td>
 							<td><?php echo $row["property_id"] ?></a></td>
 							<?php $prop_id = $row["property_id"]; ?>
+							<?php $cid = $row["id"]; ?>
 							<td><?php echo $row["last_name"] ?></a></td>
 							<td><?php echo $row["first_name"] ?></a></td>
 							<td><?php echo $row["middle_name"] ?></a></td>
@@ -315,7 +320,7 @@
 							<?php endif; ?>
 	
 							<td>
-								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
 									<i class="fa fa-eye" aria-hidden="true"></i>
 									<span class="tooltip">View</span>
 								</a>
@@ -381,15 +386,17 @@
 						GROUP BY y.property_id;"); */
 
 						
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
 						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=1
-						GROUP BY y.property_id;");
+						");
                             while($row = $qry->fetch_assoc()):   
 								  
                         ?>
                         <tr>
+						<td><?php echo $row["id"]; ?> </a></td>
 						<td><?php echo $row["property_id"] ?></a></td>
 						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
 						<td><?php echo $row["last_name"] ?></a></td>
 						<td><?php echo $row["first_name"] ?></a></td>
 						<td><?php echo $row["middle_name"] ?></a></td>
@@ -429,7 +436,7 @@
 						<?php endif; ?>
 
                         <td>
-                            <a class="btn btn-flat btn-success btn-s view_res_coo" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+							<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                             </a>
@@ -475,7 +482,7 @@
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
 							elseif($usertype=="IT Admin"):
-								echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+								echo '<a class="btn btn-flat btn-primary btn-s disapproved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 								echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 								echo '<span class="tooltip">Approved</span>';
 								echo '</a>';
@@ -501,11 +508,11 @@ $(document).ready(function() {
         }
     ); 
 });
-$('.view_res_coo').click(function(){
+/* $('.view_res_coo').click(function(){
 	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_approved_view.php?id='+$(this).attr('data-id'),"mid-large")
-})
+}) */
 $('.view_res').click(function(){
-	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id'),"mid-large")
+	uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id') + '&cid=' + $(this).attr('cid') ,"mid-large")
 })
 $('.approved_res').click(function(){
 	_conf("Are you sure you want to restructure this account?","approved_res",[$(this).attr('data-id'),$(this).attr('value')])

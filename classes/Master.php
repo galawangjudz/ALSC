@@ -2647,14 +2647,15 @@ Class Master extends DBConnection {
 	function res_approval(){
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where id = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where id = ".$data_id);
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where property_id = ".$data_id);
-			$qry1 = "SELECT * FROM pending_restructuring where property_id =".$data_id;
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where id = ".$data_id);
+			$qry1 = "SELECT * FROM pending_restructuring where id =".$data_id;
 			$sql1 = $this->conn->query($qry1);
 			while($row = $sql1->fetch_assoc()) {
+				$prop_id = $row['property_id'];
 				$payment_type1 = $row['c_payment_type1'];
 				$net_dp = $row['c_net_dp'];
 				$less_dp = $row['less_dp'];
@@ -2701,15 +2702,15 @@ Class Master extends DBConnection {
 				$data .= ", c_restructured = '$mode'";
 				
 	
-				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$data_id);
+				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
 
 
 			}
 		
-			$add = $this->conn->query("INSERT INTO tbl_restructuring set status = 1, property_id = ".$data_id);
+			$add = $this->conn->query("INSERT INTO tbl_restructuring set res_id =".$data_id. ", status = 1, property_id = ".$prop_id);
 
 
-			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$data_id." ORDER by payment_count";
+			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 			$sql = $this->conn->query($qry);
 			$l_last = $sql->num_rows - 1;
 			$payments_data = array(); 
@@ -2727,10 +2728,10 @@ Class Master extends DBConnection {
 			$due_date = $last_row['due_date'];
 			$pay_count = $last_row['payment_count'] + 1;
 
-			$data2 = "property_id = '$data_id' ";
+			$data2 = "property_id = '$prop_id' ";
 			$data2 .= ", due_date = '$due_date' ";
 			$data2 .= ", pay_date = '$restructured_date' ";
-			$data2 .= ", or_no = '******' ";
+			$data2 .= ", or_no = 'RSTR-". $data_id ."'";
 			$data2 .= ", payment_amount = '0' ";
 			$data2 .= ", amount_due = '$amount_due' ";
 			$data2 .= ", rebate = '0' ";
@@ -2745,7 +2746,7 @@ Class Master extends DBConnection {
 			$res_pay = $this->conn->query("INSERT INTO property_payments set ".$data2);
 
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where id = ".$data_id);
 		endif;
 		
 
@@ -2788,7 +2789,7 @@ Class Master extends DBConnection {
 		$data = "property_id = '$prop_id' ";
 		$acc_status = $_POST['acc_stat'];
 	
-		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
+		if ($acc_status == "Reservation" || $acc_status == "Partial DownPayment" || $acc_status == 'No DownPayment'){
 				
 				$payment_type1 = $_POST['payment_type1'];
 				$less_paymt= $_POST['less_paymt_dte'];
@@ -3023,21 +3024,69 @@ Class Master extends DBConnection {
 		$data .= ", c_surcharge = '$av_sur' ";
 		$data .= ", c_interest = '$av_int' ";
 		$data .= ", c_rebate = '$av_reb' ";
-		$data .= ", c_new_acc_no = '$new_acc_no' "; 
+		/* $data .= ", c_new_acc_no = '$new_acc_no' ";  */
 		$data .= ", c_remarks = '$remarks' ";
 		
-		$check = $this->conn->query("SELECT * FROM `t_av_payment` where `c_av_no` ='{$av_no}'")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `t_av_summary` where `c_av_no` ='{$av_no}'")->num_rows;
 		if($check > 0){
 			$resp['status'] = 'failed';
 			$resp['msg'] = " AV number already exists.";
 			return json_encode($resp);
 		}else{
-			$save = $this->conn->query("INSERT INTO t_av_payment set ".$data);
+			$save = $this->conn->query("INSERT INTO t_av_summary set ".$data);
 			
+			$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$p_id."");
+			
+			/* $sql2 = $this->conn->query("UPDATE property set c_reopen = 1 where property_id =".$p_id."");
+ */
+			if($sql->num_rows <= 0){
+				$resp['status'] = 'failed';
+				$resp['err'] = 'No Payment Records yet! Please add to proceed with payments';
+				return json_encode($resp);
+			} 
+			while($row = $sql->fetch_array()):	
+				$prop_id = $row['property_id'];
+				$pay_date = $row['pay_date'];
+				$or_no_ent = $row['or_no'];
+				$amount_paid = $row['payment_amount'];
+				$due_date = $row['due_date'];
+				$tot_amount_due = $row['amount_due'];
+				$rebate = $row['rebate'];
+				$surcharge = $row['surcharge'];
+				$interest = $row['interest'];
+				$principal = $row['principal'];
+				$balance = $row['remaining_balance'];
+				$status = $row['status'];
+				$status_count = $row['status_count'];
+				$payment_count = $row['payment_count'];
+
+	
+	
+				$data = " property_id = '$prop_id' ";
+				$data .= ", av_no = '$av_no' ";
+				$data .= ", pay_date = '$pay_date' ";
+				$data .= ", or_no = '$or_no_ent' " ;
+				$data .= ", payment_amount = '$amount_paid' ";
+				$data .= ", due_date = '$due_date' ";
+				$data .= ", amount_due = '$tot_amount_due' ";
+				$data .= ", rebate = '$rebate' ";
+				$data .= ", surcharge = '$surcharge' ";
+				$data .= ", interest = '$interest' ";
+				$data .= ", principal = '$principal' ";
+				$data .= ", remaining_balance = '$balance' ";
+				$data .= ", status = '$status' ";
+				$data .= ", status_count = '$status_count' ";
+				$data .= ", payment_count = '$payment_count' ";
+			
+	
+				$save = $this->conn->query("INSERT INTO t_av_breakdown set ".$data);
+	
+			endwhile;
+
+
 			if($save){
 				$resp['status'] = 'success';
-				if(empty($prop_id))
-					$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
+				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
 
 			}else{
 				$resp['status'] = 'failed';
@@ -3047,77 +3096,7 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 			
 	}
-	function move_av(){
-		extract($_POST);
-		$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$prop_id."");
-		
-		$sql2 = $this->conn->query("UPDATE property set c_reopen = 1 where property_id =".$prop_id."");
-
-		if($sql->num_rows <= 0){
-			$resp['status'] = 'failed';
-			$resp['err'] = 'No Payment Records yet! Please add to proceed with payments';
-			return json_encode($resp);
-        } 
-		while($row = $sql->fetch_array()):	
-			$prop_id = $row['property_id'];
-			$pay_date = $row['pay_date'];
-			$or_no_ent = $row['or_no'];
-			$amount_paid = $row['payment_amount'];
-			$due_date = $row['due_date'];
-			$tot_amount_due = $row['amount_due'];
-			$rebate = $row['rebate'];
-			$surcharge = $row['surcharge'];
-			$interest = $row['interest'];
-			$principal = $row['principal'];
-			$balance = $row['remaining_balance'];
-			$status = $row['status'];
-			$status_count = $row['status_count'];
-			$payment_count = $row['payment_count'];
-			$excess = $row['excess'];
-			$l_status = $row['account_status'];
-			$gentime = $row['gen_time'];
-			$transdate = $row['trans_date'];
-			$surchargepercent = $row['surcharge_percent'];
-
-
-			$data = " property_id = '$prop_id' ";
-			$data .= ", pay_date = '$pay_date' ";
-			$data .= ", or_no = '$or_no_ent' " ;
-			$data .= ", payment_amount = '$amount_paid' ";
-			$data .= ", due_date = '$due_date' ";
-			$data .= ", amount_due = '$tot_amount_due' ";
-			$data .= ", rebate = '$rebate' ";
-			$data .= ", surcharge = '$surcharge' ";
-			$data .= ", interest = '$interest' ";
-			$data .= ", principal = '$principal' ";
-			$data .= ", remaining_balance = '$balance' ";
-			$data .= ", status = '$status' ";
-			$data .= ", status_count = '$status_count' ";
-			$data .= ", payment_count = '$payment_count' ";
-			$data .= ", excess = '$excess' ";
-			$data .= ", account_status = '$l_status' ";
-			$data .= ", gen_time = '$gentime' ";
-			$data .= ", trans_date = '$transdate' ";
-			$data .= ",surcharge_percent = '$surchargepercent' ";
-
-			$save = $this->conn->query("INSERT INTO t_moved_av set ".$data);
-
-		endwhile;
-
-		if($save){
-			
-				$resp['status'] = 'success';
-				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
-			
-			
-		}else{
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
-		}
-
-		return json_encode($resp);
-	}
-
+	
 
 	function set_retention(){
 		extract($_POST);

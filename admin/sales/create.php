@@ -393,7 +393,7 @@ input{
 				l_a = $('.net-tcp').val();
 				l_b = $('.reservation-fee').val();
 				$('#down_frm').hide();
-				/* $('#no_payment').val('1'); */
+				$('#no_payment').val('1');
 				$('#mo_down_text').hide();
 				l_sdate = $('.first-dp-date').val();
 				$('#p1').hide();
@@ -423,19 +423,19 @@ input{
 				compute_monthly_payments(); */
 			}
 		var l_payment_type2 = $('.payment-type2').val();
-		if (l_payment_type2 == "Deferred Cash Payment"){
-		$('#loan_text').text("Amount to be financed :");
-		$('#interest_rate').show();
-		$('#fixed_factor').show();
-		$('#monthly_frm').show();
-		$('#rate_text').show()
-		$('#factor_text').show()
-		$('#ma_text').text("Monthly Amortization ");
+		if (l_payment_type2 == "Monthly Amortization"){
+			$('#loan_text').text("Amount to be financed :");
+			$('#interest_rate').show();
+			$('#fixed_factor').show();
+			$('#monthly_frm').show();
+			$('#rate_text').show()
+			$('#factor_text').show()
+			$('#ma_text').text("Monthly Amortization ");
 		}else if (l_payment_type2 == "Deferred Cash Payment"){
 			$('#ma_text').text("Deferred Cash Payment ");
 			$('#loan_text').text("Deferred Amount:");
 			$("#interest_rate").val(0);
-			$("#fixed_facotr").val(0);
+			$("#fixed_factor").val(0);
 			$('#rate_text').hide()
 			$('#factor_text').hide()
 			$('#interest_rate').hide();

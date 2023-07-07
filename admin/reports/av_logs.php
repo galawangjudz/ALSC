@@ -101,7 +101,7 @@
                         <th>Total Rebate</th>
 						<th>Total Surcharge</th>
 						<th>Other Deductions</th>
-                        <th>New Account No</th>
+                      <!--   <th>New Account No</th> -->
                         <th>Remarks</th>
                         <th>Action</th>
                         </tr>
@@ -109,7 +109,7 @@
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM t_av_payment ORDER BY c_av_date DESC") ;
+                            $qry = $conn->query("SELECT * FROM t_av_summary ORDER BY c_av_date DESC") ;
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>
@@ -123,9 +123,18 @@
                         <td><?php echo number_format($row["c_rebate"],2) ?></td>
                         <td><?php echo number_format($row["c_surcharge"],2) ?></td>
 						<td><?php echo number_format($row["c_deductions"],2) ?></td>
-                        <td><?php echo $row["c_new_acc_no"] ?></td>
+                     <!--    <td><?php echo $row["c_new_acc_no"] ?></td> -->
                         <td><?php echo $row["c_remarks"] ?></td>
-                        <td><a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['property_id'] ?>"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</td>
+                        <td><a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
+						<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
+										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+										<span class="tooltip">Approved</span>
+										</a>
+							<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;"  data-id="<?php echo $row['c_av_no'] ?>" id="view_tooltip">
+									<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+									<span class="tooltip">Disapproved</span>
+						</a>
+						</td>
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>
@@ -142,6 +151,6 @@ $(document).ready(function() {
     ); 
 });
 $('.view_av').click(function(){
-	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
+	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/application_voucher/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
 })
 </script>
