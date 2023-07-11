@@ -320,7 +320,7 @@ body{
                       <a class="btn btn-flat btn-info undo-delete-last-or" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-undo"></span>&nbsp;&nbsp;Undo</a>
                     </td>
                     <td style="width:10%;">
-                      <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
+                      <a class="btn btn-flat btn-dark new_av2" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
                     </td>
                   </tr>
                 </table>
@@ -765,6 +765,11 @@ $(document).ready(function() {
     $('.new_av').click(function(){
         uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/application_voucher/av_payment.php?id='+$(this).attr('prop-id'),"mid-large")
     })
+
+    $('.new_av2').click(function(){
+        uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/application_voucher/av_modal2.php?id='+$(this).attr('prop-id'),"mid-large")
+    })
+ 
  
     $('.update_family_mem').click(function(){
       //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
