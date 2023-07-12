@@ -131,7 +131,7 @@
 		</div>
 	</div>
 </div>
-<div class="card card-outline card-primary rounded-0 shadow">
+<div class="card card-outline card-maroon">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>List of Transfer Accounts</b></i></h3>
 		<div class="card-tools">
@@ -141,7 +141,7 @@
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
-			<table class="table table-bordered table-hover table-striped">
+		<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
 				<colgroup>
 					<col width="5%">
 					<col width="20%">
@@ -151,7 +151,7 @@
 					<col width="15%">
 				</colgroup>
 				<thead>
-					<tr class="bg-gradient-primary text-light">
+					<tr>
 						<th>#</th>
 						<th>Date Transferred</th>
 						<th>Account</th>
@@ -175,13 +175,13 @@
 								<?php 
 									switch($row['c_reopen']){
 										case 0:
-											echo '<span class="badge badge-danger bg-gradient-primary px-3 rounded-pill">Active</span>';
+											echo '<span class="badge badge-danger bg-gradient-primary">Active</span>';
 											break;
 										case 1:
-											echo '<span class="badge badge-primary bg-gradient-danger px-3 rounded-pill">Reopen</span>';
+											echo '<span class="badge badge-primary bg-gradient-danger">Reopen</span>';
 											break;
 										default:
-											echo '<span class="badge badge-default border px-3 rounded-pill">N/A</span>';
+											echo '<span class="badge badge-default">N/A</span>';
 												break;
 									}
 								?>
