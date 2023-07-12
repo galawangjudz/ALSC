@@ -8,31 +8,35 @@ if($_settings->chk_flashdata('success')): ?>
 <?php endif;?>
 <?php
 $usertype = $_settings->userdata('user_type');
-if (!isset($usertype)) {
-    include '404.html';
-  exit;
-}
+// if (!isset($usertype)) {
+//     include '404.html';
+//   exit;
+// }
 
 $user_role = $usertype;
 
-if ($user_role != 'IT Admin') {
-    include '404.html';
-  exit;
-}
+// if ($user_role != 'IT Admin') {
+//     include '404.html';
+//   exit;
+// }
 
 ?>
 <?php
+
 if(isset($_GET['id'])){
-    $prop_id = $_GET['id'];
-    $user = $conn->query("SELECT * FROM t_av_summary where c_av_no =".$_GET['id']);
-    foreach($user->fetch_array() as $k =>$v){
-        $meta[$k] = $v;
+    $qry = $conn->query("SELECT * FROM `t_av_summary` where c_av_no = '{$_GET['id']}'");
+    if($qry->num_rows > 0){
+        $res = $qry->fetch_array();
+        foreach($res as $k => $v){
+            if(!is_numeric($k))
+            $$k = $v;
+        }
     }
 }
 ?>
 
 <div class="card card-outline rounded-0 card-maroon">
-<h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i><?php echo $prop_id ?></i> </b></h3>
+    <h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i><?php echo $_GET['id'] ?></i> </b></h3>
     <div class="table-responsive">
         <table class="table table-bordered table-stripped" style="text-align:center;">
         <br>
@@ -49,13 +53,12 @@ if(isset($_GET['id'])){
                     <th>Principal</th>
                     <th>Remaining Balance</th>
                     <th>Status</th>
-                 
                 </tr>
             </thead>
         <tbody style="font-size:14px;">
             <?php 
                     $i = 1;
-                    $qry = $conn->query("SELECT * FROM t_av_breakdown WHERE av_no =".$_GET['id']." ORDER BY payment_count ASC") ;
+                    $qry = $conn->query("SELECT * FROM t_av_breakdown WHERE av_no = '{$_GET['id']}' ORDER BY payment_count ASC") ;
                         while($row = $qry->fetch_assoc()):
                     ?>
                 <tr>
@@ -70,7 +73,6 @@ if(isset($_GET['id'])){
                     <td><?php echo number_format($row["principal"],2) ?></td>
                     <td><?php echo number_format($row["remaining_balance"],2) ?></td>
                     <td><?php echo $row["status"] ?></td>
-                  
                 </tr>
                 <?php endwhile; ?>
             </tbody>

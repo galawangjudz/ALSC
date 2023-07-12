@@ -13,7 +13,9 @@ $username = $_settings->userdata('username');
 echo $_GET['id'];
 $prop_id = $_GET['prop_id'];
 
+
 if(isset($_GET['id']) && $_GET['id'] > 0){
+	
     
 	$csr = $conn->query("SELECT x.*, y.* FROM t_csr x inner join t_additional_cost y on x.c_csr_no = y.c_csr_no where md5(x.c_csr_no) = '{$_GET['id']}' ");
 
@@ -100,6 +102,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		$block = $rows['c_block'];
 		$lot = $rows['c_lot'];
 	endwhile;
+	
+	$qry_code = substr($prop_id, 0, 2);
+
+	$qry_lid = $conn->query("SELECT * FROM t_projects WHERE c_project_code = '" . $qry_code . "'");
+
+
+	while($row_lid = $qry_lid->fetch_assoc()):
+		$get_pcode = $row_lid['c_project_code'];
+
+	endwhile;
+	$merged_query = $get_pcode . $lot_id . $csr_type .'01' ;
+
+	$qry_res = $conn->query("SELECT * FROM t_av_summary WHERE property_id = '" . $merged_query . "'");
+
+	while ($row_res = $qry_res->fetch_assoc()) {
+		$av_amt = $row_res['c_av_amount']; // Principal or av_amt?
+		// Process each row as needed
+	}
+	
+
 }
 
 ?>
@@ -484,6 +506,7 @@ input{
 											<div class="panel-heading">
 												<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
 												<div class="titles"><center> Buyer's Information Details</center></div>
+												<?php $av_amt; ?>
 												<div class="clear"></div>
 											</div>
 											</th>
@@ -1409,7 +1432,7 @@ input{
 										<div class="col-md-6">	
 											<div class="form-group">
 												<label class="control-label">Reservation: </label>
-												<input type="text" class="form-control margin-bottom required reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" >
+												<input type="text" class="form-control margin-bottom required reservation-fee" name="reservation" id="reservation" value="<?php echo isset($av_amt) ? $av_amt : 0; ?>" tabindex ="1" readonly>
 											</div>
 										</div>
 									</div>

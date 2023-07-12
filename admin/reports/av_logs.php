@@ -5,6 +5,9 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+<?php
+	$usertype = $_settings->userdata('user_type');
+?>
 
 <style>
 	.main_menu{
@@ -107,36 +110,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <?php 
-                        $i = 1;
-                            $qry = $conn->query("SELECT * FROM t_av_summary ORDER BY c_av_date DESC") ;
-                            while($row = $qry->fetch_assoc()):
-                                
-                        ?>
-                        <tr>
-                        <td><?php echo $row["c_av_no"] ?></a></td>
-						<td><?php echo $row["property_id"] ?></a></td>
-                        <td><?php echo $row["c_av_date"] ?></td>
-                        <td><?php echo number_format($row["c_av_amount"],2) ?></td>
-						<td><?php echo number_format($row["c_principal"],2) ?></td>
-						<td><?php echo number_format($row["c_interest"],2) ?></td>
-                        <td><?php echo number_format($row["c_rebate"],2) ?></td>
-                        <td><?php echo number_format($row["c_surcharge"],2) ?></td>
-						<td><?php echo number_format($row["c_deductions"],2) ?></td>
-                     <!--    <td><?php echo $row["c_new_acc_no"] ?></td> -->
-                        <td><?php echo $row["c_remarks"] ?></td>
-                        <td><a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
-						<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-										<span class="tooltip">Approved</span>
-										</a>
-							<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;"  data-id="<?php echo $row['c_av_no'] ?>" id="view_tooltip">
-									<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-									<span class="tooltip">Disapproved</span>
-						</a>
-						</td>
-                        </tr>
-                    <?php endwhile; ?>
+                    <?php
+						$i = 1;
+						$qry = $conn->query("SELECT * FROM t_av_summary ORDER BY c_av_date DESC");
+						while ($row = $qry->fetch_assoc()):
+							?>
+							<tr>
+								<td><?php echo $row["c_av_no"] ?></td>
+								<td><?php echo $row["property_id"] ?></td>
+								<td><?php echo $row["c_av_date"] ?></td>
+								<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
+								<td><?php echo number_format($row["c_principal"], 2) ?></td>
+								<td><?php echo number_format($row["c_interest"], 2) ?></td>
+								<td><?php echo number_format($row["c_rebate"], 2) ?></td>
+								<td><?php echo number_format($row["c_surcharge"], 2) ?></td>
+								<td><?php echo number_format($row["c_deductions"], 2) ?></td>
+								<td><?php echo $row["c_remarks"] ?></td>
+								<td>
+									<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
+									<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
+									<?php
+									if($row["lvl1"]== 0){
+										if ($usertype == "COO" || $usertype == "IT Admin"):
+											echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" prop-id="' . $row['property_id'] . '" 
+												style="font-size: 12px; height: 30px; width: 37px;">
+												<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+												<span class="tooltip">Approved</span>
+												</a>';
+										endif;
+										if ($usertype == "COO" || $usertype == "IT Admin"):
+											echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '"
+													style="font-size: 12px; height: 30px; width: 37px;">
+													<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+													<span class="tooltip">Disapproved</span>
+												</a>';
+										endif;
+									}?>
+								</td>
+							</tr>
+						<?php endwhile; ?>
                     </tbody></table>
 					</div>                     
             </div>
@@ -146,11 +158,61 @@
 $(document).ready(function() {
     $('.table').dataTable(
         {
-                "ordering": false
+            "ordering": false
         }
     ); 
 });
 $('.view_av').click(function(){
 	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/application_voucher/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
 })
+$('.approved_av').click(function(){
+    _conf("Are you sure you want to approve this application voucher?", "approved_av", [$(this).attr('data-id'),$(this).attr('prop-id')]);
+})
+$('.disapproved_av').click(function(){
+	_conf("Are you sure you want to disapprove this application voucher?","disapproved_av",[$(this).attr('data-id'),$(this).attr('prop-id')]);
+}) 
+function approved_av($data_id,$prop_id){
+	start_loader();
+	$.ajax({
+		url:_base_url_+"classes/Master.php?f=av_approval",
+		method:"POST",
+		data:{data_id: $data_id, prop_id: $prop_id},
+		dataType:"json",
+		error:err=>{
+			console.log(err)
+			alert_toast("An error occured.",'error');
+			end_loader();
+		},
+		success:function(resp){
+			if(typeof resp== 'object' && resp.status == 'success'){
+				location.reload();
+			}else{
+				alert_toast("An error occured.",'error');
+				end_loader();
+			}
+		}
+	})
+}
+function disapproved_av($data_id,$prop_id){
+	start_loader();
+	$.ajax({
+		url:_base_url_+"classes/Master.php?f=av_disapproval",
+		method:"POST",
+		data:{data_id: $data_id, prop_id: $prop_id},
+		dataType:"json",
+		error:err=>{
+			console.log(err)
+			alert_toast("An error occured.",'error');
+			end_loader();
+		},
+		success:function(resp){
+			if(typeof resp== 'object' && resp.status == 'success'){
+				location.reload();
+			}else{
+				alert_toast("An error occured.",'error');
+				end_loader();
+			}
+		}
+	})
+}
 </script>
