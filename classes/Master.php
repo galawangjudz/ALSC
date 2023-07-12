@@ -987,7 +987,20 @@ Class Master extends DBConnection {
 		$data .= ", c_reserve_date = CURRENT_TIMESTAMP() " ;
 		$data .= ", c_amount_paid = '$amount_paid' ";
 
+
 		if(empty($id)){
+			
+			$check = $this->conn->query("SELECT * FROM `t_reservation` where `c_or_no` = '{$or_no}'")->num_rows;
+			if($this->capture_err())
+				return $this->capture_err();
+			if($check > 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "OR number already exists!";
+				
+				return json_encode($resp);
+				exit;
+			} 
+
 			$save = $this->conn->query("INSERT INTO t_reservation set ".$data);
 			
 		}else{
@@ -1540,11 +1553,9 @@ Class Master extends DBConnection {
 		
 			if ($l_status == ''){
 					$l_sql = $this->conn->query("UPDATE properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
-					$l_sql = $this->conn->query("UPDATE pending_properties SET c_balance = ".$balance." WHERE property_id = ".$prop_id);
 			}else{
 					$l_sql =  $this->conn->query("UPDATE properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
-					$l_sql =  $this->conn->query("UPDATE pending_properties SET c_account_status = '".$l_status."' , c_balance = ".$balance." WHERE property_id =".$prop_id);
-			}
+					}
 		endwhile;
 
 		if($save && $l_sql){
