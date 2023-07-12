@@ -2658,14 +2658,15 @@ Class Master extends DBConnection {
 	function res_approval(){
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where id = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where id = ".$data_id);
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where property_id = ".$data_id);
-			$qry1 = "SELECT * FROM pending_restructuring where property_id =".$data_id;
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where id = ".$data_id);
+			$qry1 = "SELECT * FROM pending_restructuring where id =".$data_id;
 			$sql1 = $this->conn->query($qry1);
 			while($row = $sql1->fetch_assoc()) {
+				$prop_id = $row['property_id'];
 				$payment_type1 = $row['c_payment_type1'];
 				$net_dp = $row['c_net_dp'];
 				$less_dp = $row['less_dp'];
@@ -2712,15 +2713,15 @@ Class Master extends DBConnection {
 				$data .= ", c_restructured = '$mode'";
 				
 	
-				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$data_id);
+				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
 
 
 			}
 		
-			$add = $this->conn->query("INSERT INTO tbl_restructuring set status = 1, property_id = ".$data_id);
+			$add = $this->conn->query("INSERT INTO tbl_restructuring set res_id =".$data_id. ", status = 1, property_id = ".$prop_id);
 
 
-			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$data_id." ORDER by payment_count";
+			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
 			$sql = $this->conn->query($qry);
 			$l_last = $sql->num_rows - 1;
 			$payments_data = array(); 
@@ -2738,10 +2739,10 @@ Class Master extends DBConnection {
 			$due_date = $last_row['due_date'];
 			$pay_count = $last_row['payment_count'] + 1;
 
-			$data2 = "property_id = '$data_id' ";
+			$data2 = "property_id = '$prop_id' ";
 			$data2 .= ", due_date = '$due_date' ";
 			$data2 .= ", pay_date = '$restructured_date' ";
-			$data2 .= ", or_no = '******' ";
+			$data2 .= ", or_no = 'RSTR-". $data_id ."'";
 			$data2 .= ", payment_amount = '0' ";
 			$data2 .= ", amount_due = '$amount_due' ";
 			$data2 .= ", rebate = '0' ";
@@ -2756,7 +2757,7 @@ Class Master extends DBConnection {
 			$res_pay = $this->conn->query("INSERT INTO property_payments set ".$data2);
 
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where id = ".$data_id);
 		endif;
 		
 
