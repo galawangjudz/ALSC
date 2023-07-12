@@ -3113,9 +3113,10 @@ Class Master extends DBConnection {
 		$update = $this->conn->query("UPDATE properties set c_active='2',c_reopen = '1' where property_id = ".$prop_id);
 		$get_lid = intval(substr($prop_id, 2, 8));
 		$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
+		$update2 = $this->conn->query("UPDATE t_csr set c_active= 0  where c_lid = ".$get_lid);
 		$delete = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 
-		if($update && $delete){
+		if($update && $update2 && $delete){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Transferring of this account successfully approved!");
 		}else{
@@ -3162,7 +3163,7 @@ Class Master extends DBConnection {
 
 	function backout_acc(){
 		extract($_POST);
-		$backout = $this->conn->query("UPDATE properties set c_active = '0', c_backout_date = DATE(CURRENT_TIMESTAMP()) where property_id = ".$prop_id);
+		$backout = $this->conn->query("UPDATE properties set c_reopen = '0', c_active = '0', c_backout_date = DATE(CURRENT_TIMESTAMP()) where property_id = ".$prop_id);
 		$lid = substr($prop_id,2,8);
 		$inactive_csr = $this->conn->query("UPDATE t_csr set c_active = '0' where c_csr_no =". $csr_no);
 		$update_lot = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =". $lid);
@@ -3282,6 +3283,7 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+	
 	function save_journal(){
 		if(empty($_POST['id'])){
 			$prefix = date("Ym-");

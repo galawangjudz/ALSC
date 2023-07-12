@@ -10,7 +10,7 @@ if($_settings->chk_flashdata('success')): ?>
 <?php 
 
 $username = $_settings->userdata('username'); 
-echo $_GET['id'];
+//echo $_GET['id'];
 $prop_id = $_GET['prop_id'];
 
 
@@ -112,12 +112,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		$get_pcode = $row_lid['c_project_code'];
 
 	endwhile;
-	$merged_query = $get_pcode . $lot_id . $csr_type .'01' ;
-
-	$qry_res = $conn->query("SELECT * FROM t_av_summary WHERE property_id = '" . $merged_query . "'");
+	//$merged_query = $get_pcode . $lot_id . $csr_type .'01' ;
+	//pwede naman donita ung prop_id variable para dito di kasi pwede ung merged_query kasi ung ending account number di lagi 01
+	//$qry_res = $conn->query("SELECT * FROM t_av_summary WHERE property_id = '" . $merged_query . "'");
+	
+	$qry_res = $conn->query("SELECT * FROM t_av_summary WHERE property_id = '" . $prop_id . "'");
 
 	while ($row_res = $qry_res->fetch_assoc()) {
 		$av_amt = $row_res['c_av_amount']; // Principal or av_amt?
+		//echo $av_amt;
 		// Process each row as needed
 	}
 	
@@ -404,7 +407,7 @@ input{
 			} else if(l_payment_type1 == "Full DownPayment"){
 				
 				$('#no_pay_text').hide();
-				$('#no_payment').val(0);
+				$('#no_payment').val(1);
 				$('#no_payment').hide();
 				$('#mo_down_text').hide();
 				$('#monthly_down').val(0);
@@ -423,7 +426,7 @@ input{
 				l_a = $('.net-tcp').val();
 				l_b = $('.reservation-fee').val();
 				$('#down_frm').hide();
-				/* $('#no_payment').val('1'); */
+			
 				$('#mo_down_text').hide();
 				l_sdate = $('.first-dp-date').val();
 				$('#p1').hide();
@@ -492,8 +495,8 @@ input{
 		</div>
 		<form method="" id="save_csr">
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
-			<input type="text" name="c_csr_no" value="">
-            <input type="text" name="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
+			<input type="hidden" name="c_csr_no" value="">
+            <input type="hidden" name="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
 			<div id="Buyer" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
