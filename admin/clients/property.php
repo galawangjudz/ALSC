@@ -320,7 +320,7 @@ body{
                       <a class="btn btn-flat btn-info undo-delete-last-or" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-undo"></span>&nbsp;&nbsp;Undo</a>
                     </td>
                     <td style="width:10%;">
-                      <a class="btn btn-flat btn-dark new_av2" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
+                      <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
                     </td>
                   </tr>
                 </table>
