@@ -114,7 +114,7 @@ foreach($res->fetch_array() as $k =>$v){
 						<div class="col-md-12">   
 							<div class="form-group">
 								<label>Remaining Reservation Fee: </label>
-								<input type="text" class="form-control margin-bottom required" name="amount_paid" id="amount_paid" value="<?php echo isset($meta['c_amount_paid']) ? $meta['c_amount_paid']: '' ?>" >
+								<input type="text" class="form-control margin-bottom required" name="amount_paid" id="amount_paid" value="<?php echo isset($meta['c_amount_paid']) ? $meta['c_amount_paid']: '' ?>" readonly>
 								</div>
 							<div class="form-group">
 								<label>Total Reservation Fee: </label>

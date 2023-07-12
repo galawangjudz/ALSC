@@ -169,16 +169,6 @@
 						<th>Last Name</th>
 						<th>First Name</th>
 						<th>Middle Name</th>
-                        <!-- <th>Payment Amt.</th>
-                        <th>Pay Date</th>
-						<th>Due Date</th>
-                        <th>OR No.</th>
-                        <th>Amt Due</th>
-						<th>Rebate</th>
-						<th>Surcharge</th>
-                        <th>Interest</th>
-                        <th>Principal</th>
-                        <th>Rem Bal</th> -->
                         <th>Billing Status</th>
                         <th>FM Status</th>
                         <th>CFO Status</th>
@@ -211,16 +201,6 @@
 						<td><?php echo $row["last_name"] ?></a></td>
 						<td><?php echo $row["first_name"] ?></a></td>
 						<td><?php echo $row["middle_name"] ?></a></td>
-                        <!-- <td><?php echo number_format($row["payment_amount"],2) ?></td>
-                        <td><?php echo $row["pay_date"] ?></td>
-						<td><?php echo $row["due_date"] ?></td>
-						<td><?php echo $row["or_no"] ?></td>
-                        <td><?php echo number_format($row["amount_due"],2) ?></td>
-                        <td><?php echo number_format($row["rebate"],2) ?></td>
-						<td><?php echo number_format($row["surcharge"],2) ?></td>
-                        <td><?php echo number_format($row["interest"],2) ?></td>
-                        <td><?php echo number_format($row["principal"],2) ?></td>
-                        <td><?php echo number_format($row["remaining_balance"],2) ?></td> -->
 
                         <?php if($row['lvl1'] == 0): ?>
 							<td><span class="badge badge-warning">Pending</span></td>
@@ -328,16 +308,6 @@
 							<td><?php echo $row["last_name"] ?></a></td>
 							<td><?php echo $row["first_name"] ?></a></td>
 							<td><?php echo $row["middle_name"] ?></a></td>
-							<!-- <td><?php echo number_format($row["payment_amount"],2) ?></td>
-							<td><?php echo $row["pay_date"] ?></td>
-							<td><?php echo $row["due_date"] ?></td>
-							<td><?php echo $row["or_no"] ?></td>
-							<td><?php echo number_format($row["amount_due"],2) ?></td>
-							<td><?php echo number_format($row["rebate"],2) ?></td>
-							<td><?php echo number_format($row["surcharge"],2) ?></td>
-							<td><?php echo number_format($row["interest"],2) ?></td>
-							<td><?php echo number_format($row["principal"],2) ?></td>
-							<td><?php echo number_format($row["remaining_balance"],2) ?></td> -->
 	
 							<?php if($row['lvl1'] == 0): ?>
 								<td><span class="badge badge-warning">Pending</span></td>
@@ -443,16 +413,6 @@
 						<td><?php echo $row["last_name"] ?></td>
 						<td><?php echo $row["first_name"] ?></td>
 						<td><?php echo $row["middle_name"] ?></td>
-                        <!-- <td><?php echo number_format($row["payment_amount"],2) ?></td>
-                        <td><?php echo $row["pay_date"] ?></td>
-						<td><?php echo $row["due_date"] ?></td>
-						<td><?php echo $row["or_no"] ?></td>
-                        <td><?php echo number_format($row["amount_due"],2) ?></td>
-                        <td><?php echo number_format($row["rebate"],2) ?></td>
-						<td><?php echo number_format($row["surcharge"],2) ?></td>
-                        <td><?php echo number_format($row["interest"],2) ?></td>
-                        <td><?php echo number_format($row["principal"],2) ?></td>
-                        <td><?php echo number_format($row["remaining_balance"],2) ?></td> -->
 
                         <?php if($row['lvl1'] == 0): ?>
 							<td><span class="badge badge-warning">Pending</span></td>

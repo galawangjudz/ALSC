@@ -102,7 +102,7 @@ body{
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
   $client_id = $row['client_id'];
-  $acc_stat = $row['c_reopen'];
+  // $acc_stat = $row['c_reopen'];
 
 ?>
 
@@ -141,7 +141,7 @@ body{
         <tr><th style="padding-left:5px;">Contact No: </th><td><?php echo $row['contact_no'];?></td></tr>
         <tr><th style="padding-left:5px;">Contact Abroad: </th><td><?php echo $row['contact_abroad'];?></td></tr>
         <tr><th style="padding-left:5px;">Email Address: </th><td><?php echo $row['email'];?></td></tr>
-        <input type="hidden" value="<?php echo $row['c_reopen'];?>" id="txt_reopen"/>
+        <!-- <input type="hidden" value="<?php echo $row['c_reopen'];?>" id="txt_reopen"/> -->
         </table>
 
         <hr>
@@ -320,6 +320,14 @@ body{
                       <a class="btn btn-flat btn-info undo-delete-last-or" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-undo"></span>&nbsp;&nbsp;Undo</a>
                     </td>
                     <td style="width:10%;">
+                     <!-- <?php
+                          $qry13 = $conn->query("SELECT * FROM t_av_summary where md5(property_id) = '{$_GET['id']}'");
+                          if($qry13->num_rows > 0){
+                            echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
+                          }else{
+                            echo '<a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>';
+                      }
+                    ?> -->
                       <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
                     </td>
                   </tr>

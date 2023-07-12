@@ -2658,15 +2658,14 @@ Class Master extends DBConnection {
 	function res_approval(){
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where property_id = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where property_id = ".$data_id);
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where id = ".$data_id);
-			$qry1 = "SELECT * FROM pending_restructuring where id =".$data_id;
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where property_id = ".$data_id);
+			$qry1 = "SELECT * FROM pending_restructuring where property_id =".$data_id;
 			$sql1 = $this->conn->query($qry1);
 			while($row = $sql1->fetch_assoc()) {
-				$prop_id = $row['property_id'];
 				$payment_type1 = $row['c_payment_type1'];
 				$net_dp = $row['c_net_dp'];
 				$less_dp = $row['less_dp'];
@@ -2713,15 +2712,15 @@ Class Master extends DBConnection {
 				$data .= ", c_restructured = '$mode'";
 				
 	
-				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$prop_id);
+				$update = $this->conn->query("UPDATE properties set ".$data." where property_id = ".$data_id);
 
 
 			}
 		
-			$add = $this->conn->query("INSERT INTO tbl_restructuring set res_id =".$data_id. ", status = 1, property_id = ".$prop_id);
+			$add = $this->conn->query("INSERT INTO tbl_restructuring set status = 1, property_id = ".$data_id);
 
 
-			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$prop_id." ORDER by payment_count";
+			$qry = "SELECT due_date, payment_count, status_count FROM property_payments where property_id =".$data_id." ORDER by payment_count";
 			$sql = $this->conn->query($qry);
 			$l_last = $sql->num_rows - 1;
 			$payments_data = array(); 
@@ -2739,10 +2738,10 @@ Class Master extends DBConnection {
 			$due_date = $last_row['due_date'];
 			$pay_count = $last_row['payment_count'] + 1;
 
-			$data2 = "property_id = '$prop_id' ";
+			$data2 = "property_id = '$data_id' ";
 			$data2 .= ", due_date = '$due_date' ";
 			$data2 .= ", pay_date = '$restructured_date' ";
-			$data2 .= ", or_no = 'RSTR-". $data_id ."'";
+			$data2 .= ", or_no = '******' ";
 			$data2 .= ", payment_amount = '0' ";
 			$data2 .= ", amount_due = '$amount_due' ";
 			$data2 .= ", rebate = '0' ";
@@ -2757,7 +2756,7 @@ Class Master extends DBConnection {
 			$res_pay = $this->conn->query("INSERT INTO property_payments set ".$data2);
 
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where id = ".$data_id);
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where property_id = ".$data_id);
 		endif;
 		
 
@@ -2800,7 +2799,7 @@ Class Master extends DBConnection {
 		$data = "property_id = '$prop_id' ";
 		$acc_status = $_POST['acc_stat'];
 	
-		if ($acc_status == "Reservation" || $acc_status == "Partial DownPayment" || $acc_status == 'No DownPayment'){
+		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
 				
 				$payment_type1 = $_POST['payment_type1'];
 				$less_paymt= $_POST['less_paymt_dte'];
@@ -3048,8 +3047,6 @@ Class Master extends DBConnection {
 			
 			$sql = $this->conn->query("SELECT * FROM property_payments where property_id =".$p_id."");
 			
-			/* $sql2 = $this->conn->query("UPDATE property set c_reopen = 1 where property_id =".$p_id."");
- */
 			if($sql->num_rows <= 0){
 				$resp['status'] = 'failed';
 				$resp['err'] = 'No Payment Records yet! Please add to proceed with payments';
@@ -3070,8 +3067,6 @@ Class Master extends DBConnection {
 				$status = $row['status'];
 				$status_count = $row['status_count'];
 				$payment_count = $row['payment_count'];
-
-	
 	
 				$data = " property_id = '$prop_id' ";
 				$data .= ", av_no = '$av_no' ";
@@ -3088,9 +3083,9 @@ Class Master extends DBConnection {
 				$data .= ", status = '$status' ";
 				$data .= ", status_count = '$status_count' ";
 				$data .= ", payment_count = '$payment_count' ";
-			
 	
 				$save = $this->conn->query("INSERT INTO t_av_breakdown set ".$data);
+				//$update = $this->conn->query("UPDATE property_payments set pending_status=1 WHERE property_id = '$prop_id'");
 	
 			endwhile;
 
@@ -3107,8 +3102,49 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 			
 	}
-	
 
+	function av_approval(){
+		//reopen (properties)
+		//active_status - transferred (2)
+		//update t_lots
+		//removed from payments - pending_status (property_payments)
+		extract($_POST);
+		$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+		$update = $this->conn->query("UPDATE properties set c_active='2',c_reopen = '1' where property_id = ".$prop_id);
+		$get_lid = intval(substr($prop_id, 2, 8));
+		$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
+		$delete = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
+
+		if($update && $delete){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Transferring of this account successfully approved!");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+	function av_disapproval(){
+		//reopen (properties)
+		//active_status - transferred (2)
+		//update t_lots
+		//removed from payments - pending_status (property_payments)
+		extract($_POST);
+		$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
+		$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
+		// $get_lid = intval(substr($prop_id, 2, 8));
+		// $update = $this->conn->query("UPDATE t_lots set c_status='Sold' where c_lid = ".$get_lid);
+		//$delete = $this->conn->query("DELETE FROM property_payments WHERE pending_status = 1 and property_id = ".$prop_id);
+
+		if($update){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Transferring of this account successfully disapproved!");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
 	function set_retention(){
 		extract($_POST);
 		$ret = $this->conn->query("UPDATE properties set c_retention = '1' where property_id = ".$prop_id);
@@ -3528,7 +3564,11 @@ switch ($action) {
 	case 'save_restructured2':
 		echo $Master->save_restructured2();
 	break;
-	
+	case 'av_approval':
+		echo $Master->av_approval();
+	break;
+	case 'av_disapproval':
+		echo $Master->av_disapproval();
 	default:
 		break;
 }
