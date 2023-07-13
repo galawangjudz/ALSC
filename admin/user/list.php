@@ -45,7 +45,7 @@
                         <?php if($row['type'] == 1): ?>
                             <td class="text-center"><span class="badge badge-primary">Admin</span></td>
                         <?php elseif($row['type'] == 2): ?>
-                            <td class="text-center"><span class="badge badge-success">COO</span></td>
+                            <td class="text-center"><span class="badge badge-success">Chief Officer</span></td>
                         <?php elseif($row['type'] == 3): ?>
                             <td class="text-center"><span class="badge badge-secondary">Manager</span></td>
                         <?php elseif($row['type'] == 4): ?>
