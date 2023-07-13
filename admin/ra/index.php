@@ -267,7 +267,7 @@
 							$td=strtotime($today_date);		
 	
 							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2, c_active = 0 WHERE c_csr_no = '".$id."'");	
 								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 							}
