@@ -313,7 +313,7 @@ Class Master extends DBConnection {
 
 			//lot computation
 			$username =  $_POST['username'];
-			//$prop_id = $_POST['prop_id'];
+			$prop_id = $_POST['prop_id'];
 			$lot_lid = $_POST['l_lid'];
 			$lot_area = $_POST['lot_area'];
 			$price_sqm = $_POST['price_per_sqm'];
@@ -331,6 +331,7 @@ Class Master extends DBConnection {
 			$tcp_disc_amt = $_POST['tcp_disc_amt'];
 			$vat_amt = $_POST['vat_amt_computed'];
 			$net_tcp = $_POST['net_tcp'];
+			
 
 			// Payment Details
 			$reservation = $_POST['reservation'];
@@ -350,6 +351,10 @@ Class Master extends DBConnection {
 			$start_date = $_POST['start_date'];
 			$invoice_notes = $_POST['invoice_notes'];
 			$type = $_POST['chkOption3'];
+			$rev = $_POST['rev_status'];//////////////////ADDED
+
+
+
 
 			$data = " c_lot_lid = '$lot_lid' ";
 			$data .= ", c_type = '$type' ";
@@ -386,9 +391,16 @@ Class Master extends DBConnection {
 			$data .= ", c_start_date = '$start_date' ";
 			$data .= ", c_remarks = '$invoice_notes' ";
 			$data .= ", c_created_by = '$username' ";
-			$data .= ", c_verify = 0 ";
-			$data .= ", coo_approval = 0";
-			$data .= ", c_revised = 0";
+
+			if ($prop_id != null){ //////////////////ADDED
+				$data .= ", c_revised = 2 ";//////////////////ADDED
+				$data .= ", old_property_id = '$prop_id' ";//////////////////ADDED
+				
+			}else{//////////////////ADDED
+				$data .= ", c_revised = '0' ";//////////////////ADDED
+			}//////////////////ADDED
+			
+			
 			//$data .= ", old_property_id = '$prop_id'";
 
 
@@ -1144,7 +1156,8 @@ Class Master extends DBConnection {
 		if ($value == 1):
 			$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
 			//$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
-			$save = $this->conn->query("UPDATE t_csr SET c_verify = 1, coo_approval = 1, c_revised = 0 where c_csr_no = ".$id);
+			//$save = $this->conn->query("UPDATE t_csr SET c_verify = 1, coo_approval = 1, c_revised = 0 where c_csr_no = ".$id);
+			$save = $this->conn->query("UPDATE t_csr SET c_verify = 1, coo_approval = 1 where c_csr_no = ".$id);
 		elseif ($value == 2):
 			$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
@@ -1285,16 +1298,11 @@ Class Master extends DBConnection {
 			$start_date = $row['c_start_date'];
 			$remarks = $row['c_remarks'];
 			$active = $row['c_active'];
-			$old_prop_id = $row['old_prop_id'];
+
+			$old_prop_id = $row['old_property_id'];
+
 			$code = substr($lot_lid, 0, 3);
-
-			
-
-
-
-			$old_acct = $this->conn->query("SELECT c_date_of_sale from properties where old_prop_id =".$old_prop_id);
-			$old_data = $old_acct->fetch_array();
-			$old_date_of_sale = $old_data['date_of_sale'];
+			$rev = $row['c_revised'];
 
 
 			$qry = $this->conn->query("SELECT c_project_code FROM t_projects where c_code =".$code);
@@ -1342,8 +1350,17 @@ Class Master extends DBConnection {
 			$data .= ", c_active = '$active' ";
 			$balance = ($net_tcp - $reservation);
 			$data .= ", c_balance = '$balance' ";
-			//$data .= ", old_property_id = '$old_prop_id' ";
+			$data .= ", new_property_id = '$old_prop_id' ";
 
+
+			if($rev == '2'){
+				$old_acct = $this->conn->query("SELECT c_date_of_sale from properties where property_id =".$old_prop_id);
+				$old_data = $old_acct->fetch_array();
+				$old_date_of_sale = $old_data['c_date_of_sale']; 
+				$data .=", c_date_of_sale = '$old_date_of_sale' ";
+			}
+
+			
 			endwhile;
 
 	/* 	$check2 = $this->conn->query("SELECT * FROM t_lots where c_status = 'Sold' and c_lid =".$lot_lid);

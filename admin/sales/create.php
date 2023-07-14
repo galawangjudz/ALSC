@@ -13,6 +13,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 	if($csr->num_rows > 0){
 		while($row = $csr->fetch_assoc()):
+			$prop_id = null;
 			$c_csr_no =  $row['c_csr_no'];
 			$lot_id = $row['c_lot_lid'];
 			$csr_type = $row['c_type'];
@@ -463,6 +464,7 @@ input{
 		<form method="" id="save_csr">
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
 			<input type="hidden" name="c_csr_no" value="<?php echo isset($c_csr_no) ? $c_csr_no : '';  ?>">
+			<input type="text" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
 			<div id="Buyer" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
@@ -870,6 +872,7 @@ input{
 				</div>
 			</div>
 			
+			
 			<div id="Investment" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
@@ -965,6 +968,7 @@ input{
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
+											<input type="text" class="form-control margin-bottom copy-input" name="rev_status" id="rev_status" value="<?php echo isset($csr_rev) ? $csr_rev : ''; ?>">
 												<label class="control-label">Lot Area: </label>
 												<input type="text" class="form-control margin-bottom lot-area" name="lot_area" id="lot_area" readonly value="<?php echo isset($lot_area) ? $lot_area : ''; ?>">
 											</div>

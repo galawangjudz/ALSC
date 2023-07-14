@@ -243,53 +243,53 @@ $(document).ready(function() {
 	});
 
 
-	$(document).on('click', ".select-ra", function(e) {
+	// $(document).on('click', ".select-ra", function(e) {
 
-		e.preventDefault;
+	// 	e.preventDefault;
 
-	 	var ra = $(this); 
+	//  	var ra = $(this); 
 
-		$('#insert_ra').modal({ backdrop: 'static', keyboard: false });
+	// 	$('#insert_ra').modal({ backdrop: 'static', keyboard: false });
 
-		return false;
+	// 	return false;
 
-	});
+	// });
 
-	$(document).on('click', ".ra-select", function(e) {
+	// $(document).on('click', ".ra-select", function(e) {
 
-		var ra_no =  $(this).attr('data-ra-no');
-		var lot_lid =  $(this).attr('data-ra-lot-lid');
-		var csr_no =  $(this).attr('data-csr-no');
-		var ra_site = $(this).attr('data-ra-site');
-		var ra_block = $(this).attr('data-ra-block');
-		var ra_lot = $(this).attr('data-ra-lot');
-		var fullname = $(this).attr('data-ra-fname');
+	// 	var ra_no =  $(this).attr('data-ra-no');
+	// 	var lot_lid =  $(this).attr('data-ra-lot-lid');
+	// 	var csr_no =  $(this).attr('data-csr-no');
+	// 	var ra_site = $(this).attr('data-ra-site');
+	// 	var ra_block = $(this).attr('data-ra-block');
+	// 	var ra_lot = $(this).attr('data-ra-lot');
+	// 	var fullname = $(this).attr('data-ra-fname');
 
-		var reserve_or_no = $(this).attr('data-or-no');
-		var reserve_date = $(this).attr('data-reserve-date');
-		/* var reserve_amt = $(this).attr('data-amt-paid'); */
-		var reserve_amt = $(this).attr('data-res-remaining');
-		var total_res = $(this).attr('data-ra-res');
+	// 	var reserve_or_no = $(this).attr('data-or-no');
+	// 	var reserve_date = $(this).attr('data-reserve-date');
+	// 	/* var reserve_amt = $(this).attr('data-amt-paid'); */
+	// 	var reserve_amt = $(this).attr('data-res-remaining');
+	// 	var total_res = $(this).attr('data-ra-res');
 
 
-		$('#ra_no').val(ra_no);
-		$('#lot_lid').val(lot_lid);
-		$('#csr_no').val(csr_no);
-		$('#reserve_site').val(ra_site);
-		$('#reserve_block').val(ra_block);
-		$('#reserve_lot').val(ra_lot);
-		$('#fullname').val(fullname);
-		$('#or_no').val(reserve_or_no);
-		$('#pay_date').val(reserve_date);
-		$('#amount_paid').val(reserve_amt);
-		$('#total_res').val(total_res);
+	// 	$('#ra_no').val(ra_no);
+	// 	$('#lot_lid').val(lot_lid);
+	// 	$('#csr_no').val(csr_no);
+	// 	$('#reserve_site').val(ra_site);
+	// 	$('#reserve_block').val(ra_block);
+	// 	$('#reserve_lot').val(ra_lot);
+	// 	$('#fullname').val(fullname);
+	// 	$('#or_no').val(reserve_or_no);
+	// 	$('#pay_date').val(reserve_date);
+	// 	$('#amount_paid').val(reserve_amt);
+	// 	$('#total_res').val(total_res);
 
 		
 
 
-		$('#insert_ra').modal('hide');
+	// 	$('#insert_ra').modal('hide');
 
-	});
+	// });
 // remove commission row
 $('#comm_table').on('click', ".delete-row", function(e) {
 	e.preventDefault();

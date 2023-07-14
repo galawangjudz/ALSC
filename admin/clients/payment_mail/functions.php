@@ -1087,7 +1087,7 @@ function popRAsList() {
 						<td>'.$row["last_name"].', '.$row["first_name"].' '.$row["middle_name"].' </td>
 					
 						
-						<td><a href="#" class="btn btn-primary btn-xs ra-select" data-ra-no="'.$row['ra_id'].'" data-ra-lot-lid="'.$row['c_lot_lid'].'" data-csr-no="'.$row['c_csr_no'].'" data-ra-site="'.$row['c_acronym'].'" data-ra-block="'.$row['c_block'].'" data-ra-lot="'.$row['c_lot'].'" data-res-remaining="'.$remaining_res.'" data-ra-res="'.$row['c_reservation_amt'].'" data-ra-fname="'.$row["last_name"].', '.$row["first_name"].' '.$row["middle_name"].'">Select</a></td>
+						<td><a href="#" class="btn btn-primary btn-xs ra-select" data-ra-no="'.$row['ra_id'].'" data-ra-lot-lid="'.$row['c_lot_lid'].'" data-csr-no="'.$row['c_csr_no'].'" data-ra-site="'.$row['c_acronym'].'" data-ra-block="'.$row['c_block'].'" data-ra-lot="'.$row['c_lot'].'" data-res-remaining="'.$remaining_res.'" data-ra-res="'.$row['c_reservation_amt'].'" data-ra-fname="'.$row["last_name"].', '.$row["first_name"].' '.$row["middle_name"].','.$row["c_or_no"].'">Select</a></td>
 				   
 						</tr>
 				';
