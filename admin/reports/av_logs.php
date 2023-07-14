@@ -110,6 +110,7 @@
                         </tr>
                     </thead>
                     <tbody>
+
                     <?php
 						$i = 1;
 						$qry = $conn->query("SELECT * FROM t_av_summary ORDER BY c_av_date DESC");
@@ -149,6 +150,7 @@
 								</td>
 							</tr>
 						<?php endwhile; ?>
+
                     </tbody></table>
 					</div>                     
             </div>

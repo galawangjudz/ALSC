@@ -456,7 +456,10 @@ foreach($res->fetch_array() as $k =>$v){
                             el.addClass("alert alert-danger err-msg").text(resp.msg)
                             _this.prepend(el)
                             el.show('slow')
+						
                             end_loader()
+							window.scrollTo(0, 0);
+
                     }else{
 						alert_toast("An error occured",'error');
 						end_loader();

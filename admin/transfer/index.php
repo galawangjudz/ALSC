@@ -125,7 +125,7 @@
 			<a href="#" class="main_menu dropdown-toggle" id="ra-link" onclick="highlightLink('ralink')"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;Property Accounts</a>
 				<ul class="dropdown-menu" style="position: absolute; right: 0; transform: translateX(400%);height:122px;border-radius:0px;">
 					<li><a href="<?php echo base_url ?>admin/?page=clients/property_list" style="margin-top:-8px;"><i class="nav-icon fas fa-check-circle"></i>&nbsp;&nbsp;&nbsp;Active</a></li>
-					<li><a href="<?php echo base_url ?>admin/?page=transfer"><i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Transferred</a></li>
+					<li><a href="<?php echo base_url ?>admin/?page=transfer"><i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Reopen</a></li>
 					<li><a href="<?php echo base_url ?>admin/?page=backout"><i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Backout</a></li>
 				</ul>
 		</div>
@@ -196,7 +196,7 @@
 								<div class="dropdown-divider"></div>
 							<!-- 	<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['property_id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div> -->
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['property_id'] ?>"  data-name="<?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"]  ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['property_id'] ?>"  data-csr="<?php echo $row["c_csr_no"] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 								</div>
 							</td>
 						</tr>
@@ -214,7 +214,7 @@
 			uni_modal("Update Account Details","transfer/create.php?id="+$(this).attr('data-id'),'mid-large')
 		})
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
+			_conf("Are you sure to Backout '<b>"+$(this).attr('data-id')+"</b>' from Reopen List permanently?","backout_acc",[$(this).attr('data-id'),$(this).attr('data-csr')])
 		})
 		$('.view_data').click(function(){
 			uni_modal("Account Details","backout/view_backout.php?id="+$(this).attr('data-id'),'mid-large')
@@ -226,27 +226,27 @@
             ],
         });
 	})
-	function delete_account($id){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_account",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert_toast("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.reload();
-					console.log('dsdsds');
-				}else{
-					alert_toast("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
-	}
+    function backout_acc($prop_id,$csr_no){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=backout_acc",
+            method:"POST",
+            data:{prop_id: $prop_id, csr_no: $csr_no},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("Can't Backout!",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    location.reload();
+                }else{
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+
 </script>

@@ -773,6 +773,11 @@ $(document).ready(function() {
     $('.new_av').click(function(){
         uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/application_voucher/av_payment.php?id='+$(this).attr('prop-id'),"mid-large")
     })
+
+    $('.new_av2').click(function(){
+        uni_modal("<i class='fa fa-plus'></i> Move to AV",'clients/application_voucher/av_modal2.php?id='+$(this).attr('prop-id'),"mid-large")
+    })
+ 
  
     $('.update_family_mem').click(function(){
       //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
