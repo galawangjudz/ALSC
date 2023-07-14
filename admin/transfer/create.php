@@ -25,6 +25,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$c_csr_no =  $row['c_csr_no'];
 			$lot_id = $row['c_lot_lid'];
           
+			$csr_rev = $row['c_revised'];
 			$csr_type = $row['c_type'];
 			$lot_area = $row['c_lot_area'];
 			$price_sqm = $row['c_price_sqm'];
@@ -120,10 +121,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		$av_amt = $row_res['c_av_amount']; // Principal or av_amt?
 		// Process each row as needed
 	}
-	
-
 }
-
 ?>
 
 <style>
@@ -493,7 +491,7 @@ input{
 		<form method="" id="save_csr">
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
 			<input type="text" name="c_csr_no" value="">
-            <input type="text" name="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
+            <input type="text" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
 			<div id="Buyer" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
@@ -506,6 +504,7 @@ input{
 											<div class="panel-heading">
 												<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
 												<div class="titles"><center> Buyer's Information Details</center></div>
+												
 												<?php $av_amt; ?>
 												<div class="clear"></div>
 											</div>
@@ -997,6 +996,7 @@ input{
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
+											<input type="text" class="form-control margin-bottom copy-input" name="rev_status" id="rev_status" value="<?php echo isset($csr_rev) ? $csr_rev : ''; ?>">
 												<label class="control-label">Lot Area: </label>
 												<input type="text" class="form-control margin-bottom lot-area" name="lot_area" id="lot_area" readonly value="<?php echo isset($lot_area) ? $lot_area : ''; ?>">
 											</div>

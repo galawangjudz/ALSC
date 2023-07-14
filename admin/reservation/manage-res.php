@@ -105,7 +105,20 @@ foreach($res->fetch_array() as $k =>$v){
 						<div class="col-md-12">   
 							<div class="form-group">
 								<label>OR #:</label>
-								<input type="text" class="form-control margin-bottom required" name="or_no" id="or_no" value="<?php echo isset($meta['c_or_no']) ? $meta['c_or_no']: '' ?>"  >	
+								<?php 
+									$query02 = $conn->query("SELECT * FROM t_approval_csr i
+									INNER JOIN t_csr_view x ON i.c_csr_no = x.c_csr_no
+									INNER JOIN t_csr y ON x.c_csr_no = y.c_csr_no
+									INNER JOIN t_av_summary z ON y.old_property_id = z.property_id
+									WHERE (i.c_csr_status = 1 AND (i.c_reserve_status = 0 OR i.c_reserve_status = 2)) 
+									ORDER BY c_date_approved");
+
+									if($query02->num_rows > 0){
+										?>
+										<input type="text" class="form-control margin-bottom required" name="or_no" id="or_no" value="<?php echo isset($meta['c_or_no']) ? $meta['c_or_no']: '' ?>" readonly>	
+									<?php }else{ ?>
+										<input type="text" class="form-control margin-bottom required" name="or_no" id="or_no" value="<?php echo isset($meta['c_or_no']) ? $meta['c_or_no']: '' ?>">	
+									<?php } ?>
 							</div>
 						</div>
 					</div>
@@ -151,7 +164,17 @@ foreach($res->fetch_array() as $k =>$v){
 			<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			 --><h4 class="modal-title">Select RA</h4>
 		</div>
-		<div class="modal-body">
+		<?php 
+			$query01 = $conn->query("SELECT * FROM t_approval_csr i
+			INNER JOIN t_csr_view x ON i.c_csr_no = x.c_csr_no
+			INNER JOIN t_csr y ON x.c_csr_no = y.c_csr_no
+			INNER JOIN t_av_summary z ON y.old_property_id = z.property_id
+			WHERE (i.c_csr_status = 1 AND (i.c_reserve_status = 0 OR i.c_reserve_status = 2)) 
+			ORDER BY c_date_approved");
+
+			if($query01->num_rows > 0){
+				?>
+				<div class="modal-body">
 				<?php 
 				$i = 0;
 				$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no ORDER BY c_date_approved");
@@ -198,8 +221,13 @@ foreach($res->fetch_array() as $k =>$v){
 				</thead>
 				<tbody>
 				<?php
-				$query =$conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no where (i.c_csr_status = 1 and (i.c_reserve_status = 0 or i.c_reserve_status = 2)) 
-				ORDER BY c_date_approved");
+					$query = $conn->query("SELECT * FROM t_approval_csr i
+					INNER JOIN t_csr_view x ON i.c_csr_no = x.c_csr_no
+					INNER JOIN t_csr y ON x.c_csr_no = y.c_csr_no
+					INNER JOIN t_av_summary z ON y.old_property_id = z.property_id
+					WHERE (i.c_csr_status = 1 AND (i.c_reserve_status = 0 OR i.c_reserve_status = 2)) 
+					ORDER BY c_date_approved");
+
 
 				while($row = $query->fetch_assoc()): 
 					$res = $row['c_reservation_amt'];
@@ -214,16 +242,94 @@ foreach($res->fetch_array() as $k =>$v){
 						<td><?php echo $row["c_block"] ?></td>
 						<td><?php echo $row["c_lot"] ?></td>
 						<td><?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?> </td>
-					
-
-						<td><a href="#" class="btn btn-primary btn-xs ra-select" style="width:100%;font-size:14px;" data-ra-no="<?php echo $row['ra_id'] ?>" data-ra-lot-lid="<?php echo $row['c_lot_lid'] ?>" data-csr-no="<?php echo $row['c_csr_no'] ?>" data-ra-site="<?php echo $row['c_acronym'] ?>" data-ra-block="<?php echo $row['c_block'] ?>" data-ra-lot="<?php echo $row['c_lot'] ?>" data-res-remaining="<?php echo $remaining_res ?>" data-ra-res="<?php echo $row['c_reservation_amt'] ?>" data-ra-fname="<?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?>"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</a></td>
-				   
+						<!-- <td><?php echo $row["c_av_no"] ?> </td> -->
+				
+						<td><a href="#" class="btn btn-primary btn-xs ra-select" style="width:100%;font-size:14px;" data-ra-no="<?php echo $row['ra_id'] ?>" data-ra-lot-lid="<?php echo $row['c_lot_lid'] ?>" data-csr-no="<?php echo $row['c_csr_no'] ?>" data-ra-site="<?php echo $row['c_acronym'] ?>" data-ra-block="<?php echo $row['c_block'] ?>" data-ra-lot="<?php echo $row['c_lot'] ?>" data-res-remaining="<?php echo $remaining_res ?>" data-ra-res="<?php echo $row['c_reservation_amt'] ?>" data-ra-fname="<?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?>" data-or-no="<?php echo $row["c_av_no"] ?>"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</a></td>
 					</tr>
 				<?php endwhile; ?>
 				</tbody>
 			</table>
 			
 		</div>
+		<?php
+			}else{?>
+				<div class="modal-body">
+				<?php 
+				$i = 0;
+				$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no ORDER BY c_date_approved");
+				while($row = $qry->fetch_assoc()):
+				$i++;
+				$ra_id = $row["ra_id"];
+				$status=$row["c_csr_status"];
+				$date_created=$row["c_date_created"];
+				$id=$row["c_csr_no"];
+				$lid = $row["c_lot_lid"];
+				$exp_date=new DateTime($row["c_duration"]);
+				$exp_date_str=$row["c_duration"];
+				$exp_date_only=date("Y-m-d",strtotime($exp_date_str));
+				//echo $exp_date_only;
+
+				$today_date=date('Y/m/d H:i:s');
+				$today_date_only=date("Y-m-d",strtotime($today_date));
+				//echo $today_date_only;
+
+				$exp=strtotime($exp_date_str);
+				$td=strtotime($today_date);		
+				if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
+					$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+					$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
+					$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
+				} 
+				endwhile; ?>
+
+
+
+			<table class="table table-bordered table-stripped">
+				<thead>
+					<tr>
+
+						<th>RA No.</th>
+						<th>Ref No</th>
+						<th>Phase</th>
+						<th>Block</th>
+						<th>Lot</th>
+						<th>Buyer Name</th>
+						<th>Action</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				<?php
+					$query =$conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no where (i.c_csr_status = 1 and (i.c_reserve_status = 0 or i.c_reserve_status = 2)) 
+					ORDER BY c_date_approved");
+
+
+				while($row = $query->fetch_assoc()): 
+					$res = $row['c_reservation_amt'];
+					$amt_paid = $row['c_amount_paid'];
+					$remaining_res = $res - $amt_paid;
+					?>
+
+					<tr>
+						<td><?php echo $row["ra_id"] ?></td>
+						<td><?php echo $row["ref_no"] ?></td>
+						<td><?php echo $row["c_acronym"] ?></td>
+						<td><?php echo $row["c_block"] ?></td>
+						<td><?php echo $row["c_lot"] ?></td>
+						<td><?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?> </td>
+						<!-- <td><?php echo $row["c_av_no"] ?> </td> -->
+				
+						<td><a href="#" class="btn btn-primary btn-xs ra-select" style="width:100%;font-size:14px;" data-ra-no="<?php echo $row['ra_id'] ?>" data-ra-lot-lid="<?php echo $row['c_lot_lid'] ?>" data-csr-no="<?php echo $row['c_csr_no'] ?>" data-ra-site="<?php echo $row['c_acronym'] ?>" data-ra-block="<?php echo $row['c_block'] ?>" data-ra-lot="<?php echo $row['c_lot'] ?>" data-res-remaining="<?php echo $remaining_res ?>" data-ra-res="<?php echo $row['c_reservation_amt'] ?>" data-ra-fname="<?php echo $row["last_name"] ?>, <?php echo $row["first_name"] ?> <?php echo $row["middle_name"] ?>"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</a></td>
+					</tr>
+				<?php endwhile; ?>
+				</tbody>
+			</table>
+			
+		</div>
+			<?php }
+		
+		?>
+		
 		<div class="modal-footer">
 			<button type="button" data-dismiss="modal" class="btn btn-flat btn-sm btn-default" style="width:100%;">Cancel</button>
 		</div>
@@ -356,6 +462,7 @@ foreach($res->fetch_array() as $k =>$v){
 						end_loader();
                         console.log(resp)
 					}
+					
 				}
 			})
 		})
