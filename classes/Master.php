@@ -1350,7 +1350,7 @@ Class Master extends DBConnection {
 			$data .= ", c_active = '$active' ";
 			$balance = ($net_tcp - $reservation);
 			$data .= ", c_balance = '$balance' ";
-			$data .= ", new_property_id = '$old_prop_id' ";
+			$data .= ", old_property_id = '$old_prop_id' ";
 
 
 			if($rev == '2'){
