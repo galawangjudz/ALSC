@@ -46,7 +46,7 @@ foreach($user->fetch_array() as $k =>$v){
 					<label class="control-label">Position: </label>
 					<select name="type" id="type" class="form-control required">
 						<option value="1" <?php echo isset($meta['type']) && $meta['type'] == "1" ? 'selected': '' ?>>Admin</option>
-						<option value="2"<?php echo isset($meta['type']) && $meta['type'] == "2" ? 'selected': '' ?>> COO</option>
+						<option value="2"<?php echo isset($meta['type']) && $meta['type'] == "2" ? 'selected': '' ?>> Chief Officer</option>
 						<option value="3"<?php echo isset($meta['type']) && $meta['type'] == "3" ? 'selected': '' ?>>Manager</option>
 						<option value="4" <?php echo isset($meta['type']) && $meta['type'] == "4" ? 'selected': '' ?>>Supervisor</option>
 						<option value="5" <?php echo isset($meta['type']) && $meta['type'] == "5" ? 'selected': '' ?>>Employee</option>
@@ -58,6 +58,7 @@ foreach($user->fetch_array() as $k =>$v){
 					</style>
 					<label class="control-label">User Type: </label>
 					<select name="user_type" id="user_type" class="form-control required">
+						<option value="CFO"<?php echo isset($meta['user_type']) && $meta['user_type'] == "CFO" ? 'selected': '' ?>> CFO</option>
 						<option value="SOS" <?php echo isset($meta['user_type']) && $meta['user_type'] == "IT Admin" ? 'selected': '' ?>>Sales Operation Supervisor</option>
 						<option value="COO"<?php echo isset($meta['user_type']) && $meta['user_type'] == "COO" ? 'selected': '' ?>> COO</option>
 						<option value="IT Admin"<?php echo isset($meta['user_type']) && $meta['user_type'] == "IT Admin" ? 'selected': '' ?>>IT Admin</option>

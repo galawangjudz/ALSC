@@ -871,7 +871,7 @@ function getRAs() {
 					$x=$exp_date->diff(new DateTime());
 
 					print '<td class="counter"><span class="label label-default">Expired</span></td>';
-					$query = "UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'";
+					$query = "UPDATE t_csr SET coo_approval = 2,c_active = 0 WHERE c_csr_no = '".$id."'";
 					$result = mysqli_query($mysqli,$query);
 					
 					$query2 = "UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'";
@@ -1040,7 +1040,7 @@ function popRAsList() {
 			$td=strtotime($today_date);		
 
 			if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-				$update_csr = $mysqli->query("UPDATE t_csr SET coo_approval = 2 WHERE c_csr_no = '".$id."'");	
+				$update_csr = $mysqli->query("UPDATE t_csr SET coo_approval = 2, c_active = 0 WHERE c_csr_no = '".$id."'");	
 				$update_app = $mysqli->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 				$update_lot = $mysqli->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 			}

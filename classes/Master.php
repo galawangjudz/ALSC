@@ -1298,11 +1298,12 @@ Class Master extends DBConnection {
 			$start_date = $row['c_start_date'];
 			$remarks = $row['c_remarks'];
 			$active = $row['c_active'];
+
 			$old_prop_id = $row['old_property_id'];
+
 			$code = substr($lot_lid, 0, 3);
 			$rev = $row['c_revised'];
 
-		
 
 			$qry = $this->conn->query("SELECT c_project_code FROM t_projects where c_code =".$code);
 			$proj_code = $qry->fetch_array();
@@ -3132,7 +3133,7 @@ Class Master extends DBConnection {
 		$update = $this->conn->query("UPDATE properties set c_active='2',c_reopen = '1' where property_id = ".$prop_id);
 		$get_lid = intval(substr($prop_id, 2, 8));
 		$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
-		$update2 = $this->conn->query("UPDATE t_csr set c_active= 0  where c_lid = ".$get_lid);
+		$update2 = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
 		$delete = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 
 		if($update && $update2 && $delete){

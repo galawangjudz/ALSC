@@ -220,7 +220,7 @@
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
-								elseif($usertype=="COO"):
+								elseif($usertype=="CFO"):
 									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
@@ -243,7 +243,7 @@
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
-							elseif($usertype=="COO"):	
+							elseif($usertype=="CFO"):	
 								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
@@ -337,7 +337,7 @@
 										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 										echo '<span class="tooltip">Approved</span>';
 										echo '</a>';
-									elseif($usertype=="COO"):
+									elseif($usertype=="CFO"):
 										echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 										echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 										echo '<span class="tooltip">Approved</span>';
@@ -360,7 +360,7 @@
 									echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Disapproved</span>';
 									echo '</a>';
-								elseif($usertype=="COO"):	
+								elseif($usertype=="CFO"):	
 									echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Disapproved</span>';
@@ -377,7 +377,7 @@
 						<?php endwhile; ?>
 					<?php                         
 					}
-					elseif($usertype=='COO' || $usertype=='IT Admin')
+					elseif($usertype=='CFO' || $usertype=='IT Admin')
 					{
 					/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
@@ -453,7 +453,7 @@
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
 									echo '</a>';
-								elseif($usertype=="COO"):
+								elseif($usertype=="CFO"):
 									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
 									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
 									echo '<span class="tooltip">Approved</span>';
@@ -476,7 +476,7 @@
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';
                             	echo '</a>';
-							elseif($usertype=="COO"):	
+							elseif($usertype=="CFO"):	
 								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
                                 echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
                                 echo '<span class="tooltip">Disapproved</span>';

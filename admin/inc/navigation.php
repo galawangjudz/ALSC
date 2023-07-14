@@ -79,7 +79,7 @@
 
                    
 
-                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO'): ?>
+                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=reports/av_logs" class="nav-link nav-av">
