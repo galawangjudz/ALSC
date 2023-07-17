@@ -187,6 +187,7 @@
 										<span class="tooltip">Approved</span>
 										</a>';
 								endif;
+
 								if ($usertype == "Billing" || $usertype == "IT Admin"):
 									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
 											style="font-size: 12px; height: 30px; width: 37px;">
@@ -195,6 +196,7 @@
 										</a>';
 								endif;
 							?> -->
+                            
 						</td>
                         </tr>
                     	<?php endwhile; ?>
