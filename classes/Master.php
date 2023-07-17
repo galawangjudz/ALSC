@@ -351,7 +351,7 @@ Class Master extends DBConnection {
 			$start_date = $_POST['start_date'];
 			$invoice_notes = $_POST['invoice_notes'];
 			$type = $_POST['chkOption3'];
-			$rev = $_POST['rev_status'];//////////////////ADDED
+			//$rev = $_POST['rev_status'];//////////////////ADDED
 
 
 
@@ -393,7 +393,8 @@ Class Master extends DBConnection {
 			$data .= ", c_created_by = '$username' ";
 
 			if ($prop_id != null){ //////////////////ADDED
-				$data .= ", c_revised = 2 ";//////////////////ADDED
+				$rev_count=2;
+				$data .= ", c_revised = '$rev_count' ";//////////////////ADDED
 				$data .= ", old_property_id = '$prop_id' ";//////////////////ADDED
 				
 			}else{//////////////////ADDED
@@ -830,7 +831,7 @@ Class Master extends DBConnection {
 				$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			}
 
-			$save = $this->conn->query("UPDATE t_csr SET c_revised=0, c_verify = ".$value." where c_csr_no = ".$id);
+			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
 
 			}
 		else{
@@ -1298,7 +1299,6 @@ Class Master extends DBConnection {
 			$start_date = $row['c_start_date'];
 			$remarks = $row['c_remarks'];
 			$active = $row['c_active'];
-
 			$old_prop_id = $row['old_property_id'];
 
 			$code = substr($lot_lid, 0, 3);
@@ -1350,14 +1350,17 @@ Class Master extends DBConnection {
 			$data .= ", c_active = '$active' ";
 			$balance = ($net_tcp - $reservation);
 			$data .= ", c_balance = '$balance' ";
-			$data .= ", old_property_id = '$old_prop_id' ";
+			
 
 
-			if($rev == '2'){
+			if($rev == 2){
 				$old_acct = $this->conn->query("SELECT c_date_of_sale from properties where property_id =".$old_prop_id);
 				$old_data = $old_acct->fetch_array();
 				$old_date_of_sale = $old_data['c_date_of_sale']; 
 				$data .=", c_date_of_sale = '$old_date_of_sale' ";
+				$data .= ", old_property_id = '$old_prop_id' ";
+
+				$update = $this->conn->query("UPDATE properties set c_active='2' where property_id = ".$old_prop_id);
 			}
 
 			
@@ -1376,10 +1379,10 @@ Class Master extends DBConnection {
 		$update = $this->conn->query("UPDATE t_lots set c_status = 'Sold' where c_lid =".$lot_lid);
 		$save99 = $this->conn->query("INSERT INTO properties set ".$data);
 		
-
 		$find =  $this->conn->query("SELECT property_id FROM properties where c_csr_no =".$csr_no);
 		$row3 = $find->fetch_assoc();
 		$new_property_id = $row3["property_id"];
+		
 	
 		$payment_count = 1;
 		$new_balance = $net_tcp;
@@ -3130,14 +3133,24 @@ Class Master extends DBConnection {
 		//update t_lots
 		//removed from payments - pending_status (property_payments)
 		extract($_POST);
-		$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
-		$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
-		$get_lid = intval(substr($prop_id, 2, 8));
-		$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
-		$update2 = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
-		//$delete = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 
-		if($update && $update2){
+		if ($value == 4):
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+		elseif($value == 3):
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+		elseif($value == 2 or $value == 1):
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
+			$get_lid = intval(substr($prop_id, 2, 8));
+			//echo $get_lid;
+			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
+			$update = $this->conn->query("UPDATE t_csr set c_active = 1  where c_lot_lid = ".$get_lid);
+			//$update = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
+	
+		endif;
+		
+		if($update){
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Transferring of this account successfully approved!");
 		}else{
@@ -3152,15 +3165,24 @@ Class Master extends DBConnection {
 		//update t_lots
 		//removed from payments - pending_status (property_payments)
 		extract($_POST);
-		$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
-		$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
-		// $get_lid = intval(substr($prop_id, 2, 8));
-		// $update = $this->conn->query("UPDATE t_lots set c_status='Sold' where c_lid = ".$get_lid);
-		//$delete = $this->conn->query("DELETE FROM property_payments WHERE pending_status = 1 and property_id = ".$prop_id);
-
+		if ($value == 4):
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+		elseif($value == 3):
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+		elseif($value == 2 or $value == 1):
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
+			$get_lid = intval(substr($prop_id, 2, 8));
+			//echo $get_lid;
+			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
+			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
+		endif;
+		
 		if($update){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Transferring of this account successfully disapproved!");
+			$this->settings->set_flashdata('success',"Transferring of this account successfully approved!");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;

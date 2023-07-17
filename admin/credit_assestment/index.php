@@ -239,9 +239,6 @@
 							$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 						} 
 						?> 
-
-
-
 							<?php if ($usertype == "IT Admin" || $usertype == 'CA'): ?>	
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
