@@ -92,9 +92,11 @@
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_approved_list" class="main_menu">
 			<i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Approved List
 		</a>
+        <?php if ($usertype != "CFO"){ ?>
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_disapproved_list" class="main_menu">
 			<i class="fa fa-thumbs-down" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Disapproved List
         </a>
+        <?php }?>
     </div>
 </div>
 <div class="card card-outline rounded-0 card-maroon">
