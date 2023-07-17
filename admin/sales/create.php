@@ -407,7 +407,7 @@ input{
 				$('#amt_to_be_financed').val(l_c.toFixed(2))
 				$("#down_percent").val(0);
 				$("#net_dp").val(0);
-				$("#no_payment").val(0);
+				$("#no_payment").val(1);
 				$("#monthly_down").val(0);
 				/* compute_net_dp();
 				compute_no_payment();
