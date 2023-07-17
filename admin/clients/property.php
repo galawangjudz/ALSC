@@ -320,16 +320,15 @@ body{
                       <a class="btn btn-flat btn-info undo-delete-last-or" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-undo"></span>&nbsp;&nbsp;Undo</a>
                     </td>
                     <td style="width:10%;">
-                     <!-- <?php
-                          $qry13 = $conn->query("SELECT * FROM t_av_summary where md5(property_id) = '{$_GET['id']}'");
-                          if($qry13->num_rows > 0){
-                            echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
-                          }else{
-                            echo '<a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>';
-                      }
-                    ?> -->
-                      <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px;"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
-                    </td>
+                    <?php
+                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 AND lvl2 = 0 AND lvl1 = 0");
+                    if ($qry13->num_rows > 0) {
+                        echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
+                    }
+                    ?>
+                    <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px; <?php if ($qry13->num_rows > 0) { echo 'display: none;'; } ?>"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
+                </td>
+
                   </tr>
                 </table>
               </div>  

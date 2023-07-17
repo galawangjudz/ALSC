@@ -18,10 +18,10 @@ if (!isset($usertype)) {
 
 $user_role = $usertype;
 
-if ($user_role != 'IT Admin') {
-    include '404.html';
-  exit;
-}
+// if ($user_role != 'IT Admin') {
+//     include '404.html';
+//   exit;
+// }
 
 ?>
 <?php
