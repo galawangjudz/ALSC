@@ -9,6 +9,10 @@
 	$usertype = $_settings->userdata('user_type');
 ?>
 
+
+
+
+
 <style>
 	.main_menu{
 		float:left;
