@@ -942,12 +942,12 @@ function updateTotals(elem) {
 	function auto_terms(){
 		var l_no_pay = $('.no-payment').val();
 		var l_start_date = $('.first-dp-date').val();
-		
-		
+				
 		fd_dte = new Date(l_start_date);
-		if(l_no_pay == 0){
+		if(l_no_pay == 0 || l_no_pay == 1){
 			l_no_pay = 1
 		}
+	
 		fd_dte.setMonth(fd_dte.getMonth()+ parseFloat(l_no_pay - 1));
 		
 		var fd_dte = fd_dte.toISOString().slice(0, 10);

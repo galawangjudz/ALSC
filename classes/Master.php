@@ -2160,7 +2160,7 @@ Class Master extends DBConnection {
 		$amt_paid = floatval(str_replace(',', '',$amt_paid));
 		$amt_due = floatval(str_replace(',', '',$tot_amount_due));
 				
-		$check = $this->conn->query("SELECT * FROM `t_invoice` where `or_no` != '{$or_no_ent}'")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `t_invoice` where `or_no` != '{$or_no_ent}' and property_id =".$prop_id )->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
@@ -3057,6 +3057,7 @@ Class Master extends DBConnection {
 		$data .= ", c_surcharge = '$av_sur' ";
 		$data .= ", c_interest = '$av_int' ";
 		$data .= ", c_rebate = '$av_reb' ";
+		$data .= ", c_av_type = '$av_type' ";
 		/* $data .= ", c_new_acc_no = '$new_acc_no' ";  */
 		$data .= ", c_remarks = '$remarks' ";
 		
@@ -3132,6 +3133,7 @@ Class Master extends DBConnection {
 		//update t_lots
 		//removed from payments - pending_status (property_payments)
 		extract($_POST);
+
 		if ($value == 4):
 			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 3):
@@ -3148,6 +3150,7 @@ Class Master extends DBConnection {
 		endif;
 		
 		if($update){
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Transferring of this account successfully approved!");
 		}else{

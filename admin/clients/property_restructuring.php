@@ -743,6 +743,7 @@ $(document).on('change', ".acc-interest", function(e) {
 		var l_no_pay = $('.rem-dp').val();
 		var l_start_date = $('.first-dp-date').val();
 	
+    console.log(l_start_date);
 		fd_dte = new Date(l_start_date);
 		if(l_no_pay == 0){
 			l_no_pay = 1
