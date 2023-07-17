@@ -9,6 +9,10 @@
 	$usertype = $_settings->userdata('user_type');
 ?>
 
+
+
+
+
 <style>
 	.main_menu{
 		float:left;
@@ -92,9 +96,11 @@
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_approved_list" class="main_menu">
 			<i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Approved List
 		</a>
+        <?php if ($usertype != "CFO"){ ?>
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_disapproved_list" class="main_menu">
 			<i class="fa fa-thumbs-down" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Disapproved List
         </a>
+        <?php }?>
     </div>
 </div>
 <div class="card card-outline rounded-0 card-maroon">
@@ -181,6 +187,7 @@
 										<span class="tooltip">Approved</span>
 										</a>';
 								endif;
+
 								if ($usertype == "Billing" || $usertype == "IT Admin"):
 									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
 											style="font-size: 12px; height: 30px; width: 37px;">
@@ -189,6 +196,7 @@
 										</a>';
 								endif;
 							?> -->
+                            
 						</td>
                         </tr>
                     	<?php endwhile; ?>
