@@ -174,7 +174,7 @@ if(isset($_GET['id'])){
         <table style="width:100%">
             <tr>
             <!-- <?php if ($cfo_stat == 0):?> -->
-            <?php if ($rev_stats == 0):?> 
+            <?php if ($rev_stats == 0 or $rev_stats == 2):?> 
                 <td>
                     <button type="button" style="width:100%;font-size:14px;" class="btn btn-success btn-flat ca_approved" csr-id ="<?php $csr_no ?>"  value= 1><i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;Approved</button>
                 </td>

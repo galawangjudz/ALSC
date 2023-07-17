@@ -1001,7 +1001,7 @@ input{
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-											<input type="text" class="form-control margin-bottom copy-input" name="rev_status" id="rev_status" value="<?php echo isset($csr_rev) ? $csr_rev : ''; ?>">
+											
 												<label class="control-label">Lot Area: </label>
 												<input type="text" class="form-control margin-bottom lot-area" name="lot_area" id="lot_area" readonly value="<?php echo isset($lot_area) ? $lot_area : ''; ?>">
 											</div>
