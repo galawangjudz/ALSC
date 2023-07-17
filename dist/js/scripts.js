@@ -941,7 +941,7 @@ function updateTotals(elem) {
 
 	function auto_terms(){
 		var l_no_pay = $('.no-payment').val();
-		var l_start_date = $('.first-dp-date').val();
+		var l_start_date = $('.first-dp-date').val() || new Date().toISOString().split('T')[0];;
 				
 		fd_dte = new Date(l_start_date);
 		if(l_no_pay == 0 || l_no_pay == 1){
