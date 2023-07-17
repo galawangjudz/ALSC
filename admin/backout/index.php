@@ -131,7 +131,7 @@
 		</div>
 	</div>
 </div>
-<div class="card card-outline card-primary rounded-0 shadow">
+<div class="card card-outline card-danger rounded-0 shadow">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>List of Backout Accounts</b></i></h3>
 		<div class="card-tools">
@@ -151,7 +151,7 @@
 					<col width="15%">
 				</colgroup>
 				<thead>
-					<tr class="bg-gradient-primary text-light">
+					<tr class="bg-gradient-danger text-light">
 						<th>#</th>
 						<th>Date Backout</th>
 						<th>Account</th>

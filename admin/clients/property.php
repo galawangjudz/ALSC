@@ -287,7 +287,95 @@ body{
                                 <span class="tooltip">Backout</span>
                               </a>
                             </td>                            
-                            <?php endwhile; }?>                          
+                            <?php endwhile; }?>  
+                                
+                            </tbody>
+                        </table>
+                       
+                         
+                            <?php  $history = " WITH RECURSIVE cte AS (
+                                        SELECT *
+                                        FROM properties
+                                        WHERE md5(property_id) = '{$_GET['id']}'
+                                        
+                                        UNION ALL
+                                        
+                                        SELECT t.*
+                                        FROM properties t
+                                        JOIN cte ON t.property_id = cte.old_property_id
+                                    )
+                                    SELECT *
+                                    FROM cte where md5(property_id) != '{$_GET['id']}'
+                                    ORDER BY property_id ";
+                            //echo $history;
+                            $qry4 = $conn->query($history);
+
+                                 
+                                if($qry4->num_rows <= 0){ ?>
+                                  <tbody>
+                                    
+                                      <td>
+                                        <?php  echo ""; ?>
+                                      <td>
+                                    
+                                  </tbody>
+                                </table>
+                                <?php }else{ ?>
+
+                                      <br>
+                                      <h5 class="card-title"><b><i>Old Account History</b></i></h5>
+                                      <table class="table2 table-bordered table-stripped" style="width:100%;">
+                                        <thead> 
+                                      
+                                            <tr>
+                                              <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
+                                              <th style="text-align:center;font-size:13px;">LOCATION</th>
+                                              <th style="text-align:center;font-size:13px;">TYPE</th>
+                                              <th style="text-align:center;font-size:13px;">RETETION STATUS</th>
+                                              <th style="text-align:center;font-size:13px;">NET TCP</th>  
+                                              <th style="text-align:center;font-size:13px;">ACTION</th>          
+                                            </tr>
+                                        </thead>
+                                        <tbody><?php
+                                    while($row = $qry4->fetch_assoc()):
+                                      $property_id = $row["property_id"];
+                                      //echo $property_id;
+                                      $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where property_id =" .$property_id);
+                                      
+                                     $row_details = $qry3->fetch_assoc();
+
+                                      $property_id_part1 = substr($property_id, 0, 2);
+                                      $property_id_part2 = substr($property_id, 2, 6);
+                                      $property_id_part3 = substr($property_id, 8, 5);
+                                    ?>    
+                                   <tr>
+                                   <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3?> <span class="badge badge-danger">Old Account</span></td>
+                                   <td class="text-center" style="font-size:13px;width:20%;"><?php echo $row_details["c_acronym"]. ' Block ' .$row_details["c_block"] . ' Lot '.$row_details["c_lot"] ?></td>
+                                   <?php if($row['c_type'] == 1){ ?>
+                                      <td class="text-center" style="width:15%;"><span class="badge badge-primary">Lot Only</span></td>
+                                  <?php }elseif($row['c_type'] == 2){ ?>
+                                      <td class="text-center" style="width:15%;"><span class="badge badge-primary">House Only</span></td>
+                                  <?php }elseif($row['c_type'] == 3){ ?>
+                                      <td class="text-center" style="width:15%;"><span class="badge badge-primary">Packaged</span></td>         
+                                  <?php }elseif($row['c_type'] == 4){ ?>
+                                      <td class="text-center" style="width:15%;"><span class="badge badge-primary">Fence</span></td>
+                                  <?php }elseif($row['c_type'] == 5){ ?>
+                                      <td class="text-center" style="width:15%;"><span class="badge badge-primary">Add Cost</span></td>
+                                  <?php } ?>      
+                                  <?php if($row['c_retention'] == 1){ ?>
+                                      <td class="text-center" style="width:10%;"><span class="badge badge-danger">Retention</span></td>
+                                  <?php }elseif($row['c_retention'] == 0){ ?>
+                                      <td class="text-center" style="width:10%;"><span class="badge badge-primary">Regular</span></td>
+                                  <?php } ?> 
+                                  <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($row['c_net_tcp'],2) ?></td>
+                                  <td class="text-center" style="font-size:12px;width:30%;">
+                                  <a class="btn btn-flat btn-success btn-s view_data" style="font-size: 12px; height: 30px; width: 37px;" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    <span class="tooltip">View</span>
+                                  </a>
+
+                                   <tr>
+                                  <?php endwhile ; }?>
                           </tr>
 
                     </tbody>

@@ -134,9 +134,9 @@
 	</div>
 </div>
 
-<div class="card card-outline rounded-0 card-maroon">
+<div class="card card-outline rounded-0 card-green">
 		<div class="card-header">
-			<h5 class="card-title"><b><i>Properties</b></i></h5>
+			<h5 class="card-title"><b><i>List of Active Accounts</b></i></h5>
 			<!-- <div class="card-tools">
 				<a class="btn btn-block btn-sm btn-primary btn-flat border-primary new_lot" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
 			</div> -->
@@ -146,7 +146,7 @@
             <div class="container-fluid">
                 <table class="table table-bordered table-stripped" style="text-align:center;">
                     <thead>
-                        <tr>
+                        <tr class="bg-gradient-success text-light">
                         <?php if ($usertype == 'IT Admin' || $usertype == 'Cashier' || $usertype == 'Billing'): ?>
 				        <th>Actions</th>
                         <?php endif?>
@@ -165,7 +165,7 @@
                             z.c_block, z.c_lot FROM properties x, property_clients y , t_lots z, t_projects q WHERE 
                             x.property_id = y.property_id
                             and x.c_lot_lid = z.c_lid 
-                            and z.c_site = q.c_code and c_active = 1 ORDER BY x.c_date_of_sale DESC") ;
+                            and z.c_site = q.c_code and x.c_active = 1 and x.c_reopen = 0 ORDER BY x.c_date_of_sale DESC") ;
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>

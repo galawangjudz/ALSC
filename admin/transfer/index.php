@@ -131,9 +131,9 @@
 		</div>
 	</div>
 </div>
-<div class="card card-outline card-maroon">
+<div class="card card-outline card-primary rounded-0 shadow">
 	<div class="card-header">
-		<h3 class="card-title"><b><i>List of Transfer Accounts</b></i></h3>
+		<h3 class="card-title"><b><i>List of Reopen Accounts</b></i></h3>
 		<div class="card-tools">
 			<!-- <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add New</a>
 		 --></div>
@@ -151,13 +151,14 @@
 					<col width="15%">
 				</colgroup>
 				<thead>
-					<tr>
-						<th>#</th>
-						<th>Date Transferred</th>
-						<th>Account</th>
-						<th>Location</th>
-						<th>Status</th>
-						<th>Action</th>
+					<tr class="bg-gradient-primary text-light">
+						<th>Actions</th>
+                        <th>Property ID</th>
+                        <!-- <th>Client Name</th> -->
+                        <th>Location</th>
+                        <th>Net TCP</th>
+						<th>Account Status</th>
+						<th>Type</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -167,11 +168,31 @@
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
-							<td class="text-center"><?php echo $i++; ?></td>
-							<td class=""><?php echo date("Y-m-d",strtotime($row['c_date_of_sale'])) ?></td>
-							<td class=""><?php echo $row['property_id'] ?></td>
+							<td align="center">
+								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+									Action
+								<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item create_new" href="./?page=transfer/create&id=<?php echo md5($row['c_csr_no']) ?>&prop_id=<?php echo $row['property_id']?>" ><span class="fa fa-eye text-dark"></span> Create</a>
+								<div class="dropdown-divider"></div>
+							<!-- 	<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['property_id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<div class="dropdown-divider"></div> -->
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['property_id'] ?>"  data-csr="<?php echo $row["c_csr_no"] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								</div>
+							</td>
+							<?php 
+							$property_id = $row["property_id"];
+							$property_id_part1 = substr($property_id, 0, 2);
+							$property_id_part2 = substr($property_id, 2, 8);
+							$property_id_part3 = substr($property_id, 10, 3);
+							?>
+							<td><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?></td>
+							<!-- <td><?php echo $row["full_name"] ?></td> -->
 							<td class=""><p class="m-0 truncate-1"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></p></td>
-							<td class="text-center">
+							<td><?php echo number_format($row["c_net_tcp"],2) ?></td>
+							<td><?php echo $row["c_account_status"] ?></td>
+								<td class="text-center">
 								<?php 
 									switch($row['c_reopen']){
 										case 0:
@@ -186,19 +207,7 @@
 									}
 								?>
 							</td>
-							<td align="center">
-								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item create_new" href="./?page=transfer/create&id=<?php echo md5($row['c_csr_no']) ?>&prop_id=<?php echo $row['property_id']?>" ><span class="fa fa-eye text-dark"></span> Create</a>
-								<div class="dropdown-divider"></div>
-							<!-- 	<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['property_id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div> -->
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['property_id'] ?>"  data-csr="<?php echo $row["c_csr_no"] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-								</div>
-							</td>
+						
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

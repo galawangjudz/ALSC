@@ -2157,7 +2157,7 @@ Class Master extends DBConnection {
 		$amt_paid = floatval(str_replace(',', '',$amt_paid));
 		$amt_due = floatval(str_replace(',', '',$tot_amount_due));
 				
-		$check = $this->conn->query("SELECT * FROM `t_invoice` where `or_no` != '{$or_no_ent}'")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `t_invoice` where `or_no` != '{$or_no_ent}' and property_id =".$prop_id )->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
@@ -3054,6 +3054,7 @@ Class Master extends DBConnection {
 		$data .= ", c_surcharge = '$av_sur' ";
 		$data .= ", c_interest = '$av_int' ";
 		$data .= ", c_rebate = '$av_reb' ";
+		$data .= ", c_av_type = '$av_type' ";
 		/* $data .= ", c_new_acc_no = '$new_acc_no' ";  */
 		$data .= ", c_remarks = '$remarks' ";
 		
@@ -3130,13 +3131,13 @@ Class Master extends DBConnection {
 		//removed from payments - pending_status (property_payments)
 		extract($_POST);
 		$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
-		$update = $this->conn->query("UPDATE properties set c_active='2',c_reopen = '1' where property_id = ".$prop_id);
+		$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 		$get_lid = intval(substr($prop_id, 2, 8));
 		$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
 		$update2 = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
-		$delete = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
+		//$delete = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 
-		if($update && $update2 && $delete){
+		if($update && $update2){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Transferring of this account successfully approved!");
 		}else{
