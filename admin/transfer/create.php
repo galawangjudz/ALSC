@@ -494,8 +494,8 @@ input{
 		<form method="" id="save_csr">
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
 
-			<input type="text" name="c_csr_no" value="">
-            <input type="text" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
+			<input type="hidden" name="c_csr_no" value="">
+            <input type="hidden" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
 
 			<div id="Buyer" class="tabcontent">
 				<div class="row">

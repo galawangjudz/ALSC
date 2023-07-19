@@ -73,7 +73,14 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
-
+	.table-container {
+  		overflow-x: auto;
+  		max-width: 100%;
+	}
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
     <div class="navbar-menu" style="width:100%; margin-left: auto; margin-right: auto; max-width: 1200px;">
@@ -134,7 +141,7 @@ if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
 	<div class="card-body">
 		
         <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="text-align:center;">
+			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 
 				<thead>
 					<tr>

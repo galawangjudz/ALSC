@@ -78,6 +78,14 @@
 		align-items: center;
 		}
 	}
+	.table-container {
+  		overflow-x: auto;
+  		max-width: 100%;
+	}
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
 
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
@@ -120,7 +128,7 @@
 	<div class="card-body">
 	
         <div class="container-fluid">
-			<table class="table table-bordered table-stripped " style="text-align:center;">
+			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 			<!-- 	<colgroup>
 					<col width="5%">
 					<col width="15%">
@@ -297,9 +305,10 @@
 						<?php endif; ?>
 				
 					
-						<td align="center">
+						<td align="center" style="white-space: nowrap;">
+							<div style="display: inline-block;">
 								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
+								Action
 								<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<div class="dropdown-menu" role="menu">

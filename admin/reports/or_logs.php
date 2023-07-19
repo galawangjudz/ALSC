@@ -18,6 +18,14 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
     .nav-or:hover {
         background-color: #007bff !important;
     }
+    .table-container {
+  		overflow-x: auto;
+  		max-width: 100%;
+	}
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
 </style>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
@@ -89,7 +97,7 @@ $preparer = isset($_GET['preparer']) ? $_GET['preparer'] : '';
             <div class="card card-outline rounded-0 card-maroon" style="font-size:14px;">
                 <div class="card-body">
                     <div class="container-fluid">
-                        <table class="table table-hover table-bordered" style="text-align:center;">
+                        <table class="table table-hover table-bordered" style="text-align:center;width:100%;">
                             <colgroup>
                                 <col width="10%">
                                 <col width="10%">

@@ -32,7 +32,7 @@
 		padding-right:50px;
 		background-color:transparent;
 	}
-	#pl-link{
+	#pending-link{
 		border-bottom: solid 2px blue;
 		background-color:#E8E8E8;
 	}
@@ -101,13 +101,12 @@
 </div>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-
 		<h3 class="card-title"><b><i>AV Logs</b></i></h3>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
 			<div class="table-responsive">
-				<table class="table table-bordered table-stripped" style="text-align:center;font-size:14px;">
+				<table class="table table-bordered table-stripped" style="text-align:center;font-size:13px;">
 					<thead>
 						<tr>
 						<th>AV No.</th>
@@ -130,7 +129,7 @@
 					<tbody>
 					<?php                         
 					$i = 1;
-					if($usertype=='Billing' || $usertype=='IT Admin')
+					if($usertype=='Billing')
 					{
 						//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
 						$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
@@ -174,18 +173,18 @@
 						<?php endif; ?>
 						<td>
 							<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
-							<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
+							<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 							<?php
-								if ($usertype == "Billing" || $usertype == "IT Admin"):
+								if ($usertype == "Billing"):
 									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
-										style="font-size: 12px; height: 30px; width: 37px;">
+										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
 										</a>';
 								endif;
-								if ($usertype == "Billing" || $usertype == "IT Admin"):
+								if ($usertype == "Billing"):
 									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
-											style="font-size: 12px; height: 30px; width: 37px;">
+											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 											<span class="tooltip">Disapproved</span>
 										</a>';
@@ -195,7 +194,7 @@
                         </tr>
                     	<?php endwhile; ?>
 						<?php        
-					}elseif($usertype=='Manager' || $usertype=='IT Admin'){
+					}elseif($usertype=='Manager'){
 							//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
 							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 1 and y.lvl2 = 0");
 							while($row = $qry->fetch_assoc()):   
@@ -238,18 +237,18 @@
 							<?php endif; ?>
 							<td>
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
-								<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
+								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
-									if ($usertype == "Manager" || $usertype == "IT Admin"):
+									if ($usertype == "Manager"):
 										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" 
-											style="font-size: 12px; height: 30px; width: 37px;">
+											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
-									if ($usertype == "Manager" || $usertype == "IT Admin"):
+									if ($usertype == "Manager"):
 										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" 
-												style="font-size: 12px; height: 30px; width: 37px;">
+												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 												<span class="tooltip">Disapproved</span>
 											</a>';
@@ -259,11 +258,11 @@
 							</tr>
 							<?php endwhile; ?>
 							<?php        
-							}elseif($usertype=='CFO' || $usertype=='IT Admin'){
-								//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
-								$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 1 and y.lvl2 = 1 and y.lvl3 = 0");
+						}elseif($usertype=='CFO'){
+							//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
+							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 1 and y.lvl2 = 1 and y.lvl3 = 0");
 							while($row = $qry->fetch_assoc()):   
-									  
+									
 							?>
 							<tr>
 							<td><?php echo $row["c_av_no"] ?></td>
@@ -302,18 +301,18 @@
 							<?php endif; ?>
 							<td>
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
-								<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
+								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
-									if ($usertype == "CFO" || $usertype == "IT Admin"):
+									if ($usertype == "CFO"):
 										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
-											style="font-size: 12px; height: 30px; width: 37px;">
+											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
-									if ($usertype == "CFO" || $usertype == "IT Admin"):
+									if ($usertype == "CFO"):
 										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
-												style="font-size: 12px; height: 30px; width: 37px;">
+												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 												<span class="tooltip">Disapproved</span>
 											</a>';
@@ -321,9 +320,73 @@
 								?>
 							</td>
 							</tr>
-								<?php endwhile; ?>
-								<?php        
-								}
+							<?php endwhile; ?>
+							<?php        
+						}elseif($usertype=='IT Admin'){
+							//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
+							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0 or y.lvl2 = 0 or y.lvl3 = 0");
+							while($row = $qry->fetch_assoc()):   
+									
+							?>
+							<tr>
+							<td><?php echo $row["c_av_no"] ?></td>
+							<td><?php echo $row["property_id"] ?></td>
+							<td><?php echo $row["c_av_date"] ?></td>
+							<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
+							<td><?php echo number_format($row["c_principal"], 2) ?></td>
+							<td><?php echo number_format($row["c_interest"], 2) ?></td>
+							<td><?php echo number_format($row["c_rebate"], 2) ?></td>
+							<td><?php echo number_format($row["c_surcharge"], 2) ?></td>
+							<td><?php echo number_format($row["c_deductions"], 2) ?></td>
+							<td><?php echo $row["c_remarks"] ?></td>
+							
+							<?php if($row['lvl1'] == 0): ?>
+								<td><span class="badge badge-warning">Pending</span></td>
+							<?php elseif ($row['lvl1'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl1'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<?php if($row['lvl2'] == 0): ?>
+								<td><span class="badge badge-warning">Pending</span></td>
+							<?php elseif ($row['lvl2'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl2'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<?php if($row['lvl3'] == 0): ?>
+								<td><span class="badge badge-warning">Pending</span></td>
+							<?php elseif ($row['lvl3'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl3'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+							<td>
+								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
+								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
+								<?php
+									if ($usertype == "IT Admin"):
+										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="1" prop-id="' . $row['property_id'] . '" 
+											style="font-size: 10px; height: 30px; width: 37px;">
+											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+											<span class="tooltip">Approved</span>
+											</a>';
+									endif;
+									if ($usertype == "IT Admin"):
+										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="1" prop-id="' . $row['property_id'] . '" 
+												style="font-size: 10px; height: 30px; width: 37px;">
+												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+												<span class="tooltip">Disapproved</span>
+											</a>';
+									endif;
+								?>
+							</td>
+							</tr>
+							<?php endwhile; ?>
+							<?php        
+						}
 						?>
 					</tbody>
 				</table>
