@@ -227,7 +227,7 @@ body{
                           <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
                           <th style="text-align:center;font-size:13px;">LOCATION</th>
                           <th style="text-align:center;font-size:13px;">TYPE</th>
-                          <th style="text-align:center;font-size:13px;">RETETION STATUS</th>
+                          <th style="text-align:center;font-size:13px;">RETENTION STATUS</th>
                           <th style="text-align:center;font-size:13px;">NET TCP</th>  
                           <th style="text-align:center;font-size:13px;">ACTION</th>          
                         </tr>

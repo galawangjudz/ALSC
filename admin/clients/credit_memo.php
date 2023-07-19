@@ -71,7 +71,7 @@ if(isset($_GET['id'])){
                 </div>
                 <div class="form-group">
                     <label for="name">Reason: </label>
-                    <input type="number" class="form-control required" name="cm_reason"  id="cm_reason" value="0">
+                    <input type="number" class="form-control required" name="cm_reason"  id="cm_reason" placeholder="Reason">
                 </div>
                 <div class="form-group">
                     <label for="name">Reference: </label>
@@ -81,7 +81,7 @@ if(isset($_GET['id'])){
                 <div class="form-group">
                     <label class="control-label">Status: </label>
                     <div class="input-group">
-                        <input type="text" name="cm_status" id="cm_status" value="" class="form-control" placeholder="0.00">
+                        <input type="text" name="cm_status" id="cm_status" value="" class="form-control" placeholder="Status">
                     </div>
                 </div>
               
