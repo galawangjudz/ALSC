@@ -26,14 +26,7 @@ if ($user_role != 'IT Admin') {
 ?>
 <?php
 
-/* if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `t_lots` where md5(id) = '{$_GET['id']}' ");
-    if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
-        }
-    }
-} */
+
 
 if(isset($_GET['id'])){
     $user = $conn->query("SELECT * FROM t_lots where c_lid =".$_GET['id']);

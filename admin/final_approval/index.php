@@ -170,7 +170,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-								  <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> Evaluation</a>
+								  <!-- <a class="dropdown-item view_data" href="./?page=credit_assestment/ca-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> Evaluation</a> -->
 				                    <a class="dropdown-item booked_data" ra-id = "<?php echo $row['ra_id']?>" csr_no = "<?php echo $row['c_csr_no']?>" data-lot-id="<?php echo $row['c_lot_lid'] ?>"><span class="fa fa-check text-primary"></span> Approved</a>
 								 </div>
 							</td>
