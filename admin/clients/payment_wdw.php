@@ -355,6 +355,7 @@ body{
                                         
                                     }else{
                                         echo '<input type="submit" name="submit" value=" &#43;&nbsp;&nbsp;Add to List" class="btn btn-flat btn-info" style="width:100%;font-size:14px;">';
+                                        echo '<a href="#" class="btn btn-dark btn-flat credit-memo" id="credit_memo" style="width:100%;font-size:14px;"><i class="fa fa-credit"></i>&nbsp;&nbsp;Add Credit Memo</a>';
                                     }
                                 ?>
                             </td>
@@ -1329,6 +1330,11 @@ $(document).ready(function(){
     $(document).on('click', ".credit-pri", function(e) {
         e.preventDefault(); 
         CreditPrincipal();
+    });
+
+    $(document).on('click', ".credit-memo", function(e) {
+        e.preventDefault(); 
+        uni_modal("<i class='fa fa-plus'></i>&nbsp;&nbsp;Credit Memo",'clients/credit_memo.php',"mid-large")
     });
 
     $(document).on('click', ".add-payment-bal", function(e) {
