@@ -73,6 +73,14 @@
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
+	.table-container {
+  		overflow-x: auto;
+  		max-width: 100%;
+	}
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
     <div class="navbar-menu" style="width:100%; margin-left: auto; margin-right: auto; max-width: 1200px;">
@@ -116,7 +124,7 @@
 	</div>
 	<div class="card-body">
         <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="text-align:center;">
+			<table class="table table-bordered table-stripped" style="text-align:center;width:100%;">
 				
 				<thead>
 					<tr>

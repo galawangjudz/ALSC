@@ -100,6 +100,14 @@
 		line-height:40px;
 		background-color:#E8E8E8;
 	}
+	.table-container {
+  		overflow-x: auto;
+  		max-width: 100%;
+	}
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
     <div class="navbar-menu" style="width:100%; margin-left: auto; margin-right: auto; max-width: 1200px;">
@@ -141,7 +149,7 @@
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
-			<table class="table table-bordered table-hover table-striped">
+			<table class="table table-bordered table-hover table-striped" style="text-align:center;width:100%;">
 				<colgroup>
 					<col width="5%">
 					<col width="20%">

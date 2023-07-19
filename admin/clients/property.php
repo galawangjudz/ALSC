@@ -97,6 +97,18 @@ body{
     padding:5px;
     transition: opacity 0.5s ease;
 }
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.table2 {
+  table-layout: fixed;
+  width: 100%;
+}
+table {
+  table-layout: fixed;
+  width: 100%;
+}
 
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
@@ -331,22 +343,22 @@ body{
                                               <th style="text-align:center;font-size:13px;">PROPERTY ID</th>
                                               <th style="text-align:center;font-size:13px;">LOCATION</th>
                                               <th style="text-align:center;font-size:13px;">TYPE</th>
-                                              <th style="text-align:center;font-size:13px;">RETETION STATUS</th>
+                                              <th style="text-align:center;font-size:13px;">RETENTION STATUS</th>
                                               <th style="text-align:center;font-size:13px;">NET TCP</th>  
                                               <th style="text-align:center;font-size:13px;">ACTION</th>          
                                             </tr>
                                         </thead>
                                         <tbody><?php
                                     while($row = $qry4->fetch_assoc()):
-                                      $property_id = $row["property_id"];
+                                      $old_property_id = $row["property_id"];
                                       //echo $property_id;
                                       $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where property_id =" .$property_id);
                                       
                                      $row_details = $qry3->fetch_assoc();
 
-                                      $property_id_part1 = substr($property_id, 0, 2);
-                                      $property_id_part2 = substr($property_id, 2, 6);
-                                      $property_id_part3 = substr($property_id, 8, 5);
+                                      $property_id_part1 = substr($old_property_id, 0, 2);
+                                      $property_id_part2 = substr($old_property_id, 2, 6);
+                                      $property_id_part3 = substr($old_property_id, 8, 5);
                                     ?>    
                                    <tr>
                                    <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3?> <span class="badge badge-danger">Old Account</span></td>
@@ -389,13 +401,17 @@ body{
                   <tr style="width:100%;">
                     <td style="width:10%;">
                     <?php
+                      $qry19 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl1 = 0");
                       $qry11 = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' and pending_status=1");
-                      if($qry11->num_rows > 0){
+                      if($qry11 ->num_rows > 0){
                         echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for Restructuring</a>';
+                      }
+                      else if($qry19->num_rows > 0){
+                        echo "<a href='./?page=clients/payment_wdw&id=" . md5($property_id) . "' class='btn btn-flat btn-success pull-right disabled-link' style='width:100%; font-size:13px;' disabled><span class='fas fa-plus'></span>&nbsp;&nbsp;New Payment</a>";
                       }else{
                         echo "<a href='./?page=clients/payment_wdw&id=" . md5($property_id) . "' class='btn btn-flat btn-success pull-right' style='width:100%; font-size:13px;'><span class='fas fa-plus'></span>&nbsp;&nbsp;New Payment</a>";
-
                       }
+
                     ?>
                     </td>
                     <td style="width:10%;">
@@ -409,7 +425,7 @@ body{
                     </td>
                     <td style="width:10%;">
                     <?php
-                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 AND lvl2 = 0 AND lvl1 = 0");
+                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl1 = 0");
                     if ($qry13->num_rows > 0) {
                         echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
                     }
@@ -487,9 +503,9 @@ body{
                 </table>
 
               
-                <div class="col-md-12">
-                    <div class="form-group">
-                      <table>
+                <!-- <div class="col-md-12">
+                    <div class="form-group"> -->
+                      <table class="table2 table-bordered table-stripped">
                           <tr>
                           <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}' ";
 
@@ -553,20 +569,22 @@ body{
                                   echo "No results found.";
                               }
                               ?>
-                              <td style="font-size:12px;"><label for="tot_prin" class="control-label">Total Principal: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label for="tot_reb" class="control-label">Total Rebate: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label for="tot_sur" class="control-label">Total Surcharge: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label for="tot_int" class="control-label">Total Interest: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width:125px;"></td>
-                              <td style="font-size:12px;"><label for="tot_amt_due" class="control-label">Total Amount Due: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width:125px;"></td>
+                              
+                              
+                              <td style="font-size:12px; width: 50%;"><label for="tot_prin" class="control-label" style="width: 100%;">Total Principal: </label></td>
+                              <td style="width: 50%;"><input type="text" class="form-control-sm" name="tot_prin" id="tot_prin" value="<?php echo number_format($total_prin,2) ?>" style="width: 100%;"></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_reb" class="control-label" style="width: 100%;">Total Rebate: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_reb" id="tot_reb" value="<?php echo number_format($total_rebate,2) ?>" style="width: 100%;"></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_sur" class="control-label" style="width: 100%;">Total Surcharge: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo number_format($total_surcharge,2) ?>" style="width: 100%;"></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_int" class="control-label" style="width: 100%;">Total Interest: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_int" id="tot_int" value="<?php echo number_format($total_interest,2) ?>" style="width: 100%;"></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_amt_due" class="control-label" style="width: 100%;">Total Amount Due: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo number_format($main_total,2) ?>" style="width: 100%;"></td>
                           </tr>
                       </table>
-                    </div>
-                </div>
+                    <!-- </div>
+                </div> -->
                 
             </div>   
 
@@ -638,14 +656,14 @@ body{
                     <div class="form-group">
                       <table>
                           <tr>
-                              <td style="font-size:12px;"><label for="tot_prin2" class="control-label">Total Principal: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_prin2" id="tot_prin2" value="<?php echo isset($total_prin) ? number_format($total_prin): ''; ?>.00" disabled></td>
-                              <td style="font-size:12px;"><label for="tot_sur2" class="control-label">Total Surcharge: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_sur2" id="tot_sur2" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
-                              <td style="font-size:12px;"><label for="tot_int2" class="control-label">Total Interest: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_int2" id="tot_int2" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
-                              <td style="font-size:12px;"><label for="tot_amt_due2">Total Amount Due: </label></td>
-                              <td><input type="text" class= "form-control-sm" name="tot_amt_due2" id="tot_amt_due2" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_prin2" class="control-label" style="width: 100%;">Total Principal: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_prin2" id="tot_prin2" value="<?php echo isset($total_prin) ? number_format($total_prin): ''; ?>.00" disabled></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_sur2" class="control-label" style="width: 100%;">Total Surcharge: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_sur2" id="tot_sur2" value="<?php echo isset($total_surcharge) ? $total_surcharge : ''; ?>" disabled></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_int2" class="control-label" style="width: 100%;">Total Interest: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_int2" id="tot_int2" value="<?php echo isset($total_interest) ? $total_interest : ''; ?>" disabled></td>
+                              <td style="font-size:12px; width: 50%;"><label for="tot_amt_due2" class="control-label" style="width: 100%;">Total Amount Due: </label></td>
+                              <td style="width: 50%;"><input type="text" class= "form-control-sm" name="tot_amt_due2" id="tot_amt_due2" value="<?php echo isset($total_amt_due) ? $total_amt_due : ''; ?>" disabled></td>
                           </tr>
                       </table>
                     </div>

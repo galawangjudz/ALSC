@@ -30,6 +30,14 @@
 		border-bottom: solid 2px blue;
         background-color:#E8E8E8;
 	}
+    .table-container {
+  		overflow-x: auto;
+  		max-width: 100%;
+	}
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
 </style>
 
 <div class="card" id="container">
@@ -66,7 +74,7 @@ if ($user_role != 'IT Admin') {
 		<div class="card-body">
             <div class="container-fluid">
             <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
                     <thead>
                         <tr>
                         <th>No.</th>
