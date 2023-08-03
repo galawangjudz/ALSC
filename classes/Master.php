@@ -21,7 +21,32 @@ Class Master extends DBConnection {
 		}
 	}
 
-
+	function save_cm(){
+		extract($_POST);
+		$data = " cm_date = '$cm_date' ";
+		$data .= ", credit_amount = '$cm_amount' ";
+		$data .= ", reason = '$cm_reason' ";	 
+	 	$data .= ", reference = '$cm_reference' ";
+		$data .= ", memo_status = '$cm' ";
+	 	//if(empty($cm_id)){ 
+			$sql = "INSERT INTO t_credit_memo set ".$data;
+			$save = $this->conn->query($sql);
+	 	// }else{
+		// 	$save = $this->conn->query("UPDATE t_credit_memo set ".$data." where cm_id = ".$cm_id);
+		// } 
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($prod_lid))
+				$this->settings->set_flashdata('success',"Credit/Debit memo successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Credit/Debit memo successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+			
+	}
 
 	function save_lot(){
 		extract($_POST);
@@ -3168,6 +3193,122 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+
+	function cm_approval(){
+		extract($_POST);
+		$save2 = null;
+		if ($value == 4){
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl1='1' WHERE reference = ".$data_id);
+		} elseif ($value == 3){
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl2='1' WHERE reference = ".$data_id);
+		} elseif ($value == 2){
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl3='1' WHERE reference = ".$data_id);
+		} elseif ($value == 1){
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl1='1',lvl2='1',lvl3='1' WHERE reference = ".$data_id);
+		}
+
+		if ($value == 2){
+
+		$qry_get_cm = "SELECT * FROM t_credit_memo where reference = ".$data_id."";
+		$sql_get_cm = $this->conn->query($qry_get_cm);
+		while($row = $sql_get_cm->fetch_assoc()) {
+			$cm_id = $row['cm_id'];
+			$cm_status = $row['memo_status'];
+			$cm_date = $row['cm_date'];
+
+			if($cm_status=='CM'){
+				$cm_id = 'CM'.$cm_id;
+			}else{
+				$cm_id = 'DM'.$cm_id;
+			}
+
+			//$data2 = " reference = '$cm_id' ";
+		}
+
+		$qry = "SELECT * FROM property_payments where property_id = ".$prop_id." ORDER by payment_count";
+			$sql = $this->conn->query($qry);
+			$l_last = $sql->num_rows - 1;
+			$payments_data = array(); 
+			if($sql->num_rows <= 0){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'No Payment Records yet!';
+			return json_encode($resp);
+			} 
+			while($row = $sql->fetch_assoc()) {
+			$payments_data[] = $row; 
+
+			}
+
+			$last_row = $payments_data[$l_last];
+			$prop_id = $last_row['property_id'];
+			$payment_amt = $last_row['payment_amount'];
+			$due_date = $last_row['due_date'];
+			$pay_count = $last_row['payment_count'] + 1;
+			$status = $last_row['status'];
+			$status_count = $last_row['status_count'];
+
+			$rem_bal = $last_row['remaining_balance'];
+			$last_bal = $rem_bal - $cm_amt;
+			$data2 = " property_id = '$prop_id' ";
+			$data2 .= ", payment_amount = '$payment_amt' ";/// or same sila ng principal?
+			
+			$data2 .= ", pay_date = '$cm_date' "; 
+			$data2 .= ", due_date = '$due_date' "; 
+			$data2 .= ", or_no = '$cm_id' ";
+			$data2 .= ", amount_due = '0' "; 
+			$data2 .= ", rebate = '0' ";
+			$data2 .= ", surcharge = '0' ";
+			$data2 .= ", interest = '0' ";
+			$data2 .= ", principal = '$cm_amt' ";/// amount ng CM (- or +)
+
+			
+			$data2 .= ", remaining_balance = '$last_bal' ";/// last balance - principal
+			$data2 .= ", status = '$status' ";
+			$data2 .= ", payment_count = '$pay_count' ";
+			$data2 .= ", status_count = '$status_count' ";
+			
+			
+			$insert_qry = "INSERT INTO property_payments SET ".$data2;
+			$save2 = $this->conn->query($insert_qry);
+		}
+
+		if ($update && $save2 !== false) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Credit/Debit Memo successfully approved!");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	
+
+	function cm_disapproval(){
+
+		extract($_POST);
+
+		if ($value == 4):
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl1='2' WHERE reference = ".$data_id);
+		elseif($value == 3):
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl2='2' WHERE reference = ".$data_id);
+		elseif($value == 2):
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl3='2' WHERE reference = ".$data_id);
+		elseif($value == 1):
+			$update = $this->conn->query("UPDATE t_credit_memo SET lvl1='2',lvl2='2',lvl3='2' WHERE reference = ".$data_id);
+		endif;
+		
+		if($update){
+
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Credit/Debit Memo successfully disapproved!");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
 	function av_disapproval(){
 		//reopen (properties)
 		//active_status - transferred (2)
@@ -3629,6 +3770,15 @@ switch ($action) {
 	break;
 	case 'av_approval':
 		echo $Master->av_approval();
+	break;
+	case 'cm_approval':
+		echo $Master->cm_approval();
+	break;
+	case 'cm_disapproval':
+		echo $Master->cm_disapproval();
+	break;
+	case 'save_cm':
+		echo $Master->save_cm();
 	break;
 	case 'av_disapproval':
 		echo $Master->av_disapproval();

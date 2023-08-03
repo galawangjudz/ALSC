@@ -98,6 +98,14 @@
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=clients/credit-memo/cm_list" class="nav-link nav-cm">
+                      <i class="nav-icon fa fa-credit-card"></i>
+                        <p>
+                          Credit/Debit Memo
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_list" class="nav-link nav-res">
                       <i class="nav-icon fas fa-redo"></i>
                         <p>
