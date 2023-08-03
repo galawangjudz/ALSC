@@ -123,7 +123,7 @@
 						<th>Billing Status</th>
 						<th>FM Status</th>
 						<th>CFO Status</th>
-						<th>Action</th>
+						<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2023 at 03:11 AM
+-- Generation Time: Feb 07, 2023 at 03:45 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -20,495 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `alscdb`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `account_list`
---
-DROP TABLE `alscdb`.`account_list`;
-
-CREATE TABLE `account_list` (
-  `id` int(30) NOT NULL,
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `delete_flag` tinyint(1) NOT NULL DEFAULT 0,
-  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
-  `date_updated` datetime DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `account_list`
---
-
-INSERT INTO `account_list` (`id`, `name`, `description`, `status`, `delete_flag`, `date_created`, `date_updated`) VALUES
-(1, 'Cash', 'Cash', 1, 0, '2022-02-01 10:09:26', NULL),
-(2, 'Petty Cash', 'Petty Cash', 1, 0, '2022-02-01 10:09:40', NULL),
-(3, 'Cash Equivalents', 'Cash Equivalents', 1, 0, '2022-02-01 10:09:56', NULL),
-(4, 'Accounts Receivable', 'Accounts Receivable', 1, 0, '2022-02-01 10:10:22', NULL),
-(5, 'Interest Receivable', 'Interest Receivable', 1, 0, '2022-02-01 10:10:57', NULL),
-(6, 'Office Supplies', 'Office Supplies', 1, 0, '2022-02-01 10:11:13', NULL),
-(7, 'Accounts Payable', 'Accounts Payable', 1, 0, '2022-02-01 10:11:55', NULL),
-(8, 'Insurance Payable', 'Insurance Payable', 1, 0, '2022-02-01 10:12:07', NULL),
-(9, 'Interest Payable', 'Interest Payable', 1, 0, '2022-02-01 10:12:20', NULL),
-(10, 'Legal Fees Payable', 'Legal Fees Payable', 1, 0, '2022-02-01 10:12:35', NULL),
-(11, 'Office Salaries Payable', 'Office Salaries Payable', 1, 0, '2022-02-01 10:12:51', NULL),
-(12, 'Salaries Payable', 'Salaries Payable', 1, 0, '2022-02-01 10:13:03', NULL),
-(13, 'Wages Payable', 'Wages Payable', 1, 0, '2022-02-01 10:13:24', NULL),
-(14, 'Owner’s Capital', 'Owner’s Capital', 1, 0, '2022-02-01 10:13:54', NULL),
-(15, 'Owner’s Withdrawals', 'Owner’s Withdrawals', 1, 0, '2022-02-01 10:14:04', NULL),
-(16, 'Common Stock, Par Value', 'Common Stock, Par Value', 1, 0, '2022-02-01 10:14:25', NULL),
-(17, 'Common stock, no par value', 'Common stock, no par value', 1, 0, '2022-02-01 10:14:34', NULL),
-(18, 'Common stock dividend distributable', 'Common stock dividend distributable', 1, 0, '2022-02-01 10:14:50', NULL),
-(19, 'Paid-in capital in excess of par value, Common stock', 'Paid-in capital in excess of par value, Common\r\nstock', 1, 0, '2022-02-01 10:15:02', NULL),
-(20, 'Paid-in capital in excess of stated value, No-par common stock', 'Paid-in capital in excess of stated value, No-par\r\ncommon stock', 1, 0, '2022-02-01 10:15:11', NULL),
-(21, 'Retained earnings', 'Retained earnings', 1, 0, '2022-02-01 10:15:31', NULL),
-(22, 'Cash dividends', 'Cash dividends', 1, 0, '2022-02-01 10:15:44', NULL),
-(23, 'Stock dividends', 'Stock dividends', 1, 0, '2022-02-01 10:15:58', NULL),
-(24, 'Treasury stock, Common', 'Treasury stock, Common', 1, 0, '2022-02-01 10:16:48', NULL),
-(25, 'Unrealized gain-Equity', 'Unrealized gain-Equity', 1, 0, '2022-02-01 10:16:57', NULL),
-(26, 'Unrealized loss-Equity', 'Unrealized loss-Equity', 1, 0, '2022-02-01 10:17:05', NULL),
-(27, 'Fees earned from product one', 'Fees earned from product one', 1, 0, '2022-02-01 10:17:27', NULL),
-(28, 'Fees earned from product two', 'Fees earned from product two', 1, 0, '2022-02-01 10:17:43', NULL),
-(29, 'Service revenue one', 'Service revenue one', 1, 0, '2022-02-01 10:17:55', NULL),
-(30, 'Service revenue two', 'Service revenue two', 1, 0, '2022-02-01 10:18:04', NULL),
-(31, 'Commissions earned', 'Commissions earned', 1, 0, '2022-02-01 10:18:14', NULL),
-(32, 'Rent revenue', 'Rent revenue', 1, 0, '2022-02-01 10:18:26', NULL),
-(33, 'Dividends revenue', 'Dividends revenue', 1, 0, '2022-02-01 10:18:40', NULL),
-(34, 'Earnings from investments in “blank”', 'Earnings from investments in “blank”', 1, 0, '2022-02-01 10:18:51', NULL),
-(35, 'Interest revenue', 'Interest revenue', 1, 0, '2022-02-01 10:19:03', NULL),
-(36, 'Sinking fund earnings', 'Sinking fund earnings', 1, 0, '2022-02-01 11:41:57', NULL),
-(37, 'Amortization expense', 'Amortization expense', 1, 0, '2022-02-01 11:42:08', NULL),
-(38, 'Depletion expense', 'Depletion expense', 1, 0, '2022-02-01 11:42:16', NULL),
-(39, 'Depreciation expense-Automobiles', 'Depreciation expense-Automobiles', 1, 0, '2022-02-01 11:42:25', NULL),
-(40, 'Depreciation expense-Building', 'Depreciation expense-Building', 1, 0, '2022-02-01 11:42:34', NULL),
-(41, 'Depreciation expense-Furniture', 'Depreciation expense-Furniture', 1, 0, '2022-02-01 11:43:02', NULL),
-(42, 'Office salaries expense', 'Office salaries expense', 1, 0, '2022-02-01 11:43:12', NULL),
-(43, 'Sales salaries expense', 'Sales salaries expense', 1, 0, '2022-02-01 11:43:21', NULL),
-(44, 'Salaries expense', 'Salaries expense', 1, 0, '2022-02-01 11:43:31', NULL),
-(45, 'Income taxes expense', 'Income taxes expense', 1, 0, '2022-02-01 11:43:44', NULL),
-(46, 'Warranty expense', 'Warranty expense', 1, 0, '2022-02-01 11:44:01', NULL),
-(47, 'Utilities expense', 'Utilities expense', 1, 0, '2022-02-01 11:44:10', NULL),
-(48, 'Selling expense', 'Selling expense', 1, 0, '2022-02-01 11:44:23', NULL),
-(49, 'Sample101', 'Sample101', 0, 1, '2022-02-01 11:45:03', '2022-02-01 11:45:23'),
-(50, 'Sample 01', 'Sample 01', 1, 1, '2023-06-05 16:39:10', '2023-06-05 16:43:54'),
-(51, 'Sample', 'Sample', 1, 0, '2023-06-05 16:39:26', NULL),
-(52, 'Sample1', 'Sample1', 1, 0, '2023-06-06 09:29:09', NULL),
-(53, 'Sample2', 'Sample2', 1, 0, '2023-06-06 09:30:53', NULL),
-(54, 'dsdsd', 'adds', 0, 0, '2023-06-06 09:51:24', NULL),
-(55, '1212', '1211313', 0, 1, '2023-06-06 09:56:50', '2023-06-06 10:00:07'),
-(56, '131313', '13132', 0, 1, '2023-06-06 09:57:01', '2023-06-06 10:00:16'),
-(57, '1314255', '1231313', 1, 1, '2023-06-06 09:57:55', '2023-06-06 10:31:29'),
-(58, '131414', '31313', 0, 1, '2023-06-06 09:59:13', '2023-06-06 10:00:22'),
-(59, '31313', '31313', 1, 1, '2023-06-06 09:59:51', '2023-06-06 10:31:25'),
-(60, '1212', '12121212', 0, 1, '2023-06-06 10:12:55', '2023-06-06 10:17:26'),
-(61, '131313', 'qe213', 0, 1, '2023-06-06 10:13:04', '2023-06-06 10:17:29');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `family_members`
---
-
-CREATE TABLE `family_members` (
-  `member_id` int(11) NOT NULL,
-  `client_id` bigint(20) DEFAULT NULL,
-  `c_buyer_count` tinyint(4) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `middle_name` varchar(255) NOT NULL,
-  `suffix_name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `zip_code` varchar(255) NOT NULL,
-  `address_abroad` text NOT NULL,
-  `birthdate` date NOT NULL,
-  `age` int(11) NOT NULL,
-  `viber` varchar(25) NOT NULL,
-  `gender` text NOT NULL,
-  `civil_status` text NOT NULL,
-  `citizenship` varchar(255) NOT NULL,
-  `id_presented` varchar(255) NOT NULL,
-  `tin_no` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `contact_no` varchar(100) NOT NULL,
-  `contact_abroad` varchar(100) NOT NULL,
-  `relationship` tinyint(4) DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0 = Pending\r\n1 = Active\r\n2 = Inactive'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `group_list`
---
-
-CREATE TABLE `group_list` (
-  `id` int(30) NOT NULL,
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1 = Debit, 2= Credit',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0=Inactive, 1= Active',
-  `delete_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 = No, 1 = Yes ',
-  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
-  `date_updated` datetime DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `group_list`
---
-
-INSERT INTO `group_list` (`id`, `name`, `description`, `type`, `status`, `delete_flag`, `date_created`, `date_updated`) VALUES
-(1, 'Assets', 'The cash, inventory, and other resources you owned.', 1, 1, 0, '2022-02-01 09:56:35', '2022-02-01 09:56:58'),
-(2, 'Revenue', 'Cash coming into your business through sales and other types of payments', 2, 1, 0, '2022-02-01 09:57:45', NULL),
-(3, 'Expenses', 'The amount you’re spending on services and other items, like payroll, utility bills, and fees for contractors.', 1, 1, 0, '2022-02-01 09:58:09', '2022-02-01 09:59:13'),
-(4, 'Liabilities', 'The money you still owe on loans, debts, and other obligations.', 2, 1, 0, '2022-02-01 09:58:34', NULL),
-(5, 'Equity', 'How much is remaining after you subtract liabilities from assets.', 2, 1, 0, '2022-02-01 09:59:05', NULL),
-(6, 'Dividend', 'Form of income that shareholders of corporations receive for each share of stock that they hold.', 1, 1, 0, '2022-02-01 10:00:13', NULL),
-(7, 'Sample101', 'Sample', 1, 0, 1, '2022-02-01 10:01:35', '2022-02-01 10:03:28');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `journal_entries`
---
-
-CREATE TABLE `journal_entries` (
-  `id` int(30) NOT NULL,
-  `code` varchar(100) NOT NULL,
-  `journal_date` date NOT NULL,
-  `description` text NOT NULL,
-  `user_id` int(30) DEFAULT NULL,
-  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
-  `date_updated` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `journal_entries`
---
-
-INSERT INTO `journal_entries` (`id`, `code`, `journal_date`, `description`, `user_id`, `date_created`, `date_updated`) VALUES
-(3, '202306-00001', '2023-06-01', 'Capital', 1, '2023-06-05 00:00:00', '2023-06-06 13:11:52'),
-(4, '202306-00002', '2023-06-01', 'Sample', 1, '2023-06-05 00:00:00', '2023-06-06 13:12:06'),
-(5, '202306-00003', '2023-06-01', 'Sample 102', 1, '2023-06-05 00:00:00', '2023-06-06 13:12:08'),
-(8, '202306-00001', '2023-06-06', 'Sample 101', 1, '2023-06-06 08:55:37', '2023-06-06 13:12:08');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `journal_items`
---
-
-CREATE TABLE `journal_items` (
-  `journal_id` int(30) NOT NULL,
-  `account_id` int(30) NOT NULL,
-  `group_id` int(30) NOT NULL,
-  `amount` float NOT NULL DEFAULT 0,
-  `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `journal_items`
---
-
-INSERT INTO `journal_items` (`journal_id`, `account_id`, `group_id`, `amount`, `date_created`) VALUES
-(3, 1, 1, 15000, '2022-02-01 14:52:56'),
-(3, 14, 5, 15000, '2022-02-01 14:52:56'),
-(4, 42, 3, 5000, '2022-02-01 15:55:46'),
-(4, 11, 4, 5000, '2022-02-01 15:55:46'),
-(5, 31, 2, 5000, '2022-02-01 15:59:34'),
-(5, 31, 2, 3000, '2022-02-01 15:59:34'),
-(5, 4, 1, 8000, '2022-02-01 15:59:34'),
-(8, 4, 1, 1000, '2023-06-06 08:55:37'),
-(8, 1, 4, 1000, '2023-06-06 08:55:37');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `or_logs`
---
-
-CREATE TABLE `or_logs` (
-  `or_id` bigint(11) NOT NULL,
-  `property_id` bigint(20) NOT NULL,
-  `pay_date` date NOT NULL DEFAULT current_timestamp(),
-  `or_no` varchar(30) NOT NULL,
-  `amount_paid` decimal(10,2) NOT NULL,
-  `amount_due` decimal(10,2) NOT NULL,
-  `surcharge` decimal(10,2) NOT NULL,
-  `interest` decimal(10,2) NOT NULL,
-  `principal` decimal(10,2) NOT NULL,
-  `rebate` decimal(10,2) NOT NULL,
-  `remaining_balance` decimal(10,2) NOT NULL,
-  `mode_of_payment` varchar(100) NOT NULL,
-  `user` varchar(100) NOT NULL,
-  `gen_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `check_date` date NOT NULL DEFAULT current_timestamp(),
-  `branch` text NOT NULL,
-  `particulars` text NOT NULL,
-  `check_number` text NOT NULL,
-  `status` tinyint(4) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `or_logs`
---
-
-INSERT INTO `or_logs` (`or_id`, `property_id`, `pay_date`, `or_no`, `amount_paid`, `amount_due`, `surcharge`, `interest`, `principal`, `rebate`, `remaining_balance`, `mode_of_payment`, `user`, `gen_time`, `check_date`, `branch`, `particulars`, `check_number`, `status`) VALUES
-(26, 1413001901101, '2020-06-08', '395273', '22209.00', '22207.66', '0.00', '0.00', '22209.00', '0.00', '2722791.00', '-1', 'admin', '2023-05-11 09:34:53', '0000-00-00', '', '', '', 1),
-(27, 1413001901101, '2020-06-08', '395274', '22209.00', '22206.99', '0.00', '0.00', '22209.00', '0.00', '2700582.00', '-1', 'admin', '2023-05-11 09:39:50', '0000-00-00', '', '', '', 1),
-(28, 1413001901101, '2020-07-27', '397428', '66627.00', '22204.98', '0.00', '0.00', '66627.00', '0.00', '2633955.00', '-1', 'admin', '2023-05-11 09:43:25', '0000-00-00', '', '', '', 1),
-(29, 1413001901101, '2020-08-25', '398465', '22209.00', '22204.31', '0.00', '0.00', '22209.00', '0.00', '2611746.00', '-1', 'admin', '2023-05-11 09:44:30', '0000-00-00', '', '', '', 1),
-(30, 1413001901101, '2020-09-25', '399658', '22209.00', '22203.64', '0.00', '0.00', '22209.00', '0.00', '2589537.00', '-1', 'admin', '2023-05-11 09:45:02', '0000-00-00', '', '', '', 1),
-(31, 1413001901101, '2020-10-26', '400754', '22209.00', '22202.97', '0.00', '0.00', '22209.00', '0.00', '2567328.00', '-1', 'admin', '2023-05-11 09:45:30', '0000-00-00', '', '', '', 1),
-(32, 1413001901101, '2020-11-25', '401902', '22209.00', '22202.30', '0.00', '0.00', '22209.00', '0.00', '2545119.00', '-1', 'admin', '2023-05-11 09:45:56', '0000-00-00', '', '', '', 1),
-(33, 1413001901101, '2020-12-23', '402923', '22209.00', '22201.63', '0.00', '0.00', '22209.00', '0.00', '2522910.00', '-1', 'admin', '2023-05-11 09:46:31', '0000-00-00', '', '', '', 1),
-(34, 1413001901101, '2021-01-25', '404230', '22209.00', '22200.96', '0.00', '0.00', '22209.00', '0.00', '2500701.00', '-1', 'admin', '2023-05-11 09:53:49', '0000-00-00', '', '', '', 1),
-(35, 1413001901101, '2021-02-24', '405295', '22209.00', '22200.29', '0.00', '0.00', '22209.00', '0.00', '2478492.00', '-1', 'admin', '2023-05-11 09:54:48', '0000-00-00', '', '', '', 1),
-(36, 1413001901101, '2021-03-25', '407107', '22209.00', '22199.62', '0.00', '0.00', '22209.00', '0.00', '2456283.00', '-1', 'admin', '2023-05-11 09:56:51', '0000-00-00', '', '', '', 1),
-(37, 1413001901101, '2021-04-26', '408865', '22209.00', '22198.95', '0.00', '0.00', '22209.00', '0.00', '2434074.00', '-1', 'admin', '2023-05-11 09:57:39', '0000-00-00', '', '', '', 1),
-(39, 1413001901101, '2021-05-25', '409899', '22209.00', '22198.28', '0.00', '0.00', '22209.00', '0.00', '2411865.00', '-1', 'admin', '2023-05-11 10:04:33', '0000-00-00', '', '', '', 1),
-(40, 1413001901101, '2021-07-27', '412366', '44418.00', '22196.94', '0.00', '0.00', '44418.00', '0.00', '2367447.00', '-1', 'admin', '2023-05-11 10:09:53', '0000-00-00', '', '', '', 1),
-(41, 1413001901101, '2021-08-25', '413465', '22209.00', '22196.27', '0.00', '0.00', '22209.00', '0.00', '2345238.00', '-1', 'admin', '2023-05-11 10:11:38', '0000-00-00', '', '', '', 1),
-(45, 1413001901101, '2021-09-27', '414786', '22209.00', '22195.60', '0.00', '0.00', '22209.00', '0.00', '2323029.00', '-1', 'admin', '2023-05-11 10:20:40', '0000-00-00', '', '', '', 1),
-(46, 1413001901101, '2021-11-25', '416974', '44418.00', '22194.26', '0.00', '0.00', '44418.00', '0.00', '2278611.00', '-1', 'admin', '2023-05-11 10:21:37', '0000-00-00', '', '', '', 1),
-(47, 1413001901101, '2021-12-27', '418040', '22209.00', '22193.59', '0.00', '0.00', '22209.00', '0.00', '2256402.00', '-1', 'admin', '2023-05-11 10:22:14', '0000-00-00', '', '', '', 1),
-(48, 1413001901101, '2022-01-25', '418999', '22209.00', '22193.00', '0.00', '0.00', '22209.00', '0.00', '2234193.00', '-1', 'admin', '2023-05-11 10:25:05', '0000-00-00', '', '', '', 1),
-(49, 1413001901101, '2022-02-24', '421210', '22209.00', '44057.90', '0.00', '16.00', '22193.00', '0.00', '2212000.00', '-1', 'admin', '2023-05-11 10:25:40', '0000-00-00', '', '', '', 0),
-(50, 1413001901101, '2022-02-24', '421210', '22193.00', '45204.00', '0.00', '0.00', '22193.00', '0.00', '2212000.00', '-1', 'admin', '2023-05-11 10:30:18', '0000-00-00', '', '', '', 0),
-(51, 1413001901101, '2022-02-24', '1213313', '150000.00', '45204.00', '0.00', '0.00', '150000.00', '0.00', '2062000.00', '-1', 'admin', '2023-05-11 10:30:41', '0000-00-00', '', '', '', 0),
-(52, 1413001901101, '2022-02-24', '421210', '22209.00', '45204.00', '0.00', '0.00', '22209.00', '0.00', '2211984.00', '-1', 'admin', '2023-05-11 10:36:05', '0000-00-00', '', '', '', 1),
-(53, 1413001901101, '2022-04-25', '424657', '90408.00', '45204.00', '0.00', '62476.42', '27931.58', '0.00', '2184052.42', '-1', 'admin', '2023-05-11 10:46:50', '0000-00-00', '', '', '', 1),
-(54, 1413001901101, '2022-04-25', '131414', '88147.80', '45204.00', '0.00', '61679.42', '26468.38', '2260.20', '2155323.84', '-1', 'admin', '2023-05-11 10:49:51', '0000-00-00', '', '', '', 0),
-(55, 1413001901101, '2022-06-06', '431802', '45204.00', '904.08', '904.08', '30940.74', '13359.18', '0.00', '2170693.24', '-1', 'admin', '2023-05-11 11:06:49', '0000-00-00', '', '', '', 1),
-(56, 1413001901101, '2022-06-08', '431849', '904.08', '45204.00', '0.00', '0.00', '904.08', '0.00', '2169789.16', '-1', 'admin', '2023-05-11 11:28:28', '0000-00-00', '', '', '', 1),
-(57, 1413001901101, '2022-07-27', '426009', '47623.00', '45195.88', '2410.88', '30746.80', '14465.32', '0.00', '2155323.84', '-1', 'admin', '2023-05-11 11:29:15', '0000-00-00', '', '', '', 0),
-(58, 1413001901101, '2022-07-27', '426009', '47623.00', '45204.00', '2410.88', '30738.68', '14473.44', '0.00', '2155315.72', '-1', 'admin', '2023-05-11 11:32:00', '0000-00-00', '', '', '', 0),
-(59, 1413001901101, '2022-11-05', '429352', '52500.00', '464.02', '7760.02', '30533.64', '14206.34', '0.00', '2141109.38', '-1', 'admin', '2023-05-11 11:38:18', '0000-00-00', '', '', '', 1),
-(60, 1413001901101, '2023-03-22', '442073', '285110.56', '33926.98', '47349.52', '160768.25', '76992.79', '0.00', '2064116.59', '-1', 'admin', '2023-05-11 13:21:18', '0000-00-00', '', '', '', 1),
-(61, 1214500602101, '2023-05-04', '1212', '8840.49', '9043.98', '0.00', '4752.00', '4088.49', '203.49', '375868.02', '-1', 'admin', '2023-05-25 11:02:39', '0000-00-00', '', '', '', 1),
-(69, 1214500602101, '2023-06-01', '12141414', '16656.67', '16656.67', '0.00', '2667.00', '13989.67', '0.00', '443210.33', '-1', 'admin', '2023-06-15 11:06:04', '0000-00-00', '', '', '', 1),
-(71, 1214500402101, '2023-06-08', '11441', '5773.33', '5773.33', '0.00', '0.00', '5773.33', '0.00', '420626.67', '-1', 'admin', '2023-06-15 11:14:07', '0000-00-00', '', '', '', 1),
-(72, 1214500502101, '2023-06-08', '1212', '124120.45', '5215.80', '0.00', '0.00', '124120.45', '0.00', '312947.71', '-1', 'admin', '2023-06-16 11:15:04', '0000-00-00', '', '', '', 1),
-(73, 1214500502101, '2023-06-08', '121313', '5215.80', '5215.80', '0.00', '0.00', '5215.80', '0.00', '307731.91', '-1', 'admin', '2023-06-16 11:15:10', '0000-00-00', '', '', '', 1),
-(74, 1214500502101, '2023-06-08', '1212', '5215.80', '5215.80', '0.00', '0.00', '5215.80', '0.00', '302516.11', '-1', 'admin', '2023-06-16 11:15:14', '0000-00-00', '', '', '', 1),
-(75, 1213700202101, '2023-05-03', '1212', '56163.82', '26345.65', '13977.74', '0.00', '28333.30', '0.00', '760000.00', '-1', 'admin', '2023-06-16 13:26:02', '0000-00-00', '', '', '', 1),
-(76, 1214500401101, '2023-06-16', '1421313', '100000.00', '8240.00', '0.00', '0.00', '100000.00', '0.00', '330800.00', '-1', 'admin', '2023-06-19 13:51:23', '0000-00-00', '', '', '', 1),
-(77, 1214500401101, '2023-06-19', '12345', '29203.30', '0.00', '0.00', '0.00', '29203.30', '0.00', '301796.70', '-1', 'admin', '2023-06-19 13:56:26', '0000-00-00', '', '', '', 1),
-(78, 1214500401101, '2023-06-19', '1313', '87609.90', '29875.50', '0.00', '11443.31', '76166.60', '2016.60', '252816.81', '-1', 'admin', '2023-06-19 14:09:33', '0000-00-00', '', '', '', 1),
-(79, 1413001901102, '2023-06-19', '12113', '209141.65', '209141.65', '0.00', '0.00', '209141.65', '0.00', '2300558.15', '-1', 'admin', '2023-06-19 15:32:53', '0000-00-00', '', '', '', 1),
-(80, 1214500514101, '2023-06-19', '121213', '21733.30', '2173.33', '0.00', '0.00', '21733.30', '0.00', '399066.70', '-1', 'admin', '2023-06-19 15:33:54', '0000-00-00', '', '', '', 1),
-(81, 1214500323301, '2023-06-19', '12131', '21142432.04', '1469803.41', '0.00', '0.00', '21142432.04', '0.00', '78857567.95', '-1', 'admin', '2023-06-20 11:27:12', '0000-00-00', '', '', '', 1),
-(83, 1214500514101, '2023-06-19', '12131', '42920.12', '6406.88', '0.00', '10428.02', '32492.10', '320.34', '366254.26', '-1', 'admin', '2023-06-20 14:22:45', '0000-00-00', '', '', '', 1),
-(85, 1413001901102, '2023-06-20', '1212', '145123.76', '37116.05', '0.00', '114395.74', '30728.02', '3340.44', '2266489.69', '-1', 'admin', '2023-06-20 15:23:59', '0000-00-00', '', '', '', 1),
-(86, 1413001901102, '2023-06-20', '121414', '100000.00', '0.00', '0.00', '0.00', '100000.00', '0.00', '2166489.69', '-1', 'admin', '2023-06-20 15:26:48', '0000-00-00', '', '', '', 1),
-(87, 1410300901102, '2023-06-20', '1212', '5149.33', '5149.33', '0.00', '0.00', '5149.33', '0.00', '383810.67', '-1', 'admin', '2023-06-21 09:02:13', '0000-00-00', '', '', '', 1),
-(88, 1410300901101, '2023-07-05', '123456', '5149.33', '5149.33', '0.00', '0.00', '5149.33', '0.00', '383810.67', '-1', 'admin', '2023-07-05 09:12:28', '0000-00-00', '', '', '', 1),
-(89, 1410300901101, '2023-08-05', '134513', '5149.33', '5149.33', '0.00', '0.00', '5149.33', '0.00', '378661.34', '-1', 'admin', '2023-07-05 09:12:46', '0000-00-00', '', '', '', 1),
-(92, 1410300901102, '2023-07-06', '1212134', '51792.00', '2726.40', '0.00', '0.00', '51792.00', '0.00', '327168.00', '-1', 'admin', '2023-07-06 11:09:04', '0000-00-00', '', '', '', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pending_restructuring`
---
-
-CREATE TABLE `pending_restructuring` (
-  `id` int(11) NOT NULL,
-  `property_id` bigint(20) NOT NULL,
-  `c_balance` double NOT NULL,
-  `c_account_status` varchar(100) NOT NULL,
-  `c_payment_type1` text DEFAULT NULL,
-  `c_payment_type2` text DEFAULT NULL,
-  `c_net_dp` double DEFAULT NULL,
-  `less_dp` double NOT NULL,
-  `acc_surcharge1` double NOT NULL,
-  `c_no_payments` int(11) DEFAULT NULL,
-  `c_monthly_down` double DEFAULT NULL,
-  `c_first_dp` date DEFAULT NULL,
-  `c_full_down` date DEFAULT NULL,
-  `c_amt_financed` double DEFAULT NULL,
-  `acc_surcharge2` double NOT NULL,
-  `acc_interest` double NOT NULL,
-  `c_adj_prin_bal` double NOT NULL,
-  `c_terms` int(11) DEFAULT NULL,
-  `c_interest_rate` double DEFAULT NULL,
-  `c_fixed_factor` double DEFAULT NULL,
-  `c_monthly_payment` double DEFAULT NULL,
-  `c_start_date` date DEFAULT NULL,
-  `c_restructured_date` date DEFAULT NULL,
-  `pending_status` int(11) NOT NULL,
-  `lvl1` int(11) NOT NULL COMMENT 'BS',
-  `lvl2` int(11) NOT NULL COMMENT 'Ghie',
-  `lvl3` int(11) NOT NULL COMMENT 'CFO'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `pending_restructuring`
---
-
-INSERT INTO `pending_restructuring` (`id`, `property_id`, `c_balance`, `c_account_status`, `c_payment_type1`, `c_payment_type2`, `c_net_dp`, `less_dp`, `acc_surcharge1`, `c_no_payments`, `c_monthly_down`, `c_first_dp`, `c_full_down`, `c_amt_financed`, `acc_surcharge2`, `acc_interest`, `c_adj_prin_bal`, `c_terms`, `c_interest_rate`, `c_fixed_factor`, `c_monthly_payment`, `c_start_date`, `c_restructured_date`, `pending_status`, `lvl1`, `lvl2`, `lvl3`) VALUES
-(33, 1410300901102, 327168, 'Full DownPayment', 'Full DownPayment', 'Monthly Amortization', 51792, 0, 0, 1, 51792, '2023-07-06', '2023-07-06', 327168, 1000, 1000, 329168, 12, 15, 0.09025831, 29710.15, '2023-08-06', '2023-07-06', 0, 1, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `properties`
---
-
-CREATE TABLE `properties` (
-  `property_id` bigint(20) NOT NULL,
-  `c_csr_no` bigint(20) NOT NULL,
-  `project_id` int(11) NOT NULL,
-  `c_lot_lid` int(11) NOT NULL,
-  `c_type` text NOT NULL,
-  `c_date_of_sale` date DEFAULT current_timestamp(),
-  `c_balance` double NOT NULL,
-  `c_account_status` varchar(100) NOT NULL,
-  `c_account_type` varchar(20) NOT NULL,
-  `c_account_type1` varchar(20) NOT NULL,
-  `c_lot_area` double DEFAULT NULL,
-  `c_price_sqm` double DEFAULT NULL,
-  `c_lot_discount` double DEFAULT NULL,
-  `c_lot_discount_amt` double DEFAULT NULL,
-  `c_house_model` varchar(100) DEFAULT NULL,
-  `c_floor_area` double DEFAULT NULL,
-  `c_house_price_sqm` double DEFAULT NULL,
-  `c_house_discount` double DEFAULT NULL,
-  `c_house_discount_amt` double DEFAULT NULL,
-  `c_tcp_discount` double DEFAULT NULL,
-  `c_tcp_discount_amt` double DEFAULT NULL,
-  `c_tcp` double DEFAULT NULL,
-  `c_vat_amount` double DEFAULT NULL,
-  `c_net_tcp` double DEFAULT NULL,
-  `c_reservation` double DEFAULT NULL,
-  `c_payment_type1` text DEFAULT NULL,
-  `c_payment_type2` text DEFAULT NULL,
-  `c_down_percent` double DEFAULT NULL,
-  `c_net_dp` double DEFAULT NULL,
-  `c_no_payments` int(11) DEFAULT NULL,
-  `c_monthly_down` double DEFAULT NULL,
-  `c_first_dp` date DEFAULT NULL,
-  `c_full_down` date DEFAULT NULL,
-  `c_amt_financed` double DEFAULT NULL,
-  `c_terms` int(11) DEFAULT NULL,
-  `c_interest_rate` double DEFAULT NULL,
-  `c_fixed_factor` double DEFAULT NULL,
-  `c_monthly_payment` double DEFAULT NULL,
-  `c_start_date` date DEFAULT NULL,
-  `c_retention` tinyint(2) NOT NULL,
-  `c_reopen` int(11) NOT NULL DEFAULT 0,
-  `c_change_date` tinyint(2) NOT NULL,
-  `c_restructured` tinyint(2) NOT NULL,
-  `c_remarks` text NOT NULL,
-  `c_active` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = Backout,\r\n1 = Active,\r\n2 = Transferred',
-  `c_backout_date` date DEFAULT NULL,
-  `old_property_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `properties`
---
-
-INSERT INTO `properties` (`property_id`, `c_csr_no`, `project_id`, `c_lot_lid`, `c_type`, `c_date_of_sale`, `c_balance`, `c_account_status`, `c_account_type`, `c_account_type1`, `c_lot_area`, `c_price_sqm`, `c_lot_discount`, `c_lot_discount_amt`, `c_house_model`, `c_floor_area`, `c_house_price_sqm`, `c_house_discount`, `c_house_discount_amt`, `c_tcp_discount`, `c_tcp_discount_amt`, `c_tcp`, `c_vat_amount`, `c_net_tcp`, `c_reservation`, `c_payment_type1`, `c_payment_type2`, `c_down_percent`, `c_net_dp`, `c_no_payments`, `c_monthly_down`, `c_first_dp`, `c_full_down`, `c_amt_financed`, `c_terms`, `c_interest_rate`, `c_fixed_factor`, `c_monthly_payment`, `c_start_date`, `c_retention`, `c_reopen`, `c_change_date`, `c_restructured`, `c_remarks`, `c_active`, `c_backout_date`, `old_property_id`) VALUES
-(1214500323101, 84, 12, 14500323, '1', '2023-07-12', 337200, 'Reservation', 'LOC', 'REG', 76, 4700, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 357200, 0, 357200, 20000, 'Spot Cash', 'None', 0, 0, 0, 0, '0000-00-00', '0000-00-00', 337200, 0, 0, 0, 0, '2023-08-11', 0, 0, 0, 0, '', 1, NULL, NULL),
-(1410300901101, 82, 14, 10300901, '1', '2023-07-05', 930661.34, 'Partial DownPayment', 'LOC', 'REG', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 20000, 'Full DownPayment', 'Monthly Amortization', 20, 62792, 1, 62792, '2023-07-05', '2023-07-05', 928661.34, 30, 17, 0.04114897, 38213.45, '2023-08-05', 0, 0, 0, 1, 'sample 1', 0, '2023-07-06', NULL),
-(1410300901102, 83, 14, 10300901, '1', '2023-07-06', 329168, 'Full DownPayment', 'LOC', 'REG', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 30000, 'Full DownPayment', 'Monthly Amortization', 20, 51792, 1, 51792, '2023-07-06', '2023-07-06', 329168, 12, 15, 0.09025831, 29710.15, '2023-08-06', 0, 0, 0, 1, '', 0, '2023-07-12', NULL),
-(1410300901103, 86, 14, 10300901, '1', '2023-07-12', 328168, 'Reservation', 'LOC', 'REG', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 80792, 'Full DownPayment', 'Deferred Cash Payment', 20, 51792, 0, 0, '2023-07-12', '2023-07-12', 327168, 120, 17, 0, 2726.4, '2023-07-12', 0, 0, 0, 0, '', 1, NULL, NULL);
-
---
--- Triggers `properties`
---
-DELIMITER $$
-CREATE TRIGGER `tr_generate_property_id` BEFORE INSERT ON `properties` FOR EACH ROW BEGIN
-  SET @running_number = (SELECT COALESCE(MAX(SUBSTRING(property_id, -2)), 0) + 1 
-                        FROM properties 
-                        WHERE project_id = NEW.project_id 
-                        AND c_lot_lid = NEW.c_lot_lid 
-                        AND c_type = NEW.c_type);
-  
-  SET NEW.property_id = CONCAT(NEW.project_id, NEW.c_lot_lid, NEW.c_type, LPAD(@running_number, 2, '0'));
-END
-$$
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `property_clients`
---
-
-CREATE TABLE `property_clients` (
-  `client_id` bigint(20) NOT NULL,
-  `property_id` bigint(20) DEFAULT NULL,
-  `c_buyer_count` tinyint(4) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `middle_name` varchar(255) NOT NULL,
-  `suffix_name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `zip_code` varchar(255) NOT NULL,
-  `address_abroad` text NOT NULL,
-  `birthdate` date NOT NULL,
-  `age` int(11) NOT NULL,
-  `viber` varchar(25) NOT NULL,
-  `gender` text NOT NULL,
-  `civil_status` text NOT NULL,
-  `citizenship` varchar(255) NOT NULL,
-  `id_presented` varchar(255) NOT NULL,
-  `tin_no` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `contact_no` varchar(100) NOT NULL,
-  `contact_abroad` varchar(100) NOT NULL,
-  `relationship` tinyint(4) DEFAULT NULL,
-  `c_reopen` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `property_clients`
---
-
-INSERT INTO `property_clients` (`client_id`, `property_id`, `c_buyer_count`, `last_name`, `first_name`, `middle_name`, `suffix_name`, `address`, `zip_code`, `address_abroad`, `birthdate`, `age`, `viber`, `gender`, `civil_status`, `citizenship`, `id_presented`, `tin_no`, `email`, `contact_no`, `contact_abroad`, `relationship`, `c_reopen`) VALUES
-(2388013199747, 1214500323101, 1, 'SANCHEZ', 'LIEZL', '', '', 'PULILAN, BULACAN', '3010', '  ', '1988-01-31', 34, '  ', 'F', 'Single', 'Filipino', '', '', 'liezlsanchez@gmail.com', '012121313131', '', 0, 0),
-(2394122529221, 1410300901101, 1, 'DELA CRUZ', 'JUDE', 'PANGILINAN', '', '0682 SANTOL BALAGTAS BULACAN', '3016', '  ', '1994-12-25', 28, '  ', 'M', 'Single', 'Filipino', '', '', 'jaevoli18@gmail.com', '09561305511', '', 0, 0),
-(2395010156767, 1410300901103, 1, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '   ', '1995-01-01', 28, '   ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 0, 0),
-(2395010167188, 1410300901102, 1, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '  ', '1995-01-01', 28, '  ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 0, 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `property_payments`
---
-
-CREATE TABLE `property_payments` (
-  `payment_id` int(11) NOT NULL,
-  `property_id` bigint(20) DEFAULT NULL,
-  `payment_amount` decimal(10,2) DEFAULT NULL,
-  `pay_date` date DEFAULT NULL,
-  `due_date` date DEFAULT NULL,
-  `or_no` varchar(30) DEFAULT NULL,
-  `amount_due` decimal(10,2) DEFAULT NULL,
-  `rebate` decimal(10,2) DEFAULT NULL,
-  `surcharge` decimal(10,2) DEFAULT NULL,
-  `interest` decimal(10,2) DEFAULT NULL,
-  `principal` decimal(10,2) DEFAULT NULL,
-  `remaining_balance` decimal(10,2) DEFAULT NULL,
-  `status` varchar(20) DEFAULT NULL,
-  `status_count` smallint(6) NOT NULL,
-  `payment_count` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `property_payments`
---
-
-INSERT INTO `property_payments` (`payment_id`, `property_id`, `payment_amount`, `pay_date`, `due_date`, `or_no`, `amount_due`, `rebate`, `surcharge`, `interest`, `principal`, `remaining_balance`, `status`, `status_count`, `payment_count`) VALUES
-(629, 1410300901101, '20000.00', '2023-07-05', '2023-07-05', '121414', '0.00', '0.00', '0.00', '0.00', '20000.00', '388960.00', 'RES', 0, 1),
-(630, 1410300901101, '5149.33', '2023-07-05', '2023-07-05', '123456', '5149.33', '0.00', '0.00', '0.00', '5149.33', '383810.67', 'PD - 1', 1, 2),
-(631, 1410300901101, '5149.33', '2023-08-05', '2023-08-05', '134513', '5149.33', '0.00', '0.00', '0.00', '5149.33', '378661.34', 'PD - 2', 2, 3),
-(634, 1410300901101, '0.00', '2023-08-05', '2023-08-05', '******', '552000.00', '0.00', '152000.00', '400000.00', '0.00', '930661.34', 'RESTRUCTURED', 0, 4),
-(645, 1214500323101, '20000.00', '2023-07-12', '2023-07-12', 'AV14144', '0.00', '0.00', '0.00', '0.00', '20000.00', '337200.00', 'RES', 0, 1),
-(646, 1410300901103, '80792.00', '2023-07-12', '2023-07-12', 'AV14144', '0.00', '0.00', '0.00', '0.00', '80792.00', '328168.00', 'RES', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -571,59 +82,16 @@ CREATE TABLE `tbl_attachments` (
   `approval_status` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `tbl_restructuring`
+-- Dumping data for table `tbl_attachments`
 --
 
-CREATE TABLE `tbl_restructuring` (
-  `res_id` int(11) NOT NULL,
-  `property_id` bigint(20) DEFAULT NULL,
-  `status` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_restructuring`
---
-
-INSERT INTO `tbl_restructuring` (`res_id`, `property_id`, `status`) VALUES
-(33, 1410300901102, '1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `t_additional_cost`
---
-
-CREATE TABLE `t_additional_cost` (
-  `id` int(11) NOT NULL,
-  `c_csr_no` bigint(20) NOT NULL,
-  `floor_elevation` int(11) NOT NULL,
-  `aircon_outlets` int(11) NOT NULL,
-  `aircon_grill` int(11) NOT NULL,
-  `service_area` int(11) NOT NULL,
-  `others` int(11) NOT NULL,
-  `conv_outlet` float NOT NULL,
-  `aircon_outlet_price` float NOT NULL,
-  `aircon_grill_price` float NOT NULL,
-  `conv_outlet_price` float NOT NULL,
-  `service_area_price` float NOT NULL,
-  `others_price` float NOT NULL,
-  `floor_elev_price` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `t_additional_cost`
---
-
-INSERT INTO `t_additional_cost` (`id`, `c_csr_no`, `floor_elevation`, `aircon_outlets`, `aircon_grill`, `service_area`, `others`, `conv_outlet`, `aircon_outlet_price`, `aircon_grill_price`, `conv_outlet_price`, `service_area_price`, `others_price`, `floor_elev_price`) VALUES
-(67, 82, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(68, 83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(69, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(70, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(71, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(72, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `tbl_attachments` (`id`, `c_csr_no`, `title`, `name`, `date_uploaded`, `approval_status`) VALUES
+(145, 27, '23232', '324968796_1493900247764601_4903202627073500753_n.jpg', '2023-01-26 20:55:15', 0),
+(146, 20, '13114', '', '2023-01-27 07:59:07', 1),
+(147, 20, '12121212', 'RA20-SANCHEZ_LIEZL_SG.pdf', '2023-01-27 08:04:57', 1),
+(148, 27, 'test', '1664026500_male1.jfif', '2023-01-27 09:00:02', 0),
+(149, 30, '12121', 'RA30_AGREEMENT.pdf', '2023-01-30 16:25:48', 1);
 
 -- --------------------------------------------------------
 
@@ -1081,113 +549,8 @@ CREATE TABLE `t_approval_csr` (
 --
 
 INSERT INTO `t_approval_csr` (`ra_id`, `c_csr_no`, `c_lot_lid`, `c_csr_status`, `c_date_approved`, `c_duration`, `c_amount_paid`, `c_reservation_amt`, `c_date_reserved`, `c_reserved_duration`, `c_reserve_status`, `c_ca_status`, `cfo_status`) VALUES
-(131, 82, 10300901, 1, '2023-07-05 09:07:04', '2023-07-06 09:07:04', 20000, 20000, '2023-07-05 09:07:27', '2023-08-04 09:07:27', 1, 1, 1),
-(132, 83, 10300901, 1, '2023-07-06 08:50:54', '2023-07-07 08:50:54', 30000, 30000, '2023-07-06 08:51:06', '2023-08-05 08:51:06', 1, 1, 1),
-(133, 84, 14500323, 1, '2023-07-11 09:32:19', '2023-07-12 09:32:19', 20000, 20000, '2023-07-12 08:49:03', '2023-08-11 08:49:03', 1, 1, 1),
-(134, 85, 10300901, 3, '2023-07-12 08:48:13', '2023-07-12 08:55:19', 0, 0, NULL, NULL, 0, 0, 0),
-(135, 86, 10300901, 1, '2023-07-12 08:55:41', '2023-07-13 08:55:41', 80792, 80792, '2023-07-12 08:56:06', '2023-08-11 08:56:06', 1, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `t_av_breakdown`
---
-
-CREATE TABLE `t_av_breakdown` (
-  `av_id` int(11) NOT NULL,
-  `av_no` int(11) NOT NULL,
-  `property_id` bigint(20) DEFAULT NULL,
-  `payment_amount` decimal(10,2) DEFAULT NULL,
-  `pay_date` date DEFAULT NULL,
-  `due_date` date DEFAULT NULL,
-  `or_no` varchar(30) DEFAULT NULL,
-  `amount_due` decimal(10,2) DEFAULT NULL,
-  `rebate` decimal(10,2) DEFAULT NULL,
-  `surcharge` decimal(10,2) DEFAULT NULL,
-  `interest` decimal(10,2) DEFAULT NULL,
-  `principal` decimal(10,2) DEFAULT NULL,
-  `remaining_balance` decimal(10,2) DEFAULT NULL,
-  `status` varchar(20) DEFAULT NULL,
-  `status_count` smallint(6) NOT NULL,
-  `payment_count` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `t_av_breakdown`
---
-
-INSERT INTO `t_av_breakdown` (`av_id`, `av_no`, `property_id`, `payment_amount`, `pay_date`, `due_date`, `or_no`, `amount_due`, `rebate`, `surcharge`, `interest`, `principal`, `remaining_balance`, `status`, `status_count`, `payment_count`) VALUES
-(49, 14144, 1410300901102, '30000.00', '2023-07-06', '2023-07-06', '432134', '0.00', '0.00', '0.00', '0.00', '30000.00', '378960.00', 'RES', 0, 1),
-(50, 14144, 1410300901102, '51792.00', '2023-07-06', '2023-07-06', '1212134', '51792.00', '0.00', '0.00', '0.00', '51792.00', '327168.00', 'FD', 1, 2),
-(51, 14144, 1410300901102, '0.00', '2023-07-06', '2023-07-06', 'RSTR-33', '2000.00', '0.00', '1000.00', '1000.00', '0.00', '329168.00', 'RESTRUCTURED', 0, 5);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `t_av_summary`
---
-
-CREATE TABLE `t_av_summary` (
-  `av_id` int(11) NOT NULL,
-  `property_id` text NOT NULL,
-  `c_av_no` text NOT NULL,
-  `c_av_date` date NOT NULL DEFAULT current_timestamp(),
-  `c_av_amount` double DEFAULT 0,
-  `c_surcharge` double NOT NULL,
-  `c_principal` double NOT NULL,
-  `c_interest` double NOT NULL,
-  `c_rebate` double NOT NULL,
-  `c_deductions` double NOT NULL,
-  `c_remarks` text NOT NULL,
-  `c_av_type` tinyint(2) NOT NULL COMMENT '1- Relocation / 2- Transfer of Location / 3-Change of Model House / 4 -Downgrade',
-  `lvl1` int(11) NOT NULL DEFAULT 0 COMMENT '0 = Pending / 1 = Approved / 2 = Disapproved'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `t_av_summary`
---
-
-INSERT INTO `t_av_summary` (`av_id`, `property_id`, `c_av_no`, `c_av_date`, `c_av_amount`, `c_surcharge`, `c_principal`, `c_interest`, `c_rebate`, `c_deductions`, `c_remarks`, `c_av_type`, `lvl1`) VALUES
-(12, '1410300901102', '14144', '2023-07-12', 80792, 0, 81792, 0, 0, 1000, 'test', 0, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `t_buyer_info`
---
-
-CREATE TABLE `t_buyer_info` (
-  `id` int(11) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `middle_name` varchar(255) NOT NULL,
-  `suffix_name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `zip_code` varchar(255) NOT NULL,
-  `address_abroad` text NOT NULL,
-  `birthdate` date NOT NULL,
-  `age` int(11) NOT NULL,
-  `viber` varchar(25) NOT NULL,
-  `gender` text NOT NULL,
-  `civil_status` text NOT NULL,
-  `citizenship` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `contact_no` varchar(100) NOT NULL,
-  `c_created_by` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `t_buyer_info`
---
-
-INSERT INTO `t_buyer_info` (`id`, `last_name`, `first_name`, `middle_name`, `suffix_name`, `address`, `zip_code`, `address_abroad`, `birthdate`, `age`, `viber`, `gender`, `civil_status`, `citizenship`, `email`, `contact_no`, `c_created_by`) VALUES
-(27, 'DELA CRUZ', 'JUDE', 'PANGILINAN', '', '0682 SANTOL BALAGTAS BULACAN', '3016', '', '1994-12-25', 28, '', 'M', 'Single', 'Filipino', 'jaevoli18@gmail.com', '09561305511', 'admin'),
-(28, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '', '1995-01-01', 28, '', 'M', 'Single', 'Filipino', 'francisdiaz22@gmail.com', '09123456789', 'admin'),
-(29, 'TANTOCO', 'DONITA ROSE', '', '', 'MALOLOS BULACAN', '3000', '', '1995-02-02', 27, '', 'F', 'Single', 'Filipino', 'donitarose09@gmail.com', '0934512142434', 'admin'),
-(30, 'SANCHEZ', 'LIEZL', '', '', 'PULILAN, BULACAN', '3010', '', '1988-01-31', 34, '', 'F', 'Married', 'Filipino', 'liezlsanchez@gmail.com', '012121313131', 'admin'),
-(31, 'SESE', 'EDHEN', '', '', 'HAGONOY, BULACAN', '3144', '', '1996-05-01', 26, '', 'F', 'Single', 'Filipino', 'edhensee@gmail.com', '121345577', 'admin'),
-(32, 'SALIBAY', 'SEBASTIEN', '', '', 'CALUMPIT, BULACAN', '3333', '', '1996-08-10', 26, '', 'M', 'Single', 'Filipino', 'kimsalibay@gmail.com', '1211455666', 'admin'),
-(33, 'MANANGUIT', 'MARIA MIRASOL', '', '', 'PULILAN, BULACAN', '3011', '', '1978-07-12', 44, '', 'F', 'Married', 'Filipino', 'cutiepiesol@yahoo.com', '012121313131', 'admin');
+(93, 30, 14500414, 0, '2023-01-27 11:43:59', '2023-01-28 11:43:59', 20000, 20000, NULL, NULL, 1, 0, 0),
+(94, 29, 14500323, 1, '2023-01-30 14:55:54', '2023-01-31 14:55:54', 10000, 10000, NULL, NULL, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1216,6 +579,53 @@ CREATE TABLE `t_ca_requirement` (
   `ver_doc_remarks` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `t_ca_requirement`
+--
+
+INSERT INTO `t_ca_requirement` (`id`, `c_csr_no`, `loan_amt`, `terms`, `gross_income`, `co_borrower`, `total`, `income_req`, `interest`, `terms_month`, `monthly`, `doc_req1`, `doc_req2`, `doc_req3`, `ver_doc1`, `ver_doc2`, `doc_req_remarks`, `ver_doc_remarks`) VALUES
+(14, 30, 1946816, 0, 1212, 121212, 122424, 82371.43, 15, 108, 32948.57, 1, 0, 1, 0, 1, '', ''),
+(15, 29, 1946816, 9, 11111, 12121, 23232, 82371.43, 15, 108, 32948.57, 1, 1, 0, 1, 1, 'TEST', 'SDD');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t_client_info`
+--
+
+CREATE TABLE `t_client_info` (
+  `id` int(11) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `middle_name` varchar(255) NOT NULL,
+  `suffix_name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `zip_code` varchar(255) NOT NULL,
+  `address_abroad` text NOT NULL,
+  `birthdate` date NOT NULL,
+  `age` int(11) NOT NULL,
+  `viber` varchar(25) NOT NULL,
+  `gender` text NOT NULL,
+  `civil_status` text NOT NULL,
+  `citizenship` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `contact_no` varchar(100) NOT NULL,
+  `c_created_by` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_client_info`
+--
+
+INSERT INTO `t_client_info` (`id`, `last_name`, `first_name`, `middle_name`, `suffix_name`, `address`, `zip_code`, `address_abroad`, `birthdate`, `age`, `viber`, `gender`, `civil_status`, `citizenship`, `email`, `contact_no`, `c_created_by`) VALUES
+(27, 'DELA CRUZ', 'JUDE', 'PANGILINAN', '', '0682 SANTOL BALAGTAS BULACAN', '3016', '', '1994-12-25', 28, '', 'M', 'Single', 'Filipino', 'jaevoli18@gmail.com', '09561305511', 'admin'),
+(28, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '', '1995-01-01', 28, '', 'M', 'Single', 'Filipino', 'francisdiaz22@gmail.com', '09123456789', 'admin'),
+(29, 'TANTOCO', 'DONITA ROSE', '', '', 'MALOLOS BULACAN', '3000', '', '1995-02-02', 27, '', 'F', 'Single', 'Filipino', 'donitarose09@gmail.com', '0934512142434', 'admin'),
+(30, 'SANCHEZ', 'LIEZL', '', '', 'PULILAN, BULACAN', '3010', '', '1988-01-31', 34, '', 'F', 'Married', 'Filipino', 'liezlsanchez@gmail.com', '012121313131', 'admin'),
+(31, 'SESE', 'EDHEN', '', '', 'HAGONOY, BULACAN', '3144', '', '1996-05-01', 26, '', 'F', 'Single', 'Filipino', 'edhensee@gmail.com', '121345577', 'admin'),
+(32, 'SALIBAY', 'SEBASTIEN', '', '', 'CALUMPIT, BULACAN', '3333', '', '1996-08-10', 26, '', 'M', 'Single', 'Filipino', 'kimsalibay@gmail.com', '1211455666', 'admin'),
+(33, 'MANANGUIT', 'MARIA MIRASOL', '', '', 'PULILAN, BULACAN', '3011', '', '1978-07-12', 44, '', 'F', 'Married', 'Filipino', 'cutiepiesol@yahoo.com', '012121313131', 'admin');
+
 -- --------------------------------------------------------
 
 --
@@ -1226,7 +636,6 @@ CREATE TABLE `t_csr` (
   `c_csr_no` bigint(20) NOT NULL,
   `ref_no` varchar(100) NOT NULL,
   `c_lot_lid` int(11) NOT NULL,
-  `c_type` tinyint(2) NOT NULL COMMENT '1= Lot Only\r\n2= House Only\r\n3= Packaged\r\n4=Fence/Others',
   `c_date_of_sale` date DEFAULT current_timestamp(),
   `c_lot_area` double DEFAULT NULL,
   `c_price_sqm` double DEFAULT NULL,
@@ -1235,11 +644,6 @@ CREATE TABLE `t_csr` (
   `c_house_model` varchar(100) DEFAULT NULL,
   `c_floor_area` double DEFAULT NULL,
   `c_house_price_sqm` double DEFAULT NULL,
-  `c_linear` float NOT NULL,
-  `c_fence_price_sqm` float NOT NULL,
-  `c_processing_fee` float NOT NULL,
-  `c_less` float NOT NULL,
-  `pf_mo` float NOT NULL,
   `c_house_discount` double DEFAULT NULL,
   `c_house_discount_amt` double DEFAULT NULL,
   `c_tcp_discount` double DEFAULT NULL,
@@ -1268,22 +672,17 @@ CREATE TABLE `t_csr` (
   `c_created_by` text NOT NULL,
   `c_verify` tinyint(1) DEFAULT 0 COMMENT '0 = Pending\r\n1= Verified \r\n2= Void',
   `coo_approval` tinyint(1) DEFAULT 0 COMMENT '0= Pending\r\n1= Approved\r\n2= Lapsed\r\n3= Cancelled\r\n4= Disapproved',
-  `c_revised` tinyint(1) DEFAULT 0 COMMENT '0 = Normal\r\n1 = For Revision\r\n2 = Adjustment',
-  `c_active` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = Inactive,\r\n1 = Active',
-  `old_property_id` bigint(20) DEFAULT NULL
+  `c_revised` tinyint(1) DEFAULT 0 COMMENT '0 = Normal\r\n1 = For Revision',
+  `c_active` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = Inactive,\r\n1 = Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `t_csr`
 --
 
-INSERT INTO `t_csr` (`c_csr_no`, `ref_no`, `c_lot_lid`, `c_type`, `c_date_of_sale`, `c_lot_area`, `c_price_sqm`, `c_lot_discount`, `c_lot_discount_amt`, `c_house_model`, `c_floor_area`, `c_house_price_sqm`, `c_linear`, `c_fence_price_sqm`, `c_processing_fee`, `c_less`, `pf_mo`, `c_house_discount`, `c_house_discount_amt`, `c_tcp_discount`, `c_tcp_discount_amt`, `c_tcp`, `c_vat_amount`, `c_net_tcp`, `c_reservation`, `c_payment_type1`, `c_payment_type2`, `c_down_percent`, `c_net_dp`, `c_no_payments`, `c_monthly_down`, `c_first_dp`, `c_full_down`, `c_amt_financed`, `c_terms`, `c_interest_rate`, `c_fixed_factor`, `c_monthly_payment`, `c_start_date`, `c_remarks`, `c_date_created`, `c_date_updated`, `c_created_by`, `c_verify`, `coo_approval`, `c_revised`, `c_active`, `old_property_id`) VALUES
-(82, '2459666866\n', 10300901, 1, '2023-07-05', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 20000, 'Partial DownPayment', 'Monthly Amortization', 20, 61792, 12, 5149.33, '2023-07-05', '2024-06-05', 327168, 120, 17, 0.01737977, 5686.1, '2024-07-05', 'sample 1', '2023-07-05 09:05:43', '2023-07-06 08:37:32', 'admin', 1, 1, 0, 0, NULL),
-(83, '6757902848\n', 10300901, 1, '2023-07-06', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 30000, 'Full DownPayment', 'Deferred Cash Payment', 20, 51792, 0, 0, '2023-07-06', '2023-07-06', 327168, 120, 17, 0, 2726.4, '2023-08-06', '', '2023-07-06 08:50:46', '2023-07-12 08:48:00', 'admin', 1, 1, 0, 0, NULL),
-(84, '6266657616\n', 14500323, 1, '2023-07-11', 76, 4700, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 357200, 0, 357200, 20000, 'Spot Cash', 'None', 0, 0, 0, 0, '0000-00-00', '0000-00-00', 337200, 0, 0, 0, 0, '2023-08-11', '', '2023-07-11 09:32:13', '2023-07-11 09:32:19', 'admin', 1, 1, 0, 1, NULL),
-(85, '7870044\n', 10300901, 1, '2023-07-12', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 0, 'Full DownPayment', 'Deferred Cash Payment', 20, 51792, 0, 0, '2023-07-12', '2023-07-12', 327168, 120, 17, 0, 2726.4, '2023-07-12', '', '2023-07-12 08:44:35', '2023-07-12 08:55:19', 'admin', 1, 3, 0, 0, NULL),
-(86, '8967784350\n', 10300901, 1, '2023-07-12', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 80792, 'Full DownPayment', 'Deferred Cash Payment', 20, 51792, 0, 0, '2023-07-12', '2023-07-12', 327168, 120, 17, 0, 2726.4, '2023-07-12', '', '2023-07-12 08:55:35', '2023-07-12 08:55:41', 'admin', 1, 1, 0, 1, NULL),
-(87, '425903071\n', 10300901, 1, '2023-07-12', 142, 2880, 0, 0, 'None', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 408960, 0, 408960, 80792, 'Full DownPayment', 'Deferred Cash Payment', 20, 51792, 1, 0, '2023-07-12', '2023-07-12', 327168, 120, 17, 0, 2726.4, '2023-07-12', '', '2023-07-12 08:59:34', '2023-07-12 08:59:50', 'admin', 2, 0, 0, 0, NULL);
+INSERT INTO `t_csr` (`c_csr_no`, `ref_no`, `c_lot_lid`, `c_date_of_sale`, `c_lot_area`, `c_price_sqm`, `c_lot_discount`, `c_lot_discount_amt`, `c_house_model`, `c_floor_area`, `c_house_price_sqm`, `c_house_discount`, `c_house_discount_amt`, `c_tcp_discount`, `c_tcp_discount_amt`, `c_tcp`, `c_vat_amount`, `c_net_tcp`, `c_reservation`, `c_payment_type1`, `c_payment_type2`, `c_down_percent`, `c_net_dp`, `c_no_payments`, `c_monthly_down`, `c_first_dp`, `c_full_down`, `c_amt_financed`, `c_terms`, `c_interest_rate`, `c_fixed_factor`, `c_monthly_payment`, `c_start_date`, `c_remarks`, `c_date_created`, `c_date_updated`, `c_created_by`, `c_verify`, `coo_approval`, `c_revised`, `c_active`) VALUES
+(29, '3973003011\n', 14500323, '2023-01-27', 76, 4700, 0, 0, 'SASHA', 0, 0, 0, 0, 0, 0, 357200, 0, 357200, 10000, 'Full DownPayment', 'Monthly Amortization', 30, 97160, 0, 0, '2023-01-27', '2023-01-27', 250040, 15, 14, 0.07305721, 18267.22, '2023-02-27', '', '2023-01-27 10:46:28', '2023-01-30 14:55:54', 'admin', 1, 1, 0, 1),
+(30, '1770852612\n', 14500414, '2023-01-27', 117, 4800, 0, 0, 'FREYA', 100, 20000, 0, 0, 5, 128080, 2433520, 0, 2433520, 20000, 'Partial DownPayment', 'Monthly Amortization', 20, 466704, 12, 38892, '2023-01-27', '2024-01-27', 1946816, 120, 15, 0.0161335, 31408.95, '2024-02-27', '', '2023-01-27 11:13:48', '2023-01-30 16:29:33', 'admin', 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1292,7 +691,6 @@ INSERT INTO `t_csr` (`c_csr_no`, `ref_no`, `c_lot_lid`, `c_type`, `c_date_of_sal
 --
 
 CREATE TABLE `t_csr_buyers` (
-  `buyer_id` int(11) NOT NULL,
   `c_csr_no` bigint(20) NOT NULL,
   `c_buyer_count` tinyint(4) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -1313,20 +711,17 @@ CREATE TABLE `t_csr_buyers` (
   `email` varchar(255) NOT NULL,
   `contact_no` varchar(100) NOT NULL,
   `contact_abroad` varchar(100) NOT NULL,
-  `relationship` tinyint(4) DEFAULT NULL COMMENT '0= None\r\n1= And\r\n2= Spouses\r\n3= Married To\r\n4=Minor/Represented by Legal Guardian'
+  `relationship` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `t_csr_buyers`
 --
 
-INSERT INTO `t_csr_buyers` (`buyer_id`, `c_csr_no`, `c_buyer_count`, `last_name`, `first_name`, `middle_name`, `suffix_name`, `address`, `zip_code`, `address_abroad`, `birthdate`, `age`, `viber`, `gender`, `civil_status`, `citizenship`, `id_presented`, `tin_no`, `email`, `contact_no`, `contact_abroad`, `relationship`) VALUES
-(64, 82, 1, 'DELA CRUZ', 'JUDE', 'PANGILINAN', '', '0682 SANTOL BALAGTAS BULACAN', '3016', ' ', '1994-12-25', 28, ' ', 'M', 'Single', 'Filipino', '', '', 'jaevoli18@gmail.com', '09561305511', '', 0),
-(65, 83, 1, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', ' ', '1995-01-01', 28, ' ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 0),
-(66, 84, 1, 'SANCHEZ', 'LIEZL', '', '', 'PULILAN, BULACAN', '3010', ' ', '1988-01-31', 34, ' ', 'F', 'Single', 'Filipino', '', '', 'liezlsanchez@gmail.com', '012121313131', '', 0),
-(67, 85, 1, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '  ', '1995-01-01', 28, '  ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 0),
-(68, 86, 1, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '  ', '1995-01-01', 28, '  ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 0),
-(69, 87, 1, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', '  ', '1995-01-01', 28, '  ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 0);
+INSERT INTO `t_csr_buyers` (`c_csr_no`, `c_buyer_count`, `last_name`, `first_name`, `middle_name`, `suffix_name`, `address`, `zip_code`, `address_abroad`, `birthdate`, `age`, `viber`, `gender`, `civil_status`, `citizenship`, `id_presented`, `tin_no`, `email`, `contact_no`, `contact_abroad`, `relationship`) VALUES
+(30, 1, 'DELA CRUZ', 'JUDE', 'PANGILINAN', '', '0682 SANTOL BALAGTAS BULACAN', '3016', ' ', '1994-12-25', 55, ' ', 'M', 'Single', 'Filipino', '', '', 'jaevoli18@gmail.com', '09561305511', '', 0),
+(30, 2, 'DIAZ', 'FRANCIS', 'AGUILAR', '', 'BOCAUE, BULACAN', '3011', ' ', '1995-01-01', 28, ' ', 'M', 'Single', 'Filipino', '', '', 'francisdiaz22@gmail.com', '09123456789', '', 4),
+(29, 1, 'DELA CRUZ', 'JUDE', 'PANGILINAN', '', 'SANTOL, BALAGTAS, BULACAN', '3016', '    ', '1994-12-01', 28, '    ', 'F', 'Divorced', 'Filipino', '', '', 'jaevoli18@gmail.com', '09561305511', '', 1);
 
 -- --------------------------------------------------------
 
@@ -1350,7 +745,6 @@ CREATE TABLE `t_csr_comments` (
 --
 
 CREATE TABLE `t_csr_commission` (
-  `comm_id` int(11) NOT NULL,
   `c_csr_no` bigint(20) NOT NULL,
   `c_code` bigint(20) NOT NULL,
   `c_position` text NOT NULL,
@@ -1363,13 +757,9 @@ CREATE TABLE `t_csr_commission` (
 -- Dumping data for table `t_csr_commission`
 --
 
-INSERT INTO `t_csr_commission` (`comm_id`, `c_csr_no`, `c_code`, `c_position`, `c_agent`, `c_amount`, `c_rate`) VALUES
-(50, 82, 107380, ' MA ', 'Aberia , Joseph ', 4089.6, 1),
-(51, 83, 110883, ' MA ', 'Agra , Karen ', 4089.6, 1),
-(52, 84, 107380, ' MA ', 'Aberia , Joseph ', 3572, 1),
-(53, 85, 110883, ' MA ', 'Agra , Karen ', 4089.6, 1),
-(54, 86, 110883, ' MA ', 'Agra , Karen ', 4089.6, 1),
-(55, 87, 110883, ' MA ', 'Agra , Karen ', 4089.6, 1);
+INSERT INTO `t_csr_commission` (`c_csr_no`, `c_code`, `c_position`, `c_agent`, `c_amount`, `c_rate`) VALUES
+(29, 107380, ' MA ', 'Aberia , Joseph ', 3572, 1),
+(30, 110883, ' MA ', 'Agra , Karen ', 24335.2, 1);
 
 -- --------------------------------------------------------
 
@@ -1388,7 +778,6 @@ CREATE TABLE `t_csr_view` (
 ,`c_csr_no` bigint(20)
 ,`ref_no` varchar(100)
 ,`c_lot_lid` int(11)
-,`c_type` tinyint(2)
 ,`c_date_of_sale` date
 ,`c_lot_area` double
 ,`c_price_sqm` double
@@ -1397,11 +786,6 @@ CREATE TABLE `t_csr_view` (
 ,`c_house_model` varchar(100)
 ,`c_floor_area` double
 ,`c_house_price_sqm` double
-,`c_linear` float
-,`c_fence_price_sqm` float
-,`c_processing_fee` float
-,`c_less` float
-,`pf_mo` float
 ,`c_house_discount` double
 ,`c_house_discount_amt` double
 ,`c_tcp_discount` double
@@ -1431,7 +815,6 @@ CREATE TABLE `t_csr_view` (
 ,`c_verify` tinyint(1)
 ,`coo_approval` tinyint(1)
 ,`c_revised` tinyint(1)
-,`c_active` tinyint(1)
 );
 
 -- --------------------------------------------------------
@@ -1783,35 +1166,6 @@ INSERT INTO `t_house` (`c_house_lid`, `c_site`, `c_block`, `c_lot`, `c_house_mod
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t_invoice`
---
-
-CREATE TABLE `t_invoice` (
-  `invoice_id` int(11) NOT NULL,
-  `property_id` bigint(20) DEFAULT NULL,
-  `payment_amount` decimal(10,2) DEFAULT NULL,
-  `pay_date` date DEFAULT NULL,
-  `due_date` date DEFAULT NULL,
-  `or_no` varchar(30) DEFAULT NULL,
-  `amount_due` decimal(10,2) DEFAULT NULL,
-  `rebate` decimal(10,2) DEFAULT NULL,
-  `surcharge` decimal(10,2) DEFAULT NULL,
-  `interest` decimal(10,2) DEFAULT NULL,
-  `principal` decimal(10,2) DEFAULT NULL,
-  `remaining_balance` decimal(10,2) DEFAULT NULL,
-  `status` varchar(20) DEFAULT NULL,
-  `status_count` smallint(6) NOT NULL,
-  `payment_count` int(11) DEFAULT NULL,
-  `excess` double NOT NULL,
-  `account_status` varchar(100) NOT NULL,
-  `trans_date` date DEFAULT NULL,
-  `surcharge_percent` int(11) NOT NULL,
-  `gen_time` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `t_lots`
 --
 
@@ -1837,10 +1191,7 @@ CREATE TABLE `t_lots` (
 --
 
 INSERT INTO `t_lots` (`c_lid`, `c_house_lid`, `c_site`, `c_block`, `c_lot`, `c_lot_area`, `c_price_sqm`, `c_remarks`, `c_status`, `c_lot_type`, `c_title`, `c_lot_type_remarks`, `c_title_owner`, `c_previous_owner`) VALUES
-(10300901, NULL, 103, 9, 1, '142', 2880, '', 'Available', NULL, NULL, NULL, NULL, NULL),
-(13001901, NULL, 130, 19, 1, '81', 34135.8, '1213', 'Available', NULL, NULL, NULL, NULL, NULL),
-(13700202, NULL, 137, 2, 2, '100', 9500, '', 'Available', NULL, NULL, NULL, NULL, NULL),
-(14500323, NULL, 145, 3, 23, '76', 4700, '', 'Sold', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
+(14500323, NULL, 145, 3, 23, '76', 4700, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
 (14500401, NULL, 145, 4, 1, '96', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'ALSC', 'ALSC'),
 (14500402, NULL, 145, 4, 2, '93', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
 (14500403, NULL, 145, 4, 3, '72', 4600, '', 'Available', 'Regular Lot', 'With Title', '', 'Buyer', 'ALSC'),
@@ -1851,7 +1202,7 @@ INSERT INTO `t_lots` (`c_lid`, `c_house_lid`, `c_site`, `c_block`, `c_lot`, `c_l
 (14500410, NULL, 145, 4, 10, '84', 4600, '', 'Available', 'Regular Lot', 'With Title', '', 'Buyer', 'ALSC'),
 (14500411, NULL, 145, 4, 11, '84', 4600, '', 'Available', 'Regular Lot', 'With Title', '', 'Buyer', 'ALSC'),
 (14500413, NULL, 145, 4, 13, '112', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
-(14500414, NULL, 145, 4, 14, '117', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'ALSC', 'ALSC'),
+(14500414, NULL, 145, 4, 14, '117', 4800, 'dch-ah 4/14 for house.', 'Reserved', 'Prime Lot', 'With Title', 'corner lot', 'ALSC', 'ALSC'),
 (14500501, NULL, 145, 5, 1, '87', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
 (14500502, NULL, 145, 5, 2, '84', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
 (14500503, NULL, 145, 5, 3, '84', 4600, '', 'Available', 'Regular Lot', 'With Title', '', 'Buyer', 'ALSC'),
@@ -1864,8 +1215,7 @@ INSERT INTO `t_lots` (`c_lid`, `c_house_lid`, `c_site`, `c_block`, `c_lot`, `c_l
 (14500511, NULL, 145, 5, 11, '72', 4600, '', 'Available', 'Regular Lot', 'With Title', '', 'ALSC', 'ALSC'),
 (14500513, NULL, 145, 5, 13, '91', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'ALSC', 'ALSC'),
 (14500514, NULL, 145, 5, 14, '96', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'ALSC', 'ALSC'),
-(14500602, NULL, 145, 6, 2, '99', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC'),
-(15200202, NULL, 152, 2, 2, '149', 6800, '', 'Available', NULL, NULL, NULL, NULL, NULL);
+(14500602, NULL, 145, 6, 2, '99', 4800, '', 'Available', 'Prime Lot', 'With Title', 'corner lot', 'Buyer', 'ALSC');
 
 -- --------------------------------------------------------
 
@@ -2272,7 +1622,6 @@ INSERT INTO `t_network_division` (`c_code`, `c_network`, `c_division`) VALUES
 
 CREATE TABLE `t_projects` (
   `c_code` smallint(6) NOT NULL,
-  `c_project_code` smallint(6) NOT NULL,
   `c_name` text DEFAULT NULL,
   `c_acronym` text DEFAULT NULL,
   `c_address` text DEFAULT NULL,
@@ -2287,103 +1636,103 @@ CREATE TABLE `t_projects` (
 -- Dumping data for table `t_projects`
 --
 
-INSERT INTO `t_projects` (`c_code`, `c_project_code`, `c_name`, `c_acronym`, `c_address`, `c_province`, `c_status`, `c_zip`, `c_rate`, `c_reservation`) VALUES
-(101, 16, 'ROYALE ESTATE', 'RE', 'Bulihan', 'Malolos City', 1, 3000, 1, 10000),
-(102, 11, 'CASA ROYALE', 'CR', 'Sapang Putol', 'San Ildefonso, Bulacan', 1, 3010, 20, 5000),
-(103, 14, 'GRAND ROYALE 1', 'GR-1', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(104, 12, 'DREAMCREST HOMES 1', 'DCH-1', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(105, 14, 'GRAND ROYALE 2', 'GR-2', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(106, 13, 'GRAND INDUSTRIAL ESTATE', 'GIE', 'Div. Rd, Parulan', 'Plaridel, Bulacan', 1, 3004, 0, 100000),
-(107, 12, 'DREAMCREST HOMES 2-A', 'DCH-2A', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(108, 14, 'GRAND ROYALE 2-A', 'GR-2A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(109, 12, 'DREAMCREST HOMES 2-B', 'DCH-2B', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(110, 14, 'GRAND ROYALE 1-A', 'GR-1A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(111, 14, 'GRAND ROYALE 3', 'GR-3', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(112, 12, 'DREAMCREST HOMES 3', 'DCH-3', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(113, 14, 'GRAND ROYALE 4', 'GR-4', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(114, 12, 'DREAMCREST HOMES 1-A', 'DCH-1A', 'Bulihan', 'Malolos City', 1, 3000, 21, 5000),
-(115, 14, 'GRAND ROYALE 5', 'GR-5', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(116, 12, 'DREAMCREST HOMES 4', 'DCH-4', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(117, 12, 'DREAMCREST HOMES 5', 'DCH-5', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(118, 14, 'GRAND ROYALE 5-A', 'GR-5A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(119, 14, 'GRAND ROYALE 6', 'GR-6', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(120, 14, 'GRAND ROYALE 7', 'GR-7', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(121, 14, 'GRAND ROYALE 8', 'GR-8', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(122, 14, 'GRAND ROYALE 9', 'GR-9', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(123, 15, 'THE MEADOWS', 'MEADOWS', 'San Jose Patag', 'Sta. Maria, Bulacan', 1, 3022, 0, 20000),
-(124, 14, 'GRAND ROYALE 8-A', 'GR-8A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(125, 14, 'GRAND ROYALE 8-B', 'GR-8B', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(126, 14, 'GRAND ROYALE 8-C', 'GR-8C', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(127, 14, 'GRAND ROYALE 9-A', 'GR-9A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(128, 14, 'GRAND ROYALE 10', 'GR-10', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(129, 14, 'GRAND ROYALE 8-D', 'GR-8D', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(130, 14, 'GRAND ROYALE 7-A', 'GR-7A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(131, 14, 'GRAND ROYALE 8-E', 'GR-8E', 'Longos', 'Malolos City', 1, 3000, 0, 10000),
-(132, 14, 'GRAND ROYALE 7-B', 'GR-7B', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
-(133, 14, 'GRAND ROYALE 1-B', 'GR-1B', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(134, 14, 'GRAND ROYALE 1-C', 'GR-1C', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(135, 14, 'GRAND ROYALE 7-C', 'GR-7C', 'Longos', 'Malolos City', 1, 3000, 0, 10000),
-(136, 14, 'GRAND ROYALE 4-A', 'GR-4A', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
-(137, 12, 'DREAMCREST HOMES 2-C', 'DCH-2C', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(138, 12, 'DREAMCREST HOMES 5-A', 'DCH-5A', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(139, 14, 'GRAND ROYALE 3-A', 'GR-3A', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
-(140, 14, 'GRAND ROYALE 7-D', 'GR-7D', 'Look 1st', 'Malolos City', 1, 3000, 0, 10000),
-(141, 14, 'GRAND ROYALE 7-E', 'GR-7E', 'Lugam', 'Malolos City', 1, 3000, 0, 10000),
-(142, 14, 'GRAND ROYALE 5-B', 'GR-5B', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
-(143, 14, 'GRAND ROYALE 6-A', 'GR-6A', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
-(144, 14, 'GRAND ROYALE 5-C', 'GR-5C', 'Mojon', 'Malolos City', 1, 3000, 0, 10000),
-(145, 12, 'DREAMCREST HOMES 5-B', 'DCH-5B', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(146, 14, 'GRAND ROYALE 7-F', 'GR-7F', 'Longos', 'Malolos City', 1, 3000, 0, 10000),
-(147, 12, 'DREAMCREST HOMES 5-C', 'DCH-5C', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(148, 14, 'GRAND ROYALE 6-B', 'GR-6B', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
-(149, 17, 'WOODLANDS OF GRAND ROYALE', 'WGR', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(150, 16, 'ROYALE ESTATE 2', 'RE-2', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(151, 14, 'GRAND ROYALE 5-D', 'GR-5D', 'Mojon', 'Malolos City', 1, 3000, 0, 10000),
-(152, 10, 'CASABUENA DE PULILAN', 'CBP', 'Cutcot', 'Pulilan, Bulacan', 1, 3005, 0, 10000),
-(153, 14, 'GRAND ROYALE 1-D', 'GR-1D', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(154, 14, 'GRAND ROYALE 1-E', 'GR-1E', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(155, 14, 'GRAND ROYALE 7-G', 'GR-7G', 'Look 1st', 'Malolos City', 1, 3000, 0, 10000),
-(156, 17, 'WOODLANDS OF GRAND ROYALE 2', 'WGR-2', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(157, 10, 'CASABUENA DE PULILAN 2', 'CBP-2', 'Cutcut', 'Pulilan, Bulacan', 1, 3005, 0, 10000),
-(158, 12, 'DREAMCREST HOMES 2-D', 'DCH-2D', 'Longos', 'Malolos City', 1, 3000, 21, 5000),
-(159, 14, 'GRAND ROYALE 7-H', 'GR-7H', 'Longos', 'Malolos City', 0, 3000, 0, 10000),
-(160, 14, 'GRAND ROYALE 1-F', 'GR-1F', 'Mojon', 'Malolos City', 0, 3000, 0, 10000),
-(161, 10, 'CASABUENA DE PULILAN 1-A', 'CBP-1A', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(162, 12, 'DREAMCREST HOMES 5-D', 'DCH-5D', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(163, 17, 'WOODLANDS OF GRAND ROYALE 3', 'WGR-3', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(164, 15, 'THE MEADOWS 2', 'MEADOWS-2', 'San Jose Patag', 'Sta. Maria, Bulacan', 0, 3022, 0, 20000),
-(165, 14, 'GRAND ROYALE 3-B', 'GR-3B', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
-(166, 10, 'CASABUENA DE PULILAN 2A', 'CBP-2A', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(167, 17, 'WOODLANDS OF GRAND ROYALE 1-A', 'WGR-1A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(168, 10, 'CASABUENA DE PULILAN 3', 'CBP-3', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(169, 10, 'CASABUENA DE PULILAN 4', 'CBP-4', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(170, 10, 'CASABUENA DE PULILAN 2B', 'CBP-2B', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(171, 14, 'GRAND ROYALE 7-I', 'GR-7I', 'Longos', 'Malolos City', 0, 3000, 0, 10000),
-(172, 10, 'CASABUENA DE PULILAN 5', 'CBP-5', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(173, 14, 'GRAND ROYALE 6-C', 'GR-6C', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
-(174, 17, 'WOODLANDS OF GRAND ROYALE 4', 'WGR-4', 'Anilao', 'Malolos City', 0, 3000, 0, 10000),
-(175, 14, 'GRAND ROYALE 9-B', 'GR-9B', 'Lugam', 'Malolos City', 0, 3000, 0, 10000),
-(176, 17, 'WOODLANDS OF GRAND ROYALE 2-A', 'WGR-2A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(177, 17, 'WOODLANDS OF GRAND ROYALE 1-B', 'WGR-1B', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(178, 14, 'GRAND ROYALE 8-F', 'GR-8F', 'Longos', 'Malolos City', 0, 3000, 0, 10000),
-(179, 14, 'GRAND ROYALE 6-E', 'GR-6E', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
-(180, 10, 'CASABUENA DE PULILAN 1B', 'CBP-1B', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(181, 17, 'WOODLANDS OF GRAND ROYALE 2-B', 'WGR-2B', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
-(182, 10, 'CASABUENA DE PULILAN 3A', 'CBP-3A', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(183, 10, 'CASABUENA DE PULILAN 5-A', 'CBP-5A', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(184, 14, 'GRAND ROYALE 6-D', 'GR-6D', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
-(185, 12, 'DREAMCREST HOMES 5-E', 'DCH-5E', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
-(186, 10, 'CASABUENA DE PULILAN 3-B', 'CBP-3B', 'Paltao', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(187, 10, 'CASABUENA DE PULILAN 5-B', 'CBP-5B', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(188, 14, 'GRAND ROYALE 7-J', 'GR-7J', 'Looc 1st', 'Malolos City', 0, 3000, 0, 10000),
-(189, 10, 'CASABUENA DE PULILAN 3-C', 'CBP-3C', 'Paltao', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
-(190, 16, 'ROYALE ESTATE - HOUSE', 'RE-AH', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(191, 11, 'CASA ROYALE - HOUSE', 'CR-AH', 'Sapang Putol', 'San Ildefonso, Bulacan', 1, 3010, 20, 5000),
-(192, 12, 'DREAMCREST HOMES - HOUSE', 'DCH-AH', 'Longos', 'Malolos City', 1, 3000, 21, 5000),
-(193, 14, 'GRAND ROYALE - HOUSE', 'GR-AH', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
-(194, 15, 'THE MEADOWS - HOUSE', 'MEAD-AH', 'San Jose Patag', 'Sta. Maria, Bulacan', 1, 3022, 0, 10000),
-(195, 10, 'CASABUENA DE PULILAN', 'CBP-2C', '', 'Pulilan, Bulacan', 1, 3005, 0, 0),
-(196, 10, 'CASABUENA DE PULILAN', 'CBP-3D', '', 'Pulilan, Bulacan', 1, 3005, 0, 0);
+INSERT INTO `t_projects` (`c_code`, `c_name`, `c_acronym`, `c_address`, `c_province`, `c_status`, `c_zip`, `c_rate`, `c_reservation`) VALUES
+(101, 'ROYALE ESTATE', 'RE', 'Bulihan', 'Malolos City', 1, 3000, 1, 10000),
+(102, 'CASA ROYALE', 'CR', 'Sapang Putol', 'San Ildefonso, Bulacan', 1, 3010, 20, 5000),
+(103, 'GRAND ROYALE 1', 'GR-1', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(104, 'DREAMCREST HOMES 1', 'DCH-1', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(105, 'GRAND ROYALE 2', 'GR-2', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(106, 'GRAND INDUSTRIAL ESTATE', 'GIE', 'Div. Rd, Parulan', 'Plaridel, Bulacan', 1, 3004, 0, 100000),
+(107, 'DREAMCREST HOMES 2-A', 'DCH-2A', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(108, 'GRAND ROYALE 2-A', 'GR-2A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(109, 'DREAMCREST HOMES 2-B', 'DCH-2B', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(110, 'GRAND ROYALE 1-A', 'GR-1A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(111, 'GRAND ROYALE 3', 'GR-3', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(112, 'DREAMCREST HOMES 3', 'DCH-3', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(113, 'GRAND ROYALE 4', 'GR-4', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(114, 'DREAMCREST HOMES 1-A', 'DCH-1A', 'Bulihan', 'Malolos City', 1, 3000, 21, 5000),
+(115, 'GRAND ROYALE 5', 'GR-5', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(116, 'DREAMCREST HOMES 4', 'DCH-4', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(117, 'DREAMCREST HOMES 5', 'DCH-5', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(118, 'GRAND ROYALE 5-A', 'GR-5A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(119, 'GRAND ROYALE 6', 'GR-6', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(120, 'GRAND ROYALE 7', 'GR-7', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(121, 'GRAND ROYALE 8', 'GR-8', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(122, 'GRAND ROYALE 9', 'GR-9', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(123, 'THE MEADOWS', 'MEADOWS', 'San Jose Patag', 'Sta. Maria, Bulacan', 1, 3022, 0, 20000),
+(124, 'GRAND ROYALE 8-A', 'GR-8A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(125, 'GRAND ROYALE 8-B', 'GR-8B', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(126, 'GRAND ROYALE 8-C', 'GR-8C', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(127, 'GRAND ROYALE 9-A', 'GR-9A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(128, 'GRAND ROYALE 10', 'GR-10', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(129, 'GRAND ROYALE 8-D', 'GR-8D', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(130, 'GRAND ROYALE 7-A', 'GR-7A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(131, 'GRAND ROYALE 8-E', 'GR-8E', 'Longos', 'Malolos City', 1, 3000, 0, 10000),
+(132, 'GRAND ROYALE 7-B', 'GR-7B', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
+(133, 'GRAND ROYALE 1-B', 'GR-1B', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(134, 'GRAND ROYALE 1-C', 'GR-1C', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(135, 'GRAND ROYALE 7-C', 'GR-7C', 'Longos', 'Malolos City', 1, 3000, 0, 10000),
+(136, 'GRAND ROYALE 4-A', 'GR-4A', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
+(137, 'DREAMCREST HOMES 2-C', 'DCH-2C', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(138, 'DREAMCREST HOMES 5-A', 'DCH-5A', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(139, 'GRAND ROYALE 3-A', 'GR-3A', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
+(140, 'GRAND ROYALE 7-D', 'GR-7D', 'Look 1st', 'Malolos City', 1, 3000, 0, 10000),
+(141, 'GRAND ROYALE 7-E', 'GR-7E', 'Lugam', 'Malolos City', 1, 3000, 0, 10000),
+(142, 'GRAND ROYALE 5-B', 'GR-5B', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
+(143, 'GRAND ROYALE 6-A', 'GR-6A', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
+(144, 'GRAND ROYALE 5-C', 'GR-5C', 'Mojon', 'Malolos City', 1, 3000, 0, 10000),
+(145, 'DREAMCREST HOMES 5-B', 'DCH-5B', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(146, 'GRAND ROYALE 7-F', 'GR-7F', 'Longos', 'Malolos City', 1, 3000, 0, 10000),
+(147, 'DREAMCREST HOMES 5-C', 'DCH-5C', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(148, 'GRAND ROYALE 6-B', 'GR-6B', 'Pinagbakahan', 'Malolos City', 1, 3000, 0, 10000),
+(149, 'WOODLANDS OF GRAND ROYALE', 'WGR', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(150, 'ROYALE ESTATE 2', 'RE-2', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(151, 'GRAND ROYALE 5-D', 'GR-5D', 'Mojon', 'Malolos City', 1, 3000, 0, 10000),
+(152, 'CASABUENA DE PULILAN', 'CBP', 'Cutcot', 'Pulilan, Bulacan', 1, 3005, 0, 10000),
+(153, 'GRAND ROYALE 1-D', 'GR-1D', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(154, 'GRAND ROYALE 1-E', 'GR-1E', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(155, 'GRAND ROYALE 7-G', 'GR-7G', 'Look 1st', 'Malolos City', 1, 3000, 0, 10000),
+(156, 'WOODLANDS OF GRAND ROYALE 2', 'WGR-2', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(157, 'CASABUENA DE PULILAN 2', 'CBP-2', 'Cutcut', 'Pulilan, Bulacan', 1, 3005, 0, 10000),
+(158, 'DREAMCREST HOMES 2-D', 'DCH-2D', 'Longos', 'Malolos City', 1, 3000, 21, 5000),
+(159, 'GRAND ROYALE 7-H', 'GR-7H', 'Longos', 'Malolos City', 0, 3000, 0, 10000),
+(160, 'GRAND ROYALE 1-F', 'GR-1F', 'Mojon', 'Malolos City', 0, 3000, 0, 10000),
+(161, 'CASABUENA DE PULILAN 1-A', 'CBP-1A', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(162, 'DREAMCREST HOMES 5-D', 'DCH-5D', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(163, 'WOODLANDS OF GRAND ROYALE 3', 'WGR-3', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(164, 'THE MEADOWS 2', 'MEADOWS-2', 'San Jose Patag', 'Sta. Maria, Bulacan', 0, 3022, 0, 20000),
+(165, 'GRAND ROYALE 3-B', 'GR-3B', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
+(166, 'CASABUENA DE PULILAN 2A', 'CBP-2A', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(167, 'WOODLANDS OF GRAND ROYALE 1-A', 'WGR-1A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(168, 'CASABUENA DE PULILAN 3', 'CBP-3', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(169, 'CASABUENA DE PULILAN 4', 'CBP-4', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(170, 'CASABUENA DE PULILAN 2B', 'CBP-2B', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(171, 'GRAND ROYALE 7-I', 'GR-7I', 'Longos', 'Malolos City', 0, 3000, 0, 10000),
+(172, 'CASABUENA DE PULILAN 5', 'CBP-5', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(173, 'GRAND ROYALE 6-C', 'GR-6C', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
+(174, 'WOODLANDS OF GRAND ROYALE 4', 'WGR-4', 'Anilao', 'Malolos City', 0, 3000, 0, 10000),
+(175, 'GRAND ROYALE 9-B', 'GR-9B', 'Lugam', 'Malolos City', 0, 3000, 0, 10000),
+(176, 'WOODLANDS OF GRAND ROYALE 2-A', 'WGR-2A', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(177, 'WOODLANDS OF GRAND ROYALE 1-B', 'WGR-1B', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(178, 'GRAND ROYALE 8-F', 'GR-8F', 'Longos', 'Malolos City', 0, 3000, 0, 10000),
+(179, 'GRAND ROYALE 6-E', 'GR-6E', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
+(180, 'CASABUENA DE PULILAN 1B', 'CBP-1B', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(181, 'WOODLANDS OF GRAND ROYALE 2-B', 'WGR-2B', 'Bulihan', 'Malolos City', 0, 3000, 0, 10000),
+(182, 'CASABUENA DE PULILAN 3A', 'CBP-3A', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(183, 'CASABUENA DE PULILAN 5-A', 'CBP-5A', 'Cutcut', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(184, 'GRAND ROYALE 6-D', 'GR-6D', 'Pinagbakahan', 'Malolos City', 0, 3000, 0, 10000),
+(185, 'DREAMCREST HOMES 5-E', 'DCH-5E', 'Longos', 'Malolos City', 0, 3000, 21, 5000),
+(186, 'CASABUENA DE PULILAN 3-B', 'CBP-3B', 'Paltao', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(187, 'CASABUENA DE PULILAN 5-B', 'CBP-5B', 'Cutcot', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(188, 'GRAND ROYALE 7-J', 'GR-7J', 'Looc 1st', 'Malolos City', 0, 3000, 0, 10000),
+(189, 'CASABUENA DE PULILAN 3-C', 'CBP-3C', 'Paltao', 'Pulilan, Bulacan', 0, 3005, 0, 10000),
+(190, 'ROYALE ESTATE - HOUSE', 'RE-AH', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(191, 'CASA ROYALE - HOUSE', 'CR-AH', 'Sapang Putol', 'San Ildefonso, Bulacan', 1, 3010, 20, 5000),
+(192, 'DREAMCREST HOMES - HOUSE', 'DCH-AH', 'Longos', 'Malolos City', 1, 3000, 21, 5000),
+(193, 'GRAND ROYALE - HOUSE', 'GR-AH', 'Bulihan', 'Malolos City', 1, 3000, 0, 10000),
+(194, 'THE MEADOWS - HOUSE', 'MEAD-AH', 'San Jose Patag', 'Sta. Maria, Bulacan', 1, 3022, 0, 10000),
+(195, 'CASABUENA DE PULILAN', 'CBP-2C', '', 'Pulilan, Bulacan', 1, 3005, 0, 0),
+(196, 'CASABUENA DE PULILAN', 'CBP-3D', '', 'Pulilan, Bulacan', 1, 3005, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2406,10 +1755,8 @@ CREATE TABLE `t_reservation` (
 --
 
 INSERT INTO `t_reservation` (`id`, `ra_no`, `c_csr_no`, `c_lot_id`, `c_or_no`, `c_reserve_date`, `c_amount_paid`) VALUES
-(127, 131, 82, 10300901, '121414', '2023-07-05 09:07:27', 20000),
-(128, 132, 83, 10300901, '432134', '2023-07-06 08:51:06', 30000),
-(129, 133, 84, 14500323, 'AV14444', '2023-07-12 08:56:04', 20000),
-(130, 135, 86, 10300901, 'AV14144', '2023-07-12 08:56:06', 80792);
+(86, 93, 30, 14500414, 'ABC12345', '2023-01-27 13:12:33', 20000),
+(87, 94, 29, 14500323, '10000', '2023-01-30 14:56:03', 10000);
 
 -- --------------------------------------------------------
 
@@ -2440,16 +1787,13 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `email`, `phone`, `password`, `avatar`, `last_login`, `type`, `user_type`, `date_added`, `date_updated`) VALUES
 (1, 'Adminstrator', 'Admin', 'admin', 'admin2@gmail.com', '639561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1675232580_1675125780_310082230_527806389353530_3496035450341313581_n.jpg', NULL, 1, 'IT Admin', '2021-01-20 14:02:37', '2023-02-01 14:23:28'),
 (2, 'Pia', 'Madrid', 'coo_pia', 'admin3@gmail.com', '639561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1674732540_89744207_10158068221285818_5380944493983825920_n.jpg', NULL, 2, 'COO', '2021-01-20 14:02:37', '2023-01-26 20:23:14'),
-(3, 'Agent', 'x44', 'agentx44', 'agent@gmail.com', '639561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1675754520_NZ6_5625.JPG', NULL, 5, 'Agent', '2021-01-20 14:02:37', '2023-02-07 15:22:23'),
+(3, 'Agent', 'x44', 'agentx44', 'agent@gmail.com', '639561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1675126560_logo.png', NULL, 5, 'Agent', '2021-01-20 14:02:37', '2023-01-31 08:56:06'),
 (4, 'Janine', 'Cruz', 'ca_janine', 'agent@gmail.com', '639561305511', '0192023a7bbd73250516f069df18b500', NULL, NULL, 4, 'CA', '2021-01-20 14:02:37', '2023-01-26 20:23:22'),
 (5, 'Vio', 'Borlongan', 'sm_vio', 'agent@gmail.com', '639561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1674780660_1674735360_Tiny+Avatar.png', NULL, 4, 'SOS', '2021-01-20 14:02:37', '2023-01-27 11:54:52'),
 (6, 'Eliza', 'Figueroa', 'cashier_eliza', 'eliza@gmail.com', '12345678910', '0192023a7bbd73250516f069df18b500', 'uploads/1675124340_1664026500_male1.jfif', NULL, 5, 'Cashier', '2023-01-31 08:19:54', '2023-01-31 08:44:00'),
 (7, 'LIEZL', 'SANCHEZ', 'liezlsa', 'liezl@gmail.com', '123455678', '0192023a7bbd73250516f069df18b500', 'uploads/1675125480_NZ6_5624.JPG', NULL, 5, 'Cashier', '2023-01-31 08:38:49', '2023-01-31 08:44:03'),
 (8, 'JUDE', 'DELA CRUZ', 'judedel', 'jaevoli18@gmail.com', '09561305511', '21232f297a57a5a743894a0e4a801fc3', 'uploads/1675126620_310082230_527806389353530_3496035450341313581_n.jpg', NULL, 1, 'IT Admin', '2023-01-31 08:43:22', '2023-01-31 08:57:23'),
-(9, 'DONITA ROSE', 'TANTOCO', 'donits', 'donita@gmail.com', '09561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1675126140_user_icon.png', NULL, 1, 'IT Admin', '2023-01-31 08:49:33', NULL),
-(11, 'DONITA ROSE', 'TANTOCO', 'donits', 'donita@gmail.com', '09561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1675126140_user_icon.png', NULL, 1, 'IT Admin', '2023-01-31 08:49:33', NULL),
-(12, 'Rosalyn', 'San Pedro', 'BS_Lhen', 'rosalynsanpedro@gmail.com', '097898765112', '0192023a7bbd73250516f069df18b500', 'uploads/1687405680_4157705191_34525f6cb1_b.jpg', NULL, 4, 'Billing', '2023-06-22 11:48:51', NULL),
-(13, 'Giezl Ann', 'Guiao', 'fm_ghie', 'sample@gmail.com', '09878945632', '0192023a7bbd73250516f069df18b500', 'uploads/1687411320_ad992844046d9f4ce594624a7b0a01fb.jpg', NULL, 3, 'Manager', '2023-06-22 13:22:54', NULL);
+(9, 'DONITA ROSE', 'TANTOCO', 'donits', 'donita@gmail.com', '09561305511', '0192023a7bbd73250516f069df18b500', 'uploads/1675126140_user_icon.png', NULL, 1, 'IT Admin', '2023-01-31 08:49:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -2458,97 +1802,17 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `email`, `phone`
 --
 DROP TABLE IF EXISTS `t_csr_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`` SQL SECURITY DEFINER VIEW `t_csr_view`  AS SELECT `q`.`c_acronym` AS `c_acronym`, `z`.`c_block` AS `c_block`, `z`.`c_lot` AS `c_lot`, `y`.`last_name` AS `last_name`, `y`.`first_name` AS `first_name`, `y`.`middle_name` AS `middle_name`, `y`.`suffix_name` AS `suffix_name`, `x`.`c_csr_no` AS `c_csr_no`, `x`.`ref_no` AS `ref_no`, `x`.`c_lot_lid` AS `c_lot_lid`, `x`.`c_type` AS `c_type`, `x`.`c_date_of_sale` AS `c_date_of_sale`, `x`.`c_lot_area` AS `c_lot_area`, `x`.`c_price_sqm` AS `c_price_sqm`, `x`.`c_lot_discount` AS `c_lot_discount`, `x`.`c_lot_discount_amt` AS `c_lot_discount_amt`, `x`.`c_house_model` AS `c_house_model`, `x`.`c_floor_area` AS `c_floor_area`, `x`.`c_house_price_sqm` AS `c_house_price_sqm`, `x`.`c_linear` AS `c_linear`, `x`.`c_fence_price_sqm` AS `c_fence_price_sqm`, `x`.`c_processing_fee` AS `c_processing_fee`, `x`.`c_less` AS `c_less`, `x`.`pf_mo` AS `pf_mo`, `x`.`c_house_discount` AS `c_house_discount`, `x`.`c_house_discount_amt` AS `c_house_discount_amt`, `x`.`c_tcp_discount` AS `c_tcp_discount`, `x`.`c_tcp_discount_amt` AS `c_tcp_discount_amt`, `x`.`c_tcp` AS `c_tcp`, `x`.`c_vat_amount` AS `c_vat_amount`, `x`.`c_net_tcp` AS `c_net_tcp`, `x`.`c_reservation` AS `c_reservation`, `x`.`c_payment_type1` AS `c_payment_type1`, `x`.`c_payment_type2` AS `c_payment_type2`, `x`.`c_down_percent` AS `c_down_percent`, `x`.`c_net_dp` AS `c_net_dp`, `x`.`c_no_payments` AS `c_no_payments`, `x`.`c_monthly_down` AS `c_monthly_down`, `x`.`c_first_dp` AS `c_first_dp`, `x`.`c_full_down` AS `c_full_down`, `x`.`c_amt_financed` AS `c_amt_financed`, `x`.`c_terms` AS `c_terms`, `x`.`c_interest_rate` AS `c_interest_rate`, `x`.`c_fixed_factor` AS `c_fixed_factor`, `x`.`c_monthly_payment` AS `c_monthly_payment`, `x`.`c_start_date` AS `c_start_date`, `x`.`c_remarks` AS `c_remarks`, `x`.`c_date_created` AS `c_date_created`, `x`.`c_date_updated` AS `c_date_updated`, `x`.`c_created_by` AS `c_created_by`, `x`.`c_verify` AS `c_verify`, `x`.`coo_approval` AS `coo_approval`, `x`.`c_revised` AS `c_revised`, `x`.`c_active` AS `c_active` FROM (((`t_csr` `x` join `t_csr_buyers` `y` on(`x`.`c_csr_no` = `y`.`c_csr_no`)) join `t_lots` `z` on(`x`.`c_lot_lid` = `z`.`c_lid`)) join `t_projects` `q` on(`z`.`c_site` = `q`.`c_code`)) WHERE `y`.`c_buyer_count` = 11  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `t_csr_view`  AS SELECT `q`.`c_acronym` AS `c_acronym`, `z`.`c_block` AS `c_block`, `z`.`c_lot` AS `c_lot`, `y`.`last_name` AS `last_name`, `y`.`first_name` AS `first_name`, `y`.`middle_name` AS `middle_name`, `y`.`suffix_name` AS `suffix_name`, `x`.`c_csr_no` AS `c_csr_no`, `x`.`ref_no` AS `ref_no`, `x`.`c_lot_lid` AS `c_lot_lid`, `x`.`c_date_of_sale` AS `c_date_of_sale`, `x`.`c_lot_area` AS `c_lot_area`, `x`.`c_price_sqm` AS `c_price_sqm`, `x`.`c_lot_discount` AS `c_lot_discount`, `x`.`c_lot_discount_amt` AS `c_lot_discount_amt`, `x`.`c_house_model` AS `c_house_model`, `x`.`c_floor_area` AS `c_floor_area`, `x`.`c_house_price_sqm` AS `c_house_price_sqm`, `x`.`c_house_discount` AS `c_house_discount`, `x`.`c_house_discount_amt` AS `c_house_discount_amt`, `x`.`c_tcp_discount` AS `c_tcp_discount`, `x`.`c_tcp_discount_amt` AS `c_tcp_discount_amt`, `x`.`c_tcp` AS `c_tcp`, `x`.`c_vat_amount` AS `c_vat_amount`, `x`.`c_net_tcp` AS `c_net_tcp`, `x`.`c_reservation` AS `c_reservation`, `x`.`c_payment_type1` AS `c_payment_type1`, `x`.`c_payment_type2` AS `c_payment_type2`, `x`.`c_down_percent` AS `c_down_percent`, `x`.`c_net_dp` AS `c_net_dp`, `x`.`c_no_payments` AS `c_no_payments`, `x`.`c_monthly_down` AS `c_monthly_down`, `x`.`c_first_dp` AS `c_first_dp`, `x`.`c_full_down` AS `c_full_down`, `x`.`c_amt_financed` AS `c_amt_financed`, `x`.`c_terms` AS `c_terms`, `x`.`c_interest_rate` AS `c_interest_rate`, `x`.`c_fixed_factor` AS `c_fixed_factor`, `x`.`c_monthly_payment` AS `c_monthly_payment`, `x`.`c_start_date` AS `c_start_date`, `x`.`c_remarks` AS `c_remarks`, `x`.`c_date_created` AS `c_date_created`, `x`.`c_date_updated` AS `c_date_updated`, `x`.`c_created_by` AS `c_created_by`, `x`.`c_verify` AS `c_verify`, `x`.`coo_approval` AS `coo_approval`, `x`.`c_revised` AS `c_revised` FROM (((`t_csr` `x` join `t_csr_buyers` `y` on(`x`.`c_csr_no` = `y`.`c_csr_no`)) join `t_lots` `z` on(`x`.`c_lot_lid` = `z`.`c_lid`)) join `t_projects` `q` on(`z`.`c_site` = `q`.`c_code`)) WHERE `y`.`c_buyer_count` = 11  ;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `account_list`
---
-ALTER TABLE `account_list`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `family_members`
---
-ALTER TABLE `family_members`
-  ADD PRIMARY KEY (`member_id`),
-  ADD KEY `client_id` (`client_id`);
-
---
--- Indexes for table `group_list`
---
-ALTER TABLE `group_list`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `journal_entries`
---
-ALTER TABLE `journal_entries`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `journal_items`
---
-ALTER TABLE `journal_items`
-  ADD KEY `journal_id` (`journal_id`),
-  ADD KEY `account_id` (`account_id`),
-  ADD KEY `group_id` (`group_id`);
-
---
--- Indexes for table `or_logs`
---
-ALTER TABLE `or_logs`
-  ADD PRIMARY KEY (`or_id`);
-
---
--- Indexes for table `pending_restructuring`
---
-ALTER TABLE `pending_restructuring`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `properties`
---
-ALTER TABLE `properties`
-  ADD PRIMARY KEY (`property_id`),
-  ADD KEY `fk_c_lot_lid` (`c_lot_lid`);
-
---
--- Indexes for table `property_clients`
---
-ALTER TABLE `property_clients`
-  ADD PRIMARY KEY (`client_id`),
-  ADD KEY `property_id` (`property_id`);
-
---
--- Indexes for table `property_payments`
---
-ALTER TABLE `property_payments`
-  ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `property_id` (`property_id`);
-
---
 -- Indexes for table `tbl_attachments`
 --
 ALTER TABLE `tbl_attachments`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tbl_restructuring`
---
-ALTER TABLE `tbl_restructuring`
-  ADD PRIMARY KEY (`res_id`);
-
---
--- Indexes for table `t_additional_cost`
---
-ALTER TABLE `t_additional_cost`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_additional_cost` (`c_csr_no`);
 
 --
 -- Indexes for table `t_agents`
@@ -2566,27 +1830,15 @@ ALTER TABLE `t_approval_csr`
   ADD KEY `fk_c_lid` (`c_lot_lid`);
 
 --
--- Indexes for table `t_av_breakdown`
---
-ALTER TABLE `t_av_breakdown`
-  ADD PRIMARY KEY (`av_id`);
-
---
--- Indexes for table `t_av_summary`
---
-ALTER TABLE `t_av_summary`
-  ADD PRIMARY KEY (`av_id`);
-
---
--- Indexes for table `t_buyer_info`
---
-ALTER TABLE `t_buyer_info`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `t_ca_requirement`
 --
 ALTER TABLE `t_ca_requirement`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `t_client_info`
+--
+ALTER TABLE `t_client_info`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2595,12 +1847,6 @@ ALTER TABLE `t_ca_requirement`
 ALTER TABLE `t_csr`
   ADD PRIMARY KEY (`c_csr_no`),
   ADD KEY `fk_c_lot_lid` (`c_lot_lid`);
-
---
--- Indexes for table `t_csr_buyers`
---
-ALTER TABLE `t_csr_buyers`
-  ADD PRIMARY KEY (`buyer_id`);
 
 --
 -- Indexes for table `t_csr_comments`
@@ -2612,19 +1858,13 @@ ALTER TABLE `t_csr_comments`
 -- Indexes for table `t_csr_commission`
 --
 ALTER TABLE `t_csr_commission`
-  ADD PRIMARY KEY (`comm_id`);
+  ADD PRIMARY KEY (`c_csr_no`);
 
 --
 -- Indexes for table `t_house`
 --
 ALTER TABLE `t_house`
   ADD PRIMARY KEY (`c_house_lid`);
-
---
--- Indexes for table `t_invoice`
---
-ALTER TABLE `t_invoice`
-  ADD PRIMARY KEY (`invoice_id`);
 
 --
 -- Indexes for table `t_lots`
@@ -2662,58 +1902,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `account_list`
---
-ALTER TABLE `account_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
-
---
--- AUTO_INCREMENT for table `family_members`
---
-ALTER TABLE `family_members`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `group_list`
---
-ALTER TABLE `group_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `journal_entries`
---
-ALTER TABLE `journal_entries`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `or_logs`
---
-ALTER TABLE `or_logs`
-  MODIFY `or_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
-
---
--- AUTO_INCREMENT for table `pending_restructuring`
---
-ALTER TABLE `pending_restructuring`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
-
---
--- AUTO_INCREMENT for table `property_payments`
---
-ALTER TABLE `property_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=647;
-
---
 -- AUTO_INCREMENT for table `tbl_attachments`
 --
 ALTER TABLE `tbl_attachments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
-
---
--- AUTO_INCREMENT for table `t_additional_cost`
---
-ALTER TABLE `t_additional_cost`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 
 --
 -- AUTO_INCREMENT for table `t_agents`
@@ -2725,43 +1917,25 @@ ALTER TABLE `t_agents`
 -- AUTO_INCREMENT for table `t_approval_csr`
 --
 ALTER TABLE `t_approval_csr`
-  MODIFY `ra_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
-
---
--- AUTO_INCREMENT for table `t_av_breakdown`
---
-ALTER TABLE `t_av_breakdown`
-  MODIFY `av_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
-
---
--- AUTO_INCREMENT for table `t_av_summary`
---
-ALTER TABLE `t_av_summary`
-  MODIFY `av_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT for table `t_buyer_info`
---
-ALTER TABLE `t_buyer_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `ra_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `t_ca_requirement`
 --
 ALTER TABLE `t_ca_requirement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `t_client_info`
+--
+ALTER TABLE `t_client_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `t_csr`
 --
 ALTER TABLE `t_csr`
-  MODIFY `c_csr_no` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
-
---
--- AUTO_INCREMENT for table `t_csr_buyers`
---
-ALTER TABLE `t_csr_buyers`
-  MODIFY `buyer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `c_csr_no` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `t_csr_comments`
@@ -2770,70 +1944,20 @@ ALTER TABLE `t_csr_comments`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
--- AUTO_INCREMENT for table `t_csr_commission`
---
-ALTER TABLE `t_csr_commission`
-  MODIFY `comm_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
-
---
--- AUTO_INCREMENT for table `t_invoice`
---
-ALTER TABLE `t_invoice`
-  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- AUTO_INCREMENT for table `t_reservation`
 --
 ALTER TABLE `t_reservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `family_members`
---
-ALTER TABLE `family_members`
-  ADD CONSTRAINT `family_members_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `property_clients` (`client_id`);
-
---
--- Constraints for table `journal_entries`
---
-ALTER TABLE `journal_entries`
-  ADD CONSTRAINT `journal_entries_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-
---
--- Constraints for table `journal_items`
---
-ALTER TABLE `journal_items`
-  ADD CONSTRAINT `journal_items_ibfk_1` FOREIGN KEY (`journal_id`) REFERENCES `journal_entries` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `journal_items_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `account_list` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `journal_items_ibfk_3` FOREIGN KEY (`group_id`) REFERENCES `group_list` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `property_clients`
---
-ALTER TABLE `property_clients`
-  ADD CONSTRAINT `property_clients_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`property_id`);
-
---
--- Constraints for table `property_payments`
---
-ALTER TABLE `property_payments`
-  ADD CONSTRAINT `property_payments_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`property_id`);
-
---
--- Constraints for table `tbl_restructuring`
---
-ALTER TABLE `tbl_restructuring`
-  ADD CONSTRAINT `tbl_restructuring_ibfk_1` FOREIGN KEY (`res_id`) REFERENCES `pending_restructuring` (`id`);
 
 --
 -- Constraints for table `t_approval_csr`

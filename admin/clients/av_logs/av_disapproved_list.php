@@ -173,7 +173,7 @@
 							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 						<td>
-							<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
+							<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 							<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
 							<!-- <?php
 								if ($usertype == "Billing"):
@@ -197,7 +197,7 @@
 						<?php        
 					}elseif($usertype=='Manager'){
 							//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
-							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 2 and y.lvl2 = 2");
+							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl2 = 2");
 							while($row = $qry->fetch_assoc()):   
 									  
 							?>
@@ -237,7 +237,7 @@
 								<td><span class="badge badge-danger">Disapproved </span></td>
 							<?php endif; ?>
 							<td>
-								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
+								<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 								<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
 								<!-- <?php
 									if ($usertype == "Manager"):
@@ -261,7 +261,7 @@
 							<?php        
 							}elseif($usertype == "IT Admin"){
 								//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
-								$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 2 and y.lvl2 = 2 and y.lvl3 = 2");
+								$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl3 = 2");
 								while($row = $qry->fetch_assoc()):   
 										  
 								?>
@@ -301,7 +301,7 @@
 									<td><span class="badge badge-danger">Disapproved </span></td>
 								<?php endif; ?>
 								<td>
-									<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
+									<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 									<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
 									<!-- <?php
 										if ($usertype == "CFO"):
@@ -339,7 +339,7 @@ $(document).ready(function() {
         }
     ); 
 });
-$('.view_av').click(function(){
+$('.view_cm').click(function(){
 	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/application_voucher/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
 })
 $('.approved_av').click(function(){

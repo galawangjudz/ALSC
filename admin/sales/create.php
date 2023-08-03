@@ -1114,7 +1114,7 @@ input{
 												<input id="id40" type="radio" name="chkOption4" value="2" <?php echo isset($floor_elev)&&$floor_elev == 2 ? 'checked' : ''; ?>/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<input id="id60" type="radio" name="chkOption4" value="3" <?php echo isset($floor_elev)&&$floor_elev ==  3 ? 'checked' : ''; ?>/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											</div>
-												<input type="text" name="flrelev_text" id="flrelev_text" value="<?php echo isset($floor_elev) ? $floor_elev : 0; ?>" onchange="getFlrElev(this);"/>
+												<input type="hidden" name="flrelev_text" id="flrelev_text" value="<?php echo isset($floor_elev) ? $floor_elev : 0; ?>" onchange="getFlrElev(this);"/>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">

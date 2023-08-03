@@ -425,7 +425,7 @@ table {
                     </td>
                     <td style="width:10%;">
                     <?php
-                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl1 = 0");
+                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl3 = 0");
                     if ($qry13->num_rows > 0) {
                         echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
                     }
