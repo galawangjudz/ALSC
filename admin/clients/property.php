@@ -109,6 +109,13 @@ table {
   table-layout: fixed;
   width: 100%;
 }
+#uni_modal_2{
+        width:180%;
+        height:100%;
+        margin:auto;
+		margin-left:-40%;
+		margin-right:auto;
+    } 
 
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
@@ -425,7 +432,7 @@ table {
                     </td>
                     <td style="width:10%;">
                     <?php
-                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl1 = 0");
+                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl3 = 0");
                     if ($qry13->num_rows > 0) {
                         echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
                     }
@@ -483,13 +490,27 @@ table {
 
                           $total_rebate += $rebate;
 
+                  
+
                       ?>
                       <tr>
                        <!-- 
                         <td class="text-center" style="font-size:13px;width:20%;"><?php echo $property_id_part1 . "-" . $property_id_part2 . "-" . $property_id_part3 ?> </td>
                         --> <td class="text-center" style="font-size:13px;width:12%;"><?php echo $due_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?> </td> 
-                        <td class="text-center" style="font-size:13px;width:10%;"><?php echo $or_no ?> </td> 
+                        <td class="text-center" style="font-size:13px;width:10%;">
+                        <?php
+                         if (strpos($or_no, 'RSTR') === 0) {
+                            // If $or_no starts with 'RSTR', create a link or button here
+                          ?> <a class="basic-link view_restruc" data-id="<?php echo md5($row['property_id']) ?>" cid="<?php echo str_replace('RSTR-', '', $or_no) ?>"><?php echo $or_no; ?> </a>
+                          <?php
+                          } else if (strpos($or_no, 'AV') === 0) {
+                            // If $or_no starts with 'RSTR', create a link or button here
+                            ?> <a class="basic-link view_av" data-id="<?php echo md5($row['property_id']) ?>" cid="<?php echo  $or_no; ?>"><?php echo $or_no; ?> </a>
+                        <?php } else {
+                            // If $or_no doesn't start with 'RSTR', just output its value as plain text
+                            echo $or_no;
+                        }  ?> </td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td>
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td>  
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
@@ -866,6 +887,16 @@ $(document).ready(function() {
       //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
       uni_modal("<i class='fa fa-paint-brush'></i> Edit Client",'clients/client_update.php?id='+$(this).attr('client-id'),"mid-large")
 
+    })
+
+    $('.view_restruc').click(function(){
+	  uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id') + '&cid=' + $(this).attr('cid') ,"mid-large")
+    })
+
+
+    
+    $('.view_av').click(function(){
+      uni_modal_2("<i class='fa fa-info'></i> AV Details",'clients/application_voucher/av_modal.php?id=' + $(this).attr('cid'), 'mid-large')
     })
 
     

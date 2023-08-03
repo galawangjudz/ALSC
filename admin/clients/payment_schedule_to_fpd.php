@@ -9,10 +9,10 @@
             if ($day == 31):
                 $l_new_day = '30';
             else:
-                $l_new_day = $l_day;
+                $l_new_day = $day;
             endif;
         elseif ($month == 2):
-            if ($l_day > 28):
+            if ($day > 28):
                 $l_leap = is_leap_year($year);
 
                 if ($l_leap):

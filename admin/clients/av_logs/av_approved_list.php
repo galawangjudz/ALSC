@@ -181,7 +181,7 @@
 							<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
 							<!-- <?php
 								if ($usertype == "Billing"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
+									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="'. $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
@@ -309,22 +309,7 @@
 								<td>
 									<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 									<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
-									<!-- <?php
-										if ($usertype == "CFO"):
-											echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
-												style="font-size: 10px; height: 30px; width: 37px;">
-												<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-												<span class="tooltip">Approved</span>
-												</a>';
-										endif;
-										if ($usertype == "CFO"):
-											echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
-													style="font-size: 10px; height: 30px; width: 37px;">
-													<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-													<span class="tooltip">Disapproved</span>
-												</a>';
-										endif;
-									?> -->
+								
 								</td>
 								</tr>
 								<?php endwhile; ?>
@@ -349,7 +334,7 @@ $('.view_av').click(function(){
 	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/application_voucher/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
 })
 $('.approved_av').click(function(){
-    _conf("Are you sure you want to approve this application voucher?", "approved_av", [$(this).attr('data-id'),$(this).attr('value'),$(this).attr('prop-id')]);
+    _conf("Are you sure you want to approve this application voucher?", "approved_av", [$(this).data('data-id'),$(this).attr('value'),$(this).attr('prop-id')]);
 })
 $('.disapproved_av').click(function(){
 	_conf("Are you sure you want to disapprove this application voucher?","disapproved_av",[$(this).attr('data-id'),$(this).attr('value'),$(this).attr('prop-id')]);

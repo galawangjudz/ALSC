@@ -3136,24 +3136,24 @@ Class Master extends DBConnection {
 		extract($_POST);
 
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
-			$update = $this->conn->query("UPDATE t_csr set c_active = 1  where c_lot_lid = ".$get_lid);
+			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
 			//$update = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
-			$update = $this->conn->query("UPDATE t_csr set c_active = 1  where c_lot_lid = ".$get_lid);
+			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
 			//$update = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 	
 		endif;
@@ -3175,9 +3175,9 @@ Class Master extends DBConnection {
 		//removed from payments - pending_status (property_payments)
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 2):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
@@ -3185,8 +3185,8 @@ Class Master extends DBConnection {
 			//echo $get_lid;
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
-			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
 		elseif($value == 1):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2',lvl2='2',lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
@@ -3194,8 +3194,8 @@ Class Master extends DBConnection {
 			//echo $get_lid;
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
-			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
 		endif;
 		
 		if($update){

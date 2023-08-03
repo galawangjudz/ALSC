@@ -82,7 +82,7 @@ if (isset($_GET['id'])) {
                             </div> 
                             <div class="form-group">
                                 <label class="control-label">AV No: </label>
-                                <input type="number" class="form-control required" name="av_no" id="av_no">
+                                <input type="text" class="form-control required" name="av_no" id="av_no">
                             </div> 
                             <div class="form-group">
                                 <label class="control-label">AV Date: </label>

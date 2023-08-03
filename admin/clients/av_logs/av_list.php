@@ -366,22 +366,22 @@
 							<td>
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
-								<?php
-									if ($usertype == "IT Admin"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="1" prop-id="' . $row['property_id'] . '" 
-											style="font-size: 10px; height: 30px; width: 37px;">
-											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-											<span class="tooltip">Approved</span>
-											</a>';
-									endif;
-									if ($usertype == "IT Admin"):
-										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="1" prop-id="' . $row['property_id'] . '" 
-												style="font-size: 10px; height: 30px; width: 37px;">
-												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-												<span class="tooltip">Disapproved</span>
-											</a>';
-									endif;
-								?>
+								<?php if ($usertype == "IT Admin"): ?>
+									<a class="btn btn-flat btn-primary btn-s approved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" 
+										style="font-size: 10px; height: 30px; width: 37px;">
+										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+										<span class="tooltip">Approved</span>
+									</a>
+								<?php endif; ?>
+
+								<?php if ($usertype == "IT Admin"): ?>
+									&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" 
+										style="font-size: 10px; height: 30px; width: 37px;">
+										<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+										<span class="tooltip">Disapproved</span>
+									</a>
+								<?php endif; ?>
+
 							</td>
 							</tr>
 							<?php endwhile; ?>
@@ -405,12 +405,45 @@ $(document).ready(function() {
 $('.view_av').click(function(){
 	uni_modal_2('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View AV', 'clients/application_voucher/av_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
 })
-$('.approved_av').click(function(){
-    _conf("Are you sure you want to approve this application voucher?", "approved_av", [$(this).attr('data-id'),$(this).attr('value'),$(this).attr('prop-id')]);
-})
+/* $('.approved_av').click(function(){
+    _conf("Are you sure you want to approve this application voucher?", "approved_av", [$(this).attr	('data-id'),$(this).attr('value'),$(this).attr('prop-id')]);
+}) */
 $('.disapproved_av').click(function(){
 	_conf("Are you sure you want to disapprove this application voucher?","disapproved_av",[$(this).attr('data-id'),$(this).attr('value'),$(this).attr('prop-id')]);
 }) 
+$('.approved_av').click(function(){
+    var dataId = $(this).attr('data-id');
+	dataId = dataId.replace(/^AV/, '');
+	var value = $(this).attr('value');
+    var propId = $(this).attr('prop-id');
+
+    _conf("Are you sure you want to approve this application voucher?", "approved_av", [ dataId, value, propId]);
+});
+
+function approved_av(dataId, value, propId) {
+    start_loader();
+    $.ajax({
+        url: _base_url_ + "classes/Master.php?f=av_approval",
+        method: "POST",
+        data: {data_id: dataId, value: value, prop_id: propId},
+        dataType: "json",
+        error: function(err){
+            console.log(err);
+            alert_toast("An error occurred.", 'error');
+            end_loader();
+        },
+        success: function(resp){
+            if(typeof resp === 'object' && resp.status === 'success'){
+                location.reload();
+            } else {
+                alert_toast("An error occurred.", 'error');
+                end_loader();
+            }
+        }
+    });
+}
+
+/* 
 function approved_av($data_id,$value,$prop_id){
 	start_loader();
 	$.ajax({
@@ -432,7 +465,7 @@ function approved_av($data_id,$value,$prop_id){
 			}
 		}
 	})
-}
+} */
 function disapproved_av($data_id,$value,$prop_id){
 	start_loader();
 	$.ajax({
