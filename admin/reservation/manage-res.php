@@ -115,7 +115,7 @@ foreach($res->fetch_array() as $k =>$v){
 
 									if($query02->num_rows > 0){
 										?>
-										<input type="text" class="form-control margin-bottom required" name="or_no" id="or_no" value="<?php echo isset($meta['c_or_no']) ? $meta['c_or_no']: '' ?>" readonly>	
+										<input type="text" class="form-control margin-bottom required" name="or_no" id="or_no" value=" <?php echo isset($meta['c_or_no']) ? $meta['c_or_no']: '' ?>" readonly>	
 									<?php }else{ ?>
 										<input type="text" class="form-control margin-bottom required" name="or_no" id="or_no" value="<?php echo isset($meta['c_or_no']) ? $meta['c_or_no']: '' ?>">	
 									<?php } ?>

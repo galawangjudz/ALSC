@@ -6,6 +6,37 @@ if($_settings->chk_flashdata('success')): ?>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+<style>
+	table tr{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 60%;
+  border:solid 1px;
+  padding-left:10px!important;
+  border:solid 1px gainsboro;
+}
+table td{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 20%;
+  border:solid 1px gainsboro;
+  padding:5px;
+}
+.table td, .table th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.table tr:nth-child(even) {
+  background-color: #dddddd;
+}
+.tabs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+</style>
 <?php
 $usertype = $_settings->userdata('user_type');
 // if (!isset($usertype)) {
@@ -43,10 +74,10 @@ if(isset($_GET['id'])){
             <thead style="font-size:14px;">
                 <tr>
                     <th>Payment Amt</th>
-                    <th style="width:25%;">Pay Date</th>
-                    <th style="width:25%;">Due Date</th>
+                    <th>Pay Date</th>
+                    <th>Due Date</th>
                     <th>OR No</th>
-                    <th style="width:20%;">Amt Due</th>
+                    <th >Amt Due</th>
                     <th>Interest</th>
                     <th>Rebate</th>
                     <th>Surcharge</th>
