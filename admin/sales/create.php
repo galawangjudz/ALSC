@@ -587,7 +587,7 @@ input{
 														<div class="col-md-2">
 															<div class="form-group">
 																<label class="control-label">Birthdate: </label>
-																	<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
+																	<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>" min="1900-01-01">		
 															</div>
 														</div>
 														<div class="col-md-1">
@@ -761,7 +761,7 @@ input{
 																<div class="form-group">
 																	<label class="control-label">Birthdate: </label>
 															
-																		<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
+																		<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>" min="1990-01-01">		
 																	
 																
 																</div>
@@ -1404,7 +1404,7 @@ input{
 										<div class="col-md-6">	
 											<div class="form-group">
 												<label class="control-label">Reservation: </label>
-												<input type="text" class="form-control margin-bottom required reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" >
+												<input type="text" class="form-control margin-bottom required reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" required>
 											</div>
 										</div>
 									</div>

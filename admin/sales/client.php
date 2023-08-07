@@ -94,9 +94,8 @@ foreach($client->fetch_array() as $k =>$v){
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="birth_day" class="control-label">Birthdate: </label>
-                                <input type="date" class="form-control birth_day required" name="birth_day" id = "birth_day" value="<?php echo isset($meta['birthdate']) ? $meta['birthdate']: '' ?>">		
-                                	
+                                <label for="birth_day" class="control-label">Birthdate:</label>
+                                <input type="date" class="form-control birth_day required" name="birth_day" id="birth_day" value="<?php echo isset($meta['birthdate']) ? $meta['birthdate']: '' ?>" min="1900-01-01">
                             </div>
                         </div>
                         <div class="col-md-3">
