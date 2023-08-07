@@ -39,7 +39,18 @@ $lot = substr($property_id, 8, 2); ?>
 $row2 = $qry2->fetch_assoc();
 $name = $row2['c_acronym']; ?>
 <style>
-    /* .container_content{ margin-top:-20px; } */
+        @media print {
+        @page {
+            size: 8.5in 5.5in;
+            margin: 10mm;
+        }
+        body {
+            font-size: 12px;
+        }
+        .hide-on-print {
+            display: none;
+        }
+    }
     body {
         font-family: 'Armata', sans-serif;
         font-size: 12px;
@@ -114,12 +125,9 @@ $name = $row2['c_acronym']; ?>
     }
     @media print {
         @page {
-            /* this affects the margin in the printer settings */
             margin: 5mm;
             orientation: portrait;
             transform: scale(0.8) !important;
-            /* transform: scale(0.8)!important; */
-            /* dpi: 300; */
         }
     }
 </style>
@@ -226,7 +234,6 @@ $name = $row2['c_acronym']; ?>
                                 style="width:125px;border:none;font-family: 'Armata', sans-serif;font-size:12px;text-align:right;">
                         </td>
                     </tr>
-                    
                     <tr>
                     <?php
                         if ($memo_stats == 'CM') {

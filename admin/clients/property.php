@@ -734,16 +734,16 @@ $(document).ready(function() {
   }); 
 
     $('.retention_acc').click(function(){
-        _conf("Are you sure you want to retention?","retention_acc",[$(this).attr('prop-id')])
+        _conf("Are you absolutely sure you want to place this account into retention?","retention_acc",[$(this).attr('prop-id')])
     }) 
 
     $('.backout_acc').click(function(){
-        _conf("Are you sure you want to backout ?","backout_acc",[$(this).attr('prop-id'),$(this).attr('csr-no')])
+        _conf("Are you absolutely certain about backing out this account?","backout_acc",[$(this).attr('prop-id'),$(this).attr('csr-no')])
     }) 
 
 
     $('.delete-last-or').click(function(){
-        _conf("Are you sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
+        _conf("Are you absolutely sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
     }) 
 
     $('.undo-delete-last-or').click(function(){

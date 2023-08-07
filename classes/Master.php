@@ -3208,7 +3208,7 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE t_credit_memo SET lvl1='1',lvl2='1',lvl3='1' WHERE reference = ".$data_id);
 		}
 
-		if ($value == 2){
+		if ($value == 2 or $value == 1){
 
 		$qry_get_cm = "SELECT * FROM t_credit_memo where reference = ".$data_id."";
 		$sql_get_cm = $this->conn->query($qry_get_cm);

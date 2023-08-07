@@ -86,6 +86,18 @@
     .nav-cm:hover {
         background-color: #007bff !important;
     }
+	/* Custom styles for the buttons */
+	.custom-btn {
+		font-size: 14px;
+		padding: 5px;
+		padding-bottom: 3px;
+	}
+
+	/* Specific style for the "Details" button */
+	.btn-details {
+		font-size: 14px;
+	}
+
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
     <div class="navbar-menu" style="max-width: 1200px; margin: 0 auto;">
@@ -162,9 +174,12 @@
 							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 						<td>
-							<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['reference'] ?>">
-							<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
-							<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row["reference"]; ?>", target="_blank" class="btn btn-flat btn-success pull-right" style="font-size:14px;"><i class="fas fa-print"></i>&nbsp;&nbsp;CM</a>
+							<a class="btn btn-flat btn-sm view_cm btn-info btn-details" data-id="<?php echo $row['reference'] ?>">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details
+							</a>
+							<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row['reference']; ?>" target="_blank" class="btn btn-flat btn-sm btn-success custom-btn">
+								<i class="fas fa-print"></i>&nbsp;&nbsp;CM
+							</a>
 						</td>
                         </tr>
                     	<?php endwhile; ?>
@@ -205,9 +220,12 @@
 							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 						<td>
-							<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['reference'] ?>">
-							<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
-							<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row["reference"]; ?>", target="_blank" class="btn btn-flat btn-success pull-right" style="font-size:14px;"><i class="fas fa-print"></i>&nbsp;&nbsp;CM</a>
+							<a class="btn btn-flat btn-sm view_cm btn-info btn-details" data-id="<?php echo $row['reference'] ?>">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details
+							</a>
+							<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row['reference']; ?>" target="_blank" class="btn btn-flat btn-sm btn-success custom-btn">
+								<i class="fas fa-print"></i>&nbsp;&nbsp;CM
+							</a>
 						</td>
                         </tr>
 							<?php endwhile; ?>
@@ -248,11 +266,14 @@
                                 <?php elseif ($row['lvl3'] == 2): ?>
                                     <td><span class="badge badge-danger">Disapproved </span></td>
                                 <?php endif; ?>
-                                <td>
-                                    <a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['reference'] ?>">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details</a>
-									<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row["reference"]; ?>", target="_blank" class="btn btn-flat btn-success pull-right" style="font-size:14px;"><i class="fas fa-print"></i>&nbsp;&nbsp;CM</a>
-                                </td>
+								<td>
+									<a class="btn btn-flat btn-sm view_cm btn-info btn-details" data-id="<?php echo $row['reference'] ?>">
+										<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details
+									</a>
+									<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row['reference']; ?>" target="_blank" class="btn btn-flat btn-sm btn-success custom-btn">
+										<i class="fas fa-print"></i>&nbsp;&nbsp;CM
+									</a>
+								</td>
                                 </tr>
 								<?php endwhile; ?>
 								<?php        

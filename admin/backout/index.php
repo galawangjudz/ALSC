@@ -200,7 +200,7 @@
 								<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item view_data" href="javascript:void(0)" data-id ="<?php echo $row['property_id'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+									<a class="dropdown-item view_data" href="javascript:void(0)" data-id ="<?php echo $row['property_id'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
 								<div class="dropdown-divider"></div>
 							<!-- 	<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['property_id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div> -->
@@ -224,7 +224,7 @@
 			uni_modal("Update Account Details","accounts/manage_account.php?id="+$(this).attr('data-id'),'mid-large')
 		})
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
+			_conf("Are you sure you want to permanently delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
 		})
 		$('.view_data').click(function(){
 			uni_modal("Account Details","backout/view_backout.php?id="+$(this).attr('data-id'),'mid-large')
