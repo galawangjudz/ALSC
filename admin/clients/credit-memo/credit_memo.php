@@ -35,7 +35,7 @@ if($_settings->chk_flashdata('success')): ?>
 		die("Connection failed: " . mysqli_connect_error());
 	}
 
-	$sql = "SELECT or_no FROM property_payments where md5(property_id) = '{$_GET['id']}'";
+	$sql = "SELECT DISTINCT(or_no) FROM property_payments where md5(property_id) = '{$_GET['id']}'";
 	$result = mysqli_query($conn, $sql);
 
 	$orData = array();
@@ -115,8 +115,9 @@ if($_settings->chk_flashdata('success')): ?>
 							<option value='' selected>Select</option>
 							<?php
 							foreach ($orData as $data) {
-								//echo "<option value='$data'>$data</option>";
-								echo "<option value='" . $data . "' " . (isset($data) && $data == $row['data'] ? 'selected' : '') . " >" . $data . "</option>";
+								if (!preg_match('/^[A-Za-z]/', $data)) { 
+									echo "<option value='" . $data . "' " . (isset($data) && $data == $row['data'] ? 'selected' : '') . " >" . $data . "</option>";
+								}
 							}
 							?>
 						</select>

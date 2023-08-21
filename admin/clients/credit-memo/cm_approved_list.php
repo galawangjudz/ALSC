@@ -9,10 +9,6 @@
 	$usertype = $_settings->userdata('user_type');
 ?>
 
-
-
-
-
 <style>
 	.main_menu{
 		float:left;
@@ -230,54 +226,54 @@
                         </tr>
 							<?php endwhile; ?>
 							<?php        
-							}elseif($usertype=='CFO' || $usertype=='IT Admin'){
-								//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
-								$qry = $conn->query("SELECT * FROM t_credit_memo WHERE lvl1 = 1 and lvl2 = 1 and lvl3 = 1");
-								while($row = $qry->fetch_assoc()):   
-										  
-								?>
-								<tr>
-                                <td><?php echo $row["cm_id"] ?></td>
-                                <td><?php echo $row["cm_date"] ?></td>
-                                <td><?php echo number_format($row["credit_amount"], 2) ?></td>
-                                <td><?php echo $row["reason"] ?></td>
-                                <td><?php echo $row["reference"] ?></td>
-                                
-                                <?php if($row['lvl1'] == 0): ?>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                <?php elseif ($row['lvl1'] == 1): ?>
-                                    <td><span class="badge badge-success">Approved </span></td>
-                                <?php elseif ($row['lvl1'] == 2): ?>
-                                    <td><span class="badge badge-danger">Disapproved </span></td>
-                                <?php endif; ?>
+					}elseif($usertype=='CFO' or $usertype=='COO' or $usertype=='IT Admin'){
+						//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
+						$qry = $conn->query("SELECT * FROM t_credit_memo WHERE lvl1 = 1 and lvl2 = 1 and lvl3 = 1");
+						while($row = $qry->fetch_assoc()):   
+									
+						?>
+						<tr>
+						<td><?php echo $row["cm_id"] ?></td>
+						<td><?php echo $row["cm_date"] ?></td>
+						<td><?php echo number_format($row["credit_amount"], 2) ?></td>
+						<td><?php echo $row["reason"] ?></td>
+						<td><?php echo $row["reference"] ?></td>
+						
+						<?php if($row['lvl1'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['lvl1'] == 1): ?>
+							<td><span class="badge badge-success">Approved </span></td>
+						<?php elseif ($row['lvl1'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved </span></td>
+						<?php endif; ?>
 
-                                <?php if($row['lvl2'] == 0): ?>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                <?php elseif ($row['lvl2'] == 1): ?>
-                                    <td><span class="badge badge-success">Approved </span></td>
-                                <?php elseif ($row['lvl2'] == 2): ?>
-                                    <td><span class="badge badge-danger">Disapproved </span></td>
-                                <?php endif; ?>
+						<?php if($row['lvl2'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['lvl2'] == 1): ?>
+							<td><span class="badge badge-success">Approved </span></td>
+						<?php elseif ($row['lvl2'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved </span></td>
+						<?php endif; ?>
 
-                                <?php if($row['lvl3'] == 0): ?>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                <?php elseif ($row['lvl3'] == 1): ?>
-                                    <td><span class="badge badge-success">Approved </span></td>
-                                <?php elseif ($row['lvl3'] == 2): ?>
-                                    <td><span class="badge badge-danger">Disapproved </span></td>
-                                <?php endif; ?>
-								<td>
-									<a class="btn btn-flat btn-sm view_cm btn-info btn-details" data-id="<?php echo $row['reference'] ?>">
-										<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details
-									</a>
-									<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row['reference']; ?>" target="_blank" class="btn btn-flat btn-sm btn-success custom-btn">
-										<i class="fas fa-print"></i>&nbsp;&nbsp;CM
-									</a>
-								</td>
-                                </tr>
-								<?php endwhile; ?>
-								<?php        
-							}
+						<?php if($row['lvl3'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['lvl3'] == 1): ?>
+							<td><span class="badge badge-success">Approved </span></td>
+						<?php elseif ($row['lvl3'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved </span></td>
+						<?php endif; ?>
+						<td>
+							<a class="btn btn-flat btn-sm view_cm btn-info btn-details" data-id="<?php echo $row['reference'] ?>">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Details
+							</a>
+							<a href="<?php echo base_url ?>/report/print_cm.php?id=<?php echo $row['reference']; ?>" target="_blank" class="btn btn-flat btn-sm btn-success custom-btn">
+								<i class="fas fa-print"></i>&nbsp;&nbsp;CM
+							</a>
+						</td>
+						</tr>
+						<?php endwhile; ?>
+						<?php        
+					}
 						?>
 					</tbody>
 				</table>

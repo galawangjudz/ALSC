@@ -142,7 +142,7 @@
 								  
                         ?>
                         <tr>
-						<td><?php echo $row["c_av_no"] ?></td>
+						<td>AV<?php echo $row["c_av_no"] ?></td>
 						<td><?php echo $row["property_id"] ?></td>
 						<td><?php echo $row["c_av_date"] ?></td>
 						<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -208,7 +208,7 @@
 									  
 							?>
 							<tr>
-							<td><?php echo $row["c_av_no"] ?></td>
+							<td>AV<?php echo $row["c_av_no"] ?></td>
 							<td><?php echo $row["property_id"] ?></td>
 							<td><?php echo $row["c_av_date"] ?></td>
 							<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -265,14 +265,14 @@
 							</tr>
 							<?php endwhile; ?>
 							<?php        
-							}elseif($usertype=='CFO' || $usertype=='IT Admin'){
+							}elseif($usertype=='CFO' or $usertype=='COO' or $usertype=='IT Admin'){
 								//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
 								$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 1 and y.lvl2 = 1 and y.lvl3 = 1");
 								while($row = $qry->fetch_assoc()):   
 										  
 								?>
 								<tr>
-								<td><?php echo $row["c_av_no"] ?></td>
+								<td>AV<?php echo $row["c_av_no"] ?></td>
 								<td><?php echo $row["property_id"] ?></td>
 								<td><?php echo $row["c_av_date"] ?></td>
 								<td><?php echo number_format($row["c_av_amount"], 2) ?></td>

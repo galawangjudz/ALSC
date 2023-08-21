@@ -294,7 +294,6 @@ input{
     <div class="panel-heading">
         <div class="titles"><center><h5>Payment Computation<h5></center></div>
     </div>
-
     <form action="" id="restructuring">
              
     <div class="panel-body form-group form-group-sm">

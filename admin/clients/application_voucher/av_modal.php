@@ -7,6 +7,7 @@ if($_settings->chk_flashdata('success')): ?>
 </script>
 <?php endif;?>
 <style>
+
 	table tr{
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -67,11 +68,11 @@ if(isset($_GET['id'])){
 ?>
 
 <div class="card card-outline rounded-0 card-maroon">
-    <h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i><?php echo $_GET['id'] ?></i> </b></h3>
+    <h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i>AV<?php echo $_GET['id'] ?></i> </b></h3>
     <div class="table-responsive">
         <table class="table table-bordered table-stripped" style="text-align:center;">
         <br>
-            <thead style="font-size:14px;">
+            <thead style="font-size:12px;">
                 <tr>
                     <th>Payment Amt</th>
                     <th>Pay Date</th>
@@ -86,7 +87,7 @@ if(isset($_GET['id'])){
                     <th>Status</th>
                 </tr>
             </thead>
-        <tbody style="font-size:14px;">
+        <tbody style="font-size:12px;">
             <?php 
                     $i = 1;
                     $qry = $conn->query("SELECT * FROM t_av_breakdown WHERE av_no = '{$_GET['id']}' ORDER BY payment_count ASC") ;

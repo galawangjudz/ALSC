@@ -3,23 +3,24 @@ include '../../config.php';
 
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $csr = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, 
-							y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
-							t_lots z,  t_projects q
-							where x.c_csr_no = y.c_csr_no 
-							and x.c_lot_lid = z.c_lid 
-							and z.c_site = q.c_code 
-							and y.c_buyer_count = 1 
-							and x.c_csr_no = ".$_GET['id']);
-    foreach($csr->fetch_assoc() as $k =>$v){
-        $meta[$k] = $v;
-    }
+			y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
+			t_lots z,  t_projects q
+			where x.c_csr_no = y.c_csr_no 
+			and x.c_lot_lid = z.c_lid 
+			and z.c_site = q.c_code 
+			and y.c_buyer_count = 1 
+			and x.c_csr_no = ".$_GET['id']);
+		foreach($csr->fetch_assoc() as $k =>$v){
+			$meta[$k] = $v;
+		}
     }
 
-
+$username = $_settings->userdata('username');
 ?>
 
 <div class="container-fluid">
 	<form action="" id="approval-form">
+		<input type="hidden" name="type"  id="type" value="<?php echo $username; ?>">
 		<input type="hidden" name="id"  id="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
 		<input type="hidden" name="lid" id="lid" value="<?php echo isset($meta['c_lot_lid']) ? $meta['c_lot_lid']: '' ?>">
 		<input type="hidden" name="reservation_amt" id="reservation_amt" value="<?php  echo isset($meta['c_reservation']) ? $meta['c_reservation']: '' ?>">

@@ -60,7 +60,7 @@ table td{
     margin-right:auto;
     margin-left:auto;
     height:auto;
-    display: block!important; /* remove extra space below image */
+    display: block!important;
     }
 .tab-content {
   display: none;
@@ -408,18 +408,29 @@ table {
                   <tr style="width:100%;">
                     <td style="width:10%;">
                     <?php
-                      $qry19 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl1 = 0");
-                      $qry11 = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' and pending_status=1");
-                      if($qry11 ->num_rows > 0){
-                        echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for Restructuring</a>';
-                      }
-                      else if($qry19->num_rows > 0){
-                        echo "<a href='./?page=clients/payment_wdw&id=" . md5($property_id) . "' class='btn btn-flat btn-success pull-right disabled-link' style='width:100%; font-size:13px;' disabled><span class='fas fa-plus'></span>&nbsp;&nbsp;New Payment</a>";
-                      }else{
-                        echo "<a href='./?page=clients/payment_wdw&id=" . md5($property_id) . "' class='btn btn-flat btn-success pull-right' style='width:100%; font-size:13px;'><span class='fas fa-plus'></span>&nbsp;&nbsp;New Payment</a>";
-                      }
+                      $qry_av_summary = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND (lvl1 = 0 or lvl2 = 0 or lvl3 = 0)");
+                      $qry_pending_res = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' and pending_status=1");
 
-                    ?>
+                      // Check if there are pending restructuring records
+                      $showPendingRestructuringButton = ($qry_pending_res->num_rows > 0);
+
+                      // Check if there are pending payment records
+                      $showNewPaymentButton = ($qry_av_summary->num_rows > 0);
+
+                      ?>
+                    <?php if ($showPendingRestructuringButton) { ?>
+                        <a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled>
+                            <span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for Restructuring
+                        </a>
+                    <?php } else { ?>
+                      <a href="./?page=clients/payment_wdw&id=<?php echo md5($property_id); ?>" class="btn btn-flat btn-success pull-right" style="width:100%; font-size:13px;">
+                        <span class="fas fa-plus"></span>&nbsp;&nbsp;New Payment
+                    </a>
+                    <?php } ?>
+                    
+
+
+
                     </td>
                     <td style="width:10%;">
                       <a href="<?php echo base_url ?>/report/print_properties.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-secondary pull-right"  style="width:100%;font-size:13px;"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>            
@@ -432,14 +443,28 @@ table {
                     </td>
                     <td style="width:10%;">
                     <?php
-                    $qry13 = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND lvl1 = 0 or lvl2 = 0 or lvl3 = 0");
-                    if ($qry13->num_rows > 0) {
-                        echo '<a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px;" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>';
-                    }
-                    ?>
-                    <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width:100%;font-size:13px; <?php if ($qry13->num_rows > 0) { echo 'display: none;'; } ?>"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
-                </td>
+                        $qry_av_summary = $conn->query("SELECT * FROM t_av_summary WHERE MD5(property_id) = '{$_GET['id']}' AND (lvl1 = 0 or lvl2 = 0 or lvl3 = 0)");
+                        $qry_pending_res = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' and pending_status=1");
+  
+                        // Check if there are pending restructuring records
+                        $showPendingRestructuringButton = ($qry_pending_res->num_rows > 0);
+  
+                        // Check if there are pending payment records
+                        $showNewPaymentButton = ($qry_av_summary->num_rows > 0);
+  
+                        ?>
+                    
+                   
+                         <a class="btn btn-flat btn-dark new_av" prop-id="<?php echo $property_id; ?>" style="width: 100%; font-size: 13px; <?php if ($qry_av_summary->num_rows > 0) { echo 'display: none;'; } else { echo 'display: inline-block;'; } ?>"><span class="fas fa-receipt"></span>&nbsp;&nbsp;AV</a>
 
+
+                                        
+   
+                          <a href="" class="btn btn-flat bg-maroon pull-right disabled-link" style="width:100%; font-size:13px; <?php if ($qry_av_summary->num_rows > 0) { echo 'display: block;'; } else { echo 'display: none;'; } ?>" disabled><span class="fas fa-redo"></span>&nbsp;&nbsp;Pending for AV</a>
+
+
+
+                </td>
                   </tr>
                 </table>
               </div>  
@@ -500,17 +525,18 @@ table {
                         <td class="text-center" style="font-size:13px;width:12%;"><?php echo $pay_dte ?> </td> 
                         <td class="text-center" style="font-size:13px;width:10%;">
                         <?php
-                         if (strpos($or_no, 'RSTR') === 0) {
-                            // If $or_no starts with 'RSTR', create a link or button here
-                          ?> <a class="basic-link view_restruc" data-id="<?php echo md5($row['property_id']) ?>" cid="<?php echo str_replace('RSTR-', '', $or_no) ?>"><?php echo $or_no; ?> </a>
-                          <?php
-                          } else if (strpos($or_no, 'AV') === 0) {
-                            // If $or_no starts with 'RSTR', create a link or button here
-                            ?> <a class="basic-link view_av" data-id="<?php echo md5($row['property_id']) ?>" cid="<?php echo  $or_no; ?>"><?php echo $or_no; ?> </a>
-                        <?php } else {
-                            // If $or_no doesn't start with 'RSTR', just output its value as plain text
-                            echo $or_no;
-                        }  ?> </td> 
+                          if (strpos($or_no, 'RSTR') === 0) {
+                              echo '<a class="basic-link view_restruc" data-id="' . md5($row['property_id']) . '" cid="' . str_replace('RSTR-', '', $or_no) . '">' . $or_no . '</a>';
+                          } elseif (strpos($or_no, 'AV') === 0) {
+                              echo '<a class="basic-link view_av" data-id="' . md5($row['property_id']) . '" cid="' . $or_no . '">' . $or_no . '</a>';
+                          } elseif (strpos($or_no, 'CM') === 0 || strpos($or_no, 'DM') === 0) {
+                              $newId = substr($or_no, 2); 
+                              echo '<a class="basic-link view_cm" data-id="' . $or_no . '">' . $or_no . '</a>';
+                          } else {
+                              echo $or_no;
+                          }
+                          ?>
+                        </td> 
                         <td class="text-center" style="font-size:13px;width:15%;"><?php echo number_format($amt_paid,2) ?> </td>
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($surcharge,2) ?> </td>  
                         <td class="text-center" style="font-size:13px;width:10%;"><?php echo number_format($interest,2) ?> </td> 
@@ -531,14 +557,9 @@ table {
                           <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}' ";
 
                             $result = mysqli_query($conn, $qry_prin);
-
-                            // Check if the query was successful
                             if (mysqli_num_rows($result) > 0) {
-                                // Fetch the result as an associative array
                                 $row = mysqli_fetch_assoc($result);
-                                // Get the sum value
                                 $total_prin = $row["p_principal"];
-                                // Display the sum value
                             } else {
                                 echo "No results found.";
                             }
@@ -546,14 +567,9 @@ table {
                             <?php $qry_surcharge = "SELECT SUM(surcharge) AS p_surcharge FROM property_payments where md5(property_id) = '{$_GET['id']}' ";
 
                             $result = mysqli_query($conn, $qry_surcharge);
-
-                            // Check if the query was successful
                             if (mysqli_num_rows($result) > 0) {
-                                // Fetch the result as an associative array
                                 $row = mysqli_fetch_assoc($result);
-                                // Get the sum value
                                 $total_surcharge = $row["p_surcharge"];
-                                // Display the sum value
                             } else {
                                 echo "No results found.";
                             }
@@ -561,14 +577,9 @@ table {
                             <?php $qry_interest = "SELECT SUM(interest) AS p_interest FROM property_payments where md5(property_id) = '{$_GET['id']}' ";
 
                             $result = mysqli_query($conn, $qry_interest);
-
-                            // Check if the query was successful
                             if (mysqli_num_rows($result) > 0) {
-                                // Fetch the result as an associative array
                                 $row = mysqli_fetch_assoc($result);
-                                // Get the sum value
                                 $total_interest = $row["p_interest"];
-                                // Display the sum value
                             } else {
                                 echo "No results found.";
                             }
@@ -576,16 +587,10 @@ table {
                             <?php $qry_amt_due = "SELECT SUM(amount_due) AS p_amt_due FROM property_payments where md5(property_id) = '{$_GET['id']}' ";
 
                               $result = mysqli_query($conn, $qry_amt_due);
-
-                              // Check if the query was successful
                               if (mysqli_num_rows($result) > 0) {
-                                  // Fetch the result as an associative array
                                   $row = mysqli_fetch_assoc($result);
-                                  // Get the sum value
                                   $total_amt_due = $row["p_amt_due"];
-
                                   $main_total = $total_amt_due + $total_interest + $total_surcharge + $total_prin;
-                                  // Display the sum value
                               } else {
                                   echo "No results found.";
                               }
@@ -893,7 +898,9 @@ $(document).ready(function() {
 	  uni_modal_right("<i class='fa fa-info'></i> Restructuring Details",'clients/restructuring/restructuring_details.php?id='+$(this).attr('data-id') + '&cid=' + $(this).attr('cid') ,"mid-large")
     })
 
-
+    $('.view_cm').click(function(){
+      uni_modal_right('<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;&nbsp;View Credit/Debit Memo Details', 'clients/credit-memo/cm_modal.php?id=' + $(this).attr('data-id'), 'mid-large');
+    })
     
     $('.view_av').click(function(){
       uni_modal_2("<i class='fa fa-info'></i> AV Details",'clients/application_voucher/av_modal.php?id=' + $(this).attr('cid'), 'mid-large')

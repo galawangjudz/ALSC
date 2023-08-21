@@ -160,7 +160,7 @@
 <?php 
 
 $usertype = $_settings->userdata('user_type');
-
+$type = $_settings->userdata('id');
 
 
 
@@ -291,18 +291,18 @@ if($csr->num_rows > 0){
                         </td>           
                         <td>
                         <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="1" class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verified</button>  
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="1" user-type=<?php echo $type?> class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verified</button>  
                         </td>
                         <td>                          
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="2" class="btn btn-flat btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times-circle" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="2" user-type=<?php echo $type?> class="btn btn-flat btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times-circle" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
                         <?php } ?>
                         </td>
                         <td>
-                        <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "COO" or $usertype == "IT Admin" )){ ?>
-                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
+                        <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "CFO" or $usertype == "COO" or $usertype == "IT Admin" )){ ?>
+                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> user-type=<?php echo $type?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO/CFO Approved</button>
                         </td>
                         <td>
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO Disapproved</button>
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> user-type=<?php echo $type?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO/CFO Disapproved</button>
                         </td>
                         <?php } ?>     
                     </div>
@@ -956,24 +956,24 @@ if($csr->num_rows > 0){
     
 
     $('.coo-disapproval').click(function(){
-		_conf("Are you sure you want to disapproved this CSR?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to disapproved this CSR?","coo_disapproval",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value'),$(this).attr('user-type')])
 	})
 
     $('.sm-verification').click(function(){
-		_conf("Are you sure you want to verify this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to verify this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value'),$(this).attr('user-type')])
 	})
 
     $('.sm-verification2').click(function(){
-		_conf("Are you sure you want to void this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value')])
+		_conf("Are you sure you want to void this CSR?","sm_verification",[$(this).attr('csr-id'),$(this).attr('csr-lot-lid'),$(this).attr('value'),$(this).attr('user-type')])
 	})
 
 
-    function sm_verification($id,$lid,$value){
+    function sm_verification($id,$lid,$value,$type){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=sm_verification",
 			method:'POST',
-			data:{id:$id,lid:$lid,value:$value},
+			data:{id:$id,lid:$lid,value:$value,type:$type},
 			dataType:"json",
 			error:err=>{
 				console.log(err)
@@ -999,12 +999,12 @@ if($csr->num_rows > 0){
 		})
 	}
 
-    function coo_disapproval($id,$lid,$value){
+    function coo_disapproval($id,$lid,$value,$type){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=coo_disapproval",
 			method:'POST',
-			data:{id:$id,lid:$lid,value:$value},
+			data:{id:$id,lid:$lid,value:$value,type:$type},
 			dataType:"json",
 			error:err=>{
 				console.log(err)
@@ -1033,7 +1033,7 @@ if($csr->num_rows > 0){
 
 
     $('.new-coo-approval').click(function(){   
-        uni_modal("<i class='fa fa-plus'></i> COO Approval",'sales/approval.php?id='+$(this).attr('data-csr-id'),"mid-small")
+        uni_modal("<i class='fa fa-plus'></i> COO Approval",'sales/approval.php?id='+$(this).attr('data-csr-id'),$(this).attr('user-type'),"mid-small")
     })
 
 

@@ -19,7 +19,7 @@ if(isset($_GET['id'])){
 
 
 <?php
-
+$username = $_settings->userdata('username');
 $usertype = $_settings->userdata('user_type');
 if (!isset($usertype)) {
     include '404.html';
@@ -54,6 +54,8 @@ if ($user_role != 'IT Admin') {
 	<div class="card-body">
 		<div class="container-fluid">
         <form action="" id="manage-project">
+        <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new project site">
+        <input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated project site">
         <input type="hidden" name="prod_id" value="<?php echo isset($meta['c_code']) ? $meta['c_code']: '' ?>">
             <div class="form-group">
                 <label class="control-label">Code: </label>

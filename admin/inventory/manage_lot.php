@@ -9,7 +9,7 @@ if($_settings->chk_flashdata('success')): ?>
 
 
 <?php
-
+$username = $_settings->userdata('username');
 $usertype = $_settings->userdata('user_type');
 if (!isset($usertype)) {
     include '404.html';
@@ -55,8 +55,9 @@ if(isset($_GET['id'])){
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-			
             <form action="" id="manage-lot">
+                <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new lot ">
+                <input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated lot ">
                 <input type="hidden" name="prod_lid" id="prod_lid" value="<?php echo isset($meta['c_lid']) ? $meta['c_lid']: '' ?>">
                 <div class="form-group">
                     <label class="control-label">Phase: </label>
