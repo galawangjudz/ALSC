@@ -6,7 +6,8 @@
 </script>
 <?php endif;?>
 <?php
-	$usertype = $_settings->userdata('user_type');
+	$username = $_settings->userdata('username'); 
+	$type = $_settings->userdata('id');
 ?>
 
 <style>

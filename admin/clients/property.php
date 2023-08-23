@@ -3,7 +3,10 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-
+<?php
+$username = $_settings->userdata('username'); 
+$type = $_settings->userdata('id');
+?>
 <style>
 .disabled-link {
   pointer-events: none;
@@ -284,13 +287,13 @@ table {
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                 <span class="tooltip">View</span>
                               </a>
-                              <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:37px;" prop-id="<?php echo $row['property_id'] ?>" id="view_tooltip">
+                              <a class="btn btn-flat btn-warning btn-s retention_acc" style="font-size:12px;height:30px;width:37px;" prop-id="<?php echo $row['property_id'] ?>" user-type="<?php echo $type; ?>" id="view_tooltip">
                                 <i class="fa fa-magnet" aria-hidden="true"></i>
                                 <span class="tooltip">Retention</span></a>
                                 <?php
                                   $qry12 = $conn->query("SELECT * FROM pending_restructuring where md5(property_id) = '{$_GET['id']}' and pending_status = 1 ");
                                   if ($qry12->num_rows > 0) {
-                                      echo '<a class="btn btn-primary btn-flat restructured_data disabled" style="font-size:12px;height:30px;width:37px;" data-id="' . md5($row['property_id']) . '" id="view_tooltip" onclick="return false;">
+                                      echo '<a class="btn btn-primary btn-flat restructured_data disabled" style="font-size:12px;height:30px;width:37px;" data-id="' . md5($row['property_id']) . '" user-type="<?php echo $type; ?>" id="view_tooltip" onclick="return false;">
                                           <i class="fa fa-redo" aria-hidden="true"></i>
                                           <span class="tooltip">Restructuring</span>
                                       </a>';
@@ -301,7 +304,7 @@ table {
                                       </a>';
                                   }
                                   ?>
-                              <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no'] ?>" id="view_tooltip">
+                              <a class="btn btn-danger btn-flat backout_acc" style="font-size: 12px; height: 30px; width: 37px;" prop-id="<?php echo $row['property_id'] ?>" csr-no="<?php echo $row['c_csr_no'] ?>" user-type="<?php echo $type; ?>" id="view_tooltip">
                                 <i class="fa fa-archive" aria-hidden="true"></i>
                                 <span class="tooltip">Backout</span>
                               </a>
@@ -736,16 +739,23 @@ $(document).ready(function() {
 
   $('#data-table').dataTable({
 
-  }); 
+  });
+  
+  $('.retention_acc').click(function() {
+    var propId = $(this).attr('prop-id');
+    var userType = $(this).attr('user-type');
+    
+        _conf("Are you absolutely sure you want to place this account into retention?<b>" + userType + "</b>", "retention_acc", [propId, userType]);
+    });
 
-    $('.retention_acc').click(function(){
-        _conf("Are you absolutely sure you want to place this account into retention?","retention_acc",[$(this).attr('prop-id')])
-    }) 
 
-    $('.backout_acc').click(function(){
-        _conf("Are you absolutely certain about backing out this account?","backout_acc",[$(this).attr('prop-id'),$(this).attr('csr-no')])
-    }) 
-
+    $('.backout_acc').click(function() {
+    var propId = $(this).attr('prop-id');
+    var csrNo = $(this).attr('csr-no');
+    var userType = $(this).attr('user-type');
+    
+        _conf("Are you absolutely certain about backing out this account?<b>" + userType + "</b>", "backout_acc", [propId, csrNo, userType]);
+    });
 
     $('.delete-last-or').click(function(){
         _conf("Are you absolutely sure you want to delete this OR?","delete_last_or",[$(this).attr('prop-id')])
@@ -792,12 +802,12 @@ $(document).ready(function() {
         })
     }
 
-    function retention_acc($prop_id){
+    function retention_acc($prop_id,$type){
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=set_retention",
             method:"POST",
-            data:{prop_id: $prop_id},
+            data:{prop_id: $prop_id,type:$type},
             dataType:"json",
             error:err=>{
                 console.log(err)
@@ -816,12 +826,12 @@ $(document).ready(function() {
     }
 
 
-    function backout_acc($prop_id,$csr_no){
+    function backout_acc($prop_id,$csr_no,$type){
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=backout_acc",
             method:"POST",
-            data:{prop_id: $prop_id, csr_no: $csr_no},
+            data:{prop_id: $prop_id, csr_no: $csr_no,type:$type},
             dataType:"json",
             error:err=>{
                 console.log(err)

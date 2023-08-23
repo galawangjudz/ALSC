@@ -172,8 +172,28 @@ Class Master extends DBConnection {
 
 	function add_data(){
 		extract($_POST);
+		
 		$del = $this->conn->query("UPDATE family_members SET status=1 where member_id = ".$id);
 		if($del){
+
+		$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+		while($row = $sql->fetch_assoc()){
+			$usertype= $row['username'];
+		}
+			$users_to_notify = array('IT Admin'); 
+
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+						"message = '$usertype approved family member for client #.$clientId.'",
+						"user_to_be_notified = '$user'",
+						"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Information successfully updated.");
 		}else{
@@ -1063,9 +1083,6 @@ Class Master extends DBConnection {
 		exit;
 
 	}	
-
-
-	
 	function coo_disapproval(){
 		extract($_POST);
 		$data = ", c_lot_lid = '$lid' ";
@@ -2899,13 +2916,43 @@ Class Master extends DBConnection {
 		} 
 		if(empty($member_id)){
 			/* $sql = "SELECT * FROM t_buyer_info"; */
+
+
+			$users_to_notify = array('IT Admin'); 
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm$client_id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
+
 			$sql = "INSERT INTO family_members set ".$data;
 			$save = $this->conn->query($sql);
 		}else{
 			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$users_to_notify = array('IT Admin'); 
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm2$client_id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
+
 			$sql = "UPDATE family_members set ".$data." where member_id = ".$member_id;
 			$save = $this->conn->query($sql);
-		}
+		}	
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($member_id))
@@ -3146,6 +3193,21 @@ Class Master extends DBConnection {
 		#donita binago ko to para mas malinis
 		$save = $this->conn->query("INSERT INTO pending_restructuring set ". $data);
 		if($save){
+			
+			$users_to_notify = array('IT Admin'); 
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+				"message = '$comm'",
+				"user_to_be_notified = '$user'",
+				"seen = '0'"
+			);
+
+			$data_notif = implode(", ", $data_notif_values);
+
+			$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+
+		}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Restructuring successfully created.");
 
@@ -3354,6 +3416,20 @@ Class Master extends DBConnection {
 
 
 			if($save){
+				$users_to_notify = array('IT Admin'); 
+
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+						"message = '$comm'",
+						"user_to_be_notified = '$user'",
+						"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 				$resp['status'] = 'success';
 				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
 
@@ -3573,6 +3649,23 @@ Class Master extends DBConnection {
 		$ret = $this->conn->query("UPDATE properties set c_retention = '1' where property_id = ".$prop_id);
 		//echo $ret;
 		if($ret){
+			$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+				while($row = $sql->fetch_assoc()){
+					$usertype= $row['username'];
+				}
+				$users_to_notify = array('IT Admin'); 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype set client with property ID #$prop_id to retention.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Property successfully set to Retention.");
 		}else{
@@ -3592,6 +3685,24 @@ Class Master extends DBConnection {
 
 		//echo $ret;
 		if($backout && $update_lot){
+
+			$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+				while($row = $sql->fetch_assoc()){
+					$usertype= $row['username'];
+				}
+				$users_to_notify = array('IT Admin'); 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype set client with property ID #$prop_id to backout.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Property successfully Backout.");
 		}else{
