@@ -77,11 +77,6 @@
                       </a>
                     </li>  -->
 
-
-
-
-
-
                     <?php if ($usertype == "IT Admin" || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
                     <!-- <li class="nav-item dropdown">
