@@ -178,14 +178,14 @@
 							<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 							<?php
 								if ($usertype == "Billing"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
+									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '"  user-type="' . $usertype . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
 										</a>';
 								endif;
 								if ($usertype == "Billing"):
-									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
+									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 											<span class="tooltip">Disapproved</span>
@@ -242,14 +242,14 @@
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
 									if ($usertype == "Manager"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" 
+										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
 									if ($usertype == "Manager"):
-										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" 
+										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 												<span class="tooltip">Disapproved</span>
@@ -306,14 +306,14 @@
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
 									if ($usertype == "CFO" or $usertype=="COO"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
+										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
 									if ($usertype == "CFO" or $usertype=="COO"):
-										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
+										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 												<span class="tooltip">Disapproved</span>
@@ -369,7 +369,7 @@
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php if ($usertype == "IT Admin"): ?>
-									<a class="btn btn-flat btn-primary btn-s approved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" 
+									<a class="btn btn-flat btn-primary btn-s approved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" user-type="' . $usertype . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
@@ -377,7 +377,7 @@
 								<?php endif; ?>
 
 								<?php if ($usertype == "IT Admin"): ?>
-									&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" 
+									&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" user-type="' . $usertype . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 										<span class="tooltip">Disapproved</span>
@@ -418,6 +418,7 @@ $('.approved_av').click(function(){
 	dataId = dataId.replace(/^AV/, '');
 	var value = $(this).attr('value');
     var propId = $(this).attr('prop-id');
+	var userType = $(this).attr('');
 
     _conf("Are you sure you want to approve this application voucher?", "approved_av", [ dataId, value, propId]);
 });
