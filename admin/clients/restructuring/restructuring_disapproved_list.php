@@ -120,20 +120,11 @@
                 <table class="table table-bordered table-stripped" style="text-align:center;font-size:14px;">
                     <thead>
                         <tr>
+						<th>Restructured No.</th>
 						<th>Property ID</th>
 						<th>Last Name</th>
 						<th>First Name</th>
 						<th>Middle Name</th>
-                        <!-- <th>Payment Amt.</th>
-                        <th>Pay Date</th>
-						<th>Due Date</th>
-                        <th>OR No.</th>
-                        <th>Amt Due</th>
-						<th>Rebate</th>
-						<th>Surcharge</th>
-                        <th>Interest</th>
-                        <th>Principal</th>
-                        <th>Rem Bal</th> -->
                         <th>Billing Status</th>
                         <th>FM Status</th>
                         <th>CFO Status</th>
@@ -143,59 +134,52 @@
                     <tbody>
                     <?php                         
 					$i = 1;
-					
-					
-					/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+					if($usertype=='Billing')
+					{
+						/* $qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
-						y.remaining_balance, y.payment_count,
-						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=2 or y.lvl2=2 or y.lvl3=2
-						GROUP BY y.property_id;");
- */
-						$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
-						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl2=2 or y.lvl2=2 or y.lvl3=2
-						GROUP BY y.property_id;");
-                            while($row = $qry->fetch_assoc()):   
+						y.remaining_balance, y.payment_count,y.status,
+						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=0 and y.status='RESTRUCTURED'
+						GROUP BY y.property_id;"); */
+
+
+						$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y inner JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=2 ");
+
+                        while($row = $qry->fetch_assoc()):   
 								  
                         ?>
                         <tr>
+						<td><?php echo $row["id"]; ?> </a></td>
 						<td><?php echo $row["property_id"] ?></a></td>
 						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
 						<td><?php echo $row["last_name"] ?></a></td>
 						<td><?php echo $row["first_name"] ?></a></td>
 						<td><?php echo $row["middle_name"] ?></a></td>
-                        <!-- <td><?php echo number_format($row["payment_amount"],2) ?></td>
-                        <td><?php echo $row["pay_date"] ?></td>
-						<td><?php echo $row["due_date"] ?></td>
-						<td><?php echo $row["or_no"] ?></td>
-                        <td><?php echo number_format($row["amount_due"],2) ?></td>
-                        <td><?php echo number_format($row["rebate"],2) ?></td>
-						<td><?php echo number_format($row["surcharge"],2) ?></td>
-                        <td><?php echo number_format($row["interest"],2) ?></td>
-                        <td><?php echo number_format($row["principal"],2) ?></td>
-                        <td><?php echo number_format($row["remaining_balance"],2) ?></td> -->
 
                         <?php if($row['lvl1'] == 0): ?>
 							<td><span class="badge badge-warning">Pending</span></td>
 						<?php elseif ($row['lvl1'] == 1): ?>
 							<td><span class="badge badge-success">Approved </span></td>
 						<?php elseif ($row['lvl1'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span class="badge badge-danger">Disapproved </span></td>
 						<?php endif; ?>
 
                         <?php if($row['lvl2'] == 0): ?>
-							<td><span class="badge badge-warning">Pending</span></td>
+							<td><span>---</span></td>
 						<?php elseif ($row['lvl2'] == 1): ?>
-							<td><span class="badge badge-success">Approved </span></td>
+							<td><span>---</span></td>
 						<?php elseif ($row['lvl2'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span>---</span></td>
 						<?php endif; ?>
 
                         <?php if($row['lvl3'] == 0): ?>
-							<td><span class="badge badge-warning">Pending</span></td>
+							<td><span>---</span></td>
 						<?php elseif ($row['lvl3'] == 1): ?>
-							<td><span class="badge badge-success">Approved </span></td>
+							<td><span>---</span></td>
 						<?php elseif ($row['lvl3'] == 2): ?>
-							<td><span class="badge badge-danger">Dispproved </span></td>
+							<td><span>---</span></td>
 						<?php endif; ?>
 
                         <td>
@@ -205,63 +189,197 @@
                             </a>
 							<?php
 							?>
-							<!-- <?php 
-								if($usertype=="Billing"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="4" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-									echo '<span class="tooltip">Approved</span>';
-									echo '</a>';
-								elseif($usertype=="Manager"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="3" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-									echo '<span class="tooltip">Approved</span>';
-									echo '</a>';
-								elseif($usertype=="CFO"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="2" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-									echo '<span class="tooltip">Approved</span>';
-									echo '</a>';
-								elseif($usertype=="IT Admin"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-									echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-									echo '<span class="tooltip">Approved</span>';
-									echo '</a>';
-								endif;
+							
+                        	</td>
+                        </tr>
+                    <?php endwhile; ?>
+					<?php                         
+					}
+					elseif($usertype=='Manager')
+					{
+						/* $qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
+						y.remaining_balance, y.payment_count,
+						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=0 and y.status='RESTRUCTURED'
+						GROUP BY y.property_id;"); */
+
+						$qry = $conn->query("SELECT  y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1 = 1 and y.lvl2 = 2
+						");
+
+						
+								while($row = $qry->fetch_assoc()):   
+									  
 							?>
-							<?php 
-							if($usertype=="Billing"):
-                            	echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="4" id="view_tooltip">';
-                                echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
-                                echo '<span class="tooltip">Disapproved</span>';
-                            	echo '</a>';
-							elseif($usertype=="Manager"):	
-								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="3" id="view_tooltip">';
-                                echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
-                                echo '<span class="tooltip">Disapproved</span>';
-                            	echo '</a>';
-							elseif($usertype=="CFO"):	
-								echo '<a class="btn btn-flat btn-danger btn-s disapproved_res" style="font-size: 12px; height: 30px; width: 37px;" data-id="' . $row['property_id'] . '" value="2" id="view_tooltip">';
-                                echo '<i class="fa fa-thumbs-down" aria-hidden="true"></i>';
-                                echo '<span class="tooltip">Disapproved</span>';
-                            	echo '</a>';
-							elseif($usertype=="IT Admin"):
-								echo '<a class="btn btn-flat btn-primary btn-s approved_res" data-id="' . $row['property_id'] . '" value="1" style="font-size: 12px; height: 30px; width: 37px;" id="view_tooltip">';
-								echo '<i class="fa fa-thumbs-up" aria-hidden="true"></i>';
-								echo '<span class="tooltip">Approved</span>';
-								echo '</a>';
-							endif;
-							?> -->
+							<tr>
+							<td><?php echo $row["id"]; ?> </a></td>
+							<td><?php echo $row["property_id"] ?></a></td>
+							<?php $prop_id = $row["property_id"]; ?>
+							<?php $cid = $row["id"]; ?>
+							<td><?php echo $row["last_name"] ?></a></td>
+							<td><?php echo $row["first_name"] ?></a></td>
+							<td><?php echo $row["middle_name"] ?></a></td>
+	
+							<?php if($row['lvl1'] == 0): ?>
+								<td><span class="badge badge-warning">Pending</span></td>
+							<?php elseif ($row['lvl1'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl1'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<?php if($row['lvl2'] == 0): ?>
+								<td><span class="badge badge-warning">Pending</span></td>
+							<?php elseif ($row['lvl2'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl2'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<?php if($row['lvl3'] == 0): ?>
+								<td><span>---</span></td>
+							<?php elseif ($row['lvl3'] == 1): ?>
+								<td><span>---</span></td>
+							<?php elseif ($row['lvl3'] == 2): ?>
+								<td><span>---</span></td>
+							<?php endif; ?>
+	
+							<td>
+								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+									<span class="tooltip">View</span>
+								</a>
+								<?php
+								?>
+								</td>
+							</tr>
+						<?php endwhile; ?>
+					<?php                         
+					}
+					elseif($usertype=='CFO' or $usertype=='COO'){
+					/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
+						y.remaining_balance, y.payment_count,
+						y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0 and y.status='RESTRUCTURED'
+						GROUP BY y.property_id;"); */
+
+						$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+						y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=2
+						");
+
+                            while($row = $qry->fetch_assoc()):
+								  
+                        ?>
+                        <tr>
+						<td><?php echo $row["id"]; ?> </a></td>
+						<td><?php echo $row["property_id"] ?></td>
+						<?php $prop_id = $row["property_id"]; ?>
+						<?php $cid = $row["id"]; ?>
+						<td><?php echo $row["last_name"] ?></td>
+						<td><?php echo $row["first_name"] ?></td>
+						<td><?php echo $row["middle_name"] ?></td>
+
+                        <?php if($row['lvl1'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['lvl1'] == 1): ?>
+							<td><span class="badge badge-success">Approved </span></td>
+						<?php elseif ($row['lvl1'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved </span></td>
+						<?php endif; ?>
+
+                        <?php if($row['lvl2'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['lvl2'] == 1): ?>
+							<td><span class="badge badge-success">Approved </span></td>
+						<?php elseif ($row['lvl2'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved </span></td>
+						<?php endif; ?>
+
+                        <?php if($row['lvl3'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php elseif ($row['lvl3'] == 1): ?>
+							<td><span class="badge badge-success">Approved </span></td>
+						<?php elseif ($row['lvl3'] == 2): ?>
+							<td><span class="badge badge-danger">Disapproved </span></td>
+						<?php endif; ?>
+
+                        <td>
+                            <a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <span class="tooltip">View</span>
+                            </a>
+							<?php
+							?>
                         	</td>
                         </tr>
 						<?php endwhile; ?>
-
+						<?php                         
+					} elseif($usertype=='IT Admin'){
+						/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
+							y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,
+							y.remaining_balance, y.payment_count,
+							y.lvl3, y.lvl1, y.lvl2 FROM property_payments y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=1 and y.lvl2=1 and y.lvl3=0 and y.status='RESTRUCTURED'
+							GROUP BY y.property_id;"); */
+	
+							$qry = $conn->query("SELECT y.id , z.last_name, z.first_name, z.middle_name,y.property_id, y.pending_status,
+							y.lvl3, y.lvl1, y.lvl2 FROM pending_restructuring y INNER JOIN property_clients z ON y.property_id = z.property_id WHERE y.lvl1=2 or y.lvl2=2 or y.lvl3=2
+							");
+	
+								while($row = $qry->fetch_assoc()):
+									  
+							?>
+							<tr>
+							<td><?php echo $row["id"]; ?> </a></td>
+							<td><?php echo $row["property_id"] ?></td>
+							<?php $prop_id = $row["property_id"]; ?>
+							<?php $cid = $row["id"]; ?>
+							<td><?php echo $row["last_name"] ?></td>
+							<td><?php echo $row["first_name"] ?></td>
+							<td><?php echo $row["middle_name"] ?></td>
+	
+							<?php if($row['lvl1'] == 0): ?>
+								<td><span>---</span></td>
+							<?php elseif ($row['lvl1'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl1'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<?php if($row['lvl2'] == 0): ?>
+								<td><span>---</span></td>
+							<?php elseif ($row['lvl2'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl2'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<?php if($row['lvl3'] == 0): ?>
+								<td><span>---</span></td>
+							<?php elseif ($row['lvl3'] == 1): ?>
+								<td><span class="badge badge-success">Approved </span></td>
+							<?php elseif ($row['lvl3'] == 2): ?>
+								<td><span class="badge badge-danger">Disapproved </span></td>
+							<?php endif; ?>
+	
+							<td>
+								<a class="btn btn-flat btn-success btn-s view_res" style="font-size: 12px; height: 30px; width: 37px;" cid="<?php echo $cid ?>" data-id="<?php echo md5($row['property_id']) ?>" id="view_tooltip">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+									<span class="tooltip">View</span>
+								</a>
+								<?php
+								?>
+								</td>
+							</tr>
+							<?php endwhile; ?>
+							<?php                         
+						} 
+					?>
                     </tbody>
 					</table>
 					</div>                     
             </div>
 
 	</div>
-
 <script>
 $(document).ready(function() {
     $('.table').dataTable(

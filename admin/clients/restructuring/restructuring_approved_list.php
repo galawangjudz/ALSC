@@ -377,7 +377,7 @@
 						<?php endwhile; ?>
 					<?php                         
 					}
-					elseif($usertype=='CFO' || $usertype=='IT Admin')
+					elseif($usertype=='CFO' or $usertype=='COO' or $usertype=='IT Admin')
 					{
 					/* 	$qry = $conn->query("SELECT z.last_name, z.first_name, z.middle_name,y.property_id, y.payment_amount, y.pay_date, y.due_date, y.or_no,
 						y.amount_due, y.rebate, y.surcharge, y.interest, y.principal,

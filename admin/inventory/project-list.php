@@ -1,4 +1,5 @@
 <?php if($_settings->chk_flashdata('success')): ?>
+    
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
@@ -51,7 +52,7 @@
 
 
 <?php
-
+$username = $_settings->userdata('username');
 $usertype = $_settings->userdata('user_type');
 if (!isset($usertype)) {
     include '404.html';

@@ -6,8 +6,7 @@
 <?php endif;?>
 
 <?php 
-
-
+$username = $_settings->userdata('username');
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from t_ca_requirement where md5(c_csr_no) = '{$_GET['id']}'");
     if($qry->num_rows > 0){
@@ -33,6 +32,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="container-fluid">
             <div class="container-fluid">
                 <form method="post" id="save_ca">
+                    <input type="hidden" name="comm"  id="comm" value="<?php echo $username; ?>">
                     <input type="hidden" name="id" value="<?php echo isset($id) ? $id: '' ;?>" >
                     <input type="hidden" name="csr_no" value="<?php echo isset($meta['c_csr_no']) ? $meta['c_csr_no']: '' ;?>" >
                     <div class="row">

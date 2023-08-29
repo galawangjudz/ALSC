@@ -7,7 +7,7 @@ if($_settings->chk_flashdata('success')): ?>
 <?php endif;?>
 <?php
 
-
+$type = $_settings->userdata('id');
 if(isset($_GET['id'])){
     $csr = $conn->query("SELECT c_reserve_date, c_amount_paid FROM t_reservation where md5(c_csr_no) = '{$_GET['id']}' ");    
     while($row=$csr->fetch_assoc()){
@@ -209,7 +209,7 @@ if(isset($_GET['id'])){
 		$.ajax({
             url:_base_url_+'classes/Master.php?f=ca_approval',
 			method:'POST',
-			data:{ra_id:'<?php echo $ra_id ?>',id:'<?php echo $csr_no ?>',lot_id:'<?php echo $lot_id ?>',value:$(this).attr('value')},
+			data:{ra_id:'<?php echo $ra_id ?>',id:'<?php echo $csr_no ?>',lot_id:'<?php echo $lot_id ?>',value:$(this).attr('value'),type:'<?php echo $type ?>'},
 			dataType:"json",
 			error:err=>{
                 console.log(err)

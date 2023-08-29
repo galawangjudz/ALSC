@@ -6,7 +6,8 @@
 </script>
 <?php endif;?>
 <?php
-	$usertype = $_settings->userdata('user_type');
+	$username = $_settings->userdata('username'); 
+	$type = $_settings->userdata('id');
 ?>
 
 <style>
@@ -86,13 +87,14 @@
 </style>
 <div class="card" id="container" style="display: flex; justify-content: center;">
     <div class="navbar-menu" style="max-width: 1200px; margin: 0 auto;">
+
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_list" class="main_menu" style="border-left: solid 3px white;" id="pending-link" onclick="highlightLink('res-link')">
 			<i class="fa fa-clock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Pending List
         </a>
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_approved_list" class="main_menu">
 			<i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Approved List
 		</a>
-		<?php if ($usertype != "CFO"){ ?>
+		<?php if ($usertype != "CFO" and $usertype != "COO"){ ?>
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_disapproved_list" class="main_menu">
 			<i class="fa fa-thumbs-down" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Disapproved List
         </a>
@@ -137,7 +139,7 @@
 								  
                         ?>
                         <tr>
-						<td><?php echo $row["c_av_no"] ?></td>
+						<td>AV<?php echo $row["c_av_no"] ?></td>
 						<td><?php echo $row["property_id"] ?></td>
 						<td><?php echo $row["c_av_date"] ?></td>
 						<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -176,14 +178,14 @@
 							<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 							<?php
 								if ($usertype == "Billing"):
-									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
+									echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '"  user-type="' . $usertype . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
 										</a>';
 								endif;
 								if ($usertype == "Billing"):
-									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" 
+									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="4" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 											<span class="tooltip">Disapproved</span>
@@ -201,7 +203,7 @@
 									  
 							?>
 							<tr>
-							<td><?php echo $row["c_av_no"] ?></td>
+							<td>AV<?php echo $row["c_av_no"] ?></td>
 							<td><?php echo $row["property_id"] ?></td>
 							<td><?php echo $row["c_av_date"] ?></td>
 							<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -240,14 +242,14 @@
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
 									if ($usertype == "Manager"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" 
+										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
 									if ($usertype == "Manager"):
-										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" 
+										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="3" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 												<span class="tooltip">Disapproved</span>
@@ -258,14 +260,14 @@
 							</tr>
 							<?php endwhile; ?>
 							<?php        
-						}elseif($usertype=='CFO'){
+						}elseif($usertype=='CFO' or $usertype=='COO'){
 							//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
 							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 1 and y.lvl2 = 1 and y.lvl3 = 0");
 							while($row = $qry->fetch_assoc()):   
 									
 							?>
 							<tr>
-							<td><?php echo $row["c_av_no"] ?></td>
+							<td>AV<?php echo $row["c_av_no"] ?></td>
 							<td><?php echo $row["property_id"] ?></td>
 							<td><?php echo $row["c_av_date"] ?></td>
 							<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -303,15 +305,15 @@
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
-									if ($usertype == "CFO"):
-										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
+									if ($usertype == "CFO" or $usertype=="COO"):
+										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
-									if ($usertype == "CFO"):
-										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" 
+									if ($usertype == "CFO" or $usertype=="COO"):
+										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 												<span class="tooltip">Disapproved</span>
@@ -324,12 +326,12 @@
 							<?php        
 						}elseif($usertype=='IT Admin'){
 							//$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0");
-							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE y.lvl1 = 0 or y.lvl2 = 0 or y.lvl3 = 0");
+							$qry = $conn->query("SELECT y.*, z.* FROM t_av_summary AS y INNER JOIN property_clients AS z ON y.property_id = z.property_id WHERE (y.lvl1 !=2 and y.lvl2 !=2 and y.lvl3 !=2) and (y.lvl1 =0 or y.lvl2 =0 or y.lvl3 =0);");
 							while($row = $qry->fetch_assoc()):   
 									
 							?>
 							<tr>
-							<td><?php echo $row["c_av_no"] ?></td>
+							<td>AV<?php echo $row["c_av_no"] ?></td>
 							<td><?php echo $row["property_id"] ?></td>
 							<td><?php echo $row["c_av_date"] ?></td>
 							<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -367,7 +369,7 @@
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php if ($usertype == "IT Admin"): ?>
-									<a class="btn btn-flat btn-primary btn-s approved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" 
+									<a class="btn btn-flat btn-primary btn-s approved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" user-type="' . $usertype . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 										<span class="tooltip">Approved</span>
@@ -375,7 +377,7 @@
 								<?php endif; ?>
 
 								<?php if ($usertype == "IT Admin"): ?>
-									&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" 
+									&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="<?= $row['c_av_no'] ?>" value="1" prop-id="<?= $row['property_id'] ?>" user-type="' . $usertype . '" 
 										style="font-size: 10px; height: 30px; width: 37px;">
 										<i class="fa fa-thumbs-down" aria-hidden="true"></i>
 										<span class="tooltip">Disapproved</span>
@@ -416,6 +418,7 @@ $('.approved_av').click(function(){
 	dataId = dataId.replace(/^AV/, '');
 	var value = $(this).attr('value');
     var propId = $(this).attr('prop-id');
+	var userType = $(this).attr('');
 
     _conf("Are you sure you want to approve this application voucher?", "approved_av", [ dataId, value, propId]);
 });

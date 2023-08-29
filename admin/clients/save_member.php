@@ -6,7 +6,7 @@ if($_settings->chk_flashdata('success')): ?>
 </script>
 <?php endif;?>
 <?php
-
+$username = $_settings->userdata('username');
 
 if(isset($_GET['id'])){
 
@@ -14,20 +14,15 @@ if(isset($_GET['id'])){
     foreach($client->fetch_array() as $k =>$v){
         $meta[$k] = $v;
     }
-        }
-
+}
 ?>
 <style>
 #item-list th, #item-list td{
 	padding:5px 3px!important;
 }
-
 .container-fluid p{
     margin: unset
 }
-
-
-
 </style>
 
 <div class="card card-outline rounded-0 card-maroon">
@@ -41,7 +36,8 @@ if(isset($_GET['id'])){
         <input type="hidden" name="member_id" value="<?php echo isset($meta['member_id']) ? $meta['member_id']: '' ?>">
         <input type="hidden" name="client_id" value="<?php echo isset($meta['client_id']) ? $meta['client_id']: $id ?>">
         <input type="hidden" name="username" value="<?php echo $username ?>">
-      
+        <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a member for client # ">
+        <input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated a member for client # ">
         <div class="panel panel-default">
             <div class="panel-body form-group form-group-sm">
                <!--  <div class="main_box"> -->
@@ -108,7 +104,7 @@ if(isset($_GET['id'])){
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Age: </label>
-                                <input type="text" class="form-control margin-bottom required" name="customer_age" id="customer_age" value="<?php echo isset($meta['age']) ? $meta['age']: '' ?>" readonly>
+                                <input type="text" class="form-control margin-bottom required" name="customer_age" id="customer_age" value="<?php echo isset($meta['age']) ? $meta['age']: '' ?>"y>
                             </div>
                         </div>	
                     </div>

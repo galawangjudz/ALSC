@@ -21,9 +21,11 @@ if($_settings->chk_flashdata('success')): ?>
 </style>
 
 <?php
+$originalId = $_GET['id'];
+$newId = substr($originalId, 2); 
 	if (isset($_GET['id'])) {
 		$prop = $conn->query("SELECT y.*, z.*, x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN
-        property_clients AS x ON z.property_id = x.property_id WHERE y.reference = '{$_GET['id']}'");    
+        property_clients AS x ON z.property_id = x.property_id WHERE y.reference = '{$_GET['id']}' or y.cm_id = '{$newId}'");    
         
 		while($row=$prop->fetch_assoc()){
 			$cm_id = $row['cm_id'];

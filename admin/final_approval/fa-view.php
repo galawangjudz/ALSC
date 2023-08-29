@@ -8,7 +8,7 @@ if($_settings->chk_flashdata('success')): ?>
 
 <?php
 
-
+$username = $_settings->userdata('username');
 if(isset($_GET['id'])){
     // $query = "SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no inner join properties a on x.c_csr_no = a.c_csr_no where a.c_csr_no = '{$_GET['id']}' ";
     $query = "SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no where x.c_csr_no = '{$_GET['id']}' ";
@@ -38,6 +38,7 @@ if(isset($_GET['id'])){
     
         <div class="card-body">
             <form action="" id="manage-booked">
+            <input type="text" name="comm"  id="comm" value="<?php echo $username; ?>">
                 <div class="container-fluid">
                     <table class="table table-striped table-hover table-bordered" id="data-table">
                         <tr>

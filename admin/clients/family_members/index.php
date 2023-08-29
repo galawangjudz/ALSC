@@ -3,6 +3,11 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+<?php
+// Assuming you have a class/method to retrieve user data
+$username = $_settings->userdata('username'); 
+$type = $_settings->userdata('id');
+?>
 <style>
 	.main_menu{
 		float:left;
@@ -87,21 +92,21 @@
                         <td><?php echo $row["email"] ?></td>
                         <td><?php echo $row["contact_no"] ?></td>
                         <!-- <td><?php echo $row["relationship"] ?></td> -->
-                        <?php if ($usertype == 'IT Admin'): ?>
+                        <!-- <?php if ($usertype == 'IT Admin'): ?> -->
                             <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
                                 <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item add-data" data-id="<?php echo $row['member_id'] ?>"><span class="fa fa-thumbs-up"></span>&nbsp;&nbsp;Approve</a>
+                                <a class="dropdown-item add-data" data-id="<?php echo $row['member_id'] ?>" user-type="<?php echo $type; ?>" client-id="<?php echo $row["client_id"] ?>"><span class="fa fa-thumbs-up"></span>&nbsp;&nbsp;Approve</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item update_family_mem" data-id="<?php echo $row['member_id'] ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Edit</a>
+                                <a class="dropdown-item update_family_mem" data-id="<?php echo $row['member_id'] ?>" user-type="<?php echo $type ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Edit</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item delete-data" data-id="<?php echo $row['member_id'] ?>"><span class="fa fa-trash text-danger"></span>&nbsp;&nbsp;Delete</a>
+                                <a class="dropdown-item delete-data" data-id="<?php echo $row['member_id'] ?>" user-type="<?php echo $type ?>"><span class="fa fa-trash text-danger"></span>&nbsp;&nbsp;Delete</a>
                                 </div>
                             </td>
-                        <?php endif; ?>
+                        <!-- <?php endif; ?> -->
                         </tr>
                     <?php endwhile; ?>
                     </tbody></table>
@@ -113,9 +118,20 @@
 		$('.table').dataTable();
 	})
 
-    $('.add-data').click(function(){
-        _conf("Are you sure you want to accept this information?","add_data",[$(this).attr('data-id')])
-    }) 
+    // $('.add-data').click(function(){
+    //     _conf("Are you sure you want to accept this information?<b>"+$(this).attr('user-type')+"</b>","add_data",[$(this).attr('data-id')],[$(this).attr('user-type')])
+    //     //_conf("Are you sure to Backout '<b>"+$(this).attr('data-id')+"</b>' from Reopen List permanently?","backout_acc",[$(this).attr('data-id'),$(this).attr('data-csr')])
+    // }) 
+
+    $('.add-data').click(function() {
+    var userId = $(this).attr('data-id');
+    var userType = $(this).attr('user-type');
+    var clientId = $(this).attr('client-id');
+    
+        _conf("Are you sure you want to accept this information?<b>" + userType + "</b>", "add_data", [userId, userType, clientId]);
+    });
+
+
 
     $('.update_family_mem').click(function(){
       //uni_modal_right("<i class='fa fa-paint-brush'></i> Edit Client",'sales/client_update.php?id='+$(this).attr('client-id'),"mid-large")
@@ -150,12 +166,12 @@
         })
     }
 	
-    function add_data($id){
+    function add_data($id,$type,$clientId){
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=add_data",
             method:"POST",
-            data:{id: $id},
+            data:{id: $id,type:$type,clientId:$clientId},
             dataType:"json",
             error:err=>{
                 console.log(err)

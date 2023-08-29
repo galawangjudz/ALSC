@@ -17,7 +17,7 @@ foreach($res->fetch_array() as $k =>$v){
 	$meta[$k] = $v;
 }
 }
-
+$username = $_settings->userdata('username');
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -64,6 +64,8 @@ foreach($res->fetch_array() as $k =>$v){
 						<div class="col-md-12">
 							<div class="form-group">
 								<label>Ra No:</label>
+								<input type="hidden" name="comm" id="comm" value="<?php echo $username ?> created a reservation for CSR # ">
+								<input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated reservation for CSR # ">
 								<input type="hidden" class="form-control margin-bottom" name="id" value="<?php echo isset($meta['id']) ? $meta['id']: '' ?>">
 								<input type="text" class="form-control margin-bottom required" readonly name="ra_no" id="ra_no" value="<?php echo isset($meta['ra_no']) ? $meta['ra_no']: '' ?>" >
 								<input type="hidden" class="form-control margin-bottom required" name="csr_no" id="csr_no" value="<?php echo isset($meta['c_csr_no']) ? $meta['c_csr_no']: '' ?> " >

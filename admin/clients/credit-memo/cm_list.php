@@ -122,7 +122,7 @@
 					$i = 1;
 					if($usertype=='Billing')
 					{
-						$qry = $conn->query("SELECT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients
+						$qry = $conn->query("SELECT DISTINCT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients
 						AS x ON z.property_id = x.property_id where y.lvl1 = 0;");
 						while($row = $qry->fetch_assoc()):   
 								  
@@ -181,7 +181,7 @@
                     	<?php endwhile; ?>
 						<?php        
 					}elseif($usertype=='Manager'){
-                        $qry = $conn->query("SELECT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients AS x ON z.property_id = x.property_id where y.lvl1 = 1 and y.lvl2 = 0;");
+                        $qry = $conn->query("SELECT DISTINCT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients AS x ON z.property_id = x.property_id where y.lvl1 = 1 and y.lvl2 = 0;");
 							while($row = $qry->fetch_assoc()):   
 									  
 							?>
@@ -238,8 +238,8 @@
                         </tr>
 							<?php endwhile; ?>
 							<?php        
-						}elseif($usertype=='CFO'){
-                            $qry = $conn->query("SELECT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients AS x ON z.property_id = x.property_id where y.lvl1 = 1 and y.lvl2 = 1 and y.lvl3 = 0;");
+						}elseif($usertype=='CFO' or $usertype=='COO'){
+                            $qry = $conn->query("SELECT DISTINCT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients AS x ON z.property_id = x.property_id where y.lvl1 = 1 and y.lvl2 = 1 and y.lvl3 = 0;");
 							while($row = $qry->fetch_assoc()):   
 									
 							?>
@@ -277,7 +277,7 @@
 							<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['reference'] ?>">
 							<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 							<?php
-								if ($usertype == "CFO"):
+								if ($usertype == "CFO" or $usertype=="COO"):
 									echo '<a class="btn btn-flat btn-primary btn-s approved_cm" data-id="' . $row['reference'] . '" value="2" prop-id="' . $row['property_id'] . '" cm-amt="' . $row['credit_amount'] . '"
 									style="font-size: 10px; height: 30px; width: 37px;">
 									<i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -285,7 +285,7 @@
 									</a>';
 
 								endif;
-								if ($usertype == "CFO"):
+								if ($usertype == "CFO" or $usertype=="COO"):
 									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_cm" data-id="' . $row['reference'] . '" value="2" prop-id="' . $row['property_id'] . '" cm-amt="' . $row['credit_amount'] . '"
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-down" aria-hidden="true"></i>
@@ -298,7 +298,7 @@
 							<?php endwhile; ?>
 							<?php        
 						}elseif($usertype=='IT Admin'){
-							$qry = $conn->query("SELECT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients AS x ON z.property_id = x.property_id where y.lvl1 = 0 and y.lvl2 = 0 and y.lvl3 = 0;");
+							$qry = $conn->query("SELECT DISTINCT y.*,z.*,x.* FROM t_credit_memo AS y INNER JOIN property_payments AS z ON y.reference = z.or_no INNER JOIN property_clients AS x ON z.property_id = x.property_id where (y.lvl1 !=2 and y.lvl2 !=2 and y.lvl3 !=2) and (y.lvl1 =0 or y.lvl2 =0 or y.lvl3 =0);");
 							while($row = $qry->fetch_assoc()):   
 									
 							?>

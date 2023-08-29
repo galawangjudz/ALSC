@@ -77,7 +77,49 @@
                       </a>
                     </li>  -->
 
-                   
+                    <?php if ($usertype == "IT Admin" || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po" class="nav-link nav-av">
+                      <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                          PO - Dashboard
+                        </p>
+                      </a>
+                    </li>  -->
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
+                      <i class="nav-icon fas fa-truck"></i>
+                        <p>
+                          Supplier List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/items" class="nav-link nav-items">
+                      <i class="nav-icon fas fa-shopping-cart"></i>
+                        <p>
+                          Item List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
+                      <i class="nav-icon fas fa-check-square"></i>
+                        <p>
+                          Purchasing Orders
+                        </p>
+                      </a>
+                    </li> 
+                    <?php endif ; ?>
+
+
+
+
+
+
+
+
 
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>

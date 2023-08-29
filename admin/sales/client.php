@@ -33,9 +33,7 @@ foreach($client->fetch_array() as $k =>$v){
 <div class="container-fluid">
 	<form action="" id="manage-client">
         <input type="hidden" name="id" value="<?php echo isset($meta['id']) ? $meta['id']: '' ?>">
-       
-        <input type="hidden" name="username" value="<?php echo $username ?>">
-      
+        <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new client.">
         <div class="panel panel-default">
             <div class="panel-body form-group form-group-sm">
                <!--  <div class="main_box"> -->
@@ -161,16 +159,13 @@ foreach($client->fetch_array() as $k =>$v){
                                 <option value="Divorced" <?php echo isset($meta['civil_status']) && $meta['civil_status'] == "Divorced" ? 'selected': '' ?>>Divorced</option>
                                 <option value="Widowed" <?php echo isset($meta['civil_status']) && $meta['civil_status'] == "Widowed" ? 'selected': '' ?>>Widowed</option>
                             </select>
-                        </div>
-                        
+                        </div>  
                     </div>
-                  
                 </div>
-            </div>
-                
-                
+            </div>  
 	</form>
 </div>
+
     <div class="card-footer">
         <table style="width:100%;">
 			<tr>
@@ -185,6 +180,32 @@ foreach($client->fetch_array() as $k =>$v){
     </div>
 </div>
 </div>
+    <script>
+        const frm =document.getElementById('frm');
+        document.getElementById('submit').addEventListener('click',(e)=>{
+            e.preventDefault();
+
+            let insert_xhr=new XMLHttpRequest();
+
+            insert_xhr.open('post','./notifications/insert.php',true);
+
+            let userInput = document.getElementById('comm').value;
+
+            let formdata = "msg="+userInput;
+
+            insert_xhr.onload = function(){
+                if(insert_xhr.status==200){
+                    let get_data = JSON.parse(insert_xhr.responseText);
+                    if(get_data=='added'){
+                        alert("New Notification");
+                    }
+                }
+            }
+            insert_xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+            insert_xhr.send(formdata);
+        })
+    </script>
+
 <script>
 
 

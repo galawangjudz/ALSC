@@ -57,11 +57,21 @@ Class Master extends DBConnection {
 		$data .= ", c_price_sqm = '$prod_lot_price' "; 
 		$data .= ", c_remarks = '$prod_remarks' ";
 		$data .= ", c_status = '$prod_status' ";
+		
 	 	if(empty($prod_lid)){ 
 			$prod_lid = sprintf('%03d%03d%02d', $prod_code, $prod_block, $prod_lot);
 			$data .= ", c_lid = '$prod_lid' "; 
+
+			$data_notif = " message = '$comm with Lot ID #$prod_lid.'";
+			$data_notif .= ", user_to_be_notified = 'IT Admin' ";
+			$data_notif .= ", seen = '0' ";
+			$save = $this->conn->query("INSERT INTO message_tbl set ".$data_notif);
 			$save = $this->conn->query("INSERT INTO t_lots set ".$data);
 	 	}else{
+			$data_notif1 = " message = '$comm2 with Lot ID #$prod_lid.'";
+			$data_notif1 .= ", user_to_be_notified = 'IT Admin' ";
+			$data_notif1 .= ", seen = '0' ";
+			$save = $this->conn->query("INSERT INTO message_tbl set ".$data_notif1);
 			$save = $this->conn->query("UPDATE t_lots set ".$data." where c_lid = ".$prod_lid);
 		} 
 		if($save){
@@ -162,8 +172,28 @@ Class Master extends DBConnection {
 
 	function add_data(){
 		extract($_POST);
+		
 		$del = $this->conn->query("UPDATE family_members SET status=1 where member_id = ".$id);
 		if($del){
+
+		$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+		while($row = $sql->fetch_assoc()){
+			$usertype= $row['username'];
+		}
+			$users_to_notify = array('IT Admin'); 
+
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+						"message = '$usertype approved family member for client #.$clientId.'",
+						"user_to_be_notified = '$user'",
+						"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Information successfully updated.");
 		}else{
@@ -256,9 +286,17 @@ Class Master extends DBConnection {
 		$data .= ", c_acronym = '$c_acronym' ";
 		$data .= ", c_code = '$c_code' ";
 		if(empty($prod_id)){
+			$data_notif = " message = '$comm with code #$c_code.'";
+			$data_notif .= ", user_to_be_notified = 'IT Admin' ";
+			$data_notif .= ", seen = '0' ";
+			$save = $this->conn->query("INSERT INTO message_tbl set ".$data_notif);
 			$sql = "INSERT INTO t_model_house set ".$data;
 			$save = $this->conn->query($sql);
 		}else{
+			$data_notif1 = " message = '$comm2 with code #$c_code.'";
+			$data_notif1 .= ", user_to_be_notified = 'IT Admin' ";
+			$data_notif1 .= ", seen = '0' ";
+			$save = $this->conn->query("INSERT INTO message_tbl set ".$data_notif1);
 			$sql = "UPDATE t_model_house set ".$data." where c_code = ".$prod_id;
 			$save = $this->conn->query($sql);
 		}
@@ -301,9 +339,16 @@ Class Master extends DBConnection {
 		$data .= ", c_status = '$c_status' ";
 		$data .= ", c_code = '$c_code' ";
 		if(empty($prod_id)){
-			
+			$data_notif = " message = '$comm $c_name.'";
+			$data_notif .= ", user_to_be_notified = 'IT Admin' ";
+			$data_notif .= ", seen = '0' ";
+			$save = $this->conn->query("INSERT INTO message_tbl set ".$data_notif);
 			$save = $this->conn->query("INSERT INTO t_projects set ".$data);
 		}else{
+			$data_notif1 = " message = '$comm2 $c_name.'";
+			$data_notif1 .= ", user_to_be_notified = 'IT Admin' ";
+			$data_notif1 .= ", seen = '0' ";
+			$save = $this->conn->query("INSERT INTO message_tbl set ".$data_notif1);
 			$save = $this->conn->query("UPDATE t_projects set ".$data." where c_code = ".$prod_id);
 		}
 		if($save){
@@ -425,10 +470,7 @@ Class Master extends DBConnection {
 			}else{//////////////////ADDED
 				$data .= ", c_revised = '0' ";//////////////////ADDED
 			}//////////////////ADDED
-			
-			
 			//$data .= ", old_property_id = '$prop_id'";
-
 
 			$i = 1;
 			while($i== 1){
@@ -437,6 +479,7 @@ Class Master extends DBConnection {
 					$i=0;
 			}
 			$data .= ", ref_no = '$ref' ";
+
 			$save = $this->conn->query("INSERT INTO t_csr set ".$data);
 
 			// get last insert id
@@ -471,11 +514,8 @@ Class Master extends DBConnection {
 			$data2 .= ", others_price = '$others_price' ";
 
 			$save = $this->conn->query("INSERT INTO t_additional_cost set ".$data2);
-			
-			
 
 			foreach($_POST['agent_name'] as $key => $value) {
-
 
 				$agent = $value;
 			
@@ -490,7 +530,6 @@ Class Master extends DBConnection {
 				$data .= ", c_agent = '$agent' ";
 				$data .= ", c_amount = '$agent_amount' ";
 				$data .= ", c_rate = '$agent_rate' ";
-
 
 				$save = $this->conn->query("INSERT INTO t_csr_commission set ".$data);
 				}
@@ -518,7 +557,6 @@ Class Master extends DBConnection {
 				$contact_no = $_POST['contact_no'][$key];
 				$contact_abroad = $_POST['contact_abroad'][$key];
 				$relationship = $_POST['relationship'][$key];
-			
 
 				$data = " c_csr_no = '$last_id' ";
 				$data .= ", c_buyer_count = '$buyer_count' ";
@@ -542,7 +580,22 @@ Class Master extends DBConnection {
 				$data .= ", contact_abroad = '$contact_abroad' "; 
 				$data .= ", relationship = '$relationship' ";
 
+				$users_to_notify = array('IT Admin', 'SOS'); 
+
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+						"message = '$comm with ref#$ref.'",
+						"user_to_be_notified = '$user'",
+						"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+				
 				$save = $this->conn->query("INSERT INTO t_csr_buyers set ".$data);
+
 				$buyer_count += 1;
 				}
 			
@@ -656,9 +709,6 @@ Class Master extends DBConnection {
 			$conv_outlet_price = $_POST['conv_outlet_price'];
 			$others_price = $_POST['others_price'];
 
-			
-
-
 			$data2 = " aircon_outlets = '$ac_outlets' ";
 			$data2 .= ", aircon_grill = '$ac_grill' ";
 			$data2 .= ", service_area = '$service_area' ";
@@ -672,20 +722,14 @@ Class Master extends DBConnection {
 			$data2 .= ", conv_outlet_price = '$conv_outlet_price' ";
 			$data2 .= ", others_price = '$others_price' ";
 
+			
 			$this->conn->query("UPDATE t_additional_cost set ".$data2." where c_csr_no = ".$c_csr_no);
 				
-			
-
-		
-		
 			$this->conn->query("UPDATE t_csr set ".$data." where c_csr_no = ".$c_csr_no);
 			$this->conn->query("DELETE FROM t_csr_buyers where c_csr_no = ".$c_csr_no);
 			$this->conn->query("DELETE FROM t_csr_commission where c_csr_no = ".$c_csr_no);
 			// get last insert id
 			$last_id = $c_csr_no;
-
-
-			
 
 			foreach($_POST['agent_name'] as $key => $value) {
 				$agent = $value;
@@ -704,9 +748,6 @@ Class Master extends DBConnection {
 
 				$save = $this->conn->query("INSERT INTO t_csr_commission set ".$data);
 				}
-
-
-
 
 			$buyer_count = 1;
 			foreach($_POST['last_name'] as $key => $value) {
@@ -756,6 +797,21 @@ Class Master extends DBConnection {
 
 				$save = $this->conn->query("INSERT INTO t_csr_buyers set ".$data);
 				$buyer_count += 1;
+				}
+
+
+				$users_to_notify = array('IT Admin', 'SOS'); 
+
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+						"message = '$comm2 with CSR# $c_csr_no.'",
+						"user_to_be_notified = '$user'",
+						"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
 				}
 		}
 		
@@ -808,6 +864,9 @@ Class Master extends DBConnection {
 		$data .= ", contact_no = '$contact_no' ";
 		$data .= ", c_created_by = '$username' ";
 
+		$data_notif = " message = '$comm'";
+		$data_notif .= ", user_to_be_notified = 'IT Admin' ";
+		$data_notif .= ", seen = '0' ";
 		
 		$check = $this->conn->query("SELECT * FROM `t_buyer_info` where `last_name` = '{$customer_last_name}' and
 		 `first_name` = '{$customer_first_name}' and `middle_name` = '{$customer_middle_name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
@@ -822,6 +881,7 @@ Class Master extends DBConnection {
 		if(empty($id)){
 			/* $sql = "SELECT * FROM t_buyer_info"; */
 			$sql = "INSERT INTO t_buyer_info set ".$data;
+			$sql = "INSERT INTO message_tbl set ".$data_notif;
 			$save = $this->conn->query($sql);
 		}else{
 			/* $sql = "SELECT * FROM t_buyer_info"; */
@@ -843,6 +903,12 @@ Class Master extends DBConnection {
 
 	function sm_verification(){
 		extract($_POST);
+		$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+		while($row = $sql->fetch_assoc()){
+			$usertype= $row['username'];
+		}
+		$users_to_notify = array('CFO', 'COO', 'IT Admin'); 
+
 	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_active = 1 and c_lot_lid ='{$lid}'")->num_rows;
 		if($this->capture_err())
 		 	return $this->capture_err();
@@ -866,14 +932,36 @@ Class Master extends DBConnection {
 			}
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = ".$value." where c_csr_no = ".$id);
 		}
+		
 		if($save){
 			if($value == 1){
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype verified CSR #$id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+					);
 
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+					}
 				$resp['status'] = 'success';
 			
 				$this->settings->set_flashdata('success',"RA successfully verified.");
 			}else{
 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype voided CSR #$id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+					}
 				$update = $this->conn->query("UPDATE t_approval_csr SET c_csr_status = 3 where c_csr_no = ".$id);
 				
 				$resp['status'] = 'success';
@@ -890,8 +978,7 @@ Class Master extends DBConnection {
 
 	function coo_approval(){
 		extract($_POST);
-		
-
+	
 		$data = " c_csr_no = '$id' ";
 		$data .= ", c_lot_lid = '$lid' ";
 		$data .= ", c_csr_status = '$value' ";
@@ -905,9 +992,21 @@ Class Master extends DBConnection {
 		
 			$save = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
 			$save2 = $this->conn->query("UPDATE t_csr SET coo_approval = ".$value." where c_csr_no = ".$id);
-			
-			
+
 			if($save && $save2){
+				$users_to_notify = array('Cashier', 'IT Admin'); 
+				foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+				"message = '$type approved CSR #$id.'",
+				"user_to_be_notified = '$user'",
+				"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 				$resp['status'] = 'success';
 			
 				$this->settings->set_flashdata('success',"RA successfully approved.");
@@ -955,6 +1054,23 @@ Class Master extends DBConnection {
 		$data = "c_duration = DATE_ADD('$ext_duration',INTERVAL $duration DAY)";
 		$save = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
 		if($save){
+			$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+				while($row = $sql->fetch_assoc()){
+					$usertype= $row['username'];
+				}
+				$users_to_notify = array('CFO', 'COO', 'IT Admin'); 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype extended the approval of CSR #$id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+				
 			$resp['status'] = 'success';
 		
 			$this->settings->set_flashdata('success',"RA approval extend successfully.");
@@ -967,9 +1083,6 @@ Class Master extends DBConnection {
 		exit;
 
 	}	
-
-
-	
 	function coo_disapproval(){
 		extract($_POST);
 		$data = ", c_lot_lid = '$lid' ";
@@ -982,7 +1095,24 @@ Class Master extends DBConnection {
 			$dis = $this->conn->query("UPDATE t_csr SET c_active = 0, coo_approval = ".$value." where c_csr_no = ".$id);
 		}
 
-		if($dis){
+			if($dis){
+				$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+				while($row = $sql->fetch_assoc()){
+					$usertype= $row['username'];
+				}
+				$users_to_notify = array('CFO', 'COO', 'IT Admin'); 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype disapproved CSR #$id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 		
 			$this->settings->set_flashdata('success',"RA successfully disapproved.");
@@ -1039,10 +1169,35 @@ Class Master extends DBConnection {
 				return json_encode($resp);
 				exit;
 			} 
+			$users_to_notify = array('IT Admin', 'CA'); 
 
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm$csr_no.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
 			$save = $this->conn->query("INSERT INTO t_reservation set ".$data);
 			
 		}else{
+			$users_to_notify = array('IT Admin', 'CA'); 
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm2 $csr_no.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
 			$save = $this->conn->query("UPDATE t_reservation set ".$data." where id = ".$id);
 		}
 
@@ -1179,20 +1334,63 @@ Class Master extends DBConnection {
 	
 	function ca_approval(){
 		extract($_POST);
+
+		$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+			while($row = $sql->fetch_assoc()){
+				$usertype= $row['username'];
+		}
+		$users_to_notify = array('IT Admin', 'CFO'); 
+
 		$data = " c_ca_status = '$value' ";
 		if ($value == 1):
 			$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
 			//$save = $this->conn->query("UPDATE t_approval_csr SET ".$data." where ra_id = ".$ra_id);
 			//$save = $this->conn->query("UPDATE t_csr SET c_verify = 1, coo_approval = 1, c_revised = 0 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = 1, coo_approval = 1 where c_csr_no = ".$id);
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$usertype approved RA# $ra_id. (CA)'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+				$data_notif = implode(", ", $data_notif_values);
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
+
 		elseif ($value == 2):
 			$save = $this->conn->query("UPDATE t_csr SET c_active = 0 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_lots set c_status = 'Available' where c_lid =".$lot_id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$usertype disapproved RA# $ra_id. (CA)'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+	
+				$data_notif = implode(", ", $data_notif_values);
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
 		elseif ($value == 3):
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = 0, coo_approval = 0, c_revised = 1 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$usertype has already set RA #$ra_id for revision. (CA)'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+	
+				$data_notif = implode(", ", $data_notif_values);
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
 		endif;
+
+		
+
 
 		if($save){
 			$resp['status'] = 'success';
@@ -1232,9 +1430,33 @@ Class Master extends DBConnection {
 		$data .= ", ver_doc_remarks = '$remark_ver' ";
 
 		if(empty($id)){
-		
+			$users_to_notify = array('IT Admin'); 
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm created an evaluation for CSR #$csr_no.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
+
 			$save = $this->conn->query("INSERT INTO t_ca_requirement set ".$data);
 		}else{
+			$users_to_notify = array('IT Admin'); 
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm updated the evaluation for CSR #$csr_no.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
 			$save = $this->conn->query("UPDATE t_ca_requirement set ".$data." WHERE id =".$id);
 		}
 		$id = !empty($id) ? $id : $this->conn->insert_id;
@@ -1530,7 +1752,18 @@ Class Master extends DBConnection {
 			endif;
 
 			endwhile;
+			$users_to_notify = array('IT Admin'); 
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm booked CSR #$csr_no.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+	
+				$data_notif = implode(", ", $data_notif_values);
 
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
 		
 		$save4 = $this->conn->query("UPDATE t_approval_csr set cfo_status = 1 where c_csr_no =".$csr_no);
 
@@ -2683,13 +2916,43 @@ Class Master extends DBConnection {
 		} 
 		if(empty($member_id)){
 			/* $sql = "SELECT * FROM t_buyer_info"; */
+
+
+			$users_to_notify = array('IT Admin'); 
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm$client_id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
+
 			$sql = "INSERT INTO family_members set ".$data;
 			$save = $this->conn->query($sql);
 		}else{
 			/* $sql = "SELECT * FROM t_buyer_info"; */
+			$users_to_notify = array('IT Admin'); 
+
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+					"message = '$comm2$client_id.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			}
+
 			$sql = "UPDATE family_members set ".$data." where member_id = ".$member_id;
 			$save = $this->conn->query($sql);
-		}
+		}	
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($member_id))
@@ -2709,8 +2972,8 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='1' where id = ".$data_id);
 		elseif($value == 3):
 			$update = $this->conn->query("UPDATE  pending_restructuring set lvl2='1' where id = ".$data_id);
-		elseif($value == 2):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1' ,pending_status = 0 where id = ".$data_id);
+		elseif($value == 2 or $value == 1):
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1', lvl2='1', lvl1='1', pending_status = 0 where id = ".$data_id);
 			$qry1 = "SELECT * FROM pending_restructuring where id =".$data_id;
 			$sql1 = $this->conn->query($qry1);
 			while($row = $sql1->fetch_assoc()) {
@@ -2804,8 +3067,6 @@ Class Master extends DBConnection {
 
 			$res_pay = $this->conn->query("INSERT INTO property_payments set ".$data2);
 
-		elseif($value == 1):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='1',lvl2='1',lvl1='1', pending_status='0' where id = ".$data_id);
 		endif;
 		
 
@@ -2822,13 +3083,11 @@ Class Master extends DBConnection {
 	function res_disapproval(){
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='2',  pending_status='1' and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl1='2', pending_status='2' where id = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE pending_restructuring set lvl2='2', pending_status='1'  and property_id = ".$data_id);
-		elseif($value == 2):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='2', pending_status='1' and property_id = ".$data_id);
-		elseif($value == 1):
-			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='2',lvl2='2',lvl1='2', pending_status='1'  and property_id = ".$data_id);
+			$update = $this->conn->query("UPDATE pending_restructuring set lvl2='2', pending_status='2'  where id = ".$data_id);
+		elseif($value == 2 or $value == 1):
+			$update = $this->conn->query("UPDATE  pending_restructuring set lvl3='2',lvl2='2',lvl1='2', pending_status='2' where id = ".$data_id);
 		endif;
 
 		if($update){
@@ -2934,6 +3193,21 @@ Class Master extends DBConnection {
 		#donita binago ko to para mas malinis
 		$save = $this->conn->query("INSERT INTO pending_restructuring set ". $data);
 		if($save){
+			
+			$users_to_notify = array('IT Admin'); 
+			foreach ($users_to_notify as $user) {
+				$data_notif_values = array(
+				"message = '$comm'",
+				"user_to_be_notified = '$user'",
+				"seen = '0'"
+			);
+
+			$data_notif = implode(", ", $data_notif_values);
+
+			$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+
+		}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Restructuring successfully created.");
 
@@ -3074,7 +3348,8 @@ Class Master extends DBConnection {
 
 	function save_av(){
 		extract($_POST);
-		$data = " c_av_no = '$av_no' ";
+		#$data = " c_av_no = 'AV".$av_no."' ";
+		$data = " c_av_no = '$av_no' ";	 
 		$data .= ", property_id = '$p_id' ";	 
 		$data .= ", c_av_date = '$av_date' ";	 
 	 	$data .= ", c_av_amount = '$total_av' ";
@@ -3141,6 +3416,20 @@ Class Master extends DBConnection {
 
 
 			if($save){
+				$users_to_notify = array('IT Admin'); 
+
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+						"message = '$comm'",
+						"user_to_be_notified = '$user'",
+						"seen = '0'"
+					);
+
+					$data_notif = implode(", ", $data_notif_values);
+
+					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 				$resp['status'] = 'success';
 				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");
 
@@ -3161,11 +3450,12 @@ Class Master extends DBConnection {
 		extract($_POST);
 
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = ".$data_id);
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = ".$data_id);
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
@@ -3173,7 +3463,7 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
 			//$update = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = ".$data_id);
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
@@ -3251,7 +3541,7 @@ Class Master extends DBConnection {
 			$rem_bal = $last_row['remaining_balance'];
 			$last_bal = $rem_bal - $cm_amt;
 			$data2 = " property_id = '$prop_id' ";
-			$data2 .= ", payment_amount = '$payment_amt' ";/// or same sila ng principal?
+			$data2 .= ", payment_amount = '0' ";
 			
 			$data2 .= ", pay_date = '$cm_date' "; 
 			$data2 .= ", due_date = '$due_date' "; 
@@ -3316,9 +3606,11 @@ Class Master extends DBConnection {
 		//removed from payments - pending_status (property_payments)
 		extract($_POST);
 		if ($value == 4):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no =  ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			//$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no =  ".$data_id);
 		elseif($value == 2):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
@@ -3326,8 +3618,10 @@ Class Master extends DBConnection {
 			//echo $get_lid;
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
-			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
+			//$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
+			//$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
 		elseif($value == 1):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2',lvl2='2',lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
@@ -3335,8 +3629,10 @@ Class Master extends DBConnection {
 			//echo $get_lid;
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
-			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
+			// $update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
+			// $update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
 		endif;
 		
 		if($update){
@@ -3353,6 +3649,23 @@ Class Master extends DBConnection {
 		$ret = $this->conn->query("UPDATE properties set c_retention = '1' where property_id = ".$prop_id);
 		//echo $ret;
 		if($ret){
+			$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+				while($row = $sql->fetch_assoc()){
+					$usertype= $row['username'];
+				}
+				$users_to_notify = array('IT Admin'); 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype set client with property ID #$prop_id to retention.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Property successfully set to Retention.");
 		}else{
@@ -3372,6 +3685,24 @@ Class Master extends DBConnection {
 
 		//echo $ret;
 		if($backout && $update_lot){
+
+			$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+				while($row = $sql->fetch_assoc()){
+					$usertype= $row['username'];
+				}
+				$users_to_notify = array('IT Admin'); 
+				foreach ($users_to_notify as $user) {
+					$data_notif_values = array(
+					"message = '$usertype set client with property ID #$prop_id to backout.'",
+					"user_to_be_notified = '$user'",
+					"seen = '0'"
+				);
+
+				$data_notif = implode(", ", $data_notif_values);
+
+				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				}
+
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Property successfully Backout.");
 		}else{
@@ -3592,6 +3923,326 @@ Class Master extends DBConnection {
 	}
 
 
+
+
+
+
+
+
+
+
+	///////////////////////////////PURCHASING ORDER///////////////////////////
+
+	function save_supplier(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(!in_array($k,array('id'))){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		$check = $this->conn->query("SELECT * FROM `supplier_list` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
+		if($this->capture_err())
+			return $this->capture_err();
+		if($check > 0){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Supplier already exist.";
+			return json_encode($resp);
+			exit;
+		}
+		if(empty($id)){
+			$sql = "INSERT INTO `supplier_list` set {$data} ";
+			$save = $this->conn->query($sql);
+		}else{
+			$sql = "UPDATE `supplier_list` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New Supplier successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Supplier successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	function delete_supplier(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `supplier_list` where id = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Supplier successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+	function save_item(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(!in_array($k,array('id','description'))){
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		if(isset($_POST['description'])){
+			if(!empty($data)) $data .=",";
+				$data .= " `description`='".addslashes(htmlentities($description))."' ";
+		}
+		$check = $this->conn->query("SELECT * FROM `item_list` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
+		if($this->capture_err())
+			return $this->capture_err();
+		if($check > 0){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Item Name already exist.";
+			return json_encode($resp);
+			exit;
+		}
+		if(empty($id)){
+			$sql = "INSERT INTO `item_list` set {$data} ";
+		}else{
+			$sql = "UPDATE `item_list` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New item successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"item successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	function delete_item(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `item_list` where id = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"item successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+	function search_items(){
+		extract($_POST);
+		$qry = $this->conn->query("SELECT * FROM item_list where `name` LIKE '%{$q}%'");
+		$data = array();
+		while($row = $qry->fetch_assoc()){
+			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description']);
+		}
+		return json_encode($data);
+	}
+	function save_po(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(in_array($k,array('discount_amount','tax_amount')))
+				$v= str_replace(',','',$v);
+			if(!in_array($k,array('id','po_no')) && !is_array($_POST[$k])){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		if(!empty($po_no)){
+			$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+			if($this->capture_err())
+				return $this->capture_err();
+			if($check > 0){
+				$resp['status'] = 'po_failed';
+				$resp['msg'] = "Purchase Order Number already exist.";
+				return json_encode($resp);
+				exit;
+			}
+		}else{
+			$po_no ="";
+			while(true){
+				$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
+				$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}'")->num_rows;
+				if($check <= 0)
+				break;
+			}
+		}
+		$data .= ", po_no = '{$po_no}' ";
+
+		if(empty($id)){
+			$sql = "INSERT INTO `po_list` set {$data} ";
+		}else{
+			$sql = "UPDATE `po_list` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			$po_id = empty($id) ? $this->conn->insert_id : $id ;
+			$resp['id'] = $po_id;
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
+				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`) VALUES {$data} ");
+			}
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Purchase Order successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	function delete_po(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `po_list` where unit_id = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Purchase Order successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+	function get_price(){
+		extract($_POST);
+		 $qry = $this->conn->query("SELECT * FROM price_list where unit_id = '{$unit_id}'");
+		 $this->capture_err();
+		 if($qry->num_rows > 0){
+			 $res = $qry->fetch_array();
+			 switch($rent_type){
+				 case '1':
+					$resp['price'] = $res['monthly'];
+					break;
+				case '2':
+					$resp['price'] = $res['quarterly'];
+					break;
+				case '3':
+					$resp['price'] = $res['annually'];
+					break;
+			 }
+		 }else{
+			 $resp['price'] = "0";
+		 }
+		 return json_encode($resp);
+	}
+	function save_rent(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(!in_array($k,array('id')) && !is_array($_POST[$k])){
+				if(!empty($data)) $data .=",";
+				$v = addslashes($v);
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		switch ($rent_type) {
+			case 1:
+				$data .= ", `date_end`='".date("Y-m-d",strtotime($date_rented.' +1 month'))."' ";
+				break;
+			
+			case 2:
+				$data .= ", `date_end`='".date("Y-m-d",strtotime($date_rented.' +3 month'))."' ";
+				break;
+			case 3:
+				$data .= ", `date_end`='".date("Y-m-d",strtotime($date_rented.' +1 year'))."' ";
+				break;
+			default:
+				# code...
+				break;
+		}
+		if(empty($id)){
+			$sql = "INSERT INTO `rent_list` set {$data} ";
+		}else{
+			$sql = "UPDATE `rent_list` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New Rent successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Rent successfully updated.");
+			$this->settings->conn->query("UPDATE `unit_list` set `status` = '{$status}' where id = '{$unit_id}'");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	function delete_rent(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `rent_list` where id = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Rent successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+	function delete_img(){
+		extract($_POST);
+		if(is_file($path)){
+			if(unlink($path)){
+				$resp['status'] = 'success';
+			}else{
+				$resp['status'] = 'failed';
+				$resp['error'] = 'failed to delete '.$path;
+			}
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = 'Unkown '.$path.' path';
+		}
+		return json_encode($resp);
+	}
+	function renew_rent(){
+		extract($_POST);
+		$qry = $this->conn->query("SELECT * FROM `rent_list` where id ='{$id}'");
+		$res = $qry->fetch_array();
+		switch ($res['rent_type']) {
+			case 1:
+				$date_end = " `date_end`='".date("Y-m-d",strtotime($res['date_end'].' +1 month'))."' ";
+				break;
+			case 2:
+				$date_end = " `date_end`='".date("Y-m-d",strtotime($res['date_end'].' +3 month'))."' ";
+				break;
+			case 3:
+				$date_end = " `date_end`='".date("Y-m-d",strtotime($res['date_end'].' +1 year'))."' ";
+				break;
+			default:
+				# code...
+				break;
+		}
+		$update = $this->conn->query("UPDATE `rent_list` set {$date_end}, date_rented = date_end where id = '{$id}' ");
+		if($update){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success'," Rent successfully renewed.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
 }
 	
 
@@ -3782,6 +4433,41 @@ switch ($action) {
 	break;
 	case 'av_disapproval':
 		echo $Master->av_disapproval();
+	break;
+	///////////////////////PURCHASING ORDER////
+	case 'save_supplier':
+		echo $Master->save_supplier();
+	break;
+	case 'delete_supplier':
+		echo $Master->delete_supplier();
+	break;
+	case 'save_item':
+		echo $Master->save_item();
+	break;
+	case 'delete_item':
+		echo $Master->delete_item();
+	break;
+	case 'search_items':
+		echo $Master->search_items();
+	break;
+	case 'save_po':
+		echo $Master->save_po();
+	break;
+	case 'delete_po':
+		echo $Master->delete_po();
+	break;
+	case 'get_price':
+		echo $Master->get_price();
+		break;
+	case 'save_rent':
+		echo $Master->save_rent();
+	break;
+	case 'delete_rent':
+		echo $Master->delete_rent();
+	break;
+	case 'renew_rent':
+		echo $Master->renew_rent();
+	break;
 	default:
 		break;
 }
