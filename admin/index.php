@@ -11,8 +11,6 @@
       alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
     </script>
     <?php endif;?>    
-
-
               
      <?php $page = isset($_GET['page']) ? $_GET['page'] : 'home';  ?>
       <!-- Content Wrapper. Contains page content -->

@@ -17,23 +17,33 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <div class="container fluid">
     <callout class="callout-primary">
         <dl class="row">
-            <dt class="col-md-4">Item Name</dt>
-            <dd class="col-md-8">: <?php echo $name ?></dd>
-            <dt class="col-md-4">Description</dt>
-            <dd class="col-md-8">: <?php echo $description ?></dd>
-            <dt class="col-md-4">Status</dt>
-            <dd class="col-md-8">:&nbsp;
-                <?php if($status == 1): ?>
-                    <span class="badge badge-success">Active</span>
-                <?php else: ?>
-                    <span class="badge badge-secondary">Inactive</span>
-                <?php endif; ?>
-            </dd>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Item Name:</dt></td>
+                    <td><?php echo $name ?></dd></td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td><?php echo $description ?></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td>
+                        <?php if($status == 1): ?>
+                            <span class="badge badge-success">Active</span>
+                        <?php else: ?>
+                            <span class="badge badge-secondary">Inactive</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            </table>
         </dl>
     </callout>
-    <div class="row px-2 justify-content-end">
-        <div class="col-1">
-            <button class="btn btn-dark btn-flat btn-sm" type="button" data-dismiss="modal">Close</button>
-        </div>
-    </div>
+    <table style="width:100%;">
+        <tr>
+            <td>
+                <button class="btn btn-dark btn-flat btn-default" type="button" style="width:100%; margin-left:5px;font-size:14px;" data-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </td>
+        </tr>
+    </table>
 </div>

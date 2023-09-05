@@ -1,4 +1,5 @@
 <?php
+$delivery_date = date('Y-m-d', strtotime('+1 week'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `po_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -18,51 +19,64 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         padding-left: 0.5rem;
         height: auto;
     }
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-		}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+	}
 
-		input[type=number] {
-		-moz-appearance: textfield;
-		}
-		[name="tax_percentage"],[name="discount_percentage"]{
-			width:5vw;
-		}
+	input[type=number] {
+	-moz-appearance: textfield;
+	}
+	[name="tax_percentage"],[name="discount_percentage"]{
+		width:5vw;
+	}
+	.nav-req{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-req:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
+    .hidden-cell {
+        display: none;
+    }
 </style>
 <?php
 $usertype = $_settings->userdata('user_type'); 
 $type = $_settings->userdata('id');
 $level = $_settings->userdata('type');
+$department = $_settings->userdata('department');
 ?>
 <div class="card card-outline card-info">
 	<div class="card-header">
-		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order": "New Purchase Order" ?></b></i></h5>
+		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Request": "New Purchase Request" ?></b></i></h5>
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
-			<input type="hidden" id="usertype" name="usertype" value="<?php echo $usertype; ?>">
-			<div class="row">
-				<div class="col-md-6 form-group">
-				<label for="supplier_id">Supplier:</label>
-				<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
-						<?php 
-							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
-							while($row = $supplier_qry->fetch_assoc()):
-						?>
-						<option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>><?php echo $row['name'] ?></option>
-						<?php endwhile; ?>
-					</select>
-				</div>
-				<div class="col-md-6 form-group">
-					<label for="po_no">PO # <span class="po_err_msg text-danger"></span></label>
-					<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
-					<small><i><label style="color:red;font-weight:normal;"><b>(Leave this blank to Automatically Generate upon saving.)</b></label></i></small>
-				</div>
-			</div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="supplier_id">Supplier:</label>
+                    <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+                        <option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
+                        <?php 
+                            $supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
+                            while($row = $supplier_qry->fetch_assoc()):
+                        ?>
+                        <option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>><?php echo $row['name'] ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+                    <input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
+                    <small><i><label style="color:red;font-weight:normal;"><b>(Leave this blank to Automatically Generate upon saving.)</b></label></i></small>
+                </div>
+            </div>
 			<div class="row">
 				<div class="col-md-6 form-group">
 					<label for="department">Requesting Department:</label>
@@ -95,8 +109,6 @@ $level = $_settings->userdata('type');
 							<col width="10%">
 							<col width="20%">
 							<col width="30%">
-							<col width="15%">
-							<col width="15%">
 						</colgroup>
 						<thead>
 							<tr class="bg-navy disabled">
@@ -105,8 +117,6 @@ $level = $_settings->userdata('type');
 								<th class="px-1 py-1 text-center">Unit</th>
 								<th class="px-1 py-1 text-center">Item</th>
 								<th class="px-1 py-1 text-center">Description</th>
-								<th class="px-1 py-1 text-center">Price (per piece)</th>
-								<th class="px-1 py-1 text-center">Total</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -131,34 +141,15 @@ $level = $_settings->userdata('type');
 									<input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
 								</td>
 								<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
-								<td class="align-middle p-1">
-									<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
-								</td>
-								<td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
+                                <input type="hidden" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
+                                <td class="align-middle p-1 text-right total-price hidden-cell"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
 							</tr>
 							<?php endwhile;endif; ?>
 						</tbody>
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
-									<th class="p-1 text-right" id="sub_total">0</th>
-								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="6">Discount (%):
-									<input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
-									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($discount_amount) ? $discount_amount : 0 ?>" name="discount_amount"></th>
-								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="6">Tax Inclusive (%):
-									<input type="number" step="any" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
-									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
-								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="6">Total:</th>
-									<th class="p-1 text-right" id="total">0</th>
+                                    <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add Row</button></span></th>
 								</tr>
 							</tr>
 						</tfoot>
@@ -168,20 +159,9 @@ $level = $_settings->userdata('type');
 							<label for="notes" class="control-label">Notes:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
-						<!-- <?php 
-                        if ($level < 4){?>
-								<div class="col-md-6">
-									<label for="status" class="control-label">Status:</label>
-									<select name="status" id="status" class="form-control form-control-sm rounded-0">
-										<option value="0" <?php echo isset($status) && $status == 0 ? 'selected': '' ?>>Pending</option>
-										<option value="1" <?php echo isset($status) && $status == 1 ? 'selected': '' ?>>Approved</option>
-										<option value="2" <?php echo isset($status) && $status == 2 ? 'selected': '' ?>>Declined</option>
-									</select>
-								</div>
-						<?php } ?> -->			
 					</div>
-				</div>
-			</div>
+			    </div>
+            </div>
 		</form>
 	</div>
 	<div class="card-footer">
@@ -191,7 +171,7 @@ $level = $_settings->userdata('type');
 					<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/purchase_orders"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" href="?page=po/requisitions/pending_req" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -203,20 +183,17 @@ $level = $_settings->userdata('type');
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 		</td>
 		<td class="align-middle p-0 text-center">
-			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
 		</td>
 		<td class="align-middle p-1">
-			<input type="text" class="text-center w-100 border-0" name="unit[]"/>
+			<input type="text" class="text-center w-100 border-0" name="unit[]" required/>
 		</td>
 		<td class="align-middle p-1">
 			<input type="hidden" name="item_id[]">
 			<input type="text" class="text-center w-100 border-0 item_id" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
-		<td class="align-middle p-1">
-			<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
-		</td>
-		<td class="align-middle p-1 text-right total-price">0</td>
+		<input type="hidden" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
 	</tr>
 </table>
 <script>
@@ -317,7 +294,7 @@ $level = $_settings->userdata('type');
 			}
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_po",
+				url:_base_url_+"classes/Master.php?f=manage_req_save_po",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -332,7 +309,7 @@ $level = $_settings->userdata('type');
 				},
 				success:function(resp){
 					if(typeof resp =='object' && resp.status == 'success'){
-						location.href = "./?page=po/purchase_orders/view_po&id="+resp.id;
+						location.href = "./?page=po/requisitions/pending_req";
 					}else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -351,7 +328,5 @@ $level = $_settings->userdata('type');
 				}
 			})
 		})
-
-        
 	})
 </script>

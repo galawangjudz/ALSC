@@ -115,7 +115,7 @@
     }
   })
 </script>
-<footer class="main-footer text-sm">
+<footer class="main-footer text-sm hidden-section">
         <strong>Copyright © <?php echo date('Y') ?>. 
         <!-- <a href=""></a> -->
         </strong>

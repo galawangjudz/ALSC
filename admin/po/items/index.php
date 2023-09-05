@@ -37,9 +37,11 @@
 				<thead>
 					<tr class="bg-navy disabled">
 						<th>#</th>
+						<th>Item Code</th>
 						<th>Item Name</th>
 						<th>Description</th>
-						<th>Date Created</th>
+						<th>Supplier</th>
+						<!-- <th>Date Created</th> -->
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -47,15 +49,31 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `item_list` order by (`name`) asc ");
+					$qry = $conn->query("SELECT * from `item_list` order by (`date_created`) asc ");
 					while($row = $qry->fetch_assoc()):
 						$row['description'] = html_entity_decode($row['description']);
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
+							<td><?php echo $row['item_code'] ?></td>
 							<td><?php echo $row['name'] ?></td>
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
-							<td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
+							<td>
+							<?php
+								$pdo = new PDO("mysql:host=localhost;dbname=alscdb", 'root', '');
+
+								// Retrieve supplier name from supplier_table based on supplier_id
+								$supplierId = $row['supplier_id'];
+								$query = "SELECT * FROM supplier_list WHERE id = :supplierId";
+								$stmt = $pdo->prepare($query);
+								$stmt->bindParam(':supplierId', $supplierId, PDO::PARAM_INT);
+								$stmt->execute();
+								$supplierData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+								echo $supplierData['name'];
+							?>
+						</td>
+							<!-- <td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td> -->
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>

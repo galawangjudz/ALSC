@@ -68,6 +68,7 @@ foreach($user->fetch_array() as $k =>$v){
 						<option value="Billing" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Billing Supervisor" ? 'selected': '' ?>>Billing Supervisor</option>
 						<option value="Cashier" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Cashier" ? 'selected': '' ?>>Cashier</option>
 						<option value="Manager" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Finance Manager" ? 'selected': '' ?>>Finance Manager</option>
+						<option value="Manager" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Marketing Supervisor" ? 'selected': '' ?>>Marketing Supervisor</option>
 					</select>
 				</div>
 				<div class="form-group">

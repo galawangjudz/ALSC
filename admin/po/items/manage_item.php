@@ -23,10 +23,25 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <form action="" id="item-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
     <div class="container-fluid">
-
+    <div class="form-group">
+            <label for="item_code" class="control-label">Item Code:</label>
+            <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code :"" ?>" required>
+        </div>
         <div class="form-group">
             <label for="name" class="control-label">Item Name:</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="supplier" class="supplier">Supplier:</label>
+            <select name="supplier_id" id="supplier_id" class="form-control rounded-0">
+                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
+                <?php 
+                    $supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
+                    while($row = $supplier_qry->fetch_assoc()):
+                ?>
+                <option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>><?php echo $row['name'] ?></option>
+                <?php endwhile; ?>
+            </select>
         </div>
         <div class="form-group">
             <label for="description" class="control-label">Description:</label>

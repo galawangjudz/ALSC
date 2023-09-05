@@ -4046,13 +4046,200 @@ Class Master extends DBConnection {
 		}
 		return json_encode($data);
 	}
+
+	function update_status_gr() {
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(in_array($k,array('discount_amount','tax_amount')))
+				$v= str_replace(',','',$v);
+			if(!in_array($k,array('id','po_no','po_id','usertype')) && !is_array($_POST[$k])){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		if(!empty($po_no)){
+			$check = $this->conn->query("SELECT * FROM `po_approved_list` where `po_no` = '{$po_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+			if($this->capture_err())
+				return $this->capture_err();
+			if($check > 0){
+				$resp['status'] = 'po_failed';
+				$resp['msg'] = "Purchase Order Number already exist.";
+				return json_encode($resp);
+				exit;
+			}
+		}else{
+			$po_no ="";
+			while(true){
+				$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
+				$check = $this->conn->query("SELECT * FROM `po_approved_list` where `po_no` = '{$po_no}'")->num_rows;
+				if($check <= 0)
+				break;
+			}
+		}
+		$data .= ", po_no = '{$po_no}' ";
+
+		if(empty($id)){
+			$sql = "INSERT INTO `po_approved_list` set {$data} ";
+		}else{
+			$sql = "UPDATE `po_approved_list` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			$po_id = empty($id) ? $this->conn->insert_id : $id ;
+			$resp['id'] = $po_id;
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$received[$k]}','{$outstanding[$k]}')";
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `approved_order_items` where po_id = '{$po_id}'");
+				$save = $this->conn->query("INSERT INTO `approved_order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`,`received`,`outstanding`) VALUES {$data} ");
+			}
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Purchase Order successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	
+	
+	function update_status_po() {
+    extract($_POST);
+	if($usertype == 'Purchasing'){
+		$update = $this->conn->query("UPDATE `po_list` set `status` = '{$status}' where id = '{$po_id}'");
+	}
+	else if($usertype == 'Manager'){
+		$update = $this->conn->query("UPDATE `po_list` set `status2` = '{$status}' where id = '{$po_id}'");
+	}
+    else if ($usertype == 'CFO' || $usertype == 'COO') {
+        $update = $this->conn->query("UPDATE `po_list` SET `status3` = '{$status}' WHERE id = '{$po_id}'");
+	}
+	else if ($usertype == 'IT Admin') {
+        $update = $this->conn->query("UPDATE `po_list` SET `status` = '{$status}', `status2` = '{$status}',`status3` = '{$status}' WHERE id = '{$po_id}'");
+	}
+	
+		if (($usertype == 'CFO' || $usertype == 'COO' || $usertype == 'IT Admin') && $status == '1') {
+
+			$data = "";
+			foreach($_POST as $k =>$v){
+				if(in_array($k,array('discount_amount','tax_amount')))
+					$v= str_replace(',','',$v);
+				if(!in_array($k,array('po_id','usertype')) && !is_array($_POST[$k])){
+					$v = addslashes(trim($v));
+					if(!empty($data)) 
+					$data .=",";
+					$data .= " `{$k}`='{$v}' ";
+				}
+			}
+			$data .= ", id = '{$po_id}' ";
+			if (empty($id)) {
+				$sql = "INSERT INTO `po_approved_list` SET {$data} ";
+			}
+			$update = $this->conn->query($sql);
+
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}',0,'{$qty[$k]}')";
+			}
+			if(!empty($data)){
+				//$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
+				$update = $this->conn->query("INSERT INTO `approved_order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`,`received`,`outstanding`) VALUES {$data} ");
+			}
+		}
+		if ($update) {
+			$resp['status'] = 'success';
+			$resp['id'] = $po_id;
+
+			$this->settings->set_flashdata('success', "Purchase Order status successfully updated.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
 	function save_po(){
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
 			if(in_array($k,array('discount_amount','tax_amount')))
 				$v= str_replace(',','',$v);
-			if(!in_array($k,array('id','po_no')) && !is_array($_POST[$k])){
+			if(!in_array($k,array('id','po_no','usertype')) && !is_array($_POST[$k])){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		if(!empty($po_no)){
+			$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+			if($this->capture_err())
+				return $this->capture_err();
+			if($check > 0){
+				$resp['status'] = 'po_failed';
+				$resp['msg'] = "Purchase Order Number already exist.";
+				return json_encode($resp);
+				exit;
+			}
+		}else{
+			$po_no ="";
+			while(true){
+				$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
+				$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}'")->num_rows;
+				if($check <= 0)
+				break;
+			}
+		}
+		$data .= ", po_no = '{$po_no}' ";
+
+		if(empty($id)){
+			$sql = "INSERT INTO `po_list` set {$data} ";
+		}else{
+
+			$data .= ", status = '1' ";
+
+			$sql = "UPDATE `po_list` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			$po_id = empty($id) ? $this->conn->insert_id : $id ;
+			$resp['id'] = $po_id;
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
+				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`) VALUES {$data} ");
+			}
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Purchase Order successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function manage_req_save_po(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(in_array($k,array('discount_amount','tax_amount')))
+				$v= str_replace(',','',$v);
+			if(!in_array($k,array('id','po_no','usertype')) && !is_array($_POST[$k])){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4110,7 +4297,7 @@ Class Master extends DBConnection {
 	}
 	function delete_po(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `po_list` where unit_id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `po_list` where id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Purchase Order successfully deleted.");
@@ -4143,63 +4330,7 @@ Class Master extends DBConnection {
 		 }
 		 return json_encode($resp);
 	}
-	function save_rent(){
-		extract($_POST);
-		$data = "";
-		foreach($_POST as $k =>$v){
-			if(!in_array($k,array('id')) && !is_array($_POST[$k])){
-				if(!empty($data)) $data .=",";
-				$v = addslashes($v);
-				$data .= " `{$k}`='{$v}' ";
-			}
-		}
-		switch ($rent_type) {
-			case 1:
-				$data .= ", `date_end`='".date("Y-m-d",strtotime($date_rented.' +1 month'))."' ";
-				break;
-			
-			case 2:
-				$data .= ", `date_end`='".date("Y-m-d",strtotime($date_rented.' +3 month'))."' ";
-				break;
-			case 3:
-				$data .= ", `date_end`='".date("Y-m-d",strtotime($date_rented.' +1 year'))."' ";
-				break;
-			default:
-				# code...
-				break;
-		}
-		if(empty($id)){
-			$sql = "INSERT INTO `rent_list` set {$data} ";
-		}else{
-			$sql = "UPDATE `rent_list` set {$data} where id = '{$id}' ";
-		}
-		$save = $this->conn->query($sql);
-		if($save){
-			$resp['status'] = 'success';
-			if(empty($id))
-				$this->settings->set_flashdata('success',"New Rent successfully saved.");
-			else
-				$this->settings->set_flashdata('success',"Rent successfully updated.");
-			$this->settings->conn->query("UPDATE `unit_list` set `status` = '{$status}' where id = '{$unit_id}'");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
-		}
-		return json_encode($resp);
-	}
-	function delete_rent(){
-		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `rent_list` where id = '{$id}'");
-		if($del){
-			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Rent successfully deleted.");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['error'] = $this->conn->error;
-		}
-		return json_encode($resp);
-
-	}
+	
 	function delete_img(){
 		extract($_POST);
 		if(is_file($path)){
@@ -4212,34 +4343,6 @@ Class Master extends DBConnection {
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = 'Unkown '.$path.' path';
-		}
-		return json_encode($resp);
-	}
-	function renew_rent(){
-		extract($_POST);
-		$qry = $this->conn->query("SELECT * FROM `rent_list` where id ='{$id}'");
-		$res = $qry->fetch_array();
-		switch ($res['rent_type']) {
-			case 1:
-				$date_end = " `date_end`='".date("Y-m-d",strtotime($res['date_end'].' +1 month'))."' ";
-				break;
-			case 2:
-				$date_end = " `date_end`='".date("Y-m-d",strtotime($res['date_end'].' +3 month'))."' ";
-				break;
-			case 3:
-				$date_end = " `date_end`='".date("Y-m-d",strtotime($res['date_end'].' +1 year'))."' ";
-				break;
-			default:
-				# code...
-				break;
-		}
-		$update = $this->conn->query("UPDATE `rent_list` set {$date_end}, date_rented = date_end where id = '{$id}' ");
-		if($update){
-			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success'," Rent successfully renewed.");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['error'] = $this->conn->error;
 		}
 		return json_encode($resp);
 	}
@@ -4453,21 +4556,21 @@ switch ($action) {
 	case 'save_po':
 		echo $Master->save_po();
 	break;
+	case 'manage_req_save_po':
+		echo $Master->manage_req_save_po();
+	break;
+	case 'update_status_po':
+		echo $Master->update_status_po();
+	break;
+	case 'update_status_gr':
+		echo $Master->update_status_gr();
+	break;
 	case 'delete_po':
 		echo $Master->delete_po();
 	break;
 	case 'get_price':
 		echo $Master->get_price();
 		break;
-	case 'save_rent':
-		echo $Master->save_rent();
-	break;
-	case 'delete_rent':
-		echo $Master->delete_rent();
-	break;
-	case 'renew_rent':
-		echo $Master->renew_rent();
-	break;
 	default:
 		break;
 }

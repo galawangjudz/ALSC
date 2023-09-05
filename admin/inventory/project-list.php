@@ -18,15 +18,12 @@
 		border-bottom: solid 2px blue;
 		background-color:#E8E8E8;
 	}
-	#container{
-		margin-right:auto;
-		margin-left:auto;
-		width:100%;
-		position:relative;
-		padding-left:250px;
-		padding-right:250px;
-		background-color:transparent;
-	}
+    #container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color:transparent;
+    }
 	#proj-link{
 		border-bottom: solid 2px blue;
         background-color:#E8E8E8;
