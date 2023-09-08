@@ -33,6 +33,7 @@
 					<col width="25%">
 					<col width="10%">
 					<col width="15%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
@@ -41,7 +42,7 @@
 						<th>Item Name</th>
 						<th>Description</th>
 						<th>Supplier</th>
-						<!-- <th>Date Created</th> -->
+						<th>Last Date Canvassed</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -73,7 +74,7 @@
 								echo $supplierData['name'];
 							?>
 						</td>
-							<!-- <td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td> -->
+							<td><?php echo date("Y-m-d",strtotime($row['last_date_canvassed'])) ?></td>
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>

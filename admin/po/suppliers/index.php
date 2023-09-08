@@ -33,7 +33,8 @@
 					<col width="20%">
 					<col width="20%">
 					<col width="10%">
-					<col width="15%">
+					<col width="10%">
+					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
@@ -42,6 +43,7 @@
 						<th>Supplier</th>
 						<th>Contact Person</th>
 						<th>Address</th>
+						<th>VAT (%)</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -49,7 +51,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `supplier_list` order by (`name`) asc ");
+					$qry = $conn->query("SELECT * from `supplier_list` order by (`date_created`) desc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
@@ -63,6 +65,13 @@
 								</p>
 							</td>
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
+							<td>
+								<?php if($row['vatable'] == 0): ?>
+									<span class="badge badge-secondary">0 %</span>
+								<?php else: ?>
+									<span class="badge badge-primary"><?php echo $row['vatable'] ?> %</span>
+								<?php endif; ?>
+							</td>
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>

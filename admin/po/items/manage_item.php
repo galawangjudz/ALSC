@@ -1,5 +1,6 @@
 <?php
 require_once('./../../../config.php');
+$last_date_canvassed = date('Y-m-d', strtotime('now'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `item_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -46,6 +47,16 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="form-group">
             <label for="description" class="control-label">Description:</label>
             <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
+        </div>
+        <div class="form-group">
+            <label for="default_unit" class="control-label">Default Unit/s:</label>
+            <input type="text" name="default_unit" id="default_unit" class="form-control rounded-0" value="<?php echo isset($default_unit) ? $default_unit :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="description" class="control-label">Last Date Canvassed:</label>
+            <?php
+                $formattedDate = date('Y-m-d', strtotime($last_date_canvassed)); ?>
+                <input type="date" class="form-control form-control-sm rounded-0" id="last_date_canvassed" name="last_date_canvassed" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
         </div>
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>

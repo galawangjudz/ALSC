@@ -4042,7 +4042,7 @@ Class Master extends DBConnection {
 		$qry = $this->conn->query("SELECT * FROM item_list where `name` LIKE '%{$q}%'");
 		$data = array();
 		while($row = $qry->fetch_assoc()){
-			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description']);
+			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description'],"default_unit"=>$row['default_unit']);
 		}
 		return json_encode($data);
 	}
@@ -4279,7 +4279,7 @@ Class Master extends DBConnection {
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
-				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
+				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
 			}
 			if(!empty($data)){
 				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");

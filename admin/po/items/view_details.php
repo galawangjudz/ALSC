@@ -27,6 +27,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><?php echo $description ?></td>
                 </tr>
                 <tr>
+                    <td>Available Unit/s:</td>
+                    <td><?php echo $default_unit ?></td>
+                </tr>
+                <tr>
+                    <td>Last Date Canvassed:</td>
+                    <td><?php echo date("F j, Y",strtotime($last_date_canvassed)) ?></td>
+                </tr>
+                <tr>
                     <td>Status:</td>
                     <td>
                         <?php if($status == 1): ?>

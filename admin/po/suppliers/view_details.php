@@ -39,14 +39,29 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><?php echo $email ?></td>
                 </tr>
                 <tr>
+                    <td><b>Vatable:</b></td>
+                    <td>
+                    <?php if($vatable == 0): ?>
+                        <span class="badge badge-secondary">0 %</span>
+                    <?php else: ?>
+                        <span class="badge badge-primary"><?php echo $vatable ?> %</span>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>
+                    <td><b>Date Created:</b></td>
+                    <td><?php echo $formatted_date ?></td>
+                </tr>
+                <tr>
                     <td><b>Status:</b></td>
                     <td>
-                <?php if($status == 1): ?>
-                    <span class="badge badge-success">Active</span>
-                <?php else: ?>
-                    <span class="badge badge-secondary">Inactive</span>
-                <?php endif; ?>
-                </td>
+                    <?php if($status == 1): ?>
+                        <span class="badge badge-success">Active</span>
+                    <?php else: ?>
+                        <span class="badge badge-secondary">Inactive</span>
+                    <?php endif; ?>
+                    </td>
                 </tr>
             </table>
         </dl>
