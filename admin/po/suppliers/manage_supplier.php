@@ -21,16 +21,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         height: auto;
     }
 </style>
-<input type="text" name="vat" id="vat" value="<?php echo isset($vatable) ? $vatable : ''; ?>">
-
+<input type="hidden" name="vat" id="vat" value="<?php echo isset($vatable) ? $vatable : ''; ?>">
 <script>
     var vat = document.getElementById("vat").value;
-
     if (vat == 0) {
-        document.getElementById("vatable").selectedIndex = 2; // Select the "No" option
+        document.getElementById("vatable").selectedIndex = 1;
     }
 </script>
-
 <form action="" id="supplier-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
     <div class="container-fluid">
@@ -55,16 +52,16 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <input type="text" name="contact" id="contact" class="form-control rounded-0" value="<?php echo isset($contact) ? $contact :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="status" class="control-label">Vatable:</label>
+            <label for="status" class="control-label">Vatable?</label>
             <select name="vatable" id="vatable" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($vatable) && $vatable =="" ? "selected": "1" ?> >Yes</option>
+                <option value="12" <?php echo isset($vatable) && $vatable =="" ? "selected": "12" ?> >Yes</option>
                 <option value="0" <?php echo isset($vatable) && $vatable =="" ? "selected": "0" ?>>No</option>
             </select>
         </div>
-        <div class="form-group" id="textbox-container" style="display: none;">
+        <!-- <div class="form-group" id="textbox-container" style="display: none;">
             <label for="vatable" class="control-label">Vatable Percentage (%):</label>
             <input type="text" name="vatable" id="vatable" class="form-control rounded-0" value="<?php echo isset($vatable) ? $vatable :"" ?>">
-        </div>
+        </div> -->
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control rounded-0" required>
@@ -74,7 +71,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
     </div>
 </form>
-
+<!-- 
 <script>
     var select = document.getElementById("vatable");
     var textboxContainer = document.getElementById("textbox-container");
@@ -93,7 +90,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         textboxContainer.style.display = "none";
         document.getElementById("vatable").value = "0";
     }
-</script>
+</script> -->
 
 <script>
     $(function(){

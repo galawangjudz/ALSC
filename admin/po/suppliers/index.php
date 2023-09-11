@@ -43,7 +43,7 @@
 						<th>Supplier</th>
 						<th>Contact Person</th>
 						<th>Address</th>
-						<th>VAT (%)</th>
+						<th>Vatable?</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -67,9 +67,9 @@
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
 							<td>
 								<?php if($row['vatable'] == 0): ?>
-									<span class="badge badge-secondary">0 %</span>
+									<span class="badge badge-secondary">No</span>
 								<?php else: ?>
-									<span class="badge badge-primary"><?php echo $row['vatable'] ?> %</span>
+									<span class="badge badge-primary">Yes</span>
 								<?php endif; ?>
 							</td>
 							<td class="text-center">

@@ -3925,12 +3925,6 @@ Class Master extends DBConnection {
 
 
 
-
-
-
-
-
-
 	///////////////////////////////PURCHASING ORDER///////////////////////////
 
 	function save_supplier(){
@@ -4173,7 +4167,7 @@ Class Master extends DBConnection {
 		foreach($_POST as $k =>$v){
 			if(in_array($k,array('discount_amount','tax_amount')))
 				$v= str_replace(',','',$v);
-			if(!in_array($k,array('id','po_no','usertype')) && !is_array($_POST[$k])){
+			if(!in_array($k,array('id','po_no','usertype','item_status','item_notes')) && !is_array($_POST[$k])){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4203,9 +4197,6 @@ Class Master extends DBConnection {
 		if(empty($id)){
 			$sql = "INSERT INTO `po_list` set {$data} ";
 		}else{
-
-			$data .= ", status = '1' ";
-
 			$sql = "UPDATE `po_list` set {$data} where id = '{$id}' ";
 		}
 		$save = $this->conn->query($sql);
@@ -4216,11 +4207,14 @@ Class Master extends DBConnection {
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
-				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
+				$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$item_status[$k]}','{$item_notes[$k]}')";
 			}
+			
+
 			if(!empty($data)){
 				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
-				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`) VALUES {$data} ");
+				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
 			}
 			if(empty($id))
 				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
@@ -4233,13 +4227,13 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
-	function manage_req_save_po(){
+	function manage_po(){
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
 			if(in_array($k,array('discount_amount','tax_amount')))
 				$v= str_replace(',','',$v);
-			if(!in_array($k,array('id','po_no','usertype')) && !is_array($_POST[$k])){
+			if(!in_array($k,array('id','po_no','usertype','item_status','item_notes')) && !is_array($_POST[$k])){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4279,11 +4273,14 @@ Class Master extends DBConnection {
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
+				//$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
 				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
 			}
+			
+
 			if(!empty($data)){
 				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
-				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`) VALUES {$data} ");
+				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`) VALUES {$data} ");
 			}
 			if(empty($id))
 				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
@@ -4556,8 +4553,8 @@ switch ($action) {
 	case 'save_po':
 		echo $Master->save_po();
 	break;
-	case 'manage_req_save_po':
-		echo $Master->manage_req_save_po();
+	case 'manage_po':
+		echo $Master->manage_po();
 	break;
 	case 'update_status_po':
 		echo $Master->update_status_po();

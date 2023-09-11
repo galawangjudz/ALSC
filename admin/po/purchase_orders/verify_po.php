@@ -73,6 +73,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	input{
 		border:none;
 	}
+	.instruction{
+		font-weight:bold;
+		font-style:italic;
+		color:red;
+		font-size:14px;
+	}
 </style>
 
 <script>
@@ -99,9 +105,11 @@ $(document).ready(function() {
 
         if (this.checked) {
             itemNotesTextarea.prop('readonly', true);
+            // Remove the "unchecked-row" class when the checkbox is checked
             $(this).closest('tr').removeClass('unchecked-row');
         } else {
             itemNotesTextarea.prop('readonly', false);
+            // Add the "unchecked-row" class when the checkbox is unchecked
             $(this).closest('tr').addClass('unchecked-row');
         }
     });
@@ -148,19 +156,20 @@ $(document).ready(function() {
 				</div>
             </div>
 			<div class="row">
-			<div class="col-md-6 form-group">
-				<label for="department">Requesting Department:</label>
-				<select name="department" id="department" class="custom-select custom-select-sm rounded-0">
-					<option value="" id="department" disabled <?php echo !isset($department) ? "selected" :'' ?>></option>
-					<?php 
-					$reqdept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
-					while($row = $reqdept_qry->fetch_assoc()):
-					?>
-					<option value="<?php echo $row['department'] ?>" <?php echo isset($department) && $department == $row['department'] ? 'selected' : '' ?>><?php echo $row['department'] ?></option>
-					<?php endwhile; ?>
-				</select>
-			</div>
-
+				<div class="col-md-6 form-group">
+					<label for="department">Requesting Department:</label>
+                    <!-- <input type="text" class="form-control form-control-sm rounded-0" name="department" id="department" value="<?php echo $department; ?>" style="background-color:gainsboro;text-align:center;border:none;text-decoration-line:underline;font-style:italic;font-weight:bold;pointer-events:none;color:black;" readonly/> -->
+					<select name="department" id="department" class="custom-select custom-select-sm rounded-0">
+				
+						<option value="" id="department" disabled <?php echo !isset($department) ? "selected" :'' ?>></option>
+						<?php 
+							$reqdept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
+							while($row = $reqdept_qry->fetch_assoc()):
+						?>
+						<option value="<?php echo $row['department'] ?>" <?php echo isset($department) && $department == $row['department'] ? 'selected' : '' ?>><?php echo $row['department'] ?></option>
+						<?php endwhile; ?>
+					</select>
+				</div>
                 <div class="col-md-6 form-group">
 					<label for="department">Delivery Date:</label>
 					<?php
@@ -169,22 +178,26 @@ $(document).ready(function() {
                     <input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
 				</div>
 			</div>
-			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
+			<div class="instruction">Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div>
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="item-list">
 						<!-- <colgroup>
 							<col width="5%">
 							<col width="5%">
+							<col width="25%">
 							<col width="5%">
 							<col width="5%">
+							<col width="35%">
 							<col width="10%">
 							<col width="20%">
-							<col width="30%">
+							<col width="20%">
 						</colgroup> -->
 						<thead>
 							<tr class="bg-navy disabled">
 							<th class="px-1 py-1 text-center"></th>
+								<th class="px-1 py-1 text-center">Select</th>
+								<th class="px-1 py-1 text-center">Note</th>
 								<th class="px-1 py-1 text-center">Qty</th>
 								<th class="px-1 py-1 text-center">Unit</th>
 								<th class="px-1 py-1 text-center">Item</th>
@@ -203,6 +216,14 @@ $(document).ready(function() {
 							<tr class="po-item" data-id="">
 								<td class="align-middle p-1 text-center">
 									<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+								</td>
+								<td class="align-middle p-0 text-center">
+									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
+									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+								</td>
+
+								<td class="align-middle p-0 text-center">
+									<textarea id="item_notes" name="item_notes[]"><?php echo empty($row['item_notes']) ? '' : $row['item_notes']; ?></textarea>
 								</td>
 								<td class="align-middle p-0 text-center">
 									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
@@ -233,25 +254,25 @@ $(document).ready(function() {
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6"><span>
+									<th class="p-1 text-right" colspan="8"><span>
 										<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
 									</span> Sub Total</th>
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Discount (%):
+									<th class="p-1 text-right" colspan="8">Discount (%):
 									<input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo number_format(isset($discount_amount) ? $discount_amount : 0) ?>" name="discount_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Tax Inclusive (%):
+									<th class="p-1 text-right" colspan="8">Tax Inclusive (%):
 									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Total:</th>
+									<th class="p-1 text-right" colspan="8">Total:</th>
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 							</tr>
@@ -263,18 +284,16 @@ $(document).ready(function() {
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
-					<!-- <input type="text" name="status2" id="status2" value="0">
-					<button id="checkItemStatusButton">Check Item Status</button> -->
-
-					<!-- <div class="form-group">
+					<br>
+					<div class="form-group">
 						<label for="status2">Status:</label>
 						<select name="status2" id="status2" class="form-control">
-							
+							<option value="0"></option>
 							<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
 							<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
-							<option value="0" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
+							<option value="3" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
 						</select>
-					</div> -->
+					</div>
 			    </div>
             </div>
 		</form>
@@ -297,6 +316,13 @@ $(document).ready(function() {
 	<tr class="po-item" data-id="">
 		<td class="align-middle p-1 text-center">
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+		</td>
+		<td class="align-middle p-0 text-center">
+			<input type="checkbox" class="item-checkbox">
+			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+		</td>
+		<td class="align-middle p-0 text-center">
+			<textarea name="item_notes[]" id="item_notes"></textarea>
 		</td>
 		<td class="align-middle p-0 text-center">
 			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
@@ -489,7 +515,7 @@ $(document).ready(function() {
 			}
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=manage_po",
+				url:_base_url_+"classes/Master.php?f=save_po",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -504,7 +530,7 @@ $(document).ready(function() {
 				},
 				success:function(resp){
 					if(typeof resp =='object' && resp.status == 'success'){
-						location.href = "./?page=po/purchase_orders";
+						location.href = "./?page=po/requisitions/pending_req";
 					}else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)

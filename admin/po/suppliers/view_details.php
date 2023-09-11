@@ -39,12 +39,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><?php echo $email ?></td>
                 </tr>
                 <tr>
-                    <td><b>Vatable:</b></td>
+                    <td><b>Vatable?</b></td>
                     <td>
                     <?php if($vatable == 0): ?>
-                        <span class="badge badge-secondary">0 %</span>
+                        <span class="badge badge-secondary">No</span>
                     <?php else: ?>
-                        <span class="badge badge-primary"><?php echo $vatable ?> %</span>
+                        <span class="badge badge-primary">Yes</span>
                     <?php endif; ?>
                     </td>
                 </tr>

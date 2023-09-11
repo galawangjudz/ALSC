@@ -81,21 +81,22 @@ $level = $_settings->userdata('type');
                     <?php if ($level <= 4): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/manage_po" class="nav-link nav-cpo">
+                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
-                          Create PO
+                          PO List
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           Request Form
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <?php endif ; ?>
                     <?php if ($level <= 3): ?>
 
