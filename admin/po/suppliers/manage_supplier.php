@@ -8,6 +8,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             $$k=stripslashes($v);
         }
     }
+}else{
+    $mop = "";
+    $status = "";
 }
 ?>
 <style>
@@ -58,15 +61,22 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <option value="0" <?php echo isset($vatable) && $vatable =="" ? "selected": "0" ?>>No</option>
             </select>
         </div>
-        <!-- <div class="form-group" id="textbox-container" style="display: none;">
-            <label for="vatable" class="control-label">Vatable Percentage (%):</label>
-            <input type="text" name="vatable" id="vatable" class="form-control rounded-0" value="<?php echo isset($vatable) ? $vatable :"" ?>">
-        </div> -->
+        <div class="form-group">
+            <label for="mop" class="control-label">Mode of Payment:</label>
+            <select name="mop" id="mop" class="form-control rounded-0" required>
+                <option value="1" <?php echo ($mop === "1") ? "selected" : ""; ?>>Check</option>
+                <option value="0" <?php echo ($mop === "0") ? "selected" : ""; ?>>Cash on Delivery</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="mop" class="control-label">Terms: (days)</label>
+            <input type="text" name="terms" id="terms" class="form-control rounded-0" value="<?php echo isset($terms) ? $terms :"" ?>" required>
+        </div>
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($status) && $status =="" ? "selected": "1" ?> >Active</option>
-                <option value="0" <?php echo isset($status) && $status =="" ? "selected": "0" ?>>Inactive</option>
+                <option value="1" <?php echo ($status === "1") ? "selected": ""; ?>>Active</option>
+                <option value="0" <?php echo ($status === "0") ? "selected": ""; ?>>Inactive</option>
             </select>
         </div>
     </div>

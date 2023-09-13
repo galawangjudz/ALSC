@@ -33,7 +33,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     $po_number = 'PO - ' . str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
 }
 
-
 ?>
 <style>
     span.select2-selection.select2-selection--single {
@@ -84,7 +83,6 @@ $(document).ready(function() {
             $(this).find('.item-checkbox').prop('checked', true);
             itemNotesTextarea.prop('readonly', true);
         } else {
-            // Add the "unchecked-row" class to the row
             $(this).closest('tr').addClass('unchecked-row');
         }
     });
@@ -113,7 +111,6 @@ $(document).ready(function() {
 	$usertype = $_settings->userdata('user_type'); 
 	$type = $_settings->userdata('id');
 	$level = $_settings->userdata('type');
-	$department = $_settings->userdata('department');
 ?>
 <body onload="">
 <div class="card card-outline card-info">
@@ -122,7 +119,7 @@ $(document).ready(function() {
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="text" value="<?php echo $level; ?>">
+			<input type="hidden" value="<?php echo $level; ?>">
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
@@ -130,7 +127,7 @@ $(document).ready(function() {
 					<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
 						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
 						<?php 
-						$supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
+						$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 order by `name` asc");
 						while($row = $supplier_qry->fetch_assoc()):
 							$vatable = $row['vatable'];
 						?>
@@ -147,20 +144,25 @@ $(document).ready(function() {
 					<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 				</div>
             </div>
+
 			<div class="row">
 			<div class="col-md-6 form-group">
 				<label for="department">Requesting Department:</label>
-				<select name="department" id="department" class="custom-select custom-select-sm rounded-0">
-					<option value="" id="department" disabled <?php echo !isset($department) ? "selected" :'' ?>></option>
+				<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
+					<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
 					<?php 
-					$reqdept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
-					while($row = $reqdept_qry->fetch_assoc()):
+					$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
+					while($row = $dept_qry->fetch_assoc()):
+						$deptValue = $row['department']; 
 					?>
-					<option value="<?php echo $row['department'] ?>" <?php echo isset($department) && $department == $row['department'] ? 'selected' : '' ?>><?php echo $row['department'] ?></option>
+					<option 
+						value="<?php echo $deptValue ?>" 
+						<?php echo isset($department) && $department == $deptValue ? 'selected' : '' ?> 
+						><?php echo $deptValue ?>
+					</option>
 					<?php endwhile; ?>
 				</select>
 			</div>
-
                 <div class="col-md-6 form-group">
 					<label for="department">Delivery Date:</label>
 					<?php
@@ -169,19 +171,21 @@ $(document).ready(function() {
                     <input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label for="receiver">Receiver:</label>
+					<input type="text" class="form-control form-control-sm rounded-0" id="receiver" name="receiver" value="<?php echo isset($receiver) ? $receiver : '' ?>">
+				</div>
+				<div class="col-md-6 form-group">
+					<label for="receiver_contact_no">Contact #:</label>
+					<input type="text" class="form-control form-control-sm rounded-0" id="receiver_contact_no" name="receiver_contact_no" value="<?php echo isset($receiver_contact_no) ? $receiver_contact_no : '' ?>">
+				</div>
+			</div>
 			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="item-list">
-						<!-- <colgroup>
-							<col width="5%">
-							<col width="5%">
-							<col width="5%">
-							<col width="5%">
-							<col width="10%">
-							<col width="20%">
-							<col width="30%">
-						</colgroup> -->
 						<thead>
 							<tr class="bg-navy disabled">
 							<th class="px-1 py-1 text-center"></th>
@@ -196,7 +200,7 @@ $(document).ready(function() {
 						<tbody>
 							<?php 
 							if(isset($id)):
-							$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' ");
+							$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' and o.item_status != 2 ");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 							?>
@@ -287,7 +291,7 @@ $(document).ready(function() {
 					<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" href="?page=po/requisitions/pending_req" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" href="?page=po/purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -321,14 +325,11 @@ $(document).ready(function() {
 </body>
 <script>
 	$(document).ready(function() {
-    // ...
 
-    // Function to check if all checkboxes are checked
     function areAllCheckboxesChecked() {
-        // Get all the item-checkbox input elements
+
         const checkboxes = $('.item-checkbox');
 
-        // Use Array.every() to check if all checkboxes are checked
         const allChecked = checkboxes.toArray().every(function (checkbox) {
             return $(checkbox).prop('checked');
         });
@@ -336,7 +337,6 @@ $(document).ready(function() {
         return allChecked;
     }
 
-    // Add a click event handler for the check button
     $('#checkItemStatusButton').click(function () {
         const allChecked = areAllCheckboxesChecked();
 
@@ -347,7 +347,6 @@ $(document).ready(function() {
         }
     });
 
-    // ...
 });
 
 
@@ -376,16 +375,13 @@ $(document).ready(function() {
         var vatable = parseFloat(selectedOption.data("vatable")) || 0;
         var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
 
-        // Calculate the discount based on the vatable percentage
         var discount = (subtotal * vatable) / 100;
         
-        // Update the discount input field and trigger the calculate function
         $('[name="tax_percentage"]').val(vatable);
         $('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
         
 		var total = subtotal - discount;
 
-        // Update the total input field
         $('#total').text(total.toLocaleString('en-US'));
     });
 });

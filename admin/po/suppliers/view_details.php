@@ -49,6 +49,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     </td>
                 </tr>
                 <tr>
+                    <td><b>Mode of Payment:</b></td>
+                    <td>
+                    <?php if($mop == 0): ?>
+                        <span>Cash on Delivery</span>
+                    <?php else: ?>
+                        <span>Check</span>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Terms:</b></td>
+                    <td><?php echo $terms ?> (days)</td>
+                </tr>
+                <tr>
                     <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>
                     <td><b>Date Created:</b></td>
                     <td><?php echo $formatted_date ?></td>

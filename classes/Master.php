@@ -4106,48 +4106,76 @@ Class Master extends DBConnection {
 	
 	
 	function update_status_po() {
-    extract($_POST);
-	if($usertype == 'Purchasing'){
-		$update = $this->conn->query("UPDATE `po_list` set `status` = '{$status}' where id = '{$po_id}'");
-	}
-	else if($usertype == 'Manager'){
-		$update = $this->conn->query("UPDATE `po_list` set `status2` = '{$status}' where id = '{$po_id}'");
-	}
-    else if ($usertype == 'CFO' || $usertype == 'COO') {
-        $update = $this->conn->query("UPDATE `po_list` SET `status3` = '{$status}' WHERE id = '{$po_id}'");
-	}
-	else if ($usertype == 'IT Admin') {
-        $update = $this->conn->query("UPDATE `po_list` SET `status` = '{$status}', `status2` = '{$status}',`status3` = '{$status}' WHERE id = '{$po_id}'");
-	}
-	
-		if (($usertype == 'CFO' || $usertype == 'COO' || $usertype == 'IT Admin') && $status == '1') {
-
-			$data = "";
-			foreach($_POST as $k =>$v){
-				if(in_array($k,array('discount_amount','tax_amount')))
-					$v= str_replace(',','',$v);
-				if(!in_array($k,array('po_id','usertype')) && !is_array($_POST[$k])){
-					$v = addslashes(trim($v));
-					if(!empty($data)) 
-					$data .=",";
-					$data .= " `{$k}`='{$v}' ";
-				}
-			}
-			$data .= ", id = '{$po_id}' ";
-			if (empty($id)) {
-				$sql = "INSERT INTO `po_approved_list` SET {$data} ";
-			}
-			$update = $this->conn->query($sql);
-
+		extract($_POST);
+		if($level == 4 and $selected_index == 1){
+			$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
-				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}',0,'{$qty[$k]}')";
+				$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$item_status[$k]}','{$item_notes[$k]}')";
 			}
 			if(!empty($data)){
-				//$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
-				$update = $this->conn->query("INSERT INTO `approved_order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`,`received`,`outstanding`) VALUES {$data} ");
+				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
+				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
 			}
+		}
+		else if($level == 3){
+			$update = $this->conn->query("UPDATE `po_list` set `status2` = '{$status2}',`fpo_status` = '{$status2}' where id = '{$po_id}'");
+			//$po_id = empty($id) ? $this->conn->insert_id : $id ;
+			//$resp['id'] = $po_id;
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$item_status[$k]}','{$item_notes[$k]}')";
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}' and item_status != 2");
+				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
+			}
+		}
+		else if ($level == 2 && $selected_index != 1) {
+			$update = $this->conn->query("UPDATE `po_list` set `status3` = '{$status3}',`fpo_status` = '{$status3}' where id = '{$po_id}'");
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$item_status[$k]}','{$item_notes[$k]}')";
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}' and item_status != 2");
+				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
+			}
+		}
+		else if ($level == 2 && $selected_index == 1) {
+			$update = $this->conn->query("UPDATE `po_list` SET `status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
+			$data = "";
+				foreach($_POST as $k =>$v){
+					if(in_array($k,array('discount_amount','tax_amount')))
+						$v= str_replace(',','',$v);
+					if(!in_array($k,array('po_id','level','selected_index')) && !is_array($_POST[$k])){
+						$v = addslashes(trim($v));
+						if(!empty($data)) 
+						$data .=",";
+						$data .= " `{$k}`='{$v}' ";
+					}
+				}
+				//$data .= ", id = '{$po_id}' ";
+				if (!empty($id)) {
+					$sql = "INSERT INTO `po_approved_list` SET {$data} ";
+				}
+				$update = $this->conn->query($sql);
+
+				$data = "";
+				foreach($item_id as $k =>$v){
+					if(!empty($data)) $data .=",";
+					$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}',0,'{$qty[$k]}')";
+				}
+				if(!empty($data)){
+					$this->conn->query("DELETE FROM `approved_order_items` where po_id = '{$po_id}'");
+					$update = $this->conn->query("INSERT INTO `approved_order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`) VALUES {$data} ");
+				}
 		}
 		if ($update) {
 			$resp['status'] = 'success';
@@ -4167,7 +4195,7 @@ Class Master extends DBConnection {
 		foreach($_POST as $k =>$v){
 			if(in_array($k,array('discount_amount','tax_amount')))
 				$v= str_replace(',','',$v);
-			if(!in_array($k,array('id','po_no','usertype','item_status','item_notes')) && !is_array($_POST[$k])){
+			if(!in_array($k,array('id','po_no','usertype','item_status','item_notes','level','selected_index')) && !is_array($_POST[$k])){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4197,6 +4225,18 @@ Class Master extends DBConnection {
 		if(empty($id)){
 			$sql = "INSERT INTO `po_list` set {$data} ";
 		}else{
+
+			if($level == 4){
+				$data .= ", status = '1' ";
+				$data .= ", status2 = '0' ";
+				$data .= ", status3 = '0' ";
+			}
+
+			if($level == 3 and $status2 == 3){
+				$data .= ", status = '3' ";
+				$data .= ", status2 = '0' ";
+				$data .= ", status3 = '0' ";
+			}
 			$sql = "UPDATE `po_list` set {$data} where id = '{$id}' ";
 		}
 		$save = $this->conn->query($sql);
@@ -4211,7 +4251,6 @@ Class Master extends DBConnection {
 				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$item_status[$k]}','{$item_notes[$k]}')";
 			}
 			
-
 			if(!empty($data)){
 				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
 				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
@@ -4295,6 +4334,7 @@ Class Master extends DBConnection {
 	function delete_po(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `po_list` where id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `order_items` where po_id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Purchase Order successfully deleted.");

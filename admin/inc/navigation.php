@@ -78,7 +78,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                    <?php if ($level <= 4): ?>
+
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
@@ -97,8 +97,6 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                    <?php endif ; ?>
-                    <?php if ($level <= 3): ?>
 
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po" class="nav-link nav-av">
@@ -125,7 +123,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    
+
                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
@@ -135,8 +133,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <?php endif ; ?>
-                    
+
                     <?php if ($level <= 3){?>
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/sales_invoice/sales_invoice" class="nav-link nav-invoice">
