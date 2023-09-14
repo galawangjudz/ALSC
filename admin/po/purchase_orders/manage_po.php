@@ -171,7 +171,6 @@ $(document).ready(function() {
                     <input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
 				</div>
 			</div>
-
 			<div class="row">
 				<div class="col-md-6 form-group">
 					<label for="receiver">Receiver:</label>
