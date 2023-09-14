@@ -1,5 +1,6 @@
 <?php
 require_once('./../../../config.php');
+$last_date_canvassed = date('Y-m-d', strtotime('now'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `item_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -23,14 +24,39 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <form action="" id="item-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
     <div class="container-fluid">
-
+    <div class="form-group">
+            <label for="item_code" class="control-label">Item Code:</label>
+            <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code :"" ?>" required>
+        </div>
         <div class="form-group">
             <label for="name" class="control-label">Item Name:</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
         </div>
         <div class="form-group">
+            <label for="supplier" class="supplier">Supplier:</label>
+            <select name="supplier_id" id="supplier_id" class="form-control rounded-0">
+                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
+                <?php 
+                    $supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
+                    while($row = $supplier_qry->fetch_assoc()):
+                ?>
+                <option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>><?php echo $row['name'] ?></option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+        <div class="form-group">
             <label for="description" class="control-label">Description:</label>
             <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
+        </div>
+        <div class="form-group">
+            <label for="default_unit" class="control-label">Default Unit/s:</label>
+            <input type="text" name="default_unit" id="default_unit" class="form-control rounded-0" value="<?php echo isset($default_unit) ? $default_unit :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="description" class="control-label">Last Date Canvassed:</label>
+            <?php
+                $formattedDate = date('Y-m-d', strtotime($last_date_canvassed)); ?>
+                <input type="date" class="form-control form-control-sm rounded-0" id="last_date_canvassed" name="last_date_canvassed" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
         </div>
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>

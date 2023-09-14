@@ -33,7 +33,8 @@
 					<col width="20%">
 					<col width="20%">
 					<col width="10%">
-					<col width="15%">
+					<col width="10%">
+					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
@@ -42,6 +43,7 @@
 						<th>Supplier</th>
 						<th>Contact Person</th>
 						<th>Address</th>
+						<th>Vatable?</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -49,7 +51,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `supplier_list` order by (`name`) asc ");
+					$qry = $conn->query("SELECT * from `supplier_list` order by (`date_created`) desc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
@@ -63,6 +65,13 @@
 								</p>
 							</td>
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
+							<td>
+								<?php if($row['vatable'] == 0): ?>
+									<span class="badge badge-secondary">No</span>
+								<?php else: ?>
+									<span class="badge badge-primary">Yes</span>
+								<?php endif; ?>
+							</td>
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>
@@ -76,11 +85,11 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-info text-primary"></span> View</a>
+				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-info text-primary"></span>&nbsp;&nbsp;View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Edit</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span>&nbsp;&nbsp;Delete</a>
 				                  </div>
 							</td>
 						</tr>

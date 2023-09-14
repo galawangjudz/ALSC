@@ -122,7 +122,7 @@ if(isset($_GET['id'])){
             <table style="width:100%;">
                 <tr>
                     <td>
-				        <button class="btn btn-flat btn-default bg-maroon" form="manage-lot"  style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+				        <button class="btn btn-flat btn-default bg-maroon" form="manage-lot" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
                     </td>
                     <td>
 				        <a class="btn btn-flat btn-default" href="./?page=inventory/lot-list" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>

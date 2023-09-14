@@ -33,6 +33,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     $po_number = 'PO - ' . str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
 }
 
+
 ?>
 <style>
     span.select2-selection.select2-selection--single {
@@ -72,7 +73,92 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	input{
 		border:none;
 	}
+	.instruction{
+		font-weight:bold;
+		font-style:italic;
+		color:red;
+		font-size:14px;
+	}
 </style>
+
+
+<script>
+$(document).ready(function() {
+    var level = <?php echo $level; ?>;
+    var supplierValue = $('#supplier_id').val();
+    var departmentValue = $('#department').val();
+    var status2Val = <?php echo $status2; ?>;
+    var status3Val = <?php echo $status3; ?>;
+
+    
+    if (level != 4) {
+        $('input[name="qty[]"], input[name="default_unit[]"], input[name="item_id[]"], input[name="unit_price[]"]').prop('readonly', true);
+        $('#delivery_date').prop('readonly', true);
+        $('#notes').prop('readonly', true);
+		$('#receiver').prop('readonly', true);
+		$('#receiver_contact_no').prop('readonly', true);
+        //$('#supplier_id, #department').prop('readonly', true); Not working pa rin e
+    }
+	
+	// if (level != 4 && (status2Val == 3 || status3Val == 3)) {
+	// 	$('input[name="qty[]"], input[name="default_unit[]"], input[name="item_id[]"], input[name="unit_price[]"], textarea[name="item_notes[]"]').prop('readonly', true);
+	// 	$('.item-checkbox').prop('disabled', true);
+	// 	$('#delivery_date').prop('readonly', true);
+    //     $('#notes').prop('readonly', true);
+	// 	$('#status').prop('hidden', true);
+	// 	$('#status2').prop('hidden', true);
+	// 	$('#status3').prop('hidden', true);
+    //     //$('#supplier_id, #department').prop('readonly', true); Not working pa rin e
+	// }
+});
+
+</script>
+<!-- <script>
+	document.addEventListener("DOMContentLoaded", function () {
+	var statusDropdown = document.getElementById("status");
+	statusDropdown.addEventListener("change", function () {
+	var selectedStatus = statusDropdown.value;
+	var itemStatusInputs = document.querySelectorAll("input[name='item_status[]']");
+		if (selectedStatus === "1") {
+			itemStatusInputs.forEach(function (input) {
+				if (input.value === "1") {
+					input.value = "2";
+				}
+			});
+		}else{
+			itemStatusInputs.forEach(function (input) {
+				if (input.value === "2") {
+					input.value = "1";
+				}
+			});
+		}
+	});
+});
+</script> -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+		var statusDropdown = document.getElementById("status");
+        var level = <?php echo $level; ?>;
+		var selectedStatus = statusDropdown.value;
+
+        if (level === 4) {
+            var itemStatusInputs = document.querySelectorAll("input[name='item_status[]']");
+			if (selectedStatus === "1") {
+				itemStatusInputs.forEach(function (input) {
+						if (input.value === "1") {
+						input.value = "2";
+					}
+				});
+				}else{
+				itemStatusInputs.forEach(function (input) {
+					if (input.value === "2") {
+						input.value = "1";
+					}
+				});
+			}
+        }
+    });
+</script>
 
 <script>
 $(document).ready(function() {
@@ -81,8 +167,9 @@ $(document).ready(function() {
         var itemNotesTextarea = $(this).closest('tr').find('[name="item_notes[]"]');
         if (itemStatusInput.val() == '0') {
             $(this).find('.item-checkbox').prop('checked', true);
-            itemNotesTextarea.prop('readonly', true);
+            // itemNotesTextarea.prop('readonly', true);
         } else {
+
             $(this).closest('tr').addClass('unchecked-row');
         }
     });
@@ -96,10 +183,12 @@ $(document).ready(function() {
         itemStatusInput.val(this.checked ? 0 : 1);
 
         if (this.checked) {
-            itemNotesTextarea.prop('readonly', true);
+            // itemNotesTextarea.prop('readonly', true);
+
             $(this).closest('tr').removeClass('unchecked-row');
         } else {
-            itemNotesTextarea.prop('readonly', false);
+            // itemNotesTextarea.prop('readonly', false);
+
             $(this).closest('tr').addClass('unchecked-row');
         }
     });
@@ -119,15 +208,16 @@ $(document).ready(function() {
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="hidden" value="<?php echo $level; ?>">
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
+					<!-- <input type="text" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id; ?>">
+					<input type="text" id="department" name="department" value="<?php echo $department; ?>"> -->
 					<label for="supplier_id">Supplier:</label>
-					<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+					<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" required>
 						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
 						<?php 
-						$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 order by `name` asc");
+						$supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
 						while($row = $supplier_qry->fetch_assoc()):
 							$vatable = $row['vatable'];
 						?>
@@ -140,37 +230,37 @@ $(document).ready(function() {
 					</select>
 				</div>
                 <div class="col-md-6 form-group">
+					<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
 					<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
 					<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 				</div>
             </div>
-
 			<div class="row">
-			<div class="col-md-6 form-group">
-				<label for="department">Requesting Department:</label>
-				<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
-					<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
-					<?php 
-					$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
-					while($row = $dept_qry->fetch_assoc()):
-						$deptValue = $row['department']; 
-					?>
-					<option 
-						value="<?php echo $deptValue ?>" 
-						<?php echo isset($department) && $department == $deptValue ? 'selected' : '' ?> 
-						><?php echo $deptValue ?>
-					</option>
-					<?php endwhile; ?>
-				</select>
-			</div>
+				<div class="col-md-6 form-group">
+					<label for="department">Requesting Department:</label>
+					<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2" required>
+						<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
+						<?php 
+						$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
+						while($row = $dept_qry->fetch_assoc()):
+							$deptValue = $row['department']; 
+						?>
+						<option 
+							value="<?php echo $deptValue ?>" 
+							<?php echo isset($department) && $department == $deptValue ? 'selected' : '' ?> 
+							><?php echo $deptValue ?>
+						</option>
+						<?php endwhile; ?>
+					</select>
+				</div>
                 <div class="col-md-6 form-group">
 					<label for="department">Delivery Date:</label>
 					<?php
 					$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-					
                     <input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
 				</div>
 			</div>
+
 			<div class="row">
 				<div class="col-md-6 form-group">
 					<label for="receiver">Receiver:</label>
@@ -181,32 +271,40 @@ $(document).ready(function() {
 					<input type="text" class="form-control form-control-sm rounded-0" id="receiver_contact_no" name="receiver_contact_no" value="<?php echo isset($receiver_contact_no) ? $receiver_contact_no : '' ?>">
 				</div>
 			</div>
-			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
+			
+			<br>
+			<div class="instruction">Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div>
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="item-list">
 						<thead>
 							<tr class="bg-navy disabled">
-							<th class="px-1 py-1 text-center"></th>
+								<?php if($level == 4 and ($fpo_status != 3)): ?>
+									<th class="px-1 py-1 text-center"></th>
+								<?php endif; ?>
 								<th class="px-1 py-1 text-center">Qty</th>
 								<th class="px-1 py-1 text-center">Unit</th>
 								<th class="px-1 py-1 text-center">Item</th>
 								<th class="px-1 py-1 text-center">Description</th>
 								<th class="px-1 py-1 text-center">Price (per piece)</th>
 								<th class="px-1 py-1 text-center">Total</th>
+								<th class="px-1 py-1 text-center">Select</th>
+								<th class="px-1 py-1 text-center">Note</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php 
 							if(isset($id)):
-							$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' and o.item_status != 2 ");
+							$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' and o.item_status != 2");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 							?>
 							<tr class="po-item" data-id="">
-								<td class="align-middle p-1 text-center">
-									<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-								</td>
+								<?php if($level == 4 and ($fpo_status != 3)): ?>
+									<td class="align-middle p-1 text-center">
+										<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+									</td>
+								<?php endif; ?>
 								<td class="align-middle p-0 text-center">
 									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
 								</td>
@@ -228,7 +326,14 @@ $(document).ready(function() {
                                 	<input type="text" step="any" class="text-right w-100 border-0" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price']) ?>
+								</td>
+								<td class="align-middle p-0 text-center">
+									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
+									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+								</td>
 
+								<td class="align-middle p-0 text-center">
+									<textarea id="item_notes" name="item_notes[]"><?php echo empty($row['item_notes']) ? '' : $row['item_notes']; ?></textarea>
 								</td>
 							</tr>
 							<?php endwhile;endif; ?>
@@ -236,25 +341,27 @@ $(document).ready(function() {
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6"><span>
+									<th class="p-1 text-right" colspan="5"><span>
+									<?php if($usertype == "Purchasing Officer"): ?>
 										<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
+									<?php endif; ?>
 									</span> Sub Total</th>
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Discount (%):
+									<th class="p-1 text-right" colspan="5">Discount (%):
 									<input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo number_format(isset($discount_amount) ? $discount_amount : 0) ?>" name="discount_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Tax Inclusive (%):
+									<th class="p-1 text-right" colspan="5">Tax Inclusive (%):
 									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Total:</th>
+									<th class="p-1 text-right" colspan="5">Total:</th>
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 							</tr>
@@ -266,45 +373,67 @@ $(document).ready(function() {
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
-					<!-- <input type="text" name="status2" id="status2" value="0">
-					<button id="checkItemStatusButton">Check Item Status</button> -->
+					<br>
+					<div class="form-group">
+						<input type="hidden" value="<?php echo $level; ?>" name="level">
+						<input type="hidden" value="0" name="selected_index">
+						<label for="status">Status:</label>
 
-					<!-- <div class="form-group">
-						<label for="status2">Status:</label>
-						<select name="status2" id="status2" class="form-control">
-							
-							<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
-							<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
-							<option value="0" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
-						</select>
-					</div> -->
+						<!-- Purchasing Officer -->
+						<?php if ($level == 4) { ?>
+							<select name="status" id="status" class="form-control">
+								<option value="0"></option>
+								<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
+								<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
+								<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
+							</select>
+
+
+						<!-- Finance Manager -->
+						<?php } elseif ($level == 3) { ?>
+							<select name="status2" id="status2" class="form-control">
+								<option value="0"></option>
+								<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
+								<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
+								<option value="3" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
+							</select>
+
+						<!-- COO/CFO -->
+						<?php } elseif ($level == 2) { ?>
+							<select name="status3" id="status3" class="form-control">
+								<option value="0"></option>
+								<option value="1" <?php echo $status3 == 1 ? 'selected' : ''; ?>>Approved</option>
+								<option value="2" <?php echo $status3 == 2 ? 'selected' : ''; ?>>Declined</option>
+								<option value="3" <?php echo $status3 == 3 ? 'selected' : ''; ?>>For Review</option>
+							</select>
+						<?php } ?>
 			    </div>
             </div>
 		</form>
 	</div>
-
-	<div class="card-footer">
-		<table style="width:100%;">
-			<tr>
-				<td>
-					<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
-				</td>
-				<td>
-					<a class="btn btn-flat btn-default" href="?page=po/purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
-				</td>
-			</tr>
-		</table>
-	</div>
+    <div class="card-footer">
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                </td>
+                <td>
+                    <a class="btn btn-flat btn-default" href="?page=po/purchase_orders" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <table class="d-none" id="item-clone">
 	<tr class="po-item" data-id="">
+	<?php if($level == 4 and ($fpo_status != 3)): ?>
 		<td class="align-middle p-1 text-center">
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 		</td>
+	<?php endif; ?>
 		<td class="align-middle p-0 text-center">
 			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
 		</td>
-
 			<!-- <input type="text" class="text-center w-100 border-0" name="unit[]" required/> -->
 		<!-- <td class="align-middle p-1 item-unit"></td> -->
 		<td class="align-middle p-1 item-unit">
@@ -319,36 +448,74 @@ $(document).ready(function() {
 			<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
 		</td>
 		<td class="align-middle p-1 text-right total-price">0</td>
+		<td class="align-middle p-0 text-center">
+			<input type="checkbox" class="item-checkbox">
+			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+		</td>
+		<td class="align-middle p-0 text-center">
+			<textarea name="item_notes[]" id="item_notes"></textarea>
+		</td>
 	</tr>
 </table>
 </body>
 <script>
-	$(document).ready(function() {
 
-    function areAllCheckboxesChecked() {
-
-        const checkboxes = $('.item-checkbox');
-
-        const allChecked = checkboxes.toArray().every(function (checkbox) {
-            return $(checkbox).prop('checked');
-        });
-
-        return allChecked;
+  function updateSelectedIndex() {
+    var selectedIndexInput = document.querySelector('input[name="selected_index"]');
+    
+    var selectedValue;
+    if (<?php echo $level; ?> == 4) {
+      selectedValue = document.querySelector('#status').value;
+    } else if (<?php echo $level; ?> == 3) {
+      selectedValue = document.querySelector('#status2').value;
+    } else if (<?php echo $level; ?> == 2) {
+      selectedValue = document.querySelector('#status3').value;
     }
+    selectedIndexInput.value = selectedValue;
+  }
 
-    $('#checkItemStatusButton').click(function () {
-        const allChecked = areAllCheckboxesChecked();
-
-        if (allChecked) {
-            alert('All checkboxes are checked.');
-        } else {
-            alert('Not all checkboxes are checked.');
-        }
+  document.addEventListener('DOMContentLoaded', function () {
+    updateSelectedIndex();
+    
+    var statusDropdowns = document.querySelectorAll('select[name^="status"]');
+    statusDropdowns.forEach(function (dropdown) {
+      dropdown.addEventListener('change', updateSelectedIndex);
     });
+  });
+</script>
+<!-- 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var selectElement = document.getElementById("status"); 
+        var testTextbox = document.getElementsByName("selected_index")[1];
 
-});
-
-
+        selectElement.addEventListener("change", function() {
+            var selectedIndex = selectElement.selectedIndex;
+            testTextbox.value = selectedIndex;
+        });
+    });
+</script> -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var statusDropdown = document.getElementById("status");
+    statusDropdown.addEventListener("change", function () {
+    var selectedStatus = statusDropdown.value;
+	var itemStatusInputs = document.querySelectorAll("input[name='item_status[]']");
+            if (selectedStatus === "1") {
+                itemStatusInputs.forEach(function (input) {
+                    if (input.value === "1") {
+                        input.value = "2";
+                    }
+                });
+            }else{
+                itemStatusInputs.forEach(function (input) {
+                    if (input.value === "2") {
+                        input.value = "1";
+                    }
+                });
+			}
+        });
+    });
     document.addEventListener('change', function(event) {
 		if (event.target.classList.contains('item-checkbox')) {
 			var textboxId = 'item_status_' + event.target.dataset.rowid;
@@ -369,21 +536,23 @@ $(document).ready(function() {
 	});
 
     $(document).ready(function() {
-    $("#supplier_id").change(function() {
-        var selectedOption = $(this).find("option:selected");
-        var vatable = parseFloat(selectedOption.data("vatable")) || 0;
-        var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
+		$("#supplier_id").change(function() {
+			var selectedOption = $(this).find("option:selected");
+			var vatable = parseFloat(selectedOption.data("vatable")) || 0;
+			var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
 
-        var discount = (subtotal * vatable) / 100;
-        
-        $('[name="tax_percentage"]').val(vatable);
-        $('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
-        
-		var total = subtotal - discount;
+			var discount = (subtotal * vatable) / 100;
+			
 
-        $('#total').text(total.toLocaleString('en-US'));
-    });
-});
+			$('[name="tax_percentage"]').val(vatable);
+			$('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
+			
+			var total = subtotal - discount;
+
+
+			$('#total').text(total.toLocaleString('en-US'));
+		});
+	});
 
 	function rem_item(_this){
 		_this.closest('tr').remove()
@@ -483,8 +652,10 @@ $(document).ready(function() {
 				return false;
 			}
 			start_loader();
+
+			var ajaxUrl = _base_url_ + "classes/Master.php?f=update_status_po";
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=manage_po",
+				url: ajaxUrl,
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -542,9 +713,7 @@ $(document).ready(function() {
     $('#total').text(parseFloat(_total - discount_amount).toLocaleString('en-US'));
 }
 $(document).ready(function() {
-
     calculateTotal();
-
 
     $('body').on('input', '.po-item [name="qty[]"], .po-item [name="unit_price[]"]', function() {
         calculateTotal();

@@ -17,29 +17,74 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <div class="container fluid">
     <callout class="callout-primary">
         <dl class="row">
-            <dt class="col-md-4">Supplier Name</dt>
-            <dd class="col-md-8">: <?php echo $name ?></dd>
-            <dt class="col-md-4">Address</dt>
-            <dd class="col-md-8">: <span><?php echo $address ?></span></dd>
-            <dt class="col-md-4">Contact Person</dt>
-            <dd class="col-md-8">: <?php echo $contact_person ?></dd>
-            <dt class="col-md-4">Contact #</dt>
-            <dd class="col-md-8">: <?php echo $contact ?></dd>
-            <dt class="col-md-4">Email</dt>
-            <dd class="col-md-8">: <?php echo $email ?></dd>
-            <dt class="col-md-4">Status</dt>
-            <dd class="col-md-8">:&nbsp;
-                <?php if($status == 1): ?>
-                    <span class="badge badge-success">Active</span>
-                <?php else: ?>
-                    <span class="badge badge-secondary">Inactive</span>
-                <?php endif; ?>
-            </dd>
+            <table class="table table-bordered">
+                <tr>
+                    <td style="width:150px;"><b>Supplier Name:</b></td>
+                    <td><?php echo $name ?></td>
+                </tr>
+                <tr>
+                    <td><b>Address:</b></td>
+                    <td><?php echo $address ?></td>
+                </tr>
+                <tr>
+                    <td><b>Contact Person:</b></td>
+                    <td><?php echo $contact_person ?></td>
+                </tr>
+                <tr>
+                    <td><b>Contact #:</b></td>
+                    <td><?php echo $contact ?></td>
+                </tr>
+                <tr>
+                    <td><b>Email:</b></td>
+                    <td><?php echo $email ?></td>
+                </tr>
+                <tr>
+                    <td><b>Vatable?</b></td>
+                    <td>
+                    <?php if($vatable == 0): ?>
+                        <span class="badge badge-secondary">No</span>
+                    <?php else: ?>
+                        <span class="badge badge-primary">Yes</span>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Mode of Payment:</b></td>
+                    <td>
+                    <?php if($mop == 0): ?>
+                        <span>Cash on Delivery</span>
+                    <?php else: ?>
+                        <span>Check</span>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Terms:</b></td>
+                    <td><?php echo $terms ?> (days)</td>
+                </tr>
+                <tr>
+                    <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>
+                    <td><b>Date Created:</b></td>
+                    <td><?php echo $formatted_date ?></td>
+                </tr>
+                <tr>
+                    <td><b>Status:</b></td>
+                    <td>
+                    <?php if($status == 1): ?>
+                        <span class="badge badge-success">Active</span>
+                    <?php else: ?>
+                        <span class="badge badge-secondary">Inactive</span>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+            </table>
         </dl>
     </callout>
-    <div class="row px-2 justify-content-end">
-        <div class="col-1">
-            <button class="btn btn-dark btn-flat btn-sm" type="button" data-dismiss="modal">Close</button>
-        </div>
-    </div>
+    <table style="width:100%;">
+        <tr>
+            <td>
+                <button class="btn btn-dark btn-flat btn-default" type="button" style="width:100%; margin-left:5px;font-size:14px;" data-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </td>
+        </tr>
+    </table>
 </div>

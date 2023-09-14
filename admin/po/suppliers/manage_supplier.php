@@ -1,5 +1,6 @@
 <?php
 require_once('./../../../config.php');
+$vatable='';
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `supplier_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -7,6 +8,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             $$k=stripslashes($v);
         }
     }
+}else{
+    $mop = "";
+    $status = "";
 }
 ?>
 <style>
@@ -20,6 +24,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         height: auto;
     }
 </style>
+<input type="hidden" name="vat" id="vat" value="<?php echo isset($vatable) ? $vatable : ''; ?>">
+<script>
+    var vat = document.getElementById("vat").value;
+    if (vat == 0) {
+        document.getElementById("vatable").selectedIndex = 1;
+    }
+</script>
 <form action="" id="supplier-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
     <div class="container-fluid">
@@ -40,18 +51,57 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo isset($email) ? $email :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="contact" class="control-label">Contact:</label>
+            <label for="contact" class="control-label">Contact #:</label>
             <input type="text" name="contact" id="contact" class="form-control rounded-0" value="<?php echo isset($contact) ? $contact :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="status" class="control-label">Vatable?</label>
+            <select name="vatable" id="vatable" class="form-control rounded-0" required>
+                <option value="12" <?php echo isset($vatable) && $vatable =="" ? "selected": "12" ?> >Yes</option>
+                <option value="0" <?php echo isset($vatable) && $vatable =="" ? "selected": "0" ?>>No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="mop" class="control-label">Mode of Payment:</label>
+            <select name="mop" id="mop" class="form-control rounded-0" required>
+                <option value="1" <?php echo ($mop === "1") ? "selected" : ""; ?>>Check</option>
+                <option value="0" <?php echo ($mop === "0") ? "selected" : ""; ?>>Cash on Delivery</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="mop" class="control-label">Terms: (days)</label>
+            <input type="text" name="terms" id="terms" class="form-control rounded-0" value="<?php echo isset($terms) ? $terms :"" ?>" required>
         </div>
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($status) && $status =="" ? "selected": "1" ?> >Active</option>
-                <option value="0" <?php echo isset($status) && $status =="" ? "selected": "0" ?>>Inactive</option>
+                <option value="1" <?php echo ($status === "1") ? "selected": ""; ?>>Active</option>
+                <option value="0" <?php echo ($status === "0") ? "selected": ""; ?>>Inactive</option>
             </select>
         </div>
     </div>
 </form>
+<!-- 
+<script>
+    var select = document.getElementById("vatable");
+    var textboxContainer = document.getElementById("textbox-container");
+    select.addEventListener("change", function () {
+        if (select.value === "1") {
+            textboxContainer.style.display = "block";
+            document.getElementById("vatable").value = "0";
+        } else {
+            textboxContainer.style.display = "none";
+            document.getElementById("vatable").value = "0";
+        }
+    });
+    if (select.value === "1") {
+        textboxContainer.style.display = "block";
+    } else {
+        textboxContainer.style.display = "none";
+        document.getElementById("vatable").value = "0";
+    }
+</script> -->
+
 <script>
     $(function(){
         $('#supplier-form').submit(function(e){
