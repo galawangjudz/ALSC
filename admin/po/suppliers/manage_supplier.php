@@ -51,7 +51,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo isset($email) ? $email :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="contact" class="control-label">Contact:</label>
+            <label for="contact" class="control-label">Contact #:</label>
             <input type="text" name="contact" id="contact" class="form-control rounded-0" value="<?php echo isset($contact) ? $contact :"" ?>" required>
         </div>
         <div class="form-group">
