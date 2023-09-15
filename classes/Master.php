@@ -3991,12 +3991,12 @@ Class Master extends DBConnection {
 			if(!empty($data)) $data .=",";
 				$data .= " `description`='".addslashes(htmlentities($description))."' ";
 		}
-		$check = $this->conn->query("SELECT * FROM `item_list` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `item_list` where `item_code` = '{$item_code}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Item Name already exist.";
+			$resp['msg'] = "Item code already exist.";
 			return json_encode($resp);
 			exit;
 		}
@@ -4033,10 +4033,17 @@ Class Master extends DBConnection {
 	}
 	function search_items(){
 		extract($_POST);
-		$qry = $this->conn->query("SELECT * FROM item_list where `name` LIKE '%{$q}%'");
+		
+		$qry = $this->conn->query("SELECT ilist.*, o_list.unit_price, o_list.item_id, o_list.date_purchased AS recent_date_purchased
+		FROM `item_list` ilist
+		LEFT JOIN `approved_order_items` o_list ON ilist.id = o_list.item_id
+		WHERE `name` LIKE '%{$q}%'
+		ORDER BY o_list.date_purchased DESC
+		LIMIT 1;");
+		//$qry = $this->conn->query("SELECT * FROM item_list where `name` LIKE '%{$q}%'");
 		$data = array();
 		while($row = $qry->fetch_assoc()){
-			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description'],"default_unit"=>$row['default_unit']);
+			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description'],"default_unit"=>$row['default_unit'],"unit_price"=>$row['unit_price']);
 		}
 		return json_encode($data);
 	}

@@ -85,7 +85,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <h5 class="card-title"><b><i>View Purchase Order Details</b></i></h5>
         <?php if ($status == 1 and $status2 == 1 and $status3 == 1): ?>
         <div class="card-tools">
-            <button class="btn btn-sm btn-flat btn-success" id="print" type="button" style="float:right;"><i class="fa fa-print"></i> Print</button>
+            <button class="btn btn-sm btn-flat btn-success" id="print" type="button" style="float:right;margin-left:5px;"><i class="fa fa-print"></i> Print</button>
+            <!-- <a class="btn btn-sm btn-flat btn-primary" href="?page=po/purchase_orders/verify_po&id=<?php echo $id ?>" style="float:right;"><i class="fa fa-edit"></i> Edit</a> -->
         </div>
         <?php endif; ?>
 	</div>
@@ -139,15 +140,38 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             </div>
         </div>
         <br>
+        <?php 
+            $receiver_qry = $conn->query("SELECT * FROM users where id = '{$receiver_id}'");
+            $receiver2_qry = $conn->query("SELECT * FROM users where id = '{$receiver2_id}'");
+            $receiver = $receiver_qry->fetch_array();
+            $receiver2 = $receiver2_qry->fetch_array();
+        ?>
+
+        <hr>
+        <p class="m-0"><b>Ship To:</b></p>
         <div class="row mb-2">
             <div class="col-6">
-                <p class="m-0"><b>Ship To:</b></p>
                 <div class="form-group">
-                <p class="m-0"><?php echo $receiver; ?></p>
-                <p class="m-0"><?php echo $receiver_contact_no; ?></p>
+                    <?php if ($receiver !== null): ?>
+                        <p class="m-0"><b><?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?></b></p>
+                        <p class="m-0"><?php echo $receiver['phone'] ?></p>
+                    <?php else: ?>
+                        <p class="m-0"></p>
+                    <?php endif; ?>
+                    </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <?php if ($receiver2 !== null): ?>
+                        <p class="m-0"><b><?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?></b></p>
+                        <p class="m-0"><?php echo $receiver2['phone'] ?></p>
+                    <?php else: ?>
+                        <p class="m-0"></p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
+
 
         <div class="row">
             <div class="col-md-12">

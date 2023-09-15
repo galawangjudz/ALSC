@@ -62,6 +62,7 @@
 </div>
 <div class="card card-outline card-primary">
 	<div class="card-header">
+        <input type="text" value="<?php echo $type; ?>">
         <h5 class="card-title" id="purchase-orders-title">List of Open Purchase Orders</h5>
 	</div>
 	<div class="card-body">
@@ -93,7 +94,14 @@
                             <?php 
                             $i = 1;
                                 //$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id order by unix_timestamp(po.date_updated) ");
-                                $qry = $conn->query("SELECT po.*, s.name as sname FROM `po_approved_list` po INNER JOIN `supplier_list` s ON po.supplier_id = s.id WHERE po.status = 1 ORDER BY po.date_created DESC");
+                                $qry = $conn->query("SELECT u.*, po.*, s.name as sname
+                                FROM `po_approved_list` po
+                                INNER JOIN `supplier_list` s ON po.supplier_id = s.id
+                                INNER JOIN `users` u ON (po.receiver_id = u.id OR po.receiver2_id = u.id)
+                                WHERE po.status = 1 AND (po.receiver_id = '$type' OR po.receiver2_id = '$type')
+                                GROUP BY po.po_no
+                                ORDER BY po.date_created DESC;
+                                ");
                                 while($row = $qry->fetch_assoc()):
                                     $row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
                                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -123,7 +131,7 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu" role="menu">
-                                            <a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                            <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
                                             
                                         </div>
                                     </td>
@@ -158,7 +166,14 @@
                             <?php 
                             $i = 1;
                                 //$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id order by unix_timestamp(po.date_updated) ");
-                                $qry = $conn->query("SELECT po.*, s.name as sname FROM `po_approved_list` po INNER JOIN `supplier_list` s ON po.supplier_id = s.id WHERE po.status = 0 ORDER BY po.date_created DESC");
+                                $qry = $conn->query("SELECT u.*, po.*, s.name as sname
+                                FROM `po_approved_list` po
+                                INNER JOIN `supplier_list` s ON po.supplier_id = s.id
+                                INNER JOIN `users` u ON (po.receiver_id = u.id OR po.receiver2_id = u.id)
+                                WHERE po.status = 0 AND (po.receiver_id = '$type' OR po.receiver2_id = '$type')
+                                GROUP BY po.po_no
+                                ORDER BY po.date_created DESC;
+                                ");
                                 while($row = $qry->fetch_assoc()):
                                     $row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
                                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -188,7 +203,7 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu" role="menu">
-                                            <a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                            <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
                                             
                                         </div>
                                     </td>

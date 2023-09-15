@@ -97,6 +97,8 @@ $(document).ready(function() {
         $('#notes').prop('readonly', true);
 		$('#receiver').prop('readonly', true);
 		$('#receiver_contact_no').prop('readonly', true);
+
+
         //$('#supplier_id, #department').prop('readonly', true); Not working pa rin e
     }
 	
@@ -158,9 +160,6 @@ $(document).ready(function() {
 			}
         }
     });
-</script>
-
-<script>
 $(document).ready(function() {
     $(".align-middle").each(function() {
         var itemStatusInput = $(this).find('input[name="item_status[]"]');
@@ -172,6 +171,7 @@ $(document).ready(function() {
 
             $(this).closest('tr').addClass('unchecked-row');
         }
+		
     });
 });
 
@@ -201,7 +201,7 @@ $(document).ready(function() {
 	$type = $_settings->userdata('id');
 	$level = $_settings->userdata('type');
 ?>
-<body onload="">
+<body onload="calculate()">
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order": "New Purchase Order" ?></b></i></h5>
@@ -260,15 +260,55 @@ $(document).ready(function() {
                     <input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
 				</div>
 			</div>
+			</div>			
+			<hr>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label for="receiver">Receiver 1:</label>
+						<select name="receiver_id" id="receiver_id" class="custom-select custom-select-sm rounded-0 select2">
+							<option value="" disabled <?php echo !isset($receiver_id) ? "selected" : '' ?>></option>
+							<?php 
+							$receiver_qry = $conn->query("SELECT * FROM `users`");
+							while($row = $receiver_qry->fetch_assoc()):
+								$recValue = $row['firstname'] . ' ' . $row['lastname'];
+							?>
+							<option 
+								value="<?php echo $row['id'] ?>" 
+								data-contact1="<?php echo $row['phone'] ?>"
+								<?php echo isset($receiver_id) && $receiver_id == $row['id'] ? 'selected' : '' ?>>
+								<?php echo $recValue ?></option>
+							<?php endwhile; ?>
+						</select>
+					</div>
 
-			<div class="row">
-				<div class="col-md-6 form-group">
-					<label for="receiver">Receiver:</label>
-					<input type="text" class="form-control form-control-sm rounded-0" id="receiver" name="receiver" value="<?php echo isset($receiver) ? $receiver : '' ?>">
-				</div>
-				<div class="col-md-6 form-group">
-					<label for="receiver_contact_no">Contact #:</label>
-					<input type="text" class="form-control form-control-sm rounded-0" id="receiver_contact_no" name="receiver_contact_no" value="<?php echo isset($receiver_contact_no) ? $receiver_contact_no : '' ?>">
+					<div class="col-md-6 form-group">
+						<label for="contact_no1">Contact #:</label>
+						<input type="text" class="form-control form-control-sm rounded-0" id="contact_no1" value="<?php echo isset($contact_no1) ? $contact_no1 : '' ?>" readonly>
+					</div>
+
+					<div class="col-md-6 form-group">
+						<label for="receiver">Receiver 2:</label>
+						<select name="receiver2_id" id="receiver2_id" class="custom-select custom-select-sm rounded-0 select2">
+							<option value="" disabled <?php echo !isset($receiver2_id) ? "selected" : '' ?>></option>
+							<?php 
+							$receiver_qry = $conn->query("SELECT * FROM `users`");
+							while($row = $receiver_qry->fetch_assoc()):
+								$recValue = $row['firstname'] . ' ' . $row['lastname'];
+							?>
+							<option 
+								value="<?php echo $row['id'] ?>" 
+								data-contact2="<?php echo $row['phone'] ?>"
+								<?php echo isset($receiver2_id) && $receiver2_id == $row['id'] ? 'selected' : '' ?>>
+								<?php echo $recValue ?></option>
+							<?php endwhile; ?>
+						</select>
+					</div>
+
+					<div class="col-md-6 form-group">
+						<label for="contact_no2">Contact #:</label>
+						<input type="text" class="form-control form-control-sm rounded-0" id="contact_no2" value="<?php echo isset($contact_no2) ? $contact_no2 : '' ?>" readonly>
+					</div>
 				</div>
 			</div>
 			
@@ -345,7 +385,7 @@ $(document).ready(function() {
 									<?php if($usertype == "Purchasing Officer"): ?>
 										<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
 									<?php endif; ?>
-									</span> Sub Total</th>
+									</span> Sub Total:</th>
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
@@ -459,6 +499,35 @@ $(document).ready(function() {
 </table>
 </body>
 <script>
+	$(document).ready(function() {
+		function updateContactInfo() {
+			var selectedOption = $('#receiver_id').find(':selected');
+			var contactNumber = selectedOption.data('contact1');
+			
+			$('#contact_no1').val(contactNumber);
+		}
+
+		updateContactInfo();
+
+		$('#receiver_id').change(function() {
+			updateContactInfo();
+		});
+	});
+
+	$(document).ready(function() {
+		function updateContactInfo() {
+			var selectedOption = $('#receiver2_id').find(':selected');
+			var contactNumber = selectedOption.data('contact2');
+			
+			$('#contact_no2').val(contactNumber);
+		}
+
+		updateContactInfo();
+
+		$('#receiver2_id').change(function() {
+			updateContactInfo();
+		});
+	});
 
   function updateSelectedIndex() {
     var selectedIndexInput = document.querySelector('input[name="selected_index"]');
@@ -525,6 +594,7 @@ $(document).ready(function() {
 			} else {
 				textbox.value = '1';
 			}
+			calculate();
 		}
 	});
 	$(document).ready(function() {
@@ -557,36 +627,45 @@ $(document).ready(function() {
 	function rem_item(_this){
 		_this.closest('tr').remove()
 	}
-	function calculate(){
-		var _total = 0
-		$('.po-item').each(function(){
-			var qty = $(this).find("[name='qty[]']").val()
-			var unit_price = $(this).find("[name='unit_price[]']").val()
+	function calculate() {
+		var _total = 0;
+		$('.po-item').each(function () {
+			var qty = $(this).find("[name='qty[]']").val();
+			var unit_price = $(this).find("[name='unit_price[]']").val();
+			var item_status = $(this).find("[name='item_status[]']").val(); 
 			var row_total = 0;
-			if(qty > 0 && unit_price > 0){
-				row_total = parseFloat(qty) * parseFloat(unit_price)
+
+
+			if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
+				row_total = parseFloat(qty) * parseFloat(unit_price);
 			}
-			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'))
-		})
-		$('.total-price').each(function(){
-			var _price = $(this).text()
-				_price = _price.replace(/\,/gi,'')
-				_total += parseFloat(_price)
-		})
-		var discount_perc = 0
-		if($('[name="discount_percentage"]').val() > 0){
-			discount_perc = $('[name="discount_percentage"]').val()
+
+			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
+			_total += row_total;
+		});
+
+		$('.total-price').each(function () {
+			var _price = $(this).text();
+			_price = _price.replace(/\,/gi, '');
+			_total += parseFloat(_price);
+		});
+
+		var discount_perc = 0;
+		if ($('[name="discount_percentage"]').val() > 0) {
+			discount_perc = $('[name="discount_percentage"]').val();
 		}
-		var discount_amount = _total * (discount_perc/100);
-		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-		var tax_perc = 0
-		if($('[name="tax_percentage"]').val() > 0){
-			tax_perc = $('[name="tax_percentage"]').val()
+		var discount_amount = _total * (discount_perc / 100);
+		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"));
+
+		var tax_perc = 0;
+		if ($('[name="tax_percentage"]').val() > 0) {
+			tax_perc = $('[name="tax_percentage"]').val();
 		}
-		var tax_amount = _total * (tax_perc/100);
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))
+		var tax_amount = _total * (tax_perc / 100);
+		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"));
+
+		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
+		$('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"));
 	}
 
 	function _autocomplete(_item){
@@ -691,37 +770,5 @@ $(document).ready(function() {
 		})
 	})
 
-	function calculateTotal() {
-    var _total = 0;
-    $('.po-item').each(function() {
-        var qty = parseFloat($(this).find("[name='qty[]']").val()) || 0;
-        var unit_price = parseFloat($(this).find("[name='unit_price[]']").val()) || 0;
-        var row_total = qty * unit_price;
-        _total += row_total;
-        $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
-    });
-
-    var discount_perc = parseFloat($('[name="discount_percentage"]').val()) || 0;
-    var discount_amount = _total * (discount_perc / 100);
-    $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString('en-US'));
-
-    var tax_perc = parseFloat($('[name="tax_percentage"]').val()) || 0;
-    var tax_amount = _total * (tax_perc / 100);
-    $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString('en-US'));
-
-    $('#sub_total').text(parseFloat(_total).toLocaleString('en-US'));
-    $('#total').text(parseFloat(_total - discount_amount).toLocaleString('en-US'));
-}
-$(document).ready(function() {
-    calculateTotal();
-
-    $('body').on('input', '.po-item [name="qty[]"], .po-item [name="unit_price[]"]', function() {
-        calculateTotal();
-    });
-
-    $('#item-list tfoot').find('[name="discount_percentage"], [name="tax_percentage"]').on('input', function() {
-        calculateTotal();
-    });
-
-});
+	
 </script>
