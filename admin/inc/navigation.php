@@ -80,6 +80,7 @@ $level = $_settings->userdata('type');
                     </li>  -->
 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
+                    <?php if ($level < 4 or $usertype == "Purchasing Officer"){ ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
@@ -106,7 +107,6 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
@@ -123,7 +123,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-
+                    <?php } ?>
                    
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
@@ -143,7 +143,6 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> -->
-                    <?php if ($level <= 3){?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
@@ -152,17 +151,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <?php }elseif($level == 4){ ?>
-                      <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/requisitions/pending_req" class="nav-link nav-gr">
-                      <i class="nav-icon fas fa-check-square"></i>
-                        <p>
-                          Goods Receiving
-                        </p>
-                      </a>
-                    </li> 
-                    <?php }?> 
-
+                   
                     
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>

@@ -1,8 +1,9 @@
 <?php
 require_once('./../../../config.php');
-$last_date_canvassed = date('Y-m-d', strtotime('now'));
+$last_date_purchased = date('Y-m-d', strtotime('now'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `item_list` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT i.*, o_approved.date_purchased, o_approved.item_id FROM `item_list` AS i LEFT JOIN `approved_order_items` AS o_approved ON i.id = o_approved.item_id WHERE i.id = {$_GET['id']} ORDER BY o_approved.date_purchased DESC LIMIT 1;");
+    
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=stripslashes($v);
@@ -55,9 +56,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="form-group">
             <label for="description" class="control-label">Last Date Purchased:</label>
             <?php
-                $formattedDate = date('Y-m-d', strtotime($last_date_canvassed)); ?>
-                <input type="date" class="form-control form-control-sm rounded-0" id="last_date_canvassed" name="last_date_canvassed" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
-        </div>
+                $formattedDate = !empty($date_purchased) ? date('Y-m-d', strtotime($date_purchased)) : null;
+                ?>
+                <input type="date" class="form-control form-control-sm rounded-0" id="last_date_purchased" name="last_date_purchased" value="<?php echo $formattedDate; ?>" readonly>
+
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control rounded-0" required>
@@ -84,7 +86,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     success: function (resp) {
                         if (resp.status === 'success') {
                             var countItemCode = resp.count_item_code;
-                            var newItemCode = supplierId + countItemCode;
+                            var newItemCode = supplierId + '-' + countItemCode;
                             $('#item_code').val(newItemCode);
                         
                             submitForm();
@@ -147,7 +149,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     success: function (resp) {
                         if (resp.status === 'success') {
                             var countItemCode = resp.count_item_code;
-                            var newItemCode = supplierId + countItemCode;
+                            var newItemCode = supplierId + '-' + countItemCode;
                             $('#item_code').val(newItemCode);
                         } else {
                             alert("Error!");

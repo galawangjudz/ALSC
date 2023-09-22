@@ -1,6 +1,6 @@
 <?php
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `po_approved_list` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `po_approved_list` where id = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -63,7 +63,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		<div class="row">
 			<div class="col-6 d-flex align-items-center">
 				<div>
-				<h2><label style="backround-color:red;">PURCHASE ORDER</h2>
+				<h2><label style="backround-color:red;">GOODS RECEIVED</h2>
 					<p class="m-0"><b><?php echo $_settings->info('company_name') ?></b></p>
 					<p class="m-0"><?php echo $_settings->info('company_email') ?></p>
 					<p class="m-0"><?php echo $_settings->info('company_address') ?></p>
@@ -91,6 +91,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			</div>
 			<div class="col-6 row">
 				<div class="col-6">
+					<p  class="m-0"><b>G.R. #:</b></p>
+					<?php 
+						$gr_qry = $conn->query("SELECT po_id, MAX(gr_id) AS max_gr_id FROM tbl_gr_list;");
+						$gr = $gr_qry->fetch_array();
+						$max_gr_id = sprintf("%03d", $gr['max_gr_id'] + 1);
+						?>
+						<p><input type="text" value="GR - <?php echo $max_gr_id ?>" id="gr_no" name="gr_no" style="border:none;color:black;pointer-events:none;"></p>
+
 					<p  class="m-0"><b>P.O. #:</b></p>
 					<p><input type="text" value="<?php echo $po_no ?>" id="po_no" name="po_no" style="border:none;color:black;pointer-events:none;"></p>
 
@@ -115,7 +123,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             $receiver = $receiver_qry->fetch_array();
             $receiver2 = $receiver2_qry->fetch_array();
         ?>
-
         <hr>
         <p class="m-0"><b>Ship To:</b></p>
 		<div class="row mb-2">
@@ -177,7 +184,16 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<tbody>
 						<?php 
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `approved_order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' ");
+						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description
+						FROM approved_order_items o
+						INNER JOIN item_list i ON o.item_id = i.id
+						WHERE o.po_id = '$id'
+						  AND o.gr_id = (
+							SELECT MAX(gr_id)
+							FROM approved_order_items
+							WHERE po_id = '$id'
+						  );
+						");
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
 						?>

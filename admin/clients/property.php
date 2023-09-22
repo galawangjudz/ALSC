@@ -745,7 +745,7 @@ $(document).ready(function() {
     var propId = $(this).attr('prop-id');
     var userType = $(this).attr('user-type');
     
-        _conf("Are you absolutely sure you want to place this account into retention?<b>" + userType + "</b>", "retention_acc", [propId, userType]);
+        _conf("Are you absolutely sure you want to place this account into retention?", "retention_acc", [propId, userType]);
     });
 
 
@@ -754,7 +754,7 @@ $(document).ready(function() {
     var csrNo = $(this).attr('csr-no');
     var userType = $(this).attr('user-type');
     
-        _conf("Are you absolutely certain about backing out this account?<b>" + userType + "</b>", "backout_acc", [propId, csrNo, userType]);
+        _conf("Are you absolutely certain about backing out this account?", "backout_acc", [propId, csrNo, userType]);
     });
 
     $('.delete-last-or').click(function(){
