@@ -67,7 +67,6 @@
 								$stmt->bindParam(':supplierId', $supplierId, PDO::PARAM_INT);
 								$stmt->execute();
 								$supplierData = $stmt->fetch(PDO::FETCH_ASSOC);
-
 								echo $supplierData['name'];
 							?>
 						</td>
