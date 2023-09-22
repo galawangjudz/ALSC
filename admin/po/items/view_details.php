@@ -1,7 +1,7 @@
 <?php
 require_once('./../../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `item_list` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT i.*, o_approved.date_purchased, o_approved.item_id FROM `item_list` AS i LEFT JOIN `approved_order_items` AS o_approved ON i.id = o_approved.item_id WHERE i.id = {$_GET['id']} ORDER BY o_approved.date_purchased DESC LIMIT 1");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=stripslashes($v);
@@ -27,12 +27,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><?php echo $description ?></td>
                 </tr>
                 <tr>
-                    <td>Available Unit/s:</td>
+                    <td>Unit of Measurement:</td>
                     <td><?php echo $default_unit ?></td>
                 </tr>
                 <tr>
-                    <td>Last Date Canvassed:</td>
-                    <td><?php echo date("F j, Y",strtotime($last_date_canvassed)) ?></td>
+                    <td>Last Date Purchased:</td>
+                    <td>
+                        <?php
+                        if (!empty($date_purchased)) {
+                            echo date("F j, Y", strtotime($date_purchased));
+                        } else {
+                            echo "<span class='badge badge-primary'>Not yet purchased</span>";
+                        }
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td>Status:</td>

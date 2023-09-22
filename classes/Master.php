@@ -3982,7 +3982,7 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
-			if(!in_array($k,array('id','description'))){
+			if(!in_array($k,array('id','description','last_date_purchased'))){
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
 			}
@@ -4031,85 +4031,113 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 
 	}
-	function search_items(){
-		extract($_POST);
-		
-		$qry = $this->conn->query("SELECT ilist.*, o_list.unit_price, o_list.item_id, o_list.date_purchased AS recent_date_purchased
-		FROM `item_list` ilist
-		LEFT JOIN `approved_order_items` o_list ON ilist.id = o_list.item_id
-		WHERE `name` LIKE '%{$q}%'
-		ORDER BY o_list.date_purchased DESC
-		LIMIT 1;");
-		//$qry = $this->conn->query("SELECT * FROM item_list where `name` LIKE '%{$q}%'");
-		$data = array();
-		while($row = $qry->fetch_assoc()){
-			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description'],"default_unit"=>$row['default_unit'],"unit_price"=>$row['unit_price']);
+	function search_items() {
+		$q = isset($_POST['q']) ? $this->conn->real_escape_string($_POST['q']) : '';
+		$supplierId = isset($_POST['supplier_id']) ? intval($_POST['supplier_id']) : 0;
+		if (empty($q)) {
+			echo json_encode([]);
+			return;
 		}
-		return json_encode($data);
+
+		$data = [
+			"supplier_id" => $supplierId, 
+		];
+	
+		$qry = $this->conn->query("SELECT ilist.*, o_list.unit_price, o_list.item_id, o_list.date_purchased AS recent_date_purchased
+			FROM `item_list` ilist
+			LEFT JOIN `approved_order_items` o_list ON ilist.id = o_list.item_id
+			WHERE `name` LIKE '%{$q}%' and supplier_id='$supplierId'
+			ORDER BY o_list.date_purchased DESC
+			LIMIT 1;");
+	
+		$items = [];
+	
+		while($row = $qry->fetch_assoc()){
+			$items[] = [
+				"label" => $row['name'],
+				"id" => $row['id'],
+				"description" => $row['description'],
+				"default_unit" => $row['default_unit'],
+				"unit_price" => $row['unit_price'],
+			];
+		}
+
+		$data["items"] = $items;
+		$jsonResponse = json_encode($data);
+		echo $jsonResponse;
+		return;
 	}
+	
+	
 
 	function update_status_gr() {
 		extract($_POST);
 		$data = "";
-		foreach($_POST as $k =>$v){
-			if(in_array($k,array('discount_amount','tax_amount')))
-				$v= str_replace(',','',$v);
-			if(!in_array($k,array('id','po_no','po_id','usertype')) && !is_array($_POST[$k])){
+	
+		foreach ($_POST as $k => $v) {
+			if (in_array($k, array('discount_amount', 'tax_amount'))) {
+				$v = str_replace(',', '', $v);
+			}
+			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding')) && !is_array($_POST[$k])) {
 				$v = addslashes(trim($v));
-				if(!empty($data)) $data .=",";
+				if (!empty($data)) $data .= ",";
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-		if(!empty($po_no)){
-			$check = $this->conn->query("SELECT * FROM `po_approved_list` where `po_no` = '{$po_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
-			if($this->capture_err())
-				return $this->capture_err();
-			if($check > 0){
-				$resp['status'] = 'po_failed';
-				$resp['msg'] = "Purchase Order Number already exist.";
-				return json_encode($resp);
-				exit;
-			}
-		}else{
-			$po_no ="";
-			while(true){
-				$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
-				$check = $this->conn->query("SELECT * FROM `po_approved_list` where `po_no` = '{$po_no}'")->num_rows;
-				if($check <= 0)
-				break;
-			}
-		}
+	
 		$data .= ", po_no = '{$po_no}' ";
-
-		if(empty($id)){
-			$sql = "INSERT INTO `po_approved_list` set {$data} ";
-		}else{
-			$sql = "UPDATE `po_approved_list` set {$data} where id = '{$id}' ";
+	
+		if (empty($id)) {
+			$sql = "INSERT INTO `po_approved_list` SET {$data} ";
+		} else {
+			$sql = "UPDATE `po_approved_list` SET {$data} WHERE id = '{$id}' ";
 		}
+	
 		$save = $this->conn->query($sql);
-		if($save){
+	
+		if ($save) {
 			$resp['status'] = 'success';
-			$po_id = empty($id) ? $this->conn->insert_id : $id ;
+			$po_id = empty($id) ? $this->conn->insert_id : $id;
 			$resp['id'] = $po_id;
-			$data = "";
-			foreach($item_id as $k =>$v){
-				if(!empty($data)) $data .=",";
-				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$received[$k]}','{$outstanding[$k]}')";
+	
+			$stmt = $this->conn->prepare("INSERT INTO `tbl_gr_list` (`po_id`) VALUES (?)");
+			$stmt->bind_param("s", $po_id);
+			$save_gr_list = $stmt->execute();
+	
+			if ($save_gr_list) {
+				$gr_id = $this->conn->insert_id; 
+	
+				$query = "";
+				foreach ($item_id as $k => $v) {
+					if (!empty($query)) $query .= ",";
+					//$prevDel = ($qty[$k] - $outstanding[$k]) - $del_items[$k];
+					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$del_items[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
+				}
+				
+				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");
+				
+				if ($save_order_items) {
+					if (empty($id)) {
+						$this->settings->set_flashdata('success', "Purchase Order successfully saved.");
+					} else {
+						$this->settings->set_flashdata('success', "Purchase Order successfully updated.");
+					}
+				} else {
+					$resp['status'] = 'failed';
+					$resp['err'] = $this->conn->error . "[{$sql}]";
+				}
+			} else {
+				$resp['status'] = 'failed';
+				$resp['err'] = $this->conn->error . "[{$sql}]";
 			}
-			if(!empty($data)){
-				$this->conn->query("DELETE FROM `approved_order_items` where po_id = '{$po_id}'");
-				$save = $this->conn->query("INSERT INTO `approved_order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`,`received`,`outstanding`) VALUES {$data} ");
-			}
-			if(empty($id))
-				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
-			else
-				$this->settings->set_flashdata('success',"Purchase Order successfully updated.");
-		}else{
+		} else {
 			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
+			$resp['err'] = $this->conn->error . "[{$sql}]";
 		}
+	
 		return json_encode($resp);
 	}
+	
 	
 	
 	function update_status_po() {

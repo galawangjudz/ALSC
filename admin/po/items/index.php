@@ -42,7 +42,6 @@
 						<th>Item Name</th>
 						<th>Description</th>
 						<th>Supplier</th>
-						<th>Last Date Purchased</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -50,7 +49,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `item_list` order by (`date_created`) asc ");
+					$qry = $conn->query("SELECT * from `item_list` order by (`item_code`) asc ");
 					while($row = $qry->fetch_assoc()):
 						$row['description'] = html_entity_decode($row['description']);
 					?>
@@ -62,19 +61,15 @@
 							<td>
 							<?php
 								$pdo = new PDO("mysql:host=localhost;dbname=alscdb", 'root', '');
-
-								// Retrieve supplier name from supplier_table based on supplier_id
 								$supplierId = $row['supplier_id'];
 								$query = "SELECT * FROM supplier_list WHERE id = :supplierId";
 								$stmt = $pdo->prepare($query);
 								$stmt->bindParam(':supplierId', $supplierId, PDO::PARAM_INT);
 								$stmt->execute();
 								$supplierData = $stmt->fetch(PDO::FETCH_ASSOC);
-
 								echo $supplierData['name'];
 							?>
 						</td>
-							<td><?php echo date("Y-m-d",strtotime($row['last_date_canvassed'])) ?></td>
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>

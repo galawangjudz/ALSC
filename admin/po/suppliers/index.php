@@ -51,7 +51,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `supplier_list` order by (`date_created`) desc ");
+					$qry = $conn->query("SELECT * from `supplier_list` order by (`date_created`) asc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>

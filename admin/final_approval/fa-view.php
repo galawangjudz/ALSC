@@ -38,7 +38,7 @@ if(isset($_GET['id'])){
     
         <div class="card-body">
             <form action="" id="manage-booked">
-            <input type="text" name="comm"  id="comm" value="<?php echo $username; ?>">
+            <input type="hidden" name="comm"  id="comm" value="<?php echo $username; ?>">
                 <div class="container-fluid">
                     <table class="table table-striped table-hover table-bordered" id="data-table">
                         <tr>
