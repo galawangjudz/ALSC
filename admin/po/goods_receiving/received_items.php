@@ -1,6 +1,6 @@
 <?php
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `po_list` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `po_approved_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -108,6 +108,38 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				</div>
 			</div>
     	</div>	
+		<br>
+        <?php 
+            $receiver_qry = $conn->query("SELECT * FROM users where id = '{$receiver_id}'");
+            $receiver2_qry = $conn->query("SELECT * FROM users where id = '{$receiver2_id}'");
+            $receiver = $receiver_qry->fetch_array();
+            $receiver2 = $receiver2_qry->fetch_array();
+        ?>
+
+        <hr>
+        <p class="m-0"><b>Ship To:</b></p>
+		<div class="row mb-2">
+    <?php if ($receiver !== null): ?>
+        <div class="col-6">
+            <div class="form-group">
+                <p class="m-0"><b><?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?></b></p>
+                <p class="m-0"><?php echo $receiver['phone'] ?></p>
+            </div>
+        </div>
+    <?php endif; ?>
+    
+    <?php if ($receiver2 !== null): ?>
+        <div class="col-6">
+            <div class="form-group">
+                <p class="m-0"><b><?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?></b></p>
+                <p class="m-0"><?php echo $receiver2['phone'] ?></p>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+
+
+
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-striped table-bordered" id="item-list">
@@ -154,7 +186,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 								<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
+								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">

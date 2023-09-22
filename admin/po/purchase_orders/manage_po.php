@@ -121,66 +121,108 @@ $(document).ready(function() {
 		<form action="" id="po-form">
 			<input type="hidden" value="<?php echo $level; ?>">
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
-            <div class="row">
-                <div class="col-md-6 form-group">
-					<label for="supplier_id">Supplier:</label>
-					<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-						<?php 
-						$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 order by `name` asc");
-						while($row = $supplier_qry->fetch_assoc()):
-							$vatable = $row['vatable'];
-						?>
-						<option 
-							value="<?php echo $row['id'] ?>" 
-							data-vatable="<?php echo $vatable ?>"
-							<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> 
-							><?php echo $row['name'] ?></option>
-						<?php endwhile; ?>
-					</select>
-				</div>
-                <div class="col-md-6 form-group">
-					<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-					<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
-				</div>
-            </div>
 
-			<div class="row">
-			<div class="col-md-6 form-group">
-				<label for="department">Requesting Department:</label>
-				<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
-					<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
-					<?php 
-					$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
-					while($row = $dept_qry->fetch_assoc()):
-						$deptValue = $row['department']; 
-					?>
-					<option 
-						value="<?php echo $deptValue ?>" 
-						<?php echo isset($department) && $department == $deptValue ? 'selected' : '' ?> 
-						><?php echo $deptValue ?>
-					</option>
-					<?php endwhile; ?>
-				</select>
-			</div>
-                <div class="col-md-6 form-group">
-					<label for="department">Delivery Date:</label>
-					<?php
-					$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-					
-                    <input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label for="supplier_id">Supplier:</label>
+							<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+								<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+								<?php 
+								$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 order by `name` asc");
+								while($row = $supplier_qry->fetch_assoc()):
+									$vatable = $row['vatable'];
+								?>
+								<option 
+									value="<?php echo $row['id'] ?>" 
+									data-vatable="<?php echo $vatable ?>"
+									<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> 
+									><?php echo $row['name'] ?></option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+						<div class="col-md-6 form-group">
+							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label for="department">Requesting Department:</label>
+							<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
+								<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
+								<?php 
+								$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
+								while($row = $dept_qry->fetch_assoc()):
+									$deptValue = $row['department']; 
+								?>
+								<option 
+									value="<?php echo $deptValue ?>" 
+									<?php echo isset($department) && $department == $deptValue ? 'selected' : '' ?> 
+									><?php echo $deptValue ?>
+								</option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+						<div class="col-md-6 form-group">
+							<label for="department">Delivery Date:</label>
+							<?php
+							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
+							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 form-group">
-					<label for="receiver">Receiver:</label>
-					<input type="text" class="form-control form-control-sm rounded-0" id="receiver" name="receiver" value="<?php echo isset($receiver) ? $receiver : '' ?>">
+				<hr>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label for="receiver">Receiver 1:</label>
+							<select name="receiver_id" id="receiver_id" class="custom-select custom-select-sm rounded-0 select2">
+								<option value="" disabled <?php echo !isset($receiver_id) ? "selected" : '' ?>></option>
+								<?php 
+								$receiver_qry = $conn->query("SELECT * FROM `users`");
+								while($row = $receiver_qry->fetch_assoc()):
+									$recValue = $row['firstname'] . ' ' . $row['lastname'];
+								?>
+								<option 
+									value="<?php echo $row['id'] ?>" 
+									data-contact1="<?php echo $row['phone'] ?>"
+									<?php echo isset($receiver_id) && $receiver_id == $row['id'] ? 'selected' : '' ?>>
+									<?php echo $recValue ?></option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+
+						<div class="col-md-6 form-group">
+							<label for="contact_no1">Contact #:</label>
+							<input type="text" class="form-control form-control-sm rounded-0" id="contact_no1" value="<?php echo isset($contact_no1) ? $contact_no1 : '' ?>" readonly>
+						</div>
+
+						<div class="col-md-6 form-group">
+							<label for="receiver">Receiver 2:</label>
+							<select name="receiver2_id" id="receiver2_id" class="custom-select custom-select-sm rounded-0 select2">
+								<option value="" disabled <?php echo !isset($receiver2_id) ? "selected" : '' ?>></option>
+								<?php 
+								$receiver_qry = $conn->query("SELECT * FROM `users`");
+								while($row = $receiver_qry->fetch_assoc()):
+									$recValue = $row['firstname'] . ' ' . $row['lastname'];
+								?>
+								<option 
+									value="<?php echo $row['id'] ?>" 
+									data-contact2="<?php echo $row['phone'] ?>"
+									<?php echo isset($receiver2_id) && $receiver2_id == $row['id'] ? 'selected' : '' ?>>
+									<?php echo $recValue ?></option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+
+						<div class="col-md-6 form-group">
+							<label for="contact_no2">Contact #:</label>
+							<input type="text" class="form-control form-control-sm rounded-0" id="contact_no2" value="<?php echo isset($contact_no2) ? $contact_no2 : '' ?>" readonly>
+						</div>
+					</div>
 				</div>
-				<div class="col-md-6 form-group">
-					<label for="receiver_contact_no">Contact #:</label>
-					<input type="text" class="form-control form-control-sm rounded-0" id="receiver_contact_no" name="receiver_contact_no" value="<?php echo isset($receiver_contact_no) ? $receiver_contact_no : '' ?>">
-				</div>
-			</div>
 			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
 			<div class="row">
 				<div class="col-md-12">
@@ -225,10 +267,9 @@ $(document).ready(function() {
 									<?php echo $row['description'] ?>
 								</td>
 								<td class="align-middle p-1">
-                                	<input type="text" step="any" class="text-right w-100 border-0" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
+									<input type="text" class="align-middle p-1 item-price" step="any" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price']) ?>
-
 								</td>
 							</tr>
 							<?php endwhile;endif; ?>
@@ -316,7 +357,7 @@ $(document).ready(function() {
 		</td>
 		<td class="align-middle p-1 item-description"></td>
 		<td class="align-middle p-1">
-			<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
+			<input type="text" class="text-right w-100 border-0 item-price" name="unit_price[]">
 		</td>
 		<td class="align-middle p-1 text-right total-price">0</td>
 	</tr>
@@ -324,7 +365,36 @@ $(document).ready(function() {
 </body>
 <script>
 	$(document).ready(function() {
+		function updateContactInfo() {
+			var selectedOption = $('#receiver_id').find(':selected');
+			var contactNumber = selectedOption.data('contact1');
+			
+			$('#contact_no1').val(contactNumber);
+		}
 
+		updateContactInfo();
+
+		$('#receiver_id').change(function() {
+			updateContactInfo();
+		});
+	});
+
+	$(document).ready(function() {
+		function updateContactInfo() {
+			var selectedOption = $('#receiver2_id').find(':selected');
+			var contactNumber = selectedOption.data('contact2');
+			
+			$('#contact_no2').val(contactNumber);
+		}
+
+		updateContactInfo();
+
+		$('#receiver2_id').change(function() {
+			updateContactInfo();
+		});
+	});
+
+	$(document).ready(function() {
     function areAllCheckboxesChecked() {
 
         const checkboxes = $('.item-checkbox');
@@ -387,6 +457,7 @@ $(document).ready(function() {
 
 	function rem_item(_this){
 		_this.closest('tr').remove()
+		calculate();
 	}
 	function calculate(){
 		var _total = 0
@@ -442,6 +513,11 @@ $(document).ready(function() {
 				_item.find('.item-description').text(ui.item.description)
 				//_item.find('.item-unit').text(ui.item.default_unit)
 				_item.find('.item-unit').attr('type', 'text').val(ui.item.default_unit);
+				_item.find('.item-price').attr('type', 'text').val(ui.item.unit_price);
+
+				var unitPrice = ui.item.unit_price || 0;
+
+				_item.find('.item-price').attr('type', 'text').val(unitPrice);
 			}
 		})
 	}
@@ -519,40 +595,4 @@ $(document).ready(function() {
 			})
 		})
 	})
-
-	function calculateTotal() {
-    var _total = 0;
-    $('.po-item').each(function() {
-        var qty = parseFloat($(this).find("[name='qty[]']").val()) || 0;
-        var unit_price = parseFloat($(this).find("[name='unit_price[]']").val()) || 0;
-        var row_total = qty * unit_price;
-        _total += row_total;
-        $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
-    });
-
-    var discount_perc = parseFloat($('[name="discount_percentage"]').val()) || 0;
-    var discount_amount = _total * (discount_perc / 100);
-    $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString('en-US'));
-
-    var tax_perc = parseFloat($('[name="tax_percentage"]').val()) || 0;
-    var tax_amount = _total * (tax_perc / 100);
-    $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString('en-US'));
-
-    $('#sub_total').text(parseFloat(_total).toLocaleString('en-US'));
-    $('#total').text(parseFloat(_total - discount_amount).toLocaleString('en-US'));
-}
-$(document).ready(function() {
-
-    calculateTotal();
-
-
-    $('body').on('input', '.po-item [name="qty[]"], .po-item [name="unit_price[]"]', function() {
-        calculateTotal();
-    });
-
-    $('#item-list tfoot').find('[name="discount_percentage"], [name="tax_percentage"]').on('input', function() {
-        calculateTotal();
-    });
-
-});
 </script>

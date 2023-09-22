@@ -144,10 +144,9 @@ $level = $_settings->userdata('type');
 												<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 											<?php } ?>
 											
-											
-											<div class="dropdown-divider"></div>
 
-											<?php if ($row['status2'] != '1'){?>
+											<?php if ($row['fpo_status'] != '3'){?>
+												<div class="dropdown-divider"></div>
 											<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 										<?php }?>
 									</div>
@@ -627,13 +626,13 @@ $level = $_settings->userdata('type');
 								</button>
 								<div class="dropdown-menu" role="menu">
 									<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-									<?php 
+									<!-- <?php 
 										if ($level== 1 || $usertype == "Purchasing Officer"){?>
 											<div class="dropdown-divider"></div>
 											<a class="dropdown-item" href="?page=po/purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 										<?php } ?>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+									<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 								</div>
 							</td>
 						</tr>
@@ -698,13 +697,13 @@ $level = $_settings->userdata('type');
 								</button>
 								<div class="dropdown-menu" role="menu">
 									<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-									<?php 
+									<!-- <?php 
 										if ($level == 1 || $usertype == "Purchasing Officer"){?>
 											<div class="dropdown-divider"></div>
 											<a class="dropdown-item" href="?page=po/purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 										<?php } ?>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+									<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 								</div>
 							</td>
 						</tr>

@@ -17,7 +17,7 @@
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-	<h3 class="card-title"><b><i>List of Items</b></i></h3>
+	<h3 class="card-title"><b><i>List of Items/Services</b></i></h3>
 		<div class="card-tools">
 			<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
 		</div>
@@ -42,7 +42,7 @@
 						<th>Item Name</th>
 						<th>Description</th>
 						<th>Supplier</th>
-						<th>Last Date Canvassed</th>
+						<th>Last Date Purchased</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>

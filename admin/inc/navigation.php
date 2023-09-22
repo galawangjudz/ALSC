@@ -125,7 +125,7 @@ $level = $_settings->userdata('type');
                     </li> 
 
                    
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
                       <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
@@ -134,15 +134,16 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
 
-                    <?php if ($level <= 3){?>
-                    <!-- <li class="nav-item dropdown">
+                    
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/sales_invoice/sales_invoice" class="nav-link nav-invoice">
                       <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
                           Sales Invoice
                         </p>
                       </a>
-                    </li>  -->
+                    </li> -->
+                    <?php if ($level <= 3){?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
@@ -160,7 +161,9 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <?php }?>
+                    <?php }?> 
+
+                    
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>
                     <li class="nav-item dropdown">
