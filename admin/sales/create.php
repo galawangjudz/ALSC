@@ -465,8 +465,8 @@ input{
 			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
 			<input type="hidden" name="c_csr_no" value="<?php echo isset($c_csr_no) ? $c_csr_no : '';  ?>">
 			<input type="hidden" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
-			<input type="text" name="comm" id="comm" value="<?php echo $username ?> added a new RA with reference #">
-			<input type="text" name="comm2" id="comm2" value="<?php echo $username ?> updated RA with reference #">
+			<input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new RA with reference #">
+			<input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated RA with reference #">
 			<div id="Buyer" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">

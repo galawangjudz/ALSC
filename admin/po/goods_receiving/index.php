@@ -122,7 +122,6 @@ $department = $_settings->userdata('department');
 									</button>
 									<div class="dropdown-menu" role="menu">
 										<a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-										
 									</div>
 								</td>
 							</tr>

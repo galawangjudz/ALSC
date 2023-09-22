@@ -30,11 +30,30 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     } else {
         $next_po_number = 1;
     }
-    $po_number = 'PO - ' . str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
+    $po_number = str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
 }
 
 ?>
-<style>
+	<style>
+	.ui-autocomplete {
+		max-height: 200px; 
+		overflow-y: auto;
+		border: 1px solid #ccc; 
+		background-color: white; 
+		position: absolute; 
+		z-index: 1000; 
+	}
+
+	.ui-menu-item {
+		padding: 5px; 
+		cursor: pointer; 
+		list-style-type: none; 
+	}
+
+	.ui-menu-item:hover {
+		background-color: #f0f0f0; 
+	}
+
     span.select2-selection.select2-selection--single {
         border-radius: 0;
         padding: 0.25rem 0.5rem;
@@ -261,7 +280,7 @@ $(document).ready(function() {
 								</td>
 								<td class="align-middle p-1">
 									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-									<input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
+									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
 								</td>
 								<td class="align-middle p-1 item-description">
 									<?php echo $row['description'] ?>
@@ -353,7 +372,7 @@ $(document).ready(function() {
 		</td>
 		<td class="align-middle p-1">
 			<input type="hidden" name="item_id[]">
-			<input type="text" class="text-center w-100 border-0 item_id" required/>
+			<input type="text" class="text-center w-100 border-0 item_id" id="item" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
 		<td class="align-middle p-1">
@@ -363,17 +382,15 @@ $(document).ready(function() {
 	</tr>
 </table>
 </body>
+
 <script>
 	$(document).ready(function() {
 		function updateContactInfo() {
 			var selectedOption = $('#receiver_id').find(':selected');
 			var contactNumber = selectedOption.data('contact1');
-			
 			$('#contact_no1').val(contactNumber);
 		}
-
 		updateContactInfo();
-
 		$('#receiver_id').change(function() {
 			updateContactInfo();
 		});
@@ -383,42 +400,14 @@ $(document).ready(function() {
 		function updateContactInfo() {
 			var selectedOption = $('#receiver2_id').find(':selected');
 			var contactNumber = selectedOption.data('contact2');
-			
 			$('#contact_no2').val(contactNumber);
 		}
 
 		updateContactInfo();
-
 		$('#receiver2_id').change(function() {
 			updateContactInfo();
 		});
 	});
-
-	$(document).ready(function() {
-    function areAllCheckboxesChecked() {
-
-        const checkboxes = $('.item-checkbox');
-
-        const allChecked = checkboxes.toArray().every(function (checkbox) {
-            return $(checkbox).prop('checked');
-        });
-
-        return allChecked;
-    }
-
-    $('#checkItemStatusButton').click(function () {
-        const allChecked = areAllCheckboxesChecked();
-
-        if (allChecked) {
-            alert('All checkboxes are checked.');
-        } else {
-            alert('Not all checkboxes are checked.');
-        }
-    });
-
-});
-
-
     document.addEventListener('change', function(event) {
 		if (event.target.classList.contains('item-checkbox')) {
 			var textboxId = 'item_status_' + event.target.dataset.rowid;
@@ -491,36 +480,48 @@ $(document).ready(function() {
 		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))
 	}
 
-	function _autocomplete(_item){
-		_item.find('.item_id').autocomplete({
-			source:function(request, response){
-				$.ajax({
-					url:_base_url_+"classes/Master.php?f=search_items",
-					method:'POST',
-					data:{q:request.term},
-					dataType:'json',
-					error:err=>{
-						console.log(err)
-					},
-					success:function(resp){
-						response(resp)
-					}
-				})
-			},
-			select:function(event,ui){
+	function _autocomplete(_item, supplierId) {
+    _item.find('.item_id').autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=search_items",
+                method: 'POST',
+                data: {
+                    q: request.term,
+                    supplier_id: selectedSupplierId
+                },
+				dataType: 'json',
+				error: err => {
+					console.log(err);
+				},
+				success: function(resp) {
+					console.log("Supplier ID from PHP:", resp.supplier_id);
+					response(resp.items); 
+				}
+            });
+        },
+			select: function(event, ui) {
 				console.log(ui)
 				_item.find('input[name="item_id[]"]').val(ui.item.id)
 				_item.find('.item-description').text(ui.item.description)
-				//_item.find('.item-unit').text(ui.item.default_unit)
-				_item.find('.item-unit').attr('type', 'text').val(ui.item.default_unit);
-				_item.find('.item-price').attr('type', 'text').val(ui.item.unit_price);
-
-				var unitPrice = ui.item.unit_price || 0;
-
-				_item.find('.item-price').attr('type', 'text').val(unitPrice);
+				_item.find('.item-unit').val(ui.item.default_unit);
+				_item.find('.item-price').val(ui.item.unit_price || 0);
 			}
 		})
 	}
+
+	var selectedSupplierId = null;
+	var item = $('#item');
+
+	$(document).ready(function() {
+		$("#supplier_id").change(function() {
+			selectedSupplierId = $(this).val();
+			selectedSupplierId = parseInt($(this).val(), 10);
+
+			console.log("Selected Supplier ID: " + selectedSupplierId);
+			_autocomplete(item, selectedSupplierId);
+		});
+	});
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 			var tr = $('#item-clone tr').clone()

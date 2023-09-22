@@ -30,7 +30,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     } else {
         $next_po_number = 1;
     }
-    $po_number = 'PO - ' . str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
+    $po_number = str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
 }
 
 
@@ -311,144 +311,146 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
-			
 			<br>
-			<div class="instruction">Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div>
-			<div class="row">
-				<div class="col-md-12">
-					<table class="table table-striped table-bordered" id="item-list">
-						<thead>
-							<tr class="bg-navy disabled">
-								<?php if($level == 4 and ($fpo_status != 3)): ?>
-									<th class="px-1 py-1 text-center"></th>
-								<?php endif; ?>
-								<th class="px-1 py-1 text-center">Qty</th>
-								<th class="px-1 py-1 text-center">Unit</th>
-								<th class="px-1 py-1 text-center">Item</th>
-								<th class="px-1 py-1 text-center">Description</th>
-								<th class="px-1 py-1 text-center">Price (per piece)</th>
-								<th class="px-1 py-1 text-center">Total</th>
-								<th class="px-1 py-1 text-center">Select</th>
-								<th class="px-1 py-1 text-center">Note</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php 
-							if(isset($id)):
-							$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' and o.item_status != 2");
-							echo $conn->error;
-							while($row = $order_items_qry->fetch_assoc()):
-							?>
-							<tr class="po-item" data-id="">
-								<?php if($level == 4 and ($fpo_status != 3)): ?>
-									<td class="align-middle p-1 text-center">
-										<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-									</td>
-								<?php endif; ?>
-								<td class="align-middle p-0 text-center">
-									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
-								</td>
-								<!-- <td class="align-middle p-1">
-									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>"/>
-								</td> -->
-								<!-- <td class="align-middle p-1 item-unit"><?php echo $row['default_unit'] ?></td> -->
-								<td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
-								</td>
-								<td class="align-middle p-1">
-									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-									<input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
-								</td>
-								<td class="align-middle p-1 item-description">
-									<?php echo $row['description'] ?>
-								</td>
-								<td class="align-middle p-1">
-                                	<input type="text" step="any" class="text-right w-100 border-0" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
-								</td>
-									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price']) ?>
-								</td>
-								<td class="align-middle p-0 text-center">
-									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
-								</td>
-
-								<td class="align-middle p-0 text-center">
-									<textarea id="item_notes" name="item_notes[]"><?php echo empty($row['item_notes']) ? '' : $row['item_notes']; ?></textarea>
-								</td>
-							</tr>
-							<?php endwhile;endif; ?>
-						</tbody>
-						<tfoot>
-							<tr class="bg-lightblue">
-								<tr>
-									<th class="p-1 text-right" colspan="5"><span>
-									<?php if($usertype == "Purchasing Officer"): ?>
-										<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
+			<div class="card-body">
+				<div class="instruction">Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div>
+				<div class="row">
+					<div class="col-md-12">
+						<table class="table table-striped table-bordered" id="item-list">
+							<thead>
+								<tr class="bg-navy disabled">
+									<?php if($level == 4 and ($fpo_status != 3)): ?>
+										<th class="px-1 py-1 text-center"></th>
 									<?php endif; ?>
-									</span> Sub Total:</th>
-									<th class="p-1 text-right" id="sub_total">0</th>
+									<th class="px-1 py-1 text-center">Qty</th>
+									<th class="px-1 py-1 text-center">Unit</th>
+									<th class="px-1 py-1 text-center">Item</th>
+									<th class="px-1 py-1 text-center">Description</th>
+									<th class="px-1 py-1 text-center">Price (per piece)</th>
+									<th class="px-1 py-1 text-center">Total</th>
+									<th class="px-1 py-1 text-center">Select</th>
+									<th class="px-1 py-1 text-center">Note</th>
 								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="5">Discount (%):
-									<input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
-									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo number_format(isset($discount_amount) ? $discount_amount : 0) ?>" name="discount_amount"></th>
+							</thead>
+							<tbody>
+								<?php 
+								if(isset($id)):
+								$order_items_qry = $conn->query("SELECT o.*,i.name, i.description FROM `order_items` o inner join item_list i on o.item_id = i.id where o.`po_id` = '$id' and o.item_status != 2");
+								echo $conn->error;
+								while($row = $order_items_qry->fetch_assoc()):
+								?>
+								<tr class="po-item" data-id="">
+									<?php if($level == 4 and ($fpo_status != 3)): ?>
+										<td class="align-middle p-1 text-center">
+											<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+										</td>
+									<?php endif; ?>
+									<td class="align-middle p-0 text-center">
+										<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
+									</td>
+									<!-- <td class="align-middle p-1">
+										<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>"/>
+									</td> -->
+									<!-- <td class="align-middle p-1 item-unit"><?php echo $row['default_unit'] ?></td> -->
+									<td class="align-middle p-0 text-center">
+										<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
+									</td>
+									<td class="align-middle p-1">
+										<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+										<input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
+									</td>
+									<td class="align-middle p-1 item-description">
+										<?php echo $row['description'] ?>
+									</td>
+									<td class="align-middle p-1">
+										<input type="text" step="any" class="text-right w-100 border-0" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
+									</td>
+										<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price']) ?>
+									</td>
+									<td class="align-middle p-0 text-center">
+										<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
+										<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									</td>
+
+									<td class="align-middle p-0 text-center">
+										<textarea id="item_notes" name="item_notes[]"><?php echo empty($row['item_notes']) ? '' : $row['item_notes']; ?></textarea>
+									</td>
 								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="5">Tax Inclusive (%):
-									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
-									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
+								<?php endwhile;endif; ?>
+							</tbody>
+							<tfoot>
+								<tr class="bg-lightblue">
+									<tr>
+										<th class="p-1 text-right" colspan="5"><span>
+										<?php if($usertype == "Purchasing Officer"): ?>
+											<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
+										<?php endif; ?>
+										</span> Sub Total:</th>
+										<th class="p-1 text-right" id="sub_total">0</th>
+									</tr>
+									<tr>
+										<th class="p-1 text-right" colspan="5">Discount (%):
+										<input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
+										</th>
+										<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo number_format(isset($discount_amount) ? $discount_amount : 0) ?>" name="discount_amount"></th>
+									</tr>
+									<tr>
+										<th class="p-1 text-right" colspan="5">Tax Inclusive (%):
+										<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
+										</th>
+										<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
+									</tr>
+									<tr>
+										<th class="p-1 text-right" colspan="5">Total:</th>
+										<th class="p-1 text-right" id="total">0</th>
+									</tr>
 								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="5">Total:</th>
-									<th class="p-1 text-right" id="total">0</th>
-								</tr>
-							</tr>
-						</tfoot>
-					</table>
-					<div class="row">
-                        <div class="col-md-12">
-							<label for="notes" class="control-label">Notes:</label>
-							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
+							</tfoot>
+						</table>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="notes" class="control-label">Notes:</label>
+								<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
+							</div>
+						</div>
+						<br>
+						<div class="form-group">
+							<input type="hidden" value="<?php echo $level; ?>" name="level">
+							<input type="hidden" value="0" name="selected_index">
+							<label for="status">Status:</label>
+
+							<!-- Purchasing Officer -->
+							<?php if ($level == 4) { ?>
+								<select name="status" id="status" class="form-control">
+									<option value="0"></option>
+									<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
+									<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
+									<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
+								</select>
+
+
+							<!-- Finance Manager -->
+							<?php } elseif ($level == 3) { ?>
+								<select name="status2" id="status2" class="form-control">
+									<option value="0"></option>
+									<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
+									<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
+									<option value="3" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
+								</select>
+
+							<!-- COO/CFO -->
+							<?php } elseif ($level == 2) { ?>
+								<select name="status3" id="status3" class="form-control">
+									<option value="0"></option>
+									<option value="1" <?php echo $status3 == 1 ? 'selected' : ''; ?>>Approved</option>
+									<option value="2" <?php echo $status3 == 2 ? 'selected' : ''; ?>>Declined</option>
+									<option value="3" <?php echo $status3 == 3 ? 'selected' : ''; ?>>For Review</option>
+								</select>
+							<?php } ?>
 						</div>
 					</div>
-					<br>
-					<div class="form-group">
-						<input type="hidden" value="<?php echo $level; ?>" name="level">
-						<input type="hidden" value="0" name="selected_index">
-						<label for="status">Status:</label>
-
-						<!-- Purchasing Officer -->
-						<?php if ($level == 4) { ?>
-							<select name="status" id="status" class="form-control">
-								<option value="0"></option>
-								<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
-								<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
-								<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
-							</select>
-
-
-						<!-- Finance Manager -->
-						<?php } elseif ($level == 3) { ?>
-							<select name="status2" id="status2" class="form-control">
-								<option value="0"></option>
-								<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
-								<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
-								<option value="3" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
-							</select>
-
-						<!-- COO/CFO -->
-						<?php } elseif ($level == 2) { ?>
-							<select name="status3" id="status3" class="form-control">
-								<option value="0"></option>
-								<option value="1" <?php echo $status3 == 1 ? 'selected' : ''; ?>>Approved</option>
-								<option value="2" <?php echo $status3 == 2 ? 'selected' : ''; ?>>Declined</option>
-								<option value="3" <?php echo $status3 == 3 ? 'selected' : ''; ?>>For Review</option>
-							</select>
-						<?php } ?>
-			    </div>
-            </div>
+				</div>
+			</div>
 		</form>
 	</div>
     <div class="card-footer">
@@ -463,6 +465,7 @@ $(document).ready(function() {
             </tr>
         </table>
     </div>
+	<br>
 </div>
 <table class="d-none" id="item-clone">
 	<tr class="po-item" data-id="">

@@ -295,7 +295,7 @@ input{
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input type="text" id="comm" name="comm" value="<?php echo $username; ?> restructured account with property ID # <?php echo $prop_id; ?>.">
+                        <input type="hidden" id="comm" name="comm" value="<?php echo $username; ?> restructured account with property ID # <?php echo $prop_id; ?>.">
                         <input type="hidden" class="form-control margin-bottom required prop-id" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : 0; ?>">
      
                         <label class="control-label">Balance:</label>
