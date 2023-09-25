@@ -11,8 +11,6 @@ $usertype = $_settings->userdata('user_type');
 ?>
 <?php
 
-
-
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $user = $conn->query("SELECT g.*,o.* from tbl_gr_list g INNER JOIN approved_order_items o on g.gr_id = o.gr_id where g.po_id = '{$_GET['id']}'");
     foreach($user->fetch_array() as $k =>$v){

@@ -10,9 +10,6 @@ if (isset($_GET['id'])) {
         }
     }
     echo "<b>GR #: </b><i> $gr_id</i>";
-} else {
-
-    echo "GR ID not provided in the URL.";
 }
 ?>
 <br>

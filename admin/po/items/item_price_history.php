@@ -10,10 +10,6 @@ if (isset($_GET['id'])) {
         }
     }
     echo "<b>Item Name: </b> <i style='background-color: yellow;padding-left:25px;padding-right:25px;'>$item_name</i>";
-
-} else {
-
-    echo "ITEM ID not provided in the URL.";
 }
 ?>
 <br><br>
