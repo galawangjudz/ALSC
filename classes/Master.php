@@ -582,17 +582,17 @@ Class Master extends DBConnection {
 
 				$users_to_notify = array('IT Admin', 'SOS'); 
 
-				foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-						"message = '$comm with ref#$ref.'",
-						"user_to_be_notified = '$user'",
-						"seen = '0'"
-					);
+				// foreach ($users_to_notify as $user) {
+				// 	$data_notif_values = array(
+				// 		"message = '$comm with ref#$ref.'",
+				// 		"user_to_be_notified = '$user'",
+				// 		"seen = '0'"
+				// 	);
 
-					$data_notif = implode(", ", $data_notif_values);
+				// 	$data_notif = implode(", ", $data_notif_values);
 
-					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-				}
+				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// }
 				
 				$save = $this->conn->query("INSERT INTO t_csr_buyers set ".$data);
 
@@ -3348,8 +3348,8 @@ Class Master extends DBConnection {
 
 	function save_av(){
 		extract($_POST);
-		#$data = " c_av_no = 'AV".$av_no."' ";
-		$data = " c_av_no = '$av_no' ";	 
+		$data = " c_av_no = 'AV".$av_no."' ";
+		#$data = " c_av_no = '$av_no' ";	 
 		$data .= ", property_id = '$p_id' ";	 
 		$data .= ", c_av_date = '$av_date' ";	 
 	 	$data .= ", c_av_amount = '$total_av' ";
@@ -3450,12 +3450,12 @@ Class Master extends DBConnection {
 		extract($_POST);
 
 		if ($value == 4):
-			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			#$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
@@ -3463,7 +3463,7 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
 			//$update = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = = 'AV".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
@@ -4111,7 +4111,7 @@ Class Master extends DBConnection {
 				foreach ($item_id as $k => $v) {
 					if (!empty($query)) $query .= ",";
 					//$prevDel = ($qty[$k] - $outstanding[$k]) - $del_items[$k];
-					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$del_items[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
+					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$received[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
 				}
 				
 				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");

@@ -56,7 +56,10 @@ $user_role = $usertype;
 <?php
 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `t_av_summary` where c_av_no = '{$_GET['id']}'");
+    // Remove the first 2 characters from $_GET['id']
+    $id = substr($_GET['id'], 2);
+
+    $qry = $conn->query("SELECT * FROM `t_av_summary` where c_av_no = '$id'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
         foreach($res as $k => $v){
@@ -65,10 +68,11 @@ if(isset($_GET['id'])){
         }
     }
 }
+
 ?>
 
 <div class="card card-outline rounded-0 card-maroon">
-    <h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i>AV<?php echo $_GET['id'] ?></i> </b></h3>
+    <h3 class="card-title" style="padding-top:10px; padding-left:10px;"><b>Application Voucher ID#: <i><?php echo $id ?></i> </b></h3>
     <div class="table-responsive">
         <table class="table table-bordered table-stripped" style="text-align:center;">
         <br>

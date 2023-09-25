@@ -56,7 +56,18 @@
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo $row['item_code'] ?></td>
-							<td><?php echo $row['name'] ?></td>
+							<td>
+							<?php
+							$qry_get_price = $conn->query("SELECT * from approved_order_items where item_id = '" . $row['id'] . "'");
+							if ($qry_get_price->num_rows > 0) {
+								echo "<a class='basic-link view_item_price_history' data-id='" . $row['id'] . "' data-name='" . $row['name'] . "'>" . $row['name'] . "</a>";
+							} else {
+								echo $row['name'];
+							}
+							
+							
+							?>    	
+							</td>
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
 							<td>
 							<?php
@@ -100,6 +111,11 @@
 </div>
 <script>
 	$(document).ready(function(){
+		$('.view_item_price_history').click(function(){
+			//var itemCode = $(this).data('id');
+			//alert(itemCode);
+			uni_modal_right("<i class='fa fa-info'></i> Price History", "po/items/item_price_history.php?id=" + $(this).attr('data-id') + "&name=" + $(this).attr('data-name'), "mid-large");
+		});
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete this Item permanently?","delete_item",[$(this).attr('data-id')])
 		})

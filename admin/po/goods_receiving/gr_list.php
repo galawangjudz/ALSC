@@ -35,7 +35,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </style>
 <body onload="lcp()">
 <div class="card card-outline rounded-0 card-maroon">
-    <table class="table table-bordered table-stripped" style="text-align:center;font-size:14px;">
+<table class="table table-striped table-hover table-bordered" style="width: 100%">
             <thead>
                 <tr>
                     <th>G.R. #</th>
@@ -70,8 +70,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </body>
 <script>
 $('.view_gr').click(function(){
-    var grId = $(this).attr('data-id'); // Retrieve the gr_id
-    var poId = $(this).data('po-id'); // Retrieve the po_id from data attribute
+    var grId = $(this).attr('data-id');
+    var poId = $(this).data('po-id'); 
 
     uni_modal_right("<i class='fa fa-info'></i> GR Details", 'po/goods_receiving/view_gr_details.php?id=' + grId + '&po_id=' + poId, "mid-large");
 });

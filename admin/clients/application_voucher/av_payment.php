@@ -71,7 +71,7 @@ if (isset($_GET['id'])) {
             <form action="" id="manage-av">
                 <input type="hidden" name="av_id" id="av_id" value="<?php echo isset($meta['property_id']) ? md5($meta['property_id']) : ''; ?>">
                 <input type="hidden" name="p_id" id="p_id" value="<?php echo isset($prop_id) ? $prop_id : '' ?>">
-                <input type="text" name="comm" id="comm" value="<?php echo $username ?> added an AV to client with property ID #<?php echo $prop_id;?>.">
+                <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added an AV to client with property ID #<?php echo $prop_id;?>.">
                 <div class="card card-outline rounded-0">
                     <div class="card-body">
                         <div class="container-fluid">
@@ -150,7 +150,7 @@ if (isset($_GET['id'])) {
                             </div> -->
                             <div class="form-group">
                                 <label for="name">Remarks: </label>
-                                <textarea  class="form-control required" name="remarks" id="remarks" rows="4" cols="50"></textarea>
+                                <textarea  class="form-control" name="remarks" id="remarks" rows="4" cols="50"></textarea>
                               <!--   <input type="text" class="form-control required" name="remarks" id="remarks"> -->
                             </div>
                         </div>

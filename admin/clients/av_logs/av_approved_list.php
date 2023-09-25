@@ -142,7 +142,7 @@
 								  
                         ?>
                         <tr>
-						<td>AV<?php echo $row["c_av_no"] ?></td>
+						<td><?php echo $row["c_av_no"] ?></td>
 						<td><?php echo $row["property_id"] ?></td>
 						<td><?php echo $row["c_av_date"] ?></td>
 						<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -208,7 +208,7 @@
 									  
 							?>
 							<tr>
-							<td>AV<?php echo $row["c_av_no"] ?></td>
+							<td><?php echo $row["c_av_no"] ?></td>
 							<td><?php echo $row["property_id"] ?></td>
 							<td><?php echo $row["c_av_date"] ?></td>
 							<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
@@ -272,7 +272,7 @@
 										  
 								?>
 								<tr>
-								<td>AV<?php echo $row["c_av_no"] ?></td>
+								<td><?php echo $row["c_av_no"] ?></td>
 								<td><?php echo $row["property_id"] ?></td>
 								<td><?php echo $row["c_av_date"] ?></td>
 								<td><?php echo number_format($row["c_av_amount"], 2) ?></td>
