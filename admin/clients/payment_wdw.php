@@ -1401,15 +1401,19 @@ $(document).ready(function(){
 
             var statusValue = $("#status").val();
 
-            var sur_amt = $("#surcharge").val();
-            var amt_paid = $("#amount_paid").val();
-
-            if (amt_paid < sur_amt){
-                alert_toast("Amount must be higher or equal to surcharge","warning");	  
-                 return false;
-
+            var sur_amt = parseFloat($("#surcharge").val());
+            var amt_paid = parseFloat($("#amount_paid").val());
+            console.log(sur_amt);
+            console.log(amt_paid);
+            if (isNaN(sur_amt) || isNaN(amt_paid)) {
+                alert_toast("Please enter valid numeric values for surcharge and amount paid", "warning");
+                return false;
             }
 
+            if (amt_paid < sur_amt) {
+                alert_toast("Amount must be higher or equal to surcharge", "warning");
+                return false;
+            }
             var errorCounter = validateForm();
             if (errorCounter > 0) {
             alert_toast("It appear's you have forgotten to complete something!","warning");	  
