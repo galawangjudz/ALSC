@@ -32,9 +32,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
     $po_number = str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
 }
-$sql_supplier = "SELECT id, name FROM supplier_list;";
-$result = mysqli_query($conn, $sql_supplier);
-$suppliers = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 ?>
 	<style>
 	.ui-autocomplete {
@@ -96,46 +94,6 @@ $suppliers = mysqli_fetch_all($result, MYSQLI_ASSOC);
 </style>
 
 <script>
-
-	
-function getItem(item_code) {
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.open("GET", "/ALSC/admin/po/purchase_orders/get_items.php?item_code=" + item_code, true);
-
-	xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var items = JSON.parse(xhr.responseText);
-            var itemSelects = document.querySelectorAll('select[name="item"]');
-
-            itemSelects.forEach(function(select) {
-                select.innerHTML = '<option value="">Select Item</option>';
-                items.forEach(function(item) {
-                    var option = document.createElement("option");
-                    option.value = item.id;
-                    option.text = item.name;
-                    select.appendChild(option);
-                });
-            });
-
-			itemSelects.forEach(function(select) {
-                select.addEventListener('change', function() {
-                    var selectedItem = this.value;
-                    var descriptionDisplay = document.querySelector('.item-description'); 
-
-                    var selectedDescription = items.find(function(item) {
-                        return item.id === selectedItem;
-                    }).description;
-
-                    descriptionDisplay.textContent = selectedDescription;
-                });
-            });
-        }
-    };
-
-    xhr.send();
-}
 $(document).ready(function() {
     $(".align-middle").each(function() {
         var itemStatusInput = $(this).find('input[name="item_status[]"]');
@@ -187,7 +145,7 @@ $(document).ready(function() {
 					<div class="row">
 						<div class="col-md-6 form-group">
 						<label for="supplier_id">Supplier:</label>
-						<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" onchange="getItem(this.value)">
+						<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
 							<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
 							<?php 
 							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
@@ -201,10 +159,7 @@ $(document).ready(function() {
 							><?php echo $row['name'] ?></option>
 							<?php endwhile; ?>
 						</select>
-						<label for="item" class="form-label" aria-label="Default select example">Item</label>
-                        <select id="item" name="item" class="form-select form-select-lg" disabled>
-                            <option value="">Select Item</option>
-                        </select>
+
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
@@ -315,29 +270,28 @@ $(document).ready(function() {
 									<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 								</td>
 								<td class="align-middle p-0 text-center">
-									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
+									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
 								</td>
-								<td class="align-middle p-1 item-unit">
-									<!-- Make sure this input field has the appropriate value -->
-									<input type="text" name="default_unit[]" class="item-unit-input" value="<?php echo $row['default_unit'] ?>">
+								<!-- <td class="align-middle p-1">
+									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>"/>
+								</td> -->
+								<!-- <td class="align-middle p-1 item-unit"><?php echo $row['default_unit'] ?></td> -->
+								<td class="align-middle p-0 text-center">
+									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
 								</td>
 								<td class="align-middle p-1">
-									<input type="text" name="item_id[]" class="item-id-input" value="<?php echo $row['item_id'] ?>">
-									<select id="item[]" name="item" class="form-select form-select-lg item-select" onchange="updateItemId(this)">
-										<option value="">Select Item</option>
-										<!-- Add options for items here -->
-									</select>
+									<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
 								</td>
 								<td class="align-middle p-1 item-description">
-									<!-- Make sure this displays the description correctly -->
 									<?php echo $row['description'] ?>
 								</td>
 								<td class="align-middle p-1">
-									<input type="text" class="text-right w-100 border-0 item-price" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
+									<input type="text" class="align-middle p-1 item-price" step="any" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
 								</td>
-								<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
+									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price']) ?>
+								</td>
 							</tr>
-
 							<?php endwhile;endif; ?>
 						</tbody>
 						<tfoot>
@@ -373,6 +327,18 @@ $(document).ready(function() {
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
+					<!-- <input type="text" name="status2" id="status2" value="0">
+					<button id="checkItemStatusButton">Check Item Status</button> -->
+
+					<!-- <div class="form-group">
+						<label for="status2">Status:</label>
+						<select name="status2" id="status2" class="form-control">
+							
+							<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
+							<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
+							<option value="0" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
+						</select>
+					</div> -->
 			    </div>
             </div>
 		</form>
@@ -403,20 +369,15 @@ $(document).ready(function() {
 			<!-- <input type="text" class="text-center w-100 border-0" name="unit[]" required/> -->
 		<!-- <td class="align-middle p-1 item-unit"></td> -->
 		<td class="align-middle p-1 item-unit">
-			<input type="text"  name="default_unit[]" class="item-unit-input">
+			<input type="text" class="text-right w-100 border-0 item-unit" name="default_unit[]">
 		</td>
 		<td class="align-middle p-1">
-			<!-- <input type="hidden" name="item_id[]"> 
-			<input type="text" class="text-center w-100 border-0 item_id" id="item" required/> -->
-
-			<input type="text" name="item_id[]" class="item-id-input">
-			<select id="item[]" name="item" class="form-select form-select-lg item-select" onchange="updateItemId(this)">
-				<option value="">Select Item</option>
-			</select>
+			<input type="text" name="item_id[]">
+			<input type="text" class="text-center w-100 border-0 item_id" id="item" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
 		<td class="align-middle p-1">
-			<input type="text" class="item-price" name="unit_price[]">
+			<input type="text" class="text-right w-100 border-0 item-price" name="unit_price[]">
 		</td>
 		<td class="align-middle p-1 text-right total-price">0</td>
 	</tr>
@@ -424,16 +385,6 @@ $(document).ready(function() {
 </body>
 
 <script>
-function updateItemId(selectElement) {
-    var selectedValue = selectElement.value;
-    var itemIDInput = selectElement.parentElement.querySelector(".item-id-input");
-
-
-    itemIDInput.value = selectedValue;
-	console.log('Change event triggered.');
-}
-
-
 	$(document).ready(function() {
 		function updateContactInfo() {
 			var selectedOption = $('#receiver_id').find(':selected');
@@ -530,51 +481,48 @@ function updateItemId(selectElement) {
 		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))
 	}
 
-	// function _autocomplete(_item, supplierId) {
-	// 	_item.find('.item_id').autocomplete({
-	// 		source: function(request, response) {
-	// 			$.ajax({
-	// 				url: _base_url_ + "classes/Master.php?f=search_items",
-	// 				method: 'POST',
-	// 				data: {
-	// 					q: request.term,
-	// 					supplier_id: selectedSupplierId,
+	function _autocomplete(_item, supplierId) {
+    _item.find('.item_id').autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=search_items",
+                method: 'POST',
+                data: {
+                    q: request.term,
+                    supplier_id: selectedSupplierId
+                },
+				dataType: 'json',
+				error: err => {
+					console.log(err);
+				},
+				success: function(resp) {
+					console.log("Supplier ID from PHP:", resp.supplier_id);
+					response(resp.items); 
+				}
+            });
+        },
+			select: function(event, ui) {
+				console.log(ui)
+				_item.find('input[name="item_id[]"]').val(ui.item.id)
+				_item.find('.item-description').text(ui.item.description)
+				_item.find('.item-unit').val(ui.item.default_unit);
+				_item.find('.item-price').val(ui.item.unit_price || 0);
+			}
+		})
+	}
 
-	// 					selected_item: $("#item").val()
-	// 				},
-	// 				dataType: 'json',
-	// 				error: err => {
-	// 					console.log(err);
-	// 				},
-	// 				success: function(resp) {
-	// 					console.log("Supplier ID from PHP:", resp.supplier_id);
-	// 					response(resp.items); 
-	// 				}
-	// 			});
-	// 		},
-	// 		select: function(event, ui) {
-	// 			console.log(ui)
-	// 			_item.find('input[name="item_id[]"]').val(ui.item.id)
-	// 			_item.find('.item-description').text(ui.item.description)
-	// 			_item.find('.item-unit').val(ui.item.default_unit);
-	// 			_item.find('.item-price').val(ui.item.unit_price || 0);
-	// 		}
-	// 	});
-	// }
+	var selectedSupplierId = null;
+	var item = $('#item');
 
-	// var selectedSupplierId = null;
-	// var item = $('#item');
+	$(document).ready(function() {
+		$("#supplier_id").change(function() {
+			selectedSupplierId = $(this).val();
+			selectedSupplierId = parseInt($(this).val(), 10);
 
-	// $(document).ready(function() {
-	// 	$("#supplier_id").change(function() {
-	// 		selectedSupplierId = $(this).val();
-	// 		selectedSupplierId = parseInt($(this).val(), 10);
-
-	// 		console.log("Selected Supplier ID: " + selectedSupplierId);
-	// 		_autocomplete(item, selectedSupplierId);
-	// 	});
-	// });
-
+			console.log("Selected Supplier ID: " + selectedSupplierId);
+			_autocomplete(item, selectedSupplierId);
+		});
+	});
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 			var tr = $('#item-clone tr').clone()

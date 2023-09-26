@@ -3394,7 +3394,7 @@ Class Master extends DBConnection {
 				$payment_count = $row['payment_count'];
 	
 				$data = " property_id = '$prop_id' ";
-				$data .= ", av_no = '$av_no' ";
+				$data .= ", av_no = 'AV".$av_no."' ";
 				$data .= ", pay_date = '$pay_date' ";
 				$data .= ", or_no = '$or_no_ent' " ;
 				$data .= ", payment_amount = '$amount_paid' ";
