@@ -1649,7 +1649,7 @@ $(document).on('click', ".credit-memo", function(e) {
     <?php
     $js_prop_id = md5($prop_id);
 
-    $qry = $conn->query("SELECT status FROM property_payments WHERE md5(property_id) = '{$js_prop_id}' ORDER by due_date, pay_date, payment_count ASC");
+    $qry = $conn->query("SELECT status FROM property_payments WHERE md5(property_id) = '{$js_prop_id}' ORDER by payment_count ASC");
     if ($qry->num_rows > 0) {
         $payments_data = array();
         while ($row = $qry->fetch_assoc()) {
