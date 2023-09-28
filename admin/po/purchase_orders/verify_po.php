@@ -92,7 +92,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		border:none;
 	}
 </style> -->
-
+<!-- <style>
+	.sup_cont{
+		display: none !important;
+	}	
+</style> -->
 <script>
 $(document).ready(function() {
     var level = <?php echo $level; ?>;
@@ -214,22 +218,31 @@ $(document).ready(function() {
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-6 form-group">
-						<label for="supplier_id">Supplier:</label>
-						<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-							<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-							<?php 
-							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-							while ($row = $supplier_qry->fetch_assoc()):
-								$vatable = $row['vatable'];
-							?>
-							<option 
-								value="<?php echo $row['id'] ?>" 
-								data-vatable="<?php echo $vatable ?>"
-								<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
-							><?php echo $row['name'] ?></option>
-							<?php endwhile; ?>
-						</select>
-
+						<!-- <label for="supplier_id">Supplier:</label>
+						<?php 
+						$sup_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 and id='$supplier_id' ORDER BY `name` ASC");
+						while($row = $sup_qry->fetch_assoc()):
+							$supName = $row['name']; 
+						?>
+						<?php endwhile; ?>
+						<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $supName; ?>">	 -->
+							<div class="sup_cont">
+								<label for="supplier_id">Supplier:</label>
+								<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+									<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+									<?php 
+									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
+									while ($row = $supplier_qry->fetch_assoc()):
+										$vatable = $row['vatable'];
+									?>
+									<option 
+										value="<?php echo $row['id'] ?>" 
+										data-vatable="<?php echo $vatable ?>"
+										<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
+									><?php echo $row['name'] ?></option>
+									<?php endwhile; ?>
+								</select>
+							</div>
 						</div>
 						<div class="col-md-6 form-group">
 							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
@@ -269,10 +282,13 @@ $(document).ready(function() {
 					<div class="row">
 						<div class="col-md-6 form-group">
 							<label for="receiver">Receiver 1:</label>
-							<select name="receiver_id" id="receiver_id" class="custom-select custom-select-sm rounded-0 select2">
-								<option value="" disabled <?php echo !isset($receiver_id) ? "selected" : '' ?>></option>
+							<select name="receiver_id" id="receiver_id" class="custom-select custom-select-sm rounded-0 select2" required>
 								<?php 
 								$receiver_qry = $conn->query("SELECT * FROM `users`");
+								$isReceiverIdZero = isset($receiver_id) && $receiver_id == 0;
+								?>
+								<option value="" <?php echo $isReceiverIdZero ? "selected" : '' ?>></option>
+								<?php 
 								while($row = $receiver_qry->fetch_assoc()):
 									$recValue = $row['firstname'] . ' ' . $row['lastname'];
 								?>
@@ -284,26 +300,28 @@ $(document).ready(function() {
 								<?php endwhile; ?>
 							</select>
 						</div>
-
 						<div class="col-md-6 form-group">
 							<label for="contact_no1">Contact #:</label>
 							<input type="text" class="form-control form-control-sm rounded-0" id="contact_no1" value="<?php echo isset($contact_no1) ? $contact_no1 : '' ?>" readonly>
 						</div>
-
 						<div class="col-md-6 form-group">
 							<label for="receiver">Receiver 2:</label>
 							<select name="receiver2_id" id="receiver2_id" class="custom-select custom-select-sm rounded-0 select2">
 								<option value="" disabled <?php echo !isset($receiver2_id) ? "selected" : '' ?>></option>
 								<?php 
-								$receiver_qry = $conn->query("SELECT * FROM `users`");
-								while($row = $receiver_qry->fetch_assoc()):
-									$recValue = $row['firstname'] . ' ' . $row['lastname'];
+								$receiver2_qry = $conn->query("SELECT * FROM `users`");
+								$isReceiverIdZero2 = isset($receiver2_id) && $receiver2_id == 0;
+								?>
+								<option value="" <?php echo $isReceiverIdZero2 ? "selected" : '' ?>></option>
+								<?php 
+								while($row = $receiver2_qry->fetch_assoc()):
+									$recValue2 = $row['firstname'] . ' ' . $row['lastname'];
 								?>
 								<option 
 									value="<?php echo $row['id'] ?>" 
 									data-contact2="<?php echo $row['phone'] ?>"
 									<?php echo isset($receiver2_id) && $receiver2_id == $row['id'] ? 'selected' : '' ?>>
-									<?php echo $recValue ?></option>
+									<?php echo $recValue2 ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -370,7 +388,7 @@ $(document).ready(function() {
 								</td>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
 								</td>
 
 								<td class="align-middle p-0 text-center">
@@ -493,7 +511,7 @@ $(document).ready(function() {
 		<td class="align-middle p-1 text-right total-price">0</td>
 		<td class="align-middle p-0 text-center">
 			<input type="checkbox" class="item-checkbox">
-			<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
 		</td>
 		<td class="align-middle p-0 text-center">
 			<textarea name="item_notes[]" id="item_notes"></textarea>

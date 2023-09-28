@@ -4190,7 +4190,7 @@ Class Master extends DBConnection {
 			}
 		}
 		else if ($level == 2 && $selected_index == 1) {
-			$update = $this->conn->query("UPDATE `po_list` SET `status2` = '1',`status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` SET `status` = '1',`status2` = '1',`status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
 			$data = "";
 				foreach($_POST as $k =>$v){
 					if(in_array($k,array('discount_amount','tax_amount')))
