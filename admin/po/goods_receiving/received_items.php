@@ -55,14 +55,21 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 ?>
 <script>
 $(document).ready(function() {
+    var type = <?php echo json_encode($type); ?>;
+    var receiverId = <?php echo json_encode($receiver_id); ?>;
+    var receiver2Id = <?php echo json_encode($receiver2_id); ?>;
+
     function toggleDelItemsReadonly(isClosed) {
-        $('input[name="del_items[]"]').prop('readonly', isClosed);
-        if (isClosed) {
+        var isDisabled = (type !== receiverId) && (type !== receiver2Id);
+
+        $('input[name="del_items[]"]').prop('readonly', isClosed || isDisabled); // Set readonly property here
+        if (isClosed && isDisabled) {
             $('input[name="del_items[]"]').closest('tr').addClass('readonly-row');
         } else {
             $('input[name="del_items[]"]').closest('tr').removeClass('readonly-row');
         }
     }
+
     var initialStatus = $('#status').val();
     toggleDelItemsReadonly(initialStatus === '0');
 
@@ -71,11 +78,14 @@ $(document).ready(function() {
         toggleDelItemsReadonly(selectedStatus === '0');
     });
 });
+
 </script>
 
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<form action="" id="po-form">
+
+
 		<h3 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order Details": "New Purchase Order" ?></b></i></h5>
 		<div class="card-tools">
 			<button class="btn btn-sm btn-flat btn-success" id="print" type="button" style="font-size:14px;float:right;margin-left:5px;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
@@ -167,6 +177,7 @@ $(document).ready(function() {
         </div>
     <?php endif; ?>
 </div>
+
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-striped table-bordered" id="item-list">

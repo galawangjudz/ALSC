@@ -47,7 +47,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	.ui-menu-item {
 		padding: 5px; 
 		cursor: pointer; 
-		list-style-type: none; 
+		list-style-type: circle;
 	}
 
 	.ui-menu-item:hover {
@@ -94,6 +94,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 
 <script>
+
 $(document).ready(function() {
     $(".align-middle").each(function() {
         var itemStatusInput = $(this).find('input[name="item_status[]"]');
@@ -131,7 +132,7 @@ $(document).ready(function() {
 	$type = $_settings->userdata('id');
 	$level = $_settings->userdata('type');
 ?>
-<body onload="">
+<body onload="calculate()">
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order": "New Purchase Order" ?></b></i></h5>
@@ -144,21 +145,22 @@ $(document).ready(function() {
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-6 form-group">
-							<label for="supplier_id">Supplier:</label>
-							<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-								<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-								<?php 
-								$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 order by `name` asc");
-								while($row = $supplier_qry->fetch_assoc()):
-									$vatable = $row['vatable'];
-								?>
-								<option 
-									value="<?php echo $row['id'] ?>" 
-									data-vatable="<?php echo $vatable ?>"
-									<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> 
-									><?php echo $row['name'] ?></option>
-								<?php endwhile; ?>
-							</select>
+						<label for="supplier_id">Supplier:</label>
+						<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+							<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+							<?php 
+							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
+							while ($row = $supplier_qry->fetch_assoc()):
+								$vatable = $row['vatable'];
+							?>
+							<option 
+								value="<?php echo $row['id'] ?>" 
+								data-vatable="<?php echo $vatable ?>"
+								<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
+							><?php echo $row['name'] ?></option>
+							<?php endwhile; ?>
+						</select>
+
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
@@ -309,7 +311,7 @@ $(document).ready(function() {
 								</tr>
 								<tr>
 									<th class="p-1 text-right" colspan="6">Tax Inclusive (%):
-									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
+									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>" readonly>
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
 								</tr>
@@ -381,7 +383,6 @@ $(document).ready(function() {
 		<td class="align-middle p-1 text-right total-price">0</td>
 	</tr>
 </table>
-</body>
 
 <script>
 	$(document).ready(function() {
@@ -448,38 +449,54 @@ $(document).ready(function() {
 		_this.closest('tr').remove()
 		calculate();
 	}
-	function calculate(){
-		var _total = 0
-		$('.po-item').each(function(){
-			var qty = $(this).find("[name='qty[]']").val()
-			var unit_price = $(this).find("[name='unit_price[]']").val()
+	function calculate() {
+		var _total = 0;
+		$('.po-item').each(function () {
+			var qty = $(this).find("[name='qty[]']").val();
+			var unit_price = $(this).find("[name='unit_price[]']").val();
+			var item_status = $(this).find("[name='item_status[]']").val(); 
 			var row_total = 0;
-			if(qty > 0 && unit_price > 0){
-				row_total = parseFloat(qty) * parseFloat(unit_price)
+
+
+			if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
+				row_total = parseFloat(qty) * parseFloat(unit_price);
 			}
-			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'))
-		})
-		$('.total-price').each(function(){
-			var _price = $(this).text()
-				_price = _price.replace(/\,/gi,'')
-				_total += parseFloat(_price)
-		})
-		var discount_perc = 0
-		if($('[name="discount_percentage"]').val() > 0){
-			discount_perc = $('[name="discount_percentage"]').val()
+
+			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
+			_total += row_total;
+		});
+
+		$('.total-price').each(function () {
+			var _price = $(this).text();
+			_price = _price.replace(/\,/gi, '');
+			_total += parseFloat(_price);
+		});
+
+		var discount_perc = 0;
+		if ($('[name="discount_percentage"]').val() > 0) {
+			discount_perc = $('[name="discount_percentage"]').val();
 		}
-		var discount_amount = _total * (discount_perc/100);
-		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-		var tax_perc = 0
-		if($('[name="tax_percentage"]').val() > 0){
-			tax_perc = $('[name="tax_percentage"]').val()
+		var discount_amount = _total * (discount_perc / 100);
+		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"));
+
+		var tax_perc = 0;
+		if ($('[name="tax_percentage"]').val() > 0) {
+			tax_perc = $('[name="tax_percentage"]').val();
 		}
-		var tax_amount = _total * (tax_perc/100);
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))
+		var tax_amount = _total * (tax_perc / 100);
+		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"));
+
+		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
+		$('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"));
 	}
 
+	var selectedSupplierId; 
+
+	$(document).ready(function() {
+		selectedSupplierId = $("#supplier_id").val();
+
+	_autocomplete(item, selectedSupplierId);
+	});
 	function _autocomplete(_item, supplierId) {
     _item.find('.item_id').autocomplete({
         source: function(request, response) {
@@ -510,7 +527,6 @@ $(document).ready(function() {
 		})
 	}
 
-	var selectedSupplierId = null;
 	var item = $('#item');
 
 	$(document).ready(function() {
