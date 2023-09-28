@@ -1035,7 +1035,8 @@ function check_paydate(){
         console.log(diffDays);
     
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
-   
+        //console.log(l_sur);
+
         if (diffDays <= 2) {
             l_sur = 0;
         }
@@ -1403,8 +1404,8 @@ $(document).ready(function(){
 
             var sur_amt = parseFloat($("#surcharge").val());
             var amt_paid = parseFloat($("#amount_paid").val());
-            console.log(sur_amt);
-            console.log(amt_paid);
+            //console.log(sur_amt);
+            //console.log(amt_paid);
             if (isNaN(sur_amt) || isNaN(amt_paid)) {
                 alert_toast("Please enter valid numeric values for surcharge and amount paid", "warning");
                 return false;
