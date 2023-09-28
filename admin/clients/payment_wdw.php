@@ -984,7 +984,23 @@ window.onload = check_paydate();
 
         $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
+            console.log("gummagalaw");
             let amount = $('.amt-paid').val();
+            let tot_amt_due =  $('.tot-amt-due').val();
+            let rebate =  $('#rebate_amt').val();
+            tot_amt = parseFloat(tot_amt_due.replace(/[^0-9.-]+/g,""))
+            reb = parseFloat(rebate.replace(/[^0-9.-]+/g,""))
+            console.log(amount);
+            console.log(tot_amt);
+            if (amount < tot_amt){
+                $('#rebate_amt').val('0.00');
+                adjust = tot_amt + reb;
+                const final_adj = formatCurrency(adjust);   
+                $('#tot_amount_due').val(final_adj);
+                
+            }else{
+                check_paydate();
+            }
             amount = amount.replace(/[^0-9.-]+/g,"");
             if (isNaN(amount)) {
                 alert("Please enter a number!");
