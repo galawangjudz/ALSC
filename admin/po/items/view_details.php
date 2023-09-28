@@ -1,7 +1,7 @@
 <?php
 require_once('./../../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT i.*, o_approved.date_purchased, o_approved.item_id FROM `item_list` AS i LEFT JOIN `approved_order_items` AS o_approved ON i.id = o_approved.item_id WHERE i.id = {$_GET['id']} ORDER BY o_approved.date_purchased DESC LIMIT 1");
+    $qry = $conn->query("SELECT i.*, o_approved.date_purchased, o_approved.item_id, o_approved.unit_price FROM `item_list` AS i LEFT JOIN `approved_order_items` AS o_approved ON i.id = o_approved.item_id WHERE i.id = {$_GET['id']} ORDER BY o_approved.date_purchased DESC LIMIT 1");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=stripslashes($v);
@@ -19,19 +19,19 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <dl class="row">
             <table class="table table-bordered">
                 <tr>
-                    <td>Item Name:</dt></td>
-                    <td><?php echo $name ?></dd></td>
+                    <td><b>Item Name:</b></dt></td>
+                    <td><b><?php echo $name ?></b></dd></td>
                 </tr>
                 <tr>
-                    <td>Description:</td>
+                    <td><b>Description:</b></td>
                     <td><?php echo $description ?></td>
                 </tr>
                 <tr>
-                    <td>Unit of Measurement:</td>
+                    <td><b>Unit of Measurement:</b></td>
                     <td><?php echo $default_unit ?></td>
                 </tr>
                 <tr>
-                    <td>Last Date Purchased:</td>
+                    <td><b>Last Date Purchased:</b></td>
                     <td>
                         <?php
                         if (!empty($date_purchased)) {
@@ -43,7 +43,18 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     </td>
                 </tr>
                 <tr>
-                    <td>Status:</td>
+                    <td><b>Last Purchased Price:</b></td>
+                    <td>
+                        <?php 
+                    if(!empty($unit_price)) {
+                        echo number_format($unit_price, 2, '.', ','); 
+                    }else{
+                        echo "<span class='badge badge-secondary'>0</span>";
+                    }
+                    ?></td>
+                </tr>
+                <tr>
+                    <td><b>Status:</b></td>
                     <td>
                         <?php if($status == 1): ?>
                             <span class="badge badge-success">Active</span>

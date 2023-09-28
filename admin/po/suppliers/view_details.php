@@ -20,7 +20,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <table class="table table-bordered">
                 <tr>
                     <td style="width:150px;"><b>Supplier Name:</b></td>
-                    <td><?php echo $name ?></td>
+                    <td><b><?php echo $name ?></b></td>
                 </tr>
                 <tr>
                     <td><b>Address:</b></td>

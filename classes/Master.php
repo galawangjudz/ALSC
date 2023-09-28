@@ -582,18 +582,21 @@ Class Master extends DBConnection {
 
 				$users_to_notify = array('IT Admin', 'SOS'); 
 
-				/* foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-						"message = '$comm with ref#$ref.'",
-						"user_to_be_notified = '$user'",
-						"seen = '0'"
-					);
 
-					$data_notif = implode(", ", $data_notif_values);
+				// foreach ($users_to_notify as $user) {
+				// 	$data_notif_values = array(
+				// 		"message = '$comm with ref#$ref.'",
+				// 		"user_to_be_notified = '$user'",
+				// 		"seen = '0'"
+				// 	);
 
-					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-				}
-				 */
+				// 	$data_notif = implode(", ", $data_notif_values);
+
+
+				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// }
+				
+
 				$save = $this->conn->query("INSERT INTO t_csr_buyers set ".$data);
 
 				$buyer_count += 1;
@@ -3348,8 +3351,8 @@ Class Master extends DBConnection {
 
 	function save_av(){
 		extract($_POST);
-		#$data = " c_av_no = 'AV".$av_no."' ";
-		$data = " c_av_no = '$av_no' ";	 
+		$data = " c_av_no = 'AV".$av_no."' ";
+		#$data = " c_av_no = '$av_no' ";	 
 		$data .= ", property_id = '$p_id' ";	 
 		$data .= ", c_av_date = '$av_date' ";	 
 	 	$data .= ", c_av_amount = '$total_av' ";
@@ -3394,7 +3397,7 @@ Class Master extends DBConnection {
 				$payment_count = $row['payment_count'];
 	
 				$data = " property_id = '$prop_id' ";
-				$data .= ", av_no = '$av_no' ";
+				$data .= ", av_no = 'AV".$av_no."' ";
 				$data .= ", pay_date = '$pay_date' ";
 				$data .= ", or_no = '$or_no_ent' " ;
 				$data .= ", payment_amount = '$amount_paid' ";
@@ -3450,12 +3453,12 @@ Class Master extends DBConnection {
 		extract($_POST);
 
 		if ($value == 4):
-			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			#$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1' WHERE c_av_no = ".$data_id);
 		elseif($value == 3):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 2):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
@@ -3463,7 +3466,7 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);
 			//$update = $this->conn->query("DELETE FROM property_payments WHERE property_id = ".$prop_id);
 		elseif($value == 1):
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='1',lvl2='1',lvl3='1' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
 			$get_lid = intval(substr($prop_id, 2, 8));
 			//echo $get_lid;
@@ -4043,12 +4046,17 @@ Class Master extends DBConnection {
 			"supplier_id" => $supplierId, 
 		];
 	
-		$qry = $this->conn->query("SELECT ilist.*, o_list.unit_price, o_list.item_id, o_list.date_purchased AS recent_date_purchased
-			FROM `item_list` ilist
-			LEFT JOIN `approved_order_items` o_list ON ilist.id = o_list.item_id
-			WHERE `name` LIKE '%{$q}%' and supplier_id='$supplierId'
-			ORDER BY o_list.date_purchased DESC
-			LIMIT 1;");
+		$qry = $this->conn->query("SELECT ilist.default_unit, ilist.description, ilist.name, ilist.id, o_list.unit_price, o_list.item_id, o_list.date_purchased AS recent_date_purchased
+		FROM `item_list` ilist
+		LEFT JOIN (
+			SELECT item_id, MAX(date_purchased) AS max_date
+			FROM `approved_order_items`
+			GROUP BY item_id
+		) recent_orders ON ilist.id = recent_orders.item_id
+		LEFT JOIN `approved_order_items` o_list ON ilist.id = o_list.item_id AND recent_orders.max_date = o_list.date_purchased
+		WHERE ilist.name LIKE '%{$q}%' AND ilist.supplier_id = '$supplierId'
+		ORDER BY ilist.name;
+		");
 	
 		$items = [];
 	
@@ -4111,7 +4119,7 @@ Class Master extends DBConnection {
 				foreach ($item_id as $k => $v) {
 					if (!empty($query)) $query .= ",";
 					//$prevDel = ($qty[$k] - $outstanding[$k]) - $del_items[$k];
-					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$del_items[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
+					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$received[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
 				}
 				
 				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");
@@ -4142,8 +4150,9 @@ Class Master extends DBConnection {
 	
 	function update_status_po() {
 		extract($_POST);
+		$discount_amount = str_replace(',', '', $discount_amount);
 		if($level == 4 and $selected_index == 1){
-			$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` set `discount_percentage` = '{$discount_percentage}',`discount_amount` = '{$discount_amount}', `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
@@ -4184,7 +4193,7 @@ Class Master extends DBConnection {
 			}
 		}
 		else if ($level == 2 && $selected_index == 1) {
-			$update = $this->conn->query("UPDATE `po_list` SET `status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` SET `status` = '1',`status2` = '1',`status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
 			$data = "";
 				foreach($_POST as $k =>$v){
 					if(in_array($k,array('discount_amount','tax_amount')))

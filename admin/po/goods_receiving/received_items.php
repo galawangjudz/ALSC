@@ -9,6 +9,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 }
 ?>
 <style>
+    .readonly-row {
+        background-color: #f0f0f0;
+    }
     .select-readonly {
         pointer-events: none;
         background-color: #f0f0f0;
@@ -50,9 +53,39 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	$type = $_settings->userdata('id');
 	$level = $_settings->userdata('type');
 ?>
+<script>
+$(document).ready(function() {
+    var type = <?php echo json_encode($type); ?>;
+    var receiverId = <?php echo json_encode($receiver_id); ?>;
+    var receiver2Id = <?php echo json_encode($receiver2_id); ?>;
+
+    function toggleDelItemsReadonly(isClosed) {
+        var isDisabled = (type !== receiverId) && (type !== receiver2Id);
+
+        $('input[name="del_items[]"]').prop('readonly', isClosed || isDisabled); // Set readonly property here
+        if (isClosed && isDisabled) {
+            $('input[name="del_items[]"]').closest('tr').addClass('readonly-row');
+        } else {
+            $('input[name="del_items[]"]').closest('tr').removeClass('readonly-row');
+        }
+    }
+
+    var initialStatus = $('#status').val();
+    toggleDelItemsReadonly(initialStatus === '0');
+
+    $('#status').on('change', function() {
+        var selectedStatus = $(this).val();
+        toggleDelItemsReadonly(selectedStatus === '0');
+    });
+});
+
+</script>
+
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<form action="" id="po-form">
+
+
 		<h3 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order Details": "New Purchase Order" ?></b></i></h5>
 		<div class="card-tools">
 			<button class="btn btn-sm btn-flat btn-success" id="print" type="button" style="font-size:14px;float:right;margin-left:5px;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
@@ -145,8 +178,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     <?php endif; ?>
 </div>
 
-
-
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-striped table-bordered" id="item-list">
@@ -155,12 +186,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						<col width="10%">
 						<col width="30%">
 						<col width="30%">
-						<?php if($level < 4): ?>
+						<?php if($level < 0): ?>
 							<col width="15%">
 						<?php endif; ?>
 						<col width="8%">
 						<col width="8%">
-						<?php if($level < 4): ?>
+						<?php if($level < 0): ?>
 							<col width="9%">
 						<?php endif; ?>
 					</colgroup>
@@ -170,13 +201,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							<th class="px-1 py-1 text-center">Unit</th>
 							<th class="px-1 py-1 text-center">Item</th>
 							<th class="px-1 py-1 text-center">Description</th>
-							<?php if($level < 4): ?>
+							<?php if($level < 0): ?>
 								<th class="px-1 py-1 text-center">Price (per piece)</th>
 							<?php endif; ?>
 							<th class="px-1 py-1 text-center">Received</th>
 							<th class="px-1 py-1 text-center">Outstanding</th>
 							<th class="px-1 py-1 text-center">No. of Delivered Items</th>
-							<?php if($level < 4): ?>
+							<?php if($level < 0): ?>
 								<th class="px-1 py-1 text-center">Total</th>
 							<?php endif; ?>
 						</tr>
@@ -210,7 +241,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
 							<input type="hidden" name="unit_price[]" value="<?php echo ($row['unit_price']) ?>"/>
-							<?php if($level < 4): ?>
+							<?php if($level < 0): ?>
 								<td class="align-middle p-1">
 									<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
 								</td>
@@ -224,7 +255,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							<td class="align-middle p-1">
 								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0"/>
 							</td>
-							<?php if($level < 4): ?>
+							<?php if($level < 0): ?>
 								<td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
 							<?php endif; ?>
 						</tr>
@@ -234,7 +265,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						<td class="p-1 text-right" colspan="8">Total Outstanding:</td>
 						<td class="p-1 text-right" id="outstanding-total">0</td>
 					</tr>
-					<?php if($level < 4): ?>
+					<?php if($level < 0): ?>
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
@@ -268,7 +299,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						<label for="notes" class="control-label">Notes:</label>
 						<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0" style="pointer-events:none;"><?php echo isset($notes) ? $notes : '' ?></textarea>
 					</div>
-					<?php if ($level <= 4){ ?>
 					<div class="col-md-6" id="hidden-status">
 						<label for="status" class="control-label">Status:</label>
 						<select name="status" id="status" class="form-control form-control-sm rounded-0">
@@ -276,7 +306,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							<option value="1" <?php echo ($status == 1) ? 'selected' : ''; ?>>Open</option>
 						</select>
 					</div>
-				<?php } ?>
 				</div>
 				<br>
 			</div>
@@ -327,6 +356,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		</tr>
 	</table>
 </div>
+
 <script>
 	$(function(){
 		$('#print').click(function(e){
@@ -512,26 +542,38 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			initDeliveredItemsEvents();
 		});
 	})
-    function initDeliveredItemsEvents() {
-		$('#item-list .po-item').each(function() {
+	function initDeliveredItemsEvents() {
+		$('#item-list .po-item').each(function () {
 			var tr = $(this);
 			tr.find('[name="received[]"]').data('initial-received', parseFloat(tr.find('[name="received[]"]').val()));
 			tr.find('[name="outstanding[]"]').data('initial-outstanding', parseFloat(tr.find('[name="outstanding[]"]').val()));
-			tr.find('[name="del_items[]"]').on('input', function(e) {
-				var deliveredItems = parseFloat($(this).val());
-				var initialReceived = tr.find('[name="received[]"]').data('initial-received');
+			tr.find('[name="del_items[]"]').on('input', function (e) {
+			var deliveredItems = parseFloat($(this).val());
+			var initialReceived = tr.find('[name="received[]"]').data('initial-received');
+			var initialOutstanding = tr.find('[name="outstanding[]"]').data('initial-outstanding');
 
-				var initialOutstanding = tr.find('[name="outstanding[]"]').data('initial-outstanding');
+			var maxDeliveredItems = initialOutstanding; 
 
-				var received = initialReceived + deliveredItems;
-				var outstanding =initialOutstanding -deliveredItems;
 
-				tr.find('[name="received[]"]').val(received);
-				tr.find('[name="outstanding[]"]').val(outstanding);
-				tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('input');
+			if (deliveredItems > maxDeliveredItems) {
+				deliveredItems = maxDeliveredItems;
+				$(this).val(deliveredItems);
+			}
+
+			var received = initialReceived + deliveredItems;
+			var outstanding = initialOutstanding - deliveredItems;
+
+			if (outstanding < 0) {
+				outstanding = 0;
+			}
+
+			tr.find('[name="received[]"]').val(received);
+			tr.find('[name="outstanding[]"]').val(outstanding);
+			tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('input');
 			});
 		});
 	}
+
 	function calculateOutstandingTotal() {
 		var totalOutstanding = 0;
 		$('.po-item').each(function() {

@@ -441,15 +441,9 @@ input{
                 <input type="text" class="form-control margin-bottom required monthly-amor" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?> "readonly>	
             </div>
             <label class="control-label" id= "start_text">Start Date: </label>	
-        
             <input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : ''; ?>">
-                
-            
         </div>
     </div>
-
-
-
     </div>
 	</div>
 </div>

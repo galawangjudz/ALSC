@@ -9,24 +9,22 @@ if (isset($_GET['id'])) {
             $$k=$v;
         }
     }
-    echo "GR #: " . $gr_id;
-} else {
-
-    echo "GR ID not provided in the URL.";
+    echo "<b>GR #: </b><i> $gr_id</i>";
 }
 ?>
 <br>
-Date Received: <?php echo $formatted_date = date('F j, Y', strtotime($date_purchased)); ?>
-<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+<b>Date Received: </b><i><?php echo $formatted_date = date('F j, Y', strtotime($date_purchased)); ?></i>
+<br>
+<table class="table table-striped table-hover table-bordered" style="width: 100%">
     <thead>
         <tr>
-            <th>Item Name</th>
-            <th>Default Unit</th>
+            <th style="width:25%">Item Name</th>
+            <th>Unit of Measurement</th>
             <th>Unit Price</th>
             <th>Quantity</th>
             <th>Total # of Prev Delivered Items</th>
-            <th># of Current Delivered Items</th>
-            <th>Current Outstanding</th>
+            <th># of Delivered Items</th>
+            <th>Outstanding</th>
         </tr>
     </thead>
     <tbody>
@@ -52,9 +50,9 @@ Date Received: <?php echo $formatted_date = date('F j, Y', strtotime($date_purch
         //$totalReceivedPerItem[$itemName] = $quantity - $outstanding;
     ?>
         <tr>
-            <td><?php echo $row["name"] ?></td>
+            <td style="width:25%;"><?php echo $row["name"] ?></td>
             <td><?php echo $row["default_unit"] ?></td>
-            <td><?php echo $row["unit_price"] ?></td>
+            <td><?php echo number_format($row["unit_price"]) ?></td>
             <td><?php echo $row["quantity"] ?></td>
             <td><?php echo ($row["quantity"] - $row["outstanding"]) - $row["del_items"] ?></td>
             <td><?php echo $row["del_items"] ?></td>
