@@ -582,6 +582,7 @@ Class Master extends DBConnection {
 
 				$users_to_notify = array('IT Admin', 'SOS'); 
 
+
 				// foreach ($users_to_notify as $user) {
 				// 	$data_notif_values = array(
 				// 		"message = '$comm with ref#$ref.'",
@@ -591,9 +592,11 @@ Class Master extends DBConnection {
 
 				// 	$data_notif = implode(", ", $data_notif_values);
 
+
 				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
 				// }
 				
+
 				$save = $this->conn->query("INSERT INTO t_csr_buyers set ".$data);
 
 				$buyer_count += 1;

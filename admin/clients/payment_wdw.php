@@ -1035,7 +1035,8 @@ function check_paydate(){
         console.log(diffDays);
     
         let l_sur = (monthly_pay * ((0.6/360) * diffDays));
-   
+        //console.log(l_sur);
+
         if (diffDays <= 2) {
             l_sur = 0;
         }
@@ -1401,15 +1402,19 @@ $(document).ready(function(){
 
             var statusValue = $("#status").val();
 
-            var sur_amt = $("#surcharge").val();
-            var amt_paid = $("#amount_paid").val();
-
-            if (amt_paid < sur_amt){
-                alert_toast("Amount must be higher or equal to surcharge","warning");	  
-                 return false;
-
+            var sur_amt = parseFloat($("#surcharge").val());
+            var amt_paid = parseFloat($("#amount_paid").val());
+            //console.log(sur_amt);
+            //console.log(amt_paid);
+            if (isNaN(sur_amt) || isNaN(amt_paid)) {
+                alert_toast("Please enter valid numeric values for surcharge and amount paid", "warning");
+                return false;
             }
 
+            if (amt_paid < sur_amt) {
+                alert_toast("Amount must be higher or equal to surcharge", "warning");
+                return false;
+            }
             var errorCounter = validateForm();
             if (errorCounter > 0) {
             alert_toast("It appear's you have forgotten to complete something!","warning");	  
@@ -1645,7 +1650,7 @@ $(document).on('click', ".credit-memo", function(e) {
     <?php
     $js_prop_id = md5($prop_id);
 
-    $qry = $conn->query("SELECT status FROM property_payments WHERE md5(property_id) = '{$js_prop_id}' ORDER by due_date, pay_date, payment_count ASC");
+    $qry = $conn->query("SELECT status FROM property_payments WHERE md5(property_id) = '{$js_prop_id}' ORDER by payment_count ASC");
     if ($qry->num_rows > 0) {
         $payments_data = array();
         while ($row = $qry->fetch_assoc()) {

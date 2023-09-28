@@ -28,10 +28,19 @@ if(isset($_GET['id'])){
         $net_dp = $row['c_net_dp'];
         $start_date = $row['c_start_date'];
 
-
         }
 
     }
+
+    $get_ma_count = $conn->query("SELECT status_count FROM property_payments where md5(property_id) = '{$_GET['id']}' order by payment_count DESC limit 1 ");    
+    while($row=$get_ma_count->fetch_assoc()){
+        $status_count = $row['status_count'];
+
+    }
+
+    $remain_terms = $terms - $status_count
+
+  
 ?>
 <?php
 $username = $_settings->userdata('username'); 
@@ -418,7 +427,11 @@ input{
              <input type="text" class="form-control margin-bottom required adj-prin-bal" name="adj_prin_bal" id="adj_prin_bal" value="<?php echo isset($amt_fnanced) ? $amt_fnanced : 0; ?>" readonly>
            
              <div class="form-group monthly-frm" id = "monthly_frm">
+              <?php if ($account_status == 'Monthly Amortization'): ?>
+                <label class="control-label">Terms: </label> <i> Note: Remaining Terms is <?php echo $remain_terms; ?> </i>
+                <?php else:?>
                 <label class="control-label">Terms: </label>
+                <?php endif; ?>
                 <input type="text" class="form-control margin-bottom required term-days" name="terms" id="terms" value="<?php echo isset($terms) ? $terms : 1; ?>">
                 <label for='interest_rate' class="control-label" id='rate_text'>Interest Rate: </label>
                 <input type="text" class="form-control margin-bottom required interest-rate" name="interest_rate" id="interest_rate" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>">

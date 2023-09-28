@@ -472,7 +472,8 @@ table {
                 </table>
               </div>  
                     <table class="table2 table-bordered table-stripped">
-                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}'  ORDER by due_date, pay_date, payment_count ASC");
+                      <!-- delete due_date, pay_date order by balik nlng if may error -->
+                    <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}'  ORDER by payment_count ASC");
                      if($qry4->num_rows <= 0){
                            echo "No Payment Records";
                      }else{  ?>      
