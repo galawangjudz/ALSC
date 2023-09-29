@@ -589,8 +589,10 @@ input{
 														<div class="col-md-2">
 															<div class="form-group">
 																<label class="control-label">Birthdate: </label>
-																	<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
-															</div>
+																	<!-- <input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
+   -->
+																	<!-- <input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
+														 -->	</div>
 														</div>
 														<div class="col-md-1">
 															<div class="form-group">
