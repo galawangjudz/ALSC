@@ -57,5 +57,6 @@
         var _base_url_ = '';
     </script>
     <script src="report/dist/js/script.js"></script>
+    <script src="report/dist/js/common.js"></script>
 
   </head>

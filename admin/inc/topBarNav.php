@@ -210,8 +210,8 @@
                 console.log(xhr.responseText);
                 try {
                     let get_data = JSON.parse(xhr.responseText);
-                    console.log(get_data);
-                    console.log('<?php echo $usertype; ?>');
+                    //console.log(get_data);
+                    //console.log('<?php echo $usertype; ?>');
                     if (get_data == get_data) {
                         // Set notification count
                         notify_label.innerHTML = get_data;
@@ -227,10 +227,10 @@
     }
 
     window.onload = () => {
-        notify_me();
+        //notify_me();
 
         setInterval(() => {
-            notify_me();
+            //notify_me();
         }, 1000);
     };
 

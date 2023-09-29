@@ -54,6 +54,7 @@
         var _base_url_ = '<?php echo base_url ?>';
     </script>
     <script src="<?php echo base_url ?>dist/js/script.js"></script>
+    <script src="<?php echo base_url ?>dist/js/common.js"></script>
     <script src="<?php echo base_url ?>assets/js/scripts.js"></script>
     <style>
     #main-header{

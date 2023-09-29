@@ -589,7 +589,7 @@ input{
 														<div class="col-md-2">
 															<div class="form-group">
 																<label class="control-label">Birthdate: </label>
-																	<!-- <input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
+																	<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
    -->
 																	<!-- <input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
 														 -->	</div>
@@ -597,7 +597,7 @@ input{
 														<div class="col-md-1">
 															<div class="form-group">
 																<label class="control-label">Age: </label>
-																<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" value="<?php echo isset($customer_age) ? $customer_age : ''; ?>">
+																<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?> "readonly>
 															</div>
 														</div>	
 														<div class="col-md-3">
@@ -764,8 +764,8 @@ input{
 															<div class="col-md-2">
 																<div class="form-group">
 																	<label class="control-label">Birthdate: </label>
-															
-																		<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
+																		<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
+																	<!-- 	<input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		 -->
 																	
 																
 																</div>
@@ -773,7 +773,7 @@ input{
 															<div class="col-md-1">
 																<div class="form-group">
 																	<label class="control-label">Age: </label>
-																	<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" value="<?php echo isset($customer_age) ? $customer_age : ''; ?>">
+																	<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?> "readonly>
 																</div>
 															</div>	
 																	
@@ -1788,19 +1788,75 @@ input{
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 </body>
+
 <script>
+	
+	$(".buyer-bday").on("change", function() {
+            // Get the entered date value
+            var enteredDate = $(this).val();
+            // Check if the entered date is in YYYY-MM-DD format
+            var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+            if (datePattern.test(enteredDate)) {
+				$(this).parent().removeClass("has-error");
+				
+                // Split the entered date into year, month, and day
+                var parts = enteredDate.split("-");
+                var year = parseInt(parts[0], 10);
+                var month = parseInt(parts[1], 10);
+                var day = parseInt(parts[2], 10);
+
+                // Calculate the age
+                var currentDate = new Date();
+                var age = currentDate.getFullYear() - year;
+
+                // If the birthday hasn't occurred yet this year, subtract 1 from age
+                if (
+                    currentDate.getMonth() + 1 < month ||
+                    (currentDate.getMonth() + 1 === month && currentDate.getDate() < day)
+                ) {
+                    age--;
+                }
+
+                // Update the age input field
+                $("#age").val(age);
+            } else {
+                // If the entered date is not in the correct format, you can handle the error here.
+                // For example, you can display a message to the user or clear the age field.
+				
+				$(this).parent().addClass("has-error");
+				$(".buyer-bday").val("");
+                $("#age").val("");
+                alert_toast("Please enter a valid date in YYYY-MM-DD format.",'error');
+            }
+        });
+
+	$(".buyer-first").on("input", function() {
+        // Get the entered text
+        var enteredText = $(this).val();
+
+        // Define a regular expression to allow hyphens and apostrophes
+        var allowedCharacters = /^[a-zA-Z'\- ]*$/;
+
+        // Check if the entered text contains only allowed characters
+        if (allowedCharacters.test(enteredText)) {
+            // Remove the error-highlight class if the input is valid
+            $(this).removeClass("error-highlight");
+
+            // Rest of your code
+        } else {
+            // Clear the input field, add the error-highlight class, and display an error message
+            $(this).val(""); // Clear the input field
+            $(this).addClass("error-highlight");
+
+            // Display an error message (you can customize this message)
+            alert("Special characters and numbers are not allowed.");
+        }
+    });
+
+
+
 		
 	$(document).ready(function(){
-
-		$(document).on('blur', ".buyer-bday", function(e) {
-		e.preventDefault();
-  		var dob = $(this).val();
-		//var dob = document.getElementById('birth_day').value;
-		dob = new Date(dob);
-		var today = new Date();
-		var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
-		$('.buyer-age').val(age);
-		});
 
 
 		

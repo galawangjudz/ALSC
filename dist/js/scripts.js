@@ -1,7 +1,6 @@
 
 $(document).ready(function() {
 
-
 	let dt = new Date().toISOString().slice(0, 10);
 
 
@@ -15,6 +14,46 @@ $(document).ready(function() {
 		e.preventDefault();
 	    actionAddReply();
 	});
+
+	$(".birth_day").on("change", function() {
+		// Get the entered date value
+		var enteredDate = $(this).val();
+		// Check if the entered date is in YYYY-MM-DD format
+		var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+		if (datePattern.test(enteredDate)) {
+			$(this).parent().removeClass("has-error");
+			
+			// Split the entered date into year, month, and day
+			var parts = enteredDate.split("-");
+			var year = parseInt(parts[0], 10);
+			var month = parseInt(parts[1], 10);
+			var day = parseInt(parts[2], 10);
+
+			// Calculate the age
+			var currentDate = new Date();
+			var age = currentDate.getFullYear() - year;
+
+			// If the birthday hasn't occurred yet this year, subtract 1 from age
+			if (
+				currentDate.getMonth() + 1 < month ||
+				(currentDate.getMonth() + 1 === month && currentDate.getDate() < day)
+			) {
+				age--;
+			}
+
+			// Update the age input field
+			$("#customer_age").val(age);
+		} else {
+			// If the entered date is not in the correct format, you can handle the error here.
+			// For example, you can display a message to the user or clear the age field.
+			
+			$(this).parent().addClass("has-error");
+			alert_toast("Please enter a valid date in YYYY-MM-DD format.",'error');
+			$("#customer_age").val("");
+			$("#birth_day").val("");
+		}
+	});
+
 
 
 	// delete reservation
