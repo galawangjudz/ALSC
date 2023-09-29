@@ -18,6 +18,7 @@ function validateForm() {
 }
 
 
+
 function validateNoSpecialChars(inputElement) {
     // Listen for input events in the given input element
     $(inputElement).on("input", function() {

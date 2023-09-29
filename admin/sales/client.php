@@ -184,15 +184,11 @@ foreach($client->fetch_array() as $k =>$v){
 <script>
 
     $(document).ready(function(){
-       
-
-
         $(".no-special").on("input", function() {
+            //function validateNospecailchars exclude hypens and asphos
             validateNoSpecialChars(this);
-            console.log("gumana");
         });
-        
-
+    
         $('#manage-client').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
@@ -239,8 +235,4 @@ foreach($client->fetch_array() as $k =>$v){
 		})
         
 	})
-
-
-	
-
 </script>
