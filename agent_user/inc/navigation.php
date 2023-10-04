@@ -13,7 +13,7 @@ $level = $_settings->userdata('type');
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>admin" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>agent_user" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;
@@ -47,7 +47,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=sales/client" class="nav-link nav-client">
+                      <a href="<?php echo base_url ?>agent_user/?page=sales/client" class="nav-link nav-client">
                         <i class="nav-icon fas fa-plus"></i>
                         <p>
                           New Client
@@ -55,7 +55,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=ra" class="nav-link nav-ra">
+                      <a href="<?php echo base_url ?>agent_user/?page=ra" class="nav-link nav-ra">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                           Master List
@@ -63,199 +63,22 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="nav-link nav-inventory">
+                      <a href="<?php echo base_url ?>agent_user/?page=inventory/lot-list" class="nav-link nav-inventory">
                       <i class="nav-icon fas fa-cube"></i>
                         <p>
                           Inventory
                         </p>
                       </a>
                     </li> 
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=clients/family_members" class="nav-link nav-members">
-                      <i class="nav-icon fas fa-cube"></i>
-                        <p>
-                          Family Members
-                        </p>
-                      </a>
-                    </li>  -->
-
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
-                    <?php if ($level < 4 or $usertype == "Purchasing Officer"){ ?>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          PO List
-                        </p>
-                      </a>
-                    </li> 
-                    
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Request Form
-                        </p>
-                      </a>
-                    </li>  -->
-
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po" class="nav-link nav-av">
-                      <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                          PO - Dashboard
-                        </p>
-                      </a>
-                    </li>  -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
-                      <i class="nav-icon fas fa-truck"></i>
-                        <p>
-                          Supplier List
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/items" class="nav-link nav-items">
-                      <i class="nav-icon fas fa-th-list"></i>
-                        <p>
-                          Item List
-                        </p>
-                      </a>
-                    </li> 
-                    <?php } ?>
                    
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
-                      <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                          Purchases
-                        </p>
-                      </a>
-                    </li> 
-
-                    
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/sales_invoice/sales_invoice" class="nav-link nav-invoice">
-                      <i class="nav-icon fas fa-file-invoice"></i>
-                        <p>
-                          Sales Invoice
-                        </p>
-                      </a>
-                    </li> -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
-                      <i class="nav-icon fas fa-check-square"></i>
-                        <p>
-                          Goods Receiving
-                        </p>
-                      </a>
-                    </li> 
-                   
-                    
-                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_list" class="nav-link nav-av">
-                      <i class="nav-icon fas fa-receipt"></i>
-                        <p>
-                          AV Logs
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=reports/or_logs" class="nav-link nav-or">
-                      <i class="nav-icon fas fa-book"></i>
-                        <p>
-                          OR Logs
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=clients/credit-memo/cm_list" class="nav-link nav-cm">
-                      <i class="nav-icon fa fa-credit-card"></i>
-                        <p>
-                          Credit/Debit Memo
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=clients/restructuring/restructuring_list" class="nav-link nav-res">
-                      <i class="nav-icon fas fa-redo"></i>
-                        <p>
-                          Restructuring
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=loan-calcu" class="nav-link nav-loan-calcu">
+                      <a href="<?php echo base_url ?>agent_user/?page=loan-calcu" class="nav-link nav-loan-calcu">
                         <i class="nav-icon fas fa-calculator"></i>
                         <p>
                           Loan Calculator
                         </p>
                       </a>
                     </li>
-                    <?php endif ; ?>
-
-                 <!--    <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link nav-journals">
-                        <i class="nav-icon fas fa-folder"></i>
-                        <p>
-                          Journal Entries
-                        </p>
-                      </a>
-
-                    </li>  -->
-
-                  
-                    <?php if ($usertype == "IT Admin"): ?>
-
-
-                      <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
-
-
-                 <!--    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=groups" class="nav-link nav-groups">
-                        <i class="nav-icon fas fa-th-list"></i>
-                        <p>
-                          Group List
-                        </p>
-                      </a>
-                    </li>
- -->
-                   <!--  <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=accounts" class="nav-link nav-accounts">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                          Accounts List
-                        </p>
-                      </a>
-                    </li> -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=agents_list/list" class="nav-link nav-agents_list">
-                        <i class="nav-icon fa fa-id-card"></i>
-                        <p>
-                          Agent List
-                        </p>
-                      </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user">
-                        <i class="nav-icon fas fa-user-circle"></i>
-                        <p>
-                          User List
-                        </p>
-                      </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
-                        <i class="nav-icon fas fa-cogs"></i>
-                        <p>
-                          Settings
-                        </p>
-                      </a>
-                    </li>
-                    <?php endif ?>
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
