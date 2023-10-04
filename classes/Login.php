@@ -23,12 +23,10 @@ class Login extends DBConnection {
 			foreach($qry->fetch_array() as $k => $v){
 				if(!is_numeric($k) && $k != 'password'){
 					$this->settings->set_userdata($k,$v);
+					
 				}
-
 			}
-			
-			$this->settings->set_userdata('type',1);
-			//$this->settings->set_userdata('login_type',1);
+
 		return json_encode(array('status'=>'success'));
 		}else{
 		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from users where username = '$username' and password = md5('$password') "));
@@ -36,36 +34,16 @@ class Login extends DBConnection {
 	}
 	public function logout(){
 		if($this->settings->sess_des()){
-			redirect('index.php');
+			redirect('auth/login.php');
 		}
 	}
-	function login_agent(){
-		extract($_POST);
-		$qry = $this->conn->query("SELECT * from clients where email = '$email' and password = md5('$password') ");
-		if($qry->num_rows > 0){
-			foreach($qry->fetch_array() as $k => $v){
-				$this->settings->set_userdata($k,$v);
-			}
-			$this->settings->set_userdata('type',5);
-		$resp['status'] = 'success';
-		}else{
-		$resp['status'] = 'incorrect';
-		}
-		if($this->conn->error){
-			$resp['status'] = 'failed';
-			$resp['_error'] = $this->conn->error;
-		}
-		return json_encode($resp);
-	}
+	
 }
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
 $auth = new Login();
 switch ($action) {
 	case 'login':
 		echo $auth->login();
-		break;
-	case 'alogin':
-		echo $auth->login_agent();
 		break;
 	case 'logout':
 		echo $auth->logout();
