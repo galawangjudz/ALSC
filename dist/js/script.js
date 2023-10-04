@@ -39,7 +39,8 @@ $(document).ready(function(){
 				if(resp){
 					resp = JSON.parse(resp)
 					if(resp.status == 'success'){
-						location.replace(_base_url_+'admin');
+						alert('Login Sucesssful!!!');
+						location.reload();
 					}else if(resp.status == 'incorrect'){
 						var _frm = $('#login-frm')
 						var _msg = "<div class='alert alert-danger text-white err_msg'><i class='fa fa-exclamation-triangle'></i> Incorrect username or password</div>"
@@ -52,6 +53,8 @@ $(document).ready(function(){
 			}
 		})
 	})
+
+
 	//Establishment Login
 	$('#flogin-frm').submit(function(e){
 		e.preventDefault()

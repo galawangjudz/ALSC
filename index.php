@@ -1,8 +1,5 @@
 <?php require_once('./config.php'); 
-redirect('admin');
+redirect('auth/login.php');
 ?>
 
 
-//ob_start();
-//header("location:admin/");
-//ob_end_clean();
