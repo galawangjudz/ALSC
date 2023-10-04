@@ -13,7 +13,6 @@ if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 	redirect('auth/login.php');
 }
 
-echo  $_SESSION['userdata']['user_type'];
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'IT Admin'){
 	redirect('admin/index.php');
 } 
