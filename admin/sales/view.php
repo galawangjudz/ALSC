@@ -291,7 +291,7 @@ if($csr->num_rows > 0){
                         </td>           
                         <td>
                         <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="1" user-type=<?php echo $type?> class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verified</button>  
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="1" user-type=<?php echo $type?> class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verify</button>  
                         </td>
                         <td>                          
                             <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="2" user-type=<?php echo $type?> class="btn btn-flat btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times-circle" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
@@ -299,10 +299,10 @@ if($csr->num_rows > 0){
                         </td>
                         <td>
                         <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "CFO" or $usertype == "COO" or $usertype == "IT Admin" )){ ?>
-                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> user-type=<?php echo $type?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO/CFO Approved</button>
+                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> user-type=<?php echo $type?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
                         </td>
                         <td>
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> user-type=<?php echo $type?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO/CFO Disapproved</button>
+                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> user-type=<?php echo $type?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO Disapproved</button>
                         </td>
                         <?php } ?>     
                     </div>

@@ -317,7 +317,7 @@ $(document).ready(function() {
 									<th class="p-1 text-right" colspan="6">Tax Inclusive (%):
 									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>" readonly>
 									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
+									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount" id="tax_amount"></th>
 								</tr>
 								<tr>
 									<th class="p-1 text-right" colspan="6">Total:</th>
@@ -491,7 +491,7 @@ $(document).ready(function() {
 		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"));
 
 		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-		$('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"));
+		$('#total').text(parseFloat((_total - discount_amount) + tax_amount).toLocaleString("en-US"));
 	}
 
 	var selectedSupplierId; 

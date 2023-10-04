@@ -242,7 +242,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             </tr>
                             <tr>
                                 <th class="p-1 text-right" colspan="5">TOTAL:</th>
-                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format($sub_total - $discount_amount) : 0 ?></th>
+                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total - $discount_amount)+$tax_amount) : 0 ?></th>
                             </tr>
                         </tr>
                     </tfoot>
