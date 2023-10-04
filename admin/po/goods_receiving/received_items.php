@@ -369,9 +369,9 @@ $(document).ready(function() {
 				var received = parseFloat($(this).find("[name='received[]']").val());
 				var outstanding = parseFloat($(this).find("[name='outstanding[]']").val());
 
-				if (received === 0 && outstanding > 0) {
-					$(this).remove();
-				}
+				// if (received === 0 && outstanding > 0) {
+				// 	$(this).remove();
+				// }
 			});
 
 			var _el = $('<div>');

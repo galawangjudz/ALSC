@@ -13,6 +13,7 @@ foreach($client->fetch_array() as $k =>$v){
 }
 
 ?>
+<?php include '.././classes/new_functions.php'; ?>
 <style>
 .nav-client{
     background-color:#007bff;
@@ -25,6 +26,7 @@ foreach($client->fetch_array() as $k =>$v){
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 }
 </style>
+
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>New Client</i></b></h3>
@@ -42,28 +44,35 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-4">		
                             <div class="form-group">
                                 <label for="customer_last_name" class="control-label">Last Name: </label>
-                                <input type="text" class="form-control margin-bottom no-special required" name="customer_last_name" id="customer_last_name" value="<?php echo isset($meta['last_name']) ? $meta['last_name']: '' ?>">
+                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_last_name" id="customer_last_name" oninput="onlyLetters()" value="<?php echo isset($meta['last_name']) ? $meta['last_name']: '' ?>">
+
                             </div>
                            
                         </div>
                         <div class="col-md-3">		
                             <div class="form-group">
                                 <label for="customer_first_name" class="control-label">First Name: </label>
-                                <input type="text" class="form-control margin-bottom no-special required" name="customer_first_name" id="customer_first_name" value="<?php echo isset($meta['first_name']) ? $meta['first_name']: '' ?>">	
+
+                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_first_name" id="customer_first_name" oninput="onlyLetters()" value="<?php echo isset($meta['first_name']) ? $meta['first_name']: '' ?>">	
+
                             </div>
                            
                         </div>
                         <div class="col-md-3">		
                             <div class="form-group">
                                 <label for="customer_middle_name" class="control-label">Middle Name: </label>
-                                <input type="text" class="form-control margin-bottom no-special" name="customer_middle_name" id="customer_middle_name" value="<?php echo isset($meta['middle_name']) ? $meta['middle_name']: '' ?>">	
+
+                                <input type="text" class="form-control margin-bottom copy-input" name="customer_middle_name" id="customer_middle_name" oninput="onlyLetters()" value="<?php echo isset($meta['middle_name']) ? $meta['middle_name']: '' ?>">	
+
                             </div>
                          
                         </div>
                         <div class="col-md-2">		
                             <div class="form-group">
                                 <label for="customer_suffix_name" class="control-label">Suffix Name: </label>
-                                <input type="text" class="form-control margin-bottom no-special" name="customer_suffix_name" id="customer_suffix_name" value="<?php echo isset($meta['suffix_name']) ? $meta['suffix_name']: '' ?>">	
+
+                                <input type="text" class="form-control margin-bottom copy-input" name="customer_suffix_name" id="customer_suffix_name" oninput="onlyLetters()" value="<?php echo isset($meta['suffix_name']) ? $meta['suffix_name']: '' ?>">	
+
                             </div>
                          
                         </div>
@@ -80,7 +89,9 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-2">		
                             <div class="form-group">
                                 <label for="customer_zip_code" class="control-label">Area Code: </label>
-                                <input type="text" class="form-control required" name="customer_zip_code" id="customer_zip_code" value="<?php echo isset($meta['zip_code']) ? $meta['zip_code']: '' ?>">					
+
+                                <input type="number" class="form-control copy-input required" name="customer_zip_code" id="customer_zip_code" value="<?php echo isset($meta['zip_code']) ? $meta['zip_code']: '' ?>">					
+
                             </div>
                         </div>
                     </div>
@@ -100,7 +111,7 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="customer_age" class="control-label">Age: </label>
-                                <input type="text" class="form-control margin-bottom required" name="customer_age" id="customer_age" value="<?php echo isset($meta['age']) ? $meta['age']: '' ?>" readonly>
+                                <input type="number" class="form-control margin-bottom required" name="customer_age" id="customer_age" value="<?php echo isset($meta['age']) ? $meta['age']: '' ?>" readonly>
                             </div>
                         </div>	
                     </div>
@@ -109,13 +120,15 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contact_no" class="control-label">Contact Number: </label>
-                                <input type="text" class="form-control margin-bottom required" name="contact_no" id="contact_no" value="<?php echo isset($meta['contact_no']) ? $meta['contact_no']: '' ?>" maxlength="11">
+
+                                <input type="number" class="form-control margin-bottom required" name="contact_no" id="contact_no" oninput="limitContactNumberLength()" value="<?php echo isset($meta['contact_no']) ? $meta['contact_no']: '' ?>" autocomplete="nope">
+
                             </div>	
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="customer_viber" class="control-label">Viber Account: </label>
-                                <input type="text" class="form-control margin-bottom" name="customer_viber" id="customer_viber" value="<?php echo isset($meta['viber']) ? $meta['viber']: '' ?>">
+                                <input type="number" class="form-control margin-bottom" name="customer_viber" id="customer_viber" value="<?php echo isset($meta['viber']) ? $meta['viber']: '' ?>" autocomplete="nope">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -123,7 +136,7 @@ foreach($client->fetch_array() as $k =>$v){
                                 <label for="customer_email" class="control-label">Email Address: </label>
                                 <div class="input-group float-right margin-bottom">
                                     <span class="input-group-addon"></span>
-                                    <input type="email" class="form-control margin-bottom required" name="customer_email" id="customer_email" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>">
+                                    <input type="email" class="form-control margin-bottom required" name="customer_email" id="customer_email" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>" autocomplete="nope">
                                 </div>
                             </div>
                         </div>

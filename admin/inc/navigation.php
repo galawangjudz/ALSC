@@ -85,7 +85,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
-                          PO List
+                          POs List
                         </p>
                       </a>
                     </li> 
@@ -111,7 +111,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
-                          Supplier List
+                          Suppliers List
                         </p>
                       </a>
                     </li> 
@@ -119,7 +119,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=po/items" class="nav-link nav-items">
                       <i class="nav-icon fas fa-th-list"></i>
                         <p>
-                          Item List
+                          Items List
                         </p>
                       </a>
                     </li> 
@@ -235,7 +235,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=agents_list/list" class="nav-link nav-agents_list">
                         <i class="nav-icon fa fa-id-card"></i>
                         <p>
-                          Agent List
+                          Agents List
                         </p>
                       </a>
                     </li>
@@ -243,7 +243,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user">
                         <i class="nav-icon fas fa-user-circle"></i>
                         <p>
-                          User List
+                          Users List
                         </p>
                       </a>
                     </li>

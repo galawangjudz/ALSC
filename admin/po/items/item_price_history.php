@@ -13,7 +13,9 @@ if (isset($_GET['id'])) {
 }
 ?>
 <br><br>
-<table class="table table-striped table-hover table-bordered" style="width: 100%">
+<button id="export-btn">Export to Excel</button>
+
+<table class="table table-striped table-hover table-bordered" style="width: 100%" id="item-table">
     <thead>
         <tr>
             <th>Unit Price</th>
@@ -42,3 +44,31 @@ if (isset($_GET['id'])) {
     <?php endwhile; ?>
     </tbody>
 </table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.getElementById('export-btn').addEventListener('click', function() {
+    // Define the table element to be exported
+    var table = document.querySelector('#item-table');
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new();
+    
+    // Convert the table to a worksheet and add it to the Workbook
+    var ws = XLSX.utils.table_to_sheet(table);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // Generate the Excel file as a Blob
+    var blob = XLSX.write(wb, { bookType: 'xlsx', type: 'blob' });
+
+    // Create a download link and trigger the download
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'exported_data.xlsx';0
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+});
+</script>

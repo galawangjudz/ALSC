@@ -19,24 +19,24 @@ while( $row = mysqli_fetch_array($result) ){
         height:auto;
         max-width: 100%!important;
         max-height: 100%!important;
-        display: block!important; /* remove extra space below image */
+        display: block!important; /
     }
     .container1{
         width:1000px!important;
         height:500px;
-        display: block!important; /* remove extra space below image */
+        display: block!important; 
     }
     .main_content{
         width:100%;
         height:100%;
         max-width: 100%!important;
         max-height: 100%!important;
-        display: block!important; /* remove extra space below image */
+        display: block!important; 
     }
     .main_content1{
         width:47%!important;
         height:500px;
-        display: block!important; /* remove extra space below image */
+        display: block!important; 
     }
 </style>
 <?php

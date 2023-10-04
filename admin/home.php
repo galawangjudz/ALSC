@@ -20,7 +20,7 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-file-invoice"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text"><b>Approved RA</b></span>
+                <span class="info-box-text"><b>Approved RAs</b></span>
                 <span class="info-box-number">
                   <?php echo number_format($conn->query("SELECT * FROM t_approval_csr where c_csr_status = 1")->num_rows) ?>
                 </span>

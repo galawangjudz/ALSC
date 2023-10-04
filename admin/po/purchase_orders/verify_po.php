@@ -34,7 +34,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 }
 
 ?>
-<!-- <style>
+<style>
 	.ui-autocomplete {
 		max-height: 200px; 
 		overflow-y: auto;
@@ -91,13 +91,25 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	input{
 		border:none;
 	}
-</style> -->
+</style>
 <!-- <style>
 	.sup_cont{
 		display: none !important;
 	}	
 </style> -->
 <script>
+document.addEventListener('change', function(event) {
+	if (event.target.classList.contains('item-checkbox')) {
+		var textboxId = 'item_status_' + event.target.dataset.rowid;
+		var textbox = document.getElementById(textboxId);
+		if (event.target.checked) {
+			textbox.value = '0';
+		} else {
+			textbox.value = '1';
+		}
+		calculate();
+	}
+});
 $(document).ready(function() {
     var level = <?php echo $level; ?>;
     var supplierValue = $('#supplier_id').val();
@@ -388,7 +400,7 @@ $(document).ready(function() {
 								</td>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
 								</td>
 
 								<td class="align-middle p-0 text-center">
@@ -400,7 +412,7 @@ $(document).ready(function() {
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6"><span>
+									<th class="p-1 text-right" colspan="5"><span>
 									<?php if($usertype == "Purchasing Officer"): ?>
 										<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
 									<?php endif; ?>
@@ -408,19 +420,19 @@ $(document).ready(function() {
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Discount (%):
+									<th class="p-1 text-right" colspan="5">Discount (%):
 									<input type="number" step="any" id="discount_percentage" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo number_format(isset($discount_amount) ? $discount_amount : 0) ?>" name="discount_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Tax Inclusive (%):
+									<th class="p-1 text-right" colspan="5">Tax Inclusive (%):
 									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Total:</th>
+									<th class="p-1 text-right" colspan="5">Total:</th>
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 							</tr>
@@ -511,7 +523,7 @@ $(document).ready(function() {
 		<td class="align-middle p-1 text-right total-price">0</td>
 		<td class="align-middle p-0 text-center">
 			<input type="checkbox" class="item-checkbox">
-			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+			<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
 		</td>
 		<td class="align-middle p-0 text-center">
 			<textarea name="item_notes[]" id="item_notes"></textarea>
@@ -544,17 +556,9 @@ $(document).ready(function() {
 			updateContactInfo();
 		});
 	});
-    document.addEventListener('change', function(event) {
-		if (event.target.classList.contains('item-checkbox')) {
-			var textboxId = 'item_status_' + event.target.dataset.rowid;
-			var textbox = document.getElementById(textboxId);
-			if (event.target.checked) {
-				textbox.value = '0';
-			} else {
-				textbox.value = '1';
-			}
-		}
-	});
+
+
+
 	$(document).ready(function() {
 		$('body').on('change', '.item-checkbox', function() {
 			var itemStatusInput = $(this).closest('tr').find('[name="item_status[]"]');
@@ -622,7 +626,7 @@ $(document).ready(function() {
 		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"));
 
 		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-		$('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"));
+		$('#total').text(parseFloat((_total - discount_amount) + tax_amount).toLocaleString("en-US"));
 	}
 
 	var selectedSupplierId; 
@@ -771,4 +775,24 @@ function updateSelectedIndex() {
       dropdown.addEventListener('change', updateSelectedIndex);
     });
   });
+</script>
+<script>
+document.addEventListener('change', function(event) {
+    if (event.target.classList.contains('item-checkbox')) {
+        var textboxId = 'item_status_' + event.target.dataset.rowid;
+        var textbox = document.getElementById(textboxId);
+        var userlevel = <?php echo $level; ?>; 
+        if (event.target.checked) {
+            textbox.value = '0';
+        } else {
+            if (userlevel === 4) { 
+                textbox.value = '2';
+            } else {
+                textbox.value = '1';
+            }
+        }
+    }
+});
+
+
 </script>
