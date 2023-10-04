@@ -35,8 +35,9 @@ if(isset($_GET['id'])){
         $tcp = $row['c_tcp'];
         $tcp_discount = $row['c_tcp_discount'];
         $tcp_discount_amt = $row['c_tcp_discount_amt'];
-        $vat = $row['c_vat_amount'];
-        $vat_amt = (0.01 * $vat)*$tcp;
+        
+        $vat_amt = $row['c_vat_amount'];
+        $vat =$vat_amt/$tcp * 100;
         $net_tcp = $row['c_net_tcp'];
 
         $reservation = $row['c_reservation'];
@@ -123,13 +124,14 @@ if(isset($_GET['id'])){
         <table class="table table-striped table-hover table-bordered" style="width: 100%">
             <tr><th>Payment Type 1: </th><td><?php echo $p1;?></td></tr>
             <tr><th>Payment Type 2: </th><td><?php echo $p2;?></td></tr>
-            <tr><th>Total Contract Price: </th><td><?php echo number_format($tcp,2);?></td></tr>
             <tr><th>TCP Discount (%): </th><td><?php echo number_format($tcp_discount,2);?></td></tr>
             <tr><th>TCP Discount Amount: </th><td><?php echo number_format($tcp_discount_amt,2);?></td></tr>
+            <tr><th>Total Contract Price: </th><td><?php echo number_format($tcp,2);?></td></tr>
             <tr><th>VAT (%): </th><td><?php echo number_format($vat,2);?></td></tr>
-            <tr><th>Down Payment (%): </th><td><?php echo number_format($down_percent,2);?></td></tr>
             <tr><th>VAT Amount: </th><td><?php echo number_format($vat_amt,2);?></td></tr>
+            <tr><th>NET TCP: </th><td><?php echo number_format($net_tcp,2);?></td></tr>
             <tr><th>Reservation Amount: </th><td><?php echo number_format($reservation,2);?></td></tr>
+            <tr><th>Down Payment (%): </th><td><?php echo number_format($down_percent,2);?></td></tr>
             <tr><th>Monthly Payment: </th><td><?php echo number_format($monthly_payment,2);?></td></tr>
             <tr><th>No. of Payment: </th><td><?php echo number_format($no_payments,2);?></td></tr>
             <tr><th>First Down Payment: </th><td><?php echo $first_dp;?></td></tr>

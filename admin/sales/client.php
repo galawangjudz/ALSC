@@ -35,6 +35,7 @@ foreach($client->fetch_array() as $k =>$v){
 <div class="container-fluid">
 	<form action="" id="manage-client">
         <input type="hidden" name="id" value="<?php echo isset($meta['id']) ? $meta['id']: '' ?>">
+        <input type="hidden" name="username" id="username" value="<?php echo $username?>">
         <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new client.">
         <div class="panel panel-default">
             <div class="panel-body form-group form-group-sm">
@@ -44,27 +45,34 @@ foreach($client->fetch_array() as $k =>$v){
                             <div class="form-group">
                                 <label for="customer_last_name" class="control-label">Last Name: </label>
                                 <input type="text" class="form-control margin-bottom copy-input required" name="customer_last_name" id="customer_last_name" oninput="onlyLetters()" value="<?php echo isset($meta['last_name']) ? $meta['last_name']: '' ?>">
+
                             </div>
                            
                         </div>
                         <div class="col-md-3">		
                             <div class="form-group">
                                 <label for="customer_first_name" class="control-label">First Name: </label>
+
                                 <input type="text" class="form-control margin-bottom copy-input required" name="customer_first_name" id="customer_first_name" oninput="onlyLetters()" value="<?php echo isset($meta['first_name']) ? $meta['first_name']: '' ?>">	
+
                             </div>
                            
                         </div>
                         <div class="col-md-3">		
                             <div class="form-group">
                                 <label for="customer_middle_name" class="control-label">Middle Name: </label>
+
                                 <input type="text" class="form-control margin-bottom copy-input" name="customer_middle_name" id="customer_middle_name" oninput="onlyLetters()" value="<?php echo isset($meta['middle_name']) ? $meta['middle_name']: '' ?>">	
+
                             </div>
                          
                         </div>
                         <div class="col-md-2">		
                             <div class="form-group">
                                 <label for="customer_suffix_name" class="control-label">Suffix Name: </label>
+
                                 <input type="text" class="form-control margin-bottom copy-input" name="customer_suffix_name" id="customer_suffix_name" oninput="onlyLetters()" value="<?php echo isset($meta['suffix_name']) ? $meta['suffix_name']: '' ?>">	
+
                             </div>
                          
                         </div>
@@ -74,14 +82,16 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-10">		
                             <div class="form-group">
                                 <label for="customer_address" class="control-label">Residential/Billing Address: </label>
-                                <input type="text" class="form-control margin-bottom copy-input required" name="customer_address" id="customer_address" value="<?php echo isset($meta['address']) ? $meta['address']: '' ?>">		
+                                <input type="text" class="form-control margin-bottom required" name="customer_address" id="customer_address" value="<?php echo isset($meta['address']) ? $meta['address']: '' ?>">		
                             </div>
                         </div>
                       
                         <div class="col-md-2">		
                             <div class="form-group">
                                 <label for="customer_zip_code" class="control-label">Area Code: </label>
+
                                 <input type="number" class="form-control copy-input required" name="customer_zip_code" id="customer_zip_code" value="<?php echo isset($meta['zip_code']) ? $meta['zip_code']: '' ?>">					
+
                             </div>
                         </div>
                     </div>
@@ -95,7 +105,7 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="birth_day" class="control-label">Birthdate:</label>
-                                <input type="date" class="form-control birth_day required" name="birth_day" id="birth_day" value="<?php echo isset($meta['birthdate']) ? $meta['birthdate']: '' ?>" min="1900-01-01">
+                                <input type="text" class="form-control birth_day required" name="birth_day" id="birth_day" placeholder="YYYY-MM-DD" value="<?php echo isset($meta['birthdate']) ? $meta['birthdate']: '' ?>">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -110,7 +120,9 @@ foreach($client->fetch_array() as $k =>$v){
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contact_no" class="control-label">Contact Number: </label>
+
                                 <input type="number" class="form-control margin-bottom required" name="contact_no" id="contact_no" oninput="limitContactNumberLength()" value="<?php echo isset($meta['contact_no']) ? $meta['contact_no']: '' ?>" autocomplete="nope">
+
                             </div>	
                         </div>
                         <div class="col-md-4">
@@ -182,70 +194,14 @@ foreach($client->fetch_array() as $k =>$v){
     </div>
 </div>
 </div>
-    <script>
-        const frm =document.getElementById('frm');
-        document.getElementById('submit').addEventListener('click',(e)=>{
-            e.preventDefault();
-
-            let insert_xhr=new XMLHttpRequest();
-
-            insert_xhr.open('post','./notifications/insert.php',true);
-
-            let userInput = document.getElementById('comm').value;
-
-            let formdata = "msg="+userInput;
-
-            insert_xhr.onload = function(){
-                if(insert_xhr.status==200){
-                    let get_data = JSON.parse(insert_xhr.responseText);
-                    if(get_data=='added'){
-                        alert("New Notification");
-                    }
-                }
-            }
-            insert_xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
-            insert_xhr.send(formdata);
-        })
-    </script>
-
 <script>
 
-
-	function validateForm() {
-	    // error handling
-	    var errorCounter = 0;
-
-	    $(".required").each(function(i, obj) {
-
-	        if($(this).val() === ''){
-	            $(this).parent().addClass("has-error");
-	            errorCounter++;
-	        } else{ 
-	            $(this).parent().removeClass("has-error"); 
-	        }
-
-	    });
-		
-	    return errorCounter;
-
-	}
-
     $(document).ready(function(){
-
-
-        $(document).on('blur', ".birth_day", function(e) {
-		e.preventDefault();
-  		var dob = $(this).val();
-		//var dob = document.getElementById('birth_day').value;
-		dob = new Date(dob);
-		var today = new Date();
-		var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
-		$('#customer_age').val(age);
-	    });
-
-
-
-
+        $(".no-special").on("input", function() {
+            //function validateNospecailchars exclude hypens and asphos
+            validateNoSpecialChars(this);
+        });
+    
         $('#manage-client').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
@@ -292,8 +248,4 @@ foreach($client->fetch_array() as $k =>$v){
 		})
         
 	})
-
-
-	
-
 </script>

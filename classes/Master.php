@@ -867,9 +867,9 @@ Class Master extends DBConnection {
 		$data .= ", contact_no = '$contact_no' ";
 		$data .= ", c_created_by = '$username' ";
 
-		$data_notif = " message = '$comm'";
+	/* 	$data_notif = " message = '$comm'";
 		$data_notif .= ", user_to_be_notified = 'IT Admin' ";
-		$data_notif .= ", seen = '0' ";
+		$data_notif .= ", seen = '0' "; */
 		
 		$check = $this->conn->query("SELECT * FROM `t_buyer_info` where `last_name` = '{$customer_last_name}' and
 		 `first_name` = '{$customer_first_name}' and `middle_name` = '{$customer_middle_name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
@@ -884,7 +884,7 @@ Class Master extends DBConnection {
 		if(empty($id)){
 			/* $sql = "SELECT * FROM t_buyer_info"; */
 			$sql = "INSERT INTO t_buyer_info set ".$data;
-			$sql = "INSERT INTO message_tbl set ".$data_notif;
+			//$sql = "INSERT INTO message_tbl set ".$data_notif;
 			$save = $this->conn->query($sql);
 		}else{
 			/* $sql = "SELECT * FROM t_buyer_info"; */

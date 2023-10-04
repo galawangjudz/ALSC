@@ -984,7 +984,21 @@ window.onload = check_paydate();
 
         $(document).on('blur', ".amt-paid", function(e) {
             e.preventDefault(); 
+            
             let amount = $('.amt-paid').val();
+            let tot_amt_due =  $('.tot-amt-due').val();
+            let rebate =  $('#rebate_amt').val();
+            tot_amt = parseFloat(tot_amt_due.replace(/[^0-9.-]+/g,""))
+            reb = parseFloat(rebate.replace(/[^0-9.-]+/g,""))
+            if (amount < tot_amt){
+                $('#rebate_amt').val('0.00');
+                adjust = tot_amt + reb;
+                const final_adj = formatCurrency(adjust);   
+                $('#tot_amount_due').val(final_adj);
+                
+            }else{
+                check_paydate();
+            }
             amount = amount.replace(/[^0-9.-]+/g,"");
             if (isNaN(amount)) {
                 alert("Please enter a number!");
@@ -1401,9 +1415,8 @@ $(document).ready(function(){
         $('.err-msg').remove();
 
             var statusValue = $("#status").val();
-
-            var sur_amt = parseFloat($("#surcharge").val());
-            var amt_paid = parseFloat($("#amount_paid").val());
+            var sur_amt = parseFloat($("#surcharge").val().replace(/[^0-9.-]+/g,""));
+            var amt_paid = parseFloat($("#amount_paid").val().replace(/[^0-9.-]+/g,""));
             //console.log(sur_amt);
             //console.log(amt_paid);
             if (isNaN(sur_amt) || isNaN(amt_paid)) {
