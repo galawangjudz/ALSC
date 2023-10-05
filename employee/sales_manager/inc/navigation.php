@@ -47,10 +47,10 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_ra" class="nav-link nav-ra">
+                      <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_sales" class="nav-link nav-ra">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
-                          Master List
+                          List of RA
                         </p>
                       </a>
                     </li> 

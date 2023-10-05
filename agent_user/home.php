@@ -1,4 +1,9 @@
 
+
+<?php 
+$session_id = $_settings->userdata('id');
+?>
+
 <section class="content">
     <div class="container-fluid">
       

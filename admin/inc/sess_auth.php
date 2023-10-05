@@ -13,11 +13,22 @@ if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 	redirect('auth/login.php');
 }
 
-echo  $_SESSION['userdata']['user_type'];
+$usertype = $_settings->userdata('user_type'); 
+$level = $_settings->userdata('type'); 
+$session_id = $_settings->userdata('id');
+if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
+	redirect('auth/login.php');
+}
+
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'IT Admin'){
 	redirect('admin/index.php');
 } 
 
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'Agent'){
 	redirect('agent_user/index.php');
-} 
+}
+
+if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'SOS'){
+	redirect('employee/sales_manager/index.php');
+}
+
