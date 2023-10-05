@@ -20,3 +20,5 @@ if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['user
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'Agent'){
 	redirect('agent_user/index.php');
 } 
+/* $session_id=$_SESSION['userdata']['id'];
+$session_role = $_SESSION['userdata']['user_type']; */

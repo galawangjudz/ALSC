@@ -21,4 +21,8 @@ if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'Agent'){
 	redirect('agent_user/index.php');
-} 
+}
+
+if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'SOS'){
+	redirect('employee/sales_manager/index.php');
+}
