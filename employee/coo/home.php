@@ -22,7 +22,7 @@ $session_id = $_settings->userdata('id');
                 ?>
 
                 <h4 class="font-20 weight-500 mb-10 text-capitalize">
-                  Welcome back <div class="weight-600 font-30 text-blue"><?php echo $row['user_type']." ".$row['firstname']. " " .$row['lastname']; ?>,</div>
+                  Welcome back <div class="weight-600 font-30 text-blue"><?php echo $row['firstname']. " " .$row['lastname']; ?>,</div>
                 </h4>
                 <p class="font-18 max-width-600"> We're delighted to see you again.</p>
               </div>

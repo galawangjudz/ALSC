@@ -166,14 +166,10 @@
                             $exp_date_only=date("Y-m-d",strtotime($exp_date_str));
                             //echo $exp_date_only;
 
-                            $query = $conn->query("SELECT current_timestamp as current_timestamp_column");
-                        
-                            $row2 = $query->fetch_assoc();
-                            $currentTimestamp = $row2['current_timestamp_column']; // Convert to milliseconds
-                         
                             $today_date=date('Y/m/d H:i:s');
                             $today_date_only=date("Y-m-d",strtotime($today_date));
                             //echo $today_date_only;
+
                             $exp=strtotime($exp_date_str);
                             $td=strtotime($today_date);
 					?>
@@ -212,7 +208,7 @@
 
 						// Get today's date and time
                         
-						var now<?php echo $id ?> = new Date("<?php echo $currentTimestamp?>").getTime();
+						var now<?php echo $id ?> = new Date().getTime();
 						
 						// Find the distance between now and the count down date
 						var distance<?php echo $id ?> = countDownDate<?php echo $id ?> - now<?php echo $id ?>;
@@ -250,20 +246,20 @@
 						
 						</script>
 						<?php 
-							
+							$exp_date=new DateTime($row["c_duration"]);
 							$exp_date_str=$row["c_duration"];
-							
+							$exp_date_only=date("Y-m-d",strtotime($exp_date_str));
 					
-							$today_date= $row2['current_timestamp_column'];
-							
+							$today_date=date('Y/m/d H:i:s');
+							$today_date_only=date("Y-m-d",strtotime($today_date));
+						
 	
 							$exp=strtotime($exp_date_str);
 							$td=strtotime($today_date);		
 	
 							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-                                
 								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2, c_active = 0 WHERE c_csr_no = '".$id."'");	
-								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE  c_csr_no = '".$id."'");
+								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 							}
 						?> 

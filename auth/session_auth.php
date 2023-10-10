@@ -10,7 +10,7 @@ $link .= "://";
 $link .= $_SERVER['HTTP_HOST']; 
 $link .= $_SERVER['REQUEST_URI'];
 
-echo $_SESSION['userdata']['user_type'] ;
+
 if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 	redirect('auth/login.php');
 }
@@ -26,3 +26,8 @@ if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['user
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'SOS'){
 	redirect('employee/sales_manager/index.php');
 }
+
+if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'COO'){
+	redirect('employee/coo/index.php');
+}
+
