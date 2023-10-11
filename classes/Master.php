@@ -389,7 +389,8 @@ Class Master extends DBConnection {
 			$price_sqm = $_POST['price_per_sqm'];
 			$lot_disc = $_POST['lot_disc'];
 			$lot_disc_amt = $_POST['lot_disc_amt'];
-			$house_model = $_POST['house_model'];
+			$house_model = isset($_POST['house_model']) ? $_POST['house_model'] : "None";
+		
 			$floor_area = $_POST['floor_area'];
 			$h_price_per_sqm = $_POST['h_price_per_sqm'];
 			$house_disc = $_POST['house_disc'];
@@ -406,7 +407,7 @@ Class Master extends DBConnection {
 			// Payment Details
 			$reservation = $_POST['reservation'];
 			$payment_type1 = $_POST['payment_type1'];
-			$payment_type2 = $_POST['payment_type2'];
+			$payment_type2 = isset($_POST['payment_type2']) ? $_POST['payment_type2'] : "None";
 			$down_percent = $_POST['down_percent'];
 			$net_dp = $_POST['net_dp'];
 			$no_payment = $_POST['no_payment'];
