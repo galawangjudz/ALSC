@@ -1,5 +1,6 @@
 <?php
-  require_once('sess_auth.php');
+  require_once('../auth/session_auth.php');
+  
 ?>
 <head>
     <meta charset="utf-8">

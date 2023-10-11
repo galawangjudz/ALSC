@@ -4,7 +4,6 @@
 
 <?php
   require_once('session_auth.php');
-
 ?>
 <head>
     <meta charset="utf-8">
