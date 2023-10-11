@@ -42,8 +42,7 @@ class Login extends DBConnection {
 			session_set_cookie_params(0);
 			session_destroy();
 			redirect('auth/login.php');
-		}
-	}
+	}}
 	
 }
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);

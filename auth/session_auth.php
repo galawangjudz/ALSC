@@ -15,10 +15,19 @@ if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 	redirect('auth/login.php');
 }
 
- if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'IT Admin'){
+if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'IT Admin'){
 	redirect('admin/index.php');
 } 
 
 if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'Agent'){
 	redirect('agent_user/index.php');
-} 
+}
+
+if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'SOS'){
+	redirect('employee/sales_manager/index.php');
+}
+
+if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'COO'){
+	redirect('employee/coo/index.php');
+}
+

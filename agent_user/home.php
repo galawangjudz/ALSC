@@ -3,16 +3,13 @@
 <hr>
 <section class="content">
     <div class="container-fluid">
-    <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-file-invoice"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text"><b>Approved RA</b></span>
-                <span class="info-box-number">
-                  <?php echo number_format($conn->query("SELECT * FROM t_approval_csr where c_csr_status = 1")->num_rows) ?>
-                </span>
+      
+      <div class="">
+        <div class="pd-ltr-20">
+          <div class="info-box pd-20 height-1400-p mb-30">
+            <div class="row align-items-center">
+              <div class="col-md-4 user-icon">
+                <img src="../vendors/images/banner-img.png" alt="">
               </div>
             </div>
           </div>
@@ -47,5 +44,5 @@
               </div>
           </div>
         </div>
-    </div>
+  </div>
 </section>
