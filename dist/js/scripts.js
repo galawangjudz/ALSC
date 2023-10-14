@@ -3,8 +3,6 @@ $(document).ready(function() {
 
 	let dt = new Date().toISOString().slice(0, 10);
 
-
-
 	$("#action_add_comment").click(function(e) {
 		e.preventDefault();
 	    actionAddComment();
@@ -359,14 +357,16 @@ $(".add-pay-row").click(function(e) {
 	e.preventDefault();
 	cloned.clone().appendTo('#payment_table'); 
 });
-
-var cloned2 = $('#buyer_table tr:last').clone();
-cloned2.find('input').val('');
 $(".add-buyer-row").click(function(e) {
-	e.preventDefault();
-	cloned2.clone().appendTo('#buyer_table'); 
-});
+    e.preventDefault();
+    var clonedRow = $('#buyer_table tr:last').clone();
+    clonedRow.find('input').val('');
+    clonedRow.find('.buyer-bday').on('change', function() {
+        calculateAgeAndSetError($(this), $(this).closest('tr').find("#age"));
+    });
 
+    $('#buyer_table tbody').append(clonedRow);
+});
 $('#comm_table').on('input', '.calculate', function () {
 	//alert(this);
 	updateTotals(this);  
@@ -655,36 +655,59 @@ function updateTotals(elem) {
 	$(document).on('change', ".payment-type2", function(e) {
 		e.preventDefault();
 		payment_type2_changed();
-
-
 	});
 	$(document).on('keyup', ".prod-lot-price", function(e) {
 		e.preventDefault();
 		compute_lcp();
-
-
 	});
-
-
 
 	$(document).on('change', ".acc-interest", function(e) {
 		e.preventDefault();
 		compute_adj_prin();
-
-
 	});
-
-	
 
   $(document).on('change', ".acc-surcharge2", function(e) {
 		e.preventDefault();
 		compute_adj_prin();
-
-
 	});
 
+	function calculateAgeAndSetError(birthdateInput, ageInput) {
+		var enteredDate = birthdateInput.val();
+		
+		var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+		if (datePattern.test(enteredDate)) {
+			birthdateInput.parent().removeClass("has-error");
 
+			var parts = enteredDate.split("-");
+			var year = parseInt(parts[0], 10);
+			var month = parseInt(parts[1], 10);
+			var day = parseInt(parts[2], 10);
 
+			var currentDate = new Date();
+			var age = currentDate.getFullYear() - year;
+	
+			if (
+				currentDate.getMonth() + 1 < month ||
+				(currentDate.getMonth() + 1 === month && currentDate.getDate() < day)
+			) {
+				age--;
+			}
+
+			ageInput.val(age);
+		} else {
+			birthdateInput.parent().addClass("has-error");
+			birthdateInput.val("");
+			ageInput.val("");
+			alert_toast("Please enter a valid date in YYYY-MM-DD format.", 'error');
+		}
+	}
+	
+
+	$(".buyer-bday").on("change", function() {
+		calculateAgeAndSetError($(this), $("#age"));
+	});
+
+	
   function compute_adj_prin(){
     var balance = $('.amt-to-be-financed').val();
     var acc_sur = $('.acc-surcharge2').val();
@@ -1119,7 +1142,9 @@ function updateTotals(elem) {
 			var monthly_ma = parseFloat(l_loan_amt) * parseFloat(l_factor);
 			monthly_ma = isFinite(monthly_ma) ? monthly_ma : 0;
 		
-			$("#fixed_factor").val(isNaN(l_factor) ? 0 : l_factor.toFixed(8));
+			$("#fixed_factor").val(isNaN(l_factor) || !isFinite(l_factor) ? 0 : l_factor.toFixed(8));
+
+			//$("#fixed_factor").val(isNaN(l_factor) ? 0 : l_factor.toFixed(8));
 			$("#monthly_amortization").val(monthly_ma.toFixed(2));
 		}
 	}

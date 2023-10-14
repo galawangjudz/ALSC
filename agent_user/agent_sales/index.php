@@ -52,6 +52,7 @@
 					<th>Net TCP</th>
 					<th>SOS Approval</th>
 					<th>COO Approval</th>
+					<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -118,6 +119,9 @@
 							elseif($row['coo_approval'] == 4){ ?> 
 							 	<td class="text-center"><span class="badge badge-danger">Disapproved</span></td>
 							<?php } ?>
+							<td align="center">
+								<a class="dropdown-item view_data" href="./?page=agent_sales/view&id=<?php echo md5($row['c_csr_no']) ?>" style="border:solid 1px gainsboro"><span class="fa fa-eye text-primary"></span> View</a>
+							</td>
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

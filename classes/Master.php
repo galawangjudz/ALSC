@@ -506,7 +506,7 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area = '$service_area' ";
 			$data2 .= ", others = '$others' ";
 			$data2 .= ", conv_outlet = '$conv_outlet' ";
-			// $data2 .= ", floor_elevation = '$flr_elev' ";
+			$data2 .= ", floor_elevation = '$floor_elev' ";
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
@@ -519,7 +519,6 @@ Class Master extends DBConnection {
 			foreach($_POST['agent_name'] as $key => $value) {
 
 				$agent = $value;
-			
 				$agent_code = $_POST['agent_code'][$key];
 				$agent_pos = $_POST['agent_position'][$key];
 				$agent_amount = $_POST['comm_amt'][$key];
@@ -531,7 +530,6 @@ Class Master extends DBConnection {
 				$data .= ", c_agent = '$agent' ";
 				$data .= ", c_amount = '$agent_amount' ";
 				$data .= ", c_rate = '$agent_rate' ";
-
 				$save = $this->conn->query("INSERT INTO t_csr_commission set ".$data);
 				}
 
@@ -614,7 +612,7 @@ Class Master extends DBConnection {
 			$price_sqm = $_POST['price_per_sqm'];
 			$lot_disc = $_POST['lot_disc'];
 			$lot_disc_amt = $_POST['lot_disc_amt'];
-			$house_model = $_POST['house_model'];
+			$house_model = isset($_POST['house_model']) ? $_POST['house_model'] : "None";
 			$floor_area = $_POST['floor_area'];
 			$h_price_per_sqm = $_POST['h_price_per_sqm'];
 			$house_disc = $_POST['house_disc'];
@@ -645,7 +643,7 @@ Class Master extends DBConnection {
 					}
 				}}
 			$payment_type1 = $_POST['payment_type1'];
-			$payment_type2 = $_POST['payment_type2'];
+			$payment_type2 = isset($_POST['payment_type2']) ? $_POST['payment_type2'] : "None";
 			$down_percent = $_POST['down_percent'];
 			$net_dp = $_POST['net_dp'];
 			$no_payment = $_POST['no_payment'];
@@ -718,7 +716,7 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area = '$service_area' ";
 			$data2 .= ", others = '$others' ";
 			$data2 .= ", conv_outlet = '$conv_outlet' ";
-			$data2 .= ", floor_elevation = '$flr_elev' ";
+			$data2 .= ", floor_elevation = '$floor_elev' ";
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
