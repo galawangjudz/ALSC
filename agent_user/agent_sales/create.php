@@ -364,7 +364,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 																select:invalid { color: gray; }
 															</style>
 															<select required id="civil_status" name="civil_status[]" class="form-control buyer-civil required">
-																<option value="" disabled selected>Select Civil Status</option>
+																<!-- <option value="" disabled selected>Select Civil Status</option> -->
 																<option name="civil_status" value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
 																<option name="civil_status" value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
 																<option name="civil_status" value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
@@ -378,7 +378,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 																</style>
 																<label class="control-label">Gender: </label>
 																<select required id="customer_gender" name="gender[]" class="form-control buyer-gender required">
-																	<option value="" disabled selected>Select Civil Status</option>
+																	<option value="" disabled selected>Select Gender</option>
 																	<option name="customer_gender" value="M" <?php echo isset($customer_gender) && $customer_gender == "M" ? 'selected' : '' ?>>Male</option>
 																	<option name="customer_gender" value="F" <?php echo isset($customer_gender) && $customer_gender == "F" ? 'selected' : '' ?>>Female</option>
 																</select>
@@ -681,7 +681,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 												<input type="radio" name="chkOption3" value="3" <?php echo isset($csr_type)&&$csr_type == 3 ? 'checked' : ''; ?>>
 											</label>
 											<div>
-												<label class="light" style="font-weight:normal;">Packaged Only</label>
+												<label class="light" style="font-weight:normal;">Packaged</label>
 											</div>
 										</div>
 										<div class="radio-container">
@@ -1638,7 +1638,7 @@ $(document).on('click', ".select-customer", function(e) {
 		$(customer).closest('tr').find('.buyer-contact').val(customer_phone);
 		$(customer).closest('tr').find('.buyer-email').val(customer_email);
 		$(customer).closest('tr').find('.buyer-gender').val(customer_gender);
-		$(customer).closest('tr').find('.buyer-civl').val(customer_civil);
+		$(customer).closest('tr').find('.buyer-civil').val(customer_civil);
 		$(customer).closest('tr').find('.buyer-ctzn').val(customer_ctzn);
 		$('#insert_customer').modal('hide');
 	});
