@@ -56,7 +56,7 @@ $level = $_settings->userdata('type');
 		<b><i><h5 class="card-title" id="main-title">List of Pending Purchase Orders</b></i></h5>
 		<?php if($usertype == "Purchasing Officer"): ?>
 		<div class="card-tools">
-			<a href="./?page=po/purchase_orders/manage_po" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+			<a href="./?page=po/purchase_orders/manage_po" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New Purchase Order</a>
 		</div>
 		<?php endif; ?>
 	</div>

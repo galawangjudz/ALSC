@@ -905,11 +905,11 @@ Class Master extends DBConnection {
 
 	function sm_verification(){
 		extract($_POST);
-		$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
-		while($row = $sql->fetch_assoc()){
-			$usertype= $row['username'];
-		}
-		$users_to_notify = array('CFO', 'COO', 'IT Admin'); 
+		// $sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+		// while($row = $sql->fetch_assoc()){
+		// 	$usertype= $row['username'];
+		// }
+		// $users_to_notify = array('CFO', 'COO', 'IT Admin'); 
 
 	 	$check = $this->conn->query("SELECT * FROM t_csr where c_verify = 1 and c_active = 1 and c_lot_lid ='{$lid}'")->num_rows;
 		if($this->capture_err())
@@ -937,17 +937,17 @@ Class Master extends DBConnection {
 		
 		if($save){
 			if($value == 1){
-				foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-					"message = '$usertype verified CSR #$id.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-					);
+				// foreach ($users_to_notify as $user) {
+				// 	$data_notif_values = array(
+				// 	"message = '$usertype verified CSR #$id.'",
+				// 	"user_to_be_notified = '$user'",
+				// 	"seen = '0'"
+				// 	);
 
-					$data_notif = implode(", ", $data_notif_values);
+				// 	$data_notif = implode(", ", $data_notif_values);
 
-					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-					}
+				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// 	}
 				$resp['status'] = 'success';
 			
 				$this->settings->set_flashdata('success',"RA successfully verified.");
@@ -1056,22 +1056,22 @@ Class Master extends DBConnection {
 		$data = "c_duration = DATE_ADD('$ext_duration',INTERVAL $duration DAY)";
 		$save = $this->conn->query("UPDATE t_approval_csr set ".$data." where c_csr_no =".$id);
 		if($save){
-			$sql = $this->conn->query("SELECT * FROM users where id=" .$type);
-				while($row = $sql->fetch_assoc()){
-					$usertype= $row['username'];
-				}
-				$users_to_notify = array('CFO', 'COO', 'IT Admin'); 
-				foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-					"message = '$usertype extended the approval of CSR #$id.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// $sql = $this->conn->query("SELECT * FROM users where id=" .$type);
+			// 	while($row = $sql->fetch_assoc()){
+			// 		$usertype= $row['username'];
+			// 	}
+			// 	$users_to_notify = array('CFO', 'COO', 'IT Admin'); 
+			// 	foreach ($users_to_notify as $user) {
+			// 		$data_notif_values = array(
+			// 		"message = '$usertype extended the approval of CSR #$id.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-				}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// 	}
 				
 			$resp['status'] = 'success';
 		
@@ -4374,6 +4374,7 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+	
 	function delete_po(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `po_list` where id = '{$id}'");
@@ -4384,6 +4385,222 @@ Class Master extends DBConnection {
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+
+	function manage_apv(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(in_array($k,array('amount_due','vat_amount','tax_amount')))
+				$v= str_replace(',','',$v);
+			if(!in_array($k,array('id')) && !is_array($_POST[$k])){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		// if(!empty($po_no)){
+		// 	$check = $this->conn->query("SELECT * FROM `apv` where `apv_no` = '{$apv_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+		// 	if($this->capture_err())
+		// 		return $this->capture_err();
+		// 	if($check > 0){
+		// 		$resp['status'] = 'po_failed';
+		// 		$resp['msg'] = "AP voucher already exist.";
+		// 		return json_encode($resp);
+		// 		exit;
+		// 	}
+		// }else{
+		// 	$po_no ="";
+		// 	while(true){
+		// 		$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
+		// 		$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}'")->num_rows;
+		// 		if($check <= 0)
+		// 		break;
+		// 	}
+		// }
+
+		if(empty($id)){
+			$sql = "INSERT INTO `apv` set {$data} ";
+		}else{
+			$sql = "UPDATE `apv` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			$apv_no = empty($id) ? $this->conn->insert_id : $id ;
+			$resp['apv_id'] = $apv_no;
+			$data = "";
+			foreach($account_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				//$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$apv_no}','{$v}','{$tax[$k]}','{$vat[$k]}','{$gross_amt[$k]}')";
+			}
+			
+
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `apv_list` where apv_id = '{$apv_no}'");
+				$save = $this->conn->query("INSERT INTO `apv_list` (`apv_id`,`account_id`,`tax_amount`,`vat_amount`,`amount_due`) VALUES {$data} ");
+			}
+			if(empty($id))
+				$this->settings->set_flashdata('success',"APV successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"APV successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+
+	}
+
+	function manage_cv() {
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (in_array($k, array('amount_due', 'vat_amount'))) {
+				$v = str_replace(',', '', $v);
+			}
+			if (!in_array($k, array('id','due_date'))) {
+				if (!is_array($v)) { // Check if it's not an array
+					$v = addslashes(trim($v));
+					if (!empty($data)) {
+						$data .= ",";
+					}
+					$data .= " `{$k}`='{$v}' ";
+				} else { // If it's an array, handle it accordingly
+					foreach ($v as $key => $value) {
+						if (!empty($data)) {
+							$data .= ",";
+						}
+						$data .= " `{$k}`='{$value}' ";
+					}
+				}
+			}
+		}
+		// Rest of your code
+	
+	
+	
+	
+	
+		// if(!empty($po_no)){
+		// 	$check = $this->conn->query("SELECT * FROM `apv` where `apv_no` = '{$apv_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+		// 	if($this->capture_err())
+		// 		return $this->capture_err();
+		// 	if($check > 0){
+		// 		$resp['status'] = 'po_failed';
+		// 		$resp['msg'] = "AP voucher already exist.";
+		// 		return json_encode($resp);
+		// 		exit;
+		// 	}
+		// }else{
+		// 	$po_no ="";
+		// 	while(true){
+		// 		$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
+		// 		$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}'")->num_rows;
+		// 		if($check <= 0)
+		// 		break;
+		// 	}
+		// }
+
+		if(empty($id)){
+			$sql = "INSERT INTO `cv` set {$data} ";
+		}else{
+			$sql = "UPDATE `cv` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			$apv_no = empty($id) ? $this->conn->insert_id : $id ;
+			$resp['apv_no'] = $apv_no;
+			$data = "";
+			foreach($due_date as $k =>$v){
+				if(!empty($data)) $data .=",";
+				//$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$v}','{$invoice_no[$k]}','{$supplier[$k]}','{$wtax[$k]}','{$amount_due[$k]}')";
+			}
+			
+
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `cv_list` where apv_id = '{$apv_no}'");
+				$save = $this->conn->query("INSERT INTO `cv_list` (`due_date`,`invoice_no`,`supplier`,`wtax`,`amount_due`) VALUES {$data} ");
+			}
+			if(empty($id))
+				$this->settings->set_flashdata('success',"CV successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"CV successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+
+	}
+
+	function manage_adv(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(in_array($k,array('amount_due','vat_amount','tax_amount')))
+				$v= str_replace(',','',$v);
+			if(!in_array($k,array('id','transaction_no')) && !is_array($_POST[$k])){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		// if(!empty($po_no)){
+		// 	$check = $this->conn->query("SELECT * FROM `adv` where `transaction_no` = '{$transaction_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+		// 	if($this->capture_err())
+		// 		return $this->capture_err();
+		// 	if($check > 0){
+		// 		$resp['status'] = 'po_failed';
+		// 		$resp['msg'] = "Direct voucher already exist.";
+		// 		return json_encode($resp);
+		// 		exit;
+		// 	}
+		// }else{
+		// 	$po_no ="";
+		// 	while(true){
+		// 		$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
+		// 		$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}'")->num_rows;
+		// 		if($check <= 0)
+		// 		break;
+		// 	}
+		// }
+
+		if(empty($id)){
+			$sql = "INSERT INTO `adv` set {$data} ";
+		}else{
+			$sql = "UPDATE `adv` set {$data} where id = '{$id}' ";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			$transaction_no = empty($id) ? $this->conn->insert_id : $id ;
+			$resp['adv_id'] = $transaction_no;
+			$data = "";
+			foreach($account_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				//$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$transaction_no}','{$v}','{$tax[$k]}','{$vat[$k]}','{$gross_amt[$k]}')";
+			}
+			
+
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `adv_list` where adv_id = '{$transaction_no}'");
+				$save = $this->conn->query("INSERT INTO `adv_list` (`adv_id`,`account_id`,`tax_amount`,`vat_amount`,`amount_due`) VALUES {$data} ");
+			}
+			if(empty($id))
+				$this->settings->set_flashdata('success',"ADV successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"ADV successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
 		}
 		return json_encode($resp);
 
@@ -4508,9 +4725,9 @@ switch ($action) {
 	case 'save_ca':
 		echo $Master->save_ca();
 	break;
-	case 'print_payment_func':
-		echo $Master->print_payment_func();
-	break;
+	// case 'print_payment_func':
+	// 	echo $Master->print_payment_func();
+	// break;
 	case 'print_payment':
 		echo $Master->print_payment();
 	break;
@@ -4560,9 +4777,9 @@ switch ($action) {
 	case 'save_av':
 		echo $Master->save_av();
 	break;
-	case 'move_av':
-		echo $Master->move_av();
-	break;
+	// case 'move_av':
+	// 	echo $Master->move_av();
+	// break;
 	case 'save_group':
 		echo $Master->save_group();
 	break;
@@ -4638,6 +4855,15 @@ switch ($action) {
 	break;
 	case 'manage_po':
 		echo $Master->manage_po();
+	break;
+	case 'manage_apv':
+		echo $Master->manage_apv();
+	break;
+	case 'manage_adv':
+		echo $Master->manage_adv();
+	break;
+	case 'manage_cv':
+		echo $Master->manage_cv();
 	break;
 	case 'update_status_po':
 		echo $Master->update_status_po();

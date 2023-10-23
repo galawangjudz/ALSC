@@ -80,7 +80,7 @@ $level = $_settings->userdata('type');
                     </li>  -->
 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
-                    <?php if ($level < 4 or $usertype == "Purchasing Officer"){ ?>
+
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
@@ -89,7 +89,56 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
+                      <i class="nav-icon fas fa-truck"></i>
+                        <p>
+                          Suppliers List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/items" class="nav-link nav-items">
+                      <i class="nav-icon fas fa-th-list"></i>
+                        <p>
+                          Items List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
+                      <i class="nav-icon fas fa-check-square"></i>
+                        <p>
+                          Goods Receiving
+                        </p>
+                      </a>
+                    </li> 
+
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Expenses</li></div></b></i>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/apv/" class="nav-link nav-apv">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Accounts Payable Voucher
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/adv/" class="nav-link nav-adv">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Direct Voucher
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/cv/" class="nav-link nav-cv">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Check Voucher
+                        </p>
+                      </a>
+                    </li> 
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
                       <i class="nav-icon fas fa-file"></i>
@@ -107,24 +156,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
-                      <i class="nav-icon fas fa-truck"></i>
-                        <p>
-                          Suppliers List
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/items" class="nav-link nav-items">
-                      <i class="nav-icon fas fa-th-list"></i>
-                        <p>
-                          Items List
-                        </p>
-                      </a>
-                    </li> 
-                    <?php } ?>
-                   
+                    
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
                       <i class="nav-icon fas fa-shopping-cart"></i>
@@ -143,14 +175,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
-                      <i class="nav-icon fas fa-check-square"></i>
-                        <p>
-                          Goods Receiving
-                        </p>
-                      </a>
-                    </li> 
+                   
                    
                     
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>

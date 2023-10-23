@@ -1,10 +1,10 @@
 <?php require_once('../config.php'); ?>
  <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
-<?php require_once('../inc_main/header.php') ?>
+<?php require_once('inc/header.php') ?>
   <body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed sidebar-mini-md sidebar-mini-xs" data-new-gr-c-s-check-loaded="14.991.0" data-gr-ext-installed="" style="height: auto;">
     <div class="wrapper">
-     <?php require_once('../inc_main/topBarNav.php') ?>
+     <?php require_once('inc/topBarNav.php') ?>
       <?php require_once('inc/navigation.php') ?>
     <?php if($_settings->chk_flashdata('success')): ?>
     <script>
@@ -111,6 +111,6 @@
     </div>
   </div>
   </div>
-      <?php require_once('../inc_main/footer.php') ?>
+      <?php require_once('inc/footer.php') ?>
   </body>
 </html>

@@ -2,23 +2,42 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') 
-    $link = "https"; 
-else
-    $link = "http"; 
-$link .= "://"; 
-$link .= $_SERVER['HTTP_HOST']; 
-$link .= $_SERVER['REQUEST_URI'];
 
-
-if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
-	redirect('auth/login.php');
+if(isset($_SESSION['userdata'])){
+    if($_SESSION['userdata']['user_type'] == 'IT Admin'){
+        if(strpos($link, 'login.php') === false){
+            redirect('admin/index.php');
+        }
+    } 
+    elseif($_SESSION['userdata']['user_type'] == 'Agent'){
+        if(strpos($link, 'login.php') === false){
+            redirect('agent_user/index.php');
+        }
+    } 
+    elseif($_SESSION['userdata']['user_type'] == 'SOS'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/sales_manager/index.php');
+        }
+    }  
+    elseif($_SESSION['userdata']['user_type'] == 'CA'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/ca/index.php');
+        }
+    }     
+    elseif($_SESSION['userdata']['user_type'] == 'Cashier'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/cashier/index.php');
+        }
+    }
+    elseif($_SESSION['userdata']['user_type'] == 'COO'){
+        if(strpos($link, 'login.php') === false){
+            redirect('mancomm/coo/index.php');
+        }
+    }  
+    elseif($_SESSION['userdata']['user_type'] == 'CFO'){
+        if(strpos($link, 'login.php') === false){
+            redirect('mancomm/cfo/index.php');
+        }
+    }  
 }
-
- if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'IT Admin'){
-	redirect('admin/index.php');
-} 
-
-if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'Agent'){
-	redirect('agent_user/index.php');
-} 
+?>

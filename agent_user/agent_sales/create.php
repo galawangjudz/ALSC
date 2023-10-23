@@ -3,6 +3,17 @@
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
+	function onlyLettersforRes() {
+    const fieldIds = ["last_name", "first_name", "middle_name", "suffix_name", "citizenship"];
+    const regex = /^[a-zA-Z\s\-]+$/;
+
+    fieldIds.forEach(id => {
+        const field = document.getElementById(id);
+        if (field) {
+            field.value = field.value.replace(/[^a-zA-Z\s\-]/g, "");
+        }
+    });
+}
 </script>
 
 <?php endif;?>
@@ -331,8 +342,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 													<div class="row">
 														<div class="col-md-3">		
 															<div class="form-group">
-															<label class="control-label">Last Name: </label>
-																<input type="text" class="form-control margin-bottom buyer-last required" name="last_name[]" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>">
+															<label class="control-label">Last Name:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
 															</div>
 														</div>
 														<div class="col-md-3">

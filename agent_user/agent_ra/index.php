@@ -46,6 +46,8 @@
                     <th>Approval Status</th>
                     <th>Reserve Status</th>
                     <th>CA Status</th>
+					<th>CFO Status</th>
+					<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -55,10 +57,10 @@
 						$username = $_settings->userdata('username');
 						$where = "c_created_by = '$username'";
 						if ($type < 5 ){
-							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
+							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no WHERE c_ca_status != 3
 												ORDER BY c_date_approved DESC");
 						}else{
-							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
+							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no WHERE c_ca_status != 3
 												and ".$where." ORDER BY c_date_approved DESC");
 						}
 						
@@ -168,6 +170,31 @@
 						<?php else: ?>
 							<td><span class="badge badge-danger">Expired </span></td>
 						<?php endif; ?>
+
+						<?php if($row['cfo_status'] == 1): ?>
+							<td><span class="badge badge-success">CFO Approved</span></td>
+						<?php elseif ($row['cfo_status'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php else: ?>
+							<td><span class="badge badge-danger">Disapproved</span></td>
+						<?php endif; ?>
+
+						<td align="center">
+							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+								Action
+							<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu" role="menu">
+							<a class="dropdown-item view_data" href="./?page=agent_ra/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+							<?php if ($row['c_verify'] == 0): ?>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item edit_data" href="./?page=sm_sales/create&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+							<?php endif; ?>	
+							</div>
+						</td>
+
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

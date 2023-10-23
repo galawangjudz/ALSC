@@ -26,6 +26,7 @@ if(isset($_GET['id'])){
     if($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $rev_stats = $row['c_revised'];
+        $ca_stats = $row['c_ca_status'];
         $ra_id = $row['ra_id'];
         $csr_no = $row['c_csr_no'];
         $lot_id = $row['c_lot_lid'];
@@ -124,6 +125,8 @@ if(isset($_GET['id'])){
 	</div>
 	<div class="card-body">
     <div class="container-fluid">
+    <?php echo $rev_stats ?>
+                <?php echo $ca_stats ?>
     <table class="table table-striped table-hover table-bordered" id="data-table">
         <tr>
             <td><b>RA #: </b></td><td><?php echo $ra_id ?></td>
@@ -167,26 +170,32 @@ if(isset($_GET['id'])){
         <tr>
             <td><b>Monthly Amortization: </b></td><td><?php echo 'P'.number_format($monthly_payment,2) ?></td>
         </tr> 
+        <tr>
+            <td><b>Monthly Amortization: </b></td><td><?php echo $rev_stats ?></td>
+        </tr> 
+        <tr>
+            <td><b>Monthly Amortization: </b></td><td><?php echo $ca_stats ?></td>
+        </tr> 
     </table>
     
 
     <div class="row-xs-3"> 
         <table style="width:100%">
             <tr>
-            <!-- <?php if ($cfo_stat == 0):?> -->
-            <?php if ($rev_stats == 0 or $rev_stats == 2):?> 
+
+            <?php if ($rev_stats == 0 && ($ca_stats == 0)):?> 
                 <td>
                     <button type="button" style="width:100%;font-size:14px;" class="btn btn-success btn-flat ca_approved" csr-id ="<?php $csr_no ?>"  value= 1><i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;Approved</button>
                 </td>
                 <td>
                     <button type="button" style="width:100%;font-size:14px;" class="btn btn-danger btn-flat ca_approved" csr-id ="<?php $csr_no ?>"  value= 2><i class="fa fa-thumbs-down" aria-hidden="true"></i>&nbsp;&nbsp;Disapproved</button>
                 </td>
-
                 <td>
                     <button type="button" style="width:100%;font-size:14px;" class="btn btn-warning btn-flat ca_approved" csr-id ="<?php $csr_no ?>" value= 3><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;For Revision</button>
                 </td>
+
+               
             <?php endif;?>
-            <!-- <?php endif;?> -->
                 <td>
                     <button type="button" style="width:100%;font-size:14px;" class="btn btn-flat btn-secondary" data-dismiss="modal" style="font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close</button>
                 </td>

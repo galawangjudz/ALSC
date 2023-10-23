@@ -49,6 +49,7 @@
 					<th>Net TCP</th>
 					<th>SOS Approval</th>
 					<th>COO Approval</th>
+					<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -113,6 +114,20 @@
                             elseif($row['coo_approval'] == 2){ ?> 
                                 <td class="text-center"><span class="badge badge-danger">Lapsed</span></td>
                             <?php } ?>
+							<td align="center">
+                                <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                    Action
+                                <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+								<div class="dropdown-menu" role="menu">
+								<?php if($row['c_verify'] == 0){ ?> 
+                                	<div class="dropdown-menu" role="menu">
+									<a class="dropdown-item" href="./?page=agent_revisions/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<?php }else {?> 
+									<a class="dropdown-item" href="./?page=agent_revisions/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+								<?php } ?>
+								</div>
+							</td>
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

@@ -14,6 +14,9 @@
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
+    .dropdown-menu{
+        text-align: center;
+    }
 </style>
 <?php 
     $usertype = $_settings->userdata('user_type');
@@ -90,10 +93,11 @@ if($csr->num_rows > 0){
         $start_date = $row['c_start_date'];
         $verify = $row['c_verify'];
 
-        $invoice_notes = $row['c_remarks'];
+        $notes = $row['c_remarks'];
     endwhile;
     }
 }
+
 ?>
 <body onload="loadAll()">
 <div class="card card-outline rounded-0 card-maroon">
@@ -104,30 +108,30 @@ if($csr->num_rows > 0){
 		<div class="container-fluid">
                 <input type="hidden" value="<?php echo $p1; ?>" id="p1">
                 <input type="hidden" value="<?php echo $p2; ?>" id="p2">
-                <table style="width:100%;">
-                    <tr>
-                    <div class="row">
-                        <td> 
-                            <?php if($verify == 0){?>
-                                <a href="?page=agent_sales/create&id=<?php echo md5($getID); ?>" class="btn btn-flat btn-primary" style="font-size:14px;width:100%;margin-top:5px;"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit</a>
-                            <?php } ?>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
-                                <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu" role="menu">   
-                                <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
-                            </div>
-                        </td>           
-                    </div>
-                    </tr>
-                        </table>
+                    <table style="width:100%;">
+                        <tr>
+                        <div class="row">
+                                <?php if($verify == 0){?>
+                                <td style="width:50%;">
+                                    <a href="?page=agent_sales/create&id=<?php echo md5($getID); ?>" class="btn btn-flat btn-primary" style="font-size:14px;width:100%;margin-top:5px;"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit</a>
+                                </td>
+                                <?php } ?>
+                                <td>
+                                <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
+                                    <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu">   
+                                    <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra.php?id=<?php echo $getID; ?>">Print Front Page</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_ra_back.php?id=<?php echo $getID; ?>">Print Back Page</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
+                                </div>
+                                </td>           
+                        </div>
+                        </tr>
+                    </table>
                     <div class="titles"> Buyer's Profile</div>
                         <br>
                         <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
@@ -718,7 +722,7 @@ if($csr->num_rows > 0){
                             <div class="titles">Remarks</div>
                             <div class="view_box">
                                 <div class="float-left col-md-12">
-                                    <div style="padding:5px"><?php echo $invoice_notes ?></div>
+                                    <div style="padding:5px"><?php echo $notes ?></div>
                                 </div>
                             </div>
                             <div class="commentDiv">
