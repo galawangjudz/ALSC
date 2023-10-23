@@ -54,7 +54,7 @@ function auto_date($last_day,$date)
     $month = $date_arr['month'];
     $day = $date_arr['day'];
     /* $change_date = 0; */
- /*    $conn = mysqli_connect('localhost', 'root', '', 'alscdb'); */
+
     $conn = mysqli_connect(DB_SERVER, DB_USERNAME, '', DB_NAME);
     if (!$conn) {
         die('Could not connect to database: ' . mysqli_connect_error());
@@ -155,7 +155,7 @@ function auto_date($last_day,$date)
   }
 
   function load_data($id,$pay_date){
-    /* $conn = mysqli_connect('localhost', 'root', '', 'alscdb'); */
+   
     $conn = mysqli_connect(DB_SERVER, DB_USERNAME, '', DB_NAME);
     if (!$conn) {
         die('Could not connect to database: ' . mysqli_connect_error());
