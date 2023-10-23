@@ -133,9 +133,6 @@
                     <th>Approval Status</th>
                     <th>Reserve Status</th>
                     <th>CA Status</th>
-
-					<th>CFO Status</th>
-
                     <th>Actions</th>
 				
 					</tr>
@@ -149,11 +146,10 @@
 						if ($type < 5 ){
 
 							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
-												WHERE c_ca_status !=3 ORDER BY c_date_approved DESC");
+												ORDER BY c_date_approved DESC");
 						}else{
 							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
-												WHERE c_ca_status !=3 and ".$where." ORDER BY c_date_approved DESC");
-
+												and ".$where." ORDER BY c_date_approved DESC");
 						}
                      
 						while($row = $qry->fetch_assoc()):
@@ -170,14 +166,10 @@
                             $exp_date_only=date("Y-m-d",strtotime($exp_date_str));
                             //echo $exp_date_only;
 
-                            $query = $conn->query("SELECT current_timestamp as current_timestamp_column");
-                        
-                            $row2 = $query->fetch_assoc();
-                            $currentTimestamp = $row2['current_timestamp_column']; // Convert to milliseconds
-                         
                             $today_date=date('Y/m/d H:i:s');
                             $today_date_only=date("Y-m-d",strtotime($today_date));
                             //echo $today_date_only;
+
                             $exp=strtotime($exp_date_str);
                             $td=strtotime($today_date);
 					?>
@@ -216,7 +208,7 @@
 
 						// Get today's date and time
                         
-						var now<?php echo $id ?> = new Date("<?php echo $currentTimestamp?>").getTime();
+						var now<?php echo $id ?> = new Date().getTime();
 						
 						// Find the distance between now and the count down date
 						var distance<?php echo $id ?> = countDownDate<?php echo $id ?> - now<?php echo $id ?>;
@@ -254,20 +246,20 @@
 						
 						</script>
 						<?php 
-							
+							$exp_date=new DateTime($row["c_duration"]);
 							$exp_date_str=$row["c_duration"];
-							
+							$exp_date_only=date("Y-m-d",strtotime($exp_date_str));
 					
-							$today_date= $row2['current_timestamp_column'];
-							
+							$today_date=date('Y/m/d H:i:s');
+							$today_date_only=date("Y-m-d",strtotime($today_date));
+						
 	
 							$exp=strtotime($exp_date_str);
 							$td=strtotime($today_date);		
 	
 							if(($td>$exp) && ($row['c_reserve_status'] == 0)  && ($row['c_csr_status'] == 1)){
-                                
 								$update_csr = $conn->query("UPDATE t_csr SET coo_approval = 2, c_active = 0 WHERE c_csr_no = '".$id."'");	
-								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE  c_csr_no = '".$id."'");
+								$update_app = $conn->query("UPDATE t_approval_csr SET c_csr_status = 2 WHERE c_csr_no = '".$id."'");
 								$update_lot = $conn->query("UPDATE t_lots SET c_status = 'Available' WHERE c_lid = '".$lid."'");
 							}
 						?> 
@@ -295,15 +287,7 @@
 							<td><span class="badge badge-danger">Expired </span></td>
 						<?php endif; ?>
 				
-
-						<?php if($row['cfo_status'] == 1): ?>
-							<td><span class="badge badge-success">CFO Approved</span></td>
-						<?php elseif ($row['cfo_status'] == 0): ?>
-							<td><span class="badge badge-warning">Pending</span></td>
-						<?php else: ?>
-							<td><span class="badge badge-danger">Disapproved</span></td>
-						<?php endif; ?>
-
+					
 						<td align="center" style="white-space: nowrap;">
 							<div style="display: inline-block;">
 								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -311,9 +295,7 @@
 								<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<div class="dropdown-menu" role="menu">
-
-								<a class="dropdown-item view_data" href="./?page=sm_ra/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-
+								<a class="dropdown-item view_data" href="./?page=sm_ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
 								
 								
 								<?php if (($usertype == 'IT Admin' || $usertype == 'COO') && ($status == 1 || $status == 0)): ?>	

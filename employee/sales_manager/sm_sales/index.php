@@ -122,14 +122,18 @@
 											where x.c_csr_no = y.c_csr_no 
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
+
 											and y.c_buyer_count = 1 and x.c_revised = 0 and x.coo_approval=0 order by c_date_updated DESC"); ///////REMOVED c_revised
+
 						}else{
 							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
 											t_lots z,  t_projects q
 											where x.c_csr_no = y.c_csr_no 
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
+
 											and y.c_buyer_count = 1 and ".$where." and x.c_revised = 0 and x.coo_approval=0 order by c_date_updated DESC");  ///////REMOVED c_revised
+
 						}
 						while($row = $qry->fetch_assoc()):
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
@@ -183,8 +187,10 @@
 				                  		Action
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
+
 								<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item view_data" href="./?page=sm_sales/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+
 								</div>
 							</td>
 						</tr>

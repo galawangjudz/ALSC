@@ -1,9 +1,11 @@
+
 <?php 
 // include "../classes/new_functions.php";
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
+
 
 <?php endif;?>
 <?php 
@@ -99,6 +101,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 }
 
 ?>
+
 <style>
 .lot_box_res {
   display: flex;
@@ -135,6 +138,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 }
 </style>
 
+
 <script type="text/javascript">
 	function opentab(evt, tabName) {
 		var i, tabcontent, tablinks;
@@ -151,7 +155,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	  }
 	  function showTab(){
 		document.getElementById('Buyer').style.display="block";
+
 	  }  
+
 	  function showTab(){
 			document.getElementById('Buyer').style.display="block";
 			var l_payment_type1 = $('.payment-type1').val();
@@ -249,13 +255,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$('#interest_rate').hide();
 			$('#fixed_factor').hide();
 		}
+
 		radioButtonCtrl();
+
 	}	  
 </script>
 <body onload="showTab()">
 <div class="card card-outline rounded-0 card-blue">
 	<div class="card-header">
+
 		<h3 class="card-title"><b><i>New Reservation Application</b></i></h3>
+
 	</div>
 	<div class="card-body">
 	<div class="container-fluid">
@@ -395,6 +405,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 																<label class="control-label">Birthdate: </label>
 																	<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
 
+
 																	<!-- <input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
 														 -->	</div>
 														</div>
@@ -504,6 +515,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 													</div>
 													<div class="main_box">
 													
+
 													<div class="row">
 														<div class="col-md-3">		
 															<div class="form-group">
@@ -658,10 +670,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										?>
 								</tbody>
 							</table>
+
 						</div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 		<div id="Investment" class="tabcontent">
 			<div class="row">
@@ -1053,10 +1067,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom add-cost-total" id="add_cost_total" name="add_cost_total" value="<?php echo isset($add_cost) ? $add_cost : 0; ?>" tabindex="52" readonly>
+
 										</div>
 									</div>
 								</div>
 							</div>
+
 						</div>
 
 						<div class="space"></div>
@@ -1230,10 +1246,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<label class="control-label">Full Down: </label>
 										
 										<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : ''; ?>">
+
 											
 										
 									</div>
 								</div>
+
 							</div>		
 							<div class="payment_box2" id="p2">	
 								<div class="col-md-12">
@@ -1253,11 +1271,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 								
 									<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : ''; ?>">
 								</div>
+
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 		<div id="Agents and Commission" class="tabcontent">
 			<div class="row">
@@ -1375,14 +1395,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 											</div>	
 										</div>
 									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</form>
+
 	</div>	<!-- /.card-body -->
 	<div class="card-footer">
 		<table style="width:100%;">
@@ -1408,11 +1431,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				<table class="table2 table-bordered table-stripped" style="width:100%;font-size:16px;">
 					<thead>
 						<tr>
+
 						<th style="text-align:center;">Last Name</th>
 						<th style="text-align:center;">First Name</th>
 						<th style="text-align:center;">Middle Name</th>
 						<th style="text-align:center;">Phone</th>
 						<th style="text-align:center;">Actions</th>
+
 						</tr>
 					</thead>
 					<tbody>
@@ -1426,11 +1451,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					}else{
 						$query = $conn->query("SELECT * FROM t_buyer_info where ".$where." ORDER BY last_name ASC");
 					}
+
 					while($row = $query->fetch_assoc()): ?>
+
 						<tr>
 							<td style="text-align:center;"><?php echo $row["last_name"] ?></td>
 							<td style="text-align:center;"><?php echo $row["first_name"] ?></td>
 							<td style="text-align:center;"><?php echo $row["middle_name"] ?></td>
+
+
 							<td style="text-align:center;"><?php echo $row["contact_no"] ?></td>
 							<td style="text-align:center;"><a href="#" class="btn btn-flat btn-primary btn-xs customer-select" data-customer-civil="<?php echo $row['civil_status']?>" data-customer-gender="<?php echo $row['gender'] ?>" data-customer-age="<?php echo $row['age'] ?>" data-customer-birthday="<?php echo $row['birthdate'] ?>" data-customer-viber="<?php echo $row['viber'] ?>" data-customer-address-1="<?php echo $row['address'] ?>" data-customer-zip-code="<?php echo $row['zip_code'] ?>"  data-customer-address-abroad="<?php echo $row['address_abroad'] ?>" data-customer-lname="<?php echo $row['last_name'] ?>" data-customer-fname="<?php echo $row['first_name'] ?>" data-customer-mname="<?php echo $row['middle_name'] ?>" data-customer-sname="<?php echo $row['suffix_name'] ?>" data-customer-email="<?php echo $row['email'] ?>" data-customer-phone="<?php echo $row['contact_no'] ?>" data-customer-ctzn="<?php echo $row['citizenship'] ?>"  style="width:100%;font-size:14px;"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</a></td>
 						</tr>
@@ -1441,14 +1470,18 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		<div class="modal-footer">
 			<button type="button" data-dismiss="modal" class="btn btn-flat btn-default" data-dismiss="modal" style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>
 		</div>
+
 		</div>
 	</div>
 </div>
+
 <div id="insert_lot" class="modal fade">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 		<div class="modal-header">
+
 			<h4 class="modal-title">Select Lot</h4>
+
 		</div>
 		<div class="modal-body">			
 			<table class="table table-bordered table-stripped">
@@ -1490,14 +1523,18 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		<div class="modal-footer">
 			<button type="button" data-dismiss="modal" class="btn btn-flat btn-default"  style="width:100%; margin-left:5px;font-size:14px;"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel</button>
 		</div>
+
 		</div>
 	</div>
 </div>
+
 <div id="insert" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -1526,6 +1563,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					</tr>
 				</table>
 			</div>
+
 		</div>
 	</div>
 </div>
@@ -1788,4 +1826,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
 </script>

@@ -63,16 +63,12 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
-
-	.nav-sm_revision{
-
+	.nav-ra{
 		background-color:#007bff;
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 	}
-
-	.nav-sm_revision:hover{
-
+	.nav-ra:hover{
 		background-color:#007bff!important;
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
@@ -87,29 +83,19 @@
 	}
 </style>
 
+
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
-		<h3 class="card-title"><b><i>List of For Revisions</b></i></h3>
-		<!-- <div class="card-tools">
-			<a href="./?page=sales/create" class="btn btn-flat btn-default bg-maroon"><span class="fas fa-plus"></span>  Create New</a>
-		</div> -->
+		<h3 class="card-title"><b><i>List of Pending RAs</b></i></h3>
+		<div class="card-tools">
+		<!-- 	<a href="./?page=transfer" class="btn btn-flat btn-default bg-secondary border-secondary" style="font-size:14px;"><span class="fas fa-retweet"></span>&nbsp;&nbsp;Create Transfer</a>
+			<a href="./?page=sm_sales/create" class="btn btn-flat btn-default bg-primary border-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+	 -->	</div>
 	</div>
 	<div class="card-body">
-		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" style="text-align:center;width:100%;">
-			<!-- 	<colgroup>
-					<col width="5%">
-					<col width="15%">
-					<col width="15%">
-					<col width="20%">
-					<col width="30%">
-					<col width="15%">
-					<col width="15%">
-					<col width="15%">
-					<col width="15%">
-					<col width="15%">
-				</colgroup> -->
+				
 				<thead>
 					<tr>
 					<th>Prepared Date</th>
@@ -122,38 +108,34 @@
 					<th>SOS Approval</th>
 					<th>COO Approval</th>
 					<th>Actions</th>
-					
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
-					$i = 1;
-					$type = $_settings->userdata('type');
-					$username = $_settings->userdata('username');
-					$where = "c_created_by = '$username'";
-
-					if ($type < 5 ){
-						$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
-										t_lots z,  t_projects q
-										where c_revised = 1 and  x.c_csr_no = y.c_csr_no 
-										and x.c_lot_lid = z.c_lid 
-										and z.c_site = q.c_code 
-										and y.c_buyer_count = 1 order by c_date_updated DESC");
-					}else{
-
-						$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
-										t_lots z,  t_projects q
-										where c_revised = 1 and  x.c_csr_no = y.c_csr_no 
-										and x.c_lot_lid = z.c_lid 
-										and z.c_site = q.c_code 
-										and y.c_buyer_count = 1 and ".$where."  order by c_date_updated DESC");
-					}
+						$i = 1;
+						$type = $_settings->userdata('type');
+						$username = $_settings->userdata('username');
+						$where = "c_created_by = '$username'";
+						if ($type < 5 ){
+							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
+											t_lots z,  t_projects q
+											where x.c_csr_no = y.c_csr_no 
+											and x.c_lot_lid = z.c_lid 
+											and z.c_site = q.c_code 
+											and y.c_buyer_count = 1 order by c_date_updated DESC"); ///////REMOVED c_revised
+						}else{
+							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
+											t_lots z,  t_projects q
+											where x.c_csr_no = y.c_csr_no 
+											and x.c_lot_lid = z.c_lid 
+											and z.c_site = q.c_code 
+											and y.c_buyer_count = 1 and ".$where."  order by c_date_updated DESC");  ///////REMOVED c_revised
+						}
 						while($row = $qry->fetch_assoc()):
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
 					?>
 						<tr>
-                                <!-- <td><?php echo $i++ ?></td> -->
-								<td class="text-center"><?php echo $timeStamp ?> </td>
+								<td class="text-center"><?php echo $timeStamp; ?> </td>
 								<td class="text-center"><?php echo $row["c_created_by"] ?></td>
                                 <td><?php echo $row['ref_no'] ?></td>
 								<?php if($row['c_active'] == 0): ?>
@@ -161,12 +143,13 @@
 								<?php else: ?>
 									<td class="text-center"><span class="badge badge-success">Active</span></td>
 								<?php endif;?>
-                                
+
+                             
                                 <td><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
                                 <td class="text-center"><?php echo $row["last_name"]. ' ' .$row["suffix_name"]. ','  .$row["first_name"] .' ' .$row["middle_name"]?></td>
 
                                 <td class="text-right"><?php echo "P".number_format($row["c_net_tcp"], 2) ?></td>
-                              
+                                
                                 
                         
                         
@@ -179,17 +162,21 @@
                             <?php } ?>
                              
                             
-							<?php if($row['coo_approval'] == 0){ ?> 
+                            <?php if($row['coo_approval'] == 0){ ?> 
                                 <td class="text-center"><span class="badge badge-warning">Pending</span></td>
-                            <?php }elseif($row['coo_approval'] == 3){ ?>
-                                <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
-                            
+                           
                             <?php }elseif($row['coo_approval'] == 1){ ?>
                                 <td class="text-center"><span class="badge badge-success">Approved</span></td>
                             <?php }
                             elseif($row['coo_approval'] == 2){ ?> 
-                                <td class="text-center"><span class="badge badge-danger">Lapsed</span></td>
-                            <?php } ?>
+                                <td class="text-center"><span class="badge badge-danger">Expired</span></td>
+                            <?php }
+							 elseif($row['coo_approval'] == 3){ ?>
+                                <td class="text-center"><span class="badge badge-danger">Cancelled</span></td>
+							<?php } 
+							elseif($row['coo_approval'] == 4){ ?> 
+							 	<td class="text-center"><span class="badge badge-danger">Disapproved</span></td>
+							<?php } ?>
 
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -197,9 +184,14 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-
-				                    <a class="dropdown-item view_data" href="./?page=sm_revision/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-
+				                    <a class="dropdown-item view_data" href="./?page=sm_sales/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+				                    <?php if ($row['c_verify'] == 0): ?>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item edit_data" href="./?page=sm_sales/create&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+									<div class="dropdown-divider"></div>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+									<?php endif; ?>	
+								</div>
 							</td>
 						</tr>
 					<?php endwhile; ?>

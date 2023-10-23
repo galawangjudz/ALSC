@@ -1,4 +1,5 @@
 
+
 <h3 class="text-dark"><i>Welcome <?php echo $_settings->userdata('username') ?>!</i></h3>
 <hr>
 <section class="content">
@@ -41,11 +42,14 @@
             <div class="info-box mb-3">
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hands-helping"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text"><b>Users</b></span>
-                <span class="info-box-number"><?php echo number_format($conn->query("SELECT * FROM users")->num_rows) ?></span>
+                <h4 class="font-20 weight-500 mb-10 text-capitalize">
+                  Welcome back <div class="weight-600 font-30 text-blue"><?php echo $row['firstname']. " " .$row['lastname']; ?>,</div>
+                </h4>
+                <p class="font-18 max-width-600"> We're delighted to see you again.</p>
               </div>
+
           </div>
+
         </div>
-    </div>
+  </div>
 </section>
