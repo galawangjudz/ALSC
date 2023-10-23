@@ -71,6 +71,7 @@
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
 							<td>
 							<?php
+							   
 								$pdo = new PDO("mysql:host=localhost;dbname=alscdb", 'root', '');
 								$supplierId = $row['supplier_id'];
 								$query = "SELECT * FROM supplier_list WHERE id = :supplierId";
