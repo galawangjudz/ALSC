@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 <br><br>
-<button id="export-btn">Export to Excel</button>
+<button id="export-csv-btn">Export</button>
 
 <table class="table table-striped table-hover table-bordered" style="width: 100%" id="item-table">
     <thead>
@@ -46,29 +46,48 @@ if (isset($_GET['id'])) {
 </table>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 <script>
-document.getElementById('export-btn').addEventListener('click', function() {
-    // Define the table element to be exported
+
+document.getElementById('export-csv-btn').addEventListener('click', function() {
+    var itemName = "<?php echo $item_name; ?>";
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
     var table = document.querySelector('#item-table');
+    var rows = table.querySelectorAll('tr');
+    var csvContent = "data:text/csv;charset=utf-8,";
 
-    // Create a new Workbook
-    var wb = XLSX.utils.book_new();
+    csvContent += itemName + " Purchase History as of " + formattedDate + "\n";
+
+    rows.forEach(function(row) {
+    var headerCols = row.querySelectorAll('th');
+    var dataCols = row.querySelectorAll('td');
     
-    // Convert the table to a worksheet and add it to the Workbook
-    var ws = XLSX.utils.table_to_sheet(table);
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    var headerData = [];
+    var dataRow = [];
 
-    // Generate the Excel file as a Blob
-    var blob = XLSX.write(wb, { bookType: 'xlsx', type: 'blob' });
+    headerCols.forEach(function(col) {
+        headerData.push(col.innerText);
+    });
 
-    // Create a download link and trigger the download
-    var url = window.URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'exported_data.xlsx';0
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    dataCols.forEach(function(col) {
+        dataRow.push(col.innerText);
+    });
+
+    var csvHeader = headerData.join('|');
+    var csvDataRow = dataRow.join('|');
+    
+    csvContent += csvHeader + "\n";
+    csvContent += csvDataRow
+});
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+
+    link.setAttribute('download', itemName + '_PurchaseHistory_asof_' + formattedDate + '.csv');
+
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 });
 </script>

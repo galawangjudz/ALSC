@@ -3,8 +3,6 @@ $(document).ready(function() {
 
 	let dt = new Date().toISOString().slice(0, 10);
 
-
-
 	$("#action_add_comment").click(function(e) {
 		e.preventDefault();
 	    actionAddComment();
@@ -359,14 +357,16 @@ $(".add-pay-row").click(function(e) {
 	e.preventDefault();
 	cloned.clone().appendTo('#payment_table'); 
 });
-
-var cloned2 = $('#buyer_table tr:last').clone();
-cloned2.find('input').val('');
 $(".add-buyer-row").click(function(e) {
-	e.preventDefault();
-	cloned2.clone().appendTo('#buyer_table'); 
-});
+    e.preventDefault();
+    var clonedRow = $('#buyer_table tr:last').clone();
+    clonedRow.find('input').val('');
+    clonedRow.find('.buyer-bday').on('change', function() {
+        calculateAgeAndSetError($(this), $(this).closest('tr').find("#age"));
+    });
 
+    $('#buyer_table tbody').append(clonedRow);
+});
 $('#comm_table').on('input', '.calculate', function () {
 	//alert(this);
 	updateTotals(this);  
@@ -585,7 +585,7 @@ function updateTotals(elem) {
 		
 	});
 
-	$(document).on('keyup', ".down-percent", function(e) {
+	$(document).on('keyup', ".down-percent",  function(e) {
 		e.preventDefault();
 		compute_net_dp();
 		compute_no_payment();
@@ -595,7 +595,29 @@ function updateTotals(elem) {
 		
 	});
 
+	
+	// $(document).on('keyup', ".terms-count",  function(e) {
+	// 	e.preventDefault();
+	// 	compute_net_dp();
+	// 	compute_no_payment();
+	// 	compute_rate();
+	// 	compute_monthly_payments();
+		
+		
+	// });
+
 	$(document).on('keyup', ".reservation-fee", function(e) {
+		e.preventDefault();
+		compute_net_dp();
+		compute_no_payment();
+		compute_monthly_payments();
+		
+		//compute_house();
+		
+	});
+
+	
+	$(document).on('keyup', ".interest-rate", function(e) {
 		e.preventDefault();
 		compute_net_dp();
 		compute_no_payment();
@@ -633,36 +655,59 @@ function updateTotals(elem) {
 	$(document).on('change', ".payment-type2", function(e) {
 		e.preventDefault();
 		payment_type2_changed();
-
-
 	});
 	$(document).on('keyup', ".prod-lot-price", function(e) {
 		e.preventDefault();
 		compute_lcp();
-
-
 	});
-
-
 
 	$(document).on('change', ".acc-interest", function(e) {
 		e.preventDefault();
 		compute_adj_prin();
-
-
 	});
-
-	
 
   $(document).on('change', ".acc-surcharge2", function(e) {
 		e.preventDefault();
 		compute_adj_prin();
-
-
 	});
 
+	function calculateAgeAndSetError(birthdateInput, ageInput) {
+		var enteredDate = birthdateInput.val();
+		
+		var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+		if (datePattern.test(enteredDate)) {
+			birthdateInput.parent().removeClass("has-error");
 
+			var parts = enteredDate.split("-");
+			var year = parseInt(parts[0], 10);
+			var month = parseInt(parts[1], 10);
+			var day = parseInt(parts[2], 10);
 
+			var currentDate = new Date();
+			var age = currentDate.getFullYear() - year;
+	
+			if (
+				currentDate.getMonth() + 1 < month ||
+				(currentDate.getMonth() + 1 === month && currentDate.getDate() < day)
+			) {
+				age--;
+			}
+
+			ageInput.val(age);
+		} else {
+			birthdateInput.parent().addClass("has-error");
+			birthdateInput.val("");
+			ageInput.val("");
+			alert_toast("Please enter a valid date in YYYY-MM-DD format.", 'error');
+		}
+	}
+	
+
+	$(".buyer-bday").on("change", function() {
+		calculateAgeAndSetError($(this), $("#age"));
+	});
+
+	
   function compute_adj_prin(){
     var balance = $('.amt-to-be-financed').val();
     var acc_sur = $('.acc-surcharge2').val();
@@ -680,6 +725,8 @@ function updateTotals(elem) {
 			var l_payment_type1 = $('.payment-type1').val();
 			$('#payment_type2').removeAttr('disabled');
 			$('#loan_text').text("Amount to be financed :");
+			$('#first_dp').show();
+			$('#first_dp_date').show();
 			$('#down_frm').show();
 			$('#monthly_frm').show();
 			$('#no_pay_text').show();
@@ -687,11 +734,13 @@ function updateTotals(elem) {
 			$('#mo_down_text').show();
 			$('#monthly_down').show();
 			$('#down_text').show();
+			$('#factor_text').show();
+			$('#fixed_factor').show();
 			$('#start_text').text("Start Date :");	
 			$('#ma_text').text("Monthly Amortization ");
 			//alert(l_payment_type1);
 			if (l_payment_type1 == "Spot Cash"){
-				$('#payment_type2').attr('readonly','readonly');
+				$('#payment_type2').prop('disabled', true);
 				/* $('#payment_type2').val('Spot Cash'); */
 				$('#down_frm').hide();
 				$('#monthly_frm').hide();
@@ -721,6 +770,8 @@ function updateTotals(elem) {
 				$('#no_payment').val(0);
 				$('#no_payment').hide();
 				$('#mo_down_text').hide();
+				$('#first_dp').hide();
+				$('#first_dp_date').hide();
 				$('#monthly_down').val(0);
 				$('#monthly_down').hide();
 				$('#p1').show();
@@ -767,9 +818,7 @@ function updateTotals(elem) {
 				compute_no_payment();
 				compute_rate();
 				compute_monthly_payments();
-				
 			}
-
 	}
 
 	function payment_type2_changed(){
@@ -1043,58 +1092,63 @@ function updateTotals(elem) {
 		}
 
 	}
-	function compute_monthly_payments(){
+	function compute_monthly_payments() {
 		var l_rate = $('.interest-rate').val();
-		l_x = '1200';
-		if (l_rate == 0){
+		var l_x = '1200';
+		// if (l_rate == 0){
+		// 	l_rate_value = 0;
+		// }else{
+		// 	var l_rate_value = parseFloat(l_rate)/ parseFloat(l_x);
+		// }
+		if (l_rate == 0) {
+			var l_rate_value = 0;
+		} else {
+			var l_rate_value = parseFloat(l_rate) / parseFloat(l_x);
+			if (isNaN(l_rate_value)) {
 			l_rate_value = 0;
-		}else{
-			var l_rate_value = parseFloat(l_rate)/ parseFloat(l_x);
+			}
 		}
+		
 		var l_payment_type1 = $('.payment-type1').val();
 		var l_payment_type2 = $('.payment-type2').val();
-		if (l_payment_type1 =="Spot Cash"){
+		
+		if (l_payment_type1 == "Spot Cash") {
 			var l_net_tcp = $('.net-tcp').val();
 			var l_rsv_fee = $('.reservation-fee').val();
-			l_amt_2b_finance = parseFloat(l_net_tcp) - parseFloat(l_rsv_fee);
+			var l_amt_2b_finance = parseFloat(l_net_tcp) - parseFloat(l_rsv_fee);
+		
 			$("#fixed_factor").val(0);
-			$("#mothly_amortization").val(0);	
-			$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));		
-		}else if(l_payment_type2 == "Deferred Cash Payment"){
-			/* if (l_terms == 0){
-				return
-			} */
-			
+			$("#monthly_amortization").val(0);
+			$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));
+		} else if (l_payment_type2 == "Deferred Cash Payment") {
 			var l_loan_amt = $('.amt-to-be-financed').val();
 			var l_terms = $('.terms-count').val();
-			//alert(l_terms);
-			var l_amt_2b_finance = parseFloat(l_loan_amt)/parseFloat(l_terms);
+			var l_amt_2b_finance = parseFloat(l_loan_amt) / parseFloat(l_terms);
 			l_amt_2b_finance = isFinite(l_amt_2b_finance) ? l_amt_2b_finance : 0;
-			//$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));	
+		
+			$("#fixed_factor").val(isNaN(l_rate_value) ? 0 : l_rate_value.toFixed(8));
 			$("#monthly_amortization").val(l_amt_2b_finance.toFixed(2));
-		}else if (l_payment_type2 == "Monthly Amortization"){
+		} else if (l_payment_type2 == "Monthly Amortization") {
 			compute_no_payment();
 			compute_net_dp();
 			var l_terms = $('.terms-count').val();
-			var l_factor = parseFloat(l_rate_value)/(1-(1+parseFloat(l_rate_value))**(-parseFloat(l_terms)));
-			//alert(l_factor);
-			//alert(l_rate_value);
-			//alert(l_terms);
-			if (l_factor == 0){
-				return
+			var l_factor = parseFloat(l_rate_value) / (1 - Math.pow(1 + parseFloat(l_rate_value), -parseFloat(l_terms)));
+		
+			if (l_factor == 0) {
+			return;
 			}
-			//var rate_factor = parseFloat(l_rate_value)/parseFloat(l_factor);
+		
 			var l_loan_amt = $('.amt-to-be-financed').val();
-			var monthly_ma = parseFloat(l_loan_amt)*parseFloat(l_factor);
+			var monthly_ma = parseFloat(l_loan_amt) * parseFloat(l_factor);
 			monthly_ma = isFinite(monthly_ma) ? monthly_ma : 0;
-			$("#fixed_factor").val(l_factor.toFixed(8));
+		
+			$("#fixed_factor").val(isNaN(l_factor) || !isFinite(l_factor) ? 0 : l_factor.toFixed(8));
+
+			//$("#fixed_factor").val(isNaN(l_factor) ? 0 : l_factor.toFixed(8));
 			$("#monthly_amortization").val(monthly_ma.toFixed(2));
-
 		}
-	
-
 	}
-
+	  
 	
    	function validateForm() {
 	    // error handling

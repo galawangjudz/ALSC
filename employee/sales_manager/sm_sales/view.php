@@ -236,6 +236,10 @@ if($csr->num_rows > 0){
         $down_percent = $row['c_down_percent'];
         $start_date = $row['c_start_date'];
         $verify = $row['c_verify'];
+
+        
+        $notes = $row['c_remarks'];
+
    /*      $duration = $row['c_duration']; */
         
     endwhile;
@@ -270,13 +274,14 @@ if($csr->num_rows > 0){
                 <input type="hidden" value="<?php echo $p2; ?>" id="p2">
                 <table style="width:100%;">
                     <tr>
-                    <div class="row">
-                        <td> 
-                            <?php if($verify == 0){?>
+
+                        <?php if ($verify == 0) { ?>
+                            <td style="width:<?php echo ($verify == 0) ? '25%' : '0'; ?>">
                                 <a href="?page=sm_sales/create&id=<?php echo md5($getID); ?>" class="btn btn-flat btn-primary" style="font-size:14px;width:100%;margin-top:5px;"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit</a>
-                            <?php } ?>
-                        </td>
-                        <td>
+                            </td>
+                        <?php } ?>
+                        <td style="width:<?php echo ($verify == 0) ? : '100%'; ?>">
+
                             <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
                                 <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -288,27 +293,20 @@ if($csr->num_rows > 0){
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
                             </div>
-                        </td>           
-                        <td>
-                        <?php if($verify == 0 && ($usertype == 'SOS' or $usertype == 'IT Admin')){?> 
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="1" user-type=<?php echo $type?> class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verify</button>  
+
                         </td>
-                        <td>                          
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo $lot_id?> value="2" user-type=<?php echo $type?> class="btn btn-flat btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times-circle" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
+                        <?php if ($verify == 0) { ?>
+                            <td style="width:<?php echo ($verify == 0) ? '25%' : '25%'; ?>">
+                                <button type="button" csr-id="<?php echo $getID; ?>" csr-lot-lid="<?php echo $lot_id; ?>" value="1" user-type="<?php echo $type; ?>" class="btn btn-flat btn-success sm-verification" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;Verify</button>  
+                            </td>
+                            <td style="width:<?php echo ($verify == 0) ? '25%' : '25%'; ?>">                          
+                                <button type="button" csr-id="<?php echo $getID; ?>" csr-lot-lid="<?php echo $lot_id; ?>" value="2" user-type="<?php echo $type; ?>" class="btn btn-flat btn-danger sm-verification2" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-times-circle" aria-hidden="true"></span>&nbsp;&nbsp;Void</button>                            
+                            </td>
                         <?php } ?>
-                        </td>
-                        <td>
-                        <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "CFO" or $usertype == "COO" or $usertype == "IT Admin" )){ ?>
-                            <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> user-type=<?php echo $type?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
-                        </td>
-                        <td>
-                            <button type="button" csr-id =<?php echo $getID; ?> csr-lot-lid = <?php echo  $lot_id?> user-type=<?php echo $type?> value="4" class="btn btn-danger btn-flat coo-disapproval" style="margin-top:5px;font-size:14px;width:100%;"><span class="fa fa-times" aria-hidden="true"></span>&nbsp;&nbsp;COO Disapproved</button>
-                        </td>
-                        <?php } ?>     
-                    </div>
                     </tr>
-                        </table>
-                    <div class="titles"> Buyer's Profile</div>
+                </table>
+                <div class="titles"> Buyer's Profile</div>
+
                         <br>
                         <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
                         $result2 = mysqli_query($conn, $query2);
@@ -338,11 +336,13 @@ if($csr->num_rows > 0){
                             <div class="float-left col-md-12">
                                 <table class="table table-striped">
                                     <tr>
-                                        <td style="width:10%;"><b>Buyer No: </b></td>
+
+                                        <td style="width:40%;"><b>Buyer No: </b></td>
                                         <td><?php echo $buyer_count ?></td>
                                     </tr>
                                     <tr>
-                                        <td style="width:10%;"><b>Buyer's Full Name:</b></td>
+                                        <td><b>Buyer's Full Name:</b></td>
+
                                         <td><?php echo $cust_fullname1 ?></td>
                                     </tr>
                                 
@@ -384,22 +384,21 @@ if($csr->num_rows > 0){
                                         <td><?php echo $customer_gender ?></td>
                                     </tr>
                                     <tr>
-                                        <td style="width:40%;"><b>Civil Status:</b></td>
+
+                                        <td><b>Civil Status:</b></td>
                                         <td><?php echo $civil_status ?></td>
                                     </tr>
-                                
-                        
-                            
+
                                 </table> 
                             </div>       
                         </div>
                         <br>
                         <div class="space"></div>
                         <?php 
-                            
+
                             }} 
                             ?>
-                       
+
                         <div class="space"></div>
                         <div class="space"></div>
                         <div class="titles">Investment Value</div>
@@ -409,7 +408,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Lot ID:</b></td>
+
+                                            <td style="width:40%;"><b>Lot ID:</b></td>
+
                                             <td><?php echo $lot_id ?></td>
                                         </tr>
                                         <tr>
@@ -440,7 +441,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>House Model:</b></td>
+
+                                            <td style="width:40%;"><b>House Model:</b></td>
+
                                             <td><?php echo $house_model ?></td>
                                         </tr>
                                         <tr>
@@ -488,11 +491,9 @@ if($csr->num_rows > 0){
                                             <label class="control-label"></label>
                                         </div>
                                     </div>
-                                    <div class="col-md-4" >
+
+                                    <div class="col-md-4 text-center">
                                         <div class="form-group">
-                                            <!-- <input id="id20" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <input id="id40" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <input id="id60" type="radio" name="chkOption4" onchange="getFlrElev(this);"/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 
                                             <?php if($floor_elevation == 1){ ?>
                                                 <input id="id20" type="radio" name="chkOption4" checked="checked" disabled/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -506,6 +507,11 @@ if($csr->num_rows > 0){
                                                 <input id="id20" type="radio" name="chkOption4" disabled/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <input id="id40" type="radio" name="chkOption4" disabled/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <input id="id60" type="radio" name="chkOption4" checked="checked" disabled/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                            <?php }else{?>
+                                                <input id="id20" type="radio" name="chkOption4" disabled/>0.20 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id40" type="radio" name="chkOption4" disabled/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input id="id60" type="radio" name="chkOption4" disabled/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <?php }
                                             ?>
@@ -695,9 +701,6 @@ if($csr->num_rows > 0){
                             </div>
                         </div>
 
-
-
-                        
                             <div class="space"></div>
                             <div class="space"></div>
                             <div class="titles">Payment Computation</div>
@@ -705,7 +708,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>TCP Discount: </b></td>
+
+                                            <td style="width:40%;"><b>TCP Discount: </b></td>
+
                                             <td><?php echo $tcp_discount ?>  %</td>
                                         </tr>
                                         <tr>
@@ -737,7 +742,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Reservation: </b></td>
+
+                                            <td style="width:40%;"><b>Reservation: </b></td>
+
                                             <td><?php echo number_format($reservation,2) ?></td>
                                         </tr>
                                     </table>
@@ -750,7 +757,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Down %:</b></td>
+
+                                            <td style="width:40%;"><b>Down %:</b></td>
+
                                             <td><?php echo $down_percent ?>  %</td>
                                         </tr>
                                         <tr>
@@ -776,13 +785,16 @@ if($csr->num_rows > 0){
                                     </table>
                                 </div>
                             </div>
-                            
+
+
                             <div id="fdp" class="fdp" >
                                 <div class="titles">Full Down Payment</div>
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Down %:</b></td>
+
+                                            <td style="width:40%;"><b>Down %:</b></td>
+
                                             <td><?php echo $down_percent ?></td>
                                         </tr>
                                         <tr>
@@ -802,7 +814,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Amount to be Financed:</b></td>
+
+                                            <td style="width:40%;"><b>Amount to be Financed:</b></td>
+
                                             <td><?php echo number_format($amt_fnanced,2) ?></td>
                                         </tr>
                                         <tr>
@@ -834,7 +848,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Deferred Amount:</b></td>
+
+                                            <td style="width:40%;"><b>Deferred Amount:</b></td>
+
                                             <td><?php echo number_format($amt_fnanced,2) ?></td>
                                         </tr>
                                         <tr>
@@ -857,7 +873,9 @@ if($csr->num_rows > 0){
                                 <div class="float-left col-md-12">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>Amount:</b></td>
+
+                                            <td style="width:40%;"><b>Amount:</b></td>
+
                                             <td><?php echo number_format($amt_fnanced,2) ?></td>
                                         </tr>
                                         <tr>
@@ -867,8 +885,54 @@ if($csr->num_rows > 0){
                                     </table>
                                 </div>
                             </div>
-                                
-                        <!--     add comment form here  -->
+
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div class="titles">Commission</div>
+                           
+                            <div class="view_box">
+                                <div class="float-left col-md-12">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <thead>
+                                                <th><b>Position</b></th>
+                                                <th><b>Code</b></th>
+                                                <th><b>Name</b></th>
+                                                <th><b>Rate</b></th>
+                                            </thead>
+                                        </tr>
+                                        <tr>
+                                        <?php $query3 = "SELECT * FROM t_csr_commission WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
+                                        $result3 = mysqli_query($conn, $query3);
+                                        if($result3) {
+                                            while ($row = mysqli_fetch_assoc($result3)) { 
+                                                $code = $row['c_code'];
+                                                $position = $row['c_position'];
+                                                $agent = $row['c_agent'];
+                                                $rate = $row['c_rate'];
+                                                $amount = $row['c_amount'];
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $position ?></td>
+                                            <td><?php echo $code ?></td>
+                                            <td><?php echo $agent ?></td>
+                                            <td><?php echo $rate ?></td>
+                                            <?php 
+                                        }} 
+                                        ?>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div class="titles">Remarks</div>
+                            <div class="view_box">
+                                <div class="float-left col-md-12">
+                                    <div style="padding:5px"><?php echo $notes ?></div>
+                                </div>
+                            </div>
+
                             <div class="commentDiv">
                                 <form  method="POST" id="add_comment">
                                     <input type="hidden" name="action" value="add_comment">
@@ -880,7 +944,8 @@ if($csr->num_rows > 0){
                                         <i class="fa fa-comment" aria-hidden="true"></i>&nbsp;&nbsp;Add Comment
                                         </button>
                                 </form>
-                            </div>  
+
+                            </div>
 
                 <?php
  

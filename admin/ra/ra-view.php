@@ -951,12 +951,9 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                                         <?php endif; ?>
                                                 <?php endif; ?>
                                                     </tr>
-                                                
-
                                                 <?php endwhile; ?>
                                                 </table>
                                         <?php
-                                        
                                     }
                                 ?>
                                 

@@ -122,14 +122,18 @@
 											where x.c_csr_no = y.c_csr_no 
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
-											and y.c_buyer_count = 1 order by c_date_updated DESC"); ///////REMOVED c_revised
+
+											and y.c_buyer_count = 1 and x.c_revised = 0 and x.coo_approval=0 order by c_date_updated DESC"); ///////REMOVED c_revised
+
 						}else{
 							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
 											t_lots z,  t_projects q
 											where x.c_csr_no = y.c_csr_no 
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
-											and y.c_buyer_count = 1 and ".$where."  order by c_date_updated DESC");  ///////REMOVED c_revised
+
+											and y.c_buyer_count = 1 and ".$where." and x.c_revised = 0 and x.coo_approval=0 order by c_date_updated DESC");  ///////REMOVED c_revised
+
 						}
 						while($row = $qry->fetch_assoc()):
 							$timeStamp = date( "m/d/Y", strtotime($row['c_date_updated']));
@@ -183,14 +187,10 @@
 				                  		Action
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
-				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="./?page=sm_sales/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-				                    <?php if ($row['c_verify'] == 0): ?>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item edit_data" href="./?page=sm_sales/create&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-									<div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-									<?php endif; ?>	
+
+								<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item view_data" href="./?page=sm_sales/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+
 								</div>
 							</td>
 						</tr>

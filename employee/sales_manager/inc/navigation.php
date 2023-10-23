@@ -5,7 +5,6 @@
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
-
 </style>
 <?php $usertype = $_settings->userdata('user_type'); 
 $level = $_settings->userdata('type'); 
@@ -74,14 +73,32 @@ $level = $_settings->userdata('type');
                     </li> 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inventory</li></div></b></i>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/sales_manager/?page=inventory/lot-list" class="nav-link nav-inventory">
+
+                      <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_inventory/lots_list" class="nav-link nav-lot">
+
                       <i class="nav-icon fas fa-cube"></i>
                         <p>
                           Lot Inventory 
                         </p>
                       </a>
                     </li> 
-                   
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_inventory/models_list" class="nav-link nav-models">
+                      <i class="nav-icon fas fa-home"></i>
+                        <p>
+                          House Models List 
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_inventory/projects_list" class="nav-link nav-projects">
+                      <i class="nav-icon fas fa-cube"></i>
+                        <p>
+                          Project Sites List
+                        </p>
+                      </a>
+                    </li> 
+
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

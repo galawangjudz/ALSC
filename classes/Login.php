@@ -32,7 +32,14 @@ class Login extends DBConnection {
 		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from users where username = '$username' and password = md5('$password') "));
 		}
 	}
-	public function logout(){
+
+	// public function logout(){
+	// 	if($this->settings->sess_des()){
+	// 		redirect('auth/login.php');
+	// 	}
+	// }
+	public function logout() {
+
 		if ($this->settings->sess_des()) {
 			session_set_cookie_params(0);
 			session_destroy();

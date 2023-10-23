@@ -63,12 +63,16 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
-	.nav-ra{
+
+	.nav-sm_revision{
+
 		background-color:#007bff;
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 	}
-	.nav-ra:hover{
+
+	.nav-sm_revision:hover{
+
 		background-color:#007bff!important;
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
@@ -193,14 +197,9 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="./?page=sales/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
-				                    <?php if ($row['c_verify'] == 0): ?>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item edit_data" href="./?page=sales/create&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-				                   <!--  <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-									 --><?php endif; ?>
-								</div>
+
+				                    <a class="dropdown-item view_data" href="./?page=sm_revision/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+
 							</td>
 						</tr>
 					<?php endwhile; ?>

@@ -133,6 +133,9 @@
                     <th>Approval Status</th>
                     <th>Reserve Status</th>
                     <th>CA Status</th>
+
+					<th>CFO Status</th>
+
                     <th>Actions</th>
 				
 					</tr>
@@ -146,10 +149,11 @@
 						if ($type < 5 ){
 
 							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
-												ORDER BY c_date_approved DESC");
+												WHERE c_ca_status !=3 ORDER BY c_date_approved DESC");
 						}else{
 							$qry = $conn->query("SELECT * FROM t_approval_csr i inner join t_csr_view x on i.c_csr_no = x.c_csr_no 
-												and ".$where." ORDER BY c_date_approved DESC");
+												WHERE c_ca_status !=3 and ".$where." ORDER BY c_date_approved DESC");
+
 						}
                      
 						while($row = $qry->fetch_assoc()):
@@ -291,7 +295,15 @@
 							<td><span class="badge badge-danger">Expired </span></td>
 						<?php endif; ?>
 				
-					
+
+						<?php if($row['cfo_status'] == 1): ?>
+							<td><span class="badge badge-success">CFO Approved</span></td>
+						<?php elseif ($row['cfo_status'] == 0): ?>
+							<td><span class="badge badge-warning">Pending</span></td>
+						<?php else: ?>
+							<td><span class="badge badge-danger">Disapproved</span></td>
+						<?php endif; ?>
+
 						<td align="center" style="white-space: nowrap;">
 							<div style="display: inline-block;">
 								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -299,7 +311,9 @@
 								<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item view_data" href="./?page=sm_ra/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+
+								<a class="dropdown-item view_data" href="./?page=sm_ra/view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-eye text-primary"></span> View</a>
+
 								
 								
 								<?php if (($usertype == 'IT Admin' || $usertype == 'COO') && ($status == 1 || $status == 0)): ?>	

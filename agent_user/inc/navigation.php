@@ -1,18 +1,8 @@
-<style>
-.nav-home:hover{
-  background-color:#007bff;
-	color:black!important;
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-}
 
-
-</style>
 <?php $usertype = $_settings->userdata('user_type'); 
 $level = $_settings->userdata('type'); 
 ?>
-<!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
-        <!-- Brand Logo -->
         <a href="<?php echo base_url ?>agent_user" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
@@ -21,7 +11,6 @@ $level = $_settings->userdata('type');
             background: white;">
         <span class="brand-text font-weight-light"><b><?php echo $_settings->info('short_name') ?></b></span>
         </a>
-        <!-- Sidebar -->
         <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden">
           <div class="os-resize-observer-host observed">
             <div class="os-resize-observer" style="left: 0px; right: auto;"></div>
@@ -33,9 +22,7 @@ $level = $_settings->userdata('type');
           <div class="os-padding">
             <div class="os-viewport os-viewport-native-scrollbars-invisible" style="overflow-y: scroll;">
               <div class="os-content" style="padding: 0px 8px; height: 100%; width: 100%;">
-                <!-- Sidebar user panel (optional) -->
                 <div class="clearfix"></div>
-                <!-- Sidebar Menu -->
                 <nav class="mt-4">
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
@@ -47,7 +34,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>agent_user/?page=sales/client" class="nav-link nav-client">
+                      <a href="<?php echo base_url ?>agent_user/?page=agent_sales/client" class="nav-link nav-client">
                         <i class="nav-icon fas fa-plus"></i>
                         <p>
                           New Client
@@ -55,7 +42,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>agent_user/?page=ra" class="nav-link nav-ra">
+                      <a href="<?php echo base_url ?>agent_user/?page=agent_ra" class="nav-link nav-ra">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                           Master List
@@ -63,7 +50,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>agent_user/?page=inventory/lot-list" class="nav-link nav-inventory">
+                      <a href="<?php echo base_url ?>agent_user/?page=agent_inventory/lots_list" class="nav-link nav-inventory">
                       <i class="nav-icon fas fa-cube"></i>
                         <p>
                           Inventory
@@ -72,7 +59,7 @@ $level = $_settings->userdata('type');
                     </li> 
                    
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>agent_user/?page=loan-calcu" class="nav-link nav-loan-calcu">
+                      <a href="<?php echo base_url ?>agent_user/?page=agent_loan_calcu" class="nav-link nav-loan">
                         <i class="nav-icon fas fa-calculator"></i>
                         <p>
                           Loan Calculator
@@ -81,7 +68,6 @@ $level = $_settings->userdata('type');
                     </li>
                   </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
               </div>
             </div>
           </div>
@@ -97,7 +83,6 @@ $level = $_settings->userdata('type');
           </div>
           <div class="os-scrollbar-corner"></div>
         </div>
-        <!-- /.sidebar -->
       </aside>
       <script>
     $(document).ready(function(){
@@ -117,8 +102,6 @@ $level = $_settings->userdata('type');
         if($('.nav-link.nav-'+page).hasClass('nav-is-tree') == true){
           $('.nav-link.nav-'+page).parent().addClass('menu-open')
         }
-
       }
-     
     })
   </script>
