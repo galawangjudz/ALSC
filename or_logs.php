@@ -277,7 +277,7 @@ class Login extends DBConnection
                                 <?php
                                 $i = 1;
                                 $conn = mysqli_connect(DB_SERVER, DB_USERNAME, '', DB_NAME);
-                               /*  $con = mysqli_connect("localhost", "root", "", "alscdb"); */
+                              
 
                                 if (isset($_GET['from_date']) && isset($_GET['to_date']) && isset($_GET['preparer'])) {
 
