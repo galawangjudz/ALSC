@@ -195,7 +195,7 @@
                         <td class="text-center"><?php echo $row["ra_id"] ?></td>
 						<td class="text-center"><?php echo $row["ref_no"] ?></td>
 						<td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
-						<td class="text-center"><?php echo $row["last_name"]. ','  .$row["first_name"] .' ' .$row["middle_name"]?></td>
+						<td class="text-center"><?php echo $row["last_name"]. ', '  .$row["first_name"] .' ' .$row["middle_name"]?></td>
 						<td class="text-center"><?php echo number_format($row["c_net_tcp"],2) ?></td>		
 
 

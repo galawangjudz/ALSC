@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if(isset($_SESSION['userdata'])){
-    if($_SESSION['userdata']['user_type'] == 'IT Admin'){
+    if($_SESSION['userdata']['user_type'] == 'IT Admin' || 'Purchasing Officer'){
         if(strpos($link, 'login.php') === false){
             redirect('admin/index.php');
         }
@@ -37,6 +37,11 @@ if(isset($_SESSION['userdata'])){
     elseif($_SESSION['userdata']['user_type'] == 'CFO'){
         if(strpos($link, 'login.php') === false){
             redirect('mancomm/cfo/index.php');
+        }
+    }  
+    elseif($_SESSION['userdata']['user_type'] == 'Accounting Officer'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/accounting/index.php');
         }
     }  
 }

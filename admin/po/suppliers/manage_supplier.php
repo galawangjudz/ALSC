@@ -69,8 +69,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             </select>
         </div>
         <div class="form-group">
-            <label for="mop" class="control-label">Terms: (days)</label>
-            <input type="text" name="terms" id="terms" class="form-control rounded-0" value="<?php echo isset($terms) ? $terms :"" ?>" required>
+            <label for="mop" class="control-label">Payment Terms:</label>
+            <!-- <input type="text" name="terms" id="terms" class="form-control rounded-0" value="<?php echo isset($terms) ? $terms :"" ?>" required> -->
+            <select name="terms" id="terms" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                <option value="" disabled <?php echo !isset($terms_indicator) ? "selected" : '' ?>></option>
+                <?php 
+                $terms_qry = $conn->query("SELECT * FROM `payment_terms` WHERE inactive = 0 ORDER BY `terms_indicator` ASC");
+                while ($row = $terms_qry->fetch_assoc()):
+                ?>
+                <option 
+                    value="<?php echo $row['terms_indicator'] ?>" 
+                    <?php echo isset($terms_indicator) && $terms_indicator == $row['terms_indicator'] ? 'selected' : '' ?> <?php echo $row['terms'] == 0? 'disabled' : '' ?>
+                ><?php echo $row['terms'] ?></option>
+                <?php endwhile; ?>
+            </select>
         </div>
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>

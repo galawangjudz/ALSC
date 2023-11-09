@@ -15,15 +15,38 @@ if(isset($_GET['id'])){
     <form action="" id="account-form">
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
         <div class="form-group">
-            <label for="name" class="control-label">Name</label>
+            <label for="name" class="control-label">Code:</label>
+            <input type="text" name="code" id="code" class="form-control form-control-border" placeholder="Enter account code" value ="<?php echo isset($code) ? $code : '' ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="group" class="control-label">Group:</label>
+
+            <select name="group_id" id="group_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px;">
+                <option value="" disabled <?php echo !isset($id) ? "selected" : '' ?>></option>
+                <?php 
+                $group_qry = $conn->query("SELECT * FROM `group_list` WHERE delete_flag = 0");
+                while ($row = $group_qry->fetch_assoc()):
+                ?>
+                <option 
+                    value="<?php echo $row['id'] ?>" 
+                    <?php echo isset($group_id) && $group_id == $row['id'] ? 'selected' : '' ?> 
+                    <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+                ><?php echo $row['name'] ?></option>
+                <?php endwhile; ?>
+            </select>
+
+        </div>
+        
+        <div class="form-group">
+            <label for="name" class="control-label">Account Name:</label>
             <input type="text" name="name" id="name" class="form-control form-control-border" placeholder="Enter account Name" value ="<?php echo isset($name) ? $name : '' ?>" required>
         </div>
-        <div class="form-group">
-            <label for="description" class="control-label">Description</label>
+        <!-- <div class="form-group">
+            <label for="description" class="control-label">Description:</label>
             <textarea rows="3" name="description" id="description" class="form-control form-control-sm rounded-0" required><?php echo isset($description) ? html_entity_decode($description) : '' ?></textarea>
-        </div>
+        </div> -->
         <div class="form-group">
-            <label for="status" class="control-label">Status</label>
+            <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control form-control-border" required>
                 <option value="1" <?= isset($status) && $status == 1 ? 'selected' : '' ?>>Active</option>
                 <option value="0" <?= isset($status) && $status == 0 ? 'selected' : '' ?>>Inactive</option>

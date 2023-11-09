@@ -1,7 +1,8 @@
 <?php
 require_once('../../config.php');
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `account_list` where id = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT accounts.*, g.name as gname FROM `group_list` g INNER JOIN `account_list` accounts ON g.id = accounts.group_id WHERE accounts.delete_flag = 0 and accounts.id = '{$_GET['id']}'");
+    //$qry = $conn->query("SELECT * FROM `account_list` where id = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
         foreach($res as $k => $v){
@@ -20,20 +21,36 @@ if(isset($_GET['id'])){
     <table class="table table-striped table-hover table-bordered" id="data-table">
         <tr>
             <td>
-                <b>Account:</b>
+                <b>Code:</b>
+            </td>
+            <td>
+                <?= isset($code) ? $code : '' ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Group List:</b>
+            </td>
+            <td>
+                <?= isset($gname) ? $gname : '' ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Account Name:</b>
             </td>
             <td>
                 <?= isset($name) ? $name : '' ?>
             </td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td>
                 <b>Description:</b>
             </td>
             <td>
                 <?= isset($description) ? html_entity_decode($description) : '' ?>
             </td>
-        </tr>
+        </tr> -->
         <tr>
             <td>
                 <b>Status:</b>

@@ -142,76 +142,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     </div>
                 </div>
             </div>
-            <div class="card-body" style="background-color:blue; width:50%;float:right;">
-                <div class="card-body" style="border: black 1px solid;border-radius:5px;">
-					<div style="font-weight:bold;">Account Details</div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no" style="font-weight:light!important;">Bank: <span class="po_err_msg text-danger"></span></label>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">TEST</label>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:-20px !important;">
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">Account Name: <span class="po_err_msg text-danger"></span></label>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">TEST</label>
-                            
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:-20px !important;">
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">Account No: <span class="po_err_msg text-danger"></span></label>
-                            
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">TEST</label>
-                            
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:-20px !important;">
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">Available Balance: <span class="po_err_msg text-danger"></span></label>
-                            
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label for="transaction_no">TEST</label>
-                            
-                        </div>
-                    </div>
-                </div>
-                <br><br>
-                <div class="row" style="margin-top:-20px !important;">
-                    <div class="col-md-6 form-group">
-                        <input type="checkbox" id="cash_adv" value="0">
-                        <label for="cash_adv">Cash Advance</label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <input type="checkbox" id="dv_to_check" value="0">
-                        <label for="dv_to_check">Assign Direct Voucher to Check</label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <input type="checkbox" id="include_vat" value="0">
-                        <label for="include_vat">Include in VAT Reports</label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <input type="checkbox" id="post_dated_check" value="0">
-                        <label for="post_dated_check">Post-dated Check</label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <input type="checkbox" id="2307_report" value="0">
-                        <label for="2307_report">Autogenerate 2307 Report</label>
-                    </div>
-                </div>
-            </div>
             
         </div>
-				
-
+			
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="adv-list">

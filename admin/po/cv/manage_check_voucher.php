@@ -1,62 +1,81 @@
-
-<?php
-$delivery_date = date('Y-m-d', strtotime('+1 week'));
-if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `cv` where id = '{$_GET['id']}' ");
+<?php 
+require_once('../config.php');
+$account_arr = [];
+$group_arr = [];
+$due_date = date('Y-m-d', strtotime('+1 week'));
+if(isset($_GET['id'])){
+    $qry = $conn->query("SELECT * FROM `cv_entries` where id = '{$_GET['id']}'");
     if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
+        $res = $qry->fetch_array();
+        foreach($res as $k => $v){
+            if(!is_numeric($k))
+            $$k = $v;
         }
     }
 }
-
-
 ?>
 <?php
-	$subtotal = 0;
-	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('id');
-	$level = $_settings->userdata('type');
+function format_num($number){
+	$decimals = 0;
+	$num_ex = explode('.',$number);
+	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
+	return number_format($number,$decimals);
+}
 ?>
-<style>
-    .nav-cv{
-        background-color:#007bff;
-        color:white!important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    }
-    .nav-cv:hover{
-        background-color:#007bff!important;
-        color:white!important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
-    }
-</style>
-<body>
-<div class="card card-outline card-info">
+
+<div class="card card-outline card-primary">
 	<div class="card-header">
-		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Check Voucher": "Add Check Voucher" ?></b></i></h5>
+		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Check Voucher Entry": "Add New Check Voucher Entry" ?></b></i></h5>
 	</div>
-	<div class="card-body">
-		<form action="" id="cv-form">
-			<input type="hidden" value="<?php echo $level; ?>">
-			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
-				<div class="card-body">
-					<div class="row">
-                       
-						<div class="col-md-6 form-group">
-							<label for="ap_voucher_date">Voucher Date: <span class="po_err_msg text-danger"></span></label>
-							<?php
-							if (!empty($ap_voucher_date)) {
-                                $voucherformattedDate = date('Y-m-d', strtotime($ap_voucher_date));
+    <!-- <button type="button" id="btnfindAPV" class="btn btn-primary" data-toggle="modal" data-target="#apvModal">
+        <i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Search for Voucher Setup Entries
+    </button> -->
+    <div class="card-body">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <form action="" id="journal-form">
+                    <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="c_num" class="control-label">Check Voucher #:</label>
+                            <input type="text" id="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($id) ? $id : "" ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="v_num" class="control-label">Voucher Setup #:</label>
+                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" disabled>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="po_no">P.O. #: </label>
+                            <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
+                                <?php 
+                                $po_qry = $conn->query("SELECT * FROM `po_list` WHERE status = 1 ORDER BY `po_no` ASC");
+                                while ($row = $po_qry->fetch_assoc()):
+                                ?>
+                                <option 
+                                    value="<?php echo $row['id'] ?>" 
+                                    <?php echo isset($po_no) && $po_no == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+                                ><?php echo $row['po_no'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="cv_date">Date: <span class="po_err_msg text-danger"></span></label>
+                            <?php
+                            if (!empty($cv_date)) {
+                                $voucherformattedDate = date('Y-m-d', strtotime($cv_date));
                             } else {
                                 $voucherformattedDate = '';
                             }
                             ?>                            
-							<input type="date" class="form-control form-control-sm rounded-0" id="ap_voucher_date" name="ap_voucher_date" value="<?php echo isset($voucherformattedDate) ? $voucherformattedDate : '' ?>">
-						</div>
-                        <div class="col-md-6 form-group">
+                            <input type="date" class="form-control form-control-sm rounded-0" id="cv_date" name="cv_date" value="<?php echo isset($voucherformattedDate) ? $voucherformattedDate : '' ?>">
+                        </div>
+                        <div class="col-md-3 form-group">
                             <label for="check_date">Check Date: <span class="po_err_msg text-danger"></span></label>
                             <?php
-							if (!empty($check_date)) {
+                            if (!empty($check_date)) {
                                 $checkformattedDate = date('Y-m-d', strtotime($check_date));
                             } else {
                                 $checkformattedDate = '';
@@ -64,218 +83,312 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             ?>     
                             <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>">
                         </div>
-                        <div class="col-md-6 form-group">
-							<label for="bank">Bank:</label>
-                            <input type="text" class="form-control form-control-sm rounded-0" id="bank" name="bank" value="<?php echo isset($bank) ? $bank : '' ?>">
-						</div>
-                        <div class="col-md-6 form-group">
-							<label for="bank_acc">Bank Account: <span class="po_err_msg text-danger"></span></label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="bank_acc" name="bank_acc" value="<?php echo isset($bank_acc) ? $bank_acc : '' ?>">
-						</div>
-
-
-						<div class="col-md-6 form-group">
-						<label for="supplier_id">Supplier:</label>
-						<select id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-							<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-							<?php 
-							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-							while ($row = $supplier_qry->fetch_assoc()):
-								$vatable = $row['vatable'];
-							?>
-							<option 
-								value="<?php echo $row['id'] ?>" 
-								data-vatable="<?php echo $vatable ?>"
-								<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
-							><?php echo $row['name'] ?></option>
-							<?php endwhile; ?>
-						</select>
-						</div>
-                         <!-- <div class="col-md-6 form-group">
-							<label for="apv_no">APV No: <span class="po_err_msg text-danger"></span></label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="apv_no" name="apv_no" value="<?php echo isset($apv_no) ? $apv_no : '' ?>">
-						</div> -->
-                        <div class="col-md-6 form-group">
-							<label for="invoice_no">Invoice No: <span class="po_err_msg text-danger"></span></label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="invoice_no" name="invoice_no" value="<?php echo isset($invoice_no) ? $invoice_no : '' ?>">
-						</div>
-					</div>
-
-					<div class="row">
-                        <div class="col-md-6 form-group">
-							<label for="due_date">Due Date</label><br>
-                            <?php
-							if (!empty($due_start_date)) {
-                                $duestartformattedDate = date('Y-m-d', strtotime($due_start_date));
-                            } else {
-                                $duestartformattedDate = '';
-                            }
-                            ?>   
-                            <?php
-							if (!empty($due_end_date)) {
-                                $dueendformattedDate = date('Y-m-d', strtotime($due_end_date));
-                            } else {
-                                $dueendformattedDate = '';
-                            }
-                            ?>     
-							<label for="due_start_date">From:</label><input type="date" class="form-control form-control-sm rounded-0" id="due_start_date" name="due_start_date" value="<?php echo isset($duestartformattedDate) ? $duestartformattedDate : '' ?>">
-                            <label for="due_end_date">To:</label><input type="date" class="form-control form-control-sm rounded-0" id="due_end_date" name="due_end_date" value="<?php echo isset($dueendformattedDate) ? $dueendformattedDate : '' ?>">
+                        <div class="col-md-3 form-group">
+                            <label for="check_num" class="control-label">Check #:</label>
+                            <input type="text" id="check_num" name="check_num" class="form-control form-control-sm form-control-border rounded-0">
                         </div>
-                        
-					</div>
-                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        Launch demo modal
-                    </button> -->
-                    <button type="button" id="btnfindAPV" class="btn btn-primary" data-toggle="modal" data-target="#apvModal">
-                        <i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Search APV
-                    </button>
-			<div class="row">
-				<div class="col-md-12">
-					<table class="table table-striped table-bordered" id="cv-list">
-						<thead>
-							<tr class="bg-navy disabled">
-							<th class="px-1 py-1 text-center"></th>
-								<th class="px-1 py-1 text-center">Due Date</th>
-								<th class="px-1 py-1 text-center">APV No.</th>
-								<th class="px-1 py-1 text-center">Invoice No.</th>
-								<th class="px-1 py-1 text-center">Supplier</th>
-								<th class="px-1 py-1 text-center">Amount Due</th>
-                                <th class="px-1 py-1 text-center">Amount to be Paid</th>
-								<th class="px-1 py-1 text-center">WTax to be Paid</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="cv" data-id="">
-								<!-- <td class="align-middle p-1 text-center">
-									<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-								</td>
-								<td class="align-middle p-0 text-center">
-                                    <input type="date" class="align-middle p-1 due_date" step="any" name="due_date[]" value=""/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="supplier_id">Supplier:</label>
+                            <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+                                <?php 
+                                $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
+                                while ($row = $supplier_qry->fetch_assoc()):
+                                    $vatable = $row['vatable'];
+                                ?>
+                                <option 
+                                    value="<?php echo $row['id'] ?>" 
+                                    data-supplier-code="<?php echo $row['id'] ?>"
+                                    <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+                                ><?php echo $row['name'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="sup_code" class="control-label">Supplier Code:</label>
+                            <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="description" class="control-label">Particulars:</label>
+                            <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label for="account_id" class="control-label">Account Name:</label>
+                            <select id="account_id" class="form-control form-control-sm form-control-border select2">
+                                <option value="" disabled selected></option>
+                                <?php 
+                                $accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY `group_id`, `name` ASC ");
+                                $currentGroup = null;
+                                
+                                while($row = $accounts->fetch_assoc()):
+                                    $account_arr[$row['id']] = $row;
+                                    if ($row['group_id'] != $currentGroup) {
+                                        if ($currentGroup !== null) {
+                                            echo '</optgroup>';
+                                        }
+                                        echo '<optgroup label="' . $row['gname'] . '">';
+                                        $currentGroup = $row['group_id'];
+                                    }
+                                ?>
+                                <option value="<?= $row['id'] ?>" data-group-id="<?= $row['group_id'] ?>"><?= $row['name'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="account_code" class="control-label">Account Code:</label>
+                            <input type="text" id="account_code" name="account_code" class="form-control form-control-sm form-control-border rounded-0">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="group_id" class="control-label">Account Group:</label>
+                            <select id="group_id" class="form-control form-control-sm form-control-border select2">
+                                <option value="" disabled selected></option>
+                                <?php 
+                                $groups = $conn->query("SELECT * FROM `group_list` where delete_flag = 0 and `status` = 1 order by `name` asc ");
+                                while($row = $groups->fetch_assoc()):
+                                    unset($row['description']);
+                                    $group_arr[$row['id']] = $row;
+                                ?>
+                                <option value="<?= $row['id'] ?>" data-group-name="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-end">
+                        <div class="form-group col-md-12">
+                            <label for="amount" class="control-label">Amount:</label>
+                            <input type="number" step="any" id="amount" class="form-control form-control-sm form-control-border text-right">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
+                        </div>
+                    </div>
+                    <table id="account_list" class="table table-striped table-bordered">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="10%">
+                            <col width="35%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="20%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="text-center"></th>
+                                <th class="text-center">Account Code</th>
+                                <th class="text-center">Account Name</th>
+                                <th class="text-center">Group</th>
+                                <th class="text-center">Debit</th>
+                                <th class="text-center">Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            if(isset($id)):
+                            $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$v_number}'");
+                            while($row = $jitems->fetch_assoc()):
+                            ?>
+                            <tr>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
                                 </td>
-                                <td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 apv_no" step="any" name="apv_no[]" value=""/>
-								</td>
-                                <td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 invoice_no" step="any" name="invoice_no[]" value=""/>
-								</td>
-                                <td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 supplier" step="any" name="supplier[]" value=""/>
-								</td>
-                                <td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 amount_due" step="any" name="amount_due[]" value=""/>
-								</td>
-                                <td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 amount_to_be_paid" step="any" value=""/>
-								</td>
-                                <td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 wtax" name="wtax[]" step="any" value=""/>
-								</td> -->
-							</tr>
-						</tbody>
+                                <td class="">
+                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                    <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <span class="account_code"><?= $row['account_code'] ?></span>
+                                </td>
+                                <td class="">
+                                    <span class="account"><?= $row['account'] ?></span>
+                                </td>
+                                <td class="group"><?= $row['group'] ?></td>
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? format_num($row['amount']) : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? format_num($row['amount']) : '' ?></td>
+                            </tr>
+                            <?php endwhile; ?>
+                            <?php endif; ?>
+                        </tbody>
                         <tfoot>
-							<tr class="bg-lightblue">
+                            <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <!-- <th class="p-1 text-right" colspan="8"><span>
-                                    <button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
-                                    </span></th> -->
+                                    <th colspan="3" class="text-center">Total</th>
+                                    <th class="text-right total_debit">0.00</th>
+                                    <th class="text-right total_credit">0.00</th>
                                 </tr>
                                 <tr>
-                                    <th class="p-1 text-right" colspan="8">Total Purchase Amount:
-                                    <input type="number" step="any" id="total_purchase" class="border-light text-right" value="0">
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="p-1 text-right" colspan="8">Total VAT Amount:
-                                    <input type="number" step="any" id="total_vat" class="border-light text-right" value="0" readonly>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="p-1 text-right" colspan="8">Total Tax Amount:
-                                    <input type="number" step="any" id="total_tax" class="border-light text-right" value="0" readonly>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="p-1 text-right" colspan="8">Total Amount Due:
-                                    <input type="number" step="any" id="total" class="border-light text-right" value="0" readonly>
-                                    </th>
+                                    <th colspan="3" class="text-center"></th>
+                                    <th colspan="3" class="text-center total-balance">0</th>
                                 </tr>
                             </tr>
-						</tfoot>
-					</table>
-					<div class="row">
-                        <div class="col-md-12">
-							<label for="notes" class="control-label">Notes:</label>
-							<textarea id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
-						</div>
-					</div>
-			    </div>
+                        </tfoot>
+                    </table>
+                    <div class="modal fade" id="apvModal" tabindex="-1" role="dialog" aria-labelledby="apvModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="apvModalLabel">Voucher Setup Entries</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered table-stripped">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;">Voucher Setup #</th>
+                                                <th style="text-align:center;">Date Created</th>
+                                                <th style="text-align:center;">PO Linked</th>
+                                                <th style="text-align:center;">Supplier Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $query = $conn->query("SELECT vse.*, s.name AS sname
+                                                                FROM vs_entries vse
+                                                                INNER JOIN supplier_list s ON vse.supplier_id = s.id;
+                                            ");
+                                            while ($row = $query->fetch_assoc()): ?>
+                                                <tr>
+                                                    <td style="text-align:center;"><?php echo $row["id"] ?></td>
+                                                    <td style="text-align:center;"><?php echo $row["date_created"] ?></td>
+                                                    <td style="text-align:center;"><?php echo $row["po_no"] ?></td>
+                                                    <td style="text-align:center;"><?php echo $row["sname"] ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $query1 = $conn->query("SELECT acc_list.*, vs.* FROM account_list acc_list INNER JOIN vs_items vs ON acc_list.id = vs.account_id;
+                                                        ");
+                                                        while ($row1 = $query1->fetch_assoc()):
+                                                            $jid = $row1['journal_id'];
+                                                            $aid = $row1['account_id'];
+                                                            $gid = $row1['group_id'];
+                                                            $amt = $row1['amount'];
+                                                        ?>
+                                                        <a href="#" class="btn btn-flat btn-primary btn-xs select-apv"
+
+                                                            data-amount="<?php echo $row1["amount"] ?>">
+                                                            <center><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</center>
+                                                        </a>
+
+                                                        <?php endwhile; ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endwhile; ?>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-		</form>
-	</div>
-
-<div class="modal fade" id="apvModal" tabindex="-1" role="dialog" aria-labelledby="apvModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="apvModalLabel">APV List</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered table-stripped">
-            <thead>
-                <tr>
-                    <th style="text-align:center;">APV No.</th>
-                    <th style="text-align:center;">Due Date</th>
-                    <th style="text-align:center;">Invoice No</th>
-                    <th style="text-align:center;">Supplier</th>
-                    <th style="text-align:center;">Amount Due</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-            $query =$conn->query("SELECT ap.*, s.name as sname FROM `apv` ap inner join `supplier_list` s on ap.supplier_id = s.id;");
-            while($row = $query->fetch_assoc()): ?>
-                <tr>
-                    <td style="text-align:center;"><?php echo $row["apv_no"] ?></td>
-                    <td style="text-align:center;"><?php echo $row["due_date"] ?></td>
-                    <td style="text-align:center;"><?php echo $row["invoice_no"] ?></td>
-                    <td style="text-align:center;"><?php echo $row["sname"] ?></td>
-                    <td style="text-align:center;"><?php echo $row["invoice_amount"] ?></td>
-                    <td>
-                        <a href="#" class="btn btn-flat btn-primary btn-xs select-apv" data-due-date="<?php echo $row["due_date"] ?>" data-apv-no="<?php echo $row["apv_no"] ?>" data-invoice-no="<?php echo $row["invoice_no"] ?>" data-supplier="<?php echo $row["sname"] ?>" data-amount-due="<?php echo $row["invoice_amount"] ?>">
-                            <center><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</center>
-                        </a>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-            </tbody>
-        </table>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
-
-	<div class="card-footer">
-        <button class="btn btn-flat btn-default bg-maroon" form="cv-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
-        <a class="btn btn-flat btn-default" href="?page=po/cv/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>		
-	</div>
-</div>
+<noscript id="item-clone">
+<tr id="selected-account-row">
+    <td class="text-center">
+        <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+    </td>
+    <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
+    <td class="">
+        <input type="hidden" name="account_code[]" value="">
+        <input type="hidden" name="account_id[]" value="">
+        <input type="hidden" name="group_id[]" value="">
+        <input type="hidden" name="amount[]" value="">
+        <span class="account"></span>
+    </td>
+    <td class="group"></td>
+    <td class="debit_amount text-right"></td>
+    <td class="credit_amount text-right"></td>
+</tr>
+</noscript>
 <script>
-    $(document).ready(function() {
-    $('#cv-list').on('click', '.btn-danger', function() {
-        $(this).closest('tr.cv').remove();
+    $(document).ready(function () {
+        $(".select-apv").on("click", function () {
+            // Get the data attributes from the clicked button
+            // var accountCode = $(this).data("account-code");
+            // var accountName = $(this).data("account-name");
+            // var groupId = $(this).data("group-id");
+            var amount = $(this).data("amount");
+
+            // Update the selected row with the account information
+            var selectedRow = $("#selected-account-row");
+            // selectedRow.find(".account_code input").val(accountCode);
+            // selectedRow.find("input[name='account_code[]']").val(accountCode);
+            // selectedRow.find("input[name='account_id[]']").val(accountId);
+            // selectedRow.find("input[name='group_id[]']").val(groupId);
+            selectedRow.find("input[name='amount[]']").val(amount);
+            // selectedRow.find(".account").text(accountName);
+            // selectedRow.find(".group").text(groupId);
+            // selectedRow.find(".debit_amount").text(amount);
+            // selectedRow.find(".credit_amount").text(amount);
+        });
+    });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var selectedOption = document.getElementById('supplier_id').options[document.getElementById('supplier_id').selectedIndex];
+    if (selectedOption) {
+        document.getElementById('sup_code').value = selectedOption.getAttribute('data-supplier-code');
+    }
+});
+document.getElementById('supplier_id').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    if (selectedOption) {
+        document.getElementById('sup_code').value = selectedOption.getAttribute('data-supplier-code');
+    } else {
+        document.getElementById('sup_code').value = '';
+    }
+});
+$(document).ready(function () {
+    $("#account_id").on("change", function () {
+        var selectedAccountId = $(this).val();
+        var accountCodeInput = $("#account_code");
+        var selectedOption = $("#account_id option:selected");
+
+        if (selectedOption) {
+            var groupId = selectedOption.data("group-id");
+            $("#group_id").val(groupId).trigger('change.select2');
+            if (selectedAccountId in account) {
+                accountCodeInput.val(account[selectedAccountId].code);
+            } else {
+                accountCodeInput.val('');
+            }
+        }
     });
 });
 
+
+$(document).ready(function () {
+    var supplierSelect = $("#supplier_id"); 
+    var supCodeInput = $("#sup_code"); 
+
+    supplierSelect.on("change", function () {
+        var selectedOption = supplierSelect.find("option:selected"); 
+
+        supCodeInput.val(selectedOption.val());
+
+    });
+});
+</script>
+<script>
+
 document.querySelectorAll('.select-apv').forEach(function(button) {
     button.addEventListener('click', function() {
-        const dueDate = this.getAttribute('data-due-date');
-        const apvNo = this.getAttribute('data-apv-no');
-        const invoiceNo = this.getAttribute('data-invoice-no');
-        const supplier = this.getAttribute('data-supplier');
-        const amountDue = this.getAttribute('data-amount-due');
+        const accId = this.getAttribute('acc-id');
 
         const newRow = document.createElement('tr');
         newRow.className = 'cv';
@@ -284,20 +397,14 @@ document.querySelectorAll('.select-apv').forEach(function(button) {
             <td class="align-middle p-1 text-center">
                 <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this)"><i class="fa fa-times"></i></button>
             </td>
-            <td class="align-middle p-0 text-center"><input type="date" class="align-middle p-1 due_date" step="any" name="due_date[]" value="${dueDate}"></td>
-            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 apv_no" step="any" name="apv_no[]" value="${apvNo}"></td>
-            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 invoice_no" step="any" name="invoice_no[]" value="${invoiceNo}"></td>
-            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 supplier" step="any" name="supplier[]" value="${supplier}"></td>
-            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 amount_due" step="any" name="amount_due[]" value="${amountDue}"></td>
-            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 amount_due" step="any" name="amount_due[]" value=""></td>
-            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 amount_due" step="any" name="amount_due[]" value=""></td>
+            <td class="align-middle p-0 text-center"><input type="text" class="align-middle p-1 acc_id" step="any" name="acc_id[]" value="${accId}"></td>
         `;
         newRow.innerHTML = cells;
         document.querySelector('#cv-list tbody').appendChild(newRow);
     });
 });
 
- const showModalBtn = document.getElementById('btnfindAPV'); 
+const showModalBtn = document.getElementById('btnfindAPV'); 
 const apvModal = document.getElementById('apvModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 
@@ -325,153 +432,122 @@ window.addEventListener('click', function(event) {
             $lastRow[0].scrollIntoView({ behavior: "smooth" });
         });
     });
-    $('#cv-form').submit(function(e){
-        e.preventDefault();
-        var _this = $(this)
-        $('.err-msg').remove();
-        $('[name="po_no"]').removeClass('border-danger')
-        if($('#cv-list .cv').length <= 0){
-            alert_toast(" Please add atleast 1 item on the list.",'warning')
-            return false;
+</script>
+<script>
+    var account = $.parseJSON('<?= json_encode($account_arr) ?>');
+    var group = $.parseJSON('<?= json_encode($group_arr) ?>');
+
+    function cal_tb() {
+        var debit = 0;
+        var credit = 0;
+        $('#account_list tbody tr').each(function () {
+            if ($(this).find('.debit_amount').text() != "")
+                debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
+            if ($(this).find('.credit_amount').text() != "")
+                credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
+        });
+        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
+    }
+
+    $(function () {
+        if ('<?= isset($id) ?>' == 1) {
+            cal_tb();
         }
-        start_loader();
-        $.ajax({
-            url:_base_url_+"classes/Master.php?f=manage_cv",
-            data: new FormData($(this)[0]),
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            type: 'POST',
-            dataType: 'json',
-            error:err=>{
-                console.log(err)
-                alert_toast("An error occured",'error');
-                end_loader();
-            },
-            success:function(resp){
-                if(typeof resp =='object' && resp.status == 'success'){
-                    location.href = "./?page=po/cv";
-                }else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
-                    var el = $('<div>')
-                        el.addClass("alert alert-danger err-msg").text(resp.msg)
-                        _this.prepend(el)
-                        el.show('slow')
-                        $("html, body").animate({ scrollTop: 0 }, "fast");
-                        end_loader()
-                        if(resp.status == 'po_failed'){
-                            $('[name="po_no"]').addClass('border-danger').focus()
-                        }
-                }else{
-                    alert_toast("An error occured",'error');
-                    end_loader();
-                    console.log(resp)
-                }
+        $('#account_list th, #account_list td').addClass('align-middle px-2 py-1');
+        $('#add_to_list').click(function () {
+            var account_id = $('#account_id').val();
+            var account_code = $('#account_code').val();
+            var group_id = $('#group_id').val();
+            var amount = $('#amount').val();
+
+            var account_data = !!account[account_id] ? account[account_id] : {};
+            var group_data = !!group[group_id] ? group[group_id] : {};
+            var tr = $($('noscript#item-clone').html()).clone();
+            tr.find('input[name="account_code[]"]').val(account_code); 
+            tr.find('input[name="account_id[]"]').val(account_id);
+            tr.find('input[name="group_id[]"]').val(group_id);
+            tr.find('input[name="amount[]"]').val(amount);
+
+
+            tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
+            tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
+            if (!!group_data.type && group_data.type == 1)
+                tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+            else
+                tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+
+            $('#account_list').append(tr);
+
+
+            tr.find('.delete-row').click(function () {
+                $(this).closest('tr').remove();
+                cal_tb();
+            });
+            cal_tb();
+            
+            $('#account_code').val('').trigger('change');
+            $('#account_id').val('').trigger('change');
+            $('#group_id').val('').trigger('change');
+            $('#amount').val('').trigger('change');
+        });
+
+
+        $('#journal-form').submit(function (e) {
+            e.preventDefault();
+            var _this = $(this);
+            $('.pop-msg').remove();
+            var el = $('<div>');
+            el.addClass("pop-msg alert");
+            el.hide();
+            if ($('#account_list tbody tr').length <= 0) {
+                el.addClass('alert-danger').text(" Account Table is empty.");
+                _this.prepend(el);
+                el.show('slow');
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
+                return false;
             }
+            if ($('#account_list tfoot .total-balance').text() != '0') {
+                el.addClass('alert-danger').text(" Trial Balance is not equal.");
+                _this.prepend(el);
+                el.show('slow');
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=manage_cv",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					//alert_toast("An error occured",'error');
+					end_loader();
+				},
+                success:function(resp){
+                    if(resp.status == 'success'){
+                        location.reload();
+              
+                    }else if(!!resp.msg){
+                        el.addClass("alert-danger")
+                        el.text(resp.msg)
+                        _this.prepend(el)
+                    }else{
+                        el.addClass("alert-danger")
+                        el.text("An error occurred due to unknown reason.")
+                        _this.prepend(el)
+                    }
+                    el.show('slow')
+                    $('html,body,.modal').animate({scrollTop:0},'fast')
+                    end_loader();
+                }
+            })
         })
     })
 </script>
-<script>
-const loadPOCheckbox = document.getElementById('loadPOCheckbox');
-const loadPOCont = document.getElementById('loadPO_cont');
-loadPOCheckbox.addEventListener('change', function () {
-    if (loadPOCheckbox.checked) {
-        loadPOCont.style.display = 'block';
-    } else {
-        loadPOCont.style.display = 'none';
-    }
-});
-$(document).ready(function() {
-    function updatePurchaseAmount() {
-        var totalPurchaseAmount = 0;
-
-        $('tbody').on('input', '.gross-amt', function() {
-            var row = $(this).closest('tr.cv');
-            var grossAmt = parseFloat($(this).val()) || 0;
-            var purchaseAmt = grossAmt;
-
-            row.find('.purchase-amt').val(purchaseAmt);
-            totalPurchaseAmount = 0; 
-            $('tbody tr.cv').each(function() {
-                var rowPurchaseAmt = parseFloat($(this).find('.purchase-amt').val()) || 0;
-                totalPurchaseAmount += rowPurchaseAmt;
-            });
-
-            $('#total_purchase').val(totalPurchaseAmount);
-        });
-    }
-    updatePurchaseAmount();
-});
-$(document).ready(function() {
-    function updateTotalVAT() {
-        var totalVATAmount = 0;
-
-        $('tbody tr.cv').each(function() {
-            var vatRate = parseFloat($(this).find('.vat').val()) || 0;
-            var purchaseAmt = parseFloat($(this).find('.purchase-amt').val()) || 0;
-            var vatAmount = purchaseAmt * (vatRate / 100);
-            totalVATAmount += vatAmount;
-        });
-
-        $('#total_vat').val(totalVATAmount);
-    }
-
-    updateTotalVAT();
-
-    $('tbody').on('input', '.vat', updateTotalVAT);
-});
-
-
-$(document).ready(function() {
-
-function updateTotalTax() {
-    var totalTaxAmount = 0;
-
-    $('tbody tr.cv').each(function() {
-        var taxRate = parseFloat($(this).find('.tax').val()) || 0;
-        var purchaseAmt = parseFloat($(this).find('.purchase-amt').val()) || 0;
-        var taxAmount = purchaseAmt * (taxRate / 100);
-        totalTaxAmount += taxAmount;
-    });
-
-    $('#total_tax').val(totalTaxAmount);
-}
-
-updateTotalTax();
-
-$('tbody').on('input', '.tax', updateTotalTax);
-});
-
-$(document).ready(function() {
-
-    function updateTotalAmountDue() {
-        var totalVAT = parseFloat($('#total_vat').val()) || 0;
-        var totalTax = parseFloat($('#total_tax').val()) || 0;
-        var totalPurchase = parseFloat($('#total_purchase').val()) || 0;
-
-        var totalAmountDue = totalVAT + totalTax + totalPurchase;
-
-        $('#total').val(totalAmountDue);
-    }
-
-    $('body').on('input', '#total_vat, #total_tax, #total_purchase', updateTotalAmountDue);
-});
-
-
-</script>
-
-<script>
-    document.getElementById("payment_type").addEventListener("change", function() {
-        var selectedPaymentType = this.value;
-        var checkDateDiv = document.getElementById("checkDateDiv");
-
-        if (selectedPaymentType === "Check") {
-            checkDateDiv.style.display = "block"; 
-        } else {
-            checkDateDiv.style.display = "none"; 
-        }
-    });
-</script>
-
-
-

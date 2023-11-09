@@ -71,7 +71,7 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
 					<?php 
 					$total_debit = 0;
 					$total_credit = 0;
-					$journals = $conn->query("SELECT * FROM `journal_entries` where date(journal_date) BETWEEN '{$from}' and '{$to}' order by date(journal_date) asc");
+					$journals = $conn->query("SELECT * FROM `vs_entries` where date(journal_date) BETWEEN '{$from}' and '{$to}' order by date(journal_date) asc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>

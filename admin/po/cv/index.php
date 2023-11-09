@@ -1,164 +1,116 @@
-<?php if($_settings->chk_flashdata('success')): ?>
-<script>
-	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
-</script>
-<?php endif;?>
 <?php
-$usertype = $_settings->userdata('user_type'); 
-$type = $_settings->userdata('id');
-$level = $_settings->userdata('type');
+function format_num($number){
+	$decimals = 0;
+	$num_ex = explode('.',$number);
+	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
+	return number_format($number,$decimals);
+}
 ?>
 <style>
-	.nav-cv{
-		background-color:#007bff;
-		color:white!important;
-		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    }
-    .nav-cv:hover{
-        background-color:#007bff!important;
-        color:white!important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
-    }
-	.main_menu{
-		float:left;
-		width:227px;
-		height:40px;
-		line-height:40px;
-		text-align:center;
-		color:black!important;
-		border-right:solid 3px white;
+	th.p-0, td.p-0{
+		padding: 0 !important;
 	}
-	#main-title{
-		font-style: italic;
-        font-weight: bold;
-	}
-	.main_menu:hover{
-		border-bottom: solid 2px blue;
-		background-color:#E8E8E8;
-	}
-    #container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color:transparent;
-    }
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<b><i><h5 class="card-title" id="main-title">Check Voucher List</b></i></h5>
+		<h3 class="card-title"><b><i>Check Voucher Entries</b></i></h3>
 		<div class="card-tools">
-			<a href="./?page=po/cv/manage_check_voucher" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add Check Voucher</a>
+			<!-- <a href="<?php echo base_url ?>admin/?page=journals/manage_journal" class="btn btn-primary btn-flat" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add New Check Voucher Setup</a> -->
 		</div>
 	</div>
 	<div class="card-body">
-		<div class="container-fluid">
         <div class="container-fluid">
-			
-			<div id="pending-table" style="display: none;">
-				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
-					<thead>
-						<tr class="bg-navy disabled">
-							<th>#</th>
-							<th>APV #</th>
-							<th>Invoice Date</th>
-							<th>Due Date</th>
-							<th>Supplier Name</th>
-							<!-- <th>Voucher Date</th> -->
-							<th>Invoice No.</th>
-							<th>Amount Due</th>
-							<th>Status</th>
-							<th>Approval Status</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
-						<tbody>
-							<?php 
-							$i = 1;
-							$qry = $conn->query("SELECT ap.*, s.name as sname FROM `apv` ap inner join `supplier_list` s on ap.supplier_id = s.id;");
-							while($row = $qry->fetch_assoc()):
-								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-							?>
-							<tr>
-								<td class="text-center"><?php echo $i++; ?></td>
-								<td class=""><?php echo $row['apv_no'] ?></td>
-								<td class=""><?php echo date("M d,Y",strtotime($row['invoice_date'])) ; ?></td>
-								<td class=""><?php echo date("M d,Y",strtotime($row['due_date'])) ; ?></td>
-								<td class=""><?php echo $row['sname'] ?></td>
-								<!-- <td class=""><?php echo date("M d,Y",strtotime($row['ap_voucher_date'])) ; ?></td> -->
-								<td class=""><?php echo $row['invoice_no'] ?></td>
-								<td class="text-right"><?php echo number_format($row['invoice_amount']) ?></td>
-								<td>
-								<?php 
-								switch ($row['status']) {
-									case '0':
-										echo '<span class="badge badge-success">Open</span>';
-										break;
-									default:
-										echo '<span class="badge badge-danger">Closed</span>';
-										break;
-								}
-								?>
-								</td>
-								<td>
-								<?php 
-								switch ($row['approval_status']) {
-									case '1':
-										echo '<span class="badge badge-success">Approved</span>';
-										break;
-									case '2':
-										echo '<span class="badge badge-danger">Declined</span>';
-										break;
-									case '3':
-										echo '<span class="badge badge-warning">For Review</span>';
-										break;
-									default:
-										echo '<span class="badge badge-secondary">Pending</span>';
-										break;
-								}
-								?>
-								</td>
-								<td align="center">
-									<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-											Action
-										<span class="sr-only">Toggle Dropdown</span>
-									</button>
-									<div class="dropdown-menu" role="menu">
-										
-												<a class="dropdown-item" href="?page=po/purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-										
-										
-											
+			<table class="table table-hover table-striped table-bordered">
+				<colgroup>
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="45%">
+					<col width="15%">
+					<col width="10%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>CV #</th>
+						<th>Voucher #</th>
+						<th>Date</th>
+                        <th>P.O. #</th>
+						<th>Supplier Name</th>
+                        <th>Preparer</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+                    
+					<?php 
+					$swhere = "";
+					if($_settings->userdata('type') != 1){
+						$swhere = " where user_id = '{$_settings->userdata('id')}' ";
+					}
+					$users = $conn->query("SELECT id,username FROM `users` where id in (SELECT `user_id` FROM `cv_entries` {$swhere})");
+					$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','id');
+					$journals = $conn->query("SELECT j.*, s.name as sname FROM `cv_entries` j inner join `supplier_list` s on j.supplier_id = s.id {$swhere} order by date(cv_date) asc");
+					while($row = $journals->fetch_assoc()):
+					?>
+					<tr>
+                        <td class=""><?= $row['id'] ?></td>
+						<td class=""><?= $row['v_number'] ?></td>
+						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
+						<td class=""><?= $row['po_no'] ?></td>
+						
+                        <td class=""><?= $row['sname'] ?></td>
 
-												<div class="dropdown-divider"></div>
-											<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-										
-									</div>
-								</td>
-							</tr>
-							<?php endwhile; ?>
-						</tbody>
-				</table>
-			</div>
-		</div>
+						
+						<td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td>
+						<td class="text-center">
+							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+									Action
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<div class="dropdown-divider"></div>
+								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['id'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+							</div>
+						</td>
+					</tr>
+					<?php endwhile; ?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
 <script>
 	$(document).ready(function(){
+		// $('#create_new').click(function(){
+		// 	uni_modal("Voucher Setup Entry","journals/manage_journal.php",'mid-large')
+		// })
+		// $('.edit_data').click(function(){
+		// 	uni_modal("Edit Voucher Setup Entry","journals/manage_journal.php?id="+$(this).attr('data-id'),"mid-large")
+		// })
+
+		$('.edit_data').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=po/cv/manage_check_voucher&id=' + dataId;
+			window.location.href = redirectUrl;
+		})
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this rent permanently?","delete_po",[$(this).attr('data-id')])
+			_conf("Are you sure you want to delete this check voucher entry permanently?","delete_cv",[$(this).attr('data-id')])
 		})
-		$('.view_details').click(function(){
-			uni_modal("Reservaton Details","po/purchase_orders/view_details.php?id="+$(this).attr('data-id'),'mid-large')
-		})
-		$('.table th,.table td').addClass('px-1 py-0 align-middle')
-		$('.table').dataTable();
+		$('.table td,.table th').addClass('py-1 px-2 align-middle')
+		$('.table').dataTable({
+            columnDefs: [
+                { orderable: false, targets: [2,4] }
+            ],
+        });
 	})
-	function delete_po($id){
+	function delete_cv($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_po",
+			url:_base_url_+"classes/Master.php?f=delete_cv",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",
@@ -177,79 +129,4 @@ $level = $_settings->userdata('type');
 			}
 		})
 	}
-
-	function showPendingPOsTable() {
-		document.getElementById('pending-table').style.display = 'block';
-		document.getElementById('approved-table').style.display = 'none';
-		document.getElementById('declined-table').style.display = 'none';
-		document.getElementById('review-table').style.display = 'none';
-
-		document.getElementById('pending-link').style.borderBottom = 'solid 2px blue';
-		document.getElementById('pending-link').style.backgroundColor = '#E8E8E8';
-		document.getElementById('approved-link').style.borderBottom = 'none';
-		document.getElementById('approved-link').style.backgroundColor = 'transparent';
-		document.getElementById('declined-link').style.borderBottom = 'none';
-		document.getElementById('declined-link').style.backgroundColor = 'transparent';
-		document.getElementById('review-link').style.borderBottom = 'none';
-		document.getElementById('review-link').style.backgroundColor = 'transparent';
-
-		document.getElementById('main-title').textContent = 'List of Pending Purchase Orders';
-	}
-
-    function showApprovedPOsTable() {
-        document.getElementById('pending-table').style.display = 'none';
-		document.getElementById('approved-table').style.display = 'block';
-		document.getElementById('declined-table').style.display = 'none';
-		document.getElementById('review-table').style.display = 'none';
-
-		document.getElementById('pending-link').style.borderBottom = 'none';
-		document.getElementById('pending-link').style.backgroundColor = 'transparent';
-		document.getElementById('approved-link').style.borderBottom = 'solid 2px blue';
-		document.getElementById('approved-link').style.backgroundColor = '#E8E8E8';
-		document.getElementById('declined-link').style.borderBottom = 'none';
-		document.getElementById('declined-link').style.backgroundColor = 'transparent';
-		document.getElementById('review-link').style.borderBottom = 'none';
-		document.getElementById('review-link').style.backgroundColor = 'transparent';
-
-		document.getElementById('main-title').textContent = 'List of Approved Purchase Orders';
-    }
-
-	function showDeclinedPOsTable() {
-        document.getElementById('pending-table').style.display = 'none';
-		document.getElementById('approved-table').style.display = 'none';
-		document.getElementById('declined-table').style.display = 'block';
-		document.getElementById('review-table').style.display = 'none';
-
-		document.getElementById('pending-link').style.borderBottom = 'none';
-		document.getElementById('pending-link').style.backgroundColor = 'transparent';
-		document.getElementById('approved-link').style.borderBottom = 'none';
-		document.getElementById('approved-link').style.backgroundColor = 'transparent';
-		document.getElementById('declined-link').style.borderBottom = 'solid 2px blue';
-		document.getElementById('declined-link').style.backgroundColor = '#E8E8E8';
-		document.getElementById('review-link').style.borderBottom = 'none';
-		document.getElementById('review-link').style.backgroundColor = 'transparent';
-
-		document.getElementById('main-title').textContent = 'List of Declined Purchase Orders';
-    }
-
-	function showForReviewPOsTable() {
-        document.getElementById('pending-table').style.display = 'none';
-		document.getElementById('approved-table').style.display = 'none';
-		document.getElementById('declined-table').style.display = 'none';
-		document.getElementById('review-table').style.display = 'block';
-
-		document.getElementById('pending-link').style.borderBottom = 'none';
-		document.getElementById('pending-link').style.backgroundColor = 'transparent';
-		document.getElementById('approved-link').style.borderBottom = 'none';
-		document.getElementById('approved-link').style.backgroundColor = 'transparent';
-		document.getElementById('declined-link').style.borderBottom = 'none';
-		document.getElementById('declined-link').style.backgroundColor = 'transparent';
-		document.getElementById('review-link').style.borderBottom = 'solid 2px blue';
-		document.getElementById('review-link').style.backgroundColor = '#E8E8E8';
-
-		document.getElementById('main-title').textContent = 'List of Purchase Orders for Revision';
-    }
-
-    showPendingPOsTable();
-
 </script>

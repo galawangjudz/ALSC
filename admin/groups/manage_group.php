@@ -15,22 +15,22 @@ if(isset($_GET['id'])){
     <form action="" id="group-form">
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
         <div class="form-group">
-            <label for="name" class="control-label">Name</label>
+            <label for="name" class="control-label">Name:</label>
             <input type="text" name="name" id="name" class="form-control form-control-border" placeholder="Enter Group Name" value ="<?php echo isset($name) ? $name : '' ?>" required>
         </div>
-        <div class="form-group">
-            <label for="description" class="control-label">Description</label>
+        <!-- <div class="form-group">
+            <label for="description" class="control-label">Description:</label>
             <textarea rows="3" name="description" id="description" class="form-control form-control-sm rounded-0" required><?php echo isset($description) ? $description : '' ?></textarea>
-        </div>
+        </div> -->
         <div class="form-group">
-            <label for="type" class="control-label">Group Type</label>
+            <label for="type" class="control-label">Group Type:</label>
             <select name="type" id="type" class="form-control form-control-border" required>
                 <option value="1" <?= isset($type) && $type == 1 ? 'selected' : '' ?>>Debit</option>
                 <option value="2" <?= isset($type) && $type == 2 ? 'selected' : '' ?>>Credit</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="status" class="control-label">Status</label>
+            <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control form-control-border" required>
                 <option value="1" <?= isset($status) && $status == 1 ? 'selected' : '' ?>>Active</option>
                 <option value="0" <?= isset($status) && $status == 0 ? 'selected' : '' ?>>Inactive</option>
