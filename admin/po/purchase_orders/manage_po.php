@@ -32,7 +32,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
     $po_number = str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
 }
-
 ?>
 	<style>
 	.ui-autocomplete {
@@ -129,7 +128,7 @@ $(document).ready(function() {
 <?php
 	$subtotal = 0;
 	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('id');
+	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
 <body onload="calculate()">

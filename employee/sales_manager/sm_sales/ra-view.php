@@ -296,7 +296,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 
 <?php 
     $usertype = $_settings->userdata('user_type');
-    $type = $_settings->userdata('id');
+    $type = $_settings->userdata('user_code');
 ?>
 <body onload="loadAll()">
 

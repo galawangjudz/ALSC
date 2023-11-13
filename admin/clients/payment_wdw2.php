@@ -1451,10 +1451,8 @@ $(document).ready(function(){
 });
 
 </script>
-
 <script>
 function redirectSoa() {
-    
     // window.location.href = "<?php echo base_url ?>/report/print_soa.php?id=<?php echo md5($prop_id); ?>";
     window.open("<?php echo base_url ?>/report/print_soa.php?id=<?php echo md5($prop_id); ?>", "_blank");
 }
@@ -1507,30 +1505,19 @@ $('#print_payment_func').submit(function(e){
 </script>
 
 <script>
-
-
 function paid_btns() {
     var confirmed = confirm("Are you sure you want to continue?");
     if (confirmed) {
-      // user clicked "OK", continue with the action
       return true;
     } else {
-      // user clicked "Cancel", cancel the action
       return false;
     }
   }
 
-
-
-// Get a reference to the surcharge entry element
-
-
-// Get a reference to the radio buttons
 const radioButtons = document.querySelectorAll('input[name="surcharge_percent"]');
 
-// Add an event listener to each radio button
-radioButtons.forEach(radioButton => {
-  radioButton.addEventListener("change", () => {
+    radioButtons.forEach(radioButton => {
+    radioButton.addEventListener("change", () => {
     check_paydate();
     const surchargeEntry = document.getElementById("surcharge");
     surcharge_value = surchargeEntry.value;
@@ -1540,11 +1527,9 @@ radioButtons.forEach(radioButton => {
     const selectedValue = parseInt(document.querySelector('input[name="surcharge_percent"]:checked').value);
     
     $('#sur_percent').val(selectedValue);
-    
-    // Calculate the surcharge amount based on the selected percentage
+
     const surchargeAmount = surcharge_amt - (surcharge_amt * (selectedValue / 100));
-    
-    // Update the surcharge entry value
+
     const numStr = $('.amt-due').val();
     const excess =  $('.excess').val();
     const last_excess =  $('.last-excess').val();
@@ -1576,10 +1561,8 @@ $(document).ready(function(){
 })
 
 function sendData() {
-
     document.getElementById("p_amt").value = document.getElementById("p-amount").value;
     document.getElementById("p_date").value = document.getElementById("p-date").value;
-
 }
 
 function getTableRowId(rowNum) {
@@ -1587,10 +1570,10 @@ function getTableRowId(rowNum) {
     getDiv.style.display = "block";
     var row = document.getElementById(rowNum);
 
-  var rowId = row.getAttribute("id");
+    var rowId = row.getAttribute("id");
 
-  document.getElementById("test").value=rowId;
-  document.getElementById("p_amt").value = document.getElementById("p-amount"+rowId).value;
+    document.getElementById("test").value=rowId;
+    document.getElementById("p_amt").value = document.getElementById("p-amount"+rowId).value;
     document.getElementById("p_date").value = document.getElementById("p-date"+rowId).value;
 }
 </script>

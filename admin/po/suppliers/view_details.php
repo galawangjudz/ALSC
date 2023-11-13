@@ -59,9 +59,27 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     </td>
                 </tr>
                 <tr>
-                    <td><b>Terms:</b></td>
-                    <td><?php echo $terms ?> (days)</td>
+                    <td><b>Payment Terms:</b></td>
+                    <td>
+                        <?php
+                        $terms_qry = $conn->prepare("SELECT * FROM `payment_terms` WHERE terms_indicator = ?");
+                        $terms_qry->bind_param("i", $terms);
+                        $terms_qry->execute();
+                        $result = $terms_qry->get_result();
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $recValue = $row['terms'];
+                                echo $recValue . "<br>"; 
+                            }
+                        } else {
+                            echo "No additional terms found.";
+                        }
+                        ?>
+                    </td>
+                    
                 </tr>
+
                 <tr>
                     <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>
                     <td><b>Date Created:</b></td>

@@ -26,14 +26,14 @@ if(isset($_GET['id'])){
                 <?= isset($name) ? $name : '' ?>
             </td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td>
                 <b>Description:</b>
             </td>
             <td>
                 <?= isset($description) ? ($description) : '' ?>
             </td>
-        </tr>
+        </tr> -->
         <tr>
             <td>
                 <b>Group Type:</b>

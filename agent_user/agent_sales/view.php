@@ -20,7 +20,7 @@
 </style>
 <?php 
     $usertype = $_settings->userdata('user_type');
-    $type = $_settings->userdata('id');
+    $type = $_settings->userdata('user_code');
 /* $usertype = isset($_settings->userdata('type')== 1) ? "IT Admin" : "" ; */
 if(($_GET['id']) && ($_GET['id'] > 0)){
     // $csr = $conn->query("SELECT * FROM t_csr where md5(c_csr_no) = '{$_GET['id']}' ");

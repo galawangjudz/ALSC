@@ -64,7 +64,7 @@ $(document).ready(function(){
          <?php 
          include('conn2.php');
          $count = 1;
-         $query = $conn->query("SELECT * FROM users order by id");
+         $query = $conn->query("SELECT * FROM users order by user_code");
          while ($row = $query ->fetch_object()) {
           $id = $row->id;
           $username = $row->username;

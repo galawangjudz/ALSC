@@ -114,8 +114,8 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
 
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Expenses</li></div></b></i>
-                    <li class="nav-item dropdown">
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">File Manager</li></div></b></i>
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/apv/" class="nav-link nav-apv">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
@@ -136,6 +136,55 @@ $level = $_settings->userdata('type');
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           Check Voucher
+                        </p>
+                      </a>
+                    </li>  -->
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=accounts/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                        Chart of Accounts
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=groups/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                        Groups List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=customers_profile/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                        Customers' Profile
+                        </p>
+                      </a>
+                    </li> 
+                    <!-- <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=subsidiary_accounts" class="nav-link">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                          Subsidiary Accounts
+                        </p>
+                      </a>
+                    </li>  -->
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Accounts Payable</li></div></b></i>
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                          Voucher Setup Entries
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/cv/" class="nav-link nav-cv">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Check Voucher Entries
                         </p>
                       </a>
                     </li> 
@@ -176,7 +225,15 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> -->
                    
-                   
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inquiries and Reports</li></div></b></i>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=po/inquiries_and_reports/supplier_transaction_inquiry" class="nav-link nav-apv">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Supplier Transaction Inquiry
+                        </p>
+                      </a>
+                    </li> 
                     
                     <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>
@@ -222,15 +279,7 @@ $level = $_settings->userdata('type');
                     </li>
                     <?php endif ; ?>
 
-                 <!--    <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=journals" class="nav-link nav-journals">
-                        <i class="nav-icon fas fa-folder"></i>
-                        <p>
-                          Journal Entries
-                        </p>
-                      </a>
-
-                    </li>  -->
+                
 
                   
                     <?php if ($usertype == "IT Admin"): ?>
