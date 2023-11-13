@@ -46,8 +46,27 @@
             }
         }
     }
-    ?>
+?>
+<style>
+.phase {
 
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+border:none;
+background-size: 15px; 
+background-position: right center;
+background-repeat: no-repeat;
+width:auto;
+
+}
+
+
+.phase:focus {
+
+border-color: #007BFF; 
+}
+</style>
 <table class="report-container" style="margin-top:-10px;width:100%;">
     <thead class="report-header">
         <tr>
@@ -61,13 +80,13 @@
                     <div class="container" style="margin-top:15px;">
                         <table class="table table-bordered">
                             <tr>
-                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher #:</td>
+                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher No:</td>
                                 <td style="width:50%; padding: 4px 10px;"><?php echo $vs_id; ?></td>
                                 <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
                                 <td style="padding: 4px 10px;"><?php echo $jdate; ?></td>
                             </tr>
                             <tr>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">PO #:</td>
+                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">PO No:</td>
                                 <td style="padding: 4px 10px;"><?php echo $po_no; ?></td>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Due Date:</td>
                                 <td style="padding: 4px 10px;"><?php echo $due; ?></td>
@@ -75,7 +94,17 @@
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Paid To:</td>
                                 <td style="padding: 4px 10px;"><?php echo $supp_name; ?></td>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Supplier Code:</td>
+                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">
+                                    <?php
+                                    if (ctype_alpha(substr($supp_code, 0, 1))) {
+                                        echo "Employee Code:";
+                                    } elseif (preg_match('/^\d{5,}$/', $supp_code)) {
+                                        echo "Agent Code:";
+                                    } else {
+                                        echo "Supplier Code:";
+                                    }
+                                    ?>
+                                </td>
                                 <td style="padding: 4px 10px;"><?php echo $supp_code; ?></td>
                             </tr>
                         </table>
@@ -88,40 +117,111 @@
                         </table>
                         <table id="account_list" class="table table-striped table-bordered">
                         <colgroup>
-                            <col width="10%">
-                            <col width="50%">
-                            <col width="20%">
-                            <col width="20%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="35%">
+                            <col width="40%">
+                            <col width="5%">
+                            <col width="5%">
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">Code</th>
+                                <th class="text-center">Item No.</th>
+                                <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
+                                <th class="text-center">Location</th>
+                                <th class="text-center">Group</th>
                                 <th class="text-center">Debit</th>
                                 <th class="text-center">Credit</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
+                            $counter = 1;
                             $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$_GET['id']}'");
                             while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>  
+                                <td class="" style="padding: 4px 10px;">
+                                    <span class="account_code"><?= $counter; ?></span>
+                                </td>
                                 <td class="" style="padding: 4px 10px;">
                                     <span class="account_code"><?= $row['account_code'] ?></span>
                                 </td>
                                 <td class="" style="padding: 4px 10px;">
                                     <span class="account"><?= $row['account'] ?></span>
                                 </td>
+                                <td class="">
+                                    <div class="loc-cont">
+                                        <select name="phase[]" id="phase[]" class="phase">
+                                        <?php 
+                                            $meta = array();
+                                            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                            while($row1 = $cat->fetch_assoc()):
+                                        ?>
+                                            <?php
+                                                echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                            ?>
+                                            <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
+                                        <?php
+                                            endwhile;
+                                        ?>
+                                        </select>
+                                        
+                                        <?php echo $row['block'] ?>/<?php echo $row['lot'] ?>
+                                        
+                                        
+                                
+
+                                        <script>
+                                            $(document).ready(function () {
+                                                $('.lot, .block, .phase').on('input', function () {
+                                                    var currentRow = $(this).closest('td');
+
+                                                    var enteredPhase = currentRow.find('.phase').val();
+                                                    var enteredBlock = currentRow.find('.block').val();
+                                                    var enteredLot = currentRow.find('.lot').val();
+
+                                                    console.log("AJAX Data:", {
+                                                        phase: enteredPhase,
+                                                        block: enteredBlock,
+                                                        lot: enteredLot
+                                                    });
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: 'journals/check_loc.php',
+                                                        data: JSON.stringify({
+                                                            phase: enteredPhase,
+                                                            block: enteredBlock,
+                                                            lot: enteredLot
+                                                        }),
+                                                        contentType: 'application/json', 
+                                                        success: function (response) {
+                                                            console.log("AJAX Response:", response);
+                                                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                                            
+                                                            
+                                                                lotExistsMsg.html(response);
+                                                            
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                </td>
+                                <td class="group"><?= $row['group'] ?></td>
                                 <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount']) : '' ?></td>
                                 <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount']) : '' ?></td>
                             </tr>
-                            <?php endwhile; ?>
+                            <?php $counter++;
+                            endwhile; ?>
                         </tbody>
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="2" class="text-center">Total</th>
+                                    <th colspan="5" class="text-center">Total</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>

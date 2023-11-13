@@ -44,7 +44,7 @@ if(isset($_GET['id'])){
 ?>
 <?php
 $username = $_settings->userdata('username'); 
-$type = $_settings->userdata('id');
+$type = $_settings->userdata('user_code');
 ?>
 <style>
 #item-list th, #item-list td{

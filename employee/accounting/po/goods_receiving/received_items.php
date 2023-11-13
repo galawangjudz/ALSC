@@ -50,7 +50,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </style>
 <?php
 	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('id');
+	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
 <script>
@@ -151,8 +151,8 @@ $(document).ready(function() {
     	</div>	
 		<br>
         <?php 
-            $receiver_qry = $conn->query("SELECT * FROM users where id = '{$receiver_id}'");
-            $receiver2_qry = $conn->query("SELECT * FROM users where id = '{$receiver2_id}'");
+            $receiver_qry = $conn->query("SELECT * FROM users where user_code = '{$receiver_id}'");
+            $receiver2_qry = $conn->query("SELECT * FROM users where user_code = '{$receiver2_id}'");
             $receiver = $receiver_qry->fetch_array();
             $receiver2 = $receiver2_qry->fetch_array();
         ?>

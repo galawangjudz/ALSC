@@ -128,7 +128,7 @@ $(document).ready(function() {
 <?php
 	$subtotal = 0;
 	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('id');
+	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
 <body onload="calculate()">
@@ -209,9 +209,9 @@ $(document).ready(function() {
 									$recValue = $row['firstname'] . ' ' . $row['lastname'];
 								?>
 								<option 
-									value="<?php echo $row['id'] ?>" 
+									value="<?php echo $row['user_code'] ?>" 
 									data-contact1="<?php echo $row['phone'] ?>"
-									<?php echo isset($receiver_id) && $receiver_id == $row['id'] ? 'selected' : '' ?>>
+									<?php echo isset($receiver_id) && $receiver_id == $row['user_code'] ? 'selected' : '' ?>>
 									<?php echo $recValue ?></option>
 								<?php endwhile; ?>
 							</select>
@@ -234,9 +234,9 @@ $(document).ready(function() {
 									$recValue2 = $row['firstname'] . ' ' . $row['lastname'];
 								?>
 								<option 
-									value="<?php echo $row['id'] ?>" 
+									value="<?php echo $row['user_code'] ?>" 
 									data-contact2="<?php echo $row['phone'] ?>"
-									<?php echo isset($receiver2_id) && $receiver2_id == $row['id'] ? 'selected' : '' ?>>
+									<?php echo isset($receiver2_id) && $receiver2_id == $row['user_code'] ? 'selected' : '' ?>>
 									<?php echo $recValue2 ?></option>
 								<?php endwhile; ?>
 							</select>

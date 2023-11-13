@@ -7,7 +7,7 @@ if($_settings->chk_flashdata('success')): ?>
 <?php endif;?>
 <?php
 
-$type = $_settings->userdata('id');
+$type = $_settings->userdata('user_code');
 if(isset($_GET['id'])){
     $csr = $conn->query("SELECT c_reserve_date, c_amount_paid FROM t_reservation where md5(c_csr_no) = '{$_GET['id']}' ");    
     while($row=$csr->fetch_assoc()){

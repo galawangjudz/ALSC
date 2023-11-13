@@ -128,7 +128,7 @@ $(document).ready(function() {
 <?php
 	$subtotal = 0;
 	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('id');
+	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
 <body onload="calculate()">

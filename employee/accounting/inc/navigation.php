@@ -192,7 +192,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> -->
                    
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inquiries and Reports</li></div></b></i>
+                    <!-- <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inquiries and Reports</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/inquiries_and_reports/supplier_transaction_inquiry" class="nav-link nav-apv">
                       <i class="nav-icon fas fa-file"></i>
@@ -200,7 +200,7 @@ $level = $_settings->userdata('type');
                           Supplier Transaction Inquiry
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

@@ -48,7 +48,7 @@ function format_num($number){
 						$swhere = " where user_id = '{$_settings->userdata('id')}' ";
 					}
 					$users = $conn->query("SELECT id,username FROM `users` where id in (SELECT `user_id` FROM `vs_entries` {$swhere})");
-					$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','id');
+					$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
 					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id {$swhere} order by date(journal_date) asc");
 					while($row = $journals->fetch_assoc()):
 					?>

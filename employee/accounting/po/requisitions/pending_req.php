@@ -5,7 +5,7 @@
 <?php endif;?>
 <?php
 $usertype = $_settings->userdata('user_type'); 
-$type = $_settings->userdata('id');
+$type = $_settings->userdata('user_code');
 $level = $_settings->userdata('type');
 $department = $_settings->userdata('department');
 ?>

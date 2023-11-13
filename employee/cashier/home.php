@@ -2,7 +2,7 @@
 <?php 
 $usertype = $_settings->userdata('user_type'); 
 $level = $_settings->userdata('type'); 
-$session_id = $_settings->userdata('id');
+$session_id = $_settings->userdata('user_code');
 ?>
 
 <section class="content">

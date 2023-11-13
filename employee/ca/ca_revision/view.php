@@ -160,7 +160,7 @@
 <?php 
 
 $usertype = $_settings->userdata('user_type');
-$type = $_settings->userdata('id');
+$type = $_settings->userdata('user_code');
 
 
 

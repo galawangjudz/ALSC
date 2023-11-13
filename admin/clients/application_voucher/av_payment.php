@@ -12,7 +12,7 @@ if($_settings->chk_flashdata('success')): ?>
 
 $usertype = $_settings->userdata('user_type');
 $username = $_settings->userdata('username'); 
-$type = $_settings->userdata('id');
+$type = $_settings->userdata('user_code');
 
 if (!isset($usertype)) {
     include '404.html';

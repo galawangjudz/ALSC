@@ -3795,10 +3795,10 @@ Class Master extends DBConnection {
 		}else{
 			$sql = "UPDATE `account_list` set {$data} where id = '{$id}' ";
 		}
-		$check = $this->conn->query("SELECT * FROM `account_list` where `name` ='{$name}' and delete_flag = 0 ".($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
+		$check = $this->conn->query("SELECT * FROM `account_list` where (`name` ='{$name}' or `code` ='{$code}') and delete_flag = 0 ".($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
 		if($check > 0){
 			$resp['status'] = 'failed';
-			$resp['msg'] = " Account's Name already exists.";
+			$resp['msg'] = " Account's Name/Code already exists.";
 		}else{
 			$save = $this->conn->query($sql);
 			if($save){
@@ -3908,14 +3908,11 @@ Class Master extends DBConnection {
 			}
 			$_POST['code'] = $prefix.$code;
 			$_POST['user_id'] = $this->settings->userdata('user_code');
-
 		}
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
-			if ($k === 'divChoice') {
-				continue; 
-			}
+			
 			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
 				if(!is_numeric($v) && !is_null($v))
 					$v = $this->conn->real_escape_string($v);
@@ -3938,10 +3935,10 @@ Class Master extends DBConnection {
 			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$jid}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$amount[$k]}')";
+				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 			if(!empty($data)){
-				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`amount`) VALUES {$data}";
+				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
 				$save2 = $this->conn->query($sql);
 				if($save2){
 					$resp['status'] = 'success';
@@ -4562,7 +4559,7 @@ Class Master extends DBConnection {
 				}
 			}
 			$_POST['code'] = $prefix.$code;
-			$_POST['user_id'] = $this->settings->userdata('id');
+			$_POST['user_id'] = $this->settings->userdata('user_code');
 		}
 		extract($_POST);
 		
@@ -4594,10 +4591,10 @@ Class Master extends DBConnection {
 			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$jid}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$amount[$k]}')";
+				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 			if(!empty($data)){
-				$sql = "INSERT INTO `cv_items` (`journal_id`,`account_id`,`group_id`,`amount`) VALUES {$data}";
+				$sql = "INSERT INTO `cv_items` (`journal_id`,`account_id`,`group_id`,`phase`, `block`, `lot`,`amount`) VALUES {$data}";
 				$save2 = $this->conn->query($sql);
 				if($save2){
 					$resp['status'] = 'success';

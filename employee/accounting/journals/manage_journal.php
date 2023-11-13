@@ -56,7 +56,7 @@ function format_num($number){
     .paid_to{
         padding:10px;
     }
-    #sup-div{
+    /* #sup-div{
         display:none;
     }
     #agent-div{
@@ -64,7 +64,7 @@ function format_num($number){
     }
     #emp-div{
         display:none;
-    }
+    } */
     .rdo-btn {
         display: flex;
         width: 100%;
@@ -82,9 +82,66 @@ function format_num($number){
         margin: 0;
         vertical-align: middle; 
     }
-
-
+    .hidden {
+        display: none;
+    }
+    .phase{
+        width:30%;
+    }
+    .block, .lot{
+        width:10%;
+    }
+    .loc-cont{
+        style:inline-block;
+        width:100%;
+    }
 </style>
+<head>
+    <script>
+        window.addEventListener('load', function () {
+        var empDiv = document.getElementById('emp-div');
+        var agentDiv = document.getElementById('agent-div');
+        var supDiv = document.getElementById('sup-div');
+
+        var supId = document.getElementById('supplier_id');
+        var agentId = document.getElementById('agent_id');
+        var empId = document.getElementById('emp_id');
+
+        var supCode = document.getElementById('sup_code');
+        var agentCode = document.getElementById('agent_code');
+        var empCode = document.getElementById('emp_code');
+
+        var paidToValue = <?php echo isset($paid_to) ? $paid_to : 0; ?>;
+
+        empDiv.classList.add('hidden');
+        agentDiv.classList.add('hidden');
+        supDiv.classList.add('hidden');
+
+        if (paidToValue === 1) {
+            empDiv.classList.remove('hidden');
+            agentId.value = '';
+            supId.value = '';
+
+            agentCode.value ='';
+            supCode.value='';
+        } else if (paidToValue === 2) {
+            agentDiv.classList.remove('hidden');
+            empId.value = '';
+            supId.value = '';
+
+            empCode.value ='';
+            supCode.value='';
+        } else if (paidToValue === 3) {
+            supDiv.classList.remove('hidden');
+            empId.value = '';
+            agentId.value = '';
+
+            agentCode.value ='';
+            empCode.value='';
+        }
+    });
+    </script>
+</head>
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -125,24 +182,27 @@ function format_num($number){
                             <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                         </div>
                     </div>
+
                     <div class="paid_to_main">
                         <div class="paid_to">
                             <label class="control-label">Paid To:</label>
                             <hr>
                             <div class="rdo-btn">
                                 <label>
-                                    <input type="radio" name="divChoice" value="1" id="emp-radio" <?php echo isset($paid_to)&&$paid_to == 1 ? 'checked' : ''; ?>> Employee
+                                    <input type="radio" name="paid_to" value="1" id="emp-radio" <?php echo isset($paid_to) && $paid_to == 1 ? 'checked' : ''; ?> required aria-required="true">
+                                    Employee
                                 </label>
                                 <label>
-                                    <input type="radio" name="divChoice" value="2" id="agent-radio" <?php echo isset($paid_to)&&$paid_to == 2 ? 'checked' : ''; ?>> Agent
+                                    <input type="radio" name="paid_to" value="2" id="agent-radio" <?php echo isset($paid_to) && $paid_to == 2 ? 'checked' : ''; ?> required aria-required="true">
+                                    Agent
                                 </label>
                                 <label>
-                                    <input type="radio" name="divChoice" value="3" id="sup-radio" <?php echo isset($paid_to)&&$paid_to == 3 ? 'checked' : ''; ?>> Supplier
+                                    <input type="radio" name="paid_to" value="3" id="sup-radio" <?php echo isset($paid_to) && $paid_to == 3 ? 'checked' : ''; ?> required aria-required="true">
+                                    Supplier
                                 </label>
-                            </div>
-                                
+                            </div>                        
+                            <hr>
                             <div class="container" id="sup-div">
-                                <hr>
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
@@ -171,7 +231,6 @@ function format_num($number){
                             </div>
 
                             <div class="row" id="agent-div">
-                                <hr>
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
@@ -199,7 +258,6 @@ function format_num($number){
                             </div>
 
                             <div class="row" id="emp-div">
-                                <hr>
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
@@ -288,17 +346,20 @@ function format_num($number){
                     <table id="account_list" class="table table-striped table-bordered">
                         <colgroup>
                             <col width="5%">
-                            <col width="10%">
+                            <col width="5%">
+                            <col width="5%">
                             <col width="35%">
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="20%">
+                            <col width="40%">
+                            <col width="5%">
+                            <col width="5%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center"></th>
+                                <th class="text-center">Item No.</th>
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
+                                <th class="text-center">Location</th>
                                 <th class="text-center">Group</th>
                                 <th class="text-center">Debit</th>
                                 <th class="text-center">Credit</th>
@@ -307,12 +368,16 @@ function format_num($number){
                         <tbody>
                             <?php 
                             if(isset($id)):
-                            $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$id}'");
-                            while($row = $jitems->fetch_assoc()):
+                                $counter = 1;
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$id}'");
+                                while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
                                 </td>
                                 <td class="">
                                     <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
@@ -324,23 +389,86 @@ function format_num($number){
                                 <td class="">
                                     <span class="account"><?= $row['account'] ?></span>
                                 </td>
+                                <td class="">
+                                <div class="loc-cont">
+                                <label class="control-label">Phase: </label>
+                                <select name="phase[]" id="phase[]" class="phase">
+                                <?php 
+                                    $meta = array();
+                                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                    while($row1 = $cat->fetch_assoc()):
+                                ?>
+                                    <?php
+                                        echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                    ?>
+                                    <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
+                                <?php
+                                    endwhile;
+                                ?>
+                                </select>
+                                    <label class="control-label">Block: </label>
+                                    <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
+                                    <label class="control-label">Lot: </label>
+                                    <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
+                                    <div class="lotExistsMsg" style="color: #ff0000;"></div>
+
+                                    <script>
+                                $(document).ready(function () {
+                                    $('.lot, .block, .phase').on('input', function () {
+                                        var currentRow = $(this).closest('td');
+
+                                        var enteredPhase = currentRow.find('.phase').val();
+                                        var enteredBlock = currentRow.find('.block').val();
+                                        var enteredLot = currentRow.find('.lot').val();
+
+                                        console.log("AJAX Data:", {
+                                            phase: enteredPhase,
+                                            block: enteredBlock,
+                                            lot: enteredLot
+                                        });
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: 'journals/check_loc.php',
+                                            data: JSON.stringify({
+                                                phase: enteredPhase,
+                                                block: enteredBlock,
+                                                lot: enteredLot
+                                            }),
+                                            contentType: 'application/json', 
+                                            success: function (response) {
+                                                console.log("AJAX Response:", response);
+                                                var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                                
+                                                
+                                                    lotExistsMsg.html(response);
+                                                
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
+                            </div>
+                                </td>
                                 <td class="group"><?= $row['group'] ?></td>
                                 <td class="debit_amount text-right"><?= $row['type'] == 1 ? format_num($row['amount']) : '' ?></td>
                                 <td class="credit_amount text-right"><?= $row['type'] == 2 ? format_num($row['amount']) : '' ?></td>
                             </tr>
-                            <?php endwhile; ?>
+                            <?php 
+                            $counter++;
+                            endwhile; ?>
                             <?php endif; ?>
                         </tbody>
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="3" class="text-center">Total</th>
+                                    <th colspan="6" class="text-center">Total</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
                                 <tr>
-                                    <th colspan="3" class="text-center"></th>
-                                    <th colspan="3" class="text-center total-balance">0</th>
+                                    <th colspan="6" class="text-center"></th>
+                                    <th colspan="4" class="text-center total-balance">0</th>
                                 </tr>
                             </tr>
                         </tfoot>
@@ -355,26 +483,87 @@ function format_num($number){
         </div>
     </div>
 </div>
-<noscript id="item-clone">
-<tr>
-    <td class="text-center">
-        <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-    </td>
-    <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
-    <td class="">
-        <input type="hidden" name="account_code[]" value="">
-        <input type="hidden" name="account_id[]" value="">
-        <input type="hidden" name="group_id[]" value="">
-        <input type="hidden" name="amount[]" value="">
-        <span class="account"></span>
-    </td>
-    <td class="group"></td>
-    <td class="debit_amount text-right"></td>
-    <td class="credit_amount text-right"></td>
-</tr>
-</noscript>
-<script>
 
+<noscript id="item-clone">
+    <tr>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+        </td>
+        <td class="text-center">
+            <input type="text" id="item_no" style="border:none;background-color:transparent;" value="">
+        </td>
+        <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
+        <td class="">
+            <input type="hidden" name="account_code[]" value="">
+            <input type="hidden" name="account_id[]" value="">
+            <input type="hidden" name="group_id[]" value="">
+            <input type="hidden" name="amount[]" value="">
+            <span class="account"></span>
+        </td>
+        <td class="">
+            <div class="loc-cont">
+            <label class="control-label">Phase: </label>
+            <select name="phase[]" class="phase">
+                <?php 
+                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                while ($row = $cat->fetch_assoc()):
+                    $cat_name[$row['c_code']] = $row['c_acronym'];
+                    $code = $row['c_code'];
+                ?>
+                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
+                <?php endwhile; ?>
+            </select>
+            <label class="control-label">Block: </label>
+            <input type="text" class="block" name="block[]" value="">
+            <label class="control-label">Lot: </label>
+            <input type="text" class="lot" name="lot[]" value="">
+            <div class="lotExistsMsg" style="color: #ff0000;"></div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('.lot, .block, .phase').on('input', function () {
+                        var currentRow = $(this).closest('td');
+
+                        var enteredPhase = currentRow.find('.phase').val();
+                        var enteredBlock = currentRow.find('.block').val();
+                        var enteredLot = currentRow.find('.lot').val();
+
+                        console.log("AJAX Data:", {
+                            phase: enteredPhase,
+                            block: enteredBlock,
+                            lot: enteredLot
+                        });
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'journals/check_loc.php',
+                            data: JSON.stringify({
+                                phase: enteredPhase,
+                                block: enteredBlock,
+                                lot: enteredLot
+                            }),
+                            contentType: 'application/json', 
+                            success: function (response) {
+                                console.log("AJAX Response:", response);
+                                var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                
+                                
+                                    lotExistsMsg.html(response);
+                                
+                            }
+                        });
+                    });
+                });
+            </script>
+        </td>
+
+        <td class="group"></td>
+        <td class="debit_amount text-right"></td>
+        <td class="credit_amount text-right"></td>
+    </tr>
+</noscript>
+
+<script>
     var empRadio = document.getElementById('emp-radio');
     var agentRadio = document.getElementById('agent-radio');
     var supRadio = document.getElementById('sup-radio');
@@ -388,6 +577,7 @@ function format_num($number){
             empDiv.style.display = 'block';
             agentDiv.style.display = 'none';
             supDiv.style.display = 'none';
+            clearSelections();
         }
     });
 
@@ -396,6 +586,7 @@ function format_num($number){
             empDiv.style.display = 'none';
             agentDiv.style.display = 'block';
             supDiv.style.display = 'none';
+            clearSelections();
         }
     });
 
@@ -404,34 +595,87 @@ function format_num($number){
             empDiv.style.display = 'none';
             agentDiv.style.display = 'none';
             supDiv.style.display = 'block';
+            clearSelections();
         }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var empId = document.getElementById('emp_id');
+        var agentId = document.getElementById('agent_id');
+        var supId = document.getElementById('supplier_id');
+
+        var empCode = document.getElementById('emp_code');
+        var agentCode = document.getElementById('agent_code');
+        var supCode = document.getElementById('sup_code');
+
+        function clearSelections() {
+            empId.value = '';
+            agentId.value = '';
+            supId.value = '';
+
+            empCode.value = '';
+            agentCode.value = '';
+            supCode.value = '';
+        }
+
+        empRadio.addEventListener('change', function() {
+            if (empRadio.checked) {
+                clearSelections();
+            }
+        });
+
+        agentRadio.addEventListener('change', function() {
+            if (agentRadio.checked) {
+                clearSelections();
+            }
+        });
+
+        supRadio.addEventListener('change', function() {
+            if (supRadio.checked) {
+                clearSelections();
+            }
+        });
     });
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var selectElement = document.getElementById('emp_id');
-    var inputElement = document.getElementById('emp_code');
+$(function () {
+    $('input[name="paid_to"]').change(function () {
+        $('#emp_code').removeAttr('required');
+        $('#agent_code').removeAttr('required');
+        $('#sup_code').removeAttr('required');
 
-    selectElement.addEventListener('change', function () {
-        var selectedOption = selectElement.options[selectElement.selectedIndex];
-        if (selectedOption) {
-            inputElement.value = selectedOption.getAttribute('data-emp-code'); 
+        if ($('#emp-radio').is(':checked')) {
+            $('#emp_id').attr('required', 'required');
+        }
+        if ($('#agent-radio').is(':checked')) {
+            $('#agent_id').attr('required', 'required');
+        }
+        if ($('#sup-radio').is(':checked')) {
+            $('#sup_id').attr('required', 'required');
         }
     });
 });
-document.addEventListener("DOMContentLoaded", function() {
-    var selectElement = document.getElementById('agent_id');
-    var inputElement = document.getElementById('agent_code');
 
-    selectElement.addEventListener('change', function () {
-        var selectedOption = selectElement.options[selectElement.selectedIndex];
-        if (selectedOption) {
-            inputElement.value = selectedOption.getAttribute('data-agent-code');
-        }
-    });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var selectedOption = document.getElementById('agent_id').options[document.getElementById('agent_id').selectedIndex];
+    console.log("Selected Option:", selectedOption);
+    if (selectedOption) {
+        document.getElementById('agent_code').value = selectedOption.getAttribute('data-agent-code');
+    }
 });
+document.addEventListener("DOMContentLoaded", function() {
+    var selectedOption = document.getElementById('emp_id').options[document.getElementById('emp_id').selectedIndex];
+    console.log("Selected Option:", selectedOption);
+    if (selectedOption) {
+        document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function() {
     var selectedOption = document.getElementById('supplier_id').options[document.getElementById('supplier_id').selectedIndex];
+    console.log("Selected Option:", selectedOption);
     if (selectedOption) {
         document.getElementById('sup_code').value = selectedOption.getAttribute('data-supplier-code');
     }
@@ -442,6 +686,22 @@ document.getElementById('supplier_id').addEventListener('change', function() {
         document.getElementById('sup_code').value = selectedOption.getAttribute('data-supplier-code');
     } else {
         document.getElementById('sup_code').value = '';
+    }
+});
+document.getElementById('emp_id').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    if (selectedOption) {
+        document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
+    } else {
+        document.getElementById('emp_code').value = '';
+    }
+});
+document.getElementById('agent_id').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    if (selectedOption) {
+        document.getElementById('agent_code').value = selectedOption.getAttribute('data-agent-code');
+    } else {
+        document.getElementById('agent_code').value = '';
     }
 });
 $(document).ready(function () {
@@ -499,43 +759,57 @@ $(document).ready(function () {
             cal_tb();
         }
         $('#account_list th, #account_list td').addClass('align-middle px-2 py-1');
+        var counter = 1; 
+
         $('#add_to_list').click(function () {
-            var account_id = $('#account_id').val();
-            var account_code = $('#account_code').val();
-            var group_id = $('#group_id').val();
-            var amount = $('#amount').val();
-
-            var account_data = !!account[account_id] ? account[account_id] : {};
-            var group_data = !!group[group_id] ? group[group_id] : {};
-            var tr = $($('noscript#item-clone').html()).clone();
-            tr.find('input[name="account_code[]"]').val(account_code); 
-            tr.find('input[name="account_id[]"]').val(account_id);
-            tr.find('input[name="group_id[]"]').val(group_id);
-            tr.find('input[name="amount[]"]').val(amount);
+        var account_id = $('#account_id').val();
+        var account_code = $('#account_code').val();
+        var group_id = $('#group_id').val();
+        var amount = $('#amount').val();
 
 
-            tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
-            tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
-            if (!!group_data.type && group_data.type == 1)
-                tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
-            else
-                tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+        if (account_code.trim() === '') {
+            alert('Please enter an account code.'); 
+            return; 
+        }
+        if (amount.trim() === '') {
+            alert('Please enter amount.'); 
+            return; 
+        }
 
-            $('#account_list').append(tr);
+        var tr = $($('noscript#item-clone').html()).clone();
+        var account_data = !!account[account_id] ? account[account_id] : {};
+        var group_data = !!group[group_id] ? group[group_id] : {};
 
+        tr.find('#item_no').val(counter);
+        tr.find('input[name="account_code[]"]').val(account_code);
+        tr.find('input[name="account_id[]"]').val(account_id);
+        tr.find('input[name="group_id[]"]').val(group_id);
+        tr.find('input[name="amount[]"]').val(amount);
 
-            tr.find('.delete-row').click(function () {
-                $(this).closest('tr').remove();
-                cal_tb();
-            });
+        tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
+        tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
+
+        if (!!group_data.type && group_data.type == 1)
+            tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+        else
+            tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+
+        $('#account_list').append(tr);
+
+        tr.find('.delete-row').click(function () {
+            $(this).closest('tr').remove();
             cal_tb();
-            
-            $('#account_code').val('').trigger('change');
-            $('#account_id').val('').trigger('change');
-            $('#group_id').val('').trigger('change');
-            $('#amount').val('').trigger('change');
         });
+        cal_tb();
 
+        $('#account_code').val('').trigger('change');
+        $('#account_id').val('').trigger('change');
+        $('#group_id').val('').trigger('change');
+        $('#amount').val('').trigger('change');
+
+        counter++;
+    });
 
         $('#journal-form').submit(function (e) {
             e.preventDefault();

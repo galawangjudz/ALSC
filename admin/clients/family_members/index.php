@@ -6,7 +6,7 @@
 <?php
 // Assuming you have a class/method to retrieve user data
 $username = $_settings->userdata('username'); 
-$type = $_settings->userdata('id');
+$type = $_settings->userdata('user_code');
 ?>
 <style>
 	.main_menu{
