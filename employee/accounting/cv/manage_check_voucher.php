@@ -136,7 +136,8 @@ function format_num($number){
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" disabled>
+                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" name="v_number" value="<?= isset($v_number) ? $v_number : '' ?>" readonly>
+
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="po_no">P.O. #: </label>
@@ -369,7 +370,7 @@ function format_num($number){
                             <?php 
                             if(isset($id)):
                                 $counter = 1;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$v_number}'");
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `cv_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$v_number}'");
                                 while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
@@ -380,6 +381,7 @@ function format_num($number){
                                     <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
                                 </td>
                                 <td class="">
+                                    <!-- <input type="text" name="v_number[]" value="<?= $row['journal_id'] ?>"> -->
                                     <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                     <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
@@ -476,6 +478,8 @@ function format_num($number){
                     
                     <div class="row">
                         <div class="form-group col-md-12">
+                        
+
                             <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
                         </div>
                     </div>
@@ -494,6 +498,7 @@ function format_num($number){
     </td>
     <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
     <td class="">
+        <!-- <input type="text" name="v_number[]" value=""> -->
         <input type="hidden" name="account_code[]" value="">
         <input type="hidden" name="account_id[]" value="">
         <input type="hidden" name="group_id[]" value="">
@@ -869,7 +874,7 @@ $(document).ready(function () {
             }
             start_loader();
             $.ajax({
-                url:_base_url_+"classes/Master.php?f=manage_cv",
+                url:_base_url_+"classes/Master.php?f=edit_cv",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

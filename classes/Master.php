@@ -4547,6 +4547,7 @@ Class Master extends DBConnection {
 	}
 
 	function manage_cv() {
+		
 		if(!empty($_POST['id'])){
 			$prefix = date("Ym-");
 			$code = sprintf("%'.05d",1);
@@ -4560,6 +4561,8 @@ Class Master extends DBConnection {
 			}
 			$_POST['code'] = $prefix.$code;
 			$_POST['user_id'] = $this->settings->userdata('user_code');
+			$v_num = $_POST['v_number'];
+			echo $v_num;
 		}
 		extract($_POST);
 		
@@ -4569,6 +4572,10 @@ Class Master extends DBConnection {
 			if ($k === 'divChoice') {
 				continue; 
 			}
+			// if ($k === 'c_num' && $v !== null) {
+			// 	continue;
+			// }
+
 			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
 				if(!is_numeric($v) && !is_null($v))
 					$v = $this->conn->real_escape_string($v);
@@ -4579,16 +4586,26 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		if(!empty($id)){
-			$sql = "INSERT INTO `cv_entries` set {$data} ";
-		}else{
-			$sql = "UPDATE `cv_entries` set {$data} where id = '{$id}' ";
+		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE id = '{$id}'");
+		if ($checkIdQuery->num_rows > 0) {
+			
+			$sql = "UPDATE `cv_entries` SET {$data} WHERE id = '{$id}'";
+		} else {
+			
+			$sql = "INSERT INTO `cv_entries` SET {$data}";
 		}
+
 		$save = $this->conn->query($sql);
 		if($save){
-			$jid = !empty($id) ? $id : $this->conn->insert_id;
+			if (!empty($id)) {
+				$jid = $id;
+			} else {
+				$jid = $this->conn->insert_id;
+			}
+			
 			$data = "";
-			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$jid}'");
+
+			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$v_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
 				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
@@ -4620,15 +4637,133 @@ Class Master extends DBConnection {
 					$resp['msg'] = " Voucher Setup Entry has failed to update.";
 				$resp['error'] = "Voucher Setup Entry Items is empty";
 			}
-		}else{
-			$resp['status'] = 'failed';
-			$resp['msg'] = "An error occured.";
-			$resp['err'] = $this->conn->error."[{$sql}]";
+		}else {
+	
+			error_log("CV Items Error: " . $this->conn->error . " [{$sql}]");
+		
+			echo "Database Error: " . $this->conn->error . " [{$sql}]";
+			
 		}
+		
+
 		if($resp['status'] =='success')
-			$this->settings->set_flashdata('success',$resp['msg']);
+		    $this->settings->set_flashdata('success',$resp['msg']);
 		return json_encode($resp);
+		
+		
+		
 	}
+
+	function edit_cv() {
+		
+		extract($_POST);
+		
+		if(!empty($id)){
+			$prefix = date("Ym-");
+			$code = sprintf("%'.05d",1);
+			while(true){
+				$check = $this->conn->query("SELECT * FROM `cv_entries` where `code` = '{$prefix}{$code}' ")->num_rows;
+				if($check > 0){
+					$code = sprintf("%'.05d",ceil($code) + 1);
+				} else {
+					break;
+				}
+			}
+			$_POST['code'] = $prefix.$code;
+			$_POST['user_id'] = $this->settings->userdata('user_code');
+			
+		}
+
+		$data = "";
+		
+		foreach($_POST as $k =>$v){
+			if ($k === 'divChoice') {
+				continue; 
+			}
+			// if ($k === 'v_number' && $v !== null) {
+			// 	continue;
+			// }
+
+			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
+				if(!is_numeric($v) && !is_null($v))
+					$v = $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=",";
+				if(!is_null($v))
+				$data .= " `{$k}`='{$v}' ";
+				else
+				$data .= " `{$k}`= NULL ";
+			}
+		}
+		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE id = '{$id}'");
+		if ($checkIdQuery->num_rows > 0) {
+			
+			$sql = "UPDATE `cv_entries` SET {$data} WHERE id = '{$id}'";
+		} else {
+			
+			$sql = "INSERT INTO `cv_entries` SET {$data}";
+		}
+
+		$save = $this->conn->query($sql);
+		if($save){
+			if (!empty($id)) {
+				$jid = $id;
+			} else {
+				$jid = $this->conn->insert_id;
+			}
+			
+			$data = "";
+			$v_num = $v_number; 
+			echo $v_num;
+			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$v_num}'");
+			foreach($account_id as $k=>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+			}
+
+			if(!empty($data)){
+				$sql = "INSERT INTO `cv_items` (`journal_id`,`account_id`,`group_id`,`phase`, `block`, `lot`,`amount`) VALUES {$data}";
+				$save2 = $this->conn->query($sql);
+				if($save2){
+					$resp['status'] = 'success';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has successfully added.";
+					}else
+						$resp['msg'] = " Voucher Setup has been updated successfully.";
+				}else{
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has failed to save.";
+						$this->conn->query("DELETE FROM `cv_entries` where id = '{$jid}'");
+					}else
+						$resp['msg'] = " Voucher Setup Entry has failed to update.";
+					$resp['error'] = $this->conn->error;
+				}
+			}else{
+				$resp['status'] = 'failed';
+				if(empty($id)){
+					$resp['msg'] = " Voucher Setup Entry has failed to save.";
+					$this->conn->query("DELETE FROM `cv_entries` where id = '{$jid}'");
+				}else
+					$resp['msg'] = " Voucher Setup Entry has failed to update.";
+				$resp['error'] = "Voucher Setup Entry Items is empty";
+			}
+		}else {
+	
+			error_log("CV Items Error: " . $this->conn->error . " [{$sql}]");
+		
+			echo "Database Error: " . $this->conn->error . " [{$sql}]";
+			
+		}
+		
+
+		if($resp['status'] =='success')
+		    $this->settings->set_flashdata('success',$resp['msg']);
+		return json_encode($resp);
+		
+		
+		
+	}
+
 
 	function manage_adv(){
 		extract($_POST);
@@ -4966,6 +5101,9 @@ switch ($action) {
 	break;
 	case 'manage_cv':
 		echo $Master->manage_cv();
+	break;
+	case 'edit_cv':
+		echo $Master->edit_cv();
 	break;
 	case 'update_status_po':
 		echo $Master->update_status_po();

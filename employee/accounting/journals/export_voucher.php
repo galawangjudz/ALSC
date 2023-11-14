@@ -34,7 +34,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     } else {
         $next_v_number = 1;
     }
-    $v_number = str_pad($next_v_number, 3, '0', STR_PAD_LEFT);
+    $v_number = str_pad($next_v_number, STR_PAD_LEFT);
 }
 
 $qry1 = $conn->query("SELECT MAX(id) AS max_id FROM `cv_entries`");
@@ -44,7 +44,7 @@ if ($qry1->num_rows > 0) {
 } else {
     $next_cv_number = 1;
 }
-$cv_number = str_pad($next_cv_number, 3, '0', STR_PAD_LEFT);
+$cv_number = str_pad($next_cv_number, STR_PAD_LEFT);
 ?>
 <?php
 function format_num($number){
