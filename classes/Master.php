@@ -4720,6 +4720,7 @@ Class Master extends DBConnection {
 				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 
+			
 			if(!empty($data)){
 				$sql = "INSERT INTO `cv_items` (`journal_id`,`account_id`,`group_id`,`phase`, `block`, `lot`,`amount`) VALUES {$data}";
 				$save2 = $this->conn->query($sql);
