@@ -49,7 +49,7 @@ $level = $_settings->userdata('type');
                     
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=po/purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
@@ -72,7 +72,7 @@ $level = $_settings->userdata('type');
                           Items List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
@@ -82,43 +82,19 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">File Manager</li></div></b></i>
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/apv/" class="nav-link nav-apv">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Accounts Payable Voucher
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/adv/" class="nav-link nav-adv">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Direct Voucher
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/cv/" class="nav-link nav-cv">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Check Voucher
-                        </p>
-                      </a>
-                    </li>  -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=accounts/" class="nav-link nav-vs">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                        Chart of Accounts
-                        </p>
-                      </a>
-                    </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=groups/" class="nav-link nav-vs">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                         Groups List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=accounts/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                        Chart of Accounts
                         </p>
                       </a>
                     </li> 
@@ -130,15 +106,15 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <!-- <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=subsidiary_accounts" class="nav-link">
-                        <i class="nav-icon fas fa-folder"></i>
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Accounts Payable</li></div></b></i>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=closed_po" class="nav-link nav-closed_po">
+                      <i class="nav-icon fas fa-file"></i>
                         <p>
-                          Subsidiary Accounts
+                          Closed Purchase Orders
                         </p>
                       </a>
-                    </li>  -->
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Accounts Payable</li></div></b></i>
+                    </li> 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
                         <i class="nav-icon fas fa-folder"></i>
@@ -155,52 +131,6 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Request Form
-                        </p>
-                      </a>
-                    </li>  -->
-
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po" class="nav-link nav-av">
-                      <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                          PO - Dashboard
-                        </p>
-                      </a>
-                    </li>  -->
-                    
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
-                      <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                          Purchases
-                        </p>
-                      </a>
-                    </li> 
-
-                    
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/sales_invoice/sales_invoice" class="nav-link nav-invoice">
-                      <i class="nav-icon fas fa-file-invoice"></i>
-                        <p>
-                          Sales Invoice
-                        </p>
-                      </a>
-                    </li> -->
-                   
-                    <!-- <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inquiries and Reports</li></div></b></i>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/inquiries_and_reports/supplier_transaction_inquiry" class="nav-link nav-apv">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Supplier Transaction Inquiry
-                        </p>
-                      </a>
-                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

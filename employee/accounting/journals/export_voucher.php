@@ -4,7 +4,7 @@ $account_arr = [];
 $group_arr = [];
 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `vs_entries` where id = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
         foreach($res as $k => $v){
@@ -18,33 +18,33 @@ $is_new_vn = true;
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
 
-    $qry = $conn->query("SELECT id FROM `vs_entries` WHERE id = $existing_v_id");
+    $qry = $conn->query("SELECT v_num FROM `vs_entries` WHERE v_num = $existing_v_id");
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $v_number = $row['id'];
+        $v_num = $row['v_num'];
         $is_new_vn = false;
     } else {
-        $v_number = 'Selected voucher not found';
+        $v_num = 'Selected voucher not found';
     }
 } else {
     $qry = $conn->query("SELECT MAX(id) AS max_id FROM `vs_entries`");
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $next_v_number = $row['max_id'] + 1;
+        $next_v_num = $row['max_id'] + 1;
     } else {
-        $next_v_number = 1;
+        $next_v_num = 1;
     }
-    $v_number = str_pad($next_v_number, STR_PAD_LEFT);
+    $v_num = str_pad($next_v_num, STR_PAD_LEFT);
 }
 
-$qry1 = $conn->query("SELECT MAX(id) AS max_id FROM `cv_entries`");
+$qry1 = $conn->query("SELECT MAX(c_num) AS max_id FROM `cv_entries`");
 if ($qry1->num_rows > 0) {
     $row = $qry1->fetch_assoc();
-    $next_cv_number = $row['max_id'] + 1;
+    $next_cv_num = $row['max_id'] + 1;
 } else {
-    $next_cv_number = 1;
+    $next_cv_num = 1;
 }
-$cv_number = str_pad($next_cv_number, STR_PAD_LEFT);
+$cv_num = str_pad($next_cv_num, STR_PAD_LEFT);
 ?>
 <?php
 function format_num($number){
@@ -149,6 +149,7 @@ function format_num($number){
     });
     </script>
 </head>
+<body onload="cal_tb()">
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Check Voucher Entry": "Check Voucher Entry" ?></b></i></h5>
@@ -164,11 +165,11 @@ function format_num($number){
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label for="c_num" class="control-label">Check Voucher #:</label>
-                            <input type="text" id="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($cv_number) ? $cv_number : "" ?>" readonly>
+                            <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($cv_num) ? $cv_num : "" ?>" readonly>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_number" name="v_number" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>" readonly>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="po_no">P.O. #: </label>
@@ -393,10 +394,12 @@ function format_num($number){
                             </tr>
                         </thead>
                         <tbody>
+                            
                             <?php 
-                            if(isset($id)):
+                            if (!isset($id) || $id === null) :
                                 $counter = 1;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$id}'");
+                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
                                 while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
@@ -478,8 +481,8 @@ function format_num($number){
                             </div>
                                 </td>
                                 <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? format_num($row['amount']) : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? format_num($row['amount']) : '' ?></td>
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
                             </tr>
                             <?php 
                             $counter++;
@@ -511,82 +514,84 @@ function format_num($number){
     </div>
 </div>
 <noscript id="item-clone">
-<tr id="selected-account-row">
-    <td class="text-center">
-        <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-    </td>
-    <td class="text-center">
-        <input type="text" id="item_no" style="border:none;background-color:transparent;" value="">
-    </td>
-    <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
-    <td class="">
-        <input type="hidden" name="account_code[]" value="">
-        <input type="hidden" name="account_id[]" value="">
-        <input type="hidden" name="group_id[]" value="">
-        <input type="hidden" name="amount[]" value="">
-        <span class="account"></span>
-    </td>
-    <td class="">
-        <div class="loc-cont">
-        <label class="control-label">Phase: </label>
-        <select name="phase[]" class="phase">
-            <?php 
-            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-            while ($row = $cat->fetch_assoc()):
-                $cat_name[$row['c_code']] = $row['c_acronym'];
-                $code = $row['c_code'];
-            ?>
-            <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-            <?php endwhile; ?>
-        </select>
-        <label class="control-label">Block: </label>
-        <input type="text" class="block" name="block[]" value="">
-        <label class="control-label">Lot: </label>
-        <input type="text" class="lot" name="lot[]" value="">
-        <div class="lotExistsMsg" style="color: #ff0000;"></div>
-        </div>
-        <script>
-            $(document).ready(function () {
-                $('.lot, .block, .phase').on('input', function () {
-                    var currentRow = $(this).closest('td');
+    <tr>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+        </td>
+        <td class="text-center">
+            <input type="text" id="item_no" style="border:none;background-color:transparent;" value="">
+        </td>
+        <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
+        <td class="">
+            <input type="hidden" name="account_code[]" value="">
+            <input type="hidden" name="account_id[]" value="">
+            <input type="hidden" name="group_id[]" value="">
+            <input type="hidden" name="amount[]" value="">
+            <span class="account"></span>
+        </td>
+        <td class="">
+            <div class="loc-cont">
+            <label class="control-label">Phase: </label>
+            <select name="phase[]" class="phase">
+                <?php 
+                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                while ($row = $cat->fetch_assoc()):
+                    $cat_name[$row['c_code']] = $row['c_acronym'];
+                    $code = $row['c_code'];
+                ?>
+                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
+                <?php endwhile; ?>
+            </select>
+            <label class="control-label">Block: </label>
+            <input type="text" class="block" name="block[]" value="">
+            <label class="control-label">Lot: </label>
+            <input type="text" class="lot" name="lot[]" value="">
+            <div class="lotExistsMsg" style="color: #ff0000;"></div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('.lot, .block, .phase').on('input', function () {
+                        var currentRow = $(this).closest('td');
 
-                    var enteredPhase = currentRow.find('.phase').val();
-                    var enteredBlock = currentRow.find('.block').val();
-                    var enteredLot = currentRow.find('.lot').val();
+                        var enteredPhase = currentRow.find('.phase').val();
+                        var enteredBlock = currentRow.find('.block').val();
+                        var enteredLot = currentRow.find('.lot').val();
 
-                    console.log("AJAX Data:", {
-                        phase: enteredPhase,
-                        block: enteredBlock,
-                        lot: enteredLot
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'journals/check_loc.php',
-                        data: JSON.stringify({
+                        console.log("AJAX Data:", {
                             phase: enteredPhase,
                             block: enteredBlock,
                             lot: enteredLot
-                        }),
-                        contentType: 'application/json', 
-                        success: function (response) {
-                            console.log("AJAX Response:", response);
-                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                            
-                            
-                                lotExistsMsg.html(response);
-                            
-                        }
+                        });
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'journals/check_loc.php',
+                            data: JSON.stringify({
+                                phase: enteredPhase,
+                                block: enteredBlock,
+                                lot: enteredLot
+                            }),
+                            contentType: 'application/json', 
+                            success: function (response) {
+                                console.log("AJAX Response:", response);
+                                var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                
+                                
+                                    lotExistsMsg.html(response);
+                                
+                            }
+                        });
                     });
                 });
-            });
-        </script>
-    </td>
-    <td class="group"></td>
-    <td class="debit_amount text-right"></td>
-    <td class="credit_amount text-right"></td>
-</tr>
+            </script>
+        </td>
+
+        <td class="group"></td>
+        <td class="debit_amount text-right"></td>
+        <td class="credit_amount text-right"></td>
+    </tr>
 </noscript>
+</body>
 <script>
     var empRadio = document.getElementById('emp-radio');
     var agentRadio = document.getElementById('agent-radio');
@@ -851,13 +856,13 @@ $(document).ready(function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             }
-            if ($('#account_list tfoot .total-balance').text() != '0') {
-                el.addClass('alert-danger').text(" Trial Balance is not equal.");
-                _this.prepend(el);
-                el.show('slow');
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                return false;
-            }
+            // if ($('#account_list tfoot .total-balance').text() != '0') {
+            //     el.addClass('alert-danger').text(" Trial Balance is not equal.");
+            //     _this.prepend(el);
+            //     el.show('slow');
+            //     $('html, body').animate({ scrollTop: 0 }, 'fast');
+            //     return false;
+            // }
             start_loader();
             $.ajax({
                 url:_base_url_+"classes/Master.php?f=manage_cv",

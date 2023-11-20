@@ -1,6 +1,6 @@
 
 <?php
-require_once('./../../../config.php');
+require_once('../../../../config.php');
 if (isset($_GET['id'])) {
     $gr_id = $_GET['id'];
     $qry = $conn->query("SELECT * from approved_order_items where gr_id = '{$_GET['id']}'");

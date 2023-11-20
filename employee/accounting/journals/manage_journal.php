@@ -3,9 +3,13 @@ require_once('../../config.php');
 $userid = $_settings->userdata('user_code');
 $account_arr = [];
 $group_arr = [];
+$adjustedTotalDebit=0;
+$wtTotal=0;
+$totalCredit = 0;
+$totalDebit = 0;
 $due_date = date('Y-m-d', strtotime('+1 week'));
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `vs_entries` where id = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
         foreach($res as $k => $v){
@@ -19,16 +23,16 @@ $is_new_vn = true;
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
 
-    $qry = $conn->query("SELECT id FROM `vs_entries` WHERE id = $existing_v_id");
+    $qry = $conn->query("SELECT v_num FROM `vs_entries` WHERE v_num = $existing_v_id");
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $v_number = $row['id'];
+        $v_number = $row['v_num'];
         $is_new_vn = false;
     } else {
         $v_number = 'Selected voucher not found';
     }
 } else {
-    $qry = $conn->query("SELECT MAX(id) AS max_id FROM `vs_entries`");
+    $qry = $conn->query("SELECT MAX(v_num) AS max_id FROM `vs_entries`");
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
         $next_v_number = $row['max_id'] + 1;
@@ -141,7 +145,13 @@ function format_num($number){
         }
     });
     </script>
+    <?php                                 
+    echo '<script>';
+    echo 'var totalCredit = ' . json_encode($totalCredit) . ';';
+    echo '</script>'; 
+?>
 </head>
+<body onload="cal_tb()">
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -154,7 +164,7 @@ function format_num($number){
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" disabled>
+                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="po_no">P.O. #: </label>
@@ -234,8 +244,8 @@ function format_num($number){
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
-                                            <label for="supplier_id">Agent:</label>
-                                            <select name="supplier_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                            <label for="agent_id">Agent:</label>
+                                            <select name="agent_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `t_agents` ORDER BY `c_last_name` ASC");
@@ -250,7 +260,7 @@ function format_num($number){
                                             </select>
                                         </td>
                                         <td style="width:50%; padding-left: 10px;"> 
-                                            <label for="sup_code" class="control-label">Agent Code:</label>
+                                            <label for="agent_code" class="control-label">Agent Code:</label>
                                             <input type="text" id="agent_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                         </td>
                                     </tr>
@@ -261,8 +271,8 @@ function format_num($number){
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
-                                            <label for="supplier_id">Employee:</label>
-                                            <select name="supplier_id" id="emp_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                            <label for="emp_id">Employee:</label>
+                                            <select name="emp_id" id="emp_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
@@ -277,12 +287,14 @@ function format_num($number){
                                             </select>
                                         </td>
                                         <td style="width:50%; padding-left: 10px;"> 
-                                            <label for="sup_code" class="control-label">Employee Code:</label>
+                                            <label for="emp_code" class="control-label">Employee Code:</label>
                                             <input type="text" id="emp_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
+
+                            
                         </div>
                     </div>
                     <br>
@@ -296,24 +308,43 @@ function format_num($number){
                         <div class="form-group col-md-4">
                             <label for="account_id" class="control-label">Account Name:</label>
                             <select id="account_id" class="form-control form-control-sm form-control-border select2">
-                                <option value="" disabled selected></option>
-                                <?php 
-                                $accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1;");
-                                $currentGroup = null;
-                                
-                                while($row = $accounts->fetch_assoc()):
-                                    $account_arr[$row['id']] = $row;
-                                    if ($row['group_id'] != $currentGroup) {
-                                        if ($currentGroup !== null) {
-                                            echo '</optgroup>';
-                                        }
-                                        echo '<optgroup label="' . $row['gname'] . '">';
-                                        $currentGroup = $row['group_id'];
-                                    }
-                                ?>
-                                <option value="<?= $row['id'] ?>" data-group-id="<?= $row['group_id'] ?>"><?= $row['name'] ?></option>
-                                <?php endwhile; ?>
-                            </select>
+                            <option value="" disabled selected></option>
+							<?php 
+							$accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
+							$currentGroup = null;
+							$groupedAccounts = array();
+
+							while($row = $accounts->fetch_assoc()):
+								$account_arr[$row['id']] = $row;
+
+								if ($row['gname'] != $currentGroup) {
+									
+									if ($currentGroup !== null) {
+										echo '</optgroup>';
+
+										foreach ($groupedAccounts[$currentGroup] as $account) {
+											echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
+										}
+
+										$groupedAccounts[$currentGroup] = array();
+									}
+
+									echo '<optgroup label="' . $row['gname'] . '">';
+									$currentGroup = $row['gname'];
+								}
+
+								$groupedAccounts[$currentGroup][] = $row;
+							endwhile;
+
+							if ($currentGroup !== null) {
+								echo '</optgroup>';
+
+								foreach ($groupedAccounts[$currentGroup] as $account) {
+									echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
+								}
+							}
+							?>
+						</select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="account_code" class="control-label">Account Code:</label>
@@ -344,19 +375,20 @@ function format_num($number){
                         </div>
                     </div>
                     <table id="account_list" class="table table-striped table-bordered">
-                        <colgroup>
+                    <colgroup>
                             <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="35%">
-                            <col width="40%">
-                            <col width="5%">
-                            <col width="5%">
+                            <!-- <col width="5%"> -->
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="30%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center"></th>
-                                <th class="text-center">Item No.</th>
+                                <!-- <th class="text-center">Item No.</th> -->
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
                                 <th class="text-center">Location</th>
@@ -366,19 +398,19 @@ function format_num($number){
                             </tr>
                         </thead>
                         <tbody>
+                            
                             <?php 
-                            if(isset($id)):
-                                $counter = 1;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$id}'");
+                            if (!isset($id) || $id === null) :
+                               
+                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
                                 while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
                                 </td>
-                                <td class="text-center">
-                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
-                                </td>
+                               
                                 <td class="">
                                     <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
@@ -451,18 +483,23 @@ function format_num($number){
                             </div>
                                 </td>
                                 <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? format_num($row['amount']) : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? format_num($row['amount']) : '' ?></td>
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'],2) : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'],2) : '' ?></td>
                             </tr>
                             <?php 
-                            $counter++;
+                            if ($row['type'] == 2) {
+                                $totalCredit += $row['amount'];
+                            }
+                            if ($row['type'] == 1) {
+                                $totalDebit += $row['amount'];
+                            }
                             endwhile; ?>
                             <?php endif; ?>
                         </tbody>
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="6" class="text-center">Total</th>
+                                    <th colspan="5" class="text-right">TOTAL</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
@@ -489,9 +526,7 @@ function format_num($number){
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="text-center">
-            <input type="text" id="item_no" style="border:none;background-color:transparent;" value="">
-        </td>
+
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
             <input type="hidden" name="account_code[]" value="">
@@ -562,7 +597,7 @@ function format_num($number){
         <td class="credit_amount text-right"></td>
     </tr>
 </noscript>
-
+</body>
 <script>
     var empRadio = document.getElementById('emp-radio');
     var agentRadio = document.getElementById('agent-radio');
@@ -735,12 +770,18 @@ $(document).ready(function () {
     });
 });
 </script>
-
+<script>
+$(document).on('click', '.delete-row', function () {
+    $(this).closest('tr').remove();
+    cal_tb();
+});
+</script>
 <script>
     var account = $.parseJSON('<?= json_encode($account_arr) ?>');
     var group = $.parseJSON('<?= json_encode($group_arr) ?>');
 
     function cal_tb() {
+        var totalCreditEchoed = <?= json_encode($totalCredit) ?>;
         var debit = 0;
         var credit = 0;
         $('#account_list tbody tr').each(function () {
@@ -749,6 +790,7 @@ $(document).ready(function () {
             if ($(this).find('.credit_amount').text() != "")
                 credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
         });
+        //credit -= totalCreditEchoed;
         $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
         $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
         $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
@@ -825,46 +867,52 @@ $(document).ready(function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             }
-            if ($('#account_list tfoot .total-balance').text() != '0') {
-                el.addClass('alert-danger').text(" Trial Balance is not equal.");
-                _this.prepend(el);
-                el.show('slow');
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                return false;
-            }
+            // if ($('#account_list tfoot .total-balance').text() != '0') {
+            //     el.addClass('alert-danger').text(" Trial Balance is not equal.");
+            //     _this.prepend(el);
+            //     el.show('slow');
+            //     $('html, body').animate({ scrollTop: 0 }, 'fast');
+            //     return false;
+            // }
             start_loader();
+            var urlSuffix;
+            <?php if (!empty($_GET['id'])) { ?>
+                urlSuffix = "modify_journal";
+            <?php } else{ ?>
+                urlSuffix = "save_journal";
+          <?php }?>
+            console.log('urlSuffix:', urlSuffix);
             $.ajax({
-                url:_base_url_+"classes/Master.php?f=save_journal",
-				data: new FormData($(this)[0]),
+                url: _base_url_ + "classes/Master.php?f=" + urlSuffix,
+                data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
                 processData: false,
                 method: 'POST',
                 type: 'POST',
                 dataType: 'json',
-				error:err=>{
-					console.log(err)
-					//alert_toast("An error occured",'error');
-					end_loader();
-				},
-                success:function(resp){
-                    if(resp.status == 'success'){
+                error: function (err) {
+                    console.log(err);
+                    end_loader();
+                },
+                success: function (resp) {
+                    var el = $("<div class='alert'></div>");
+                    if (resp.status == 'success') {
                         location.reload();
-              
-                    }else if(!!resp.msg){
-                        el.addClass("alert-danger")
-                        el.text(resp.msg)
-                        _this.prepend(el)
-                    }else{
-                        el.addClass("alert-danger")
-                        el.text("An error occurred due to unknown reason.")
-                        _this.prepend(el)
+                    } else if (!!resp.msg) {
+                        el.addClass("alert-danger");
+                        el.text(resp.msg);
+                        _this.prepend(el);
+                    } else {
+                        el.addClass("alert-danger");
+                        el.text("An error occurred due to an unknown reason.");
+                        _this.prepend(el);
                     }
-                    el.show('slow')
-                    $('html,body,.modal').animate({scrollTop:0},'fast')
+                    el.show('slow');
+                    $('html,body,.modal').animate({ scrollTop: 0 }, 'fast');
                     end_loader();
                 }
-            })
+            });
         })
     })
 </script>

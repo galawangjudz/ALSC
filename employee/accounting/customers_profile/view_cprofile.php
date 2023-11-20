@@ -112,7 +112,7 @@ if ($result2) {
             </td>
         </tr>
     </table>
-    <?php 
+    <!-- <?php 
         $c_qry = $conn->query("SELECT * FROM customers_profile WHERE buyer_id = '$buyer_id'");
         if($c_qry->num_rows > 0){
             $res = $c_qry->fetch_array();
@@ -155,5 +155,5 @@ if ($result2) {
                 <?php endif; ?>
             </td>
         </tr>
-    </table>
+    </table> -->
 </div>

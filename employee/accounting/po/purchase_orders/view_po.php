@@ -171,8 +171,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </div>
             </div>
         </div>
-
-
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" id="item-list">
@@ -203,22 +201,21 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             $sub_total += ($row['quantity'] * $row['unit_price']);
                         ?>
                         <tr class="po-item" data-id="">
-                                <td class="align-middle p-0 text-center">
-                                    <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" readonly/>
-                                </td>
-                                <td class="align-middle p-1">
-                                    <input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" readonly/>
-                                </td>
-                                <td class="align-middle p-1">
-                                    <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>" readonly>
-                                    <input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>"  readonly/>
-                                </td>
-                                <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
-                                <td class="align-middle p-1">
-                                    <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>" readonly/>
-                                </td>
-                                <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
-                        
+                            <td class="align-middle p-0 text-center">
+                                <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" readonly/>
+                            </td>
+                            <td class="align-middle p-1">
+                                <input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" readonly/>
+                            </td>
+                            <td class="align-middle p-1">
+                                <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>" readonly>
+                                <input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>"  readonly/>
+                            </td>
+                            <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
+                            <td class="align-middle p-1">
+                                <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>" readonly/>
+                            </td>
+                            <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
                         </tr>
                         <?php endwhile;endif; ?>
                     </tbody>
@@ -226,23 +223,23 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <tr class="bg-lightblue">
                             <tr>
                                 <th class="p-1 text-right" colspan="5">Sub Total:</th>
-                                <th class="p-1 text-right" id="sub_total"><?php echo number_format($sub_total) ?></th>
+                                <th class="p-1 text-right" id="sub_total"><?php echo number_format($sub_total,2) ?></th>
                             </tr>
                             <tr>
                             <th class="p-1 text-right" colspan="5">
                                 Discount (
                                 <input type="text" id="discount_percentage" name="discount_percentage" style="width:20px;border:none;" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>" readonly>%:)
                             </th>
-                                <th class="p-1 text-right"><input type="text" id="discount_amount" name="discount_amount" value="<?php echo isset($discount_amount) ? number_format($discount_amount) : 0 ?>" style="border:none;text-align:right;" readonly></th>
+                                <th class="p-1 text-right"><input type="text" id="discount_amount" name="discount_amount" value="<?php echo isset($discount_amount) ? number_format($discount_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
                             </tr>
                             <tr>
                                 <th class="p-1 text-right" colspan="5">
                                 Tax Inclusive (<input type="text" id="tax_percentage" name="tax_percentage" style="width:20px;border:none;" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>" readonly>%):</th>
-                                <th class="p-1 text-right"><input type="text" id="tax_amount" name="tax_amount"  value="<?php echo isset($tax_amount) ? number_format($tax_amount) : 0 ?>" style="border:none;text-align:right;" readonly></th>
+                                <th class="p-1 text-right"><input type="text" id="tax_amount" name="tax_amount"  value="<?php echo isset($tax_amount) ? number_format($tax_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
                             </tr>
                             <tr>
                                 <th class="p-1 text-right" colspan="5">TOTAL:</th>
-                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total - $discount_amount)+$tax_amount) : 0 ?></th>
+                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total - $discount_amount) + $tax_amount, 2) : 0 ?></th>
                             </tr>
                         </tr>
                     </tfoot>
@@ -255,28 +252,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </div><br>
             </div>
         </div>
-        <table class="d-none" id="item-clone">
-            <tr class="po-item" data-id="">
-                <td class="align-middle p-1 text-center">
-                    <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-                </td>
-                <td class="align-middle p-0 text-center">
-                    <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
-                </td>
-                <td class="align-middle p-1">
-                    <input type="text" class="text-center w-100 border-0" name="unit[]"/>
-                </td>
-                <td class="align-middle p-1">
-                    <input type="hidden" name="item_id[]">
-                    <input type="text" class="text-center w-100 border-0 item_id" required/>
-                </td>
-                <td class="align-middle p-1 item-description"></td>
-                <td class="align-middle p-1">
-                    <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
-                </td>
-                <td class="align-middle p-1 text-right total-price">0</td>
-            </tr>
-        </table>
     </div>
 </div>
 <script>

@@ -4,7 +4,7 @@ $account_arr = [];
 $group_arr = [];
 $due_date = date('Y-m-d', strtotime('+1 week'));
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `cv_entries` where id = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT * FROM `cv_entries` where c_num = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
         foreach($res as $k => $v){
@@ -117,6 +117,7 @@ function format_num($number){
     });
     </script>
 </head>
+<body onload="cal_tb()">
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Check Voucher Entry": "Add New Check Voucher Entry" ?></b></i></h5>
@@ -132,11 +133,11 @@ function format_num($number){
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label for="c_num" class="control-label">Check Voucher #:</label>
-                            <input type="text" id="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($id) ? $id : "" ?>" readonly>
+                            <input type="text" id="c_num" name="c_num"class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $_GET['id'] ?>" readonly>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" name="v_number" value="<?= isset($v_number) ? $v_number : '' ?>" readonly>
+                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" name="v_num" value="<?= isset($v_num) ? $v_num : '' ?>" readonly>
 
                         </div>
                         <div class="col-md-4 form-group">
@@ -345,14 +346,15 @@ function format_num($number){
                         </div>
                     </div>
                     <table id="account_list" class="table table-striped table-bordered">
-                    <colgroup>
+                        <colgroup>
                             <col width="5%">
                             <col width="5%">
-                            <col width="5%">
-                            <col width="35%">
-                            <col width="40%">
-                            <col width="5%">
-                            <col width="5%">
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="30%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
@@ -368,9 +370,10 @@ function format_num($number){
                         </thead>
                         <tbody>
                             <?php 
-                            if(isset($id)):
+                            if (!isset($id) || $id === null) :
                                 $counter = 1;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `cv_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$v_number}'");
+                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `cv_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
                                 while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
@@ -381,7 +384,7 @@ function format_num($number){
                                     <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
                                 </td>
                                 <td class="">
-                                    <!-- <input type="text" name="v_number[]" value="<?= $row['journal_id'] ?>"> -->
+                                    <!-- <input type="text" name="v_num[]" value="<?= $row['journal_id'] ?>"> -->
                                     <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                     <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
@@ -453,8 +456,8 @@ function format_num($number){
                             </div>
                                 </td>
                                 <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? format_num($row['amount']) : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? format_num($row['amount']) : '' ?></td>
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
                             </tr>
                             <?php 
                             $counter++;
@@ -498,7 +501,7 @@ function format_num($number){
     </td>
     <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
     <td class="">
-        <!-- <input type="text" name="v_number[]" value=""> -->
+        <!-- <input type="text" name="v_num[]" value=""> -->
         <input type="hidden" name="account_code[]" value="">
         <input type="hidden" name="account_id[]" value="">
         <input type="hidden" name="group_id[]" value="">
@@ -566,6 +569,7 @@ function format_num($number){
     <td class="credit_amount text-right"></td>
 </tr>
 </noscript>
+</body>
 <script>
     $(document).ready(function () {
         $(".select-apv").on("click", function () {
@@ -865,13 +869,13 @@ $(document).ready(function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             }
-            if ($('#account_list tfoot .total-balance').text() != '0') {
-                el.addClass('alert-danger').text(" Trial Balance is not equal.");
-                _this.prepend(el);
-                el.show('slow');
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                return false;
-            }
+            // if ($('#account_list tfoot .total-balance').text() != '0') {
+            //     el.addClass('alert-danger').text(" Trial Balance is not equal.");
+            //     _this.prepend(el);
+            //     el.show('slow');
+            //     $('html, body').animate({ scrollTop: 0 }, 'fast');
+            //     return false;
+            // }
             start_loader();
             $.ajax({
                 url:_base_url_+"classes/Master.php?f=edit_cv",

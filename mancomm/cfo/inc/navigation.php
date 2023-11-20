@@ -95,12 +95,30 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>mancomm/cfo/?page=cfo_purchase_orders" class="nav-link nav-cpo">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          POs List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>mancomm/cfo/?page=cfo_goods_receiving/received_items_status" class="nav-link nav-gr">
+                      <i class="nav-icon fas fa-check-square"></i>
+                        <p>
+                          Goods Receiving
+                        </p>
+                      </a>
+                    </li> 
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
               </div>
             </div>
           </div>
+          
           <div class="os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable os-scrollbar-auto-hidden">
             <div class="os-scrollbar-track">
               <div class="os-scrollbar-handle" style="width: 100%; transform: translate(0px, 0px);"></div>

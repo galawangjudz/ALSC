@@ -55,15 +55,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <input type="text" name="contact" id="contact" class="form-control rounded-0" value="<?php echo isset($contact) ? $contact :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="status" class="control-label">Vatable?</label>
-            <select name="vatable" id="vatable" class="form-control rounded-0" required>
-                <option value="12" <?php echo isset($vatable) && $vatable =="" ? "selected": "12" ?> >Yes</option>
-                <option value="0" <?php echo isset($vatable) && $vatable =="" ? "selected": "0" ?>>No</option>
-            </select>
-        </div>
-        <div class="form-group">
             <label for="mop" class="control-label">Mode of Payment:</label>
             <select name="mop" id="mop" class="form-control rounded-0" required>
+                <option value="" disabled selected>Select an option</option>
                 <option value="1" <?php echo ($mop === "1") ? "selected" : ""; ?>>Check</option>
                 <option value="0" <?php echo ($mop === "0") ? "selected" : ""; ?>>Cash on Delivery</option>
             </select>
@@ -72,7 +66,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <label for="mop" class="control-label">Payment Terms:</label>
             <!-- <input type="text" name="terms" id="terms" class="form-control rounded-0" value="<?php echo isset($terms) ? $terms :"" ?>" required> -->
             <select name="terms" id="terms" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                <option value="" disabled <?php echo !isset($terms_indicator) ? "selected" : '' ?>></option>
+                <option value="" disabled selected>Select an option</option>
                 <?php 
                 $terms_qry = $conn->query("SELECT * FROM `payment_terms` WHERE inactive = 0 ORDER BY `terms_indicator` ASC");
                 while ($row = $terms_qry->fetch_assoc()):

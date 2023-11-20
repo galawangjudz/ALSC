@@ -100,7 +100,7 @@ function format_num($number){
 				</colgroup>
 				<thead>
 					<tr>
-						<th>Voucher #</th>
+						<th>CV #</th>
 						<th>Date</th>
                         <th>P.O. #</th>
 						<th>Supplier Name</th>
@@ -118,7 +118,7 @@ function format_num($number){
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
-                        <td class=""><?= $row['v_number'] ?></td>
+                        <td class=""><?= $row['c_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
 						<td class=""><?= $row['po_no'] ?></td>
 						
@@ -132,11 +132,11 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['id'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
 						</td>
 					</tr>
@@ -155,7 +155,7 @@ function format_num($number){
 				</colgroup>
 				<thead>
 					<tr>
-						<th>Voucher #</th>
+						<th>CV #</th>
 						<th>Date</th>
                         <th>P.O. #</th>
 						<th>Agent Name</th>
@@ -173,7 +173,7 @@ function format_num($number){
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
-                        <td class=""><?= $row['v_number'] ?></td>
+                        <td class=""><?= $row['c_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
 						<td class=""><?= $row['po_no'] ?></td>
 						
@@ -187,11 +187,11 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['id'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
 						</td>
 					</tr>
@@ -210,7 +210,7 @@ function format_num($number){
 				</colgroup>
 				<thead>
 					<tr>
-						<th>Voucher #</th>
+						<th>CV #</th>
 						<th>Date</th>
                         <th>P.O. #</th>
 						<th>Employee Name</th>
@@ -228,7 +228,7 @@ function format_num($number){
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
-                        <td class=""><?= $row['v_number'] ?></td>
+                        <td class=""><?= $row['c_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
 						<td class=""><?= $row['po_no'] ?></td>
 						
@@ -242,11 +242,11 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['id'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"  data-code="<?php echo $row['code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
 						</td>
 					</tr>

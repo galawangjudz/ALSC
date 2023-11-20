@@ -33,6 +33,7 @@
                     <?php 
                         $i = 1;
                         $qry = $conn->query("SELECT * FROM t_csr_buyers i inner join t_csr_view x on i.c_csr_no = x.c_csr_no");
+                            //$qry = $conn->query("SELECT * FROM property_clients i inner join t_csr_view x on i.c_csr_no = x.c_csr_no");
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>
@@ -50,8 +51,8 @@
                                 </button>
                                 <div class="dropdown-menu" role="menu">
                                     <a class="dropdown-item view_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
-                                <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                <!-- <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a> -->
                                     <!-- <div class="dropdown-menu" role="menu">
                                     <a class="dropdown-item" href="?page=customers_profile/view_cprofile&id=<?php echo $row['c_csr_no'] ?>" data-id ="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
                                 </div> -->

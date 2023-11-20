@@ -101,7 +101,7 @@ if ($result2) {
                 }
             }
         ?>
-        
+<!--         
         <table class="table table-bordered" id="data-table">
             <tr>
                 <td style="width: 200px;"><label for="mop" class="control-label">Payment Terms:</label></td>
@@ -126,7 +126,7 @@ if ($result2) {
                 <option value="0" <?php echo isset($vatable) && $vatable == "0" ? "selected" : '' ?>>No</option>
                 </select></td>
             </tr>
-
+        </table>                    -->
     </form>
 </div>
 <script>

@@ -3896,6 +3896,165 @@ Class Master extends DBConnection {
 	
 	function save_journal(){
 		if(empty($_POST['id'])){
+			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
+			$prefix = date("Ym-");
+			$code = sprintf("%'.05d",$v_num);
+			while(true){
+				$check = $this->conn->query("SELECT * FROM `vs_entries` where `code` = '{$prefix}{$code}' ")->num_rows;
+				if($check > 0){
+					$code = sprintf("%'.05d",ceil($code) + 1);
+				}else{
+					break;
+				}
+			}
+			$_POST['code'] = $prefix.$code;
+			$_POST['user_id'] = $this->settings->userdata('user_code');
+		}
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			
+			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
+				if(!is_numeric($v) && !is_null($v))
+					$v = $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=",";
+				if(!is_null($v))
+				$data .= " `{$k}`='{$v}' ";
+				else
+				$data .= " `{$k}`= NULL ";
+			}
+		}
+		if(empty($id)){
+			$data = preg_replace('/\b(agent_id|emp_id)\b/', 'supplier_id', $data);
+			$sql = "INSERT INTO `vs_entries` set {$data} ";
+		}
+
+		$save = $this->conn->query($sql);
+		if($save){
+			$jid = !empty($id) ? $id : $this->conn->insert_id;
+			$data = "";
+			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
+			foreach($account_id as $k=>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+			}
+			if(!empty($data)){
+				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
+				$save2 = $this->conn->query($sql);
+				if($save2){
+					$resp['status'] = 'success';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has successfully added.";
+					}else
+						$resp['msg'] = " Voucher Setup has been updated successfully.";
+				}else{
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has failed to save.";
+						$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
+					}else
+						$resp['msg'] = " Voucher Setup Entry has failed to update.";
+					$resp['error'] = $this->conn->error;
+				}
+			}else{
+				$resp['status'] = 'failed';
+				if(empty($id)){
+					$resp['msg'] = " Voucher Setup Entry has failed to save.";
+					$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
+				}else
+					$resp['msg'] = " Voucher Setup Entry has failed to update.";
+				$resp['error'] = "Voucher Setup Entry Items is empty";
+			}
+		}else{
+			$resp['status'] = 'failed';
+			$resp['msg'] = $this->conn->error."[{$sql}]";
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		if($resp['status'] =='success')
+			$this->settings->set_flashdata('success',$resp['msg']);
+		return json_encode($resp);
+	}
+
+	function modify_journal(){
+		if(empty($_POST['id'])){
+			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
+			$prefix = date("Ym-");
+			$code = sprintf("%'.05d",$v_num);
+			while(true){
+				$check = $this->conn->query("SELECT * FROM `vs_entries` where `code` = '{$prefix}{$code}' ")->num_rows;
+				if($check > 0){
+					$code = sprintf("%'.05d",ceil($code) + 1);
+				}else{
+					break;
+				}
+			}
+			$_POST['code'] = $prefix.$code;
+			$_POST['user_id'] = $this->settings->userdata('user_code');
+		}
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			
+			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
+				if(!is_numeric($v) && !is_null($v))
+					$v = $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=",";
+				if(!is_null($v))
+				$data .= " `{$k}`='{$v}' ";
+				else
+				$data .= " `{$k}`= NULL ";
+			}
+		}
+		$data = preg_replace('/\b(agent_id|emp_id)\b/', 'supplier_id', $data);
+		$sql = "UPDATE `vs_entries` set {$data} where v_num = '{$v_num}' ";
+		
+		$save = $this->conn->query($sql);
+		if($save){
+			$data = "";
+			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
+			foreach($account_id as $k=>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+			}
+			if(!empty($data)){
+				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
+				$save2 = $this->conn->query($sql);
+				if($save2){
+					$resp['status'] = 'success';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has successfully added.";
+					}else
+						$resp['msg'] = " Voucher Setup has been updated successfully.";
+				}else{
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$resp['msg'] = $this->conn->error."[{$sql}]";
+						$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
+					}else
+						$resp['msg'] = " Voucher Setup Entry has failed to update.";
+					$resp['error'] = $this->conn->error;
+				}
+			}else{
+				$resp['status'] = 'failed';
+				if(empty($id)){
+					$resp['msg'] = $this->conn->error."[{$sql}]";
+					$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
+				}else
+					$resp['msg'] = " Voucher Setup Entry has failed to update.";
+				$resp['error'] = "Voucher Setup Entry Items is empty";
+			}
+		}else{
+			$resp['status'] = 'failed';
+			$resp['msg'] = $this->conn->error."[{$sql}]";
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		if($resp['status'] =='success')
+			$this->settings->set_flashdata('success',$resp['msg']);
+		return json_encode($resp);
+	}
+
+	function save_vs(){
+		if(!empty($_POST['id'])){
 			$prefix = date("Ym-");
 			$code = sprintf("%'.05d",1);
 			while(true){
@@ -3923,19 +4082,21 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		if(empty($id)){
+		$data = preg_replace('/\b(agent_id|emp_id)\b/', 'supplier_id', $data);
+		if(!empty($id)){
+
 			$sql = "INSERT INTO `vs_entries` set {$data} ";
 		}else{
 			$sql = "UPDATE `vs_entries` set {$data} where id = '{$id}' ";
 		}
 		$save = $this->conn->query($sql);
 		if($save){
-			$jid = !empty($id) ? $id : $this->conn->insert_id;
+			//$jid = !empty($id) ? $id : $this->conn->insert_id;
 			$data = "";
-			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$jid}'");
+			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 			if(!empty($data)){
 				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
@@ -3950,7 +4111,7 @@ Class Master extends DBConnection {
 					$resp['status'] = 'failed';
 					if(empty($id)){
 						$resp['msg'] = " Voucher Setup Entry has failed to save.";
-						$this->conn->query("DELETE FROM `vs_entries` where id = '{$jid}'");
+						$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
 					}else
 						$resp['msg'] = " Voucher Setup Entry has failed to update.";
 					$resp['error'] = $this->conn->error;
@@ -3959,7 +4120,7 @@ Class Master extends DBConnection {
 				$resp['status'] = 'failed';
 				if(empty($id)){
 					$resp['msg'] = " Voucher Setup Entry has failed to save.";
-					$this->conn->query("DELETE FROM `vs_entries` where id = '{$jid}'");
+					$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
 				}else
 					$resp['msg'] = " Voucher Setup Entry has failed to update.";
 				$resp['error'] = "Voucher Setup Entry Items is empty";
@@ -3975,7 +4136,7 @@ Class Master extends DBConnection {
 	}
 	function delete_vs(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `vs_entries` where id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `vs_entries` where v_num = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success'," Voucher Setup Entry has been deleted successfully.");
@@ -4018,26 +4179,53 @@ Class Master extends DBConnection {
 
 
 	///////////////////////////////PURCHASING ORDER///////////////////////////
-
-	function save_supplier(){
+	function save_supplier_setup(){
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
+			if ($k === 'ewt_type') {
+				continue; 
+			}
 			if(!in_array($k,array('id'))){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-		$check = $this->conn->query("SELECT * FROM `supplier_list` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
-		if($this->capture_err())
-			return $this->capture_err();
-		if($check > 0){
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Supplier already exist.";
-			return json_encode($resp);
-			exit;
+		
+		if(empty($id)){
+			$sql = "INSERT INTO `supplier_list` set {$data} ";
+			$save = $this->conn->query($sql);
+		}else{
+			$sql = "UPDATE `supplier_list` SET `wt` = '{$wt}', `vatable` = {$vatable} WHERE id = '{$id}'";
+			$save = $this->conn->query($sql);
 		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New supplier successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"Supplier successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	function save_supplier(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if ($k === 'ewt_type') {
+				continue; 
+			}
+			if(!in_array($k,array('id'))){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		
 		if(empty($id)){
 			$sql = "INSERT INTO `supplier_list` set {$data} ";
 			$save = $this->conn->query($sql);
@@ -4048,7 +4236,7 @@ Class Master extends DBConnection {
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($id))
-				$this->settings->set_flashdata('success',"New Supplier successfully saved.");
+				$this->settings->set_flashdata('success',"New supplier successfully saved.");
 			else
 				$this->settings->set_flashdata('success',"Supplier successfully updated.");
 		}else{
@@ -4070,6 +4258,7 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 
 	}
+
 	function save_item(){
 		extract($_POST);
 		$data = "";
@@ -4103,19 +4292,50 @@ Class Master extends DBConnection {
 			if(empty($id))
 				$this->settings->set_flashdata('success',"New item successfully saved.");
 			else
-				$this->settings->set_flashdata('success',"item successfully updated.");
+				$this->settings->set_flashdata('success',"Item successfully updated.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
 		}
 		return json_encode($resp);
 	}
+
+	function save_item_setup(){
+		extract($_POST);
+
+		error_log(print_r($_POST, true));
+	
+		if(empty($id)){
+			$resp['status'] = 'failed';
+			$resp['err'] = 'Invalid operation for inserting new records in this context.';
+		} else {
+			foreach ($account_title as $key => $value) {
+				if (isset($item_id[$key])) { 
+					$sql = "UPDATE `item_list` SET account_code = '{$value}' WHERE id = '{$item_id[$key]}'";
+					$update = $this->conn->query($sql);
+	
+					if (!$update) {
+						$resp['status'] = 'failed';
+						$resp['err'] = $this->conn->error . " [{$sql}]";
+						return json_encode($resp);
+					}
+				}
+			}
+	
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Account codes successfully updated for the items.");
+		}
+	
+		return json_encode($resp);
+	}
+	
+
 	function delete_item(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `item_list` where id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"item successfully deleted.");
+			$this->settings->set_flashdata('success',"Item successfully deleted.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
@@ -4239,9 +4459,10 @@ Class Master extends DBConnection {
 	
 	function update_status_po() {
 		extract($_POST);
-		$discount_amount = str_replace(',', '', $discount_amount,$tax_amount);
+		//$discount_amount = str_replace(',', '', $discount_amount,$tax_amount);
 		if($level == 4 and $selected_index == 1){
-			$update = $this->conn->query("UPDATE `po_list` set `tax_percentage`='{$tax_percentage}',`tax_amount`='{tax_amount}',`discount_percentage` = '{$discount_percentage}',`discount_amount` = '{$discount_amount}', `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			#$update = $this->conn->query("UPDATE `po_list` set `tax_percentage`='{$tax_percentage}',`tax_amount`='{tax_amount}',`discount_percentage` = '{$discount_percentage}',`discount_amount` = '{$discount_amount}', `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
@@ -4548,9 +4769,10 @@ Class Master extends DBConnection {
 
 	function manage_cv() {
 		
-		if(!empty($_POST['id'])){
+		if(empty($_POST['id'])){
+			$c_num = isset($_POST['c_num']) ? $_POST['c_num'] : '';
 			$prefix = date("Ym-");
-			$code = sprintf("%'.05d",1);
+			$code = sprintf("%'.05d",$c_num);
 			while(true){
 				$check = $this->conn->query("SELECT * FROM `cv_entries` where `code` = '{$prefix}{$code}' ")->num_rows;
 				if($check > 0){
@@ -4561,8 +4783,8 @@ Class Master extends DBConnection {
 			}
 			$_POST['code'] = $prefix.$code;
 			$_POST['user_id'] = $this->settings->userdata('user_code');
-			$v_num = $_POST['v_number'];
-			echo $v_num;
+			//$v_num = $_POST['v_num'];
+			#echo $c_num;
 		}
 		extract($_POST);
 		
@@ -4586,12 +4808,11 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE id = '{$id}'");
+		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE c_num = '{$id}'");
 		if ($checkIdQuery->num_rows > 0) {
 			
-			$sql = "UPDATE `cv_entries` SET {$data} WHERE id = '{$id}'";
+			$sql = "UPDATE `cv_entries` SET {$data} WHERE c_num = '{$id}'";
 		} else {
-			
 			$sql = "INSERT INTO `cv_entries` SET {$data}";
 		}
 
@@ -4605,10 +4826,10 @@ Class Master extends DBConnection {
 			
 			$data = "";
 
-			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$v_num}'");
+			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$c_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$jid}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+				$data .= "('{$c_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 			if(!empty($data)){
 				$sql = "INSERT INTO `cv_items` (`journal_id`,`account_id`,`group_id`,`phase`, `block`, `lot`,`amount`) VALUES {$data}";
@@ -4623,7 +4844,7 @@ Class Master extends DBConnection {
 					$resp['status'] = 'failed';
 					if(empty($id)){
 						$resp['msg'] = " Voucher Setup Entry has failed to save.";
-						$this->conn->query("DELETE FROM `cv_entries` where id = '{$jid}'");
+						$this->conn->query("DELETE FROM `cv_entries` where c_num = '{$c_num}'");
 					}else
 						$resp['msg'] = " Voucher Setup Entry has failed to update.";
 					$resp['error'] = $this->conn->error;
@@ -4632,7 +4853,7 @@ Class Master extends DBConnection {
 				$resp['status'] = 'failed';
 				if(empty($id)){
 					$resp['msg'] = " Voucher Setup Entry has failed to save.";
-					$this->conn->query("DELETE FROM `cv_entries` where id = '{$jid}'");
+					$this->conn->query("DELETE FROM `cv_entries` where c_num = '{$c_num}'");
 				}else
 					$resp['msg'] = " Voucher Setup Entry has failed to update.";
 				$resp['error'] = "Voucher Setup Entry Items is empty";
@@ -4655,12 +4876,10 @@ Class Master extends DBConnection {
 	}
 
 	function edit_cv() {
-		
-		extract($_POST);
-		
 		if(!empty($id)){
+			$c_num = isset($_POST['c_num']) ? $_POST['c_num'] : '';
 			$prefix = date("Ym-");
-			$code = sprintf("%'.05d",1);
+			$code = sprintf("%'.05d",$c_num);
 			while(true){
 				$check = $this->conn->query("SELECT * FROM `cv_entries` where `code` = '{$prefix}{$code}' ")->num_rows;
 				if($check > 0){
@@ -4673,7 +4892,7 @@ Class Master extends DBConnection {
 			$_POST['user_id'] = $this->settings->userdata('user_code');
 			
 		}
-
+		extract($_POST);
 		$data = "";
 		
 		foreach($_POST as $k =>$v){
@@ -4694,30 +4913,18 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE id = '{$id}'");
-		if ($checkIdQuery->num_rows > 0) {
-			
-			$sql = "UPDATE `cv_entries` SET {$data} WHERE id = '{$id}'";
-		} else {
-			
-			$sql = "INSERT INTO `cv_entries` SET {$data}";
-		}
-
+		
+		$sql = "UPDATE `cv_entries` SET {$data} WHERE c_num = '{$c_num}'";
+		
 		$save = $this->conn->query($sql);
 		if($save){
-			if (!empty($id)) {
-				$jid = $id;
-			} else {
-				$jid = $this->conn->insert_id;
-			}
-			
 			$data = "";
-			$v_num = $v_number; 
-			echo $v_num;
-			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$v_num}'");
+			//$v_num = $v_number; 
+			#echo $v_num;
+			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$c_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+				$data .= "('{$c_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 
 			
@@ -4734,7 +4941,7 @@ Class Master extends DBConnection {
 					$resp['status'] = 'failed';
 					if(empty($id)){
 						$resp['msg'] = " Voucher Setup Entry has failed to save.";
-						$this->conn->query("DELETE FROM `cv_entries` where id = '{$jid}'");
+						$this->conn->query("DELETE FROM `cv_entries` where c_num = '{$c_num}'");
 					}else
 						$resp['msg'] = " Voucher Setup Entry has failed to update.";
 					$resp['error'] = $this->conn->error;
@@ -4743,7 +4950,7 @@ Class Master extends DBConnection {
 				$resp['status'] = 'failed';
 				if(empty($id)){
 					$resp['msg'] = " Voucher Setup Entry has failed to save.";
-					$this->conn->query("DELETE FROM `cv_entries` where id = '{$jid}'");
+					$this->conn->query("DELETE FROM `cv_entries` where c_num = '{$c_num}'");
 				}else
 					$resp['msg'] = " Voucher Setup Entry has failed to update.";
 				$resp['error'] = "Voucher Setup Entry Items is empty";
@@ -5021,6 +5228,12 @@ switch ($action) {
 	case 'save_journal':
 		echo $Master->save_journal();
 	break;
+	case 'modify_journal':
+		echo $Master->modify_journal();
+	break;
+	case 'save_vs':
+		echo $Master->save_vs();
+	break;
 	case 'delete_vs':
 		echo $Master->delete_vs();
 	break;
@@ -5075,6 +5288,12 @@ switch ($action) {
 	break;
 	case 'save_supplier':
 		echo $Master->save_supplier();
+	break;
+	case 'save_supplier_setup':
+		echo $Master->save_supplier_setup();
+	break;
+	case 'save_item_setup':
+		echo $Master->save_item_setup();
 	break;
 	case 'delete_supplier':
 		echo $Master->delete_supplier();
