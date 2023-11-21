@@ -2,7 +2,8 @@
 require_once('../../../config.php');
 if(isset($_GET['id'])){
     //$qry = $conn->query("SELECT i.*,x.c_active FROM t_csr_buyers i inner join t_csr_view x on i.c_csr_no = x.c_csr_no inner join customers_profile c on i.buyer_id = c.buyer_id WHERE i.c_csr_no = '{$_GET['id']}'");
-    $qry = $conn->query("SELECT i.*,x.* FROM t_csr_buyers i inner join t_csr_view x on i.c_csr_no = x.c_csr_no WHERE i.c_csr_no = '{$_GET['id']}'");
+    //$qry = $conn->query("SELECT i.*,x.* FROM t_csr_buyers i inner join t_csr_view x on i.c_csr_no = x.c_csr_no WHERE i.c_csr_no = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT i.*,x.* FROM property_clients i inner join family_members x on i.client_id = x.client_id WHERE i.client_id = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
         foreach($res as $k => $v){
@@ -10,10 +11,11 @@ if(isset($_GET['id'])){
             $$k = $v;
         }
     }
+    echo $_GET['id'];
 }
 ?>
 <?php
-$query2 = "SELECT * FROM t_csr_buyers WHERE c_csr_no = '{$_GET['id']}'";
+$query2 = "SELECT i.*,x.* FROM property_clients i inner join family_members x on i.client_id = x.client_id WHERE i.client_id = '{$_GET['id']}'";
 $result2 = mysqli_query($conn, $query2);
 
 if ($result2) {

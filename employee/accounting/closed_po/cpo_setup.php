@@ -421,8 +421,8 @@ function format_num($number){
                                     while ($row = $supplier_qry->fetch_assoc()) {
                                         $vatable = $row['vatable'];
                                         $wt = $row['wt'];
-                                        echo 'vat' . $vatable;
-                                        echo 'wt' . $wt;
+                                        // echo 'vat' . $vatable;
+                                        // echo 'wt' . $wt;
                                     }
                                 } else {
                                     echo "No results found.";
@@ -438,7 +438,7 @@ function format_num($number){
                                     ?>
                                     <?php 
                                         $adjustedTotalDebit = ($totalDebit / 1.12) * 0.12;
-                                        $formattedTotalDebit = number_format($adjustedTotalDebit,2);
+                                        $formattedTotalDebit = $adjustedTotalDebit;
                                     ?>
                                     <!-- <td class="text-center">
                                         <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
@@ -525,7 +525,7 @@ function format_num($number){
                                     ?>
                                     <?php 
                                         $adjustedTotalDebit = $totalDebit * 0.12;
-                                        $formattedTotalDebit = number_format($adjustedTotalDebit,2);
+                                        $formattedTotalDebit = $adjustedTotalDebit;
                                     ?>
                                     <!-- <td class="text-center">
                                         <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
@@ -1020,9 +1020,10 @@ $(document).ready(function () {
 
         credit -= totalCreditEchoed;
 
-        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+
     }
 
     $(function () {

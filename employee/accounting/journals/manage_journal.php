@@ -106,42 +106,61 @@ function format_num($number){
         var empDiv = document.getElementById('emp-div');
         var agentDiv = document.getElementById('agent-div');
         var supDiv = document.getElementById('sup-div');
+        var clientDiv = document.getElementById('client-div');
 
         var supId = document.getElementById('supplier_id');
         var agentId = document.getElementById('agent_id');
         var empId = document.getElementById('emp_id');
+        var clientId = document.getElementById('client_id');
 
         var supCode = document.getElementById('sup_code');
         var agentCode = document.getElementById('agent_code');
         var empCode = document.getElementById('emp_code');
+        var clientCode = document.getElementById('client_code');
 
         var paidToValue = <?php echo isset($paid_to) ? $paid_to : 0; ?>;
 
         empDiv.classList.add('hidden');
         agentDiv.classList.add('hidden');
         supDiv.classList.add('hidden');
+        clientDiv.classList.add('hidden');
 
         if (paidToValue === 1) {
             empDiv.classList.remove('hidden');
             agentId.value = '';
             supId.value = '';
+            clientId.value = '';
 
             agentCode.value ='';
             supCode.value='';
+            clientCode.value='';
         } else if (paidToValue === 2) {
             agentDiv.classList.remove('hidden');
             empId.value = '';
             supId.value = '';
+            clientId.value = '';
 
             empCode.value ='';
             supCode.value='';
+            clientCode.value='';
         } else if (paidToValue === 3) {
             supDiv.classList.remove('hidden');
             empId.value = '';
             agentId.value = '';
+            clientId.value = '';
 
             agentCode.value ='';
             empCode.value='';
+            clientCode.value='';
+        }else if (paidToValue === 4) {
+            clientDiv.classList.remove('hidden');
+            empId.value = '';
+            agentId.value = '';
+            supId.value = '';
+
+            agentCode.value ='';
+            empCode.value='';
+            supCode.value='';
         }
     });
     </script>
@@ -210,6 +229,10 @@ function format_num($number){
                                     <input type="radio" name="paid_to" value="3" id="sup-radio" <?php echo isset($paid_to) && $paid_to == 3 ? 'checked' : ''; ?> required aria-required="true">
                                     Supplier
                                 </label>
+                                <!-- <label>
+                                    <input type="radio" name="paid_to" value="4" id="client-radio" <?php echo isset($paid_to) && $paid_to == 4 ? 'checked' : ''; ?> required aria-required="true">
+                                    Client
+                                </label> -->
                             </div>                        
                             <hr>
                             <div class="container" id="sup-div">
@@ -294,7 +317,32 @@ function format_num($number){
                                 </table>
                             </div>
 
-                            
+                            <!-- <div class="row" id="client-div">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td style="width:50%; padding-right: 10px;">
+                                            <label for="client_id">Client:</label>
+                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+                                                <?php 
+                                                $supplier_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                                while ($row = $supplier_qry->fetch_assoc()):
+                                                ?>
+                                                <option 
+                                                    value="<?php echo $row['user_id'] ?>" 
+                                                    data-client-code="<?php echo $row['user_code'] ?>"
+                                                    <?php echo isset($supplier_id) && $supplier_id == $row['user_id'] ? 'selected' : '' ?>
+                                                ><?php echo $row['lastname'] ?>, <?php echo $row['firstname'] ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </td>
+                                        <td style="width:50%; padding-left: 10px;"> 
+                                            <label for="client_code" class="control-label">Client ID:</label>
+                                            <input type="text" id="client_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div> -->
                         </div>
                     </div>
                     <br>
@@ -483,8 +531,8 @@ function format_num($number){
                             </div>
                                 </td>
                                 <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'],2) : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'],2) : '' ?></td>
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
                             </tr>
                             <?php 
                             if ($row['type'] == 2) {
@@ -602,16 +650,19 @@ function format_num($number){
     var empRadio = document.getElementById('emp-radio');
     var agentRadio = document.getElementById('agent-radio');
     var supRadio = document.getElementById('sup-radio');
+    var clientRadio = document.getElementById('client-radio');
 
     var empDiv = document.getElementById('emp-div');
     var agentDiv = document.getElementById('agent-div');
     var supDiv = document.getElementById('sup-div');
+    var clientDiv = document.getElementById('client-div');
 
     empRadio.addEventListener('change', function () {
         if (empRadio.checked) {
             empDiv.style.display = 'block';
             agentDiv.style.display = 'none';
             supDiv.style.display = 'none';
+            clientDiv.style.display = 'none';
             clearSelections();
         }
     });
@@ -621,6 +672,7 @@ function format_num($number){
             empDiv.style.display = 'none';
             agentDiv.style.display = 'block';
             supDiv.style.display = 'none';
+            clientDiv.style.display = 'none';
             clearSelections();
         }
     });
@@ -630,6 +682,17 @@ function format_num($number){
             empDiv.style.display = 'none';
             agentDiv.style.display = 'none';
             supDiv.style.display = 'block';
+            clientDiv.style.display = 'none';
+            clearSelections();
+        }
+    });
+
+    clientRadio.addEventListener('change', function () {
+        if (clientRadio.checked) {
+            empDiv.style.display = 'none';
+            agentDiv.style.display = 'none';
+            supDiv.style.display = 'none';
+            clientDiv.style.display = 'block';
             clearSelections();
         }
     });
@@ -638,19 +701,23 @@ function format_num($number){
         var empId = document.getElementById('emp_id');
         var agentId = document.getElementById('agent_id');
         var supId = document.getElementById('supplier_id');
+        var clientId = document.getElementById('client_id');
 
         var empCode = document.getElementById('emp_code');
         var agentCode = document.getElementById('agent_code');
         var supCode = document.getElementById('sup_code');
+        var clientCode = document.getElementById('client_code');
 
         function clearSelections() {
             empId.value = '';
             agentId.value = '';
             supId.value = '';
+            clientId.value = '';
 
             empCode.value = '';
             agentCode.value = '';
             supCode.value = '';
+            clientCode.value = '';
         }
 
         empRadio.addEventListener('change', function() {
@@ -670,6 +737,12 @@ function format_num($number){
                 clearSelections();
             }
         });
+
+        clientRadio.addEventListener('change', function() {
+            if (clientRadio.checked) {
+                clearSelections();
+            }
+        });
     });
 </script>
 <script>
@@ -678,6 +751,7 @@ $(function () {
         $('#emp_code').removeAttr('required');
         $('#agent_code').removeAttr('required');
         $('#sup_code').removeAttr('required');
+        $('#client_code').removeAttr('required');
 
         if ($('#emp-radio').is(':checked')) {
             $('#emp_id').attr('required', 'required');
@@ -687,6 +761,9 @@ $(function () {
         }
         if ($('#sup-radio').is(':checked')) {
             $('#sup_id').attr('required', 'required');
+        }
+        if ($('#client-radio').is(':checked')) {
+            $('#client_id').attr('required', 'required');
         }
     });
 });
@@ -707,7 +784,6 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
     }
 });
-
 document.addEventListener("DOMContentLoaded", function() {
     var selectedOption = document.getElementById('supplier_id').options[document.getElementById('supplier_id').selectedIndex];
     console.log("Selected Option:", selectedOption);
@@ -715,6 +791,14 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('sup_code').value = selectedOption.getAttribute('data-supplier-code');
     }
 });
+document.addEventListener("DOMContentLoaded", function() {
+    var selectedOption = document.getElementById('client_id').options[document.getElementById('client_id').selectedIndex];
+    console.log("Selected Option:", selectedOption);
+    if (selectedOption) {
+        document.getElementById('client_code').value = selectedOption.getAttribute('data-client-code');
+    }
+});
+
 document.getElementById('supplier_id').addEventListener('change', function() {
     var selectedOption = this.options[this.selectedIndex];
     if (selectedOption) {
@@ -739,6 +823,15 @@ document.getElementById('agent_id').addEventListener('change', function() {
         document.getElementById('agent_code').value = '';
     }
 });
+document.getElementById('client_id').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    if (selectedOption) {
+        document.getElementById('client_code').value = selectedOption.getAttribute('data-client-code');
+    } else {
+        document.getElementById('client_code').value = '';
+    }
+});
+
 $(document).ready(function () {
     $("#account_id").on("change", function () {
         var selectedAccountId = $(this).val();
@@ -791,9 +884,10 @@ $(document).on('click', '.delete-row', function () {
                 credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
         });
         //credit -= totalCreditEchoed;
-        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+
     }
 
     $(function () {

@@ -20,7 +20,7 @@
                     <thead>
                         <tr>
                         <th>Buyer ID</th>
-                        <th>Location</th>
+                        <!-- <th>Location</th> -->
                         <th>Name</th>
                         
                         <th>Address</th>
@@ -32,14 +32,15 @@
                     <tbody>
                     <?php 
                         $i = 1;
-                        $qry = $conn->query("SELECT * FROM t_csr_buyers i inner join t_csr_view x on i.c_csr_no = x.c_csr_no");
-                            //$qry = $conn->query("SELECT * FROM property_clients i inner join t_csr_view x on i.c_csr_no = x.c_csr_no");
+                        //$qry = $conn->query("SELECT * FROM t_csr_buyers i inner join t_csr_view x on i.c_csr_no = x.c_csr_no");
+                            $qry = $conn->query("SELECT * FROM property_clients");
                             while($row = $qry->fetch_assoc()):
                                 
                         ?>
                         <tr>
-                            <td class="text-center"><?php echo $row["buyer_id"] ?></td>
-                            <td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td>
+                            <td class="text-center"><?php echo $row["property_id"] ?></td>
+                            <!-- <td></td> -->
+                            <!-- <td class="text-center"><?php echo $row["c_acronym"]. ' Block ' .$row["c_block"] . ' Lot '.$row["c_lot"] ?></td> -->
                             <td><?php echo $row["last_name"]. ', '  .$row["first_name"] .' ' .$row["middle_name"]?></td>
                             <td><?php echo $row["address"]. ', '  .$row["zip_code"]?></td>
                             <td><?php echo $row["contact_no"]?></td>
@@ -50,7 +51,7 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+                                    <!-- <a class="dropdown-item view_data" href="javascript:void(0)" data-id ="<?php echo $row['client_id'] ?>"><span class="fa fa-eye text-dark"></span> View</a> -->
                                 <!-- <div class="dropdown-divider"></div>
                                     <a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_csr_no'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a> -->
                                     <!-- <div class="dropdown-menu" role="menu">
