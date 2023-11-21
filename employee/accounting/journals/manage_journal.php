@@ -229,10 +229,10 @@ function format_num($number){
                                     <input type="radio" name="paid_to" value="3" id="sup-radio" <?php echo isset($paid_to) && $paid_to == 3 ? 'checked' : ''; ?> required aria-required="true">
                                     Supplier
                                 </label>
-                                <!-- <label>
+                                <label>
                                     <input type="radio" name="paid_to" value="4" id="client-radio" <?php echo isset($paid_to) && $paid_to == 4 ? 'checked' : ''; ?> required aria-required="true">
                                     Client
-                                </label> -->
+                                </label>
                             </div>                        
                             <hr>
                             <div class="container" id="sup-div">
@@ -317,7 +317,7 @@ function format_num($number){
                                 </table>
                             </div>
 
-                            <!-- <div class="row" id="client-div">
+                            <div class="row" id="client-div">
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
@@ -342,7 +342,7 @@ function format_num($number){
                                         </td>
                                     </tr>
                                 </table>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <br>
