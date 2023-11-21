@@ -1122,7 +1122,6 @@ $(document).ready(function () {
                 success:function(resp){
                     if(resp.status == 'success'){
                         location.replace('./?page=closed_po')
-              
                     }else if(!!resp.msg){
                         el.addClass("alert-danger")
                         el.text(resp.msg)

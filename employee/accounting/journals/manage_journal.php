@@ -992,7 +992,8 @@ $(document).on('click', '.delete-row', function () {
                 success: function (resp) {
                     var el = $("<div class='alert'></div>");
                     if (resp.status == 'success') {
-                        location.reload();
+                        // location.reload();
+                        location.replace('./?page=journals')
                     } else if (!!resp.msg) {
                         el.addClass("alert-danger");
                         el.text(resp.msg);

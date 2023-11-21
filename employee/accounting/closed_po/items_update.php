@@ -137,7 +137,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             },
             success: function(resp){
                 if(typeof resp =='object' && resp.status == 'success'){
-                    location.reload();
+                    // location.reload();
+                    location.replace('./?page=closed_po')
                 } else if(resp.status == 'failed' && !!resp.msg){
                     var el = $('<div>')
                     el.addClass("alert alert-danger err-msg").text(resp.msg)

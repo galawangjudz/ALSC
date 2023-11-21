@@ -98,14 +98,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=customers_profile/" class="nav-link nav-vs">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                         Customers' Profile
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Accounts Payable</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=closed_po" class="nav-link nav-closed_po">
