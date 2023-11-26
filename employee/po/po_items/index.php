@@ -75,9 +75,9 @@
 						<td><?php echo $row['date_created'] ?></td>
 						<td class="text-center">
 							<?php if($row['status'] == 1): ?>
-								<span class="badge badge-success">Active</span>
+								<span class="badge rounded-pill badge-primary"><i class="fa fa-check fa-xs" aria-hidden="true"></i></span>
 							<?php else: ?>
-								<span class="badge badge-secondary">Inactive</span>
+								<span class="badge rounded-pill badge-secondary"><i class="fa fa-times fa-xs" aria-hidden="true"></i></span>
 							<?php endif; ?>
 						</td>
 						<td align="center">

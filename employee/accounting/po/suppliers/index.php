@@ -3,37 +3,23 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-<style>
-	.nav-suppliers{
-		background-color:#007bff;
-		color:white!important;
-		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    }
-    .nav-suppliers:hover{
-        background-color:#007bff!important;
-        color:white!important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
-    }
-</style>
+<link rel="stylesheet" href="css/supplier.css">
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>List of Suppliers</b></i></h3>
-		<div class="card-tools">
-			<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
-		<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 				<colgroup>
-					<col width="5%">
+					<col width="8%">
 					<col width="10%">
 					<col width="20%">
 					<col width="20%">
 					<col width="20%">
-					<col width="10%">
-					<col width="10%">
+					<!-- <col width="6%"> -->
+					<col width="6%">
 					<col width="10%">
 				</colgroup>
 				<thead>
@@ -43,7 +29,7 @@
 						<th>Supplier</th>
 						<th>Contact Person</th>
 						<th>Address</th>
-						<th>Vatable?</th>
+						<!-- <th>Vatable</th> -->
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -57,7 +43,7 @@
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
-							<td><?php echo $row['name'] ?></td>
+							<td><?php echo $row['short_name'] ?></td>
 							<td>
 								<p class="m-0">
 									<?php echo $row['contact_person'] ?><br>
@@ -65,13 +51,13 @@
 								</p>
 							</td>
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
-							<td>
+							<!-- <td>
 								<?php if($row['vatable'] == 0): ?>
 									<span class="badge badge-secondary">No</span>
 								<?php else: ?>
 									<span class="badge badge-primary">Yes</span>
 								<?php endif; ?>
-							</td>
+							</td> -->
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>
@@ -87,9 +73,7 @@
 				                  <div class="dropdown-menu" role="menu">
 				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-info text-primary"></span>&nbsp;&nbsp;View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Edit</a>
-				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span>&nbsp;&nbsp;Delete</a>
+				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Update</a>
 				                  </div>
 							</td>
 						</tr>
@@ -102,20 +86,16 @@
 </div>
 <script>
 	$(document).ready(function(){
-		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this Supplier permanently?","delete_supplier",[$(this).attr('data-id')])
-		})
-		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Register New Supplier","po/suppliers/manage_supplier.php")
-		})
 		$('.view_data').click(function(){
 			uni_modal("<i class='fa fa-info-circle'></i> Supplier's Details","po/suppliers/view_details.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.edit_data').click(function(){
 			uni_modal("<i class='fa fa-edit'></i> Edit Supplier's Details","po/suppliers/manage_supplier.php?id="+$(this).attr('data-id'))
 		})
+		$('.modal-title').css('font-size', '18px');
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')
 		$('.table').dataTable();
+
 	})
 	function delete_supplier($id){
 		start_loader();

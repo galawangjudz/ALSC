@@ -1,5 +1,5 @@
 <?php
-require_once('../../../../config.php');
+require_once('./../../../config.php');
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['supplier_id'])) {
     $supplierId = $_GET['supplier_id'];
     $query = $conn->query("SELECT COUNT(item_code) AS count_item_code FROM item_list WHERE supplier_id = '$supplierId'");

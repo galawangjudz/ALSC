@@ -30,7 +30,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     } else {
         $next_po_number = 1;
     }
-    $po_number = str_pad($next_po_number, 3, '0', STR_PAD_LEFT);
+    $po_number = str_pad($next_po_number, '0', STR_PAD_LEFT);
 }
 ?>
 <script src="js/po_scripts.js"></script>

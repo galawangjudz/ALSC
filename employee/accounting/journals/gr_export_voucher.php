@@ -1,13 +1,8 @@
 <?php 
 require_once('../../config.php');
-$userid = $_settings->userdata('user_code');
 $account_arr = [];
 $group_arr = [];
-$adjustedTotalDebit=0;
-$wtTotal=0;
-$totalCredit = 0;
-$totalDebit = 0;
-$due_date = date('Y-m-d', strtotime('+1 week'));
+
 if(isset($_GET['id'])){
     $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
     if($qry->num_rows > 0){
@@ -26,23 +21,31 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     $qry = $conn->query("SELECT v_num FROM `vs_entries` WHERE v_num = $existing_v_id");
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $v_number = $row['v_num'];
+        $v_num = $row['v_num'];
         $is_new_vn = false;
     } else {
-        $v_number = 'Selected voucher not found';
+        $v_num = 'Selected voucher not found';
     }
 } else {
     $qry = $conn->query("SELECT MAX(v_num) AS max_id FROM `vs_entries`");
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $next_v_number = $row['max_id'] + 1;
+        $next_v_num = $row['max_id'] + 1;
     } else {
-        $next_v_number = 1;
+        $next_v_num = 1;
     }
-    $v_number = str_pad($next_v_number, STR_PAD_LEFT);
+    $v_num = str_pad($next_v_num, STR_PAD_LEFT);
 }
-?>
 
+$qry1 = $conn->query("SELECT MAX(c_num) AS max_id FROM `cv_entries`");
+if ($qry1->num_rows > 0) {
+    $row = $qry1->fetch_assoc();
+    $next_cv_num = $row['max_id'] + 1;
+} else {
+    $next_cv_num = 1;
+}
+$cv_num = str_pad($next_cv_num, STR_PAD_LEFT);
+?>
 <?php
 function format_num($number){
 	$decimals = 0;
@@ -52,9 +55,6 @@ function format_num($number){
 }
 ?>
 <style>
-    table{
-        font-size:14px;
-    }
     .paid_to_main{
         border:solid 1px gainsboro;
         padding:10px;
@@ -102,16 +102,6 @@ function format_num($number){
         style:inline-block;
         width:100%;
     }
-    .custom-modal-width {
-        max-width: 60%; 
-    }
-    .custom-modal-width .modal-header .close {
-        display: none;
-    }
-    #uni_modal .modal-footer{
-        display: none;
-    }
-
 </style>
 <head>
     <script>
@@ -119,137 +109,114 @@ function format_num($number){
         var empDiv = document.getElementById('emp-div');
         var agentDiv = document.getElementById('agent-div');
         var supDiv = document.getElementById('sup-div');
-        var clientDiv = document.getElementById('client-div');
 
         var supId = document.getElementById('supplier_id');
         var agentId = document.getElementById('agent_id');
         var empId = document.getElementById('emp_id');
-        var clientId = document.getElementById('client_id');
 
         var supCode = document.getElementById('sup_code');
         var agentCode = document.getElementById('agent_code');
         var empCode = document.getElementById('emp_code');
-        var clientCode = document.getElementById('client_code');
 
         var paidToValue = <?php echo isset($paid_to) ? $paid_to : 0; ?>;
 
         empDiv.classList.add('hidden');
         agentDiv.classList.add('hidden');
         supDiv.classList.add('hidden');
-        clientDiv.classList.add('hidden');
 
         if (paidToValue === 1) {
             empDiv.classList.remove('hidden');
             agentId.value = '';
             supId.value = '';
-            clientId.value = '';
 
             agentCode.value ='';
             supCode.value='';
-            clientCode.value='';
         } else if (paidToValue === 2) {
             agentDiv.classList.remove('hidden');
             empId.value = '';
             supId.value = '';
-            clientId.value = '';
 
             empCode.value ='';
             supCode.value='';
-            clientCode.value='';
         } else if (paidToValue === 3) {
             supDiv.classList.remove('hidden');
             empId.value = '';
             agentId.value = '';
-            clientId.value = '';
 
             agentCode.value ='';
             empCode.value='';
-            clientCode.value='';
-        }else if (paidToValue === 4) {
-            clientDiv.classList.remove('hidden');
-            empId.value = '';
-            agentId.value = '';
-            supId.value = '';
-
-            agentCode.value ='';
-            empCode.value='';
-            supCode.value='';
         }
     });
     </script>
-    <?php                                 
-    echo '<script>';
-    echo 'var totalCredit = ' . json_encode($totalCredit) . ';';
-    echo '</script>'; 
-?>
 </head>
-
 <body onload="cal_tb()">
 <div class="card card-outline card-primary">
-    <div class="card-header">
-		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
+	<div class="card-header">
+		<h5 class="card-title"><b><i><?php echo isset($id) ? "Check Voucher Entry": "Check Voucher Entry" ?></b></i></h5>
 	</div>
+    <!-- <button type="button" id="btnfindAPV" class="btn btn-primary" data-toggle="modal" data-target="#apvModal">
+        <i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Search for Voucher Setup Entries
+    </button> -->
     <div class="card-body">
         <div class="container-fluid">
             <div class="container-fluid">
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+                        <div class="col-md-4 form-group">
+                            <label for="c_num" class="control-label">Check Voucher #:</label>
+                            <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($cv_num) ? $cv_num : "" ?>" readonly>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
+                            <label for="v_num" class="control-label">Voucher Setup #:</label>
+                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
                             <label for="po_no">P.O. #: </label>
-                            <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                                <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
-                                <?php 
-                                $po_qry = $conn->query("SELECT * FROM `po_list` WHERE status = 1 ORDER BY `po_no` ASC");
-                                while ($row = $po_qry->fetch_assoc()):
-                                ?>
-                                <option 
-                                    value="<?php echo $row['id'] ?>" 
-                                    <?php echo isset($po_no) && $po_no == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
-                                ><?php echo $row['po_no'] ?></option>
-                                <?php endwhile; ?>
-                            </select>
+                            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="journal_date" class="control-label">Date:</label>
-                            <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
+                            <label for="cv_date" class="control-label">Date:</label>
+                            <input type="date" id="cv_date" name="cv_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($cv_date) ? $cv_date : date("Y-m-d") ?>" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Due Date:</label>
-                            <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
+                        <div class="col-md-3 form-group">
+                            <label for="check_date">Check Date: <span class="po_err_msg text-danger"></span></label>
+                            <?php
+                            if (!empty($check_date)) {
+                                $checkformattedDate = date('Y-m-d', strtotime($check_date));
+                            } else {
+                                $checkformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" required>
                         </div>
-                    </div>
+                        <div class="col-md-3 form-group">
+                            <label for="check_num" class="control-label">Check #:</label>
+                            <input type="text" id="check_num" name="check_num" class="form-control form-control-sm form-control-border rounded-0" required>
+                        </div>
 
+                    </div>
+                    <input type="hidden" value="<?php echo $paid_to;?>" name="paid_to">
                     <div class="paid_to_main">
                         <div class="paid_to">
                             <label class="control-label">Paid To:</label>
                             <hr>
                             <div class="rdo-btn">
                                 <label>
-                                    <input type="radio" name="paid_to" value="1" id="emp-radio" <?php echo isset($paid_to) && $paid_to == 1 ? 'checked' : ''; ?> required aria-required="true">
-                                    Employee
+                                    <input type="radio" name="paid_to" value="1" id="emp-radio" <?php echo isset($paid_to) && $paid_to == 1 ? 'checked' : ''; ?> onclick="showDiv(1)"> Employee
                                 </label>
                                 <label>
-                                    <input type="radio" name="paid_to" value="2" id="agent-radio" <?php echo isset($paid_to) && $paid_to == 2 ? 'checked' : ''; ?> required aria-required="true">
-                                    Agent
+                                    <input type="radio" name="paid_to" value="2" id="agent-radio" <?php echo isset($paid_to) && $paid_to == 2 ? 'checked' : ''; ?> onclick="showDiv(2)"> Agent
                                 </label>
                                 <label>
-                                    <input type="radio" name="paid_to" value="3" id="sup-radio" <?php echo isset($paid_to) && $paid_to == 3 ? 'checked' : ''; ?> required aria-required="true">
-                                    Supplier
+                                    <input type="radio" name="paid_to" value="3" id="sup-radio" <?php echo isset($paid_to) && $paid_to == 3 ? 'checked' : ''; ?> onclick="showDiv(3)"> Supplier
                                 </label>
-                                <label>
-                                    <input type="radio" name="paid_to" value="4" id="client-radio" <?php echo isset($paid_to) && $paid_to == 4 ? 'checked' : ''; ?> required aria-required="true">
-                                    Customer
-                                </label>
-                            </div>                        
+                            </div>
                             <hr>
                             <div class="container" id="sup-div">
+                                <hr>
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
@@ -278,11 +245,12 @@ function format_num($number){
                             </div>
 
                             <div class="row" id="agent-div">
+                                <hr>
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
-                                            <label for="agent_id">Agent:</label>
-                                            <select name="agent_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                            <label for="supplier_id">Agent:</label>
+                                            <select name="supplier_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `t_agents` ORDER BY `c_last_name` ASC");
@@ -297,7 +265,7 @@ function format_num($number){
                                             </select>
                                         </td>
                                         <td style="width:50%; padding-left: 10px;"> 
-                                            <label for="agent_code" class="control-label">Agent Code:</label>
+                                            <label for="sup_code" class="control-label">Agent Code:</label>
                                             <input type="text" id="agent_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                         </td>
                                     </tr>
@@ -305,11 +273,12 @@ function format_num($number){
                             </div>
 
                             <div class="row" id="emp-div">
+                                <hr>
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
-                                            <label for="emp_id">Employee:</label>
-                                            <select name="emp_id" id="emp_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                            <label for="supplier_id">Employee:</label>
+                                            <select name="supplier_id" id="emp_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
@@ -324,44 +293,15 @@ function format_num($number){
                                             </select>
                                         </td>
                                         <td style="width:50%; padding-left: 10px;"> 
-                                            <label for="emp_code" class="control-label">Employee Code:</label>
+                                            <label for="sup_code" class="control-label">Employee Code:</label>
                                             <input type="text" id="emp_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
-
-                            <div class="row" id="client-div">
-                                <table style="width:100%;">
-                                    <tr>
-                                        <td style="width:50%; padding-right: 10px;">
-                                            <label for="client_id">Customers:</label>
-                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                                                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-                                                <?php 
-                                                $supplier_qry = $conn->query("SELECT * FROM property_clients ORDER BY `last_name` ASC");
-                                                while ($row = $supplier_qry->fetch_assoc()):
-                                                ?>
-                                                <option 
-                                                    value="<?php echo $row['client_id'] ?>" 
-                                                    data-client-code="<?php echo $row['client_id'] ?>"
-                                                    <?php echo isset($supplier_id) && $supplier_id == $row['client_id'] ? 'selected' : '' ?>
-                                                ><?php echo $row['last_name'] ?>, <?php echo $row['first_name'] ?></option>
-                                                <?php endwhile; ?>
-                                            </select>
-                                        </td>
-                                        <td style="width:50%; padding-left: 10px;"> 
-                                            <label for="client_code" class="control-label">Customer ID:</label>
-                                            <input type="text" id="client_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <br>
-                            <br>
-                            <div class="gr-container"></div>
                         </div>
                     </div>
+
                     <br>
                     <div class="row">
                         <div class="col-md-12 form-group">
@@ -373,43 +313,24 @@ function format_num($number){
                         <div class="form-group col-md-4">
                             <label for="account_id" class="control-label">Account Name:</label>
                             <select id="account_id" class="form-control form-control-sm form-control-border select2">
-                            <option value="" disabled selected></option>
-							<?php 
-							$accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-							$currentGroup = null;
-							$groupedAccounts = array();
-
-							while($row = $accounts->fetch_assoc()):
-								$account_arr[$row['id']] = $row;
-
-								if ($row['gname'] != $currentGroup) {
-									
-									if ($currentGroup !== null) {
-										echo '</optgroup>';
-
-										foreach ($groupedAccounts[$currentGroup] as $account) {
-											echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
-										}
-
-										$groupedAccounts[$currentGroup] = array();
-									}
-
-									echo '<optgroup label="' . $row['gname'] . '">';
-									$currentGroup = $row['gname'];
-								}
-
-								$groupedAccounts[$currentGroup][] = $row;
-							endwhile;
-
-							if ($currentGroup !== null) {
-								echo '</optgroup>';
-
-								foreach ($groupedAccounts[$currentGroup] as $account) {
-									echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
-								}
-							}
-							?>
-						</select>
+                                <option value="" disabled selected></option>
+                                <?php 
+                                $accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY `group_id`, `name` ASC ");
+                                $currentGroup = null;
+                                
+                                while($row = $accounts->fetch_assoc()):
+                                    $account_arr[$row['id']] = $row;
+                                    if ($row['group_id'] != $currentGroup) {
+                                        if ($currentGroup !== null) {
+                                            echo '</optgroup>';
+                                        }
+                                        echo '<optgroup label="' . $row['gname'] . '">';
+                                        $currentGroup = $row['group_id'];
+                                    }
+                                ?>
+                                <option value="<?= $row['id'] ?>" data-group-id="<?= $row['group_id'] ?>"><?= $row['name'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="account_code" class="control-label">Account Code:</label>
@@ -439,21 +360,20 @@ function format_num($number){
                             <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
                         </div>
                     </div>
-                    <table id="account_list">
-                    <colgroup>
+                    <table id="account_list" class="table table-striped table-bordered">
+                        <colgroup>
                             <col width="5%">
-                            <!-- <col width="5%"> -->
-                            <col width="10%">
-                            <col width="20%">
-                            <col width="30%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="35%">
+                            <col width="40%">
+                            <col width="5%">
+                            <col width="5%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center"></th>
-                                <!-- <th class="text-center">Item No.</th> -->
+                                <th class="text-center">Item No.</th>
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
                                 <th class="text-center">Location</th>
@@ -466,7 +386,7 @@ function format_num($number){
                             
                             <?php 
                             if (!isset($id) || $id === null) :
-                               
+                                $counter = 1;
                                 $journalId = isset($_GET['id']) ? $_GET['id'] : null;
                                 $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
                                 while($row = $jitems->fetch_assoc()):
@@ -475,12 +395,14 @@ function format_num($number){
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
                                 </td>
-                               
+                                <td class="text-center">
+                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
+                                </td>
                                 <td class="">
-                                    <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                    <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                    <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                    <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
                                     <span class="account_code"><?= $row['account_code'] ?></span>
                                 </td>
                                 <td class="">
@@ -548,23 +470,18 @@ function format_num($number){
                             </div>
                                 </td>
                                 <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
                             </tr>
                             <?php 
-                            if ($row['type'] == 2) {
-                                $totalCredit += $row['amount'];
-                            }
-                            if ($row['type'] == 1) {
-                                $totalDebit += $row['amount'];
-                            }
+                            $counter++;
                             endwhile; ?>
                             <?php endif; ?>
                         </tbody>
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="5" class="text-right">TOTAL</th>
+                                    <th colspan="6" class="text-center">Total</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
@@ -575,30 +492,30 @@ function format_num($number){
                             </tr>
                         </tfoot>
                     </table>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
+                        </div>
                     </div>
-                </div>
-                </form>
+                </form> 
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- <noscript id="item-clone">
+<noscript id="item-clone">
     <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-
+        <td class="text-center">
+            <input type="text" id="item_no" style="border:none;background-color:transparent;" value="">
+        </td>
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
-            <input type="text" name="account_code[]" value="">
-            <input type="text" name="account_id[]" value="">
-            <input type="text" name="group_id[]" value="">
-            <input type="text" name="amount[]" value="">
+            <input type="hidden" name="account_code[]" value="">
+            <input type="hidden" name="account_id[]" value="">
+            <input type="hidden" name="group_id[]" value="">
+            <input type="hidden" name="amount[]" value="">
             <span class="account"></span>
         </td>
         <td class="">
@@ -662,51 +579,22 @@ function format_num($number){
         <td class="debit_amount text-right"></td>
         <td class="credit_amount text-right"></td>
     </tr>
-</noscript> -->
-<table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>" id="account_list">
-    <thead>
-        <tr>
-            <th>GR ID</th>
-            <th>Log</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-
+</noscript>
 </body>
-<button id="display-selected-gr-details">Display Selected Tables</button>
-<div class="modal fade" id="zeroAccountCodeModal" tabindex="-1" role="dialog" aria-labelledby="zeroAccountCodeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="zeroAccountCodeModalLabel">Unlink Item/s</h5>
-                
-            </div>
-            <div class="modal-body" id="zeroAccountCodeModalBody">
-            </div>
-            
-        </div>
-    </div>
-</div>
-
 <script>
     var empRadio = document.getElementById('emp-radio');
     var agentRadio = document.getElementById('agent-radio');
     var supRadio = document.getElementById('sup-radio');
-    var clientRadio = document.getElementById('client-radio');
 
     var empDiv = document.getElementById('emp-div');
     var agentDiv = document.getElementById('agent-div');
     var supDiv = document.getElementById('sup-div');
-    var clientDiv = document.getElementById('client-div');
 
     empRadio.addEventListener('change', function () {
         if (empRadio.checked) {
             empDiv.style.display = 'block';
             agentDiv.style.display = 'none';
             supDiv.style.display = 'none';
-            clientDiv.style.display = 'none';
             clearSelections();
         }
     });
@@ -716,7 +604,6 @@ function format_num($number){
             empDiv.style.display = 'none';
             agentDiv.style.display = 'block';
             supDiv.style.display = 'none';
-            clientDiv.style.display = 'none';
             clearSelections();
         }
     });
@@ -726,17 +613,6 @@ function format_num($number){
             empDiv.style.display = 'none';
             agentDiv.style.display = 'none';
             supDiv.style.display = 'block';
-            clientDiv.style.display = 'none';
-            clearSelections();
-        }
-    });
-
-    clientRadio.addEventListener('change', function () {
-        if (clientRadio.checked) {
-            empDiv.style.display = 'none';
-            agentDiv.style.display = 'none';
-            supDiv.style.display = 'none';
-            clientDiv.style.display = 'block';
             clearSelections();
         }
     });
@@ -745,23 +621,19 @@ function format_num($number){
         var empId = document.getElementById('emp_id');
         var agentId = document.getElementById('agent_id');
         var supId = document.getElementById('supplier_id');
-        var clientId = document.getElementById('client_id');
 
         var empCode = document.getElementById('emp_code');
         var agentCode = document.getElementById('agent_code');
         var supCode = document.getElementById('sup_code');
-        var clientCode = document.getElementById('client_code');
 
         function clearSelections() {
             empId.value = '';
             agentId.value = '';
             supId.value = '';
-            clientId.value = '';
 
             empCode.value = '';
             agentCode.value = '';
             supCode.value = '';
-            clientCode.value = '';
         }
 
         empRadio.addEventListener('change', function() {
@@ -781,12 +653,6 @@ function format_num($number){
                 clearSelections();
             }
         });
-
-        clientRadio.addEventListener('change', function() {
-            if (clientRadio.checked) {
-                clearSelections();
-            }
-        });
     });
 </script>
 <script>
@@ -795,7 +661,6 @@ $(function () {
         $('#emp_code').removeAttr('required');
         $('#agent_code').removeAttr('required');
         $('#sup_code').removeAttr('required');
-        $('#client_code').removeAttr('required');
 
         if ($('#emp-radio').is(':checked')) {
             $('#emp_id').attr('required', 'required');
@@ -805,9 +670,6 @@ $(function () {
         }
         if ($('#sup-radio').is(':checked')) {
             $('#sup_id').attr('required', 'required');
-        }
-        if ($('#client-radio').is(':checked')) {
-            $('#client_id').attr('required', 'required');
         }
     });
 });
@@ -828,6 +690,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
     }
 });
+
 document.addEventListener("DOMContentLoaded", function() {
     var selectedOption = document.getElementById('supplier_id').options[document.getElementById('supplier_id').selectedIndex];
     console.log("Selected Option:", selectedOption);
@@ -835,14 +698,6 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('sup_code').value = selectedOption.getAttribute('data-supplier-code');
     }
 });
-document.addEventListener("DOMContentLoaded", function() {
-    var selectedOption = document.getElementById('client_id').options[document.getElementById('client_id').selectedIndex];
-    console.log("Selected Option:", selectedOption);
-    if (selectedOption) {
-        document.getElementById('client_code').value = selectedOption.getAttribute('data-client-code');
-    }
-});
-
 document.getElementById('supplier_id').addEventListener('change', function() {
     var selectedOption = this.options[this.selectedIndex];
     if (selectedOption) {
@@ -867,15 +722,6 @@ document.getElementById('agent_id').addEventListener('change', function() {
         document.getElementById('agent_code').value = '';
     }
 });
-document.getElementById('client_id').addEventListener('change', function() {
-    var selectedOption = this.options[this.selectedIndex];
-    if (selectedOption) {
-        document.getElementById('client_code').value = selectedOption.getAttribute('data-client-code');
-    } else {
-        document.getElementById('client_code').value = '';
-    }
-});
-
 $(document).ready(function () {
     $("#account_id").on("change", function () {
         var selectedAccountId = $(this).val();
@@ -913,7 +759,6 @@ $(document).ready(function () {
     var group = $.parseJSON('<?= json_encode($group_arr) ?>');
 
     function cal_tb() {
-        var totalCreditEchoed = <?= json_encode($totalCredit) ?>;
         var debit = 0;
         var credit = 0;
         $('#account_list tbody tr').each(function () {
@@ -922,11 +767,9 @@ $(document).ready(function () {
             if ($(this).find('.credit_amount').text() != "")
                 credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
         });
-        //credit -= totalCreditEchoed;
-        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-
+        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
     }
 
     $(function () {
@@ -937,54 +780,56 @@ $(document).ready(function () {
         var counter = 1; 
 
         $('#add_to_list').click(function () {
-        var account_id = $('#account_id').val();
-        var account_code = $('#account_code').val();
-        var group_id = $('#group_id').val();
-        var amount = $('#amount').val();
+            var account_id = $('#account_id').val();
+            var account_code = $('#account_code').val();
+            var group_id = $('#group_id').val();
+            var amount = $('#amount').val();
+
+            
+             if (account_code.trim() === '') {
+                alert('Please enter an account code.'); 
+                return; 
+            }
+            if (amount.trim() === '') {
+                alert('Please enter amount.'); 
+                return; 
+            }
+
+            var tr = $($('noscript#item-clone').html()).clone();
+            var account_data = !!account[account_id] ? account[account_id] : {};
+            var group_data = !!group[group_id] ? group[group_id] : {};
+
+            tr.find('#item_no').val(counter);
+            tr.find('input[name="account_code[]"]').val(account_code); 
+            tr.find('input[name="account_id[]"]').val(account_id);
+            tr.find('input[name="group_id[]"]').val(group_id);
+            tr.find('input[name="amount[]"]').val(amount);
 
 
-        if (account_code.trim() === '') {
-            alert('Please enter an account code.'); 
-            return; 
-        }
-        if (amount.trim() === '') {
-            alert('Please enter amount.'); 
-            return; 
-        }
+            tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
+            tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
+            if (!!group_data.type && group_data.type == 1)
+                tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+            else
+                tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
 
-        var tr = $($('noscript#item-clone').html()).clone();
-        var account_data = !!account[account_id] ? account[account_id] : {};
-        var group_data = !!group[group_id] ? group[group_id] : {};
+            $('#account_list').append(tr);
 
-        tr.find('#item_no').val(counter);
-        tr.find('input[name="account_code[]"]').val(account_code);
-        tr.find('input[name="account_id[]"]').val(account_id);
-        tr.find('input[name="group_id[]"]').val(group_id);
-        tr.find('input[name="amount[]"]').val(amount);
 
-        tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
-        tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
-
-        if (!!group_data.type && group_data.type == 1)
-            tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
-        else
-            tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
-
-        $('#account_list').append(tr);
-
-        tr.find('.delete-row').click(function () {
-            $(this).closest('tr').remove();
+            tr.find('.delete-row').click(function () {
+                $(this).closest('tr').remove();
+                cal_tb();
+            });
             cal_tb();
+            
+            $('#account_code').val('').trigger('change');
+            $('#account_id').val('').trigger('change');
+            $('#group_id').val('').trigger('change');
+            $('#amount').val('').trigger('change');
+
+            counter++;
         });
-        cal_tb();
 
-        $('#account_code').val('').trigger('change');
-        $('#account_id').val('').trigger('change');
-        $('#group_id').val('').trigger('change');
-        $('#amount').val('').trigger('change');
-
-        counter++;
-    });
 
         $('#journal-form').submit(function (e) {
             e.preventDefault();
@@ -1008,246 +853,38 @@ $(document).ready(function () {
             //     return false;
             // }
             start_loader();
-            var urlSuffix;
-            <?php if (!empty($_GET['id'])) { ?>
-                urlSuffix = "modify_journal";
-            <?php } else{ ?>
-                urlSuffix = "save_journal";
-          <?php }?>
-            console.log('urlSuffix:', urlSuffix);
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=" + urlSuffix,
-                data: new FormData($(this)[0]),
+                url:_base_url_+"classes/Master.php?f=manage_cv",
+				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
                 processData: false,
                 method: 'POST',
                 type: 'POST',
                 dataType: 'json',
-                error: function (err) {
-                    console.log(err);
-                    end_loader();
-                },
-                success: function (resp) {
-                    var el = $("<div class='alert'></div>");
-                    if (resp.status == 'success') {
-                        // location.reload();
-                        location.replace('./?page=journals')
-                    } else if (!!resp.msg) {
-                        el.addClass("alert-danger");
-                        el.text(resp.msg);
-                        _this.prepend(el);
-                    } else {
-                        el.addClass("alert-danger");
-                        el.text("An error occurred due to an unknown reason.");
-                        _this.prepend(el);
+				error:err=>{
+					console.log(err)
+					//alert_toast("An error occured",'error');
+					end_loader();
+				},
+                success:function(resp){
+                    if(resp.status == 'success'){
+                        location.reload();
+              
+                    }else if(!!resp.msg){
+                        el.addClass("alert-danger")
+                        el.text(resp.msg)
+                        _this.prepend(el)
+                    }else{
+                        el.addClass("alert-danger")
+                        el.text("An error occurred due to unknown reason.")
+                        _this.prepend(el)
                     }
-                    el.show('slow');
-                    $('html,body,.modal').animate({ scrollTop: 0 }, 'fast');
+                    el.show('slow')
+                    $('html,body,.modal').animate({scrollTop:0},'fast')
                     end_loader();
                 }
-            });
+            })
         })
     })
-</script>
-<script>
-  $(document).ready(function () {
-    $('#supplier_id').change(function () {
-        var selectedSupplierId = $(this).val();
-        if (selectedSupplierId) {
-            $.ajax({
-                url: 'journals/show_gr.php',
-                method: 'POST',
-                data: { supplier_id: selectedSupplierId },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.gr_data.length > 0) {
-                        var tableRows = buildMainTableRows(data.gr_data);
-                        var tableHtml = buildMainTableHtml(tableRows);
-                        $('.gr-container').empty().append(tableHtml);
-
-                        console.log('Main Table Info:', {
-                            Rows: data.gr_data.length,
-                            Columns: 3,
-                            Data: data.gr_data
-                        });
-                    } else {
-                        $('.gr-container').html('<p>No Goods Receipts available for the selected supplier.</p>');
-                    }
-                },
-                error: function (error) {
-                    console.log('Error:', error);
-                }
-            });
-        } else {
-            $('.gr-container').empty();
-            $('.additional-table-container').empty();
-        }
-    });
-    $('#display-selected-gr-details').on('click', async function () {
-        $('.additional-table-container').empty();
-        $('#account_list').empty();
-
-        let totalCredit = 0;
-        let totalDebit = 0;
-
-        const checkedGrIds = getCheckedGrIds();
-
-        console.log('Checked GR IDs:', checkedGrIds);
-
-        try {
-            await processCheckboxes(checkedGrIds, totalCredit, totalDebit);
-        } catch (error) {
-            console.error('Error in processCheckboxes:', error);
-        }
-    });
-    function buildMainTableRows(grData) {
-        return grData.map(function (grData) {
-            return '<tr>' +
-                '<td>' +
-                '<input type="checkbox" class="selected-gr-checkbox log-id" data-id="' + grData.gr_id + '">' +
-                '<a href="#" class="basic-link view-gr-details" data-id="' + grData.gr_id + '">' + grData.gr_id + '</a>' +
-                '</td>' +
-                '<td>' + grData.po_no + '</td>' +
-                '<td>' + grData.date_created + '</td>' +
-                '</tr>';
-        });
-    }
-    function buildMainTableHtml(tableRows) {
-        return '<table class="table table-striped table-hover table-bordered" style="width: 100%">' +
-            '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th></tr></thead>' +
-            '<tbody>' + tableRows.join('') + '</tbody></table>';
-    }
-    function getCheckedGrIds() {
-        const checkedGrIds = [];
-        $('.selected-gr-checkbox:checked').each(function () {
-            const grId = $(this).data('id');
-            if (checkedGrIds.indexOf(grId) === -1) {
-                checkedGrIds.push(grId);
-            }
-        });
-        return checkedGrIds;
-    }
-    async function processCheckboxes(checkedGrIds) {
-        let displayedTableCount = 0;
-        for (let i = 0; i < checkedGrIds.length; i++) {
-            const grId = checkedGrIds[i];
-            const additionalTableHtml = await fetchAndAppendTable(grId);
-            displayedTableCount++;
-
-            const additionalTableData = extractDataFromTable(additionalTableHtml);
-
-
-            console.log('Additional Table Info for GR ID ' + grId + ':', {
-                HTML: additionalTableHtml,
-                Data: additionalTableData,
-
-            });
-            appendLogToTable(grId, additionalTableHtml);
-
-        }
-        console.log('Number of Tables Displayed:', displayedTableCount);
-    }
-    function appendLogToTable(grId, additionalTableHtml) {
-        $('#account_list').append('<tr>' +
-            '<td>' + additionalTableHtml + '</td>' +
-            '</tr>');
-    }
-
-    function fetchAndAppendTable(grId) {
-        return new Promise((resolve, reject) => {
-            if (!$('.additional-table-container[data-id="' + grId + '"]').hasClass('added-table')) {
-                $.ajax({
-                    url: 'journals/view_gr_details.php',
-                    method: 'POST',
-                    data: { gr_id: grId },
-                    success: function (additionalTableHtml) {
-                        $('.additional-table-container').append('<div class="additional-table-container added-table" data-id="' + grId + '">' + additionalTableHtml + '</div>');
-                        resolve(additionalTableHtml);
-                    },
-                    error: function (error) {
-                        console.log('Error fetching additional table:', error);
-                        reject(error);
-                    }
-                });
-            } else {
-                resolve('');
-            }
-        });
-    }
-    function extractDataFromTable(tableHtml) {
-        const extractedData = [];
-        const tableRows = $(tableHtml).find('tbody tr');
-
-        tableRows.each(function () {
-            const rowData = [];
-            $(this).find('td').each(function () {
-                rowData.push($(this).text());
-            });
-            extractedData.push(rowData);
-        });
-        return extractedData;
-    }
-  });
-
-$(document).ready(function () {
-    $('#supplier_id').on('change', function () {
-        var supplierId = $(this).val();
-        console.log('Supplier ID:', supplierId);
-
-        $.ajax({
-            url: 'journals/items-link.php', 
-            type: 'POST',
-            data: {supplier_id: supplierId},
-            success: function (data) {
-                var items = JSON.parse(data);
-
-                console.log(items);
-                var itemsWithZeroAccountCode = items.filter(function(item) {
-                    return item.account_code == 0;
-                });
-
-                if (itemsWithZeroAccountCode.length > 0) {
-                    displayZeroAccountCodeModal(itemsWithZeroAccountCode, supplierId);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-        });
-    });
-    function displayZeroAccountCodeModal(items, supplierId) {
-        var modalBody = $('#zeroAccountCodeModalBody');
-        modalBody.empty();
-        var table = $('<table class="table table-bordered">');
-        var thead = $('<thead>').append('<tr><th style="width:40%">Name</th><th style="width:10%">Item Code</th><th style="width:50%">Description</th></tr>');
-
-        table.append(thead);
-
-        var tbody = $('<tbody>');
-        items.forEach(function (item) {
-            var row = $('<tr>');
-            row.append('<td>' + item.name + '</td>');
-            row.append('<td>' + item.item_code + '</td>');
-            row.append('<td>' + item.description + '</td>');
-            tbody.append(row);
-        });
-        table.append(tbody);
-        modalBody.append(table);
-        var modal = $('#zeroAccountCodeModal');
-        modal.find('.modal-dialog').removeClass('modal-lg'); 
-        modal.find('.modal-dialog').addClass('custom-modal-width'); 
-        modalBody.append('<button id="redirectButton" class="btn btn-primary">Manage Items</button>');
-        $('#zeroAccountCodeModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-
-    $('#zeroAccountCodeModal').modal('show');
-    $('#redirectButton').on('click', function () {
-        window.location.href = '.?page=po/items&supplier_id=' + supplierId;
-    });
-        
-    }
-});
 </script>

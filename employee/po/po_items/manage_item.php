@@ -10,6 +10,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         }
     }
 }
+$type="";
 ?>
 <style>
     span.select2-selection.select2-selection--single {
@@ -45,18 +46,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
         <div class="form-group">
             <label for="item_code" class="control-label">Item Code:</label>
-            <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code : "" ?>" readonly>
+            <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code : "" ?>">
         </div>
         <div class="form-group">
             <label for="name" class="control-label">Item Name:</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
         </div>
         <div class="form-group">
+            <label for="type" class="control-label">Item Type:</label>
+            <select name="type" id="type" class="form-control rounded-0" required>
+                <option value="" disabled selected></option>
+                <option value="1" <?php echo ($type === "1") ? "selected" : ""; ?>>Goods</option>
+                <option value="2" <?php echo ($type === "2") ? "selected" : ""; ?>>Services</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label for="description" class="control-label">Description:</label>
             <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
         </div>
         <div class="form-group">
-            <label for="default_unit" class="control-label">Unit of Measurement:</label>
+            <label for="default_unit" class="control-label">Unit of Measure:</label>
             <input type="text" name="default_unit" id="default_unit" class="form-control rounded-0" value="<?php echo isset($default_unit) ? $default_unit :"" ?>" required>
         </div>
         <div class="form-group">

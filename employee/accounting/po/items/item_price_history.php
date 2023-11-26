@@ -14,7 +14,6 @@ if (isset($_GET['id'])) {
 ?>
 <br><br>
 <button id="export-csv-btn">Export</button>
-
 <table class="table table-striped table-hover table-bordered" style="width: 100%" id="item-table">
     <thead>
         <tr>
@@ -46,8 +45,7 @@ if (isset($_GET['id'])) {
 </table>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 <script>
-
-document.getElementById('export-csv-btn').addEventListener('click', function() {
+    document.getElementById('export-csv-btn').addEventListener('click', function() {
     var itemName = "<?php echo $item_name; ?>";
     var currentDate = new Date();
     var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();

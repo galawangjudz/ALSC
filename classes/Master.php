@@ -3925,7 +3925,7 @@ Class Master extends DBConnection {
 			}
 		}
 		if(empty($id)){
-			$data = preg_replace('/\b(agent_id|emp_id)\b/', 'supplier_id', $data);
+			$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
 			$sql = "INSERT INTO `vs_entries` set {$data} ";
 		}
 
@@ -4005,7 +4005,7 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$data = preg_replace('/\b(agent_id|emp_id)\b/', 'supplier_id', $data);
+		$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
 		$sql = "UPDATE `vs_entries` set {$data} where v_num = '{$v_num}' ";
 		
 		$save = $this->conn->query($sql);
@@ -4082,7 +4082,7 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$data = preg_replace('/\b(agent_id|emp_id)\b/', 'supplier_id', $data);
+		$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
 		if(!empty($id)){
 
 			$sql = "INSERT INTO `vs_entries` set {$data} ";
@@ -4272,15 +4272,15 @@ Class Master extends DBConnection {
 			if(!empty($data)) $data .=",";
 				$data .= " `description`='".addslashes(htmlentities($description))."' ";
 		}
-		$check = $this->conn->query("SELECT * FROM `item_list` where `item_code` = '{$item_code}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
-		if($this->capture_err())
-			return $this->capture_err();
-		if($check > 0){
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Item code already exist.";
-			return json_encode($resp);
-			exit;
-		}
+		// $check = $this->conn->query("SELECT * FROM `item_list` where `item_code` = '{$item_code}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
+		// if($this->capture_err())
+		// 	return $this->capture_err();
+		// if($check > 0){
+		// 	$resp['status'] = 'failed';
+		// 	$resp['msg'] = "Item code already exist.";
+		// 	return json_encode($resp);
+		// 	exit;
+		// }
 		if(empty($id)){
 			$sql = "INSERT INTO `item_list` set {$data} ";
 		}else{

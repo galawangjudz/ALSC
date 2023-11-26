@@ -26,6 +26,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><b><?php echo $name ?></b></td>
                 </tr>
                 <tr>
+                    <td style="width:150px;"><b>Supplier Short Name:</b></td>
+                    <td><b><?php echo $short_name ?></b></td>
+                </tr>
+                <!-- <tr>
+                    <td style="width:150px;"><b>Category:</b></td>
+                    <td>
+                        <?php 
+                            if ($category == 0) {
+                                echo 'Goods';
+                            } elseif ($category == 1) {
+                                echo 'Services';
+                            } 
+                        ?>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td><b>TIN #:</b></td>
+                    <td><?php echo $tin ?></td>
+                </tr>
+                <tr>
                     <td><b>Address:</b></td>
                     <td><?php echo $address ?></td>
                 </tr>
@@ -70,6 +90,28 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         }
                         ?>
                     </td>
+                </tr>
+                <tr>
+                    <td><b>Tax Group:</b></td>
+                    <td>
+                        <?php 
+                            if ($vatable == 0) {
+                                echo 'Non-VAT';
+                            } elseif ($vatable == 1) {
+                                echo 'Inclusive';
+                            } elseif ($vatable == 2) {
+                                echo 'Exclusive';
+                            } elseif ($vatable == 3) {
+                                echo 'Zero-rated';
+                            }else {
+                                echo '';
+                            }
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Withholding Tax:</b></td>
+                    <td><?php echo $wt ?>%</td>
                 </tr>
                 <tr>
                     <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>

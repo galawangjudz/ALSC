@@ -42,7 +42,13 @@
             if (!empty($row_supp)) {
                 $supp_name = $row_supp['c_first_name'] . ' ' . $row_supp['c_last_name'];
             } else {
-                $supp_name = "Not found in any source";
+                $qry_supp = $conn->query("SELECT * FROM property_clients WHERE client_id = '$supp_code'; ");
+                $row_supp = $qry_supp->fetch_assoc();
+                if (!empty($row_supp)) {
+                    $supp_name = $row_supp['first_name'] . ' ' . $row_supp['last_name'];
+                } else {
+                    $supp_name = "Not found in any source";
+                }
             }
         }
     }
@@ -95,7 +101,7 @@ border-color: #007BFF;
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Paid To:</td>
                                 <td style="padding: 4px 10px;"><?php echo $supp_name; ?></td>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">
-                                    <?php
+                                    <!-- <?php
                                     if (ctype_alpha(substr($supp_code, 0, 1))) {
                                         echo "Employee Code:";
                                     } elseif (preg_match('/^\d{5,}$/', $supp_code)) {
@@ -103,7 +109,7 @@ border-color: #007BFF;
                                     } else {
                                         echo "Supplier Code:";
                                     }
-                                    ?>
+                                    ?> -->Code:
                                 </td>
                                 <td style="padding: 4px 10px;"><?php echo $supp_code; ?></td>
                             </tr>

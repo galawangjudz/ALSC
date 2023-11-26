@@ -22,6 +22,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <dl class="row">
             <table class="table table-bordered">
                 <tr>
+                    <td><b>Item Code:</b></td>
+                    <td><b><?php echo $item_code ?></b></td>
+                </tr>
+                <tr>
                     <td><b>Item Name:</b></dt></td>
                     <td><b><?php echo $name ?></b></dd></td>
                 </tr>
@@ -30,7 +34,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><?php echo $description ?></td>
                 </tr>
                 <tr>
-                    <td><b>Unit of Measurement:</b></td>
+                    <td><b>Type:</b></td>
+                    <td> <?php if($type == 1): ?>
+                            Goods
+                        <?php elseif($type == 2): ?>
+                            Services
+                        <?php else: ?>
+                            <span class='badge badge-secondary'>Not yet tagged</span>
+                        <?php endif; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Unit of Measure:</b></td>
                     <td><?php echo $default_unit ?></td>
                 </tr>
                 <tr>
