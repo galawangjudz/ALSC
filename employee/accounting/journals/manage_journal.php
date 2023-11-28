@@ -439,14 +439,14 @@ function format_num($number){
                             <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
                         </div>
                     </div>
-                    <table id="account_list">
+                    <table id="account_list" class="table table-bordered">
                     <colgroup>
                             <col width="5%">
                             <!-- <col width="5%"> -->
                             <col width="10%">
                             <col width="20%">
                             <col width="30%">
-                            <col width="10%">
+                            <!-- <col width="10%"> -->
                             <col width="10%">
                             <col width="10%">
                         </colgroup>
@@ -457,7 +457,7 @@ function format_num($number){
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
                                 <th class="text-center">Location</th>
-                                <th class="text-center">Group</th>
+                                <!-- <th class="text-center">Group</th> -->
                                 <th class="text-center">Debit</th>
                                 <th class="text-center">Credit</th>
                             </tr>
@@ -547,7 +547,7 @@ function format_num($number){
                             </script>
                             </div>
                                 </td>
-                                <td class="group"><?= $row['group'] ?></td>
+                                <!-- <td class="group"><?= $row['group'] ?></td> -->
                                 <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
                                 <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
                             </tr>
@@ -564,12 +564,12 @@ function format_num($number){
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="5" class="text-right">TOTAL</th>
+                                    <th colspan="4" class="text-right">TOTAL</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
                                 <tr>
-                                    <th colspan="6" class="text-center"></th>
+                                    <th colspan="5" class="text-center"></th>
                                     <th colspan="4" class="text-center total-balance">0</th>
                                 </tr>
                             </tr>
@@ -1110,12 +1110,13 @@ $(document).ready(function () {
                 '</td>' +
                 '<td>' + grData.po_no + '</td>' +
                 '<td>' + grData.date_created + '</td>' +
+                '<td>' + grData.gr_status + '</td>' +
                 '</tr>';
         });
     }
     function buildMainTableHtml(tableRows) {
         return '<table class="table table-striped table-hover table-bordered" style="width: 100%">' +
-            '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th></tr></thead>' +
+            '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th><th>GR Status</th></tr></thead>' +
             '<tbody>' + tableRows.join('') + '</tbody></table>';
     }
     function getCheckedGrIds() {

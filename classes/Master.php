@@ -3897,6 +3897,7 @@ Class Master extends DBConnection {
 	function save_journal(){
 		if(empty($_POST['id'])){
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
+			$gr_id = isset($_POST['gr_id']) ? $_POST['gr_id'] : '';
 			$prefix = date("Ym-");
 			$code = sprintf("%'.05d",$v_num);
 			while(true){
@@ -3924,13 +3925,20 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		if(empty($id)){
+		if (empty($id)) {
 			$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
-			$sql = "INSERT INTO `vs_entries` set {$data} ";
-		}
+			$insertSql = "INSERT INTO `vs_entries` SET {$data}";
+			$this->conn->query($insertSql);
+		
 
-		$save = $this->conn->query($sql);
-		if($save){
+			foreach ($gr_id as $single_gr_id) {
+				$updateSql = "UPDATE `tbl_gr_list` SET gr_status = '1' WHERE gr_id = '$single_gr_id'";
+				$this->conn->query($updateSql);
+			}
+		}
+		
+		//$save = $this->conn->query($sql);
+		if($insertSql && $updateSql){
 			$jid = !empty($id) ? $id : $this->conn->insert_id;
 			$data = "";
 			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");

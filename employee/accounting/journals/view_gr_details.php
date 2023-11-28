@@ -29,7 +29,7 @@ if (isset($_POST['gr_id'])) {
         <col width="10%">
         <col width="20%">
         <col width="30%">
-        <col width="10%">
+        <!-- <col width="10%"> -->
         <col width="10%">
         <col width="10%">
     </colgroup>
@@ -40,7 +40,7 @@ if (isset($_POST['gr_id'])) {
             <th class="text-center">Account Code</th>
             <th class="text-center">Account Name</th>
             <th class="text-center">Location</th>
-            <th class="text-center">Group</th>
+            <!-- <th class="text-center">Group</th> -->
             <th class="text-center">Debit</th>
             <th class="text-center">Credit</th>
         </tr>
@@ -88,10 +88,11 @@ if (isset($_POST['gr_id'])) {
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
             <td>
-            <input type="hidden" name="account_code[]" value="<?php echo $row["code"] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $total; ?>">
+            <input type="text" name="gr_id[]" value="<?php echo $gr_id ?>">
+            <input type="text" name="account_code[]" value="<?php echo $row["code"] ?>">
+            <input type="text" name="account_id[]" value="<?php echo $alId; ?>">
+            <input type="text" name="group_id[]" value="<?php echo $glId; ?>">
+            <input type="text" name="amount[]" value="<?php echo $total; ?>">
             <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
@@ -147,7 +148,7 @@ if (isset($_POST['gr_id'])) {
     });
 </script>
         </td>
-        <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td>
+        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td class="debit_amount text-right"><?= $glType == 1 ? $total : '' ?></td>
         <td class="credit_amount text-right"><?= $glType == 2 ? $total : '' ?></td>
         </tr>
@@ -155,7 +156,7 @@ if (isset($_POST['gr_id'])) {
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="5"><strong>Total</strong></td>
+        <td colspan="4"><strong>Total</strong></td>
         <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
         <td class="text-right" id="total-credit"><?= number_format($totalCredit, 2) ?></td>
     </tr>

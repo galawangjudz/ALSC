@@ -3,9 +3,9 @@ require_once('../../../config.php');
 if (isset($_POST['supplier_id'])) {
     $supplierId = $_POST['supplier_id'];
 
-    $query = "SELECT po.id, gr.gr_id, po.po_no, po.date_created
+    $query = "SELECT po.id, gr.gr_id, gr.gr_status, po.po_no, po.date_created
     FROM tbl_gr_list gr
-    LEFT JOIN po_approved_list po ON gr.po_id = po.id WHERE po.supplier_id=$supplierId";
+    LEFT JOIN po_approved_list po ON gr.po_id = po.id WHERE po.supplier_id=$supplierId and gr.gr_status=0";
               
 
     // $query = "SELECT pal.id as palId, pal.po_no, pal.date_created, pal.supplier_id, sl.id
