@@ -1052,8 +1052,29 @@ $(document).ready(function () {
 </script>
 <script>
   $(document).ready(function () {
-    $('#supplier_id').change(function () {
+        $('#supplier_id').on('change', function () {
         var selectedSupplierId = $(this).val();
+        console.log('Supplier ID:', selectedSupplierId);
+        $.ajax({
+            url: 'journals/items-link.php',
+            type: 'POST',
+            data: { supplier_id: selectedSupplierId },
+            success: function (data) {
+                var items = JSON.parse(data);
+
+                console.log(items);
+                var itemsWithZeroAccountCode = items.filter(function (item) {
+                    return item.account_code == 0;
+                });
+
+                if (itemsWithZeroAccountCode.length > 0) {
+                    displayZeroAccountCodeModal(itemsWithZeroAccountCode, selectedSupplierId);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
         if (selectedSupplierId) {
             $.ajax({
                 url: 'journals/show_gr.php',
@@ -1084,6 +1105,32 @@ $(document).ready(function () {
             $('.additional-table-container').empty();
         }
     });
+    function fetchAndAppendTable(grId) {
+    return new Promise((resolve, reject) => {
+        var supplierId = $('#supplier_id').val();
+
+        if (!$('.additional-table-container[data-id="' + grId + '"]').hasClass('added-table')) {
+            $.ajax({
+                url: 'journals/view_gr_details.php',
+                method: 'POST',
+                data: { gr_id: grId, supplier_id: supplierId },
+                success: function (additionalTableHtml) {
+                    console.log('supplier_id:', supplierId);
+
+                    $('.additional-table-container').append('<div class="additional-table-container added-table" data-id="' + grId + '">' + additionalTableHtml + '</div>');
+                    resolve(additionalTableHtml);
+                },
+                error: function (error) {
+                    console.log('Error fetching additional table:', error);
+                    reject(error);
+                }
+            });
+        } else {
+            resolve('');
+        }
+    });
+}
+
     $('#display-selected-gr-details').on('click', async function () {
         $('.additional-table-container').empty();
         $('#account_list').empty();
@@ -1155,27 +1202,8 @@ $(document).ready(function () {
             '</tr>');
     }
 
-    function fetchAndAppendTable(grId) {
-        return new Promise((resolve, reject) => {
-            if (!$('.additional-table-container[data-id="' + grId + '"]').hasClass('added-table')) {
-                $.ajax({
-                    url: 'journals/view_gr_details.php',
-                    method: 'POST',
-                    data: { gr_id: grId },
-                    success: function (additionalTableHtml) {
-                        $('.additional-table-container').append('<div class="additional-table-container added-table" data-id="' + grId + '">' + additionalTableHtml + '</div>');
-                        resolve(additionalTableHtml);
-                    },
-                    error: function (error) {
-                        console.log('Error fetching additional table:', error);
-                        reject(error);
-                    }
-                });
-            } else {
-                resolve('');
-            }
-        });
-    }
+   
+
     function extractDataFromTable(tableHtml) {
         const extractedData = [];
         const tableRows = $(tableHtml).find('tbody tr');
@@ -1189,34 +1217,6 @@ $(document).ready(function () {
         });
         return extractedData;
     }
-  });
-
-$(document).ready(function () {
-    $('#supplier_id').on('change', function () {
-        var supplierId = $(this).val();
-        console.log('Supplier ID:', supplierId);
-
-        $.ajax({
-            url: 'journals/items-link.php', 
-            type: 'POST',
-            data: {supplier_id: supplierId},
-            success: function (data) {
-                var items = JSON.parse(data);
-
-                console.log(items);
-                var itemsWithZeroAccountCode = items.filter(function(item) {
-                    return item.account_code == 0;
-                });
-
-                if (itemsWithZeroAccountCode.length > 0) {
-                    displayZeroAccountCodeModal(itemsWithZeroAccountCode, supplierId);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-        });
-    });
     function displayZeroAccountCodeModal(items, supplierId) {
         var modalBody = $('#zeroAccountCodeModalBody');
         modalBody.empty();
@@ -1250,5 +1250,9 @@ $(document).ready(function () {
     });
         
     }
-});
+
+  });
+
+
+
 </script>

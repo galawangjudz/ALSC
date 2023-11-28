@@ -1,27 +1,42 @@
 <?php
 require_once('../../../config.php');
-
 if (isset($_POST['gr_id'])) {
     $gr_id = $_POST['gr_id'];
+    $supplierId = $_POST['supplier_id'];
 
+    $query1 = $conn->query("SELECT vatable from supplier_list where id = '{$supplierId}'");
+    if ($query1->num_rows > 0) {
+
+        $row1 = $query1->fetch_assoc(); 
+        $vat = $row1['vatable'];
+
+        echo "<br><b>GR #: </b><i> $gr_id</i>";
+    } else {
+        echo "No data found for GR ID: $gr_id";
+    }
 
     $qry = $conn->query("SELECT * from approved_order_items where gr_id = '{$gr_id}'");
 
-    if($qry->num_rows > 0){
+    if ($qry->num_rows > 0) {
         $totalCredit = 0;
         $totalDebit = 0;
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
+
+        while ($row2 = $qry->fetch_assoc()) {
+            foreach ($row2 as $k => $v) {
+                $$k = $v;
+            }
+            echo "<br><b>GR #: </b><i> $gr_id</i>";
         }
-        echo "<br><b>GR #: </b><i> $gr_id</i>";
     } else {
         echo "No data found for GR ID: $gr_id";
     }
 } else {
     echo "GR ID not provided in the request";
 }
-?>
 
+echo $supplierId;
+echo $vat; 
+?>
 <table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>">
     <colgroup>
         <col width="5%">
@@ -47,7 +62,6 @@ if (isset($_POST['gr_id'])) {
     </thead>
     <tbody>
     <?php 
-    $i = 1;
     $id = $gr_id;
     $query = "SELECT 
         gl.id AS glId,al.id AS alId,
@@ -82,7 +96,7 @@ if (isset($_POST['gr_id'])) {
             $totalCredit += $total;
         }
     ?>
-        <tr>
+    <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
@@ -115,43 +129,137 @@ if (isset($_POST['gr_id'])) {
             <div class="lotExistsMsg" style="color: #ff0000;"></div>
             </div>
             <script>
-    $(document).ready(function () {
-        $('.lot, .block, .phase').on('input', function () {
-            var currentRow = $(this).closest('td');
+            $(document).ready(function () {
+                $('.lot, .block, .phase').on('input', function () {
+                    var currentRow = $(this).closest('td');
 
-            var enteredPhase = currentRow.find('.phase').val();
-            var enteredBlock = currentRow.find('.block').val();
-            var enteredLot = currentRow.find('.lot').val();
+                    var enteredPhase = currentRow.find('.phase').val();
+                    var enteredBlock = currentRow.find('.block').val();
+                    var enteredLot = currentRow.find('.lot').val();
 
-            console.log("AJAX Data:", {
-                phase: enteredPhase,
-                block: enteredBlock,
-                lot: enteredLot
+                    console.log("AJAX Data:", {
+                        phase: enteredPhase,
+                        block: enteredBlock,
+                        lot: enteredLot
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'journals/check_loc.php',
+                        data: JSON.stringify({
+                            phase: enteredPhase,
+                            block: enteredBlock,
+                            lot: enteredLot
+                        }),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            console.log("AJAX Response:", response);
+                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                            lotExistsMsg.html(response);
+                        }
+                    });
+                });
             });
-
-            $.ajax({
-                type: 'POST',
-                url: 'journals/check_loc.php',
-                data: JSON.stringify({
-                    phase: enteredPhase,
-                    block: enteredBlock,
-                    lot: enteredLot
-                }),
-                contentType: 'application/json',
-                success: function (response) {
-                    console.log("AJAX Response:", response);
-                    var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                    lotExistsMsg.html(response);
-                }
-            });
-        });
-    });
-</script>
+            </script>
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td class="debit_amount text-right"><?= $glType == 1 ? $total : '' ?></td>
         <td class="credit_amount text-right"><?= $glType == 2 ? $total : '' ?></td>
-        </tr>
+    </tr>
+    <?php 
+    $id = $gr_id;
+    $query_vat = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
+    FROM `account_list` al
+    JOIN `group_list` gl ON al.group_id = gl.id
+    WHERE al.code = '1201';
+    ";
+
+    $qry_vat = $conn->query($query_vat);
+    while ($row_vat = $qry_vat->fetch_assoc()):
+        $groupname = $row_vat['group_name'];
+        $glId = $row_vat['group_id'];
+        $alId = $row_vat['id'];
+        $glType = $row_vat['type'];
+        $account_name = $row_vat['name'];
+
+
+        if ($glType == 1) {
+            $totalDebit += $total;
+        } elseif ($glType == 2) {
+            $totalCredit += $total;
+        }
+    ?>
+    <tr>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+        </td>
+        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_vat["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
+            <td>
+            <input type="text" name="gr_id[]" value="<?php echo $gr_id ?>">
+            <input type="text" name="account_code[]" value="<?php echo $row_vat["code"] ?>">
+            <input type="text" name="account_id[]" value="<?php echo $alId; ?>">
+            <input type="text" name="group_id[]" value="<?php echo $glId; ?>">
+            <input type="text" name="amount[]" value="<?php echo $total; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
+        </td>
+        <td class="">
+            <div class="loc-cont">
+            <label class="control-label">Phase: </label>
+            <select name="phase[]" class="phase">
+                <?php 
+                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                while ($row = $cat->fetch_assoc()):
+                    $cat_name[$row['c_code']] = $row['c_acronym'];
+                    $code = $row['c_code'];
+                ?>
+                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
+                <?php endwhile; ?>
+            </select>
+            <label class="control-label">Block: </label>
+            <input type="text" class="block" name="block[]" value="">
+            <label class="control-label">Lot: </label>
+            <input type="text" class="lot" name="lot[]" value="">
+            <div class="lotExistsMsg" style="color: #ff0000;"></div>
+            </div>
+            <script>
+            $(document).ready(function () {
+                $('.lot, .block, .phase').on('input', function () {
+                    var currentRow = $(this).closest('td');
+
+                    var enteredPhase = currentRow.find('.phase').val();
+                    var enteredBlock = currentRow.find('.block').val();
+                    var enteredLot = currentRow.find('.lot').val();
+
+                    console.log("AJAX Data:", {
+                        phase: enteredPhase,
+                        block: enteredBlock,
+                        lot: enteredLot
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'journals/check_loc.php',
+                        data: JSON.stringify({
+                            phase: enteredPhase,
+                            block: enteredBlock,
+                            lot: enteredLot
+                        }),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            console.log("AJAX Response:", response);
+                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                            lotExistsMsg.html(response);
+                        }
+                    });
+                });
+            });
+            </script>
+        </td>
+        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
+        <td class="debit_amount text-right"><?= $glType == 1 ? $total : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? $total : '' ?></td>
+    </tr>
+    <?php endwhile; ?>
     <?php endwhile; ?>
 </tbody>
 <tfoot>
