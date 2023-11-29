@@ -477,10 +477,10 @@ function format_num($number){
                                 </td>
                                
                                 <td class="">
-                                    <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                    <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                    <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                    <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
                                     <span class="account_code"><?= $row['account_code'] ?></span>
                                 </td>
                                 <td class="">
@@ -564,7 +564,7 @@ function format_num($number){
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="4" class="text-right">TOTAL</th>
+                                    <th colspan="5" class="text-right">TOTAL</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
@@ -587,7 +587,7 @@ function format_num($number){
 </div>
 
 
-<!-- <noscript id="item-clone">
+<noscript id="item-clone">
     <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
@@ -595,10 +595,10 @@ function format_num($number){
 
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
-            <input type="text" name="account_code[]" value="">
-            <input type="text" name="account_id[]" value="">
-            <input type="text" name="group_id[]" value="">
-            <input type="text" name="amount[]" value="">
+            <input type="hidden" name="account_code[]" value="">
+            <input type="hidden" name="account_id[]" value="">
+            <input type="hidden" name="group_id[]" value="">
+            <input type="hidden" name="amount[]" value="">
             <span class="account"></span>
         </td>
         <td class="">
@@ -662,7 +662,7 @@ function format_num($number){
         <td class="debit_amount text-right"></td>
         <td class="credit_amount text-right"></td>
     </tr>
-</noscript> -->
+</noscript>
 <table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>" id="account_list">
     <thead>
         <tr>
@@ -1157,13 +1157,12 @@ $(document).ready(function () {
                 '</td>' +
                 '<td>' + grData.po_no + '</td>' +
                 '<td>' + grData.date_created + '</td>' +
-                '<td>' + grData.gr_status + '</td>' +
                 '</tr>';
         });
     }
     function buildMainTableHtml(tableRows) {
-        return '<table class="table table-striped table-hover table-bordered" style="width: 100%">' +
-            '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th><th>GR Status</th></tr></thead>' +
+        return '<table class="table-bordered" style="width: 100%">' +
+            '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th></tr></thead>' +
             '<tbody>' + tableRows.join('') + '</tbody></table>';
     }
     function getCheckedGrIds() {

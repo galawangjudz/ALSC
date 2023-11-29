@@ -3983,6 +3983,90 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function save_journal_not_supplier(){
+		if(empty($_POST['id'])){
+			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
+			$prefix = date("Ym-");
+			$code = sprintf("%'.05d",$v_num);
+			while(true){
+				$check = $this->conn->query("SELECT * FROM `vs_entries` where `code` = '{$prefix}{$code}' ")->num_rows;
+				if($check > 0){
+					$code = sprintf("%'.05d",ceil($code) + 1);
+				}else{
+					break;
+				}
+			}
+			$_POST['code'] = $prefix.$code;
+			$_POST['user_id'] = $this->settings->userdata('user_code');
+		}
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			
+			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
+				if(!is_numeric($v) && !is_null($v))
+					$v = $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=",";
+				if(!is_null($v))
+				$data .= " `{$k}`='{$v}' ";
+				else
+				$data .= " `{$k}`= NULL ";
+			}
+		}
+		if (empty($id)) {
+			$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
+			$sql = "INSERT INTO `vs_entries` SET {$data}";
+			$this->conn->query($sql);
+		}else{
+			$sql = "UPDATE `vs_entries` set {$data} where id = '{$id}' ";
+		}
+		
+		$save = $this->conn->query($sql);
+		if($save){
+			$jid = !empty($id) ? $id : $this->conn->insert_id;
+			$data = "";
+			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
+			foreach($account_id as $k=>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+			}
+			if(!empty($data)){
+				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
+				$save2 = $this->conn->query($sql);
+				if($save2){
+					$resp['status'] = 'success';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has successfully added.";
+					}else
+						$resp['msg'] = " Voucher Setup has been updated successfully.";
+				}else{
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has failed to save.";
+						$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
+					}else
+						$resp['msg'] = " Voucher Setup Entry has failed to update.";
+					$resp['error'] = $this->conn->error;
+				}
+			}else{
+				$resp['status'] = 'failed';
+				if(empty($id)){
+					$resp['msg'] = " Voucher Setup Entry has failed to save.";
+					$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
+				}else
+					$resp['msg'] = " Voucher Setup Entry has failed to update.";
+				$resp['error'] = "Voucher Setup Entry Items is empty";
+			}
+		}else{
+			$resp['status'] = 'failed';
+			$resp['msg'] = $this->conn->error."[{$sql}]";
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		if($resp['status'] =='success')
+			$this->settings->set_flashdata('success',$resp['msg']);
+		return json_encode($resp);
+	}
+
 	function modify_journal(){
 		if(empty($_POST['id'])){
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
@@ -5344,7 +5428,10 @@ switch ($action) {
 	break;
 	case 'get_price':
 		echo $Master->get_price();
-		break;
+	break;
+	case 'save_journal_not_supplier':
+		echo $Master->save_journal_not_supplier();
+	break;
 	default:
 		break;
 }

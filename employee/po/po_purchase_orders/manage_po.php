@@ -203,13 +203,23 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 								</tbody>
 								<tfoot>
 									<tr class="bg-lightblue">
-										<tr>
-											<th class="p-1 text-right" colspan="6"><span>
-												<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
-											</span> Total</th>
-											<th class="p-1 text-right" id="total">0</th>
-										</tr>
+									<tr>
+										<th class="p-1 text-right" colspan="6"><span>
+											<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
+										</span> Total</th>
+										<th class="p-1 text-right" id="sub_total">0</th>
 									</tr>
+									<tr>
+										<th class="p-1 text-right" colspan="6"><span id="tax_label"></span>:
+											<input type="hidden" step="any" id="vatable" name="vatable" class="border-light text-right" value="<?php echo isset($vatable) ? $vatable : 0 ?>" readonly>
+										</th>
+										<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount" id="tax_amount"></th>
+									</tr>
+									<!-- <tr>
+										<th class="p-1 text-right" colspan="6">Total:</th>
+										<th class="p-1 text-right" id="total">0</th>
+									</tr> -->
+								</tr>
 								</tfoot>
 							</table>
 							<div class="row">
@@ -305,14 +315,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		_this.closest('tr').remove()
 		calculate();
 	}
+	
 	function calculate() {
 		var _total = 0;
+
 		$('.po-item').each(function () {
 			var qty = $(this).find("[name='qty[]']").val();
 			var unit_price = $(this).find("[name='unit_price[]']").val();
 			var item_status = $(this).find("[name='item_status[]']").val(); 
 			var row_total = 0;
-
 
 			if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
 				row_total = parseFloat(qty) * parseFloat(unit_price);
@@ -322,9 +333,27 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			_total += row_total;
 		});
 
-		
-		$('#total').text(parseFloat((_total)).toLocaleString("en-US"));
+
+		tax_perc = $('[name="vatable"]').val();
+
+		//var tax_amount = _total * (tax_perc / 100);
+
+		if(tax_perc == 2){
+			var tax_amount = _total * 0.12;
+		}else if(tax_perc == 1){
+			var tax_amount_sub = (_total / 1.12) * 0.12;
+			tax_amount = _total - tax_amount_sub;
+		}else{
+			var tax_amount = 0;
+		}
+
+		$('[name="tax_amount"]').val(parseFloat(tax_amount).toFixed(2).toLocaleString("en-US"));
+
+
+		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
+		$('#total').text(parseFloat(_total + tax_amount).toLocaleString("en-US"));
 	}
+
 
 	var selectedSupplierId; 
 
@@ -372,6 +401,50 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			_autocomplete(item, selectedSupplierId);
 		});
 	});
+	$(document).ready(function() {
+		$("#supplier_id").change(function() {
+			$('[name="vatable"]').val('');
+
+			var selectedOption = $(this).find("option:selected");
+			var vatable = selectedOption.data("vatable");
+
+			if (vatable !== null) {
+				$('[name="vatable"]').val(vatable);
+			}
+
+			var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
+			var discount = (subtotal * vatable) / 100;
+
+			$('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
+
+			var total = subtotal - discount;
+
+			$('#total').text(total.toLocaleString('en-US'));
+			tax_perc = $('[name="vatable"]').val();
+
+			var taxLabel = $('#tax_label');
+			console.log('tax_perc:', tax_perc);
+
+			if (tax_perc === '0') {
+				taxLabel.text('Non-VAT');
+			} else if (tax_perc === '1') {
+				taxLabel.text('Tax Inclusive');
+			} else if (tax_perc === '2') {
+				taxLabel.text('Tax Exclusive');
+			} else if (tax_perc === '3') {
+				taxLabel.text('Zero rated');
+			} else {
+				taxLabel.text('');
+				//console.log('Unexpected tax percentage value:', tax_perc);
+				//alert('Oops! Looks like there\'s no tax group set for this supplier. Please make sure to assign the correct tax group.');
+			}
+		});
+
+		$("#supplier_id").trigger("change");
+	});
+
+
+
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 			var tr = $('#item-clone tr').clone()

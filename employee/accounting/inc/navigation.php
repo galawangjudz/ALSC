@@ -139,6 +139,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                          Agents
+                        </p>
+                      </a>
+                    </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=cv" class="nav-link nav-cv">
                       <i class="nav-icon fas fa-file"></i>
