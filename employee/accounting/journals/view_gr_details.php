@@ -94,12 +94,12 @@ if (isset($_POST['gr_id'])) {
         $total = $row["unit_price"] * $row["received"];
 
         if ($ilType == 1){
-            $ewtSub = $total * 0.01;
+            $ewt = $total * 0.01;
         }else if($ilType == 2){
-            $ewtSub = $total * 0.02;
+            $ewt = $total * 0.02;
         }
         else{
-            $ewtSub = 0;
+            $ewt = 0;
         }
 
         if ($glType == 1) {
@@ -107,6 +107,8 @@ if (isset($_POST['gr_id'])) {
         } elseif ($glType == 2) {
             $totalCredit += $total;
         }
+
+        $ewtSub += $ewt;
     ?>
     <tr>
         <td class="text-center">
@@ -175,7 +177,16 @@ if (isset($_POST['gr_id'])) {
             </script>
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-        <td class="gl_type"><?= $ilType; ?></td>
+        <td class="gl_type">
+            <?php
+            if ($ilType == 1) {
+                echo "Goods";
+            } else {
+                echo "Service";
+            }
+            ?> EWT = <?= $ewt; ?>
+        </td>
+
         <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
         <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
@@ -373,7 +384,7 @@ if (isset($_POST['gr_id'])) {
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
         <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total_ewt,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($ewtSub,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 
