@@ -3894,7 +3894,7 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 	
-	function save_journal(){
+	function save_voucher_supplier(){
 		if(empty($_POST['id'])){
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
 			$gr_id = isset($_POST['gr_id']) ? $_POST['gr_id'] : '';
@@ -3983,7 +3983,7 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
-	function save_journal_not_supplier(){
+	function save_voucher(){
 		if(empty($_POST['id'])){
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
 			$prefix = date("Ym-");
@@ -4013,17 +4013,15 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		if (empty($id)) {
+		if(empty($id)){
 			$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
-			$sql = "INSERT INTO `vs_entries` SET {$data}";
-			$this->conn->query($sql);
+			$sql = "INSERT INTO `vs_entries` set {$data} ";
 		}else{
 			$sql = "UPDATE `vs_entries` set {$data} where id = '{$id}' ";
 		}
 		
 		$save = $this->conn->query($sql);
 		if($save){
-			$jid = !empty($id) ? $id : $this->conn->insert_id;
 			$data = "";
 			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
 			foreach($account_id as $k=>$v){
@@ -4042,7 +4040,7 @@ Class Master extends DBConnection {
 				}else{
 					$resp['status'] = 'failed';
 					if(empty($id)){
-						$resp['msg'] = " Voucher Setup Entry has failed to save.";
+						$resp['msg'] = $this->conn->error."[{$sql}]";
 						$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
 					}else
 						$resp['msg'] = " Voucher Setup Entry has failed to update.";
@@ -4051,7 +4049,7 @@ Class Master extends DBConnection {
 			}else{
 				$resp['status'] = 'failed';
 				if(empty($id)){
-					$resp['msg'] = " Voucher Setup Entry has failed to save.";
+					$resp['msg'] = $this->conn->error."[{$sql}]";
 					$this->conn->query("DELETE FROM `vs_entries` where v_num = '{$v_num}'");
 				}else
 					$resp['msg'] = " Voucher Setup Entry has failed to update.";
@@ -4066,8 +4064,7 @@ Class Master extends DBConnection {
 			$this->settings->set_flashdata('success',$resp['msg']);
 		return json_encode($resp);
 	}
-
-	function modify_journal(){
+	function modify_voucher_supplier(){
 		if(empty($_POST['id'])){
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
 			$prefix = date("Ym-");
@@ -5317,11 +5314,14 @@ switch ($action) {
 	case 'delete_account':
 		echo $Master->delete_account();
 	break;
-	case 'save_journal':
-		echo $Master->save_journal();
+	case 'save_voucher_supplier':
+		echo $Master->save_voucher_supplier();
 	break;
-	case 'modify_journal':
-		echo $Master->modify_journal();
+	case 'save_voucher':
+		echo $Master->save_voucher();
+	break;
+	case 'modify_voucher_supplier':
+		echo $Master->modify_voucher_supplier();
 	break;
 	case 'save_vs':
 		echo $Master->save_vs();
@@ -5428,9 +5428,6 @@ switch ($action) {
 	break;
 	case 'get_price':
 		echo $Master->get_price();
-	break;
-	case 'save_journal_not_supplier':
-		echo $Master->save_journal_not_supplier();
 	break;
 	default:
 		break;

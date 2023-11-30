@@ -100,7 +100,7 @@ function format_num($number){
 					<input type="radio" name="divChoice" value="sup-div" id="sup-radio"> Suppliers
 				</label>
 				<label>
-					<input type="radio" name="divChoice" value="client-div" id="sup-radio"> Customers
+					<input type="radio" name="divChoice" value="client-div" id="sup-radio"> Clients
 				</label>
 			</div>
 		</div>
@@ -152,9 +152,9 @@ function format_num($number){
 							<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
 								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/print_voucher_supplier.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data_supplier" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
@@ -209,9 +209,9 @@ function format_num($number){
 							<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
 								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data_agent" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
@@ -266,9 +266,9 @@ function format_num($number){
 							<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
 								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data_employee" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
@@ -323,9 +323,9 @@ function format_num($number){
 							<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
 								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item edit_data_client" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div>
@@ -367,9 +367,24 @@ $(document).ready(function() {
 			var redirectUrl = '?page=journals/export_voucher&id=' + dataId;
 			window.location.href = redirectUrl;
 		})
-		$('.edit_data').click(function() {
+		$('.edit_data_supplier').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/manage_journal&id=' + dataId;
+			var redirectUrl = '?page=journals/m_supplier_voucher&id=' + dataId;
+			window.location.href = redirectUrl;
+		})
+		$('.edit_data_agent').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=journals/m_agent_voucher&id=' + dataId;
+			window.location.href = redirectUrl;
+		})
+		$('.edit_data_employee').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=journals/m_employee_voucher&id=' + dataId;
+			window.location.href = redirectUrl;
+		})
+		$('.edit_data_client').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=journals/m_client_voucher&id=' + dataId;
 			window.location.href = redirectUrl;
 		})
 		$('.delete_data').click(function(){

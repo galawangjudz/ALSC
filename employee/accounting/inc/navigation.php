@@ -5,6 +5,15 @@
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
+.nav-header {
+    cursor: pointer;
+  }
+.nav-list {
+  display: none;
+  list-style: none;
+  padding: 0;
+}
+
 
 </style>
 <?php $usertype = $_settings->userdata('user_type'); 
@@ -81,7 +90,11 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">File Manager</li></div></b></i>
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header" onclick="toggleNavList()">
+                        <b><i>File Manager</i></b>
+                      </li>
+                    </div>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=po/suppliers/" class="nav-link nav-vs">
                       <i class="nav-icon fas fa-file"></i>
@@ -131,19 +144,42 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header" onclick="toggleNavList()">
+                        <b><i>Create Voucher Setup</i></b>
+                      </li>
+                    </div>
+                    <ul class="nav-list">
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_agent_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-folder"></i>
+                          <p>Agents</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_employee_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-folder"></i>
+                          <p>Employees</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_client_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-folder"></i>
+                          <p>Clients</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_supplier_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-folder"></i>
+                          <p>Suppliers</p>
+                        </a>
+                      </li>
+                    </ul>
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
                         <i class="nav-icon fas fa-folder"></i>
                         <p>
                           Voucher Setup Entries
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
-                        <i class="nav-icon fas fa-folder"></i>
-                        <p>
-                          Agents
                         </p>
                       </a>
                     </li> 
@@ -198,3 +234,17 @@ $level = $_settings->userdata('type');
      
     })
   </script>
+<script>
+  function toggleNavList() {
+    const navList = document.querySelector('.nav-list');
+    navList.style.display = (navList.style.display === 'none' || navList.style.display === '') ? 'block' : 'none';
+  }
+
+  // Prevent toggling when a link is clicked
+  const navLinks = document.querySelectorAll('.nav-list a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', function (event) {
+      event.stopPropagation();
+    });
+  });
+</script>

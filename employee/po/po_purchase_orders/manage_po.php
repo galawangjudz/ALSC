@@ -335,16 +335,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 
 
 		tax_perc = $('[name="vatable"]').val();
-
+		var taxTotal;
+		var tax_amount;
 		//var tax_amount = _total * (tax_perc / 100);
 
 		if(tax_perc == 2){
-			var tax_amount = _total * 0.12;
+			tax_amount = _total * 0.12;
+			//taxTotal = _total - tax_amount;
 		}else if(tax_perc == 1){
-			var tax_amount_sub = (_total / 1.12) * 0.12;
+			//var tax_amount_sub = (_total / 1.12) * 0.12;
 			tax_amount = _total - tax_amount_sub;
+			//taxTotal =_total - tax_amount;
 		}else{
-			var tax_amount = 0;
+			//taxTotal = 0;
+			tax_amount = 0;
 		}
 
 		$('[name="tax_amount"]').val(parseFloat(tax_amount).toFixed(2).toLocaleString("en-US"));

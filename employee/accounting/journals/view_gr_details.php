@@ -20,7 +20,9 @@ if (isset($_POST['gr_id'])) {
     if ($qry->num_rows > 0) {
         $totalCredit = 0;
         $totalDebit = 0;
+        $vatSub = 0;
         $ewtSub = 0;
+        $subtotal_ewt = 0;
 
         while ($row2 = $qry->fetch_assoc()) {
             foreach ($row2 as $k => $v) {
@@ -93,21 +95,38 @@ if (isset($_POST['gr_id'])) {
 
         $total = $row["unit_price"] * $row["received"];
 
+
+        if ($vat == 1){
+            //$total_vat = number_format((($total/1.12)*0.12),2);
+            $total_vat = (($total/1.12)*0.12);
+        }else if($vat == 2){
+            //$total_vat = number_format(($total*0.12),2);
+            $total_vat = ($total*0.12);
+        }
+        else{
+            $total_vat = 0;
+        }
+        $vatSub += $total_vat;
+        
+        /////////////////////////////////////
         if ($ilType == 1){
-            $ewt = $total * 0.01;
+            //$ewt = number_format((($total - $total_vat) * 0.01),2);
+            $ewt = (($total - $total_vat) * 0.01);
+           
         }else if($ilType == 2){
-            $ewt = $total * 0.02;
+            //$ewt = number_format((($total - $total_vat) * 0.02),2);
+            $ewt = (($total - $total_vat) * 0.02);
         }
         else{
             $ewt = 0;
         }
 
+        /////////////////////////////////////
         if ($glType == 1) {
             $totalDebit += $total;
         } elseif ($glType == 2) {
             $totalCredit += $total;
         }
-
         $ewtSub += $ewt;
     ?>
     <tr>
@@ -184,7 +203,7 @@ if (isset($_POST['gr_id'])) {
             } else {
                 echo "Service";
             }
-            ?> EWT = <?= $ewt; ?>
+            ?> VAT = <?= $total_vat; ?>   SUBTOTAL EWT = <?= number_format($ewt,2); ?>
         </td>
 
         <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
@@ -208,14 +227,6 @@ if (isset($_POST['gr_id'])) {
         $glType = $row_vat['type'];
         $account_name = $row_vat['name'];
 
-        if ($vat == 2){
-            $total_vat = $totalDebit * 0.12;
-        }elseif($vat == 1){
-            $vat_partial = $totalDebit / 1.12;
-            $total_vat = $vat_partial * 0.12;
-        }else{
-            $total_vat = 0;
-        }
     ?>
     <tr>
         <td class="text-center">
@@ -227,7 +238,7 @@ if (isset($_POST['gr_id'])) {
             <input type="hidden" name="account_code[]" value="<?php echo $row_vat["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $total_vat; ?>">
+            <input type="text" name="amount[]" value="<?php echo $vatSub; ?>">
             <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
@@ -285,7 +296,7 @@ if (isset($_POST['gr_id'])) {
         </td>
         <td></td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total_vat,2) : '' ?></td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($vatSub,2) : '' ?></td>
         <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
@@ -307,13 +318,6 @@ if (isset($_POST['gr_id'])) {
         $account_name = $row_ewt['name'];
 
         $total_ewt = ($totalDebit) * 0.01;
-
-        // if ($vat == 2){
-        //     $total_vat = $totalDebit * 0.12;
-        // }elseif($vat == 1){
-        //     $vat_partial = $totalDebit / 1.12;
-        //     $total_vat = $vat_partial * 0.12;
-        // }
     ?>
     <tr>
         <td class="text-center">
@@ -405,13 +409,7 @@ if (isset($_POST['gr_id'])) {
         $account_name = $row_ap['name'];
 
       
-        $total_ap = ($totalDebit + $total_vat) - $total_ewt;
-        // if ($vat == 2){
-        //     $total_vat = $totalDebit * 0.12;
-        // }elseif($vat == 1){
-        //     $vat_partial = $totalDebit / 1.12;
-        //     $total_vat = $vat_partial * 0.12;
-        // }
+        $total_ap = $totalDebit - $ewtSub;
     ?>
     <tr>
         <td class="text-center">
@@ -489,8 +487,8 @@ if (isset($_POST['gr_id'])) {
 <tfoot>
     <tr>
         <td colspan="5"><strong>Total</strong></td>
-        <td class="text-right" id="total-debit"><?= number_format($totalDebit + $total_vat, 2) ?></td>
-        <td class="text-right" id="total-credit"><?= number_format($totalCredit + $total_ewt + $total_ap,2); ?></td>
+            <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
+            <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($total_ap + $ewtSub),2); ?></td>
     </tr>
 </tfoot>
 </table>
@@ -543,7 +541,5 @@ function updateTotalsAfterRowDeletion(grId) {
         }
     });
 }
-
-
 </script>
 
