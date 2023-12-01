@@ -492,7 +492,7 @@ function format_num($number){
             </script>
         </td>
 
-        <td class="group"></td>
+        <!-- <td class="group"></td> -->
         <td class="debit_amount text-right"></td>
         <td class="credit_amount text-right"></td>
     </tr>

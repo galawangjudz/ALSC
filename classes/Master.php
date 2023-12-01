@@ -3944,10 +3944,10 @@ Class Master extends DBConnection {
 			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+				$data .= "('{$gr_id[$k]}','{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 			if(!empty($data)){
-				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
+				$sql = "INSERT INTO `vs_items` (`gr_id`,`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
 				$save2 = $this->conn->query($sql);
 				if($save2){
 					$resp['status'] = 'success';
