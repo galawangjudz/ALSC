@@ -90,6 +90,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
 	input{
 		border:none;
+		font-size: 12px!important;
+	}
+	.sup_cont,.r-container{
+		display: none;
+	}
+	.form-control{
+		font-size: 12px!important;
+	}
+	label{
+		font-size: 13px!important;
+	}
+	.table{
+		font-size: 12px!important;
 	}
 </style>
 <!-- <style>
@@ -226,38 +239,49 @@ $(document).ready(function() {
 		<form action="" id="po-form">
 			<input type="hidden" value="<?php echo $level; ?>">
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
-
 				<div class="card-body">
-					<div class="row">
-						<div class="col-md-6 form-group">
-						<p  class="m-0"><b>Supplier:</b></p>
-							<div class="col-6">
-
-								<?php 
-								$supplier_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
-								while ($row = $supplier_qry->fetch_assoc()):
-									$vatable = $row['vatable'];
-								?>
-								<div>
-									<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
-									<p class="m-0"><b><?php echo $row['name'] ?></b></p>
-
-								</div>
-								<?php endwhile; ?>
-							</div>
-							
-						</div>
-						<div class="col-md-6 form-group">
-							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
-							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
-						</div>
+					<div class="sup_cont">
+						<label for="supplier_id">Supplier:</label>
+						<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+							<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+							<?php 
+							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
+							while ($row = $supplier_qry->fetch_assoc()):
+								$vatable = $row['vatable'];
+							?>
+							<option 
+								value="<?php echo $row['id'] ?>" 
+								data-vatable="<?php echo $vatable ?>"
+								<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
+							><?php echo $row['name'] ?></option>
+							<?php endwhile; ?>
+						</select>
 					</div>
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label><b>Supplier:</b></label>
+							<?php 
+							$supplier_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
+							while ($row = $supplier_qry->fetch_assoc()):
+								$vatable = $row['vatable'];
+							?>
+							<div>
+								<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
+								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $row['name'] ?>" readonly>
+							</div>
+							<?php endwhile; ?>
+						</div>
+					<div class="col-md-6 form-group">
+						<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
+						<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+						<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
+					</div>
+				</div>
 
 					<div class="row">
 						<div class="col-md-6 form-group">
-						<p  class="m-0"><b>Requesting Department:</b></p>
-                    <p><input type="text" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" style="border:none;color:black;"></p>
+						<label><b>Requesting Department:</b></label>
+                    	<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="department">Delivery Date:</label>
@@ -276,45 +300,104 @@ $(document).ready(function() {
 				?>
 				<div class="card-body">
 					<div class="row">
-						<div class="col-md-6 form-group">
-							<label for="receiver">Receiver 1:</label>
-							<div class="form-group">
-								<?php if ($receiver !== null): ?>
-									<p class="m-0"><b><?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?></b></p>
-									<p class="m-0"><?php echo $receiver['phone'] ?></p>
-								<?php else: ?>
-									<p class="m-0"></p>
-								<?php endif; ?>
-							</div>
-						</div>
-						<div class="col-md-6 form-group">
-							<label for="contact_no1">Contact #:</label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="contact_no1" value="<?php echo isset($contact_no1) ? $contact_no1 : '' ?>" readonly>
-						</div>
-						<div class="col-md-6 form-group">
-						<label for="receiver">Receiver 2:</label>
-							<div class="col-6">
+							<?php if ($receiver !== null): ?>
+							<div class="col-md-6 form-group">
+								<label for="receiver">Receiver 1:</label>
 								<div class="form-group">
-									<?php if ($receiver2 !== null): ?>
-										<p class="m-0"><b><?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?></b></p>
-										<p class="m-0"><?php echo $receiver2['phone'] ?></p>
-									<?php else: ?>
-										<p class="m-0"></p>
-									<?php endif; ?>
+									<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?>" readonly></p>
 								</div>
 							</div>
-						</div>
+							<div class="col-md-6 form-group">
+								<label for="contact_no1">Contact #:</label>
+								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $receiver['phone'] ?>" readonly>
+							</div>
+							<?php else: ?>
+								<p class="m-0"></p>
+							<?php endif; ?>
 
-						<div class="col-md-6 form-group">
-							<label for="contact_no2">Contact #:</label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="contact_no2" value="<?php echo isset($contact_no2) ? $contact_no2 : '' ?>" readonly>
+							<?php if ($receiver2 !== null): ?>
+								<div class="col-md-6 form-group">
+									<label for="receiver">Receiver 2:</label>
+									<div class="form-group">
+										<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?>" readonly></p>
+									</div>
+								</div>
+								<div class="col-md-6 form-group">
+									<label for="contact_no2">Contact #:</label>
+									<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $receiver2['phone'] ?>" readonly>
+								</div>
+							<?php else: ?>
+								<p class="m-0"></p>
+							<?php endif; ?>
+						</div>
+					<div class="r-container">
+						<div class="row">
+							<div class="col-md-6 form-group">
+								<label for="receiver">Receiver 1:</label>
+								<select name="receiver_id" id="receiver_id" class="custom-select custom-select-sm rounded-0 select2" required>
+									<?php 
+									$receiver_qry = $conn->query("SELECT * FROM `users`");
+									$isReceiverIdZero = isset($receiver_id) && $receiver_id == 0;
+									?>
+									<option value="" <?php echo $isReceiverIdZero ? "selected" : '' ?>></option>
+									<?php 
+									while($row = $receiver_qry->fetch_assoc()):
+										$recValue = $row['firstname'] . ' ' . $row['lastname'];
+									?>
+									<option 
+										value="<?php echo $row['user_code'] ?>" 
+										data-contact1="<?php echo $row['phone'] ?>"
+										<?php echo isset($receiver_id) && $receiver_id == $row['user_code'] ? 'selected' : '' ?>>
+										<?php echo $recValue ?></option>
+									<?php endwhile; ?>
+								</select>
+							</div>
+							<div class="col-md-6 form-group">
+								<label for="contact_no1">Contact #:</label>
+								<input type="text" class="form-control form-control-sm rounded-0" id="contact_no1" value="<?php echo isset($contact_no1) ? $contact_no1 : '' ?>" readonly>
+							</div>
+							<div class="col-md-6 form-group">
+								<label for="receiver">Receiver 2:</label>
+								<select name="receiver2_id" id="receiver2_id" class="custom-select custom-select-sm rounded-0 select2">
+									<option value="" disabled <?php echo !isset($receiver2_id) ? "selected" : '' ?>></option>
+									<?php 
+									$receiver2_qry = $conn->query("SELECT * FROM `users`");
+									$isReceiverIdZero2 = isset($receiver2_id) && $receiver2_id == 0;
+									?>
+									<option value="" <?php echo $isReceiverIdZero2 ? "selected" : '' ?>></option>
+									<?php 
+									while($row = $receiver2_qry->fetch_assoc()):
+										$recValue2 = $row['firstname'] . ' ' . $row['lastname'];
+									?>
+									<option 
+										value="<?php echo $row['user_code'] ?>" 
+										data-contact2="<?php echo $row['phone'] ?>"
+										<?php echo isset($receiver2_id) && $receiver2_id == $row['user_code'] ? 'selected' : '' ?>>
+										<?php echo $recValue2 ?></option>
+									<?php endwhile; ?>
+								</select>
+							</div>
+
+							<div class="col-md-6 form-group">
+								<label for="contact_no2">Contact #:</label>
+								<input type="text" class="form-control form-control-sm rounded-0" id="contact_no2" value="<?php echo isset($contact_no2) ? $contact_no2 : '' ?>" readonly>
+							</div>
 						</div>
 					</div>
-				</div>
 			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
 			<div class="row">
 				<div class="col-md-12">
-					<table class="table table-striped table-bordered" id="item-list">
+					<table class="table table-striped table-bordered" id="item-list" style="width:100%">
+						<colgroup>
+							<col width="5%">
+							<col width="10%">
+							<col width="25%">
+							<col width="20%">
+							<col width="10%">
+							<col width="10%">
+							<col width="5%">
+							<col width="25%">
+						</colgroup>
 						<thead>
 							<tr class="bg-navy disabled">
 								<?php if($level == 4 and ($fpo_status != 3)): ?>
@@ -344,24 +427,24 @@ $(document).ready(function() {
 								</td>
 							<?php endif; ?>
 								<td class="align-middle p-0 text-center">
-									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
+									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" style="background-color:transparent" readonly/>
 								</td>
 								<!-- <td class="align-middle p-1">
 									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>"/>
 								</td> -->
 								<!-- <td class="align-middle p-1 item-unit"><?php echo $row['default_unit'] ?></td> -->
 								<td class="align-middle p-0 text-center">
-									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
+									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:transparent"/>
 								</td>
 								<td class="align-middle p-1">
 									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
+									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" style="background-color:transparent" required/>
 								</td>
 								<td class="align-middle p-1 item-description">
 									<?php echo $row['description'] ?>
 								</td>
 								<td class="align-middle p-1">
-									<input type="text" class="align-middle p-1 item-price" step="any" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
+									<input type="text" class="align-middle p-1 item-price" step="any" name="unit_price[]" value="<?php echo $row['unit_price'] ?>" style="background-color:transparent"/>
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'],2) ?>
 								</td>

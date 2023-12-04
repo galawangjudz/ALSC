@@ -501,7 +501,7 @@ function format_num($number){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="zeroAccountCodeModalLabel">Unlink Item/s</h5>
+                <h5 class="modal-title" id="zeroAccountCodeModalLabel"><b>Unlinked Item/s</b></h5>
                 
             </div>
             <div class="modal-body" id="zeroAccountCodeModalBody">
@@ -874,7 +874,7 @@ function displayZeroAccountCodeModal(items, supplierId) {
     var modalBody = $('#zeroAccountCodeModalBody');
     modalBody.empty();
     var table = $('<table class="table table-bordered">');
-    var thead = $('<thead>').append('<tr><th style="width:40%">Name</th><th style="width:10%">Item Code</th><th style="width:50%">Description</th></tr>');
+    var thead = $('<thead>').append('<tr><th style="width:40%;">Name</th><th style="width:10%">Item Code</th><th style="width:50%">Description</th></tr>');
 
     table.append(thead);
 
@@ -891,7 +891,7 @@ function displayZeroAccountCodeModal(items, supplierId) {
     var modal = $('#zeroAccountCodeModal');
     modal.find('.modal-dialog').removeClass('modal-lg'); 
     modal.find('.modal-dialog').addClass('custom-modal-width'); 
-    modalBody.append('<button id="redirectButton" class="btn btn-primary">Manage Items</button>');
+    modalBody.append('<button id="redirectButton" class="btn btn-primary" style="width:100%;">Manage Items</button>');
     $('#zeroAccountCodeModal').modal({
     backdrop: 'static',
     keyboard: false

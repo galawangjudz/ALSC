@@ -268,7 +268,21 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		</tr>
 	</table>
 </body>
+
+
 <script>
+$(document).ready(function() {
+    $("#supplier_id").on("change", function() {
+        // Iterate through each input field in rows (except the first row)
+        $("#item-clone tr.po-item:not(:first) input").each(function() {
+            // Clear the value of the input field
+            $(this).val('');
+        });
+    });
+});
+
+
+
 	$(document).ready(function() {
 		function updateContactInfo() {
 			var selectedOption = $('#receiver_id').find(':selected');

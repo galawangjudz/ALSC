@@ -1,9 +1,9 @@
 /* manage_po.php */
 body{
-    font-size:12px!important;
+    font-size:13px!important;
 }
 .form-control{
-    font-size:12px;
+    font-size:13px;
 }
 .ui-autocomplete {
     max-height: 200px; 
@@ -55,11 +55,11 @@ input[type=number] {
 }
 .select2{
     margin-top:-6px!important;
-    font-size:12px!important;
+    font-size:13px!important;
 }
 .table{
-    font-size: 12px;
+    font-size: 13px;
 }
 input{
-    font-size: 12px;
+    font-size: 13px!important;
 }

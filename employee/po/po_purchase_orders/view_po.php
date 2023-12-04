@@ -170,14 +170,19 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                                 </tr> -->
 
                                 <tr>
-                                    <th class="p-1 text-right" colspan="5">TOTAL:</th>
+                                    <th class="p-1 text-right" colspan="5">Total:</th>
                                     <th class="p-1 text-right" id="total"><?php echo number_format($total, 2) ?></th>
                                 </tr>
                                 <tr>
-                                    <th class="p-1 text-right" colspan="6">Tax (<span id="tax_label"></span>):
-                                    
-                                    <?php echo $tax_amount; ?></th>
-                                </tr>
+                            </tr>
+                            <tr>
+
+                                <th class="p-1 text-right" colspan="5">Tax (<span id="tax_label"></span>):
+                                    <input type="hidden" id="vatable" value="<?php echo $vatable; ?>">
+                                </th>
+                                
+                                <th class="p-1 text-right"><input type="text" id="tax_amount" name="tax_amount" value="<?php echo isset($tax_amount) ? number_format($tax_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
+                            </tr>
                             </tr>
                         </tfoot>
                     </table>

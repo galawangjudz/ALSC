@@ -3,11 +3,7 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-<style>
-	.table{
-		font-size:12px;
-	}
-</style>
+
 <script src="js/po_scripts.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <body onload="showPendingPOsTable();">

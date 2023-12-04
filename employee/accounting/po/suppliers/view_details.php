@@ -109,10 +109,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         ?>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td><b>Withholding Tax:</b></td>
                     <td><?php echo $wt ?>%</td>
-                </tr>
+                </tr> -->
                 <tr>
                     <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>
                     <td><b>Date Created:</b></td>

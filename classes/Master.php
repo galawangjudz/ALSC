@@ -4628,8 +4628,8 @@ Class Master extends DBConnection {
 		extract($_POST);
 		//$discount_amount = str_replace(',', '', $discount_amount,$tax_amount);
 		if($level == 4 and $selected_index == 1){
-			$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
-			#$update = $this->conn->query("UPDATE `po_list` set `tax_amount`='{$tax_amount}',`status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			#$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` set `tax_amount`='{$tax_amount}',`status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";

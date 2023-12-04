@@ -103,10 +103,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <option value="2" <?php echo (isset($vatable) && $vatable == "2") ? "selected" : "" ?>>Exclusive</option>
             </select>
         </div> 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="contact" class="control-label">Withholding Tax:</label>     
             <input type="text" name="wt" id="wt" class="form-control rounded-0" value="<?php echo isset($wt) ? $wt :"" ?>">
-        </div>
+        </div> -->
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control rounded-0" required>

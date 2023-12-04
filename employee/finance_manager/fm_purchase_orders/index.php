@@ -50,6 +50,9 @@ $level = $_settings->userdata('type');
 		align-items: center; 
 		justify-content: space-around;
 	}
+	.table{
+		font-size:13px;
+	}
 </style>
 <div class="card" id="container">
 	<div class="navbar-menu">

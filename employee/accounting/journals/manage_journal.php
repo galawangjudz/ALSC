@@ -680,7 +680,7 @@ function format_num($number){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="zeroAccountCodeModalLabel">Unlink Item/s</h5>
+                <h5 class="modal-title" id="zeroAccountCodeModalLabel">Unlinked Item/s</h5>
                 
             </div>
             <div class="modal-body" id="zeroAccountCodeModalBody">
@@ -1219,7 +1219,7 @@ $(document).ready(function () {
     function displayZeroAccountCodeModal(items, supplierId) {
         var modalBody = $('#zeroAccountCodeModalBody');
         modalBody.empty();
-        var table = $('<table class="table table-bordered">');
+        var table = $('<table>');
         var thead = $('<thead>').append('<tr><th style="width:40%">Name</th><th style="width:10%">Item Code</th><th style="width:50%">Description</th></tr>');
 
         table.append(thead);
