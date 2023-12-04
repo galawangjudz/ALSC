@@ -174,7 +174,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                                     <th class="p-1 text-right" id="total"><?php echo number_format($total, 2) ?></th>
                                 </tr>
                                 <tr>
-                                    <th class="p-1 text-right" colspan="6"><span id="tax_label"></span>:
+                                    <th class="p-1 text-right" colspan="6">Tax (<span id="tax_label"></span>):
                                     
                                     <?php echo $tax_amount; ?></th>
                                 </tr>
@@ -200,9 +200,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         if (tax_perc === '0') {
             taxLabel.textContent = 'Non-VAT';
         } else if (tax_perc === '1') {
-            taxLabel.textContent = 'Tax Inclusive';
+            taxLabel.textContent = 'Inclusive';
         } else if (tax_perc === '2') {
-            taxLabel.textContent = 'Tax Exclusive';
+            taxLabel.textContent = 'Exclusive';
         } else if (tax_perc === '3') {
             taxLabel.textContent = 'Zero rated';
         } else {

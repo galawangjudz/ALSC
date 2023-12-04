@@ -51,7 +51,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     input[type=number] {
     -moz-appearance: textfield;
     }
-    [name="tax_percentage"],[name="discount_percentage"]{
+    [name="tax_percentage"]{
         width:5vw;
     }
     .disabled-link {
@@ -79,6 +79,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     $type = $_settings->userdata('user_code');
     $level = $_settings->userdata('type');
 ?>
+<body onload="taxLabel()">
 <div class="card card-outline card-info">
 	<div class="card-header">
     <form action="" id="view-po-form">
@@ -158,7 +159,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <?php else: ?>
                         <p class="m-0"></p>
                     <?php endif; ?>
-                    </div>
+                </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
@@ -224,25 +225,23 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <tfoot>
                         <tr class="bg-lightblue">
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Sub Total:</th>
+                                <th class="p-1 text-right" colspan="5">Total:</th>
                                 <th class="p-1 text-right" id="sub_total"><?php echo number_format($sub_total,2) ?></th>
                             </tr>
                             <tr>
-                            <th class="p-1 text-right" colspan="5">
-                                Discount (
-                                <input type="text" id="discount_percentage" name="discount_percentage" style="width:23px;border:none;" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>" readonly>%:)
-                            </th>
-                                <th class="p-1 text-right"><input type="text" id="discount_amount" name="discount_amount" value="<?php echo isset($discount_amount) ? number_format($discount_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
                             </tr>
                             <tr>
                                 <th class="p-1 text-right" colspan="5">
-                                Tax Inclusive (<input type="text" id="tax_percentage" name="tax_percentage" style="width:23px;border:none;" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>" readonly>%):</th>
+                                <th class="p-1 text-right" colspan="6">Tax (<span id="tax_label"></span>):<?php echo $tax_amount;?>
+                                <input type="hidden" id="vatable" value="<?php echo $vatable; ?>">
+                            </th>
+                                
                                 <th class="p-1 text-right"><input type="text" id="tax_amount" name="tax_amount"  value="<?php echo isset($tax_amount) ? number_format($tax_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <th class="p-1 text-right" colspan="5">TOTAL:</th>
-                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total - $discount_amount) + $tax_amount, 2) : 0 ?></th>
-                            </tr>
+                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total) + $tax_amount, 2) : 0 ?></th>
+                            </tr> -->
                         </tr>
                     </tfoot>
                 </table>
@@ -256,6 +255,25 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
     </div>
 </div>
+</body>
+<script>
+    function taxLabel() {
+        var taxLabel = document.getElementById('tax_label');
+        var tax_perc = document.getElementById('vatable').value;
+
+        if (tax_perc === '0') {
+            taxLabel.textContent = 'Non-VAT';
+        } else if (tax_perc === '1') {
+            taxLabel.textContent = 'Inclusive';
+        } else if (tax_perc === '2') {
+            taxLabel.textContent = 'Exclusive';
+        } else if (tax_perc === '3') {
+            taxLabel.textContent = 'Zero rated';
+        } else {
+            taxLabel.textContent = '';
+        }
+    }
+</script>
 <script>
 	$(function(){
         $('#print').click(function(e){

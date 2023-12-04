@@ -72,7 +72,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	input[type=number] {
 	-moz-appearance: textfield;
 	}
-	[name="tax_percentage"],[name="discount_percentage"]{
+	[name="tax_percentage"]{
 		width:5vw;
 	}
 	.nav-cpo{
@@ -92,11 +92,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		border:none;
 	}
 </style>
-<!-- <style>
-	.sup_cont{
-		display: none !important;
-	}	
-</style> -->
+
 <script>
 document.addEventListener('change', function(event) {
 	if (event.target.classList.contains('item-checkbox')) {
@@ -120,9 +116,9 @@ $(document).ready(function() {
     if (level != 4) {
         $('input[name="qty[]"], input[name="default_unit[]"], input[name="item_id[]"], input[name="unit_price[]"]').prop('readonly', true);
         $('#delivery_date').prop('readonly', true);
-		$('#discount_percentage').prop('readonly', true);
+		// $('#discount_percentage').prop('readonly', true);
 		$('#tax_percentage').prop('readonly', true);
-		$('#discount_percentage, #tax_percentage').css('background-color', 'whitesmoke');
+		$('#tax_percentage').css('background-color', 'whitesmoke');
         $('#notes').prop('readonly', true);
 		$('#receiver').prop('readonly', true);
 		$('#receiver_contact_no').prop('readonly', true);
@@ -230,31 +226,23 @@ $(document).ready(function() {
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-6 form-group">
-						<!-- <label for="supplier_id">Supplier:</label>
-						<?php 
-						$sup_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 and id='$supplier_id' ORDER BY `name` ASC");
-						while($row = $sup_qry->fetch_assoc()):
-							$supName = $row['name']; 
-						?>
-						<?php endwhile; ?>
-						<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $supName; ?>">	 -->
-							<div class="sup_cont">
-								<label for="supplier_id">Supplier:</label>
-								<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-									<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-									<?php 
-									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-									while ($row = $supplier_qry->fetch_assoc()):
-										$vatable = $row['vatable'];
-									?>
-									<option 
-										value="<?php echo $row['id'] ?>" 
-										data-vatable="<?php echo $vatable ?>"
-										<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
-									><?php echo $row['name'] ?></option>
-									<?php endwhile; ?>
-								</select>
+						<p  class="m-0"><b>Supplier:</b></p>
+							<div class="col-6">
+
+								<?php 
+								$supplier_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
+								while ($row = $supplier_qry->fetch_assoc()):
+									$vatable = $row['vatable'];
+								?>
+								<div>
+									<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
+									<p class="m-0"><b><?php echo $row['name'] ?></b></p>
+									<p class="m-0"><b><?php echo $row['vatable'] ?></b></p>
+
+								</div>
+								<?php endwhile; ?>
 							</div>
+							
 						</div>
 						<div class="col-md-6 form-group">
 							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
@@ -265,21 +253,8 @@ $(document).ready(function() {
 
 					<div class="row">
 						<div class="col-md-6 form-group">
-							<label for="department">Requesting Department:</label>
-							<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
-								<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
-								<?php 
-								$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
-								while($row = $dept_qry->fetch_assoc()):
-									$deptValue = $row['department']; 
-								?>
-								<option 
-									value="<?php echo $deptValue ?>" 
-									<?php echo isset($department) && $department == $deptValue ? 'selected' : '' ?> 
-									><?php echo $deptValue ?>
-								</option>
-								<?php endwhile; ?>
-							</select>
+						<p  class="m-0"><b>Requesting Department:</b></p>
+                    <p><input type="text" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" style="border:none;color:black;"></p>
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="department">Delivery Date:</label>
@@ -290,27 +265,25 @@ $(document).ready(function() {
 					</div>
 				</div>
 				<hr>
+				<?php 
+					$receiver_qry = $conn->query("SELECT * FROM users where user_code = '{$receiver_id}'");
+					$receiver2_qry = $conn->query("SELECT * FROM users where user_code = '{$receiver2_id}'");
+					$receiver = $receiver_qry->fetch_array();
+					$receiver2 = $receiver2_qry->fetch_array();
+				?>
+
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-6 form-group">
 							<label for="receiver">Receiver 1:</label>
-							<select name="receiver_id" id="receiver_id" class="custom-select custom-select-sm rounded-0 select2" required>
-								<?php 
-								$receiver_qry = $conn->query("SELECT * FROM `users`");
-								$isReceiverIdZero = isset($receiver_id) && $receiver_id == 0;
-								?>
-								<option value="" <?php echo $isReceiverIdZero ? "selected" : '' ?>></option>
-								<?php 
-								while($row = $receiver_qry->fetch_assoc()):
-									$recValue = $row['firstname'] . ' ' . $row['lastname'];
-								?>
-								<option 
-									value="<?php echo $row['user_code'] ?>" 
-									data-contact1="<?php echo $row['phone'] ?>"
-									<?php echo isset($receiver_id) && $receiver_id == $row['user_code'] ? 'selected' : '' ?>>
-									<?php echo $recValue ?></option>
-								<?php endwhile; ?>
-							</select>
+							<div class="form-group">
+								<?php if ($receiver !== null): ?>
+									<p class="m-0"><b><?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?></b></p>
+									<p class="m-0"><?php echo $receiver['phone'] ?></p>
+								<?php else: ?>
+									<p class="m-0"></p>
+								<?php endif; ?>
+							</div>
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="contact_no1">Contact #:</label>
@@ -318,24 +291,16 @@ $(document).ready(function() {
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="receiver">Receiver 2:</label>
-							<select name="receiver2_id" id="receiver2_id" class="custom-select custom-select-sm rounded-0 select2">
-								<option value="" disabled <?php echo !isset($receiver2_id) ? "selected" : '' ?>></option>
-								<?php 
-								$receiver2_qry = $conn->query("SELECT * FROM `users`");
-								$isReceiverIdZero2 = isset($receiver2_id) && $receiver2_id == 0;
-								?>
-								<option value="" <?php echo $isReceiverIdZero2 ? "selected" : '' ?>></option>
-								<?php 
-								while($row = $receiver2_qry->fetch_assoc()):
-									$recValue2 = $row['firstname'] . ' ' . $row['lastname'];
-								?>
-								<option 
-									value="<?php echo $row['user_code'] ?>" 
-									data-contact2="<?php echo $row['phone'] ?>"
-									<?php echo isset($receiver2_id) && $receiver2_id == $row['user_code'] ? 'selected' : '' ?>>
-									<?php echo $recValue2 ?></option>
-								<?php endwhile; ?>
-							</select>
+							<div class="col-6">
+								<div class="form-group">
+									<?php if ($receiver2 !== null): ?>
+										<p class="m-0"><b><?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?></b></p>
+										<p class="m-0"><?php echo $receiver2['phone'] ?></p>
+									<?php else: ?>
+										<p class="m-0"></p>
+									<?php endif; ?>
+								</div>
+							</div>
 						</div>
 
 						<div class="col-md-6 form-group">
@@ -379,16 +344,13 @@ $(document).ready(function() {
 								<td class="align-middle p-0 text-center">
 									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
 								</td>
-								<!-- <td class="align-middle p-1">
-									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>"/>
-								</td> -->
-								<!-- <td class="align-middle p-1 item-unit"><?php echo $row['default_unit'] ?></td> -->
+								
 								<td class="align-middle p-0 text-center">
 									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
 								</td>
 								<td class="align-middle p-1">
 									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
+									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" readonly/>
 								</td>
 								<td class="align-middle p-1 item-description">
 									<?php echo $row['description'] ?>
@@ -411,31 +373,23 @@ $(document).ready(function() {
 						</tbody>
 						<tfoot>
 							<tr class="bg-lightblue">
-								<tr>
-									<th class="p-1 text-right" colspan="5"><span>
-									<?php if($usertype == "Purchasing Officer"): ?>
-										<button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
-									<?php endif; ?>
-									</span> Sub Total</th>
-									<th class="p-1 text-right" id="sub_total">0</th>
-								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="5">Discount (%):
-									<input type="number" step="any" id="discount_percentage" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
-									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo number_format(isset($discount_amount) ? $discount_amount : 0) ?>" name="discount_amount"></th>
-								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="5">Tax Inclusive (%):
-									<input type="number" step="any" id="tax_percentage" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
-									</th>
-									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
-								</tr>
-								<tr>
-									<th class="p-1 text-right" colspan="5">Total:</th>
-									<th class="p-1 text-right" id="total">0</th>
-								</tr>
+							<tr>
+								<th class="p-1 text-right" colspan="5"><span>
+									
+								</span> Total</th>
+								<th class="p-1 text-right" id="sub_total">0</th>
 							</tr>
+							<tr>
+								<th class="p-1 text-right" colspan="5">Tax (<span id="tax_label"></span>):
+									<input type="text" step="any" id="vatable" name="vatable" class="border-light text-right" value="<?php echo isset($vatable) ? $vatable : 0 ?>" readonly>
+								</th>
+								<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount" id="tax_amount"></th>
+							</tr>
+							<!-- <tr>
+								<th class="p-1 text-right" colspan="6">Total:</th>
+								<th class="p-1 text-right" id="total">0</th>
+							</tr> -->
+						</tr>
 						</tfoot>
 					</table>
 					<div class="row">
@@ -507,8 +461,6 @@ $(document).ready(function() {
 			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
 		</td>
 
-			<!-- <input type="text" class="text-center w-100 border-0" name="unit[]" required/> -->
-		<!-- <td class="align-middle p-1 item-unit"></td> -->
 		<td class="align-middle p-1 item-unit">
 			<input type="text" class="text-right w-100 border-0 item-unit" name="default_unit[]">
 		</td>
@@ -530,7 +482,6 @@ $(document).ready(function() {
 		</td>
 	</tr>
 </table>
-
 <script>
 	$(document).ready(function() {
 		function updateContactInfo() {
@@ -567,22 +518,22 @@ $(document).ready(function() {
 		});
 	});
 
-    $(document).ready(function() {
-    $("#supplier_id").change(function() {
-        var selectedOption = $(this).find("option:selected");
-        var vatable = parseFloat(selectedOption.data("vatable")) || 0;
-        var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
+//     $(document).ready(function() {
+//     $("#supplier_id").change(function() {
+//         var selectedOption = $(this).find("option:selected");
+//         //var vatable = parseFloat(selectedOption.data("vatable")) || 0;
+//         var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
 
-        var discount = (subtotal * vatable) / 100;
+//         //var discount = (subtotal * vatable) / 100;
         
-        $('[name="tax_percentage"]').val(vatable);
-        $('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
+//         //$('[name="tax_percentage"]').val(vatable);
+//         $('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
         
-		var total = subtotal - discount;
+// 		var total = subtotal - discount;
 
-        $('#total').text(total.toLocaleString('en-US'));
-    });
-});
+//         $('#total').text(total.toLocaleString('en-US'));
+//     });
+// });
 
 	function rem_item(_this){
 		_this.closest('tr').remove()
@@ -590,12 +541,12 @@ $(document).ready(function() {
 	}
 	function calculate() {
 		var _total = 0;
+
 		$('.po-item').each(function () {
 			var qty = $(this).find("[name='qty[]']").val();
 			var unit_price = $(this).find("[name='unit_price[]']").val();
 			var item_status = $(this).find("[name='item_status[]']").val(); 
 			var row_total = 0;
-
 
 			if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
 				row_total = parseFloat(qty) * parseFloat(unit_price);
@@ -605,30 +556,30 @@ $(document).ready(function() {
 			_total += row_total;
 		});
 
-		$('.total-price').each(function () {
-			var _price = $(this).text();
-			_price = _price.replace(/\,/gi, '');
-			_total += parseFloat(_price);
-		});
 
-		var discount_perc = 0;
-		if ($('[name="discount_percentage"]').val() > 0) {
-			discount_perc = $('[name="discount_percentage"]').val();
-		}
-		var discount_amount = _total * (discount_perc / 100);
-		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"));
+		tax_perc = $('[name="vatable"]').val();
+		var taxTotal;
+		var tax_amount;
+		//var tax_amount = _total * (tax_perc / 100);
 
-		var tax_perc = 0;
-		if ($('[name="tax_percentage"]').val() > 0) {
-			tax_perc = $('[name="tax_percentage"]').val();
+		if(tax_perc == 2){
+			tax_amount = _total * 0.12;
+			//taxTotal = _total - tax_amount;
+		}else if(tax_perc == 1){
+			var tax_amount_sub = (_total / 1.12) * 0.12;
+			tax_amount = tax_amount_sub;
+			//taxTotal =_total - tax_amount;
+		}else{
+			//taxTotal = 0;
+			tax_amount = 0;
 		}
-		var tax_amount = _total * (tax_perc / 100);
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"));
+
+		$('[name="tax_amount"]').val(parseFloat(tax_amount).toFixed(2).toLocaleString("en-US"));
+
 
 		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-		$('#total').text(parseFloat((_total - discount_amount) + tax_amount).toLocaleString("en-US"));
+		$('#total').text(parseFloat(_total + tax_amount).toLocaleString("en-US"));
 	}
-
 	var selectedSupplierId; 
 
 	$(document).ready(function() {
@@ -677,6 +628,47 @@ $(document).ready(function() {
 			_autocomplete(item, selectedSupplierId);
 		});
 	});
+	$(document).ready(function() {
+		$("#supplier_id").change(function() {
+			$('[name="vatable"]').val('');
+
+			var selectedOption = $(this).find("option:selected");
+			var vatable = selectedOption.data("vatable");
+
+			if (vatable !== null) {
+				$('[name="vatable"]').val(vatable);
+			}
+
+			var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
+			var discount = (subtotal * vatable) / 100;
+
+			$('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
+
+			var total = subtotal - discount;
+
+			$('#total').text(total.toLocaleString('en-US'));
+			tax_perc = $('[name="vatable"]').val();
+
+			var taxLabel = $('#tax_label');
+			console.log('tax_perc:', tax_perc);
+
+			if (tax_perc === '0') {
+				taxLabel.text('Non-VAT');
+			} else if (tax_perc === '1') {
+				taxLabel.text('Inclusive');
+			} else if (tax_perc === '2') {
+				taxLabel.text('Exclusive');
+			} else if (tax_perc === '3') {
+				taxLabel.text('Zero rated');
+			} else {
+				taxLabel.text('');
+				//console.log('Unexpected tax percentage value:', tax_perc);
+				//alert('Oops! Looks like there\'s no tax group set for this supplier. Please make sure to assign the correct tax group.');
+			}
+		});
+
+		$("#supplier_id").trigger("change");
+	});
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 			var tr = $('#item-clone tr').clone()
@@ -685,7 +677,7 @@ $(document).ready(function() {
 			tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
 				calculate()
 			})
-			$('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
+			$('#item-list tfoot').find('[name="tax_percentage"]').on('input keypress',function(e){
 				calculate()
 			})
 		})
@@ -696,7 +688,7 @@ $(document).ready(function() {
 				tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
 					calculate()
 				})
-				$('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
+				$('#item-list tfoot').find('[name="tax_percentage"]').on('input keypress',function(e){
 					calculate()
 				})
 				tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')

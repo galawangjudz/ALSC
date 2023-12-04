@@ -210,7 +210,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 										<th class="p-1 text-right" id="sub_total">0</th>
 									</tr>
 									<tr>
-										<th class="p-1 text-right" colspan="6"><span id="tax_label"></span>:
+										<th class="p-1 text-right" colspan="6">Tax (<span id="tax_label"></span>):
 											<input type="hidden" step="any" id="vatable" name="vatable" class="border-light text-right" value="<?php echo isset($vatable) ? $vatable : 0 ?>" readonly>
 										</th>
 										<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount" id="tax_amount"></th>
@@ -343,8 +343,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			tax_amount = _total * 0.12;
 			//taxTotal = _total - tax_amount;
 		}else if(tax_perc == 1){
-			//var tax_amount_sub = (_total / 1.12) * 0.12;
-			tax_amount = _total - tax_amount_sub;
+			var tax_amount_sub = (_total / 1.12) * 0.12;
+			tax_amount = tax_amount_sub;
 			//taxTotal =_total - tax_amount;
 		}else{
 			//taxTotal = 0;
@@ -432,9 +432,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			if (tax_perc === '0') {
 				taxLabel.text('Non-VAT');
 			} else if (tax_perc === '1') {
-				taxLabel.text('Tax Inclusive');
+				taxLabel.text('Inclusive');
 			} else if (tax_perc === '2') {
-				taxLabel.text('Tax Exclusive');
+				taxLabel.text('Exclusive');
 			} else if (tax_perc === '3') {
 				taxLabel.text('Zero rated');
 			} else {
@@ -477,19 +477,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger')
 
-			var invalidItem = false;
-			$('#item-list .po-item').each(function() {
-				var description = $(this).find('.item-description').text().trim();
-				if (!description) {
-					invalidItem = true;
-					return false; 
-				}
-			});
+			// var invalidItem = false;
+			// $('#item-list .po-item').each(function() {
+			// 	var description = $(this).find('.item-description').text().trim();
+			// 	if (!description) {
+			// 		invalidItem = true;
+			// 		return false; 
+			// 	}
+			// });
 
-			if (invalidItem) {
-				alert_toast("Please make sure all entered items are valid.", 'warning');
-				return false;
-			}
+			// if (invalidItem) {
+			// 	alert_toast("Please make sure all entered items are valid.", 'warning');
+			// 	return false;
+			// }
 
 			if ($('#item-list .po-item').length <= 0) {
 				alert_toast("Please add at least 1 item to the list.", 'warning')

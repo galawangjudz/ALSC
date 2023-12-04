@@ -3,6 +3,11 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+<style>
+	.table{
+    font-size: 12px;
+}
+</style>
 <link rel="stylesheet" href="css/supplier.css">
 <div class="card card-outline card-primary">
 	<div class="card-header">

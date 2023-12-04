@@ -42,7 +42,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     $v_number = str_pad($next_v_number, STR_PAD_LEFT);
 }
 ?>
-
 <?php
 function format_num($number){
 	$decimals = 0;
