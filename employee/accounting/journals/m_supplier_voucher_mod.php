@@ -195,7 +195,7 @@ function format_num($number){
                             <br>
                             <br>
                             <div class="gr-container"></div>
-                            <button id="display-selected-gr-details">Display Selected Tables</button>
+                           
                         </div>
                     </div>
                     <br>
@@ -275,7 +275,21 @@ function format_num($number){
                             <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
                         </div>
                     </div>
-                    <table id="account_list" class="table table-bordered">
+                    <?php 
+                            if (!isset($id) || $id === null) :
+                               
+                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
+                                $groupedData = array();
+
+                                while ($row = $jitems->fetch_assoc()) {
+                                    $grId = $row['gr_id'];
+                                    $groupedData[$grId][] = $row;
+                                }
+                            
+                                foreach ($groupedData as $grId => $groupData) :
+                            ?>
+                    <table id="account_list_<?= $grId ?>" class="table table-bordered tbl_acc">
                     <colgroup>
                             <col width="5%">
                             <!-- <col width="5%"> -->
@@ -299,20 +313,15 @@ function format_num($number){
                             </tr>
                         </thead>
                         <tbody>
+                        <?php foreach ($groupData as $row) : ?>
                             
-                            <?php 
-                            if (!isset($id) || $id === null) :
-                               
-                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
-                                while($row = $jitems->fetch_assoc()):
-                            ?>
                             <tr>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
                                 </td>
                                
                                 <td class="">
+                                    <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
                                     <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                     <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
@@ -394,23 +403,23 @@ function format_num($number){
                             if ($row['type'] == 1) {
                                 $totalDebit += $row['amount'];
                             }
-                            endwhile; ?>
-                            <?php endif; ?>
+                            ?>
+                            <?php endforeach; ?>
                         </tbody>
                         <tfoot>
-                            <tr class="bg-gradient-secondary">
-                                <tr>
-                                    <th colspan="5" class="text-right">TOTAL</th>
-                                    <th class="text-right total_debit">0.00</th>
-                                    <th class="text-right total_credit">0.00</th>
-                                </tr>
-                                <tr>
-                                    <th colspan="5" class="text-center"></th>
-                                    <th colspan="4" class="text-center total-balance">0</th>
-                                </tr>
+                            <tr>
+                                <th colspan="5" class="text-right">TOTAL</th>
+                                <th class="text-right total_debit">0.00</th>
+                                <th class="text-right total_credit">0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" class="text-center"></th>
+                                <th colspan="4" class="text-center total-balance">0</th>
                             </tr>
                         </tfoot>
                     </table>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
@@ -421,7 +430,6 @@ function format_num($number){
         </div>
     </div>
 </div>
-
 <noscript id="item-clone">
     <tr>
         <td class="text-center">
@@ -489,7 +497,6 @@ function format_num($number){
                 });
             </script>
         </td>
-
         <!-- <td class="group"></td> -->
         <td class="debit_amount text-right"></td>
         <td class="credit_amount text-right"></td>
@@ -509,9 +516,7 @@ function format_num($number){
         </div>
     </div>
 </div>
-
 <script>
-
 $(document).ready(function () {
     $('.delete-row').on('click', function () {
         $(this).closest('tr').remove();
@@ -569,22 +574,30 @@ $(document).ready(function () {
 <script>
     var account = $.parseJSON('<?= json_encode($account_arr) ?>');
     var group = $.parseJSON('<?= json_encode($group_arr) ?>');
+    
+    $(document).ready(function () {
+    $('.tbl_acc').each(function () {
+        cal_tb($(this).attr('id'));
+    });
+});
 
-    function cal_tb() {
-        var totalCreditEchoed = <?= json_encode($totalCredit) ?>;
-        var debit = 0;
-        var credit = 0;
-        $('#account_list tbody tr').each(function () {
-            if ($(this).find('.debit_amount').text() != "")
-                debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
-            if ($(this).find('.credit_amount').text() != "")
-                credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
-        });
-        //credit -= totalCreditEchoed;
-        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-    }
+function cal_tb(tableId) {
+    var debit = 0;
+    var credit = 0;
+
+    $('#' + tableId + ' tbody tr').each(function () {
+        if ($(this).find('.debit_amount').text() !== "") {
+            debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
+        }
+        if ($(this).find('.credit_amount').text() !== "") {
+            credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
+        }
+    });
+
+    $('#' + tableId).find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+    $('#' + tableId).find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+    $('#' + tableId).find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+}
 
     $(function () {
         if ('<?= isset($id) ?>' == 1) {
@@ -650,13 +663,13 @@ $(document).ready(function () {
             var el = $('<div>');
             el.addClass("pop-msg alert");
             el.hide();
-            if ($('#account_list tbody tr').length <= 0) {
-                el.addClass('alert-danger').text(" Account Table is empty.");
-                _this.prepend(el);
-                el.show('slow');
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                return false;
-            }
+            // if ($('#account_list tbody tr').length <= 0) {
+            //     el.addClass('alert-danger').text(" Account Table is empty.");
+            //     _this.prepend(el);
+            //     el.show('slow');
+            //     $('html, body').animate({ scrollTop: 0 }, 'fast');
+            //     return false;
+            // }
             // if ($('#account_list tfoot .total-balance').text() != '0') {
             //     el.addClass('alert-danger').text(" Trial Balance is not equal.");
             //     _this.prepend(el);

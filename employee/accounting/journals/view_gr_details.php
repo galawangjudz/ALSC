@@ -40,7 +40,7 @@ if (isset($_POST['gr_id'])) {
 }
 
 ?>
-<?php echo $vat;
+<?php
 if ($vat == 1){ ?>
 <table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>">
     <colgroup>

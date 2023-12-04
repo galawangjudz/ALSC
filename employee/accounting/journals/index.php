@@ -369,7 +369,7 @@ $(document).ready(function() {
 		})
 		$('.edit_data_supplier').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/m_supplier_voucher&id=' + dataId;
+			var redirectUrl = '?page=journals/m_supplier_voucher_mod&id=' + dataId;
 			window.location.href = redirectUrl;
 		})
 		$('.edit_data_agent').click(function() {
