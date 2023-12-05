@@ -319,16 +319,29 @@ function format_num($number){
                                                 <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
                                             </td>
                                         
-                                            <td class="">
+                                            <td class="accountInfo">
                                                 <input type="text" name="gr_id[]" value="<?= $row['gr_id'] ?>">
                                                 <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
                                                 <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
                                                 <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
                                                 <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
                                                 <span class="account_code"><?= $row['account_code'] ?></span>
+                                                <input type="text" name="type[]" value="<?= $row['type'] ?>">
                                             </td>
                                             <td class="">
-                                                <span class="account"><?= $row['account'] ?></span>
+                                                <select name="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
+                                                    <option value="" disabled selected></option>
+                                                    <?php 
+                                                    $accounts = $conn->query("SELECT a.*, g.name AS gname,g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
+                                                    $currentGroup = null;
+                                                    $groupedAccounts = array();
+
+                                                    while($account = $accounts->fetch_assoc()):
+                                                    ?>
+                                                        <option value="<?= $account['id'] ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-gr-id="<?= $row['gr_id'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($row['account_id'] == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
+
+                                                    <?php endwhile; ?>
+                                                </select>
                                             </td>
                                             <td class="">
                                             <div class="loc-cont">
@@ -392,8 +405,21 @@ function format_num($number){
                                         </div>
                                             </td>
                                             <td class="group"><?= $row['gr_id'] ?></td>
-                                            <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
-                                            <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
+                                            <td class="debit_amount text-right">
+                                                <?php if ($row['type'] == 1) : ?>
+                                                    <input type="text" name="debit_amount[]" value="<?= $row['amount'] ?>">
+                                                <?php else : ?>
+                                                    <input type="text" name="debit_amount[]" value="">
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="credit_amount text-right">
+                                                <?php if ($row['type'] == 2) : ?>
+                                                    <input type="text" name="credit_amount[]" value="<?= $row['amount'] ?>">
+                                                <?php else : ?>
+                                                    <input type="text" name="credit_amount[]" value="">
+                                                <?php endif; ?>
+                                            </td>
+
                                         </tr>
                                         <?php 
                                         if ($row['type'] == 2) {
@@ -421,30 +447,42 @@ function format_num($number){
                     </tfoot>
                     </table>
                     <script>
-                    $(document).ready(function () {
-                        $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
-                            var table = $('#account_list_<?= $grId ?>');
-                            var lastRow = table.find('tbody tr:last');
-                            var clone = lastRow.clone();
+    $(document).ready(function () {
+        // Use event delegation on the parent tbody element
+        $('#account_list_<?= $grId ?> tbody').on('change', '.select2.accountSelect', function () {
+            // Your existing onchange functionality here
+            updateTextBoxes(this);
+        });
 
-                            clone.find('input, select, span').val('');
+        $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
+            var table = $('#account_list_<?= $grId ?>');
+            var lastRow = table.find('tbody tr:last');
+            var clone = lastRow.clone();
 
-                            clone.find('[name^="gr_id"]').val('');
-                            clone.find('[name^="account_code"]').val('');
-                            
-                            clone.find('[name^="account_id"]').val('');
-                            clone.find('[name^="group_id"]').val('');
-                            clone.find('[name^="amount"]').val('');
+            // Clear input values in the cloned row
+            clone.find('input, select, span').val('');
 
-                            table.find('tbody').append(clone);
-                            clone.find('.delete-row').click(function () {
-                                $(this).closest('tr').remove();
+            // Set unique names for cloned row elements
+            clone.find('[name^="gr_id"]').val('');
+            clone.find('[name^="account_code"]').val('');
+            clone.find('[name^="account_id"]').val('');
+            clone.find('[name^="group_id"]').val('');
+            clone.find('[name^="amount"]').val('');
 
-                            });
+            // Append the cloned row to the table
+            table.find('tbody').append(clone);
 
-                        });
-                    });
-                </script>
+            // Attach the delete-row function to the cloned row
+            clone.find('.delete-row').click(function () {
+                $(this).closest('tr').remove();
+            });
+
+            // No need to reattach the onchange event; it will be handled by delegation
+        });
+    });
+</script>
+
+
                 <?php 
                     endforeach; 
                 ?>
@@ -471,78 +509,6 @@ function format_num($number){
         </div>
     </div>
 </div>
-<!-- <noscript id="item-clone">
-    <tr>
-        <td class="text-center">
-            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-        </td>
-
-        <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
-        <td class="">
-            <input type="hidden" name="account_code[]" value="">
-            <input type="hidden" name="account_id[]" value="">
-            <input type="hidden" name="group_id[]" value="">
-            <input type="hidden" name="amount[]" value="">
-            <span class="account"></span>
-        </td>
-        <td class="">
-            <div class="loc-cont">
-            <label class="control-label">Phase: </label>
-            <select name="phase[]" class="phase">
-                <?php 
-                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                while ($row = $cat->fetch_assoc()):
-                    $cat_name[$row['c_code']] = $row['c_acronym'];
-                    $code = $row['c_code'];
-                ?>
-                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label class="control-label">Block: </label>
-            <input type="text" class="block" name="block[]" value="">
-            <label class="control-label">Lot: </label>
-            <input type="text" class="lot" name="lot[]" value="">
-            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-            </div>
-            <script>
-                $(document).ready(function () {
-                    $('.lot, .block, .phase').on('input', function () {
-                        var currentRow = $(this).closest('td');
-
-                        var enteredPhase = currentRow.find('.phase').val();
-                        var enteredBlock = currentRow.find('.block').val();
-                        var enteredLot = currentRow.find('.lot').val();
-
-                        console.log("AJAX Data:", {
-                            phase: enteredPhase,
-                            block: enteredBlock,
-                            lot: enteredLot
-                        });
-
-                        $.ajax({
-                            type: 'POST',
-                            url: 'journals/check_loc.php',
-                            data: JSON.stringify({
-                                phase: enteredPhase,
-                                block: enteredBlock,
-                                lot: enteredLot
-                            }),
-                            contentType: 'application/json', 
-                            success: function (response) {
-                                console.log("AJAX Response:", response);
-                                var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                                    lotExistsMsg.html(response);
-                            }
-                        });
-                    });
-                });
-            </script>
-        </td>
-        <td class="group"></td>
-        <td class="debit_amount text-right"></td>
-        <td class="credit_amount text-right"></td>
-    </tr>
-</noscript> -->
 </body>
 <div class="modal fade" id="zeroAccountCodeModal" tabindex="-1" role="dialog" aria-labelledby="zeroAccountCodeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -557,7 +523,44 @@ function format_num($number){
         </div>
     </div>
 </div>
+
 <script>
+$(document).ready(function () {
+    $(document).ready(function () {
+    $('#account_list_<?= $grId ?>').on('change', '.accountSelect', function () {
+        var selectedOption = $(this).find(':selected');
+        var currentRow = $(this).closest('tr');
+        var accountInfo = currentRow.find('.accountInfo');
+
+        var groupType = selectedOption.data('type');
+
+        // Disable the opposite type input and set its value to zero
+        if (groupType == 1) {
+            accountInfo.find('input[name="credit_amount[]"]').prop('disabled', true).val(0);
+            accountInfo.find('input[name="debit_amount[]"]').prop('disabled', false);
+        } else if (groupType == 2) {
+            accountInfo.find('input[name="debit_amount[]"]').prop('disabled', true).val(0);
+            accountInfo.find('input[name="credit_amount[]"]').prop('disabled', false);
+        }
+
+        // Set values from the selected option
+        accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
+        accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
+        accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
+        accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
+        accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
+        accountInfo.find('.account_code').text(selectedOption.data('account-code'));
+        accountInfo.find('input[name="type[]"]').val(groupType);
+    });
+
+    $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
+        // Your logic for adding a new row
+    });
+});
+
+});
+
+
 $(document).ready(function () {
     $('.delete-row').on('click', function () {
         $(this).closest('tr').remove();

@@ -398,9 +398,9 @@ function format_num($number){
                             <?php endif; ?>
                         </tbody>
                         <tfoot>
-                            <tr class="bg-gradient-secondary">
+                            <tr>
                                 <tr>
-                                    <th colspan="5" class="text-right">TOTAL</th>
+                                    <th colspan="5" class="text-right"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $grId ?>" type="button">Add Row</button>TOTAL</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
@@ -411,6 +411,50 @@ function format_num($number){
                             </tr>
                         </tfoot>
                     </table>
+                    <script>
+                        $(document).ready(function () {
+             
+                            $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
+                                var table = $('#account_list_<?= $grId ?>');
+                                var lastRow = table.find('tbody tr:last');
+                                var clone = lastRow.clone();
+
+          
+                                clone.find('input, select, span').val('');
+
+                                clone.find('[name^="gr_id"]').val('');
+                                clone.find('[name^="account_code"]').val('');
+                                clone.find('[name^="account_id"]').val('');
+                                clone.find('[name^="group_id"]').val('');
+                                clone.find('[name^="amount"]').val('');
+
+                                table.find('tbody').append(clone);
+
+  
+                                clone.find('.delete-row').click(function () {
+                                    $(this).closest('tr').remove();
+                                });
+
+     
+                                clone.find('.accountSelect').on('change', function () {
+                                    var selectedOption = $(this).find(':selected');
+                                    var currentRow = $(this).closest('tr');
+                                    var accountInfo = currentRow.find('.accountInfo');
+
+     
+                                    accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
+                                    accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
+                                    accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
+                                    accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
+                                    accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
+                                    accountInfo.find('.account_code').text(selectedOption.data('account-code'));
+                                });
+                            });
+
+      
+                            
+                        });
+                    </script>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary" id="save_journal">Save</button>

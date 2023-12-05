@@ -245,7 +245,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			</table>
 		</div>
 	</div>
-	<table id="item-clone">
+	<table class="d-none" id="item-clone">
 		<tr class="po-item" data-id="">
 			<td class="align-middle p-1 text-center">
 				<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
@@ -268,6 +268,48 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		</tr>
 	</table>
 </body>
+<script>
+	$(document).ready(function() {
+
+    function setTaxLabel() {
+        var tax_perc = $('[name="vatable"]').val();
+        var taxLabel = $('#tax_label');
+
+        if (tax_perc === '0') {
+            taxLabel.text('Non-VAT');
+        } else if (tax_perc === '1') {
+            taxLabel.text('Inclusive');
+        } else if (tax_perc === '2') {
+            taxLabel.text('Exclusive');
+        } else if (tax_perc === '3') {
+            taxLabel.text('Zero rated');
+        } else {
+            taxLabel.text('');
+           
+        }
+    }
+
+    setTaxLabel();
+});
+
+ $(document).ready(function() {
+        var originalTbody = $('#item-list tbody').html();
+
+        $('#supplier_id').on('change', function() {
+            var selectedSupplier = $(this).val();
+
+            $('#item-list tbody').empty();
+
+            if (selectedSupplier !== '') {
+                $('#item-list tbody').append('<tr class="po-item" data-id=""></tr>');
+                calculate();
+            } else {
+                $('#item-list tbody').html(originalTbody);
+            }
+        });
+    });
+</script>
+
 <script>
 	$(document).ready(function() {
 		function updateContactInfo() {
@@ -444,7 +486,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			}
 		});
 
-		$("#supplier_id").trigger("change");
+		//$("#supplier_id").trigger("change");
 	});
 
 
