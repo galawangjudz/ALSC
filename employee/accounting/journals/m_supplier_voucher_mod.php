@@ -276,150 +276,191 @@ function format_num($number){
                         </div>
                     </div>
                     <?php 
-                            if (!isset($id) || $id === null) :
-                               
-                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
-                                $groupedData = array();
+                        if (!isset($id) || $id === null) :
+                            $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                            $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
+                            $groupedData = array();
 
-                                while ($row = $jitems->fetch_assoc()) {
-                                    $grId = $row['gr_id'];
-                                    $groupedData[$grId][] = $row;
-                                }
-                            
-                                foreach ($groupedData as $grId => $groupData) :
-                            ?>
+                            while ($row = $jitems->fetch_assoc()) {
+                                $grId = $row['gr_id'];
+                                $groupedData[$grId][] = $row;
+                            }
+
+                            foreach ($groupedData as $grId => $groupData) :
+                    ?>
                     <table id="account_list_<?= $grId ?>" class="table table-bordered tbl_acc">
-                    <colgroup>
-                            <col width="5%">
-                            <!-- <col width="5%"> -->
-                            <col width="10%">
-                            <col width="20%">
-                            <col width="30%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th class="text-center"></th>
-                                <!-- <th class="text-center">Item No.</th> -->
-                                <th class="text-center">Account Code</th>
-                                <th class="text-center">Account Name</th>
-                                <th class="text-center">Location</th>
-                                <th class="text-center">GR #</th>
-                                <th class="text-center">Debit</th>
-                                <th class="text-center">Credit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($groupData as $row) : ?>
-                            
-                            <tr>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-                                </td>
-                               
-                                <td class="">
-                                    <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
-                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                    <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                    <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
-                                    <span class="account_code"><?= $row['account_code'] ?></span>
-                                </td>
-                                <td class="">
-                                    <span class="account"><?= $row['account'] ?></span>
-                                </td>
-                                <td class="">
-                                <div class="loc-cont">
-                                <label class="control-label">Phase: </label>
-                                <select name="phase[]" id="phase[]" class="phase">
-                                <?php 
-                                    $meta = array();
-                                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                    while($row1 = $cat->fetch_assoc()):
-                                ?>
-                                    <?php
-                                        echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
-                                    ?>
-                                    <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
-                                <?php
-                                    endwhile;
-                                ?>
-                                </select>
-                                    <label class="control-label">Block: </label>
-                                    <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
-                                    <label class="control-label">Lot: </label>
-                                    <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
-                                    <div class="lotExistsMsg" style="color: #ff0000;"></div>
+                                <colgroup>
+                                        <col width="5%">
+                                        <!-- <col width="5%"> -->
+                                        <col width="10%">
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <!-- <th class="text-center">Item No.</th> -->
+                                            <th class="text-center">Account Code</th>
+                                            <th class="text-center">Account Name</th>
+                                            <th class="text-center">Location</th>
+                                            <th class="text-center">GR #</th>
+                                            <th class="text-center">Debit</th>
+                                            <th class="text-center">Credit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($groupData as $row) : ?>
+                                        
+                                        <tr>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+                                            </td>
+                                        
+                                            <td class="">
+                                                <input type="text" name="gr_id[]" value="<?= $row['gr_id'] ?>">
+                                                <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                                <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                                <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                                <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
+                                                <span class="account_code"><?= $row['account_code'] ?></span>
+                                            </td>
+                                            <td class="">
+                                                <span class="account"><?= $row['account'] ?></span>
+                                            </td>
+                                            <td class="">
+                                            <div class="loc-cont">
+                                            <label class="control-label">Phase: </label>
+                                            <select name="phase[]" id="phase[]" class="phase">
+                                            <?php 
+                                                $meta = array();
+                                                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                                while($row1 = $cat->fetch_assoc()):
+                                            ?>
+                                                <?php
+                                                    echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                                ?>
+                                                <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
+                                            <?php
+                                                endwhile;
+                                            ?>
+                                            </select>
+                                                <label class="control-label">Block: </label>
+                                                <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
+                                                <label class="control-label">Lot: </label>
+                                                <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
+                                                <div class="lotExistsMsg" style="color: #ff0000;"></div>
 
-                                    <script>
-                                $(document).ready(function () {
-                                    $('.lot, .block, .phase').on('input', function () {
-                                        var currentRow = $(this).closest('td');
+                                                <script>
+                                            $(document).ready(function () {
+                                                $('.lot, .block, .phase').on('input', function () {
+                                                    var currentRow = $(this).closest('td');
 
-                                        var enteredPhase = currentRow.find('.phase').val();
-                                        var enteredBlock = currentRow.find('.block').val();
-                                        var enteredLot = currentRow.find('.lot').val();
+                                                    var enteredPhase = currentRow.find('.phase').val();
+                                                    var enteredBlock = currentRow.find('.block').val();
+                                                    var enteredLot = currentRow.find('.lot').val();
 
-                                        console.log("AJAX Data:", {
-                                            phase: enteredPhase,
-                                            block: enteredBlock,
-                                            lot: enteredLot
-                                        });
+                                                    console.log("AJAX Data:", {
+                                                        phase: enteredPhase,
+                                                        block: enteredBlock,
+                                                        lot: enteredLot
+                                                    });
 
-                                        $.ajax({
-                                            type: 'POST',
-                                            url: 'journals/check_loc.php',
-                                            data: JSON.stringify({
-                                                phase: enteredPhase,
-                                                block: enteredBlock,
-                                                lot: enteredLot
-                                            }),
-                                            contentType: 'application/json', 
-                                            success: function (response) {
-                                                console.log("AJAX Response:", response);
-                                                var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                                                
-                                                
-                                                    lotExistsMsg.html(response);
-                                                
-                                            }
-                                        });
-                                    });
-                                });
-                            </script>
-                            </div>
-                                </td>
-                                <td class="group"><?= $row['gr_id'] ?></td>
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
-                            </tr>
-                            <?php 
-                            if ($row['type'] == 2) {
-                                $totalCredit += $row['amount'];
-                            }
-                            if ($row['type'] == 1) {
-                                $totalDebit += $row['amount'];
-                            }
-                            ?>
-                            <?php endforeach; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="5" class="text-right">TOTAL</th>
-                                <th class="text-right total_debit">0.00</th>
-                                <th class="text-right total_credit">0.00</th>
-                            </tr>
-                            <tr>
-                                <th colspan="5" class="text-center"></th>
-                                <th colspan="4" class="text-center total-balance">0</th>
-                            </tr>
-                        </tfoot>
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: 'journals/check_loc.php',
+                                                        data: JSON.stringify({
+                                                            phase: enteredPhase,
+                                                            block: enteredBlock,
+                                                            lot: enteredLot
+                                                        }),
+                                                        contentType: 'application/json', 
+                                                        success: function (response) {
+                                                            console.log("AJAX Response:", response);
+                                                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                                            
+                                                            
+                                                                lotExistsMsg.html(response);
+                                                            
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+                                        </div>
+                                            </td>
+                                            <td class="group"><?= $row['gr_id'] ?></td>
+                                            <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
+                                            <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
+                                        </tr>
+                                        <?php 
+                                        if ($row['type'] == 2) {
+                                            $totalCredit += $row['amount'];
+                                        }
+                                        if ($row['type'] == 1) {
+                                            $totalDebit += $row['amount'];
+                                        }
+                                        ?>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                    <tfoot>
+                        <tr>
+                            <th colspan="5" class="text-right">
+                                <button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $grId ?>" type="button">Add Row</button>
+                                TOTAL
+                            </th>
+                            <th class="text-right total_debit">0.00</th>
+                            <th class="text-right total_credit">0.00</th>
+                        </tr>
+                        <tr>
+                            <th colspan="5" class="text-center"></th>
+                            <th colspan="4" class="text-center total-balance">0</th>
+                        </tr>
+                    </tfoot>
                     </table>
-                    <?php endforeach; ?>
+                    <script>
+                    $(document).ready(function () {
+                        $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
+                            var table = $('#account_list_<?= $grId ?>');
+                            var lastRow = table.find('tbody tr:last');
+                            var clone = lastRow.clone();
+
+                            clone.find('input, select, span').val('');
+
+                            clone.find('[name^="gr_id"]').val('');
+                            clone.find('[name^="account_code"]').val('');
+                            
+                            clone.find('[name^="account_id"]').val('');
+                            clone.find('[name^="group_id"]').val('');
+                            clone.find('[name^="amount"]').val('');
+
+                            table.find('tbody').append(clone);
+                            clone.find('.delete-row').click(function () {
+                                $(this).closest('tr').remove();
+
+                            });
+
+                        });
+                    });
+                </script>
+                <?php 
+                    endforeach; 
+                ?>
                 <?php endif; ?>
+                <table class="table table-bordered">
+                    <tr>
+
+                        <th class="text-center">TOTAL DEBIT</th>
+                        <th class="text-center">TOTAL CREDIT</th>
+                    </tr>
+                    <tr>
+
+                        <th class="text-center main_total_debit">0.00</th>
+                        <th class="text-center main_total_credit">0.00</th>
+                    </tr>
+                </table>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
@@ -430,7 +471,7 @@ function format_num($number){
         </div>
     </div>
 </div>
-<noscript id="item-clone">
+<!-- <noscript id="item-clone">
     <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
@@ -497,11 +538,11 @@ function format_num($number){
                 });
             </script>
         </td>
-        <!-- <td class="group"></td> -->
+        <td class="group"></td>
         <td class="debit_amount text-right"></td>
         <td class="credit_amount text-right"></td>
     </tr>
-</noscript>
+</noscript> -->
 </body>
 <div class="modal fade" id="zeroAccountCodeModal" tabindex="-1" role="dialog" aria-labelledby="zeroAccountCodeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -580,8 +621,38 @@ $(document).ready(function () {
         cal_tb($(this).attr('id'));
     });
 });
-
 function cal_tb(tableId) {
+
+    var grandTotalDebit = 0;
+    var grandTotalCredit = 0;
+
+
+    $('.tbl_acc').each(function () {
+        var totalDebit = 0;
+        var totalCredit = 0;
+
+
+        $(this).find('tbody tr').each(function () {
+            var debit = parseFloat($(this).find('.debit_amount').text().replace(/,/gi, '')) || 0;
+            var credit = parseFloat($(this).find('.credit_amount').text().replace(/,/gi, '')) || 0;
+
+            totalDebit += debit;
+            totalCredit += credit;
+        });
+
+
+        $(this).find('.total_debit').text(totalDebit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+        $(this).find('.total_credit').text(totalCredit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+
+   
+        grandTotalDebit += totalDebit;
+        grandTotalCredit += totalCredit;
+    });
+
+    $('.main_total_debit').text(grandTotalDebit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+    $('.main_total_credit').text(grandTotalCredit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
+
+
     var debit = 0;
     var credit = 0;
 
@@ -594,10 +665,15 @@ function cal_tb(tableId) {
         }
     });
 
+
     $('#' + tableId).find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
     $('#' + tableId).find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
     $('#' + tableId).find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
 }
+
+
+cal_tb(tableId);
+
 
     $(function () {
         if ('<?= isset($id) ?>' == 1) {
@@ -915,4 +991,7 @@ $('#zeroAccountCodeModal').modal('show');
     });    
     }
 });
+</script>
+<script>
+
 </script>

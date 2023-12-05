@@ -152,7 +152,7 @@ function format_num($number){
 							<div class="dropdown-menu" role="menu">
 								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
 								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/print_voucher_supplier.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data_supplier" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
