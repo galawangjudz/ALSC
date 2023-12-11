@@ -83,7 +83,7 @@ function format_num($number){
 		<h3 class="card-title"><b><i>Voucher Setup Entries</b></i></h3>
 		<div class="card-tools">
 			<!-- <button class="btn btn-primary btn-flat" id="create_new" type="button" style="font-size:14px;"><i class="fa fa-pen-square"></i>&nbsp;&nbsp;Add New Voucher Setup</button> -->
-			<a href="<?php echo base_url ?>employee/accounting/?page=journals/manage_journal" class="btn btn-primary btn-flat" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add New Voucher Setup</a>
+			<!-- <a href="<?php echo base_url ?>employee/accounting/?page=journals/manage_journal" class="btn btn-primary btn-flat" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Add New Voucher Setup</a> -->
 		</div>
 		<br><br>
 		<div class="preview-div">

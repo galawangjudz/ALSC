@@ -11,7 +11,6 @@ if (isset($_POST['gr_id'])) {
         $vat = $row1['vatable'];
 
         echo "<br><b>GR #: </b><i> $gr_id</i>";
-        echo "<br><b>Vat(%): </b><i> $vat</i>";
     } else {
         echo "No data found for GR ID: $gr_id";
     }
@@ -41,46 +40,9 @@ if (isset($_POST['gr_id'])) {
 }
 
 ?>
-<script>
-    
-function updateAmount(input) {
-    var inputValue = $(input).val();
-    var amountTextbox = $(input).closest('tr').find('.amount-textbox');
-    $(amountTextbox).val(inputValue);
-}
-
-
-function handleAccountSelectChange() {
-    var selectedOption = $(this).find(':selected');
-    var type = selectedOption.data('type');
-
-    var $row = $(this).closest('tr');
-    var $debitInput = $row.find('.debit_amount');
-    var $creditInput = $row.find('.credit_amount');
-
-    if (type == 1) {
-        $creditInput.prop('disabled', true);
-        $debitInput.prop('disabled', false);
-    } else if (type == 2) {
-        $debitInput.prop('disabled', true);
-        $creditInput.prop('disabled', false);
-    } else {
-        $debitInput.prop('disabled', false);
-        $creditInput.prop('disabled', false);
-    }
-}
-
-$(document).on('change', '.accountSelect', handleAccountSelectChange);
-
-
-$('.accountSelect').each(function () {
-    handleAccountSelectChange.call(this);
-});
-
-</script>
 <?php
 if ($vat == 1){ ?>
-<table class="table-bordered tbl_acc" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>" id="account_list_<?= $gr_id ?>" >
+<table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>">
     <colgroup>
         <col width="5%">
         <!-- <col width="5%"> -->
@@ -174,27 +136,13 @@ if ($vat == 1){ ?>
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $subEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $subEWT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -260,23 +208,8 @@ if ($vat == 1){ ?>
             ?> VAT = <?= $item_vat; ?>   SUBTOTAL EWT = <?= number_format($ewt,2); ?> 
         </td>
 
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($subEWT,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($subEWT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($subEWT,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>        
 
@@ -295,33 +228,20 @@ if ($vat == 1){ ?>
         $alId = $row_vat['id'];
         $glType = $row_vat['type'];
         $account_name = $row_vat['name'];
+
     ?>
     <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_vat["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-            <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_vat["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iVAT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span> style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $iVAT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -378,23 +298,8 @@ if ($vat == 1){ ?>
         </td>
         <td></td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($iVAT,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($iVAT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($iVAT,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
     
@@ -419,27 +324,13 @@ if ($vat == 1){ ?>
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ewt["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-            <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -496,23 +387,8 @@ if ($vat == 1){ ?>
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($iEWT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 
@@ -540,27 +416,13 @@ if ($vat == 1){ ?>
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ap["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-            <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_ap["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $apTotal; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $apTotal; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -617,77 +479,21 @@ if ($vat == 1){ ?>
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($apTotal,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($apTotal,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($apTotal,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="5"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
+        <td colspan="5"><strong>Total</strong></td>
             <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
             <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($apTotal + $iEWT),2); ?></td>
     </tr>
 </tfoot>
 </table>
-<script>
-$(document).ready(function () {
-    $('#account_list_<?= $gr_id ?>').on('change', '.accountSelect', function () {
-        var selectedOption = $(this).find(':selected');
-        var currentRow = $(this).closest('tr');
-        var accountInfo = currentRow.find('.accountInfo');
-
-        accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
-        accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
-        accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
-        accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
-        //accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
-        accountInfo.find('.account_code').text(selectedOption.data('account-code'));
-        accountInfo.find('.type').text(selectedOption.data('type'));
-    });
-    $('.add_row[data-gr-id="<?= $gr_id ?>"]').click(function () {
-        var table = $('#account_list_<?= $gr_id ?>');
-        var lastRow = table.find('tbody tr:last');
-        var clone = lastRow.clone();
-
-        clone.find('input, select, span').val('');
-
-        clone.find('[name^="phase"]').val(clone.find('[name^="phase"] option:first').val());
-
-        clone.find('[name^="gr_id"]').val('');
-        clone.find('[name^="account_code"]').val('');
-        clone.find('[name^="account_id"]').val('');
-        clone.find('[name^="group_id"]').val('');
-        clone.find('[name^="amount"]').val('');
-        clone.find('.account_code').val('');
-        clone.find('.type').val('');
-
-        table.find('tbody').append(clone);
-
-
-        clone.find('.delete-row').click(function () {
-            $(this).closest('tr').remove();
-        });
-    });
-});
-</script>
 <?php }else if($vat == 2){ ?>
-    <table class="table-bordered tbl_acc" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>" id="account_list_<?= $gr_id ?>" >
+    <table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>">
     <colgroup>
         <col width="5%">
         <!-- <col width="5%"> -->
@@ -778,27 +584,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $e_row["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $e_row["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $e_total; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $e_total; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -864,23 +656,8 @@ $(document).ready(function () {
             ?> VAT = <?= $e_item_vat; ?>   SUBTOTAL EWT = <?= number_format($e_ewt,2); ?> 
         </td>
 
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>        
 
@@ -906,27 +683,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_vat["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_vat["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iVAT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $iVAT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -983,23 +746,8 @@ $(document).ready(function () {
         </td>
         <td></td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($iVAT,2) : '' ?></td>accountSelectupdateppp
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($iVAT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($iVAT,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
     
@@ -1024,27 +772,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ewt["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -1101,23 +835,8 @@ $(document).ready(function () {
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($iEWT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 
@@ -1145,27 +864,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ap["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_ap["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $e_apTotal; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $e_apTotal; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -1222,77 +927,21 @@ $(document).ready(function () {
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($e_apTotal,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($e_apTotal,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($e_apTotal,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="5"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
+        <td colspan="5"><strong>Total</strong></td>
             <td class="text-right" id="total-debit"><?= number_format($totalDebit + $iVAT, 2) ?></td>
             <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($e_apTotal + $iEWT),2); ?></td>
     </tr>
 </tfoot>
 </table>
-<script>
-$(document).ready(function () {
-    $('#account_list_<?= $gr_id ?>').on('change', '.accountSelect', function () {
-        var selectedOption = $(this).find(':selected');
-        var currentRow = $(this).closest('tr');
-        var accountInfo = currentRow.find('.accountInfo');
-
-        accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
-        accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
-        accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
-        accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
-        //accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
-        accountInfo.find('.account_code').text(selectedOption.data('account-code'));
-        accountInfo.find('.type').text(selectedOption.data('type'));
-    });
-    $('.add_row[data-gr-id="<?= $gr_id ?>"]').click(function () {
-        var table = $('#account_list_<?= $gr_id ?>');
-        var lastRow = table.find('tbody tr:last');
-        var clone = lastRow.clone();
-
-        clone.find('input, select, span').val('');
-
-        clone.find('[name^="phase"]').val(clone.find('[name^="phase"] option:first').val());
-
-        clone.find('[name^="gr_id"]').val('');
-        clone.find('[name^="account_code"]').val('');
-        clone.find('[name^="account_id"]').val('');
-        clone.find('[name^="group_id"]').val('');
-        clone.find('[name^="amount"]').val('');
-        clone.find('.account_code').val('');
-        clone.find('.type').val('');
-
-        table.find('tbody').append(clone);
-
-
-        clone.find('.delete-row').click(function () {
-            $(this).closest('tr').remove();
-        });
-    });
-});
-</script>
 <?php }else if($vat == 0 || $vat == 3){ ?>
-    <table class="table-bordered tbl_acc" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>" id="account_list_<?= $gr_id ?>" >
+    <table class="table-bordered" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>">
     <colgroup>
         <col width="5%">
         <!-- <col width="5%"> -->
@@ -1384,27 +1033,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $n_row["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-            <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $n_row["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $n_total; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $n_total; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -1469,23 +1104,8 @@ $(document).ready(function () {
             }?>
         </td>
 
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($n_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($n_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($n_total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($total,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>        
 
@@ -1510,27 +1130,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ewt["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -1587,23 +1193,8 @@ $(document).ready(function () {
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($n_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($n_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($iEWT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($n_total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 
@@ -1628,27 +1219,13 @@ $(document).ready(function () {
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
         <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ap["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
+            <td>
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" name="account_code[]" value="<?php echo $row_ap["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $n_apTotal - $iEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
+            <input type="hidden" name="amount[]" value="<?php echo $n_apTotal - $iEWT; ?>">
+            <input type="text" name="account[]" value="<?php echo $account_name; ?>">
         </td>
         <td class="">
             <div class="loc-cont">
@@ -1705,110 +1282,19 @@ $(document).ready(function () {
         </td>
         <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
         <td></td>
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($n_apTotal - $iEWT ,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($n_apTotal - $iEWT) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
+        <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
+        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($n_apTotal - $iEWT ,2) : '' ?></td>
     </tr>
     <?php endwhile; ?>
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="5"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
+        <td colspan="5"><strong>Total</strong></td>
             <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
             <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($n_apTotal),2); ?></td>
     </tr>
 </tfoot>
 </table>
-<script>
-
-function updateAmount(input) {
-    var inputValue = $(input).val();
-    var amountTextbox = $(input).closest('tr').find('.amount-textbox');
-    $(amountTextbox).val(inputValue);
-}
-
-
-function handleAccountSelectChange() {
-    var selectedOption = $(this).find(':selected');
-    var type = selectedOption.data('type');
-
-    var $row = $(this).closest('tr');
-    var $debitInput = $row.find('.debit_amount');
-    var $creditInput = $row.find('.credit_amount');
-
-    if (type == 1) {
-        $creditInput.prop('disabled', true);
-        $debitInput.prop('disabled', false);
-    } else if (type == 2) {
-        $debitInput.prop('disabled', true);
-        $creditInput.prop('disabled', false);
-    } else {
-        $debitInput.prop('disabled', false);
-        $creditInput.prop('disabled', false);
-    }
-}
-
-$(document).on('change', '.accountSelect', handleAccountSelectChange);
-
-
-$('.accountSelect').each(function () {
-    handleAccountSelectChange.call(this);
-});
-
-$(document).ready(function () {
-    $('#account_list_<?= $gr_id ?>').on('change', '.accountSelect', function () {
-        var selectedOption = $(this).find(':selected');
-        var currentRow = $(this).closest('tr');
-        var accountInfo = currentRow.find('.accountInfo');
-
-        accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
-        accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
-        accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
-        accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
-        //accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
-        accountInfo.find('.account_code').text(selectedOption.data('account-code'));
-        accountInfo.find('.type').text(selectedOption.data('type'));
-    });
-    $('.add_row[data-gr-id="<?= $gr_id ?>"]').click(function () {
-        var table = $('#account_list_<?= $gr_id ?>');
-        var lastRow = table.find('tbody tr:last');
-        var clone = lastRow.clone();
-
-        clone.find('input, select, span').val('');
-
-        clone.find('[name^="phase"]').val(clone.find('[name^="phase"] option:first').val());
-
-        clone.find('[name^="gr_id"]').val('');
-        clone.find('[name^="account_code"]').val('');
-        clone.find('[name^="account_id"]').val('');
-        clone.find('[name^="group_id"]').val('');
-        clone.find('[name^="amount"]').val('');
-        clone.find('.account_code').val('');
-        clone.find('.type').val('');
-
-        table.find('tbody').append(clone);
-
-
-        clone.find('.delete-row').click(function () {
-            $(this).closest('tr').remove();
-        });
-    });
-});
-</script>
 <?php } ?>
 <script>
    function updateTotals(totalCredit, totalDebit) {

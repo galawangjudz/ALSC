@@ -117,6 +117,39 @@ function format_num($number){
     echo 'var totalCredit = ' . json_encode($totalCredit) . ';';
     echo '</script>'; 
 ?>
+<script>
+function updateAmount(input) {
+    var inputValue = $(input).val();
+    var amountTextbox = $(input).closest('tr').find('.amount-textbox');
+    $(amountTextbox).val(inputValue);
+}
+
+$(document).ready(function() {
+    function handleAccountSelectChange() {
+        var selectedOption = $(this).find(':selected');
+        var type = selectedOption.data('type');
+
+        var $row = $(this).closest('tr'); 
+        var $debitInput = $row.find('.debit-amount-input');
+        var $creditInput = $row.find('.credit-amount-input');
+
+        if (type == 1) {
+            $creditInput.prop('disabled', true);
+            $debitInput.prop('disabled', false);
+        } else if (type == 2) {
+            $creditInput.prop('disabled', false);
+            $debitInput.prop('disabled', true);
+        }
+    }
+
+    $(document).on('change', '.accountSelect', handleAccountSelectChange);
+
+    $('.accountSelect').each(function () {
+        handleAccountSelectChange.call(this);
+    });
+
+});
+</script>
 </head>
 
 <body onload="cal_tb()">
@@ -195,17 +228,16 @@ function format_num($number){
                             <br>
                             <br>
                             <div class="gr-container"></div>
-                           
                         </div>
                     </div>
-                    <br>
+                    <hr>
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label for="description" class="control-label">Particulars:</label>
                             <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="form-group col-md-4">
                             <label for="account_id" class="control-label">Account Name:</label>
                             <select id="account_id" class="form-control form-control-sm form-control-border select2">
@@ -274,9 +306,10 @@ function format_num($number){
                         <div class="form-group col-md-6">
                             <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
                         </div>
-                    </div>
+                    </div> -->
                     <?php 
                         if (!isset($id) || $id === null) :
+                            
                             $journalId = isset($_GET['id']) ? $_GET['id'] : null;
                             $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
                             $groupedData = array();
@@ -285,211 +318,215 @@ function format_num($number){
                                 $grId = $row['gr_id'];
                                 $groupedData[$grId][] = $row;
                             }
-
+                        
                             foreach ($groupedData as $grId => $groupData) :
-                    ?>
+                        ?>
+                    <hr>
+                    <b>GR #: </b><?= $grId ?>
                     <table id="account_list_<?= $grId ?>" class="table table-bordered tbl_acc">
-                                <colgroup>
-                                        <col width="5%">
-                                        <!-- <col width="5%"> -->
-                                        <col width="10%">
-                                        <col width="20%">
-                                        <col width="30%">
-                                        <col width="10%">
-                                        <col width="10%">
-                                        <col width="10%">
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center"></th>
-                                            <!-- <th class="text-center">Item No.</th> -->
-                                            <th class="text-center">Account Code</th>
-                                            <th class="text-center">Account Name</th>
-                                            <th class="text-center">Location</th>
-                                            <th class="text-center">GR #</th>
-                                            <th class="text-center">Debit</th>
-                                            <th class="text-center">Credit</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php foreach ($groupData as $row) : ?>
-                                        
-                                        <tr>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-                                            </td>
-                                        
-                                            <td class="accountInfo">
-                                                <input type="text" name="gr_id[]" value="<?= $row['gr_id'] ?>">
-                                                <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                                <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                                <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                                <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
-                                                <span class="account_code"><?= $row['account_code'] ?></span>
-                                                <input type="text" name="type[]" value="<?= $row['type'] ?>">
-                                            </td>
-                                            <td class="">
-                                                <select name="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                                                    <option value="" disabled selected></option>
-                                                    <?php 
-                                                    $accounts = $conn->query("SELECT a.*, g.name AS gname,g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                                                    $currentGroup = null;
-                                                    $groupedAccounts = array();
+                    <colgroup>
+                            <col width="5%">
+                            <!-- <col width="5%"> -->
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="30%">
+                            <!-- <col width="10%"> -->
+                            <col width="10%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="text-center"></th>
+                                <!-- <th class="text-center">Item No.</th> -->
+                                <th class="text-center">Account Code</th>
+                                <th class="text-center">Account Name</th>
+                                <th class="text-center">Location</th>
+                                <!-- <th class="text-center">GR #</th> -->
+                                <th class="text-center">Debit</th>
+                                <th class="text-center">Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($groupData as $row) : ?>
+                            
+                            <tr>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+                                </td>
+                               
+                                <td class="accountInfo">
+                                <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
+                                <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>" class="amount-textbox">
+                                <span class="account_code"><?= $row['account_code'] ?></span>
+                                <span class="type" style="display:none;"><?= $row['type'] ?></span>
+                                </td>
+                                <td class="">
+                                    <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
+                                        <option value="" disabled selected></option>
+                                        <?php 
+                                        $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
+                                        $currentGroup = null;
+                                        $groupedAccounts = array();
 
-                                                    while($account = $accounts->fetch_assoc()):
-                                                    ?>
-                                                        <option value="<?= $account['id'] ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-gr-id="<?= $row['gr_id'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($row['account_id'] == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
+                                        while($account = $accounts->fetch_assoc()):
+                                        ?>
+                                            <option value="<?= $account['id'] ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-gr-id="<?= $row['gr_id'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($row['account_id'] == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
 
-                                                    <?php endwhile; ?>
-                                                </select>
-                                            </td>
-                                            <td class="">
-                                            <div class="loc-cont">
-                                            <label class="control-label">Phase: </label>
-                                            <select name="phase[]" id="phase[]" class="phase">
-                                            <?php 
-                                                $meta = array();
-                                                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                                while($row1 = $cat->fetch_assoc()):
-                                            ?>
-                                                <?php
-                                                    echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
-                                                ?>
-                                                <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
-                                            <?php
-                                                endwhile;
-                                            ?>
-                                            </select>
-                                                <label class="control-label">Block: </label>
-                                                <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
-                                                <label class="control-label">Lot: </label>
-                                                <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
-                                                <div class="lotExistsMsg" style="color: #ff0000;"></div>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </td>
+                                <td class="">
+                                <div class="loc-cont">
+                                <label class="control-label">Phase: </label>
+                                <select name="phase[]" id="phase[]" class="phase">
+                                <?php 
+                                    $meta = array();
+                                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                    while($row1 = $cat->fetch_assoc()):
+                                ?>
+                                    <?php
+                                        echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                    ?>
+                                    <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
+                                <?php
+                                    endwhile;
+                                ?>
+                                </select>
+                                    <label class="control-label">Block: </label>
+                                    <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
+                                    <label class="control-label">Lot: </label>
+                                    <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
+                                    <div class="lotExistsMsg" style="color: #ff0000;"></div>
 
-                                                <script>
-                                            $(document).ready(function () {
-                                                $('.lot, .block, .phase').on('input', function () {
-                                                    var currentRow = $(this).closest('td');
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('.lot, .block, .phase').on('input', function () {
+                                                var currentRow = $(this).closest('td');
 
-                                                    var enteredPhase = currentRow.find('.phase').val();
-                                                    var enteredBlock = currentRow.find('.block').val();
-                                                    var enteredLot = currentRow.find('.lot').val();
+                                                var enteredPhase = currentRow.find('.phase').val();
+                                                var enteredBlock = currentRow.find('.block').val();
+                                                var enteredLot = currentRow.find('.lot').val();
 
-                                                    console.log("AJAX Data:", {
+                                                console.log("AJAX Data:", {
+                                                    phase: enteredPhase,
+                                                    block: enteredBlock,
+                                                    lot: enteredLot
+                                                });
+
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: 'journals/check_loc.php',
+                                                    data: JSON.stringify({
                                                         phase: enteredPhase,
                                                         block: enteredBlock,
                                                         lot: enteredLot
-                                                    });
-
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        url: 'journals/check_loc.php',
-                                                        data: JSON.stringify({
-                                                            phase: enteredPhase,
-                                                            block: enteredBlock,
-                                                            lot: enteredLot
-                                                        }),
-                                                        contentType: 'application/json', 
-                                                        success: function (response) {
-                                                            console.log("AJAX Response:", response);
-                                                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                                                            
-                                                            
-                                                                lotExistsMsg.html(response);
-                                                            
-                                                        }
-                                                    });
+                                                    }),
+                                                    contentType: 'application/json', 
+                                                    success: function (response) {
+                                                        console.log("AJAX Response:", response);
+                                                        var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                                        
+                                                        
+                                                            lotExistsMsg.html(response);
+                                                        
+                                                    }
                                                 });
                                             });
-                                        </script>
-                                        </div>
-                                            </td>
-                                            <td class="group"><?= $row['gr_id'] ?></td>
-                                            <td class="debit_amount text-right">
-                                                <?php if ($row['type'] == 1) : ?>
-                                                    <input type="text" name="debit_amount[]" value="<?= $row['amount'] ?>">
-                                                <?php else : ?>
-                                                    <input type="text" name="debit_amount[]" value="">
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="credit_amount text-right">
-                                                <?php if ($row['type'] == 2) : ?>
-                                                    <input type="text" name="credit_amount[]" value="<?= $row['amount'] ?>">
-                                                <?php else : ?>
-                                                    <input type="text" name="credit_amount[]" value="">
-                                                <?php endif; ?>
-                                            </td>
+                                        });
+                                    </script>
+                                </div>
+                                </td>
+                                <!-- <td class="group"><?= $row['gr_id'] ?></td> -->
+                                <td class="debit_amount text-right">
+                                    <?php if ($row['type'] == 1) : ?>
+                                        <input type="text" class="debit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
+                                    <?php else : ?>
+                                        <input type="text" class="debit-amount-input" value="" oninput="updateAmount(this)">
+                                    <?php endif; ?>
+                                </td>
 
-                                        </tr>
-                                        <?php 
-                                        if ($row['type'] == 2) {
-                                            $totalCredit += $row['amount'];
-                                        }
-                                        if ($row['type'] == 1) {
-                                            $totalDebit += $row['amount'];
-                                        }
-                                        ?>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                    <tfoot>
-                        <tr>
-                            <th colspan="5" class="text-right">
-                                <button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $grId ?>" type="button">Add Row</button>
-                                TOTAL
-                            </th>
-                            <th class="text-right total_debit">0.00</th>
-                            <th class="text-right total_credit">0.00</th>
-                        </tr>
-                        <tr>
-                            <th colspan="5" class="text-center"></th>
-                            <th colspan="4" class="text-center total-balance">0</th>
-                        </tr>
-                    </tfoot>
+                                <td class="credit_amount text-right">
+                                    <?php if ($row['type'] == 2) : ?>
+                                        <input type="text" class="credit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
+                                    <?php else : ?>
+                                        <input type="text" class="credit-amount-input" value="" oninput="updateAmount(this)">
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php 
+                            if ($row['type'] == 2) {
+                                $totalCredit += $row['amount'];
+                            }
+                            if ($row['type'] == 1) {
+                                $totalDebit += $row['amount'];
+                            }
+                            ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4" class="text-right">
+                                    <button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $grId ?>" type="button">Add Row</button>
+                                    TOTAL
+                                </th>
+                                <th class="text-right total_debit">0.00</th>
+                                <th class="text-right total_credit">0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" class="text-center"></th>
+                                <th colspan="2" class="text-center total-balance">0</th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <script>
-    $(document).ready(function () {
-        // Use event delegation on the parent tbody element
-        $('#account_list_<?= $grId ?> tbody').on('change', '.select2.accountSelect', function () {
-            // Your existing onchange functionality here
-            updateTextBoxes(this);
-        });
+                    $(document).ready(function () {
+                        $('#account_list_<?= $grId ?>').on('change', '.accountSelect', function () {
+                            var selectedOption = $(this).find(':selected');
+                            var currentRow = $(this).closest('tr');
+                            var accountInfo = currentRow.find('.accountInfo');
 
-        $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
-            var table = $('#account_list_<?= $grId ?>');
-            var lastRow = table.find('tbody tr:last');
-            var clone = lastRow.clone();
+                            accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
+                            accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
+                            accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
+                            accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
+                            //accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
+                            accountInfo.find('.account_code').text(selectedOption.data('account-code'));
+                            accountInfo.find('.type').text(selectedOption.data('type'));
+                        });
+                        $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
+                            var table = $('#account_list_<?= $grId ?>');
+                            var lastRow = table.find('tbody tr:last');
+                            var clone = lastRow.clone();
 
-            // Clear input values in the cloned row
-            clone.find('input, select, span').val('');
+                            clone.find('input, select, span').val('');
 
-            // Set unique names for cloned row elements
-            clone.find('[name^="gr_id"]').val('');
-            clone.find('[name^="account_code"]').val('');
-            clone.find('[name^="account_id"]').val('');
-            clone.find('[name^="group_id"]').val('');
-            clone.find('[name^="amount"]').val('');
+                            clone.find('[name^="phase"]').val(clone.find('[name^="phase"] option:first').val());
 
-            // Append the cloned row to the table
-            table.find('tbody').append(clone);
+                            clone.find('[name^="gr_id"]').val('');
+                            clone.find('[name^="account_code"]').val('');
+                            clone.find('[name^="account_id"]').val('');
+                            clone.find('[name^="group_id"]').val('');
+                            clone.find('[name^="amount"]').val('');
+                            clone.find('.account_code').val('');
+                            clone.find('.type').val('');
 
-            // Attach the delete-row function to the cloned row
-            clone.find('.delete-row').click(function () {
-                $(this).closest('tr').remove();
-            });
-
-            // No need to reattach the onchange event; it will be handled by delegation
-        });
-    });
-</script>
+                            table.find('tbody').append(clone);
 
 
-                <?php 
-                    endforeach; 
-                ?>
+                            clone.find('.delete-row').click(function () {
+                                $(this).closest('tr').remove();
+                            });
+                        });
+                    });
+                    </script>
+
+                    <?php endforeach; ?>
                 <?php endif; ?>
                 <table class="table table-bordered">
                     <tr>
-
                         <th class="text-center">TOTAL DEBIT</th>
                         <th class="text-center">TOTAL CREDIT</th>
                     </tr>
@@ -515,50 +552,46 @@ function format_num($number){
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="zeroAccountCodeModalLabel"><b>Unlinked Item/s</b></h5>
-                
             </div>
             <div class="modal-body" id="zeroAccountCodeModalBody">
             </div>
-            
         </div>
     </div>
 </div>
 
 <script>
-$(document).ready(function () {
-    $(document).ready(function () {
-    $('#account_list_<?= $grId ?>').on('change', '.accountSelect', function () {
-        var selectedOption = $(this).find(':selected');
-        var currentRow = $(this).closest('tr');
-        var accountInfo = currentRow.find('.accountInfo');
+    
+    function cal_tb(account_list_<?= $grId ?>) {
+    var debit = 0;
+    var credit = 0;
 
-        var groupType = selectedOption.data('type');
-
-        // Disable the opposite type input and set its value to zero
-        if (groupType == 1) {
-            accountInfo.find('input[name="credit_amount[]"]').prop('disabled', true).val(0);
-            accountInfo.find('input[name="debit_amount[]"]').prop('disabled', false);
-        } else if (groupType == 2) {
-            accountInfo.find('input[name="debit_amount[]"]').prop('disabled', true).val(0);
-            accountInfo.find('input[name="credit_amount[]"]').prop('disabled', false);
-        }
-
-        // Set values from the selected option
-        accountInfo.find('input[name="gr_id[]"]').val(selectedOption.data('gr-id'));
-        accountInfo.find('input[name="account_code[]"]').val(selectedOption.data('account-code'));
-        accountInfo.find('input[name="account_id[]"]').val(selectedOption.data('account-id'));
-        accountInfo.find('input[name="group_id[]"]').val(selectedOption.data('group-id'));
-        accountInfo.find('input[name="amount[]"]').val(selectedOption.data('amount'));
-        accountInfo.find('.account_code').text(selectedOption.data('account-code'));
-        accountInfo.find('input[name="type[]"]').val(groupType);
+    $('#' + account_list_<?= $grId ?> + ' tbody tr').each(function () {
+        debit += parseFloat($(this).find('.debit-amount-input').val()) || 0;
+        credit += parseFloat($(this).find('.credit-amount-input').val()) || 0;
     });
 
-    $('.add_row[data-gr-id="<?= $grId ?>"]').click(function () {
-        // Your logic for adding a new row
-    });
+    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2));
+    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2));
+    $('#' + account_list_<?= $grId ?>).find('.total-balance').text((debit - credit).toFixed(2));
+}
+
+cal_tb('account_list_<?= $grId ?>');
+
+var grandTotalDebit = 0;
+var grandTotalCredit = 0;
+
+$('.tbl_acc').each(function () {
+    var currentTable = $(this);
+    var totalDebit = parseFloat(currentTable.find('.total_debit').text()) || 0;
+    var totalCredit = parseFloat(currentTable.find('.total_credit').text()) || 0;
+
+    grandTotalDebit += totalDebit;
+    grandTotalCredit += totalCredit;
 });
 
-});
+$('.main_total_debit').text(grandTotalDebit.toFixed(2));
+$('.main_total_credit').text(grandTotalCredit.toFixed(2));
+
 
 
 $(document).ready(function () {
@@ -613,9 +646,8 @@ $(document).ready(function () {
 
     });
 });
-</script>
 
-<script>
+
     var account = $.parseJSON('<?= json_encode($account_arr) ?>');
     var group = $.parseJSON('<?= json_encode($group_arr) ?>');
     
@@ -624,58 +656,6 @@ $(document).ready(function () {
         cal_tb($(this).attr('id'));
     });
 });
-function cal_tb(tableId) {
-
-    var grandTotalDebit = 0;
-    var grandTotalCredit = 0;
-
-
-    $('.tbl_acc').each(function () {
-        var totalDebit = 0;
-        var totalCredit = 0;
-
-
-        $(this).find('tbody tr').each(function () {
-            var debit = parseFloat($(this).find('.debit_amount').text().replace(/,/gi, '')) || 0;
-            var credit = parseFloat($(this).find('.credit_amount').text().replace(/,/gi, '')) || 0;
-
-            totalDebit += debit;
-            totalCredit += credit;
-        });
-
-
-        $(this).find('.total_debit').text(totalDebit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-        $(this).find('.total_credit').text(totalCredit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-
-   
-        grandTotalDebit += totalDebit;
-        grandTotalCredit += totalCredit;
-    });
-
-    $('.main_total_debit').text(grandTotalDebit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-    $('.main_total_credit').text(grandTotalCredit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-
-
-    var debit = 0;
-    var credit = 0;
-
-    $('#' + tableId + ' tbody tr').each(function () {
-        if ($(this).find('.debit_amount').text() !== "") {
-            debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
-        }
-        if ($(this).find('.credit_amount').text() !== "") {
-            credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
-        }
-    });
-
-
-    $('#' + tableId).find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-    $('#' + tableId).find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-    $('#' + tableId).find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 }));
-}
-
-
-cal_tb(tableId);
 
 
     $(function () {
@@ -994,7 +974,4 @@ $('#zeroAccountCodeModal').modal('show');
     });    
     }
 });
-</script>
-<script>
-
 </script>
