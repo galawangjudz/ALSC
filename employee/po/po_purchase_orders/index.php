@@ -110,7 +110,7 @@
 										<div class="dropdown-menu" role="menu">
 											<?php 
 												if ($row['fpo_status'] != '3'){?>
-													<a class="dropdown-item" href="?page=po_purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+													<a class="dropdown-item" href="?page=po_purchase_orders/manage_po_update&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 												<?php } else{ ?>
 													<a class="dropdown-item" href="?page=po_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 												<?php } ?>

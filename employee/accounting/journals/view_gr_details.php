@@ -42,14 +42,7 @@ if (isset($_POST['gr_id'])) {
 
 ?>
 <script>
-    
-function updateAmount(input) {
-    var inputValue = $(input).val();
-    var amountTextbox = $(input).closest('tr').find('.amount-textbox');
-    $(amountTextbox).val(inputValue);
-}
-
-
+  
 function handleAccountSelectChange() {
     var selectedOption = $(this).find(':selected');
     var type = selectedOption.data('type');
@@ -307,7 +300,7 @@ if ($vat == 1){ ?>
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
             <input type="hidden" name="amount[]" value="<?php echo $iVAT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span> style="display:none;"><?= $glType ?></span>
+            <span class="type" style="display:none;"><?= $glType ?></span> 
             <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -640,8 +633,8 @@ if ($vat == 1){ ?>
 <tfoot>
     <tr>
         <td colspan="5"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
-            <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
-            <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($apTotal + $iEWT),2); ?></td>
+        <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
+        <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($apTotal + $iEWT),2); ?></td>
     </tr>
 </tfoot>
 </table>
@@ -678,10 +671,26 @@ $(document).ready(function () {
         clone.find('.type').val('');
 
         table.find('tbody').append(clone);
+        clone.find('.accountSelect').change(function () {
+            var selectedOption = $(this).find(':selected');
+            var currentRow = $(this).closest('tr');
+            var accountInfo = currentRow.find('.accountInfo');
 
+
+            currentRow.find('.account_code input[name="account_code[]"]').val(selectedOption.data('account-code'));
+
+
+        });
 
         clone.find('.delete-row').click(function () {
-            $(this).closest('tr').remove();
+            var deletedRow = $(this).closest('tr');
+            var grId = deletedRow.closest('table').data('gr-id');
+
+            console.log('Deleted Row Number:', deletedRow.index() + 1);
+
+            deletedRow.remove();
+            updateTotalsAfterRowDeletion(grId);
+            console.log(grId);
         });
     });
 });
@@ -1283,7 +1292,16 @@ $(document).ready(function () {
         clone.find('.type').val('');
 
         table.find('tbody').append(clone);
+        clone.find('.accountSelect').change(function () {
+            var selectedOption = $(this).find(':selected');
+            var currentRow = $(this).closest('tr');
+            var accountInfo = currentRow.find('.accountInfo');
 
+            // Update the account_code outside the accountInfo
+            currentRow.find('.account_code input[name="account_code[]"]').val(selectedOption.data('account-code'));
+
+            // Your existing code for updating other fields in the accountInfo
+        });
 
         clone.find('.delete-row').click(function () {
             $(this).closest('tr').remove();
@@ -1734,14 +1752,6 @@ $(document).ready(function () {
 </tfoot>
 </table>
 <script>
-
-function updateAmount(input) {
-    var inputValue = $(input).val();
-    var amountTextbox = $(input).closest('tr').find('.amount-textbox');
-    $(amountTextbox).val(inputValue);
-}
-
-
 function handleAccountSelectChange() {
     var selectedOption = $(this).find(':selected');
     var type = selectedOption.data('type');
@@ -1801,7 +1811,12 @@ $(document).ready(function () {
         clone.find('.type').val('');
 
         table.find('tbody').append(clone);
-
+        clone.find('.accountSelect').change(function () {
+            var selectedOption = $(this).find(':selected');
+            var currentRow = $(this).closest('tr');
+            var accountInfo = currentRow.find('.accountInfo');
+            currentRow.find('.account_code input[name="account_code[]"]').val(selectedOption.data('account-code'));
+        });
 
         clone.find('.delete-row').click(function () {
             $(this).closest('tr').remove();
@@ -1811,11 +1826,20 @@ $(document).ready(function () {
 </script>
 <?php } ?>
 <script>
-   function updateTotals(totalCredit, totalDebit) {
-    $('#total-credit').text(totalCredit.toFixed(2));
-    $('#total-debit').text(totalDebit.toFixed(2));
-}
+    $(document).ready(function () {
 
+        $(".accountSelect").change(function () {
+
+            var selectedAccountCode = $(this).find(":selected").data("account-code");
+
+
+            var accountCodeInput = $(this).closest('.accountInfo').prev('.account_code').find("input[name='account_code[]']");
+
+            accountCodeInput.val(selectedAccountCode);
+        });
+    });
+</script>
+<script>
 $(document).off('click', '.delete-row').on('click', '.delete-row', function () {
     var deletedRow = $(this).closest('tr');
     var grId = deletedRow.closest('table').data('gr-id');
@@ -1832,32 +1856,43 @@ function updateTotalsAfterRowDeletion(grId) {
     let totalDebit = 0;
 
     $('table[data-gr-id="' + grId + '"] .debit_amount').each(function () {
-        totalDebit += parseFloat($(this).text()) || 0;
+        totalDebit += parseFloat($(this).val().replace(/,/g, '')) || 0;
     });
 
     $('table[data-gr-id="' + grId + '"] .credit_amount').each(function () {
-        totalCredit += parseFloat($(this).text()) || 0;
+        totalCredit += parseFloat($(this).val().replace(/,/g, '')) || 0;
     });
 
     $('table[data-gr-id="' + grId + '"] tfoot #total-debit').text(totalDebit.toFixed(2));
     $('table[data-gr-id="' + grId + '"] tfoot #total-credit').text(totalCredit.toFixed(2));
-
-    urlSuffix = "save_journal";
-    $.ajax({
-        type: 'POST',
-        url: _base_url_ + "classes/Master.php?f=" + urlSuffix,
-        data: {
-            grId: grId,
-            totalCredit: totalCredit,
-            totalDebit: totalDebit
-        },
-        success: function (response) {
-            console.log('Totals updated on the server:', response);
-        },
-        error: function (error) {
-            console.error('Error updating totals on the server:', error);
-        }
-    });
 }
+
 </script>
 
+<script>
+function updateAmount(input) {
+    var inputValue = parseFloat($(input).val().replace(/,/g, '')) || 0;
+    var amountTextbox = $(input).closest('tr').find('.amount-textbox');
+    $(amountTextbox).val(inputValue);
+
+    var table = $(input).closest('table');
+
+    var totalDebit = 0;
+    var totalCredit = 0;
+
+    table.find('.debit_amount').each(function () {
+        var value = parseFloat($(this).val().replace(/,/g, '')) || 0;
+        totalDebit += value;
+    });
+
+    table.find('.credit_amount').each(function () {
+        var value = parseFloat($(this).val().replace(/,/g, '')) || 0;
+        totalCredit += value;
+    });
+
+    table.find('#total-debit').text(totalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    table.find('#total-credit').text(totalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ''));
+}
+
+
+</script>

@@ -35,7 +35,7 @@
                       <a href="<?php echo base_url ?>admin/?page=suppliers" class="nav-link nav-suppliers">
                         <i class="nav-icon fas fa-truck-loading"></i>
                         <p>
-                        Supplier List
+                        Suppliers List
                         </p>
                       </a>
                     </li>
@@ -43,7 +43,7 @@
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
                         <p>
-                          Item List
+                          Items/Services List
                         </p>
                       </a>
                     </li>

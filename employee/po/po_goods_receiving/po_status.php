@@ -3,6 +3,18 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
+<style>
+.nav-monitoring {
+    background-color: #007bff;
+    color: white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-monitoring:hover {
+    background-color: #007bff!important;
+    color: white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
+</style>
 <!-- <link rel="stylesheet" href="css/cpo.css"> -->
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -44,6 +56,7 @@
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+								
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
@@ -52,38 +65,44 @@
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo $row['department'] ?></td>
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-                                    <td>
+									<td>
 										<?php 
-											if ($row['status'] == '1' && $row['status2'] == '0' && $row['status3'] == '0') {
-												echo '<span class="badge badge-primary">PO Approved</span>';
-											} elseif ($row['status'] == '1' && $row['status2'] == '1' && $row['status3'] == '0') {
-												echo '<span class="badge badge-success">FM Approved</span>';
-											} elseif ($row['status'] == '1' && $row['status2'] == '1' && $row['status3'] == '1') {
-												echo '<span class="badge badge-secondary">CFO Approved</span>';
-											} else {
-												echo '<span class="badge badge-danger">Pending</span>';
-											}
+										if ($row['status'] == '1' && $row['status2'] == '0' && $row['status3'] == '0') {
+											echo '<span class="badge badge-primary"><i class="fa fa-thumbs-up" aria-hidden="true"></i> PO Approved</span>';
+										} elseif ($row['status'] == '1' && $row['status2'] == '1' && $row['status3'] == '0') {
+											echo '<span class="badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i> FM Approved</span>';
+										} elseif ($row['status'] == '1' && $row['status2'] == '1' && $row['status3'] == '1') {
+											echo '<span class="badge badge-secondary"><i class="fa fa-thumbs-up" aria-hidden="true"></i> CFO Approved</span>';
+										} else {
+											echo '<span class="badge badge-danger"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Pending</span>';
+										}
 										?>
-                                    </td>
-
-
+										<?php 
+										$qry_approved = $conn->query("SELECT * FROM `po_approved_list` WHERE id='{$row['id']}'");
+										while($row_approved = $qry_approved->fetch_assoc()):
+											if ($row_approved['status']=='0'){
+												echo '<span class="badge badge-primary"><i class="fa fa-truck" aria-hidden="true"></i> Delivered</span>';
+											} else {
+												echo '<span class="badge badge-danger"><i class="fa fa-truck" aria-hidden="true"></i> Still to be delivered</span>';
+											}
+										endwhile;
+										?>
+									</td>
 
 									<td align="center">
 										<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-												Action
+											Action
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
 										<div class="dropdown-menu" role="menu">
 											<?php 
-												if ($row['fpo_status'] != '3'){?>
-													<a class="dropdown-item" href="?page=po_purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-												<?php } else{ ?>
-													<a class="dropdown-item" href="?page=po_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-												<?php } ?>
-												
-
-												<?php if ($row['fpo_status'] != '3'){?>
-													<div class="dropdown-divider"></div>
+											if ($row['fpo_status'] != '3'){?>
+												<a class="dropdown-item" href="?page=po_purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+											<?php } else{ ?>
+												<a class="dropdown-item" href="?page=po_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+											<?php } ?>
+											<?php if ($row['fpo_status'] != '3'){?>
+												<div class="dropdown-divider"></div>
 												<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 											<?php }?>
 										</div>
@@ -91,6 +110,7 @@
 								</tr>
 								<?php endwhile; ?>
 							</tbody>
+
 						</table>
         </div>
 		</div>

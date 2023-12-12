@@ -38,8 +38,8 @@
 				<thead>
 					<tr class="bg-navy disabled">
 						<th>#</th>
-						<th>Item Code</th>
-						<th>Item Name</th>
+						<th>Code</th>
+						<th>Name</th>
 						<th>Description</th>
 						<th>Supplier</th>
 						<th>Status</th>
@@ -117,16 +117,16 @@
 			uni_modal_right("<i class='fa fa-info'></i> Price History", "po/items/item_price_history.php?id=" + $(this).attr('data-id') + "&name=" + $(this).attr('data-name'), "mid-large");
 		});
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this Item permanently?","delete_item",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this Item/Service permanently?","delete_item",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Create New Item","po/items/manage_item.php")
+			uni_modal("<i class='fa fa-plus'></i> Create New Item/Service","po/items/manage_item.php")
 		})
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-info-circle'></i> Item's Details","po/items/view_details.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-info-circle'></i> Details","po/items/view_details.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Item's Details","po/items/manage_item.php?id="+$(this).attr('data-id'))
+			uni_modal("<i class='fa fa-edit'></i> Edit Details","po/items/manage_item.php?id="+$(this).attr('data-id'))
 		})
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')
 		$('.table').dataTable();

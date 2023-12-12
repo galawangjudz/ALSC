@@ -22,11 +22,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <dl class="row">
             <table class="table table-bordered">
                 <tr>
-                    <td><b>Item Code:</b></td>
+                    <td><b>Code:</b></td>
                     <td><b><?php echo $item_code ?></b></td>
                 </tr>
                 <tr>
-                    <td><b>Item Name:</b></dt></td>
+                    <td><b>Name:</b></dt></td>
                     <td><b><?php echo $name ?></b></dd></td>
                 </tr>
                 <tr>

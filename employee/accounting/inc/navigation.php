@@ -90,14 +90,6 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=po/goods_receiving/po_status" class="nav-link nav-gr">
-                      <i class="nav-icon fas fa-search"></i>
-                        <p>
-                          Monitoring
-                        </p>
-                      </a>
-                    </li> 
                     <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>File Manager</i></b>

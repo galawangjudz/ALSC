@@ -299,10 +299,10 @@ function format_num($number){
                                 </td>
                                
                                 <td class="">
-                                    <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                    <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                    <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                    <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
                                     <span class="account_code"><?= $row['account_code'] ?></span>
                                 </td>
                                 <td class="">

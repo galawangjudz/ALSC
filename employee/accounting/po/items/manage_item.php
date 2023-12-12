@@ -33,11 +33,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <dl class="row">
             <table class="table table-bordered">
                 <tr>
-                    <td><b>Item Name:</b></dt></td>
+                    <td><b>Name:</b></dt></td>
                     <td><b><?php echo $name ?></b></dd></td>
                 </tr>
                 <tr>
-                    <td><b>Item Code:</b></dt></td>
+                    <td><b>Code:</b></dt></td>
                     <td><b><?php echo $item_code ?></b></dd></td>
                 </tr>
                 
@@ -109,11 +109,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <dl class="row">
             <table class="table table-bordered">
                 <tr>
-                    <td><b>Item Code:</b></dt></td>
+                    <td><b>Code:</b></dt></td>
                     <td><b><?php echo $item_code ?></b></dd></td>
                 </tr>
                 <tr>
-                    <td><b>Item Name:</b></dt></td>
+                    <td><b>Name:</b></dt></td>
                     <td><b><?php echo $name ?></b></dd></td>
                 </tr>
                 <tr>

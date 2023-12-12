@@ -56,8 +56,8 @@ if ($_settings->chk_flashdata('success')) :
                             <thead>
                                 <tr class="bg-navy disabled">
                                     <th>#</th>
-                                    <th>Item Code</th>
-                                    <th>Item Name</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
                                     <th>Description</th>
                                     <th>Supplier</th>
                                     <th>Date Created</th>
@@ -119,8 +119,8 @@ if ($_settings->chk_flashdata('success')) :
                         <thead>
                             <tr class="bg-navy disabled">
                                 <th>#</th>
-                                <th>Item Code</th>
-                                <th>Item Name</th>
+                                <th>Code</th>
+                                <th>Name</th>
                                 <th>Description</th>
                                 <th>Supplier</th>
                                 <th>Date Created</th>
@@ -206,10 +206,10 @@ if ($_settings->chk_flashdata('success')) :
             uni_modal_right("<i class='fa fa-info'></i> Price History", "po/items/item_price_history.php?id=" + $(this).attr('data-id') + "&name=" + $(this).attr('data-name'), "mid-large");
         });
         $('.view_data').click(function () {
-            uni_modal("<i class='fa fa-info-circle'></i> Item's Details", "po/items/view_details.php?id=" + $(this).attr('data-id'), "")
+            uni_modal("<i class='fa fa-info-circle'></i> Details", "po/items/view_details.php?id=" + $(this).attr('data-id'), "")
         })
         $('.link_data').click(function () {
-            uni_modal("<i class='fa fa-edit'></i> Edit Item's Details", "po/items/manage_item.php?id=" + $(this).attr('data-id'))
+            uni_modal("<i class='fa fa-edit'></i> Edit Details", "po/items/manage_item.php?id=" + $(this).attr('data-id'))
         })
         $('.modal-title').css('font-size', '18px');
         $('.table th,.table td').addClass('px-1 py-0 align-middle')

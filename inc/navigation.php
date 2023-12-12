@@ -111,7 +111,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
-                          Supplier List
+                          Suppliers List
                         </p>
                       </a>
                     </li> 
@@ -119,7 +119,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>admin/?page=po/items" class="nav-link nav-items">
                       <i class="nav-icon fas fa-th-list"></i>
                         <p>
-                          Item List
+                          Items/Services List
                         </p>
                       </a>
                     </li> 

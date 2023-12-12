@@ -27,7 +27,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <table class="table table-striped table-bordered" id="item-list">
                 <thead>
                     <tr class="bg-navy disabled">
-                        <th class="px-1 py-1 text-center">Item Code</th>
+                        <th class="px-1 py-1 text-center">Code</th>
                         <th class="px-1 py-1 text-center">Unit</th>
                         <th class="px-1 py-1 text-center">Item</th>
                         <th class="px-1 py-1 text-center">Description</th>

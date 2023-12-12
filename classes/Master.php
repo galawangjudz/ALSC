@@ -4457,9 +4457,9 @@ Class Master extends DBConnection {
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($id))
-				$this->settings->set_flashdata('success',"New item successfully saved.");
+				$this->settings->set_flashdata('success',"New item/service successfully saved.");
 			else
-				$this->settings->set_flashdata('success',"Item successfully updated.");
+				$this->settings->set_flashdata('success',"Item/Service successfully updated.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
@@ -4502,7 +4502,7 @@ Class Master extends DBConnection {
 		$del = $this->conn->query("DELETE FROM `item_list` where id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Item successfully deleted.");
+			$this->settings->set_flashdata('success',"Item/Service successfully deleted.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;

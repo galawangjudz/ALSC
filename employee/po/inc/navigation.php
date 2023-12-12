@@ -52,7 +52,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>employee/po/?page=po_purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
-                          PO List
+                          POs List
                         </p>
                       </a>
                     </li> 
@@ -78,7 +78,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>employee/po/?page=po_suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
-                          Supplier List
+                          Suppliers List
                         </p>
                       </a>
                     </li> 
@@ -86,7 +86,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>employee/po/?page=po_items" class="nav-link nav-items">
                       <i class="nav-icon fas fa-th-list"></i>
                         <p>
-                          Item List
+                          Items/Services List
                         </p>
                       </a>
                     </li> 
@@ -97,6 +97,15 @@ $level = $_settings->userdata('type');
                       <i class="nav-icon fas fa-check-square"></i>
                         <p>
                           Goods Receiving
+                        </p>
+                      </a>
+                    </li> 
+
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/po_status" class="nav-link nav-monitoring">
+                      <i class="nav-icon fas fa-search"></i>
+                        <p>
+                          Monitoring
                         </p>
                       </a>
                     </li> 

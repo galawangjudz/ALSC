@@ -1220,7 +1220,7 @@ $(document).ready(function () {
         var modalBody = $('#zeroAccountCodeModalBody');
         modalBody.empty();
         var table = $('<table>');
-        var thead = $('<thead>').append('<tr><th style="width:40%">Name</th><th style="width:10%">Item Code</th><th style="width:50%">Description</th></tr>');
+        var thead = $('<thead>').append('<tr><th style="width:40%">Name</th><th style="width:10%">Code</th><th style="width:50%">Description</th></tr>');
 
         table.append(thead);
 

@@ -119,9 +119,30 @@ function format_num($number){
 ?>
 <script>
 function updateAmount(input) {
-    var inputValue = $(input).val();
+    var inputValue = parseFloat($(input).val()) || 0;
     var amountTextbox = $(input).closest('tr').find('.amount-textbox');
     $(amountTextbox).val(inputValue);
+
+    var table = $(input).closest('table');
+
+    var totalDebit = 0;
+    var totalCredit = 0;
+
+    table.find('.debit-amount-input').each(function () {
+        var value = parseFloat($(this).val()) || 0;
+        totalDebit += value;
+    });
+
+    table.find('.credit-amount-input').each(function () {
+        var value = parseFloat($(this).val()) || 0;
+        totalCredit += value;
+    });
+
+    table.find('.total_debit').text(totalDebit.toFixed(2));
+    table.find('.total_credit').text(totalCredit.toFixed(2));
+
+    var balance = totalDebit - totalCredit;
+    table.find('.total-balance').text(balance.toFixed(2));
 }
 
 $(document).ready(function() {
@@ -351,7 +372,7 @@ $(document).ready(function() {
                             
                             <tr>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
+                                    <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" data-gr-id="account_list_<?= $grId ?>" type="button"><i class="fa fa-times"></i></button>
                                 </td>
                                
                                 <td class="accountInfo">
@@ -518,6 +539,7 @@ $(document).ready(function() {
 
                             clone.find('.delete-row').click(function () {
                                 $(this).closest('tr').remove();
+                                cal_tb();
                             });
                         });
                     });
@@ -560,8 +582,7 @@ $(document).ready(function() {
 </div>
 
 <script>
-    
-    function cal_tb(account_list_<?= $grId ?>) {
+function cal_tb(account_list_<?= $grId ?>) {
     var debit = 0;
     var credit = 0;
 
@@ -573,33 +594,37 @@ $(document).ready(function() {
     $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2));
     $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2));
     $('#' + account_list_<?= $grId ?>).find('.total-balance').text((debit - credit).toFixed(2));
+
+
+    updateGrandTotals();
 }
+
+function updateGrandTotals() {
+    var grandTotalDebit = 0;
+    var grandTotalCredit = 0;
+
+    $('.tbl_acc').each(function () {
+        var currentTable = $(this);
+        var totalDebit = parseFloat(currentTable.find('.total_debit').text()) || 0;
+        var totalCredit = parseFloat(currentTable.find('.total_credit').text()) || 0;
+
+        grandTotalDebit += totalDebit;
+        grandTotalCredit += totalCredit;
+    });
+
+    $('.main_total_debit').text(grandTotalDebit.toFixed(2));
+    $('.main_total_credit').text(grandTotalCredit.toFixed(2));
+}
+
+$(document).on('click', '.delete-row', function () {
+    var grId = $(this).data('gr-id');
+    $(this).closest('tr').remove();
+    cal_tb(grId);
+});
+
 
 cal_tb('account_list_<?= $grId ?>');
 
-var grandTotalDebit = 0;
-var grandTotalCredit = 0;
-
-$('.tbl_acc').each(function () {
-    var currentTable = $(this);
-    var totalDebit = parseFloat(currentTable.find('.total_debit').text()) || 0;
-    var totalCredit = parseFloat(currentTable.find('.total_credit').text()) || 0;
-
-    grandTotalDebit += totalDebit;
-    grandTotalCredit += totalCredit;
-});
-
-$('.main_total_debit').text(grandTotalDebit.toFixed(2));
-$('.main_total_credit').text(grandTotalCredit.toFixed(2));
-
-
-
-$(document).ready(function () {
-    $('.delete-row').on('click', function () {
-        $(this).closest('tr').remove();
-        cal_tb();
-    });
-});
 document.addEventListener("DOMContentLoaded", function() {
     var selectedOption = document.getElementById('supplier_id').options[document.getElementById('supplier_id').selectedIndex];
     console.log("Selected Option:", selectedOption);

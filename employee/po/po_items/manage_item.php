@@ -45,15 +45,15 @@ $type="";
             </select>
         </div>
         <div class="form-group">
-            <label for="item_code" class="control-label">Item Code:</label>
+            <label for="item_code" class="control-label">Code:</label>
             <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code : "" ?>">
         </div>
         <div class="form-group">
-            <label for="name" class="control-label">Item Name:</label>
+            <label for="name" class="control-label">Name:</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="type" class="control-label">Item Type:</label>
+            <label for="type" class="control-label">Type:</label>
             <select name="type" id="type" class="form-control rounded-0" required>
                 <option value="" disabled selected></option>
                 <option value="1" <?php echo ($type === "1") ? "selected" : ""; ?>>Goods</option>
