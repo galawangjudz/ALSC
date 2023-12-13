@@ -1483,7 +1483,7 @@ $(document).ready(function () {
             if ($ilType == 1) {
                 echo "Goods = " . $n_ewt;
             } else {
-                echo "Service";
+                echo "Service " . $n_ewt;
             }?>
         </td>
 

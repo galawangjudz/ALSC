@@ -261,6 +261,9 @@ $(document).ready(function() {
 				<td>
 					<button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" form="po-form" id="save-button">Save</button>
 				</td>
+				<!-- <td>
+					<a class="btn btn-flat btn-secondary" style="width:100%;margin-left:5px;font-size:14px;" href=""><i class="fa fa-undo"></i>&nbsp;&nbsp;Cancel</a>
+				</td> -->
 				<td>
 					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/goods_receiving"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
