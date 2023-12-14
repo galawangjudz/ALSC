@@ -4791,9 +4791,9 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
-			if(in_array($k,array('discount_amount','tax_amount')))
+			if(in_array($k,array('discount_amount')))
 				$v= str_replace(',','',$v);
-			if(!in_array($k,array('id','po_no','usertype','item_status','item_notes')) && !is_array($_POST[$k])){
+			if(!in_array($k,array('id','po_no','usertype','item_status','item_notes','vatType')) && !is_array($_POST[$k])){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
