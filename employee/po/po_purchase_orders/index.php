@@ -58,6 +58,17 @@
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+
+									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+									$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$rowFromPoList = $result->fetch_assoc();
+									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+									$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+									$row['total_amount'] = $totalAmountWithTax;
+
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
@@ -110,7 +121,7 @@
 										<div class="dropdown-menu" role="menu">
 											<?php 
 												if ($row['fpo_status'] != '3'){?>
-													<a class="dropdown-item" href="?page=po_purchase_orders/manage_po_update&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+													<a class="dropdown-item" href="?page=po_purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 												<?php } else{ ?>
 													<a class="dropdown-item" href="?page=po_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 												<?php } ?>
@@ -161,6 +172,16 @@
 									$id =  $row['id'];
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+									$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$rowFromPoList = $result->fetch_assoc();
+									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+									$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+									$row['total_amount'] = $totalAmountWithTax;
+								
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
@@ -252,6 +273,17 @@
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+								
+									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+									$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$rowFromPoList = $result->fetch_assoc();
+									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+									$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+									$row['total_amount'] = $totalAmountWithTax;
+
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
@@ -343,6 +375,18 @@
 									while($row = $qry->fetch_assoc()):
 										$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 										$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+										
+										$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+										$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+										$rowFromPoList = $result->fetch_assoc();
+										$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+	
+										$totalAmountWithTax = $orderItemsTotal + $totalVat;
+	
+										$row['total_amount'] = $totalAmountWithTax;
+	
+									
 									?>
 									<tr>
 										<td class="text-center"><?php echo $i++; ?></td>

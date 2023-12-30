@@ -1,0 +1,349 @@
+<?php 
+require_once('../../config.php');
+$account_arr = [];
+$group_arr = [];
+
+if(isset($_GET['id'])){
+    $qry = $conn->query("SELECT * FROM `tbl_gl_list` where gl_id = '{$_GET['id']}'");
+    if($qry->num_rows > 0){
+        $res = $qry->fetch_array();
+        foreach($res as $k => $v){
+            if(!is_numeric($k))
+            $$k = $v;
+        }
+    }
+}
+$is_new_vn = true;
+
+if (isset($_GET['id']) && $_GET['id'] > 0) {
+    $existing_v_id = $_GET['id'];
+
+    $qry = $conn->query("SELECT v_num FROM `vs_entries` WHERE v_num = $existing_v_id");
+    if ($qry->num_rows > 0) {
+        $row = $qry->fetch_assoc();
+        $v_num = $row['v_num'];
+        $is_new_vn = false;
+    } else {
+        $v_num = 'Selected voucher not found';
+    }
+} else {
+    $qry = $conn->query("SELECT MAX(v_num) AS max_id FROM `vs_entries`");
+    if ($qry->num_rows > 0) {
+        $row = $qry->fetch_assoc();
+        $next_v_num = $row['max_id'] + 1;
+    } else {
+        $next_v_num = 1;
+    }
+    $v_num = str_pad($next_v_num, STR_PAD_LEFT);
+}
+
+$qry1 = $conn->query("SELECT MAX(c_num) AS max_id FROM `cv_entries`");
+if ($qry1->num_rows > 0) {
+    $row = $qry1->fetch_assoc();
+    $next_cv_num = $row['max_id'] + 1;
+} else {
+    $next_cv_num = 1;
+}
+$cv_num = str_pad($next_cv_num, STR_PAD_LEFT);
+?>
+<?php
+function format_num($number){
+	$decimals = 0;
+	$num_ex = explode('.',$number);
+	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
+	return number_format($number,$decimals);
+}
+?>
+<style>
+    .paid_to_main{
+        border:solid 1px gainsboro;
+        padding:10px;
+        border-radius:5px;
+    }
+    .paid_to{
+        padding:10px;
+    }
+    /* #sup-div{
+        display:none;
+    }
+    #agent-div{
+        display:none;
+    }
+    #emp-div{
+        display:none;
+    } */
+    .rdo-btn {
+        display: flex;
+        width: 100%;
+    }
+
+    .rdo-btn label {
+        flex: 1;
+        text-align: center; 
+        margin: 0; 
+        padding: 10px; 
+        box-sizing: border-box; 
+    }
+
+    .rdo-btn input[type="radio"] {
+        margin: 0;
+        vertical-align: middle; 
+    }
+    .hidden {
+        display: none;
+    }
+    .phase{
+        width:30%;
+    }
+    .block, .lot{
+        width:10%;
+    }
+    .loc-cont{
+        style:inline-block;
+        width:100%;
+    }
+</style>
+
+<body onload="cal_tb()">
+<div class="card card-outline card-primary">
+	<div class="card-header">
+		<h5 class="card-title"><b><i><?php echo isset($id) ? "Check Voucher Entry": "Check Voucher Entry" ?></b></i></h5>
+	</div>
+
+    <div class="card-body">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <form action="" id="journal-form">
+                    <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
+     
+                        
+                    <table id="account_list" class="table table-striped table-bordered">
+                        <colgroup>
+
+                            <col width="5%">
+                            <col width="5%">
+
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+
+                                <th class="text-center">Item No.</th>
+                                <th class="text-center">Account Code</th>
+                                <th class="text-center">Account Name</th>
+
+                                <th class="text-center">Debit</th>
+                                <th class="text-center">Credit</th>
+                                <th class="text-center">Item Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <?php 
+                            if (!isset($id) || $id === null) :
+                                $counter = 1;
+                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                // $jitems = $conn->query("SELECT gl.amount, gl.journal_date, a.code,a.group_id,g.type,a.name,i.item_code
+                                //     FROM tbl_gl_list l
+                                //     INNER JOIN tbl_gl_items gl ON l.gl_id = gl.gl_id
+                                //     INNER JOIN item_list i ON gl.item_id = i.id
+                                //     INNER JOIN account_list a ON i.account_code = a.code
+                                //     INNER JOIN group_list g ON a.group_id = g.id
+                                //     WHERE gl.gl_id = {$_GET['id']};");
+
+                                $grId = $_GET['id'];
+                                $jitems = $conn->query("SELECT gl.amount, gl.account, i.item_code, ac.name, g.type 
+                                                        FROM tbl_gl_trans gl
+                                                        INNER JOIN account_list ac ON gl.account = ac.code
+                                                        INNER JOIN group_list g ON ac.group_id = g.id
+                                                        LEFT JOIN item_list i ON i.id = gl.item_id
+                                                        WHERE gr_id = $grId
+                                                        ORDER BY 
+                                                            g.type,
+                                                            CASE WHEN g.type = 2 THEN gl.account END ASC,
+                                                            i.item_code DESC");
+                                while($row = $jitems->fetch_assoc()):
+                            ?>
+                            <tr>
+
+                                <td class="text-center">
+                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
+                                </td>
+                                <td class="">
+                                    <input type="text" name="account_code[]" value="<?= $row['account'] ?>">
+
+                                </td>
+                                <td class="">
+                                    <span><?= $row['name'] ?></span>
+                                </td>
+
+                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
+                                <td class="text-right"><?= $row['item_code'] ?></td>
+                            </tr>
+                            <?php 
+                            $counter++;
+                            endwhile; ?>
+                            <?php endif; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-gradient-secondary">
+                                <tr>
+                                    <th colspan="3" class="text-center">Total</th>
+                                    <th class="text-right total_debit">0.00</th>
+                                    <th class="text-right total_credit">0.00</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="4" class="text-center"></th>
+                                    <th colspan="4" class="text-center total-balance">0</th>
+                                </tr>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<script>
+    var account = $.parseJSON('<?= json_encode($account_arr) ?>');
+    var group = $.parseJSON('<?= json_encode($group_arr) ?>');
+
+    function cal_tb() {
+        var debit = 0;
+        var credit = 0;
+        $('#account_list tbody tr').each(function () {
+            if ($(this).find('.debit_amount').text() != "")
+                debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
+            if ($(this).find('.credit_amount').text() != "")
+                credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
+        });
+        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
+        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
+    }
+
+    $(function () {
+        if ('<?= isset($id) ?>' == 1) {
+            cal_tb();
+        }
+        $('#account_list th, #account_list td').addClass('align-middle px-2 py-1');
+        var counter = 1; 
+
+        $('#add_to_list').click(function () {
+            var account_id = $('#account_id').val();
+            var account_code = $('#account_code').val();
+            var group_id = $('#group_id').val();
+            var amount = $('#amount').val();
+
+            
+             if (account_code.trim() === '') {
+                alert('Please enter an account code.'); 
+                return; 
+            }
+            if (amount.trim() === '') {
+                alert('Please enter amount.'); 
+                return; 
+            }
+
+            var tr = $($('noscript#item-clone').html()).clone();
+            var account_data = !!account[account_id] ? account[account_id] : {};
+            var group_data = !!group[group_id] ? group[group_id] : {};
+
+            tr.find('#item_no').val(counter);
+            tr.find('input[name="account_code[]"]').val(account_code); 
+            tr.find('input[name="account_id[]"]').val(account_id);
+            tr.find('input[name="group_id[]"]').val(group_id);
+            tr.find('input[name="amount[]"]').val(amount);
+
+
+            tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
+            tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
+            if (!!group_data.type && group_data.type == 1)
+                tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+            else
+                tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+
+            $('#account_list').append(tr);
+
+
+            tr.find('.delete-row').click(function () {
+                $(this).closest('tr').remove();
+                cal_tb();
+            });
+            cal_tb();
+            
+            $('#account_code').val('').trigger('change');
+            $('#account_id').val('').trigger('change');
+            $('#group_id').val('').trigger('change');
+            $('#amount').val('').trigger('change');
+
+            counter++;
+        });
+
+
+        $('#journal-form').submit(function (e) {
+            e.preventDefault();
+            var _this = $(this);
+            $('.pop-msg').remove();
+            var el = $('<div>');
+            el.addClass("pop-msg alert");
+            el.hide();
+            if ($('#account_list tbody tr').length <= 0) {
+                el.addClass('alert-danger').text(" Account Table is empty.");
+                _this.prepend(el);
+                el.show('slow');
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
+                return false;
+            }
+            // if ($('#account_list tfoot .total-balance').text() != '0') {
+            //     el.addClass('alert-danger').text(" Trial Balance is not equal.");
+            //     _this.prepend(el);
+            //     el.show('slow');
+            //     $('html, body').animate({ scrollTop: 0 }, 'fast');
+            //     return false;
+            // }
+            start_loader();
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=manage_cv",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					//alert_toast("An error occured",'error');
+					end_loader();
+				},
+                success:function(resp){
+                    if(resp.status == 'success'){
+                        location.reload();
+              
+                    }else if(!!resp.msg){
+                        el.addClass("alert-danger")
+                        el.text(resp.msg)
+                        _this.prepend(el)
+                    }else{
+                        el.addClass("alert-danger")
+                        el.text("An error occurred due to unknown reason.")
+                        _this.prepend(el)
+                    }
+                    el.show('slow')
+                    $('html,body,.modal').animate({scrollTop:0},'fast')
+                    end_loader();
+                }
+            })
+        })
+    })
+</script>

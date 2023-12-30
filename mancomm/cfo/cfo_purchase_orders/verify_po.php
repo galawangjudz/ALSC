@@ -247,7 +247,7 @@ $(document).ready(function() {
 							<?php 
 							$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
 							while ($row = $supplier_qry->fetch_assoc()):
-								$vatable = $row['vatable'];
+								//$vatable = $row['vatable'];
 							?>
 							<option 
 								value="<?php echo $row['id'] ?>" 
@@ -263,7 +263,7 @@ $(document).ready(function() {
 							<?php 
 							$supplier_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
 							while ($row = $supplier_qry->fetch_assoc()):
-								$vatable = $row['vatable'];
+								//$vatable = $row['vatable'];
 							?>
 							<div>
 								<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
@@ -395,6 +395,7 @@ $(document).ready(function() {
 							<col width="20%">
 							<col width="10%">
 							<col width="10%">
+							<col width="10%">
 							<col width="5%">
 							<col width="25%">
 						</colgroup>
@@ -407,8 +408,9 @@ $(document).ready(function() {
 								<th class="px-1 py-1 text-center">Unit</th>
 								<th class="px-1 py-1 text-center">Item</th>
 								<th class="px-1 py-1 text-center">Description</th>
-								<th class="px-1 py-1 text-center">Price (per piece)</th>
+								<th class="px-1 py-1 text-center">Price before Tax</th>
 								<th class="px-1 py-1 text-center">Total</th>
+								<th class="px-1 py-1 text-center">Vat Amount</th>
 								<th class="px-1 py-1 text-center">Select</th>
 								<th class="px-1 py-1 text-center">Note</th>
 							</tr>
@@ -448,6 +450,9 @@ $(document).ready(function() {
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'],2) ?>
 								</td>
+								<td class="align-middle p-1">
+									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
+								</td>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
 									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
@@ -461,23 +466,45 @@ $(document).ready(function() {
 						</tbody>
 						<tfoot>
 							<tr class="bg-lightblue">
-							<tr>
-								<th class="p-1 text-right" colspan="5"><span>
-									
-								</span> Total</th>
-								<th class="p-1 text-right" id="sub_total">0</th>
+								<tr>
+									<th class="p-1 text-right" colspan="6">
+										Sub-Total
+									</th>
+									<th class="p-1 text-right" id="sub_total">0</th>
+								</tr>
+								<tr>
+									<th class="p-1 text-right" colspan="6">
+									VAT</th>
+									<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
+								</tr>
+								<tr>
+									<th class="p-1 text-right" colspan="6">Total:</th>
+									<th class="p-1 text-right" id="total">0</th>
+								</tr>
+								<tr>
+									<table class="table-bordered">
+										<tr style="padding-left:150px;align-items: center;text-align: center;">
+											<td>
+												<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()"/>
+												<label for="nonVatRadio">Non-VAT</label>
+											</td>
+											<td>
+												<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()"/>
+												<label for="zeroRatedRadio">Zero-Rated</label>
+											</td>
+											<td>
+												<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()"/>
+												<label for="inclusiveRadio">Inclusive</label>
+											</td>
+											<td>
+												<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()"/>
+												<label for="exclusiveRadio">Exclusive</label>
+											</td>
+										</tr>
+										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+									</table>
+								</tr>
 							</tr>
-							<tr>
-								<th class="p-1 text-right" colspan="5">Tax (<span id="tax_label"></span>):
-									<input type="hidden" step="any" id="vatable" name="vatable" class="border-light text-right" value="<?php echo isset($vatable) ? $vatable : 0 ?>" readonly>
-								</th>
-								<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount" id="tax_amount"></th>
-							</tr>
-							<!-- <tr>
-								<th class="p-1 text-right" colspan="6">Total:</th>
-								<th class="p-1 text-right" id="total">0</th>
-							</tr> -->
-						</tr>
 						</tfoot>
 					</table>
 					<div class="row">
@@ -562,6 +589,9 @@ $(document).ready(function() {
 		<td class="align-middle p-1">
 			<input type="text" class="text-right w-100 border-0 item-price" name="unit_price[]">
 		</td>
+		<td class="align-middle p-1">
+			<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
+		</td>
 		<td class="align-middle p-1 text-right total-price">0</td>
 		<td class="align-middle p-0 text-center">
 			<input type="checkbox" class="item-checkbox">
@@ -572,8 +602,57 @@ $(document).ready(function() {
 		</td>
 	</tr>
 </table>
-
 <script>
+	document.addEventListener("DOMContentLoaded", function() {
+
+		updateValueOnPageLoad();
+	});
+
+	function updateValueOnPageLoad() {
+
+		var rdoTextValue = document.getElementById('rdoText').value;
+
+
+		if (rdoTextValue == 1) {
+			document.getElementById('inclusiveRadio').checked = true;
+		} else if (rdoTextValue == 2) {
+			document.getElementById('exclusiveRadio').checked = true;
+		} else if (rdoTextValue == 3) {
+			document.getElementById('nonVatRadio').checked = true;
+		} else if (rdoTextValue == 4) {
+			document.getElementById('zeroRatedRadio').checked = true;
+		}else {
+			document.getElementById('inclusiveRadio').checked = false;
+			document.getElementById('exclusiveRadio').checked = false;
+			document.getElementById('nonVatRadio').checked = false;
+			document.getElementById('zeroRatedRadio').checked = false;
+		}
+		updateValue();
+	}
+	
+	function updateValue() {
+		var radioValue = document.querySelector('input[name="vatType"]:checked').value;
+		var textBox = document.getElementById('rdoText');
+
+
+		if (radioValue === 'inclusive') {
+			textBox.value = 1;
+		} else if (radioValue === 'exclusive') {
+			textBox.value = 2;
+		}else if (radioValue === 'nonvat') {
+			textBox.value = 3;
+		}else if (radioValue === 'zerorated') {
+			textBox.value = 4;
+		}else{
+			textBox.value = 0;
+		}
+	}
+</script>
+<script>
+function copyTaxValue() {
+	var taxAmountValue = document.getElementById('vat_total').textContent;
+	document.getElementById('copytax').value = taxAmountValue;
+}
 	$(document).ready(function() {
 		function updateContactInfo() {
 			var selectedOption = $('#receiver_id').find(':selected');
@@ -631,46 +710,46 @@ $(document).ready(function() {
 		calculate();
 	}
 	function calculate() {
-		var _total = 0;
+    var _total = 0;
+    var _vat_total = 0;
 
-		$('.po-item').each(function () {
-			var qty = $(this).find("[name='qty[]']").val();
-			var unit_price = $(this).find("[name='unit_price[]']").val();
-			var item_status = $(this).find("[name='item_status[]']").val(); 
-			var row_total = 0;
+    $('.po-item').each(function() {
+        var qty = parseFloat($(this).find('[name="qty[]"]').val()) || 0;
+        var unit_price = parseFloat($(this).find('[name="unit_price[]"]').val()) || 0;
+        var item_status = $(this).find("[name='item_status[]']").val();
+        var rdoText = document.getElementById('rdoText').value;
+        var row_total = 0;
+        var result;
 
-			if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
-				row_total = parseFloat(qty) * parseFloat(unit_price);
-			}
-
-			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
-			_total += row_total;
-		});
-
-
-		tax_perc = $('[name="vatable"]').val();
-		var taxTotal;
-		var tax_amount;
-		//var tax_amount = _total * (tax_perc / 100);
-
-		if(tax_perc == 2){
-			tax_amount = _total * 0.12;
-			//taxTotal = _total - tax_amount;
-		}else if(tax_perc == 1){
-			var tax_amount_sub = (_total / 1.12) * 0.12;
-			tax_amount = tax_amount_sub;
-			//taxTotal =_total - tax_amount;
-		}else{
-			//taxTotal = 0;
-			tax_amount = 0;
+		if (rdoText === "1") {
+            result = (qty * unit_price) / 1.12 * 0.12;
+        } else if (rdoText === "2") {
+            result = qty * unit_price * 0.12;
+        }else{
+			result = 0;
 		}
 
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toFixed(2).toLocaleString("en-US"));
+        if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
+            row_total = parseFloat(qty) * parseFloat(unit_price);
+        }else{
+			result = 0;
+		}
 
+        
+        _total += row_total;
+        _vat_total += result;
+        $(this).find('[name="vat_included[]"]').val(result.toFixed(2));
+        $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
+    });
 
-		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-		$('#total').text(parseFloat(_total + tax_amount).toLocaleString("en-US"));
-	}
+    $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
+    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
+    $('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+}
+
+$('input[name="vatType"]').change(function() {
+    calculate();
+});
 
 	var selectedSupplierId; 
 

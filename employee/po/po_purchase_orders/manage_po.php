@@ -56,7 +56,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 									<?php 
 									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
 									while ($row = $supplier_qry->fetch_assoc()):
-										$vatable = $row['vatable'];
+										//$vatable = $row['vatable'];
 									?>
 									<option 
 										value="<?php echo $row['id'] ?>" 
@@ -203,8 +203,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 											<td class="align-middle p-0 text-center">
 												<input type="text" class="text-center w-100 border-0 item-price" step="any" name="unit_price[]" value="<?php echo $row['unit_price'] ?>"/>
 											</td>
-											<td class="align-middle p-0 text-center">
-												<input type="text" class="text-center w-100 border-0 item-vat" step="any" name="vat_included[]"/>
+											<td class="align-middle p-1">
+												<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
 											</td>
 											<td class="align-middle p-1 text-right total"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
 										</tr>
@@ -222,28 +222,36 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 										<tr>
 											<th class="p-1 text-right" colspan="7">
 											VAT</th>
-											<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>>0</th>
+											<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
+											<input type="text" id="copytax" name="tax_amount">
 										</tr>
 										<tr>
 											<th class="p-1 text-right" colspan="7">Total:</th>
 											<th class="p-1 text-right" id="total">0</th>
 										</tr>
 										<tr>
-											<table class="table-bordered">
-												<tr style="padding-left:150px;align-items: center;text-align: center;">
-													<td>
-														<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" checked/>
-														<label for="inclusiveRadio">Inclusive</label>
-													</td>
-													<td>
-														<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" />
-														<label for="exclusiveRadio">Exclusive</label>
-													</td>
-												</tr>
-											</table>
-											<th class="p-1 text-right" colspan="7">
-												<input type="hidden" step="any" id="vatable" name="vatable" class="border-light text-right" value="<?php echo isset($vatable) ? $vatable : 0 ?>" style="background-color:red;" readonly>
-											</th>
+										<table class="table-bordered">
+											<tr style="padding-left:150px;align-items: center;text-align: center;">
+												<td>
+													<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()"/>
+													<label for="nonVatRadio">Non-VAT</label>
+												</td>
+												<td>
+													<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()"/>
+													<label for="zeroRatedRadio">Zero-Rated</label>
+												</td>
+												<td>
+													<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()"/>
+													<label for="inclusiveRadio">Inclusive</label>
+												</td>
+												<td>
+													<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()"/>
+													<label for="exclusiveRadio">Exclusive</label>
+												</td>
+											</tr>
+											<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										</table>
+
 										</tr>
 									</tr>
 								</tfoot>
@@ -263,7 +271,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			<table style="width:100%;">
 				<tr>
 					<td>
-						<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+						<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;" onclick="copyTaxValue()"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 					</td>
 					<td>
 						<a class="btn btn-flat btn-default" href="?page=po_purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
@@ -292,7 +300,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="text" class="text-center w-100 border-0 item-price" name="unit_price[]" oninput="formatDecimal(this)">
 			</td>
 			<td class="align-middle p-1">
-				<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
+				<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
 			</td>
 			
 			<!-- <td class="align-middle p-1 text-right total-vat">0</td> -->
@@ -301,114 +309,128 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	</table>
 </body>
 <script>
-function calculateSum() {
-    var subTotal = parseFloat($('#sub_total').text().replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
-    var vatTotal = parseFloat($('#vat_total').text().replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+	document.addEventListener("DOMContentLoaded", function() {
 
-    var total = subTotal + vatTotal;
+		updateValueOnPageLoad();
+	});
 
-    $('#total').text(parseFloat(total).toLocaleString("en-US"));
+	function updateValueOnPageLoad() {
+
+		var rdoTextValue = document.getElementById('rdoText').value;
+
+
+		if (rdoTextValue == 1) {
+			document.getElementById('inclusiveRadio').checked = true;
+		} else if (rdoTextValue == 2) {
+			document.getElementById('exclusiveRadio').checked = true;
+		} else if (rdoTextValue == 3) {
+			document.getElementById('nonVatRadio').checked = true;
+		} else if (rdoTextValue == 4) {
+			document.getElementById('zeroRatedRadio').checked = true;
+		}else {
+			document.getElementById('inclusiveRadio').checked = false;
+			document.getElementById('exclusiveRadio').checked = false;
+			document.getElementById('nonVatRadio').checked = false;
+			document.getElementById('zeroRatedRadio').checked = false;
+		}
+		updateValue();
+	}
+	
+	function updateValue() {
+		var radioValue = document.querySelector('input[name="vatType"]:checked').value;
+		var textBox = document.getElementById('rdoText');
+
+
+		if (radioValue === 'inclusive') {
+			textBox.value = 1;
+		} else if (radioValue === 'exclusive') {
+			textBox.value = 2;
+		}else if (radioValue === 'nonvat') {
+			textBox.value = 3;
+		}else if (radioValue === 'zerorated') {
+			textBox.value = 4;
+		}else{
+			textBox.value = 0;
+		}
+	}
+</script>
+<script>
+function copyTaxValue() {
+	var taxAmountValue = document.getElementById('vat_total').textContent;
+	document.getElementById('copytax').value = taxAmountValue;
 }
 
-function updateInclusiveValues() {
-    $('input[name="unit_price[]"]').each(function() {
-        var unitPrice = parseFloat($(this).val());
-        var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
-
-        if (!isNaN(unitPrice) && !isNaN(qty)) {
-            var taxRate = 0.12;
-            var totalPrice = unitPrice * qty;
-            var inclusiveVatPrice = (totalPrice / 1.12) * taxRate;
-
-            $(this).closest('.po-item').find('input[name="vat_included[]"]').val(inclusiveVatPrice.toFixed(2));
-        }
-    });
-
+$('input[name="vatType"]').change(function() {
     calculate();
-    calculateSum();
-}
+});
 
-function updateExclusiveValues() {
-    $('input[name="unit_price[]"]').each(function() {
-        var unitPrice = parseFloat($(this).val());
-        var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
+// function updateInclusiveValues() {
+//     $('input[name="unit_price[]"]').each(function() {
+//         var unitPrice = parseFloat($(this).val());
+//         var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
 
-        if (!isNaN(unitPrice) && !isNaN(qty)) {
-            var taxRate = 0.12;
-            var totalPrice = unitPrice * qty;
-            var exclusiveVatPrice = totalPrice * taxRate;
+//         if (!isNaN(unitPrice) && !isNaN(qty)) {
+//             var taxRate = 0.12;
+//             var totalPrice = unitPrice * qty;
+//             var inclusiveVatPrice = (totalPrice / 1.12) * taxRate;
 
-            $(this).closest('.po-item').find('input[name="vat_included[]"]').val(exclusiveVatPrice.toFixed(2));
-        }
-    });
+//             $(this).closest('.po-item').find('input[name="vat_included[]"]').val(inclusiveVatPrice.toFixed(2));
+//         }
+//     });
 
-    calculate();
-    calculateSum();
-}
-    function calculate() {
+//     calculate();
+// }
+
+// function updateExclusiveValues() {
+//     $('input[name="unit_price[]"]').each(function() {
+//         var unitPrice = parseFloat($(this).val());
+//         var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
+
+//         if (!isNaN(unitPrice) && !isNaN(qty)) {
+//             var taxRate = 0.12;
+//             var totalPrice = unitPrice * qty;
+//             var exclusiveVatPrice = totalPrice * taxRate;
+
+//             $(this).closest('.po-item').find('input[name="vat_included[]"]').val(exclusiveVatPrice.toFixed(2));
+//         }
+//     });
+
+//     calculate();
+// }
+
+function calculate() {
     var _total = 0;
     var _vat_total = 0;
 
     $('.po-item').each(function() {
-        var qty = $(this).find("[name='qty[]']").val();
-        var unit_price = $(this).find("[name='unit_price[]']").val();
+        var qty = parseFloat($(this).find('[name="qty[]"]').val()) || 0;
+        var unit_price = parseFloat($(this).find('[name="unit_price[]"]').val()) || 0;
         var item_status = $(this).find("[name='item_status[]']").val();
-
+        var rdoText = document.getElementById('rdoText').value;
         var row_total = 0;
-        var vat_column_total = 0;
+        var result;
 
         if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
             row_total = parseFloat(qty) * parseFloat(unit_price);
-            vat_column_total = (row_total / 1.12) * 0.12;
         }
 
+        if (rdoText === "1") {
+            result = (qty * unit_price) / 1.12 * 0.12;
+        } else if (rdoText === "2") {
+            result = qty * unit_price * 0.12;
+        }else{
+			result = 0;
+		}
         _total += row_total;
-        _vat_total += vat_column_total;
-
-        $(this).find('.total-vat').text(parseFloat(vat_column_total).toLocaleString('en-US'));
+        _vat_total += result;
+        $(this).find('[name="vat_included[]"]').val(result.toFixed(2));
         $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
     });
 
-    var taxTotal = _vat_total;
-
-    $('#vat_total').text(parseFloat(taxTotal).toLocaleString("en-US"));
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-    $('#total').text(parseFloat(_total + taxTotal).toLocaleString("en-US"));
-
+    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
+    $('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
 }
-
-
-    function calculateVatTotal() {
-        var vatTotal = 0;
-
-        $('.po-item').each(function() {
-            var vatIncluded = parseFloat($(this).find("[name='vat_included[]']").val());
-
-            if (!isNaN(vatIncluded)) {
-                vatTotal += vatIncluded;
-            }
-        });
-
-        $('#vat_total').text(parseFloat(vatTotal).toLocaleString("en-US"));
-		calculateSum();
-    }
-
-	$('input[name="vatType"]').change(function() {
-    if ($(this).val() === 'inclusive') {
-        updateInclusiveValues();
-    } else if ($(this).val() === 'exclusive') {
-        updateExclusiveValues();
-    }
-    calculateVatTotal();
-    calculateSum(); 
-});
-    $('input[name="unit_price[]"], input[name="qty[]"]').on('input', function() {
-        updateInclusiveValues(calculate);
-        calculateVatTotal();
-		calculateSum(); 
-    });
-
-	calculateSum();
 
  $(document).ready(function() {
 	var originalTbody = $('#item-list tbody').html();
@@ -426,6 +448,8 @@ function updateExclusiveValues() {
 		}
 	});
 });
+
+
 
 $(document).ready(function() {
 	function updateContactInfo() {
@@ -474,8 +498,6 @@ function rem_item(_this){
 	calculate();
 }
 
-
-
 var selectedSupplierId; 
 
 $(document).ready(function() {
@@ -522,63 +544,19 @@ $(document).ready(function() {
 		_autocomplete(item, selectedSupplierId);
 	});
 });
-$(document).ready(function () {
-    $("#supplier_id").change(function () {
-        $('[name="vatable"]').val('');
-
-        var selectedOption = $(this).find("option:selected");
-        var vatable = selectedOption.data("vatable");
-
-        if (vatable !== null) {
-            $('[name="vatable"]').val(vatable);
-        }
-
-        var tax_perc = $('[name="vatable"]').val();
-
-        if (tax_perc === '2') {
-            $("#inclusiveRadio").prop("checked", true);
-			$("#exclusiveRadio").prop("checked", false);
-        } else {
-            $("#inclusiveRadio").prop("checked", false);
-			$("#exclusiveRadio").prop("checked", false);
-        }
-
-        var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
-
-        var total = subtotal;
-
-        $('#total').text(total.toLocaleString('en-US'));
-        var taxLabel = $('#tax_label');
-        console.log('tax_perc:', tax_perc);
-
-        if (tax_perc === '0') {
-            taxLabel.text('Non-VAT');
-        } else if (tax_perc === '1') {
-            taxLabel.text('Inclusive');
-        } else if (tax_perc === '2') {
-            taxLabel.text('Exclusive');
-        } else if (tax_perc === '3') {
-            taxLabel.text('Zero rated');
-        } else {
-            taxLabel.text('');
-            //console.log('Unexpected tax percentage value:', tax_perc);
-            //alert('Oops! Looks like there\'s no tax group set for this supplier. Please make sure to assign the correct tax group.');
-        }
-    });
-
-    //$("#supplier_id").trigger("change");
-});
-
-
 
 $(document).ready(function(){
 	$('#add_row').click(function(){
 		var tr = $('#item-clone tr').clone()
 		$('#item-list tbody').append(tr)
 		_autocomplete(tr)
-		tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
-			calculate();
-		})
+		tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+		calculate();
+			
+
+	});
+
+
 	})
 	if($('#item-list .po-item').length > 0){
 		$('#item-list .po-item').each(function(){

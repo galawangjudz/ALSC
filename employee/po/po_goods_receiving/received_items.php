@@ -8,6 +8,46 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 }
 ?>
+<style>
+    .readonly-row {
+        background-color: #f0f0f0;
+    }
+    .select-readonly {
+        pointer-events: none;
+        background-color: #f0f0f0;
+    }
+    span.select2-selection.select2-selection--single {
+        border-radius: 0;
+        padding: 0.25rem 0.5rem;
+        padding-top: 0.25rem;
+        padding-right: 0.5rem;
+        padding-bottom: 0.25rem;
+        padding-left: 0.5rem;
+        height: auto;
+    }
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+	}
+
+	input[type=number] {
+	-moz-appearance: textfield;
+	}
+	[name="tax_percentage"],[name="discount_percentage"]{
+		width:5vw;
+	}
+	.nav-gr{
+	background-color:#007bff;
+	color:white!important;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-gr:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
+</style>
 <?php
 	$usertype = $_settings->userdata('user_type'); 
 	$type = $_settings->userdata('user_code');
@@ -38,11 +78,14 @@ $(document).ready(function() {
         toggleDelItemsReadonly(selectedStatus === '0');
     });
 });
+
 </script>
-<link rel="stylesheet" href="css/gr.css">
+
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<form action="" id="po-form">
+
+
 		<h3 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order Details": "New Purchase Order" ?></b></i></h5>
 		<div class="card-tools">
 			<button class="btn btn-sm btn-flat btn-success" id="print" type="button" style="font-size:14px;float:right;margin-left:5px;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
@@ -116,34 +159,41 @@ $(document).ready(function() {
         <hr>
         <p class="m-0"><b>Ship To:</b></p>
 		<div class="row mb-2">
-			<?php if ($receiver !== null): ?>
-				<div class="col-6">
-					<div class="form-group">
-						<p class="m-0"><b><?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?></b></p>
-						<p class="m-0"><?php echo $receiver['phone'] ?></p>
-					</div>
-				</div>
-			<?php endif; ?>
-			<?php if ($receiver2 !== null): ?>
-				<div class="col-6">
-					<div class="form-group">
-						<p class="m-0"><b><?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?></b></p>
-						<p class="m-0"><?php echo $receiver2['phone'] ?></p>
-					</div>
-				</div>
-			<?php endif; ?>
-		</div>
+    <?php if ($receiver !== null): ?>
+        <div class="col-6">
+            <div class="form-group">
+                <p class="m-0"><b><?php echo $receiver['firstname'] ?> <?php echo $receiver['lastname'] ?></b></p>
+                <p class="m-0"><?php echo $receiver['phone'] ?></p>
+            </div>
+        </div>
+    <?php endif; ?>
+    
+    <?php if ($receiver2 !== null): ?>
+        <div class="col-6">
+            <div class="form-group">
+                <p class="m-0"><b><?php echo $receiver2['firstname'] ?> <?php echo $receiver2['lastname'] ?></b></p>
+                <p class="m-0"><?php echo $receiver2['phone'] ?></p>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-striped table-bordered" id="item-list">
 					<colgroup>
-						<col width="10%">
+						<col width="5%">
 						<col width="10%">
 						<col width="30%">
-						<col width="20%">
-						<col width="10%">
-						<col width="10%">
-						<col width="10%">
+						<col width="30%">
+						<?php if($level < 0): ?>
+							<col width="15%">
+						<?php endif; ?>
+						<col width="8%">
+						<col width="8%">
+						<?php if($level < 0): ?>
+							<col width="9%">
+						<?php endif; ?>
 					</colgroup>
 					<thead>
 						<tr class="bg-navy disabled">
@@ -151,15 +201,21 @@ $(document).ready(function() {
 							<th class="px-1 py-1 text-center">Unit</th>
 							<th class="px-1 py-1 text-center">Item</th>
 							<th class="px-1 py-1 text-center">Description</th>
+							<?php if($level < 0): ?>
+								<th class="px-1 py-1 text-center">Price (per piece)</th>
+							<?php endif; ?>
 							<th class="px-1 py-1 text-center">Received</th>
 							<th class="px-1 py-1 text-center">Outstanding</th>
-							<th class="px-1 py-1 text-center">No. of Del Items</th>
+							<th class="px-1 py-1 text-center">No. of Delivered Items</th>
+							<?php if($level < 0): ?>
+								<th class="px-1 py-1 text-center">Total</th>
+							<?php endif; ?>
 						</tr>
 					</thead>
 					<tbody>
 						<?php 
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description
+						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code
 						FROM approved_order_items o
 						INNER JOIN item_list i ON o.item_id = i.id
 						WHERE o.po_id = '$id'
@@ -181,7 +237,8 @@ $(document).ready(function() {
 							</td>
 							<td class="align-middle p-1">
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
+								<input type="text" name="account_code[]" value="<?php echo $row['account_code'] ?>">
+								<input type="text" class="w-100 border-0 item_id" name="description" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
 							<input type="hidden" name="unit_price[]" value="<?php echo ($row['unit_price']) ?>"/>
@@ -261,9 +318,6 @@ $(document).ready(function() {
 				<td>
 					<button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" form="po-form" id="save-button">Save</button>
 				</td>
-				<!-- <td>
-					<a class="btn btn-flat btn-secondary" style="width:100%;margin-left:5px;font-size:14px;" href=""><i class="fa fa-undo"></i>&nbsp;&nbsp;Cancel</a>
-				</td> -->
 				<td>
 					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/goods_receiving"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
@@ -454,6 +508,7 @@ $(document).ready(function() {
 				},
 				success:function(resp){
 					if(typeof resp =='object' && resp.status == 'success'){
+						//location.href = "./?page=po/purchase_orders/view_po&id="+resp.id;
                         location.reload();
 					}else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
                         var el = $('<div>')

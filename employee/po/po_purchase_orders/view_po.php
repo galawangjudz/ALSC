@@ -18,7 +18,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 ?>
 <script src="js/po_scripts.js"></script>
 <link rel="stylesheet" href="css/style.css">
-<body onload="taxLabel()">
+<body onload="calculate()">
     <div class="card card-outline card-info">
         <div class="card-header">
         <form action="" id="view-po-form">
@@ -58,7 +58,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <p class="m-0"><?php echo $supplier['contact_person'] ?></p>
                         <p class="m-0"><?php echo $supplier['contact'] ?></p>
                         <p class="m-0"><?php echo $supplier['email'] ?></p>
-                        <p class="m-0"><?php echo $supplier['vatable'] ?></p>
                     </div>
                 </div>
                 <div class="col-6 row">
@@ -164,25 +163,22 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <tfoot>
                         <input type="hidden" id="vatable" name="vatable"  value="<?php echo $vatable ?>">
                             <tr class="bg-lightblue">
-                                <!-- <tr>
-                                    <th class="p-1 text-right" colspan="5"> Total:</th>
+                                <tr>
+                                    <th class="p-1 text-right" colspan="5"> Sub-total:</th>
                                     <th class="p-1 text-right" id="sub_total"><?php echo number_format($sub_total) ?></th>
-                                </tr> -->
+                                </tr>
 
+                                
+                               
+                                <tr>
+                                    <th class="p-1 text-right" colspan="5">VAT</th>
+                                    <th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
+                                    <input type="text" id="copytax" name="tax_amount">
+                                </tr>
                                 <tr>
                                     <th class="p-1 text-right" colspan="5">Total:</th>
                                     <th class="p-1 text-right" id="total"><?php echo number_format($total, 2) ?></th>
                                 </tr>
-                                <tr>
-                            </tr>
-                            <tr>
-
-                                <th class="p-1 text-right" colspan="5">Tax (<span id="tax_label"></span>):
-                                    <input type="hidden" id="vatable" value="<?php echo $vatable; ?>">
-                                </th>
-                                
-                                <th class="p-1 text-right"><input type="text" id="tax_amount" name="tax_amount" value="<?php echo isset($tax_amount) ? number_format($tax_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
-                            </tr>
                             </tr>
                         </tfoot>
                     </table>
@@ -197,25 +193,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
     </div>
 </body>
-<script>
-    function taxLabel() {
-        var taxLabel = document.getElementById('tax_label');
-        var tax_perc = document.getElementById('vatable').value;
 
-        if (tax_perc === '0') {
-            taxLabel.textContent = 'Non-VAT';
-        } else if (tax_perc === '1') {
-            taxLabel.textContent = 'Inclusive';
-        } else if (tax_perc === '2') {
-            taxLabel.textContent = 'Exclusive';
-        } else if (tax_perc === '3') {
-            taxLabel.textContent = 'Zero rated';
-        } else {
-            taxLabel.textContent = '';
-        }
-    }
-</script>
 <script>
+    
 	$(function(){
         $('#print').click(function(e){
             e.preventDefault();

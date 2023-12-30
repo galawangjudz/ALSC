@@ -98,11 +98,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             if ($vatable == 0) {
                                 echo 'Non-VAT';
                             } elseif ($vatable == 1) {
-                                echo 'Inclusive';
-                            } elseif ($vatable == 2) {
-                                echo 'Exclusive';
-                            } elseif ($vatable == 3) {
                                 echo 'Zero-rated';
+                            } elseif ($vatable == 2) {
+                                echo 'Vatable';
                             }else {
                                 echo '';
                             }

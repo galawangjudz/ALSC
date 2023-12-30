@@ -6,6 +6,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             $$k=$v;
         }
     }
+	echo $_GET['id'];
 }
 ?>
 <style>
@@ -215,7 +216,7 @@ $(document).ready(function() {
 					<tbody>
 						<?php 
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description
+						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code
 						FROM approved_order_items o
 						INNER JOIN item_list i ON o.item_id = i.id
 						WHERE o.po_id = '$id'
@@ -237,7 +238,8 @@ $(document).ready(function() {
 							</td>
 							<td class="align-middle p-1">
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
+								<input type="text" name="account_code[]" value="<?php echo $row['account_code'] ?>">
+								<input type="text" class="w-100 border-0 item_id" name="description" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
 							<input type="hidden" name="unit_price[]" value="<?php echo ($row['unit_price']) ?>"/>
@@ -355,9 +357,17 @@ $(document).ready(function() {
 			<td class="align-middle p-1 text-right total-price">0</td>
 		</tr>
 	</table>
+	<a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="<?php echo $row['id'] ?>"><span class="fa fa-file-export text-secondary"></span> General Ledger</a>
 </div>
 
 <script>
+	$(document).ready(function(){
+		$('.gl_data').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=cfo_journals/gl&id=' + dataId;
+			window.location.href = redirectUrl;
+		})
+	});
 	$(function(){
 		$('#print').click(function(e){
 			e.preventDefault();

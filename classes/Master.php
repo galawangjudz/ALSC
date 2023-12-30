@@ -4557,29 +4557,45 @@ Class Master extends DBConnection {
 	function update_status_gr() {
 		extract($_POST);
 		$data = "";
-	
+		$data2 = "";
+		$data3 = "";
+		$data4 = "";
+		
 		foreach ($_POST as $k => $v) {
 			if (in_array($k, array('discount_amount', 'tax_amount'))) {
 				$v = str_replace(',', '', $v);
 			}
-			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding')) && !is_array($_POST[$k])) {
+			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr')) && !is_array($_POST[$k])) {
 				$v = addslashes(trim($v));
 				if (!empty($data)) $data .= ",";
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-	
+		
 		$data .= ", po_no = '{$po_no}' ";
-	
+
+		$data2 .= " '{$po_id}', '{$gr_id}','{$account_code_vat}', '{$item_code_vat}', '" . str_replace(',', '', $amount_vat) . "', NOW()";
+		$data3 .= " '{$po_id}', '{$gr_id}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt) . "', NOW()";
+		$data4 .= " '{$po_id}', '{$gr_id}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr) . "', NOW()";
+
 		if (empty($id)) {
 			$sql = "INSERT INTO `po_approved_list` SET {$data} ";
 		} else {
 			$sql = "UPDATE `po_approved_list` SET {$data} WHERE id = '{$id}' ";
 		}
 	
-		$save = $this->conn->query($sql);
+		$sql2 = "INSERT INTO `tbl_gl_trans` (`po_id`, `gr_id`,`account`, `item_code`, `amount`, `tran_date`) VALUES ({$data2})";
+		$sql3 = "INSERT INTO `tbl_gl_trans` (`po_id`, `gr_id`,`account`, `item_code`, `amount`, `tran_date`) VALUES ({$data3})";
+		$sql4 = "INSERT INTO `tbl_gl_trans` (`po_id`, `gr_id`,`account`, `item_code`, `amount`, `tran_date`) VALUES ({$data4})";
 	
-		if ($save) {
+		$save1 = $this->conn->query($sql);
+		$save2 = $this->conn->query($sql2);
+		$save3 = $this->conn->query($sql3);
+		$save4 = $this->conn->query($sql4);
+
+
+		if ($save1 && $save2 && $save3 && $save4) {
+		//if ($save1 && $save2 && $save3) {
 			$resp['status'] = 'success';
 			$po_id = empty($id) ? $this->conn->insert_id : $id;
 			$resp['id'] = $po_id;
@@ -4589,18 +4605,28 @@ Class Master extends DBConnection {
 			$save_gr_list = $stmt->execute();
 	
 			if ($save_gr_list) {
-				$gr_id = $this->conn->insert_id; 
+				$gr_id = $this->conn->insert_id;
 	
 				$query = "";
+				$query1 = "";
+				
+	
 				foreach ($item_id as $k => $v) {
 					if (!empty($query)) $query .= ",";
-					//$prevDel = ($qty[$k] - $outstanding[$k]) - $del_items[$k];
 					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$received[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
+	
+					if (!empty($query1)) $query1 .= ",";
+					$query1 .= "('{$po_id}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
+
+					
+					
 				}
-				
+	
 				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");
+				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`po_id`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`tran_date`) VALUES {$query1}");
 				
-				if ($save_order_items) {
+	
+				if ($save_order_items && $save_trans) {
 					if (empty($id)) {
 						$this->settings->set_flashdata('success', "Purchase Order successfully saved.");
 					} else {
@@ -4622,14 +4648,12 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 	
-	
-	
 	function update_status_po() {
 		extract($_POST);
 		//$discount_amount = str_replace(',', '', $discount_amount,$tax_amount);
 		if($level == 4 and $selected_index == 1){
 			#$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
-			$update = $this->conn->query("UPDATE `po_list` set `tax_amount`='{$tax_amount}',`status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` set `vatable`='{$vatable}',`tax_amount`='{$tax_amount}',`status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";

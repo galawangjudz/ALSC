@@ -98,6 +98,18 @@ $level = $_settings->userdata('type');
 							while($row = $qry->fetch_assoc()):
 								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+								
+								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+								$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+								$rowFromPoList = $result->fetch_assoc();
+								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+								$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+								$row['total_amount'] = $totalAmountWithTax;
+
+							
 							?>
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
@@ -105,7 +117,7 @@ $level = $_settings->userdata('type');
 								<td class=""><?php echo $row['po_no'] ?></td>
 								<td class=""><?php echo $row['sname'] ?></td>
 								<td class=""><?php echo $row['department'] ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 								<td>
 								<?php 
 								switch ($row['status2']) {
@@ -173,6 +185,17 @@ $level = $_settings->userdata('type');
 							while($row = $qry->fetch_assoc()):
 								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+								$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+								$rowFromPoList = $result->fetch_assoc();
+								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+								$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+								$row['total_amount'] = $totalAmountWithTax;
+
+							
 							?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
@@ -180,7 +203,7 @@ $level = $_settings->userdata('type');
 									<td class=""><?php echo $row['po_no'] ?></td>
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo $row['department'] ?></td>
-									<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 									<td>
 										<?php 
 											switch ($row['status2']) {
@@ -237,6 +260,17 @@ $level = $_settings->userdata('type');
 							while($row = $qry->fetch_assoc()):
 								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+								$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+								$rowFromPoList = $result->fetch_assoc();
+								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+								$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+								$row['total_amount'] = $totalAmountWithTax;
+
+							
 							?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
@@ -244,7 +278,7 @@ $level = $_settings->userdata('type');
 									<td class=""><?php echo $row['po_no'] ?></td>
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo $row['department'] ?></td>
-									<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 									<td>
 										<?php 
 											switch ($row['status2']) {
@@ -322,6 +356,16 @@ $level = $_settings->userdata('type');
 								$id =  $row['id'];
 								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+								$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+								$rowFromPoList = $result->fetch_assoc();
+								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+								$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+								$row['total_amount'] = $totalAmountWithTax;
+
 							?>
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
@@ -329,7 +373,7 @@ $level = $_settings->userdata('type');
 								<td class=""><?php echo $row['po_no'] ?></td>
 								<td class=""><?php echo $row['sname'] ?></td>
 								<td class=""><?php echo ($row['department']) ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 								<td>
 									<?php 
 										switch ($row['status2']) {
@@ -394,7 +438,7 @@ $level = $_settings->userdata('type');
 								<td class=""><?php echo $row['po_no'] ?></td>
 								<td class=""><?php echo $row['sname'] ?></td>
 								<td class=""><?php echo ($row['department']) ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 								<td>
 									<?php 
 									switch ($row['status2']) {
@@ -452,6 +496,17 @@ $level = $_settings->userdata('type');
 								$id =  $row['id'];
 								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+							
+								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+								$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+								$rowFromPoList = $result->fetch_assoc();
+								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+								$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+								$row['total_amount'] = $totalAmountWithTax;
+
 							?>
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
@@ -459,7 +514,7 @@ $level = $_settings->userdata('type');
 								<td class=""><?php echo $row['po_no'] ?></td>
 								<td class=""><?php echo $row['sname'] ?></td>
 								<td class=""><?php echo ($row['department']) ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 								<td>
 								<?php 
 									switch ($row['status2']) {
@@ -535,6 +590,17 @@ $level = $_settings->userdata('type');
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+						
+							$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+							$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+							$rowFromPoList = $result->fetch_assoc();
+							$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+							$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+							$row['total_amount'] = $totalAmountWithTax;
+
 						?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
@@ -542,7 +608,7 @@ $level = $_settings->userdata('type');
 							<td class=""><?php echo $row['po_no'] ?></td>
 							<td class=""><?php echo $row['sname'] ?></td>
 							<td class=""><?php echo ($row['department']) ?></td>
-							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+							<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 							<td>
 							<?php 
 							switch ($row['status2']) {
@@ -599,6 +665,17 @@ $level = $_settings->userdata('type');
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+							$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+							$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+							$rowFromPoList = $result->fetch_assoc();
+							$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+							$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+							$row['total_amount'] = $totalAmountWithTax;
+
+						
 						?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
@@ -606,7 +683,7 @@ $level = $_settings->userdata('type');
 							<td class=""><?php echo $row['po_no'] ?></td>
 							<td class=""><?php echo $row['sname'] ?></td>
 							<td class=""><?php echo ($row['department']) ?></td>
-							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+							<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 							<td>
 							<?php 
 								switch ($row['status2']) {
@@ -657,6 +734,17 @@ $level = $_settings->userdata('type');
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+							$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+							$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+							$rowFromPoList = $result->fetch_assoc();
+							$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+
+							$totalAmountWithTax = $orderItemsTotal + $totalVat;
+
+							$row['total_amount'] = $totalAmountWithTax;
+
+						
 						?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
@@ -664,7 +752,7 @@ $level = $_settings->userdata('type');
 							<td class=""><?php echo $row['po_no'] ?></td>
 							<td class=""><?php echo $row['sname'] ?></td>
 							<td class=""><?php echo ($row['department']) ?></td>
-							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+							<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 							<td>
 							<?php 
 								switch ($row['status2']) {
@@ -745,6 +833,8 @@ $level = $_settings->userdata('type');
 								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE (po.status=3 or po.status2='3') order by po.date_created DESC");
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
+								
+								
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
