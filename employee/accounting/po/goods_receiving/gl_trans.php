@@ -3,16 +3,13 @@ require_once('../../config.php');
 $account_arr = [];
 $group_arr = [];
 
-if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `tbl_gl_list` where gl_id = '{$_GET['id']}'");
+
+    $qry = $conn->query("SELECT * FROM `tbl_gl_trans` where gr_id = '{$_GET['id']}'");
     if($qry->num_rows > 0){
-        $res = $qry->fetch_array();
-        foreach($res as $k => $v){
-            if(!is_numeric($k))
-            $$k = $v;
+        $row = $qry->fetch_assoc();
+        $po_id = $row['po_id'];
+        $doc_no = $row['doc_no'];
         }
-    }
-}
 $is_new_vn = true;
 
 if (isset($_GET['id']) && $_GET['id'] > 0) {
@@ -107,7 +104,7 @@ function format_num($number){
 <body onload="cal_tb()">
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h5 class="card-title"><b><i><?php echo isset($id) ? "Check Voucher Entry": "Check Voucher Entry" ?></b></i></h5>
+		<h5 class="card-title"><b><i>General Ledger Transaction Details</b></i></h5>
 	</div>
 
     <div class="card-body">
@@ -115,23 +112,62 @@ function format_num($number){
             <div class="container-fluid">
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
-     
-                        
-                    <table id="account_list" class="table table-striped table-bordered">
+                    
+                    <table class="table table-striped table-bordered">
                         <colgroup>
-
-                            <col width="5%">
-                            <col width="5%">
-
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="50%">
                         </colgroup>
                         <thead>
                             <tr>
+                                <th class="text-center">Transaction Date</th>
+                                <th class="text-center">Document Number</th>
+                                <th class="text-center">Supplier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr style="text-align:center;">
+                            <?php 
+                            $date_qry = $conn->query("SELECT tran_date
+                                                    FROM tbl_gr_list 
+                                                    WHERE gr_id = '{$_GET['id']}'");   
+                            $date = $date_qry->fetch_array();
+                            ?>
+                                <td><p class="m-0"><b><?php echo $date['tran_date'] ?></b></p></td>
+                                <td>
+                                    <p class="m-0"><b><?php echo $doc_no ?></b></p>
+                                </td>
+                                <td>
+                                <?php 
+                            $sup_qry = $conn->query("SELECT s.id, s.name 
+                                                    FROM supplier_list s 
+                                                    INNER JOIN po_approved_list p ON s.id = p.supplier_id 
+                                                    WHERE p.id = '{$po_id}'");   
+                            $supplier = $sup_qry->fetch_array();
+                            ?>
+                                    <p class="m-0"><b><?php echo $supplier['name'] ?></b></p>
+                                </td>
+                            </tr>
+                        </tbody>
 
+                    </table>
+                    <table id="account_list" class="table table-striped table-bordered">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="10%">
+                            <col width="10%">
+
+                            <col width="45%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                            <tr>
                                 <th class="text-center">Item No.</th>
+                                <th class="text-center">Document Date</th>
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
 
@@ -155,7 +191,7 @@ function format_num($number){
                                 //     WHERE gl.gl_id = {$_GET['id']};");
 
                                 $grId = $_GET['id'];
-                                $jitems = $conn->query("SELECT gl.amount, gl.account, i.item_code, ac.name, g.type 
+                                $jitems = $conn->query("SELECT gl.amount, gl.account, gl.journal_date, i.item_code, ac.name, g.type 
                                                         FROM tbl_gl_trans gl
                                                         INNER JOIN account_list ac ON gl.account = ac.code
                                                         INNER JOIN group_list g ON ac.group_id = g.id
@@ -168,12 +204,15 @@ function format_num($number){
                                 while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
-
+                                
                                 <td class="text-center">
                                     <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
                                 </td>
+                                <td class="text-center">
+                                    <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;">
+                                </td>
                                 <td class="">
-                                    <input type="text" name="account_code[]" value="<?= $row['account'] ?>">
+                                    <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;">
 
                                 </td>
                                 <td class="">
@@ -192,7 +231,7 @@ function format_num($number){
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-                                    <th colspan="3" class="text-center">Total</th>
+                                    <th colspan="4" class="text-right">Total</th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
