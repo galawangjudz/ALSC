@@ -54,6 +54,27 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
+<?php
+function genDocNo() {
+    static $lastNumber = 999999; 
+    $lastNumber = ($lastNumber % 999999) + 1; 
+    return $lastNumber;
+}
+
+$sql = "SELECT MAX(doc_no) AS max_doc_no FROM tbl_gl_trans";
+$result = $conn->query($sql);
+
+if ($result && $row = $result->fetch_assoc()) {
+    $maxDocNo = $row['max_doc_no'];
+    $initialNumber = $maxDocNo + 1;
+} else {
+
+    $initialNumber = genDocNo();
+}
+
+
+?>
+
 <script>
 $(document).ready(function() {
     var type = <?php echo json_encode($type); ?>;
@@ -63,7 +84,7 @@ $(document).ready(function() {
     function toggleDelItemsReadonly(isClosed) {
         var isDisabled = (type !== receiverId) && (type !== receiver2Id);
 
-        $('input[name="del_items[]"]').prop('readonly', isClosed || isDisabled); // Set readonly property here
+        $('input[name="del_items[]"]').prop('readonly', isClosed || isDisabled); 
         if (isClosed && isDisabled) {
             $('input[name="del_items[]"]').closest('tr').addClass('readonly-row');
         } else {
@@ -85,8 +106,6 @@ $(document).ready(function() {
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<form action="" id="po-form">
-
-
 		<h3 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order Details": "New Purchase Order" ?></b></i></h5>
 		<div class="card-tools">
 			<button class="btn btn-sm btn-flat btn-success" id="print" type="button" style="font-size:14px;float:right;margin-left:5px;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
@@ -216,11 +235,11 @@ $(document).ready(function() {
 							<th class="px-1 py-1 text-center">Received</th>
 							<th class="px-1 py-1 text-center">Outstanding</th>
 							<th class="px-1 py-1 text-center">No. of Delivered Items</th>
-							<th class="px-1 py-1 text-center">Item Code</th>
+							<!-- <th class="px-1 py-1 text-center">Item Code</th>
 							<th class="px-1 py-1 text-center">Subtotal</th>
 							<th class="px-1 py-1 text-center">Type</th>
 							<th class="px-1 py-1 text-center">VAT per Item</th>
-							<th class="px-1 py-1 text-center">Ex-VAT</th>
+							<th class="px-1 py-1 text-center">Ex-VAT</th> -->
 							<?php if($level < 0): ?>
 								<th class="px-1 py-1 text-center">Total</th>
 							<?php endif; ?>
@@ -229,7 +248,7 @@ $(document).ready(function() {
 					<tbody>
 						
 					<?php 
-    $generalLedgerButton = ''; 
+    					$generalLedgerButton = ''; 
     
 						if(isset($id)):
 						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code, i.type, i.item_code
@@ -253,8 +272,9 @@ $(document).ready(function() {
 								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								CODE: <input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-								<input type="text" name="account_code[]" value="<?php echo $row['account_code'] ?>">
+								<input type="hidden" name="doc_no" id="doc_no" value="<?php echo $initialNumber; ?>" readonly>
+								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+								<input type="hidden" name="account_code[]" value="<?php echo $row['account_code'] ?>">
 								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
@@ -273,19 +293,19 @@ $(document).ready(function() {
 							<td class="align-middle p-1">
 								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" oninput="calculateAmount(this)"/>
 							</td>
-							<td><input type="text" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>"></td>
-							<td><input type="text" value="0" name="amount[]" id="amount"></td>
-							<td><input type="text" name="type[]" id="type" value="<?php echo ($row['type']) ?>"></td>
+							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
+							<input type="hidden" value="0" name="amount[]" id="amount">
+							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
 							<!-- <td><input type='text' name='vat_amt' id='vat_amt'></td>
 							<td><input type='text' name='ex_vat' id='ex_vat'></td> -->
-							<input type="text" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
+							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
 						$grIdValue = $row['gr_id'];
 						?>
 						<!-- <a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="<?php echo $row['gr_id']; ?>"><span class="fa fa-file-export text-secondary"></span> General Ledger</a> -->
 						<?php endwhile;
-						 $generalLedgerButton = '<a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="'.$grIdValue.'"><span class="fa fa-file-export text-secondary"></span> General Ledger</a>';
+						 $generalLedgerButton = '<a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="'.$grIdValue.'"><span class="fa fa-file-export"></span> View GL Journal Entries for this Delivery</a>';
 						endif;
 						?>
 						<?php echo $generalLedgerButton; ?>
@@ -298,12 +318,12 @@ $(document).ready(function() {
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
-							DEFERRED INPUT VAT<br>
-								ACC CODE: <input type="text" name="account_code_vat" value="<?php echo $row['code'] ?>">
-								ITEM CODE: <input type="text" name="item_code_vat" value="0">
-								AMOUNT: <input type="text" value="0" name="amount_vat" id="vat_total">
+							<br>
+								<input type="hidden" name="account_code_vat" value="<?php echo $row['code'] ?>">
+								<input type="hidden" name="item_code_vat" value="0">
+								<input type="hidden" value="0" name="amount_vat" id="vat_total">
 							</td>
 						</tr>
 						<?php endwhile;endif; ?>
@@ -318,13 +338,12 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
-						
+						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
-							GOODS RECEIPT<br>
-								ACC CODE: <input type="text" name="account_code_gr" value="<?php echo $row['code'] ?>">
-								ITEM CODE: <input type="text" name="item_code_gr" value="0">
-								AMOUNT: <input type="text" value="0" name="amount_gr" id="gr_total">
+							<br>
+								<input type="hidden" name="account_code_gr" value="<?php echo $row['code'] ?>">
+								<input type="hidden" name="item_code_gr" value="0">
+								<input type="hidden" value="0" name="amount_gr" id="gr_total">
 							</td>
 						</tr>
 						
@@ -340,13 +359,13 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 						
 							<td class="align-middle p-1">
-							DEFERRED EWT<br>
-								ACC CODE: <input type="text" name="account_code_ewt" value="<?php echo $row['code'] ?>">
-								ITEM CODE: <input type="text" name="item_code_ewt" value="0">
-								AMOUNT: <input type="text" value="0" name="amount_ewt" id="ewt_total">
+							<br>
+								<input type="hidden" name="account_code_ewt" value="<?php echo $row['code'] ?>">
+								<input type="hidden" name="item_code_ewt" value="0">
+								<input type="hidden" value="0" name="amount_ewt" id="ewt_total">
 							</td>
 						</tr>
 						
