@@ -337,7 +337,6 @@ $(document).ready(function() {
 							<col width="20%">
 							<col width="10%">
 							<col width="10%">
-							<col width="10%">
 							<col width="5%">
 							<col width="25%">
 						</colgroup>
@@ -352,7 +351,7 @@ $(document).ready(function() {
 								<th class="px-1 py-1 text-center">Description</th>
 								<th class="px-1 py-1 text-center">Price before Tax</th>
 								<th class="px-1 py-1 text-center">Total</th>
-								<th class="px-1 py-1 text-center">Vat Amount</th>
+								<!-- <th class="px-1 py-1 text-center">Vat Amount</th> -->
 								<th class="px-1 py-1 text-center">Select</th>
 								<th class="px-1 py-1 text-center">Note</th>
 							</tr>
@@ -389,9 +388,7 @@ $(document).ready(function() {
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
 								</td>
-								<td class="align-middle p-1">
-									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
-								</td>
+									<input type="hidden" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
 									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
@@ -406,18 +403,18 @@ $(document).ready(function() {
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6">
+									<th class="p-1 text-right" colspan="5">
 										Sub-Total
 									</th>
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">
+									<th class="p-1 text-right" colspan="5">
 									VAT</th>
 									<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Total:</th>
+									<th class="p-1 text-right" colspan="5">Total:</th>
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 								<tr>
@@ -595,39 +592,42 @@ function copyTaxValue() {
 function calculate() {
     var _total = 0;
     var _vat_total = 0;
+    var rdoText = document.getElementById('rdoText').value;
 
-    $('.po-item').each(function() {
+    $('.po-item').each(function () {
         var qty = parseFloat($(this).find('[name="qty[]"]').val()) || 0;
         var unit_price = parseFloat($(this).find('[name="unit_price[]"]').val()) || 0;
         var item_status = $(this).find("[name='item_status[]']").val();
-        var rdoText = document.getElementById('rdoText').value;
         var row_total = 0;
-        var result;
-
-		if (rdoText === "1") {
-            result = (qty * unit_price) / 1.12 * 0.12;
-        } else if (rdoText === "2") {
-            result = qty * unit_price * 0.12;
-        }else{
-			result = 0;
-		}
+        var result = 0;
 
         if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
             row_total = parseFloat(qty) * parseFloat(unit_price);
-        }else{
-			result = 0;
-		}
+        }
 
-        
+        if (rdoText === "1") {
+            result = (qty * unit_price) / 1.12 * 0.12;
+        } else if (rdoText === "2") {
+            result = qty * unit_price * 0.12;
+        }
+		if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
+            _vat_total += result;
+        }
         _total += row_total;
-        _vat_total += result;
+        
+
         $(this).find('[name="vat_included[]"]').val(result.toFixed(2));
         $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
     $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
-    $('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+
+    if (rdoText === "2") {
+		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+    } else {
+		$('#total').text(parseFloat(_total).toLocaleString("en-US"));
+    }
 }
 
 $('input[name="vatType"]').change(function() {

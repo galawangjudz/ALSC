@@ -357,7 +357,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 <script>
 function copyTaxValue() {
 	var taxAmountValue = document.getElementById('vat_total').textContent;
-	document.getElementById('copytax').value = taxAmountValue;
+	var taxAmountWithoutCommas = taxAmountValue.replace(/,/g, ''); 
+
+	document.getElementById('copytax').value = taxAmountWithoutCommas;
 }
 
 $('input[name="vatType"]').change(function() {
@@ -401,14 +403,14 @@ $('input[name="vatType"]').change(function() {
 function calculate() {
     var _total = 0;
     var _vat_total = 0;
+    var rdoText = document.getElementById('rdoText').value;
 
-    $('.po-item').each(function() {
+    $('.po-item').each(function () {
         var qty = parseFloat($(this).find('[name="qty[]"]').val()) || 0;
         var unit_price = parseFloat($(this).find('[name="unit_price[]"]').val()) || 0;
         var item_status = $(this).find("[name='item_status[]']").val();
-        var rdoText = document.getElementById('rdoText').value;
         var row_total = 0;
-        var result;
+        var result = 0;
 
         if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
             row_total = parseFloat(qty) * parseFloat(unit_price);
@@ -418,19 +420,27 @@ function calculate() {
             result = (qty * unit_price) / 1.12 * 0.12;
         } else if (rdoText === "2") {
             result = qty * unit_price * 0.12;
-        }else{
-			result = 0;
-		}
+        }
+
         _total += row_total;
         _vat_total += result;
+
         $(this).find('[name="vat_included[]"]').val(result.toFixed(2));
         $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
     $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
-    $('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+
+    if (rdoText === "1") {
+		$('#total').text(parseFloat(_total).toLocaleString("en-US"));
+    } else if (rdoText === "2") {
+		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+    } else {
+        $('#total').text("0");
+    }
 }
+
 
  $(document).ready(function() {
 	var originalTbody = $('#item-list tbody').html();
@@ -552,8 +562,6 @@ $(document).ready(function(){
 		_autocomplete(tr)
 		tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
 		calculate();
-			
-
 	});
 
 
@@ -566,6 +574,7 @@ $(document).ready(function(){
 				calculate();
 			})
 			tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
+			calculate();
 		})
 	}else{
 	$('#add_row').trigger('click')

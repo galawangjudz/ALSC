@@ -51,7 +51,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     input[type=number] {
     -moz-appearance: textfield;
     }
-    [name="tax_percentage"],[name="discount_percentage"]{
+    [name="tax_percentage"]{
         width:5vw;
     }
     .disabled-link {
@@ -79,7 +79,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     $type = $_settings->userdata('user_code');
     $level = $_settings->userdata('type');
 ?>
-<body onload="taxLabel()">
+<body>
 <div class="card card-outline card-info">
 	<div class="card-header">
     <form action="" id="view-po-form">
@@ -159,7 +159,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <?php else: ?>
                         <p class="m-0"></p>
                     <?php endif; ?>
-                    </div>
+                </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
@@ -225,23 +225,27 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <tfoot>
                         <tr class="bg-lightblue">
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Total:</th>
+                                <th class="p-1 text-right" colspan="5">Sub-total:</th>
                                 <th class="p-1 text-right" id="sub_total"><?php echo number_format($sub_total,2) ?></th>
                             </tr>
                             <tr>
                             </tr>
                             <tr>
 
-                                <th class="p-1 text-right" colspan="5">Tax (<span id="tax_label"></span>):
-                                    <input type="hidden" id="vatable" value="<?php echo $vatable; ?>">
+                                <th class="p-1 text-right" colspan="5">VAT:
                                 </th>
                                 
-                                <th class="p-1 text-right"><input type="text" id="tax_amount" name="tax_amount" value="<?php echo isset($tax_amount) ? number_format($tax_amount,2) : 0 ?>" style="border:none;text-align:right;" readonly></th>
+                                <th class="p-1 text-right" id="tax_amount" name="tax_amount"><?php echo isset($tax_amount) ? number_format($tax_amount,2) : 0 ?></th>
                             </tr>
-                            <!-- <tr>
+                            <tr>
                                 <th class="p-1 text-right" colspan="5">TOTAL:</th>
-                                <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total) + $tax_amount, 2) : 0 ?></th>
-                            </tr> -->
+                                <?php echo $vatable; ?>
+                                <?php if ($vatable == 2) { ?>
+                                    <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total + $tax_amount), 2) : 0 ?></th>
+                                <?php } else{ ?>
+                                    <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total), 2) : 0 ?></th>
+                                <?php } ?>
+                            </tr>
                         </tr>
                     </tfoot>
                 </table>
@@ -253,49 +257,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </div><br>
             </div>
         </div>
-        <table class="d-none" id="item-clone">
-            <tr class="po-item" data-id="">
-                <td class="align-middle p-1 text-center">
-                    <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-                </td>
-                <td class="align-middle p-0 text-center">
-                    <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
-                </td>
-                <td class="align-middle p-1">
-                    <input type="text" class="text-center w-100 border-0" name="unit[]"/>
-                </td>
-                <td class="align-middle p-1">
-                    <input type="hidden" name="item_id[]">
-                    <input type="text" class="text-center w-100 border-0 item_id" required/>
-                </td>
-                <td class="align-middle p-1 item-description"></td>
-                <td class="align-middle p-1">
-                    <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
-                </td>
-                <td class="align-middle p-1 text-right total-price">0</td>
-            </tr>
-        </table>
     </div>
 </div>
 </body>
-<script>
-    function taxLabel() {
-        var taxLabel = document.getElementById('tax_label');
-        var tax_perc = document.getElementById('vatable').value;
 
-        if (tax_perc === '0') {
-            taxLabel.textContent = 'Non-VAT';
-        } else if (tax_perc === '1') {
-            taxLabel.textContent = 'Inclusive';
-        } else if (tax_perc === '2') {
-            taxLabel.textContent = 'Exclusive';
-        } else if (tax_perc === '3') {
-            taxLabel.textContent = 'Zero rated';
-        } else {
-            taxLabel.textContent = '';
-        }
-    }
-</script>
 <script>
 	$(function(){
         $('#print').click(function(e){
@@ -322,34 +287,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 }, 200);
         })
     })
-    $('#view-po-form').submit(function(e){
-        e.preventDefault(); 
-        start_loader();
-
-        $.ajax({
-            url: _base_url_ + "classes/Master.php?f=update_status_po",
-            data: new FormData($(this)[0]),
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            type: 'POST',
-            dataType: 'json',
-            error: function(err) {
-                console.log(err);
-                alert_toast("An Error Occured.", 'error');
-                end_loader();
-            },
-            success: function(resp) {
-                if (typeof resp == 'object' && resp.status == 'success') {
-                        location.reload();
-                } else {
-                    alert_toast(resp.error, 'error');
-                    end_loader();
-                }
-            }
-        });
-    });
+    
     $(document).ready(function() {
         $('#notes').on('input', function() {
             const textarea = $(this);

@@ -4565,7 +4565,7 @@ Class Master extends DBConnection {
 			if (in_array($k, array('discount_amount', 'tax_amount'))) {
 				$v = str_replace(',', '', $v);
 			}
-			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr')) && !is_array($_POST[$k])) {
+			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr','tran_date')) && !is_array($_POST[$k])) {
 				$v = addslashes(trim($v));
 				if (!empty($data)) $data .= ",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4697,7 +4697,7 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE `po_list` SET `status` = '1',`status2` = '1',`status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
 			$data = "";
 				foreach($_POST as $k =>$v){
-					if(in_array($k,array('discount_amount','tax_amount')))
+					if(in_array($k,array('discount_amount')))
 						$v= str_replace(',','',$v);
 					if(!in_array($k,array('po_id','level','selected_index')) && !is_array($_POST[$k])){
 						$v = addslashes(trim($v));

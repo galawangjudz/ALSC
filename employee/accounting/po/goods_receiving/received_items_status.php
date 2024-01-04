@@ -106,13 +106,30 @@
                                 while($row = $qry->fetch_assoc()):
                                     $row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
                                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-                            ?>
+                                    $orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+                                    $result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+                                    $rowFromPoList = $result->fetch_assoc();
+                                    $totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+                                    $vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
+    
+                                    
+                                    if ($vatable == 1) {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    } elseif ($vatable == 2) {
+                                        $totalAmountWithTax = $orderItemsTotal + $totalVat;
+                                    } else {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    }
+    
+                                    $row['total_amount'] = $totalAmountWithTax;
+                                ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
                                     <td class=""><?php echo $row['po_no'] ?></td>
                                     <td class=""><?php echo $row['sname'] ?></td>
-                                    <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                                    <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                                     <td>
                                         <?php 
                                             switch ($row['status']) {
@@ -184,13 +201,31 @@
                                 while($row = $qry->fetch_assoc()):
                                     $row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
                                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-                            ?>
+                                    $orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+                                    $result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+                                    $rowFromPoList = $result->fetch_assoc();
+                                    $totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+                                    $vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
+    
+                                    
+                                    if ($vatable == 1) {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    } elseif ($vatable == 2) {
+                                        $totalAmountWithTax = $orderItemsTotal + $totalVat;
+                                    } else {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    }
+    
+                                    $row['total_amount'] = $totalAmountWithTax;
+                                
+                                ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
                                     <td class=""><?php echo $row['po_no'] ?></td>
                                     <td class=""><?php echo $row['sname'] ?></td>
-                                    <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                                    <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                                     <td>
                                         <?php 
                                             switch ($row['status']) {
@@ -274,13 +309,30 @@
                                 while($row = $qry->fetch_assoc()):
                                     $row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
                                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-                            ?>
+                                    $orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+                                    $result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+                                    $rowFromPoList = $result->fetch_assoc();
+                                    $totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+                                    $vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
+    
+                                    
+                                    if ($vatable == 1) {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    } elseif ($vatable == 2) {
+                                        $totalAmountWithTax = $orderItemsTotal + $totalVat;
+                                    } else {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    }
+    
+                                    $row['total_amount'] = $totalAmountWithTax;
+                                ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
                                     <td class=""><?php echo $row['po_no'] ?></td>
                                     <td class=""><?php echo $row['sname'] ?></td>
-                                    <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                                    <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                                     <td>
                                         <?php 
                                             switch ($row['status']) {
@@ -351,13 +403,30 @@
                                 while($row = $qry->fetch_assoc()):
                                     $row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
                                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-                            ?>
+                                    $orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+
+                                    $result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+                                    $rowFromPoList = $result->fetch_assoc();
+                                    $totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+                                    $vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
+    
+                                    
+                                    if ($vatable == 1) {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    } elseif ($vatable == 2) {
+                                        $totalAmountWithTax = $orderItemsTotal + $totalVat;
+                                    } else {
+                                        $totalAmountWithTax = $orderItemsTotal;
+                                    }
+    
+                                    $row['total_amount'] = $totalAmountWithTax;
+                                ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
                                     <td class=""><?php echo $row['po_no'] ?></td>
                                     <td class=""><?php echo $row['sname'] ?></td>
-                                    <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                                    <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                                     <td>
                                         <?php 
                                             switch ($row['status']) {
