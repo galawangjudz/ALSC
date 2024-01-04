@@ -4,11 +4,11 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if(isset($_SESSION['userdata'])){
-    // if($_SESSION['userdata']['user_type'] == 'IT Admin' || 'Purchasing Officer'){
-    //     if(strpos($link, 'login.php') === false){
-    //         redirect('admin/index.php');
-    //     }
-    // } 
+    if($_SESSION['userdata']['user_type'] == 'IT Admin' || 'Purchasing Officer'){
+       if(strpos($link, 'login.php') === false){
+           redirect('admin/index.php');
+        }
+     } 
     // elseif($_SESSION['userdata']['user_type'] == 'Agent'){
     //     if(strpos($link, 'login.php') === false){
     //         redirect('agent_user/index.php');
