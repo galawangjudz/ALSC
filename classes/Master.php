@@ -4565,7 +4565,7 @@ Class Master extends DBConnection {
 			if (in_array($k, array('discount_amount', 'tax_amount'))) {
 				$v = str_replace(',', '', $v);
 			}
-			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr')) && !is_array($_POST[$k])) {
+			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr','doc_no')) && !is_array($_POST[$k])) {
 				$v = addslashes(trim($v));
 				if (!empty($data)) $data .= ",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4574,9 +4574,9 @@ Class Master extends DBConnection {
 		
 		$data .= ", po_no = '{$po_no}' ";
 
-		$data2 .= " '{$po_id}', '{$gr_id}','{$account_code_vat}', '{$item_code_vat}', '" . str_replace(',', '', $amount_vat) . "', NOW()";
-		$data3 .= " '{$po_id}', '{$gr_id}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt) . "', NOW()";
-		$data4 .= " '{$po_id}', '{$gr_id}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr) . "', NOW()";
+		$data2 .= " '{$po_id}', '{$doc_no}','{$gr_no}','{$account_code_vat}', '{$item_code_vat}', '" . str_replace(',', '', $amount_vat) . "', NOW()";
+		$data3 .= " '{$po_id}', '{$doc_no}','{$gr_no}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt) . "', NOW()";
+		$data4 .= " '{$po_id}', '{$doc_no}','{$gr_no}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr) . "', NOW()";
 
 		if (empty($id)) {
 			$sql = "INSERT INTO `po_approved_list` SET {$data} ";
@@ -4584,9 +4584,9 @@ Class Master extends DBConnection {
 			$sql = "UPDATE `po_approved_list` SET {$data} WHERE id = '{$id}' ";
 		}
 	
-		$sql2 = "INSERT INTO `tbl_gl_trans` (`po_id`, `gr_id`,`account`, `item_code`, `amount`, `tran_date`) VALUES ({$data2})";
-		$sql3 = "INSERT INTO `tbl_gl_trans` (`po_id`, `gr_id`,`account`, `item_code`, `amount`, `tran_date`) VALUES ({$data3})";
-		$sql4 = "INSERT INTO `tbl_gl_trans` (`po_id`, `gr_id`,`account`, `item_code`, `amount`, `tran_date`) VALUES ({$data4})";
+		$sql2 = "INSERT INTO `tbl_gl_trans` (`po_id`, `doc_no`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data2})";
+		$sql3 = "INSERT INTO `tbl_gl_trans` (`po_id`, `doc_no`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data3})";
+		$sql4 = "INSERT INTO `tbl_gl_trans` (`po_id`, `doc_no`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data4})";
 	
 		$save1 = $this->conn->query($sql);
 		$save2 = $this->conn->query($sql2);
@@ -4616,14 +4616,14 @@ Class Master extends DBConnection {
 					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$received[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
 	
 					if (!empty($query1)) $query1 .= ",";
-					$query1 .= "('{$po_id}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
+					$query1 .= "('{$po_id}','{$doc_no}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
 
 					
 					
 				}
 	
 				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");
-				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`po_id`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`tran_date`) VALUES {$query1}");
+				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`po_id`,`doc_no`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`journal_date`) VALUES {$query1}");
 				
 	
 				if ($save_order_items && $save_trans) {
