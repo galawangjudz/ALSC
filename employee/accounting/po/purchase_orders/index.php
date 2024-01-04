@@ -136,7 +136,7 @@ $level = $_settings->userdata('type');
 											Action
 										<span class="sr-only">Toggle Dropdown</span>
 									</button>
-									<div class="dropdown-menu" role="menu">
+									<!-- <div class="dropdown-menu" role="menu">
 										<?php 
 											if ($row['fpo_status'] != '3'){?>
 												<a class="dropdown-item" href="?page=po/purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
@@ -149,6 +149,9 @@ $level = $_settings->userdata('type');
 												<div class="dropdown-divider"></div>
 											<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 										<?php }?>
+									</div> -->
+									<div class="dropdown-menu" role="menu">
+										<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 									</div>
 								</td>
 							</tr>
@@ -211,8 +214,11 @@ $level = $_settings->userdata('type');
 												Action
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
-										<div class="dropdown-menu" role="menu">
+										<!-- <div class="dropdown-menu" role="menu">
 											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>	
+										</div> -->
+										<div class="dropdown-menu" role="menu">
+											<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 										</div>
 									</td>
 								</tr>
@@ -275,8 +281,11 @@ $level = $_settings->userdata('type');
 												Action
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
-										<div class="dropdown-menu" role="menu">
+										<!-- <div class="dropdown-menu" role="menu">
 											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>	
+										</div> -->
+										<div class="dropdown-menu" role="menu">
+											<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 										</div>
 									</td>
 								</tr>
@@ -782,8 +791,11 @@ $level = $_settings->userdata('type');
 												Action
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
-										<div class="dropdown-menu" role="menu">
+										<!-- <div class="dropdown-menu" role="menu">
 											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+										</div> -->
+										<div class="dropdown-menu" role="menu">
+											<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 										</div>
 									</td>
 								</tr>
@@ -876,8 +888,11 @@ $level = $_settings->userdata('type');
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
 										<div class="dropdown-menu" role="menu">
-											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+											<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 										</div>
+										<!-- <div class="dropdown-menu" role="menu">
+											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+										</div> -->
 									</td>
 								</tr>
 							<?php endwhile; ?>
@@ -969,8 +984,11 @@ $level = $_settings->userdata('type');
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
 										<div class="dropdown-menu" role="menu">
-											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+											<a class="dropdown-item" href="?page=po/purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 										</div>
+										<!-- <div class="dropdown-menu" role="menu">
+											<a class="dropdown-item" href="?page=po/purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+										</div> -->
 									</td>
 								</tr>
 							<?php endwhile; ?>

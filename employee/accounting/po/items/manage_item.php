@@ -21,52 +21,172 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         padding-left: 0.5rem;
         height: auto;
     }
+    body{
+        font-size:14px;
+    }
+    .form-control{
+        font-size:14px;
+    }
 </style>
+<div class="container fluid">
+    <!-- <callout class="callout-primary">
+        <dl class="row">
+            <table class="table table-bordered">
+                <tr>
+                    <td><b>Name:</b></dt></td>
+                    <td><b><?php echo $name ?></b></dd></td>
+                </tr>
+                <tr>
+                    <td><b>Code:</b></dt></td>
+                    <td><b><?php echo $item_code ?></b></dd></td>
+                </tr>
+                
+                <tr>
+                    <td><b>Supplier:</b></dt></td>
+                    <td><?php
+                        $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE id = $supplier_id");
+                        while ($row = $supplier_qry->fetch_assoc()) :
+                        ?>
+                        <?php echo $row['name'] ?>
+                        <?php endwhile; ?>
+                    </dd></td>
+                </tr>
+                <tr>
+                <td><b>Category:</b></dt></td>
+                    <td><?php 
+                    $qry_sup = $conn->query("SELECT category FROM `supplier_list` WHERE id = $supplier_id");
+
+                    if ($qry_sup->num_rows > 0) {
+                        while ($row = $qry_sup->fetch_assoc()) :
+                            ?>
+                            <div class="form-group">
+                                <?php 
+                                if($row['category'] == 0){
+                                    echo 'Goods';
+                                } elseif($row['category'] == 1){
+                                    echo 'Services';
+                                }
+                                ?>
+                            </div>
+                            <?php 
+                        endwhile;
+                    } else {
+                        echo "No category found for the specified supplier.";
+                    }
+                ?></dd></td>
+                </tr>
+               
+                <tr>
+                    <td><b>Description:</b></dt></td>
+                    <td><?php echo $description ?></dd></td>
+                </tr>
+                <tr>
+                    <td><b>Unit of Measurement:</b></dt></td>
+                    <td><?php echo $default_unit ?></dd></td>
+                </tr>
+                <tr>
+                    <td><b>Last Date Purchased:</b></dt></td>
+                    <td><?php
+                        $formattedDate = !empty($date_purchased) ? date('Y-m-d', strtotime($date_purchased)) : null;
+                        ?>
+                        <?php echo $formattedDate; ?>
+                    </dd></td>
+                </tr>
+                <tr>
+                    <td><b>Status</b></td>
+                   <td>
+                        <?php if($status == 1): ?>
+                            <span class="badge badge-success">Active</span>
+                        <?php else: ?>
+                            <span class="badge badge-secondary">Inactive</span>
+                        <?php endif; ?>
+                   </td>
+                </tr>
+            </table>
+        </dl>
+    </callout> -->
+    <callout class="callout-primary">
+        <dl class="row">
+            <table class="table table-bordered">
+                <tr>
+                    <td><b>Code:</b></dt></td>
+                    <td><b><?php echo $item_code ?></b></dd></td>
+                </tr>
+                <tr>
+                    <td><b>Name:</b></dt></td>
+                    <td><b><?php echo $name ?></b></dd></td>
+                </tr>
+                <tr>
+                    <td><b>Description:</b></td>
+                    <td><?php echo $description ?></td>
+                </tr>
+                <tr>
+                    <td><b>Type:</b></td>
+                    <td> <?php if($type == 1): ?>
+                            Goods
+                        <?php elseif($type == 2): ?>
+                            Services
+                        <?php else: ?>
+                            <span class='badge badge-secondary'>Not yet tagged</span>
+                        <?php endif; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Unit of Measure:</b></td>
+                    <td><?php echo $default_unit ?></td>
+                </tr>
+                <!-- <tr>
+                    <td><b>Last Date Purchased:</b></td>
+                    <td>
+                        <?php
+                        if (!empty($date_purchased)) {
+                            echo date("F j, Y", strtotime($date_purchased));
+                        } else {
+                            echo "<span class='badge badge-primary'>Not yet purchased</span>";
+                        }
+                        ?>
+                    </td>
+                </tr> -->
+            </table><br><br>
+        </dl>
+    </callout>
+</div>
 <form action="" id="item-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
-        <div class="container-fluid">
-        <div class="form-group">
-            <label for="supplier" class="supplier">Supplier:</label>
-            <select name="supplier_id" id="supplier_id" class="form-control rounded-0">
-                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-                <?php
-                $supplier_qry = $conn->query("SELECT * FROM `supplier_list` order by `name` asc");
-                while ($row = $supplier_qry->fetch_assoc()) :
-                ?>
-                    <option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="item_code" class="control-label">Item Code:</label>
-            <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code : "" ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="name" class="control-label">Item Name:</label>
-            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="description" class="control-label">Description:</label>
-            <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
-        </div>
-        <div class="form-group">
-            <label for="default_unit" class="control-label">Unit of Measurement:</label>
-            <input type="text" name="default_unit" id="default_unit" class="form-control rounded-0" value="<?php echo isset($default_unit) ? $default_unit :"" ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="description" class="control-label">Last Date Purchased:</label>
+        <hr>
+    <div style="text-align:center;font-weight:bold;">GL Account:<br><hr></div>
+    <div class="form-group">
+        <label for="default_unit" class="control-label">Sales Account:</label>
+        <select name="account_code" class="form-control">
+            <option value="" disabled selected>Select an option</option>
             <?php
-                $formattedDate = !empty($date_purchased) ? date('Y-m-d', strtotime($date_purchased)) : null;
-                ?>
-                <input type="date" class="form-control form-control-sm rounded-0" id="last_date_purchased" name="last_date_purchased" value="<?php echo $formattedDate; ?>" readonly>
+            $groupedAccounts = array(); 
+            $query = "SELECT a.*, g.name AS group_name 
+                    FROM account_list a 
+                    INNER JOIN group_list g ON a.group_id = g.id 
+                    WHERE a.code != '2001' AND a.code != '1201' AND a.code != '2118'
+                    ORDER BY g.name, a.name";
 
-        <div class="form-group">
-            <label for="status" class="control-label">Status:</label>
-            <select name="status" id="status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($status) && $status =="" ? "selected": "1" ?> >Active</option>
-                <option value="0" <?php echo isset($status) && $status =="" ? "selected": "0" ?>>Inactive</option>
-            </select>
-        </div>
+            $result = $conn->query($query);
+
+            while ($row = $result->fetch_assoc()):
+                $account_row['code'] = $row['code'];
+                $account_row['name'] = $row['name'];
+                $group_name = $row['group_name'];
+
+                $groupedAccounts[$group_name][] = $account_row;
+            endwhile;
+
+            foreach ($groupedAccounts as $groupName => $accountsGroup):
+                echo '<optgroup label="' . $groupName . '">';
+
+                foreach ($accountsGroup as $account):
+                    echo '<option value="' . $account['code'] . '" ' . (isset($account_code) && $account_code == $account['code'] ? 'selected' : '') . '>' . $account['name'] . '</option>';
+                endforeach;
+
+                echo '</optgroup>';
+            endforeach;
+            ?>
+        </select>
     </div>
 </form>
 <script>
@@ -79,7 +199,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             var supplierId = $('#supplier_id').val();
             if (supplierId) {
                 $.ajax({
-                    url: _base_url_ + "admin/po/items/get_max_item_code.php",
+                    url: _base_url_ + "employee/po/po_items/get_max_item_code.php",
                     data: { supplier_id: supplierId },
                     method: 'GET',
                     dataType: 'json',
@@ -142,7 +262,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             var supplierId = $(this).val();
             if (supplierId) {
                 $.ajax({
-                    url: _base_url_ + "admin/po/items/get_max_item_code.php",
+                    url: _base_url_ + "employee/po/po_items/get_max_item_code.php",
                     data: { supplier_id: supplierId },
                     method: 'GET',
                     dataType: 'json',

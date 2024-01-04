@@ -17,7 +17,7 @@ $session_id = $_settings->userdata('user_code');
               </div>
               <div class="col-md-8">
 
-                <?php $query= mysqli_query($conn,"select * from users where id = '$session_id'")or die(mysqli_error());
+                <?php $query= mysqli_query($conn,"select * from users where user_code = '$session_id'")or die(mysqli_error());
                     $row = mysqli_fetch_array($query);
                 ?>
 

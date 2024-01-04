@@ -18,9 +18,9 @@
 </head>
 <body>
 <?php
-    $qry = $conn->query("SELECT * FROM vs_entries WHERE id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * FROM vs_entries WHERE v_num = '{$_GET['id']}' ");
     $row = $qry->fetch_assoc();
-    $vs_id = $row['id'];
+    $vs_id = $row['v_num'];
     $po_no = $row['po_no'];
     $supp_code = $row['supplier_id'];
     $jdate = $row['journal_date'];
@@ -212,8 +212,8 @@ border-color: #007BFF;
                                     </div>
                                 </td>
                                 <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount']) : '' ?></td>
-                                <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount']) : '' ?></td>
+                                <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
                             </tr>
                             <?php $counter++;
                             endwhile; ?>

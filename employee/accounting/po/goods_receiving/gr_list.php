@@ -1,5 +1,5 @@
 <?php 
-require_once('./../../../config.php');
+require_once('../../../../config.php');
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')

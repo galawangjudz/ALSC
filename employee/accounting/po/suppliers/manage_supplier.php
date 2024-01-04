@@ -11,6 +11,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 }else{
     $mop = "";
     $status = "";
+    $category = "";
 }
 ?>
 <style>
@@ -23,20 +24,35 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         padding-left: 0.5rem;
         height: auto;
     }
-</style>
-<input type="hidden" name="vat" id="vat" value="<?php echo isset($vatable) ? $vatable : ''; ?>">
-<script>
-    var vat = document.getElementById("vat").value;
-    if (vat == 0) {
-        document.getElementById("vatable").selectedIndex = 1;
+    body{
+        font-size:14px;
     }
-</script>
+    .form-control{
+        font-size:14px;
+    }
+</style>
 <form action="" id="supplier-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
     <div class="container-fluid">
         <div class="form-group">
             <label for="name" class="control-label">Supplier Name:</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="name" class="control-label">Supplier Short Name:</label>
+            <input type="text" name="short_name" id="short_name" class="form-control rounded-0" value="<?php echo isset($short_name) ? $short_name :"" ?>" required>
+        </div>
+        <!-- <div class="form-group">
+            <label for="category" class="control-label">Category:</label>
+                <select name="category" id="category" class="form-control rounded-0" required onchange="updateEWT()">
+                <option value="" disabled selected></option>
+                <option value="0" <?php echo ($category === "0") ? "selected" : ""; ?>>Goods</option>
+                <option value="1" <?php echo ($category === "1") ? "selected" : ""; ?>>Services</option>
+            </select>
+        </div> -->
+        <div class="form-group">
+            <label for="tin" class="control-label">TIN #:</label>
+            <textarea rows="3" name="tin" id="tin" class="form-control rounded-0" required><?php echo isset($tin) ? $tin :"" ?></textarea>
         </div>
         <div class="form-group">
             <label for="address" class="control-label">Address:</label>
@@ -55,35 +71,42 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <input type="text" name="contact" id="contact" class="form-control rounded-0" value="<?php echo isset($contact) ? $contact :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="status" class="control-label">Vatable?</label>
-            <select name="vatable" id="vatable" class="form-control rounded-0" required>
-                <option value="12" <?php echo isset($vatable) && $vatable =="" ? "selected": "12" ?> >Yes</option>
-                <option value="0" <?php echo isset($vatable) && $vatable =="" ? "selected": "0" ?>>No</option>
-            </select>
-        </div>
-        <div class="form-group">
             <label for="mop" class="control-label">Mode of Payment:</label>
             <select name="mop" id="mop" class="form-control rounded-0" required>
+                <option value="" disabled selected></option>
                 <option value="1" <?php echo ($mop === "1") ? "selected" : ""; ?>>Check</option>
                 <option value="0" <?php echo ($mop === "0") ? "selected" : ""; ?>>Cash on Delivery</option>
             </select>
         </div>
         <div class="form-group">
             <label for="mop" class="control-label">Payment Terms:</label>
-            <!-- <input type="text" name="terms" id="terms" class="form-control rounded-0" value="<?php echo isset($terms) ? $terms :"" ?>" required> -->
             <select name="terms" id="terms" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                <option value="" disabled <?php echo !isset($terms_indicator) ? "selected" : '' ?>></option>
+                <option value="" disabled selected></option>
                 <?php 
                 $terms_qry = $conn->query("SELECT * FROM `payment_terms` WHERE inactive = 0 ORDER BY `terms_indicator` ASC");
-                while ($row = $terms_qry->fetch_assoc()):
+                while ($terms_row = $terms_qry->fetch_assoc()):
                 ?>
                 <option 
-                    value="<?php echo $row['terms_indicator'] ?>" 
-                    <?php echo isset($terms_indicator) && $terms_indicator == $row['terms_indicator'] ? 'selected' : '' ?> <?php echo $row['terms'] == 0? 'disabled' : '' ?>
-                ><?php echo $row['terms'] ?></option>
+                    value="<?php echo $terms_row['terms_indicator'] ?>" 
+                    <?php echo isset($terms) && $terms == $terms_row['terms_indicator'] ? 'selected' : '' ?>
+                ><?php echo $terms_row['terms'] ?></option>
                 <?php endwhile; ?>
             </select>
         </div>
+        <div class="form-group">
+            <label for="vatable" class="control-label">Tax Group:</label>
+            <select name="vatable" id="vatable" class="form-control rounded-0" required>
+                <option value="" <?php echo (!isset($vatable) || $vatable === "") ? "selected" : "" ?> disabled></option>
+                <option value="0" <?php echo (isset($vatable) && $vatable == "0") ? "selected" : "" ?>>Non-VAT</option>
+                <option value="3" <?php echo (isset($vatable) && $vatable == "3") ? "selected" : "" ?>>Zero-rated</option>
+                <option value="1" <?php echo (isset($vatable) && $vatable == "1") ? "selected" : "" ?>>Inclusive</option>
+                <option value="2" <?php echo (isset($vatable) && $vatable == "2") ? "selected" : "" ?>>Exclusive</option>
+            </select>
+        </div> 
+        <!-- <div class="form-group">
+            <label for="contact" class="control-label">Withholding Tax:</label>     
+            <input type="text" name="wt" id="wt" class="form-control rounded-0" value="<?php echo isset($wt) ? $wt :"" ?>">
+        </div> -->
         <div class="form-group">
             <label for="status" class="control-label">Status:</label>
             <select name="status" id="status" class="form-control rounded-0" required>
@@ -93,26 +116,24 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
     </div>
 </form>
-<!-- 
 <script>
-    var select = document.getElementById("vatable");
-    var textboxContainer = document.getElementById("textbox-container");
-    select.addEventListener("change", function () {
-        if (select.value === "1") {
-            textboxContainer.style.display = "block";
-            document.getElementById("vatable").value = "0";
-        } else {
-            textboxContainer.style.display = "none";
-            document.getElementById("vatable").value = "0";
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        updateEWT();
     });
-    if (select.value === "1") {
-        textboxContainer.style.display = "block";
-    } else {
-        textboxContainer.style.display = "none";
-        document.getElementById("vatable").value = "0";
+
+    function updateEWT() {
+        var category = document.getElementById('category');
+        var ewtInput = document.getElementById('wt');
+
+        if (category.value === '0') {
+            
+            ewtInput.value = '1';
+        } else if (category.value === '1') {
+            
+            ewtInput.value = '2';
+        } 
     }
-</script> -->
+</script>
 
 <script>
     $(function(){

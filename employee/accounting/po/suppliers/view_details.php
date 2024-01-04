@@ -13,6 +13,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     #uni_modal .modal-footer{
         display:none
     }
+    body{
+        font-size:14px;
+    }
 </style>
 <div class="container fluid">
     <callout class="callout-primary">
@@ -21,6 +24,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <tr>
                     <td style="width:150px;"><b>Supplier Name:</b></td>
                     <td><b><?php echo $name ?></b></td>
+                </tr>
+                <tr>
+                    <td style="width:150px;"><b>Supplier Short Name:</b></td>
+                    <td><b><?php echo $short_name ?></b></td>
+                </tr>
+                <!-- <tr>
+                    <td style="width:150px;"><b>Category:</b></td>
+                    <td>
+                        <?php 
+                            if ($category == 0) {
+                                echo 'Goods';
+                            } elseif ($category == 1) {
+                                echo 'Services';
+                            } 
+                        ?>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td><b>TIN #:</b></td>
+                    <td><?php echo $tin ?></td>
                 </tr>
                 <tr>
                     <td><b>Address:</b></td>
@@ -37,16 +60,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <tr>
                     <td><b>Email:</b></td>
                     <td><?php echo $email ?></td>
-                </tr>
-                <tr>
-                    <td><b>Vatable?</b></td>
-                    <td>
-                    <?php if($vatable == 0): ?>
-                        <span class="badge badge-secondary">No</span>
-                    <?php else: ?>
-                        <span class="badge badge-primary">Yes</span>
-                    <?php endif; ?>
-                    </td>
                 </tr>
                 <tr>
                     <td><b>Mode of Payment:</b></td>
@@ -77,9 +90,29 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         }
                         ?>
                     </td>
-                    
                 </tr>
-
+                <tr>
+                    <td><b>Tax Group:</b></td>
+                    <td>
+                        <?php 
+                            if ($vatable == 0) {
+                                echo 'Non-VAT';
+                            } elseif ($vatable == 1) {
+                                echo 'Inclusive';
+                            } elseif ($vatable == 2) {
+                                echo 'Exclusive';
+                            } elseif ($vatable == 3) {
+                                echo 'Zero-rated';
+                            }else {
+                                echo '';
+                            }
+                        ?>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><b>Withholding Tax:</b></td>
+                    <td><?php echo $wt ?>%</td>
+                </tr> -->
                 <tr>
                     <?php $formatted_date = date("F j, Y h:i:s A", strtotime($date_created)); ?>
                     <td><b>Date Created:</b></td>

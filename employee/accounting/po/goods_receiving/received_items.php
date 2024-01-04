@@ -6,6 +6,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             $$k=$v;
         }
     }
+	echo $_GET['id'];
 }
 ?>
 <style>
@@ -129,8 +130,13 @@ $(document).ready(function() {
 						$gr_qry = $conn->query("SELECT po_id, MAX(gr_id) AS max_gr_id FROM tbl_gr_list;");
 						$gr = $gr_qry->fetch_array();
 						$max_gr_id = sprintf("%03d", $gr['max_gr_id'] + 1);
+
+						$gl_qry = $conn->query("SELECT gl_id, MAX(gl_id) AS max_gl_id FROM tbl_gl_list;");
+						$gl = $gl_qry->fetch_array();
+						$max_gl_id = sprintf("%03d", $gl['max_gl_id'] + 1);
 						?>
-						<p><input type="text" value="GR - <?php echo $max_gr_id ?>" id="gr_no" name="gr_no" style="border:none;color:black;pointer-events:none;"></p>
+						<p>GR - <input type="text" value="<?php echo $max_gr_id ?>" id="gr_no" name="gr_no" style="border:none;color:black;pointer-events:none;"></p>
+						<!-- <p>GL - <input type="text" value="<?php echo $max_gl_id ?>" id="gl_no" name="gl_no" style="border:none;color:black;pointer-events:none;"></p> -->
 
 					<p  class="m-0"><b>P.O. #:</b></p>
 					<p><input type="text" value="<?php echo $po_no ?>" id="po_no" name="po_no" style="border:none;color:black;pointer-events:none;"></p>
@@ -191,6 +197,9 @@ $(document).ready(function() {
 						<?php endif; ?>
 						<col width="8%">
 						<col width="8%">
+						<col width="8%">
+						<col width="8%">
+						<col width="8%">
 						<?php if($level < 0): ?>
 							<col width="9%">
 						<?php endif; ?>
@@ -207,15 +216,23 @@ $(document).ready(function() {
 							<th class="px-1 py-1 text-center">Received</th>
 							<th class="px-1 py-1 text-center">Outstanding</th>
 							<th class="px-1 py-1 text-center">No. of Delivered Items</th>
+							<th class="px-1 py-1 text-center">Item Code</th>
+							<th class="px-1 py-1 text-center">Subtotal</th>
+							<th class="px-1 py-1 text-center">Type</th>
+							<th class="px-1 py-1 text-center">VAT per Item</th>
+							<th class="px-1 py-1 text-center">Ex-VAT</th>
 							<?php if($level < 0): ?>
 								<th class="px-1 py-1 text-center">Total</th>
 							<?php endif; ?>
 						</tr>
 					</thead>
 					<tbody>
-						<?php 
+						
+					<?php 
+    $generalLedgerButton = ''; 
+    
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description
+						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code, i.type, i.item_code
 						FROM approved_order_items o
 						INNER JOIN item_list i ON o.item_id = i.id
 						WHERE o.po_id = '$id'
@@ -236,7 +253,8 @@ $(document).ready(function() {
 								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+								CODE: <input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+								<input type="text" name="account_code[]" value="<?php echo $row['account_code'] ?>">
 								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
@@ -253,14 +271,86 @@ $(document).ready(function() {
 								<input type="number" step="any" class="text-right w-100 border-0" name="outstanding[]"  id="txtoutstanding" value="<?php echo ($row['outstanding']) ?>"  style="pointer-events:none;border:none;background-color: gainsboro;" readonly/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0"/>
+								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" oninput="calculateAmount(this)"/>
 							</td>
-							<?php if($level < 0): ?>
-								<td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
-							<?php endif; ?>
+							<td><input type="text" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>"></td>
+							<td><input type="text" value="0" name="amount[]" id="amount"></td>
+							<td><input type="text" name="type[]" id="type" value="<?php echo ($row['type']) ?>"></td>
+							<!-- <td><input type='text' name='vat_amt' id='vat_amt'></td>
+							<td><input type='text' name='ex_vat' id='ex_vat'></td> -->
+							<input type="text" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
+						</tr>
+						<?php
+						$grIdValue = $row['gr_id'];
+						?>
+						<!-- <a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="<?php echo $row['gr_id']; ?>"><span class="fa fa-file-export text-secondary"></span> General Ledger</a> -->
+						<?php endwhile;
+						 $generalLedgerButton = '<a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="'.$grIdValue.'"><span class="fa fa-file-export text-secondary"></span> General Ledger</a>';
+						endif;
+						?>
+						<?php echo $generalLedgerButton; ?>
+					</tbody>
+					
+					<?php 
+						if(isset($id)):
+						$order_items_qry = $conn->query("SELECT * FROM account_list
+							WHERE code = '11081'");
+						echo $conn->error;
+						while($row = $order_items_qry->fetch_assoc()):
+						?>
+						<tr class="po-item" data-id="">
+							<td class="align-middle p-1">
+							DEFERRED INPUT VAT<br>
+								ACC CODE: <input type="text" name="account_code_vat" value="<?php echo $row['code'] ?>">
+								ITEM CODE: <input type="text" name="item_code_vat" value="0">
+								AMOUNT: <input type="text" value="0" name="amount_vat" id="vat_total">
+							</td>
 						</tr>
 						<?php endwhile;endif; ?>
-					</tbody>
+
+						
+						<?php 
+						if(isset($id)):
+						$order_items_qry = $conn->query("SELECT * FROM account_list
+							WHERE code = '20147'");
+						
+						echo $conn->error;
+						while($row = $order_items_qry->fetch_assoc()):
+						?>
+					
+						<tr class="po-item" data-id="">
+						
+							<td class="align-middle p-1">
+							GOODS RECEIPT<br>
+								ACC CODE: <input type="text" name="account_code_gr" value="<?php echo $row['code'] ?>">
+								ITEM CODE: <input type="text" name="item_code_gr" value="0">
+								AMOUNT: <input type="text" value="0" name="amount_gr" id="gr_total">
+							</td>
+						</tr>
+						
+						<?php endwhile;endif; ?>
+
+
+						<?php 
+						if(isset($id)):
+						$order_items_qry = $conn->query("SELECT * FROM account_list
+							WHERE code = '21032'");
+						
+						echo $conn->error;
+						while($row = $order_items_qry->fetch_assoc()):
+						?>
+					
+						<tr class="po-item" data-id="">
+						
+							<td class="align-middle p-1">
+							DEFERRED EWT<br>
+								ACC CODE: <input type="text" name="account_code_ewt" value="<?php echo $row['code'] ?>">
+								ITEM CODE: <input type="text" name="item_code_ewt" value="0">
+								AMOUNT: <input type="text" value="0" name="amount_ewt" id="ewt_total">
+							</td>
+						</tr>
+						
+						<?php endwhile;endif; ?>
 					<tr style="display:none;">
 						<td class="p-1 text-right" colspan="8">Total Outstanding:</td>
 						<td class="p-1 text-right" id="outstanding-total">0</td>
@@ -336,7 +426,7 @@ $(document).ready(function() {
 				<input type="text" class="text-center w-100 border-0" name="unit[]"/>
 			</td>
 			<td class="align-middle p-1">
-				<input type="hidden" name="item_id[]">
+				<input type="text" name="item_id[]">
 				<input type="text" class="text-center w-100 border-0 item_id" required/>
 			</td>
 			<td class="align-middle p-1 item-description"></td>
@@ -354,10 +444,96 @@ $(document).ready(function() {
 			</td>
 			<td class="align-middle p-1 text-right total-price">0</td>
 		</tr>
+		
 	</table>
+	
 </div>
+<script>
+    function calculateAmount(input) {
+        var tr = $(input).closest('.po-item');
+        var delitems = parseFloat(input.value);
+        var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
+        var amount = delitems * unitPrice;
+
+       // tr.find('[name="amount[]"]').val(amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+	   tr.find('[name="amount[]"]').val(amount.toFixed(2));
+
+
+        var vatAmtField = tr.find('[name="vat_amt"]');
+        var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
+        var vatAmount = amount * vatRate;
+        vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+        var exVatField = tr.find('[name="ex_vat"]');
+        var exVatValue = amount * 0.12;
+        exVatField.val(exVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+        updateVatTotal();
+		updateEWTTotal();
+		updateGR();
+    }
+
+    function updateVatTotal() {
+        var totalAmount = 0;
+		var totalVat = 0;
+        $('[name="amount[]"]').each(function() {
+            totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+			totalVat = totalAmount * 0.12;
+        });
+
+        $('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+    }
+
+	function updateGR() {
+        var totalAmount = 0;
+		var totalGR = 0;
+        $('[name="amount[]"]').each(function() {
+            totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+			totalVat = totalAmount * 0.12;
+			
+
+			if ($('[name="type[]"]').val() == 1) {
+				totalEwt = totalAmount * 0.01;
+			} else {
+				totalEwt = totalAmount * 0.02;
+			}
+
+			totalGR = (totalAmount + totalVat) - totalEwt;
+        });
+
+        $('#gr_total').val(totalGR.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+    }
+
+
+	function updateEWTTotal() {
+		var totalAmount = 0;
+		var totalEwt = 0;
+
+		$('[name="amount[]"]').each(function() {
+			totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+
+			if ($('[name="type[]"]').val() == 1) {
+				totalEwt = totalAmount * 0.01;
+			} else {
+				totalEwt = totalAmount * 0.02;
+			}
+		});
+
+		$('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+	}
+
+</script>
+
 
 <script>
+	$(document).ready(function(){
+		$('.gl_data').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;
+			window.location.href = redirectUrl;
+			
+		})
+	});
 	$(function(){
 		$('#print').click(function(e){
 			e.preventDefault();
@@ -399,37 +575,7 @@ $(document).ready(function() {
 	function rem_item(_this){
 		_this.closest('tr').remove()
 	}
-	function calculate(){
-		var _total = 0
-		$('.po-item').each(function(){
-			var outstanding = $(this).find("[name='outstanding[]']").val()
-			var unit_price = $(this).find("[name='unit_price[]']").val()
-			var row_total = 0;
-			if(outstanding > 0 && unit_price > 0){
-				row_total = parseFloat(outstanding) * parseFloat(unit_price)
-			}
-			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'))
-		})
-		$('.total-price').each(function(){
-			var _price = $(this).text()
-				_price = _price.replace(/\,/gi,'')
-				_total += parseFloat(_price)
-		})
-		var discount_perc = 0
-		if($('[name="discount_percentage"]').val() > 0){
-			discount_perc = $('[name="discount_percentage"]').val()
-		}
-		var discount_amount = _total * (discount_perc/100);
-		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-		var tax_perc = 0
-		if($('[name="tax_percentage"]').val() > 0){
-			tax_perc = $('[name="tax_percentage"]').val()
-		}
-		var tax_amount = _total * (tax_perc/100);
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))
-	}
+	
 	function _autocomplete(_item){
 		_item.find('.item_id').autocomplete({
 			source:function(request, response){
@@ -459,10 +605,7 @@ $(document).ready(function() {
 			$('#item-list tbody').append(tr)
 			_autocomplete(tr)
 			tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
-				calculate()
-			})
-			$('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
-				calculate()
+			
 			})
 		})
 		if($('#item-list .po-item').length > 0){
@@ -470,10 +613,7 @@ $(document).ready(function() {
 				var tr = $(this)
 				_autocomplete(tr)
 				tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
-					calculate()
-				})
-				$('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
-					calculate()
+			
 				})
 				tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
 			})
@@ -533,11 +673,9 @@ $(document).ready(function() {
 			$('#item-list tbody').append(tr);
 			_autocomplete(tr);
 			tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function(e) {
-				calculate();
+			
 			});
-			$('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function(e) {
-				calculate();
-			});
+		
 
 			initDeliveredItemsEvents();
 		});
@@ -578,8 +716,11 @@ $(document).ready(function() {
 		var totalOutstanding = 0;
 		$('.po-item').each(function() {
 			var outstanding = parseFloat($(this).find("[name='outstanding[]']").val());
+
+
 			totalOutstanding += isNaN(outstanding) ? 0 : outstanding;
 		});
+
 		$('#outstanding-total').text(parseFloat(totalOutstanding).toLocaleString("en-US"));
 	}
 

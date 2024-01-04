@@ -5,6 +5,15 @@
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
+.nav-header {
+    cursor: pointer;
+  }
+.nav-list {
+  display: none;
+  list-style: none;
+  padding: 0;
+}
+
 
 </style>
 <?php $usertype = $_settings->userdata('user_type'); 
@@ -49,7 +58,7 @@ $level = $_settings->userdata('type');
                     
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=po/purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
@@ -72,7 +81,7 @@ $level = $_settings->userdata('type');
                           Items List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
@@ -81,64 +90,91 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">File Manager</li></div></b></i>
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/apv/" class="nav-link nav-apv">
-                      <i class="nav-icon fas fa-file"></i>
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header" onclick="toggleNavList()">
+                        <b><i>File Manager</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=po/suppliers/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-truck"></i>
                         <p>
-                          Accounts Payable Voucher
+                        Suppliers List
                         </p>
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/adv/" class="nav-link nav-adv">
-                      <i class="nav-icon fas fa-file"></i>
+                      <a href="<?php echo base_url ?>employee/accounting/?page=po/items/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
-                          Direct Voucher
-                        </p>
-                      </a>
-                    </li> 
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/cv/" class="nav-link nav-cv">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Check Voucher
-                        </p>
-                      </a>
-                    </li>  -->
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=accounts/" class="nav-link nav-vs">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                        Chart of Accounts
+                        Items List
                         </p>
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=groups/" class="nav-link nav-vs">
-                      <i class="nav-icon fas fa-file"></i>
+                      <i class="nav-icon fas fa-list-alt"></i>
                         <p>
                         Groups List
                         </p>
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=accounts/" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Chart of Accounts
+                        </p>
+                      </a>
+                    </li> 
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=customers_profile/" class="nav-link nav-vs">
-                      <i class="nav-icon fas fa-file"></i>
+                      <i class="nav-icon fas fa-address-book"></i>
                         <p>
                         Customers' Profile
                         </p>
                       </a>
                     </li> 
-                    <!-- <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=subsidiary_accounts" class="nav-link">
-                        <i class="nav-icon fas fa-folder"></i>
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Accounts Payable</li></div></b></i>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=closed_po" class="nav-link nav-closed_po">
+                      <i class="nav-icon fas fa-file"></i>
                         <p>
-                          Subsidiary Accounts
+                          Closed Purchase Orders
                         </p>
                       </a>
                     </li>  -->
-                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Accounts Payable</li></div></b></i>
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header" onclick="toggleNavList()">
+                        <b><i>Create Voucher Setup</i></b>
+                      </li>
+                    </div>
+                    <ul class="nav-list">
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_agent_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-id-card"></i>
+                          <p>Agents</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_employee_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-id-badge"></i>
+                          <p>Employees</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_client_voucher" class="nav-link">
+                          <i class="nav-icon fas fa-users"></i>
+                          <p>Clients</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_supplier_voucher" class="nav-link">
+                          <i class="nav-icon fa fa-truck"></i>
+                          <p>Suppliers</p>
+                        </a>
+                      </li>
+                    </ul>
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
                         <i class="nav-icon fas fa-folder"></i>
@@ -155,52 +191,6 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Request Form
-                        </p>
-                      </a>
-                    </li>  -->
-
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po" class="nav-link nav-av">
-                      <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                          PO - Dashboard
-                        </p>
-                      </a>
-                    </li>  -->
-                    
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/purchase_orders" class="nav-link nav-orders">
-                      <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                          Purchases
-                        </p>
-                      </a>
-                    </li> 
-
-                    
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/sales_invoice/sales_invoice" class="nav-link nav-invoice">
-                      <i class="nav-icon fas fa-file-invoice"></i>
-                        <p>
-                          Sales Invoice
-                        </p>
-                      </a>
-                    </li> -->
-                   
-                    <!-- <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inquiries and Reports</li></div></b></i>
-                    <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=po/inquiries_and_reports/supplier_transaction_inquiry" class="nav-link nav-apv">
-                      <i class="nav-icon fas fa-file"></i>
-                        <p>
-                          Supplier Transaction Inquiry
-                        </p>
-                      </a>
-                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -244,3 +234,17 @@ $level = $_settings->userdata('type');
      
     })
   </script>
+<script>
+  function toggleNavList() {
+    const navList = document.querySelector('.nav-list');
+    navList.style.display = (navList.style.display === 'none' || navList.style.display === '') ? 'block' : 'none';
+  }
+
+  // Prevent toggling when a link is clicked
+  const navLinks = document.querySelectorAll('.nav-list a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', function (event) {
+      event.stopPropagation();
+    });
+  });
+</script>

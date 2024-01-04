@@ -1,0 +1,75 @@
+.table{
+    font-size:14px!important;
+}
+.nav-closed_po{
+    background-color:#007bff;
+    color:white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-closed_po:hover{
+    background-color:#007bff!important;
+    color:white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
+
+/* cpo_setup.php */
+.label-danger {
+    background-color: #FF0000;
+    color: #FFFFFF;
+}
+.label-success {
+    background-color: #28A745;
+    color: #FFFFFF;
+}
+.label-secondary {
+    background-color: #888888; 
+    color: #ffffff; 
+}
+#notes {
+    min-width: 590px;
+    min-height: 100px;
+    resize: none; 
+}
+input{
+    border:none !important;
+}
+span.select2-selection.select2-selection--single {
+    border-radius: 0;
+    padding: 0.25rem 0.5rem;
+    padding-top: 0.25rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    height: auto;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type=number] {
+-moz-appearance: textfield;
+}
+[name="tax_percentage"],[name="discount_percentage"]{
+    width:5vw;
+}
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.6; 
+}
+input{
+    pointer-events:none;
+    border:none;
+    background-color: transparent;
+}
+
+/* cpo_supplier_update..php */
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}

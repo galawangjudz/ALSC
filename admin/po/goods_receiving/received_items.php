@@ -151,8 +151,8 @@ $(document).ready(function() {
     	</div>	
 		<br>
         <?php 
-            $receiver_qry = $conn->query("SELECT * FROM users where id = '{$receiver_id}'");
-            $receiver2_qry = $conn->query("SELECT * FROM users where id = '{$receiver2_id}'");
+            $receiver_qry = $conn->query("SELECT * FROM users where user_code = '{$receiver_id}'");
+            $receiver2_qry = $conn->query("SELECT * FROM users where user_code = '{$receiver2_id}'");
             $receiver = $receiver_qry->fetch_array();
             $receiver2 = $receiver2_qry->fetch_array();
         ?>

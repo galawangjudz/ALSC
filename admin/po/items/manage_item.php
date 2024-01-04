@@ -38,11 +38,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             </select>
         </div>
         <div class="form-group">
-            <label for="item_code" class="control-label">Item Code:</label>
+            <label for="item_code" class="control-label">Code:</label>
             <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code : "" ?>" readonly>
         </div>
         <div class="form-group">
-            <label for="name" class="control-label">Item Name:</label>
+            <label for="name" class="control-label">Name:</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
         </div>
         <div class="form-group">
