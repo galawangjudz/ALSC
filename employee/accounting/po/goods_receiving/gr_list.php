@@ -36,10 +36,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <table class="table table-striped table-hover table-bordered" style="width: 100%">
             <thead>
                 <tr>
-                    <th>G.R. #</th>
+                    <th>GR #</th>
                     <th>Remaining Balance</th>
                     <th>Date/Time Received</th>
-
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,13 +53,29 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             while ($row = $qry->fetch_assoc()):
             ?>
             <tr>
-                <td>
+                <!-- <td>
                     <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
+                </td> -->
+                <td>
+                    <a data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
                 </td>
                 <td><?php echo number_format($row['total_amount']) ?></td>
                 <td><?php echo $row["date_purchased"] ?></td>
+                <td align="center">
+                    <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                            Action
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" role="menu">
+                        <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">Details</a>
+                        <div class='dropdown-divider'></div>
+                        <?php
+                            $grIdValue = $row['gr_id'];
+                        ?>
+                        <a class="dropdown-item gl_data" href="javascript:void(0)" data-id="<?php echo $grIdValue; ?>"><span class="fa fa-file-export"></span> View GL Journal Entries for this Delivery</a>
+                    </div>
+                </td>
             </tr>
-
             <?php endwhile; ?>
             </tbody>
         </table>
@@ -67,6 +83,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 </body>
 <script>
+    $(document).ready(function(){
+		$('.gl_data').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;
+			window.location.href = redirectUrl;
+			
+		})
+	});
 $('.view_gr').click(function(){
     var grId = $(this).attr('data-id');
     var poId = $(this).data('po-id'); 
