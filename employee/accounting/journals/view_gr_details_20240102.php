@@ -688,14 +688,16 @@ $('.accountSelect').each(function () {
 <tfoot>
     <tr>
         <td colspan="2"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
-        <!-- <td class="text-right" id="total-debit"><?= number_format($totalDebit, 2) ?></td>
-        <td class="text-right" id="total-credit"><?= number_format($totalCredit + ($apTotal + $iEWT),2); ?></td> -->
+
         <td class="text-right" id="total-debit"></td>
         <td class="text-right" id="total-credit"></td>
     </tr>
 </tfoot>
 </table>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    updateTotalsAfterRowDeletion(grId);
+    });
 $(document).ready(function () {
     $('#account_list_<?= $gr_id ?>').on('change', '.accountSelect', function () {
         var selectedOption = $(this).find(':selected');
