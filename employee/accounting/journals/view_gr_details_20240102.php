@@ -64,9 +64,11 @@ $('.accountSelect').each(function () {
     <tbody>
     <?php 
     $id = $gr_id;
-    $query = "SELECT gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
+    $query = "SELECT po.vatable, gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
     FROM tbl_gl_trans gt INNER JOIN
     account_list al ON gt.account = al.code 
+    INNER JOIN po_approved_list po ON
+    po.po_no = gt.po_id
     INNER JOIN group_list gl ON al.group_id = gl.id 
     WHERE gt.gr_id = $gr_id";
     $qry = $conn->query($query);
@@ -77,6 +79,7 @@ $('.accountSelect').each(function () {
         $glId = $row['glId'];
         $glType = $row['type'];
         $amount = $row['amount'];
+        $vat = $row['vatable'];
 
         if($account_name == 'Deferred Input VAT'){
              $iEWT = $row['amount'];
@@ -205,6 +208,7 @@ $('.accountSelect').each(function () {
     <?php endwhile; ?>
 
     <?php 
+    if($vat == 1 || $vat == 2){
     $id = $gr_id;
     $query_iv = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
@@ -221,6 +225,8 @@ $('.accountSelect').each(function () {
         $account_name = $row_iv['name'];
     ?>
     <tr>
+
+    <input type="text" value="<?php echo $vat ?>">
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
@@ -320,7 +326,9 @@ $('.accountSelect').each(function () {
             <?php endif; ?>
         </td>
     </tr>
+    
     <?php endwhile; ?>
+    <?php }; ?>
 
     <?php 
     $id = $gr_id;
@@ -466,7 +474,7 @@ $('.accountSelect').each(function () {
             <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo $e_total; ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
@@ -559,6 +567,7 @@ $('.accountSelect').each(function () {
     <?php endwhile; ?>
 
     <?php 
+    if($vat == 1 || $vat == 2){
     $id = $gr_id;
     $query = "SELECT gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
     FROM tbl_gl_trans gt INNER JOIN
@@ -683,6 +692,7 @@ $('.accountSelect').each(function () {
         </td>
     </tr>
     <?php endwhile; ?>
+    <?php }; ?>
 
 </tbody>
 <tfoot>

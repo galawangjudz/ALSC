@@ -67,7 +67,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
-                        <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">Details</a>
+                        <a class="dropdown-item basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>"><span class="fa fa-solid fa-info"></span> Details</a>
                         <div class='dropdown-divider'></div>
                         <?php
                             $grIdValue = $row['gr_id'];

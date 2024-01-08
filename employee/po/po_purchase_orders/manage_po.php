@@ -23,13 +23,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $po_number = 'Selected PO not found';
     }
 } else {
-    $qry = $conn->query("SELECT MAX(id) AS max_id FROM `po_list`");
+    $qry = $conn->query("SHOW TABLE STATUS LIKE 'po_list'");
+    
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $next_po_number = $row['max_id'] + 1;
+        $next_po_number = $row['Auto_increment'];
     } else {
         $next_po_number = 1;
     }
+
     $po_number = str_pad($next_po_number, '0', STR_PAD_LEFT);
 }
 ?>
@@ -223,7 +225,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 											<th class="p-1 text-right" colspan="7">
 											VAT</th>
 											<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
-											<input type="text" id="copytax" name="tax_amount">
+											<input type="hidden" id="copytax" name="tax_amount">
 										</tr>
 										<tr>
 											<th class="p-1 text-right" colspan="7">Total:</th>
@@ -233,25 +235,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 										<table class="table-bordered">
 											<tr style="padding-left:150px;align-items: center;text-align: center;">
 												<td>
-													<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()" required />
 													<label for="nonVatRadio">Non-VAT</label>
 												</td>
 												<td>
-													<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()" required />
 													<label for="zeroRatedRadio">Zero-Rated</label>
 												</td>
 												<td>
-													<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()" required />
 													<label for="inclusiveRadio">Inclusive</label>
 												</td>
 												<td>
-													<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()" required />
 													<label for="exclusiveRadio">Exclusive</label>
 												</td>
 											</tr>
-											<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+											<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>" />
 										</table>
-
 										</tr>
 									</tr>
 								</tfoot>
@@ -437,7 +438,7 @@ function calculate() {
     } else if (rdoText === "2") {
 		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
     } else {
-        $('#total').text("0");
+        $('#total').text(parseFloat(_total).toLocaleString("en-US"));
     }
 }
 

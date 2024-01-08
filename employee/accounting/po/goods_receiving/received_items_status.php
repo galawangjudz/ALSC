@@ -149,12 +149,12 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu" role="menu">
-                                            <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                            <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> Receive</a>
                                             <?php
                                                 $qry_get_gr = $conn->query("SELECT g.*, o.* FROM tbl_gr_list g INNER JOIN approved_order_items o ON g.gr_id = o.gr_id WHERE g.po_id = '" . $row['id'] . "'");
                                                 if ($qry_get_gr->num_rows > 0) {
                                                     echo "<div class='dropdown-divider'></div>";
-                                                    echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-eye text-primary'></span> GR List</a>";
+                                                    echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-list text-primary'></span> GR List</a>";
                                                 }
                                                 ?>                                            
                                         </div>
@@ -250,7 +250,7 @@
                                         $qry_get_gr = $conn->query("SELECT g.*, o.* FROM tbl_gr_list g INNER JOIN approved_order_items o ON g.gr_id = o.gr_id WHERE g.po_id = '" . $row['id'] . "'");
                                         if ($qry_get_gr->num_rows > 0) {
                                             echo "<div class='dropdown-divider'></div>";
-                                            echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-eye text-primary'></span> GR List</a>";
+                                            echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-list text-primary'></span> GR List</a>";
                                         }
                                         ?>      
                                         </div>
@@ -352,12 +352,12 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu" role="menu">
-                                            <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                            <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> Receive</a>
                                             <?php
                                                 $qry_get_gr = $conn->query("SELECT g.*, o.* FROM tbl_gr_list g INNER JOIN approved_order_items o ON g.gr_id = o.gr_id WHERE g.po_id = '" . $row['id'] . "'");
                                                 if ($qry_get_gr->num_rows > 0) {
                                                     echo "<div class='dropdown-divider'></div>";
-                                                    echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-eye text-primary'></span> GR List</a>";
+                                                    echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-list text-primary'></span> GR List</a>";
                                                 }
                                                 ?>                                            
                                         </div>
@@ -451,7 +451,7 @@
                                         $qry_get_gr = $conn->query("SELECT g.*, o.* FROM tbl_gr_list g INNER JOIN approved_order_items o ON g.gr_id = o.gr_id WHERE g.po_id = '" . $row['id'] . "'");
                                         if ($qry_get_gr->num_rows > 0) {
                                             echo "<div class='dropdown-divider'></div>";
-                                            echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-eye text-primary'></span> GR List</a>";
+                                            echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-list text-primary'></span> GR List</a>";
                                         }
                                         ?>      
                                         </div>

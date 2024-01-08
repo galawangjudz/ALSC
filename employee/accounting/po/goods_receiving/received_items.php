@@ -4,9 +4,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
+			
         }
+		$vatableValue = $vatable;
     }
-	echo $_GET['id'];
+echo $vatableValue;
 }
 ?>
 <style>
@@ -54,25 +56,25 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
+
 <?php
-function genDocNo() {
-    static $lastNumber = 999999; 
-    $lastNumber = ($lastNumber % 999999) + 1; 
-    return $lastNumber;
-}
 
-$sql = "SELECT MAX(doc_no) AS max_doc_no FROM tbl_gl_trans";
-$result = $conn->query($sql);
+$qry = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
 
-if ($result && $row = $result->fetch_assoc()) {
-    $maxDocNo = $row['max_doc_no'];
-    $initialNumber = $maxDocNo + 1;
+if ($qry->num_rows > 0) {
+    $row = $qry->fetch_assoc();
+    $latestDocNo = $row['max_doc_no'];
+    $newDocNo = '2' . str_pad(($latestDocNo + 1), 5, '0', STR_PAD_LEFT);
+
+    $qry = $conn->query("SELECT * FROM `tbl_gl_trans` WHERE gr_id = '{$_GET['id']}'");
+    if ($qry->num_rows > 0) {
+        $row = $qry->fetch_assoc();
+        $po_id = $row['po_id'];
+        $doc_no = $newDocNo; 
+    }
 } else {
-
-    $initialNumber = genDocNo();
+    
 }
-
-
 ?>
 
 <script>
@@ -145,18 +147,17 @@ $(document).ready(function() {
 			<div class="col-6 row">
 				<div class="col-6">
 					<p  class="m-0"><b>G.R. #:</b></p>
-					<?php 
-						$gr_qry = $conn->query("SELECT po_id, MAX(gr_id) AS max_gr_id FROM tbl_gr_list;");
-						$gr = $gr_qry->fetch_array();
-						$max_gr_id = sprintf("%03d", $gr['max_gr_id'] + 1);
+						<?php 
+							$gr_qry = $conn->query("SHOW TABLE STATUS LIKE 'tbl_gr_list'");
+							$gl_qry = $conn->query("SHOW TABLE STATUS LIKE 'tbl_gl_list'");
 
-						$gl_qry = $conn->query("SELECT gl_id, MAX(gl_id) AS max_gl_id FROM tbl_gl_list;");
-						$gl = $gl_qry->fetch_array();
-						$max_gl_id = sprintf("%03d", $gl['max_gl_id'] + 1);
+							$gr = $gr_qry->fetch_assoc();
+							$gl = $gl_qry->fetch_assoc();
+
+							$max_gr_id = sprintf("%03d", $gr['Auto_increment']);
+							$max_gl_id = sprintf("%03d", $gl['Auto_increment']);
 						?>
 						<p>GR - <input type="text" value="<?php echo $max_gr_id ?>" id="gr_no" name="gr_no" style="border:none;color:black;pointer-events:none;"></p>
-						<!-- <p>GL - <input type="text" value="<?php echo $max_gl_id ?>" id="gl_no" name="gl_no" style="border:none;color:black;pointer-events:none;"></p> -->
-
 					<p  class="m-0"><b>P.O. #:</b></p>
 					<p><input type="text" value="<?php echo $po_no ?>" id="po_no" name="po_no" style="border:none;color:black;pointer-events:none;"></p>
 
@@ -249,7 +250,7 @@ $(document).ready(function() {
 						
 					<?php 
     					$generalLedgerButton = ''; 
-    
+						$doc_no = '';
 						if(isset($id)):
 						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code, i.type, i.item_code
 						FROM approved_order_items o
@@ -272,7 +273,7 @@ $(document).ready(function() {
 								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="hidden" name="doc_no" id="doc_no" value="<?php echo $initialNumber; ?>" readonly>
+								<input type="text" name="doc_no" id="doc_no" value="<?php echo $doc_no; ?>" readonly>
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 								<input type="hidden" name="account_code[]" value="<?php echo $row['account_code'] ?>">
 								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
@@ -321,9 +322,9 @@ $(document).ready(function() {
 						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
 							<br>
-								<input type="hidden" name="account_code_vat" value="<?php echo $row['code'] ?>">
-								<input type="hidden" name="item_code_vat" value="0">
-								<input type="hidden" value="0" name="amount_vat" id="vat_total">
+								<input type="text" name="account_code_vat" value="<?php echo $row['code'] ?>">
+								<input type="text" name="item_code_vat" value="0">
+								<input type="text" value="0" name="amount_vat" id="vat_total">
 							</td>
 						</tr>
 						<?php endwhile;endif; ?>
@@ -468,47 +469,62 @@ $(document).ready(function() {
 	
 </div>
 <script>
-    function calculateAmount(input) {
-        var tr = $(input).closest('.po-item');
-        var delitems = parseFloat(input.value);
-        var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
-        var amount = delitems * unitPrice;
+	function calculateAmount(input) {
+		var tr = $(input).closest('.po-item');
+		var delitems = parseFloat(input.value);
+		var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
+		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
+		var amount = delitems * unitPrice;
 
-       // tr.find('[name="amount[]"]').val(amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-	   tr.find('[name="amount[]"]').val(amount.toFixed(2));
+		tr.find('[name="amount[]"]').val(amount.toFixed(2));
 
+		var vatAmtField = tr.find('[name="vat_amt"]');
+		var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
+		var vatAmount = amount * vatRate;
+		vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        var vatAmtField = tr.find('[name="vat_amt"]');
-        var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
-        var vatAmount = amount * vatRate;
-        vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+		var exVatField = tr.find('[name="ex_vat"]');
+		var exVatValue = vatableValue == 1 ? amount / 1.12 * 0.12 : amount * 0.12;
+		exVatField.val(exVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        var exVatField = tr.find('[name="ex_vat"]');
-        var exVatValue = amount * 0.12;
-        exVatField.val(exVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
-        updateVatTotal();
+		updateVatTotal();
 		updateEWTTotal();
 		updateGR();
-    }
+	}
 
-    function updateVatTotal() {
-        var totalAmount = 0;
+
+	function updateVatTotal() {
+		var totalAmount = 0;
 		var totalVat = 0;
-        $('[name="amount[]"]').each(function() {
-            totalAmount += parseFloat($(this).val().replace(/,/g, ''));
-			totalVat = totalAmount * 0.12;
-        });
+		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
 
-        $('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-    }
+		$('[name="amount[]"]').each(function () {
+			totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+		});
+
+		if (vatableValue == 1) {
+			totalVat = totalAmount / 1.12 * 0.12;
+		} else {
+			totalVat = totalAmount * 0.12;
+		}
+
+		$('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+	}
+
 
 	function updateGR() {
         var totalAmount = 0;
 		var totalGR = 0;
+		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
+
         $('[name="amount[]"]').each(function() {
             totalAmount += parseFloat($(this).val().replace(/,/g, ''));
-			totalVat = totalAmount * 0.12;
+			
+			if (vatableValue == 1) {
+				totalVat = totalAmount / 1.12 * 0.12;
+			} else {
+				totalVat = totalAmount * 0.12;
+			}
 			
 
 			if ($('[name="type[]"]').val() == 1) {
@@ -527,9 +543,16 @@ $(document).ready(function() {
 	function updateEWTTotal() {
 		var totalAmount = 0;
 		var totalEwt = 0;
+		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
 
 		$('[name="amount[]"]').each(function() {
 			totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+
+			if (vatableValue == 1) {
+				totalVat = totalAmount / 1.12 * 0.12;
+			} else {
+				totalVat = totalAmount * 0.12;
+			}
 
 			if ($('[name="type[]"]').val() == 1) {
 				totalEwt = totalAmount * 0.01;

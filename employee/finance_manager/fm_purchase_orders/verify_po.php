@@ -437,7 +437,7 @@ $(document).ready(function() {
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
 										</tr>
-										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
 									</table>
 								</tr>
 							</tr>
@@ -779,47 +779,7 @@ $('input[name="vatType"]').change(function() {
 			_autocomplete(item, selectedSupplierId);
 		});
 	});
-	$(document).ready(function() {
-		$("#supplier_id").change(function() {
-			$('[name="vatable"]').val('');
-
-			var selectedOption = $(this).find("option:selected");
-			var vatable = selectedOption.data("vatable");
-
-			if (vatable !== null) {
-				$('[name="vatable"]').val(vatable);
-			}
-
-			var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
-			var discount = (subtotal * vatable) / 100;
-
-			$('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
-
-			var total = subtotal - discount;
-
-			$('#total').text(total.toLocaleString('en-US'));
-			tax_perc = $('[name="vatable"]').val();
-
-			var taxLabel = $('#tax_label');
-			console.log('tax_perc:', tax_perc);
-
-			if (tax_perc === '0') {
-				taxLabel.text('Non-VAT');
-			} else if (tax_perc === '1') {
-				taxLabel.text('Inclusive');
-			} else if (tax_perc === '2') {
-				taxLabel.text('Exclusive');
-			} else if (tax_perc === '3') {
-				taxLabel.text('Zero rated');
-			} else {
-				taxLabel.text('');
-				//console.log('Unexpected tax percentage value:', tax_perc);
-				//alert('Oops! Looks like there\'s no tax group set for this supplier. Please make sure to assign the correct tax group.');
-			}
-		});
-
-		$("#supplier_id").trigger("change");
-	});
+	
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 		var tr = $('#item-clone tr').clone()

@@ -258,85 +258,16 @@ $(document).ready(function() {
                             <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="form-group col-md-4">
-                            <label for="account_id" class="control-label">Account Name:</label>
-                            <select id="account_id" class="form-control form-control-sm form-control-border select2">
-                            <option value="" disabled selected></option>
-							<?php 
-							$accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-							$currentGroup = null;
-							$groupedAccounts = array();
-
-							while($row = $accounts->fetch_assoc()):
-								$account_arr[$row['id']] = $row;
-
-								if ($row['gname'] != $currentGroup) {
-									
-									if ($currentGroup !== null) {
-										echo '</optgroup>';
-
-										foreach ($groupedAccounts[$currentGroup] as $account) {
-											echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
-										}
-
-										$groupedAccounts[$currentGroup] = array();
-									}
-
-									echo '<optgroup label="' . $row['gname'] . '">';
-									$currentGroup = $row['gname'];
-								}
-
-								$groupedAccounts[$currentGroup][] = $row;
-							endwhile;
-
-							if ($currentGroup !== null) {
-								echo '</optgroup>';
-
-								foreach ($groupedAccounts[$currentGroup] as $account) {
-									echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
-								}
-							}
-							?>
-						</select>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="account_code" class="control-label">Account Code:</label>
-                            <input type="text" id="account_code" name="account_code" class="form-control form-control-sm form-control-border rounded-0">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="group_id" class="control-label">Account Group:</label>
-                            <select id="group_id" class="form-control form-control-sm form-control-border select2">
-                                <option value="" disabled selected></option>
-                                <?php 
-                                $groups = $conn->query("SELECT * FROM `group_list` where delete_flag = 0 and `status` = 1 order by `name` asc ");
-                                while($row = $groups->fetch_assoc()):
-                                    unset($row['description']);
-                                    $group_arr[$row['id']] = $row;
-                                ?>
-                                <option value="<?= $row['id'] ?>" data-group-name="<?= $row['name'] ?>"><?= $row['name'] ?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row align-items-end">
-                        <div class="form-group col-md-12">
-                            <label for="amount" class="control-label">Amount:</label>
-                            <input type="number" step="any" id="amount" class="form-control form-control-sm form-control-border text-right">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <button class="btn btn-default bg-navy btn-flat" id="add_to_list" type="button"><i class="fa fa-plus"></i> Add Account</button>
-                        </div>
-                    </div> -->
+                    
                     <?php 
                         if (!isset($id) || $id === null) :
                             
                             $journalId = isset($_GET['id']) ? $_GET['id'] : null;
                             $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
                             $groupedData = array();
-
                             while ($row = $jitems->fetch_assoc()) {
                                 $grId = $row['gr_id'];
+                                $account_name = $row['account'];
                                 $groupedData[$grId][] = $row;
                             }
                         
@@ -346,656 +277,163 @@ $(document).ready(function() {
                     <b>GR #: </b><?= $grId ?>
                     <table id="account_list_<?= $grId ?>" class="table table-bordered tbl_acc">
                     <colgroup>
-        <col width="5%">
-        <!-- <col width="5%"> -->
-        <col width="2%">
-        <col width="43%">
-        <col width="30%">
-        <!-- <col width="10%"> -->
-        <col width="10%">
-        <col width="10%">
+                            <col width="5%">
+                            <!-- <col width="5%"> -->
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="30%">
+                            <!-- <col width="10%"> -->
+                            <col width="10%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="text-center"></th>
+                                <!-- <th class="text-center">Item No.</th> -->
+                                <th class="text-center">Account Code</th>
+                                <th class="text-center">Account Name</th>
+                                <th class="text-center">Location</th>
+                                <!-- <th class="text-center">GR #</th> -->
+                                <th class="text-center">Debit</th>
+                                <th class="text-center">Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($groupData as $row) : ?>
+                            
+                            <tr>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" data-gr-id="account_list_<?= $grId ?>" type="button"><i class="fa fa-times"></i></button>
+                                </td>
+                               
+                                <td class="accountInfo">
+                                <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
+                                <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>" class="amount-textbox">
+                                <span class="account_code"><?= $row['account_code'] ?></span>
+                                <span class="type" style="display:none;"><?= $row['type'] ?></span>
+                                </td>
+                                <td class="">
+                                    <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
+                                        <option value="" disabled selected></option>
+                                        <?php 
+                                        $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
+                                        $currentGroup = null;
+                                        $groupedAccounts = array();
 
-    </colgroup>
-    <thead>
-        <tr>
-            <th class="text-center"></th>
-            <!-- <th class="text-center">Item No.</th> -->
-            <th class="text-center">Account Code</th>
-            <th class="text-center">Account Name</th>
-            <th class="text-center">Location</th>
-            <!-- <th class="text-center">Group</th> -->
-            <!-- <th class="text-center">Item Type</th> -->
-            <th class="text-center">Debit</th>
-            <th class="text-center">Credit</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php 
-    $query = "SELECT gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
-    FROM tbl_gl_trans gt INNER JOIN
-    account_list al ON gt.account = al.code 
-    INNER JOIN group_list gl ON al.group_id = gl.id 
-    WHERE gt.gr_id = $grId";
-    $qry = $conn->query($query);
-    while ($row = $qry->fetch_assoc()):
-        $account_code = $row['account']; 
-        $account_name = $row['name'];
-        $alId = $row['alId'];
-        $glId = $row['glId'];
-        $glType = $row['type'];
-        $amount = $row['amount'];
+                                        while($account = $accounts->fetch_assoc()):
+                                        ?>
+                                            <option value="<?= $account['id'] ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-gr-id="<?= $row['gr_id'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($row['account_id'] == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
 
-        if($account_name == 'Deferred Input VAT'){
-             $iEWT = $row['amount'];
-        }
+                                        <?php endwhile; ?>
+                                    </select>
+                                </td>
+                                <td class="">
+                                <div class="loc-cont">
+                                <label class="control-label">Phase: </label>
+                                <select name="phase[]" id="phase[]" class="phase">
+                                <?php 
+                                    $meta = array();
+                                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                    while($row1 = $cat->fetch_assoc()):
+                                ?>
+                                    <?php
+                                        echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                    ?>
+                                    <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
+                                <?php
+                                    endwhile;
+                                ?>
+                                </select>
+                                    <label class="control-label">Block: </label>
+                                    <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
+                                    <label class="control-label">Lot: </label>
+                                    <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
+                                    <div class="lotExistsMsg" style="color: #ff0000;"></div>
 
-        if($account_name == 'GR/IR'){
-            $n_apTotal = $row['amount'];
-        }
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('.lot, .block, .phase').on('input', function () {
+                                                var currentRow = $(this).closest('td');
 
-        if($account_name == 'Deferred Expanded Withholding Tax Payable'){
-            $e_total = $row['amount'];
-        }
+                                                var enteredPhase = currentRow.find('.phase').val();
+                                                var enteredBlock = currentRow.find('.block').val();
+                                                var enteredLot = currentRow.find('.lot').val();
 
-        if ($account_name === 'Deferred Input VAT') {
-            continue; 
-        }
-        $allowed_accounts = [
-            'Deferred Expanded Withholding Tax Payable',
-            'GR/IR',
-            'Deferred Input VAT',
-            'Input VAT',
-            'Accounts Payable Trade',
-            'Expanded Withholding Tax Payable'
-        ];
+                                                console.log("AJAX Data:", {
+                                                    phase: enteredPhase,
+                                                    block: enteredBlock,
+                                                    lot: enteredLot
+                                                });
 
-        if (!in_array($account_name, $allowed_accounts)) {
-            continue; 
-        }
-       ?>
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: 'journals/check_loc.php',
+                                                    data: JSON.stringify({
+                                                        phase: enteredPhase,
+                                                        block: enteredBlock,
+                                                        lot: enteredLot
+                                                    }),
+                                                    contentType: 'application/json', 
+                                                    success: function (response) {
+                                                        console.log("AJAX Response:", response);
+                                                        var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                                        
+                                                        
+                                                            lotExistsMsg.html(response);
+                                                        
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                                </td>
+                                <!-- <td class="group"><?= $row['gr_id'] ?></td> -->
+                                
 
-    <tr>
-        <td class="text-center">
-            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-        </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $account_code ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
-            <input type="hidden" name="gr_id[]" value="<?php echo $grId ?>">
-            <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $amount; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
+                                <td class="debit_amount text-right">
+                                    <?php if ($row['account'] == 'GR/IR' || $row['account'] == 'Deferred Expanded Withholding Tax Payable' || ($row['type'] == 1 && $row['account'] != 'Deferred Input VAT')): ?>
+                                        <input type="text" class="debit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
+                                    <?php else : ?>
+                                        <input type="text" class="debit-amount-input" value="" oninput="updateAmount(this)">
+                                    <?php endif; ?>
+                                </td>
+                                <td class="credit_amount text-right">
+                                    <?php if ($row['type'] == 2 && $row['account'] != 'GR/IR' && $row['account'] != 'Deferred Expanded Withholding Tax Payable' || $row['account'] == 'Deferred Input VAT') : ?>
+                                        <input type="text" class="credit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
+                                    <?php else : ?>
+                                        <input type="text" class="credit-amount-input" value="" oninput="updateAmount(this)">
+                                    <?php endif; ?>
+                                </td>
 
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $grId ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
-        </td>
-        <td class="">
-            <div class="loc-cont">
-            <label class="control-label">Phase: </label>
-            <select name="phase[]" class="phase">
-                <?php 
-                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                while ($row = $cat->fetch_assoc()):
-                    $cat_name[$row['c_code']] = $row['c_acronym'];
-                    $code = $row['c_code'];
-                ?>
-                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label class="control-label">Block: </label>
-            <input type="text" class="block" name="block[]" value="">
-            <label class="control-label">Lot: </label>
-            <input type="text" class="lot" name="lot[]" value="">
-            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-            </div>
-            <script>
-            $(document).ready(function () {
-                $('.lot, .block, .phase').on('input', function () {
-                    var currentRow = $(this).closest('td');
-
-                    var enteredPhase = currentRow.find('.phase').val();
-                    var enteredBlock = currentRow.find('.block').val();
-                    var enteredLot = currentRow.find('.lot').val();
-
-                    console.log("AJAX Data:", {
-                        phase: enteredPhase,
-                        block: enteredBlock,
-                        lot: enteredLot
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'journals/check_loc.php',
-                        data: JSON.stringify({
-                            phase: enteredPhase,
-                            block: enteredBlock,
-                            lot: enteredLot
-                        }),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            console.log("AJAX Response:", response);
-                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                            lotExistsMsg.html(response);
-                        }
-                    });
-                });
-            });
-            </script>
-        </td>
-        <td class="debit_amount text-right">
-            <?php if ($account_name == 'GR/IR' || $account_name == 'Deferred Expanded Withholding Tax Payable' || ($glType == 1 && $account_name != 'Deferred Input VAT')): ?>
-                <input type="text" class="debit_amount" value="<?php echo number_format($amount, 2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2 && $account_name != 'GR/IR' && $account_name != 'Deferred Expanded Withholding Tax Payable' || $account_name == 'Deferred Input VAT') : ?>
-                <input type="text" class="credit_amount" value="<?php echo number_format($amount, 2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-
-    <?php 
-    $query_iv = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
-    FROM `account_list` al
-    JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.name = 'Input VAT';
-    ";
-
-    $qry_iv = $conn->query($query_iv);
-    while ($row_iv = $qry_iv->fetch_assoc()):
-        $groupname = $row_iv['group_name'];
-        $glId = $row_iv['group_id'];
-        $alId = $row_iv['id'];
-        $glType = $row_iv['type'];
-        $account_name = $row_iv['name'];
-    ?>
-    <tr>
-        <td class="text-center">
-            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-        </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_iv["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-            <td class="accountInfo">
-            <input type="hidden" name="gr_id[]" value="<?php echo $grId ?>">
-            <input type="hidden" name="account_code[]" value="<?php echo $row_iv["code"] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $grId ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
-        </td>
-        <td class="">
-            <div class="loc-cont">
-            <label class="control-label">Phase: </label>
-            <select name="phase[]" class="phase">
-                <?php 
-                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                while ($row = $cat->fetch_assoc()):
-                    $cat_name[$row['c_code']] = $row['c_acronym'];
-                    $code = $row['c_code'];
-                ?>
-                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label class="control-label">Block: </label>
-            <input type="text" class="block" name="block[]" value="">
-            <label class="control-label">Lot: </label>
-            <input type="text" class="lot" name="lot[]" value="">
-            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-            </div>
-            <script>
-            $(document).ready(function () {
-                $('.lot, .block, .phase').on('input', function () {
-                    var currentRow = $(this).closest('td');
-
-                    var enteredPhase = currentRow.find('.phase').val();
-                    var enteredBlock = currentRow.find('.block').val();
-                    var enteredLot = currentRow.find('.lot').val();
-
-                    console.log("AJAX Data:", {
-                        phase: enteredPhase,
-                        block: enteredBlock,
-                        lot: enteredLot
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'journals/check_loc.php',
-                        data: JSON.stringify({
-                            phase: enteredPhase,
-                            block: enteredBlock,
-                            lot: enteredLot
-                        }),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            console.log("AJAX Response:", response);
-                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                            lotExistsMsg.html(response);
-                        }
-                    });
-                });
-            });
-            </script>
-        </td>
-        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($iEWT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($iEWT,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-
-    <?php 
-    $query_ap = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
-    FROM `account_list` al
-    JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.name = 'Accounts Payable Trade';
-    ";
-
-    $qry_ap = $conn->query($query_ap);
-    while ($row_ap = $qry_ap->fetch_assoc()):
-        $groupname = $row_ap['group_name'];
-        $glId = $row_ap['group_id'];
-        $alId = $row_ap['id'];
-        $glType = $row_ap['type'];
-        $account_name = $row_ap['name'];
-    ?>
-    <tr>
-        <td class="text-center">
-            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-        </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ap["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
-            <input type="hidden" name="gr_id[]" value="<?php echo $grId ?>">
-            <input type="hidden" name="account_code[]" value="<?php echo $row_ap["code"] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $n_apTotal?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $grId ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
-        </td>
-        <td class="">
-            <div class="loc-cont">
-            <label class="control-label">Phase: </label>
-            <select name="phase[]" class="phase">
-                <?php 
-                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                while ($row = $cat->fetch_assoc()):
-                    $cat_name[$row['c_code']] = $row['c_acronym'];
-                    $code = $row['c_code'];
-                ?>
-                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label class="control-label">Block: </label>
-            <input type="text" class="block" name="block[]" value="">
-            <label class="control-label">Lot: </label>
-            <input type="text" class="lot" name="lot[]" value="">
-            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-            </div>
-            <script>
-            $(document).ready(function () {
-                $('.lot, .block, .phase').on('input', function () {
-                    var currentRow = $(this).closest('td');
-
-                    var enteredPhase = currentRow.find('.phase').val();
-                    var enteredBlock = currentRow.find('.block').val();
-                    var enteredLot = currentRow.find('.lot').val();
-
-                    console.log("AJAX Data:", {
-                        phase: enteredPhase,
-                        block: enteredBlock,
-                        lot: enteredLot
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'journals/check_loc.php',
-                        data: JSON.stringify({
-                            phase: enteredPhase,
-                            block: enteredBlock,
-                            lot: enteredLot
-                        }),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            console.log("AJAX Response:", response);
-                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                            lotExistsMsg.html(response);
-                        }
-                    });
-                });
-            });
-            </script>
-        </td>
-        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($n_apTotal,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($n_apTotal,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($n_apTotal,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-
-    <?php 
-    $query_ewt = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
-    FROM `account_list` al
-    JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.name = 'Expanded Withholding Tax Payable';
-    ";
-
-    $qry_ewt = $conn->query($query_ewt);
-    while ($row_ewt = $qry_ewt->fetch_assoc()):
-        $groupname = $row_ewt['group_name'];
-        $glId = $row_ewt['group_id'];
-        $alId = $row_ewt['id'];
-        $glType = $row_ewt['type'];
-        $account_name = $row_ewt['name'];
-    ?>
-    <tr>
-        <td class="text-center">
-            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-        </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ewt["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
-            <td class="accountInfo">
-            <input type="hidden" name="gr_id[]" value="<?php echo $grId ?>">
-            <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $grId ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
-        </td>
-        <td class="">
-            <div class="loc-cont">
-            <label class="control-label">Phase: </label>
-            <select name="phase[]" class="phase">
-                <?php 
-                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                while ($row = $cat->fetch_assoc()):
-                    $cat_name[$row['c_code']] = $row['c_acronym'];
-                    $code = $row['c_code'];
-                ?>
-                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label class="control-label">Block: </label>
-            <input type="text" class="block" name="block[]" value="">
-            <label class="control-label">Lot: </label>
-            <input type="text" class="lot" name="lot[]" value="">
-            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-            </div>
-            <script>
-            $(document).ready(function () {
-                $('.lot, .block, .phase').on('input', function () {
-                    var currentRow = $(this).closest('td');
-
-                    var enteredPhase = currentRow.find('.phase').val();
-                    var enteredBlock = currentRow.find('.block').val();
-                    var enteredLot = currentRow.find('.lot').val();
-
-                    console.log("AJAX Data:", {
-                        phase: enteredPhase,
-                        block: enteredBlock,
-                        lot: enteredLot
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'journals/check_loc.php',
-                        data: JSON.stringify({
-                            phase: enteredPhase,
-                            block: enteredBlock,
-                            lot: enteredLot
-                        }),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            console.log("AJAX Response:", response);
-                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                            lotExistsMsg.html(response);
-                        }
-                    });
-                });
-            });
-            </script>
-        </td>
-        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
-        <td class="debit_amount text-right">
-            <?php if ($glType == 1) : ?>
-                <input type="text" class="debit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2) : ?>
-                <input type="text" class="credit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-
-    <?php 
-    $query = "SELECT gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
-    FROM tbl_gl_trans gt INNER JOIN
-    account_list al ON gt.account = al.code 
-    INNER JOIN group_list gl ON al.group_id = gl.id 
-    WHERE gt.gr_id = $grId";
-    $qry = $conn->query($query);
-    while ($row = $qry->fetch_assoc()):
-        $account_code = $row['account']; 
-        $account_name = $row['name'];
-        $alId = $row['alId'];
-        $glId = $row['glId'];
-        $glType = $row['type'];
-        $amount = $row['amount'];
-
-        if($account_name == 'Deferred Input VAT'){
-             $iEWT = $row['amount'];
-        }
-
-        $allowed_accounts = [
-            'Deferred Input VAT'
-        ];
-
-        if (!in_array($account_name, $allowed_accounts)) {
-            continue; 
-        }
-       ?>
-
-    <tr>
-        <td class="text-center">
-            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-        </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $account_code ?>" style="border:none;background-color:transparent;" readonly></td>
-        <td class="accountInfo">
-            <input type="hidden" name="gr_id[]" value="<?php echo $grId ?>">
-            <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $amount; ?>" class="amount-textbox">
-            <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
-            <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
-                <option value="" disabled selected></option>
-                <?php 
-                $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                $currentGroup = null;
-                $groupedAccounts = array();
-
-                while($account = $accounts->fetch_assoc()):
-                ?>
-                    <option value="<?= $account['id'] ?>" data-gr-id="<?= $grId ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                <?php endwhile; ?>
-            </select>
-        </td>
-        <td class="">
-            <div class="loc-cont">
-            <label class="control-label">Phase: </label>
-            <select name="phase[]" class="phase">
-                <?php 
-                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                while ($row = $cat->fetch_assoc()):
-                    $cat_name[$row['c_code']] = $row['c_acronym'];
-                    $code = $row['c_code'];
-                ?>
-                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label class="control-label">Block: </label>
-            <input type="text" class="block" name="block[]" value="">
-            <label class="control-label">Lot: </label>
-            <input type="text" class="lot" name="lot[]" value="">
-            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-            </div>
-            <script>
-            $(document).ready(function () {
-                $('.lot, .block, .phase').on('input', function () {
-                    var currentRow = $(this).closest('td');
-
-                    var enteredPhase = currentRow.find('.phase').val();
-                    var enteredBlock = currentRow.find('.block').val();
-                    var enteredLot = currentRow.find('.lot').val();
-
-                    console.log("AJAX Data:", {
-                        phase: enteredPhase,
-                        block: enteredBlock,
-                        lot: enteredLot
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'journals/check_loc.php',
-                        data: JSON.stringify({
-                            phase: enteredPhase,
-                            block: enteredBlock,
-                            lot: enteredLot
-                        }),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            console.log("AJAX Response:", response);
-                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                            lotExistsMsg.html(response);
-                        }
-                    });
-                });
-            });
-            </script>
-        </td>
-        <td class="debit_amount text-right">
-            <?php if ($account_name == 'GR/IR' || $account_name == 'Deferred Expanded Withholding Tax Payable' || ($glType == 1 && $account_name != 'Deferred Input VAT')): ?>
-                <input type="text" class="debit_amount" value="<?php echo number_format($amount, 2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-        <td class="credit_amount text-right">
-            <?php if ($glType == 2 && $account_name != 'GR/IR' && $account_name != 'Deferred Expanded Withholding Tax Payable' || $account_name == 'Deferred Input VAT') : ?>
-                <input type="text" class="credit_amount" value="<?php echo number_format($amount, 2) ?>" oninput="updateAmount(this)">
-            <?php else : ?>
-                <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
-            <?php endif; ?>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-
-</tbody>
-<tfoot>
-    <tr>
-        <td colspan="2"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $grId ?>" type="button">Add Row</button><strong>Total</strong></td>
-
-        <td class="text-right" id="total-debit"></td>
-        <td class="text-right" id="total-credit"></td>
-    </tr>
-</tfoot>
+                            </tr>
+                            <?php 
+                            if ($row['type'] == 2) {
+                                $totalCredit += $row['amount'];
+                            }
+                            if ($row['type'] == 1) {
+                                $totalDebit += $row['amount'];
+                            }
+                            ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4" class="text-right">
+                                    <button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $grId ?>" type="button">Add Row</button>
+                                    TOTAL
+                                </th>
+                                <th class="text-right total_debit">0.00</th>
+                                <th class="text-right total_credit">0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" class="text-center"></th>
+                                <th colspan="2" class="text-center total-balance">0</th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <script>
                     $(document).ready(function () {

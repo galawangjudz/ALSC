@@ -476,7 +476,7 @@ $(document).ready(function() {
 									<th class="p-1 text-right" colspan="5">
 									VAT</th>
 									<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
-									<input type="text" id="copytax" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">
+									<input type="hidden" id="copytax" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">
 								</tr>
 								<tr>
 									<th class="p-1 text-right" colspan="5">Total:</th>
@@ -502,7 +502,7 @@ $(document).ready(function() {
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
 										</tr>
-										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
 									</table>
 								</tr>
 							</tr>
