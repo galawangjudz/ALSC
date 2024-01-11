@@ -91,7 +91,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <div style="background-color:gainsboro;">
-                      <li class="nav-header" onclick="toggleNavList()">
+                      <li class="nav-header">
                         <b><i>File Manager</i></b>
                       </li>
                     </div>
@@ -145,6 +145,27 @@ $level = $_settings->userdata('type');
                       </a>
                     </li>  -->
                     <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/gl/gl" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        General Ledger
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/gl/tran_details" class="nav-link nav-vs">
+                      <i class="nav-icon fas fa-money-bill"></i>
+                        <p>
+                        Transaction Details
+                        </p>
+                      </a>
+                    </li> 
+                    <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>Create Voucher Setup</i></b>
                       </li>
@@ -192,6 +213,8 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                   </ul>
+
+                  
                 </nav>
                 <!-- /.sidebar-menu -->
               </div>

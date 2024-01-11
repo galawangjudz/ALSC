@@ -8,7 +8,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         }
 		$vatableValue = $vatable;
     }
-echo $vatableValue;
+//echo $vatableValue;
 }
 ?>
 <style>
@@ -56,26 +56,25 @@ echo $vatableValue;
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
-
 <?php
+$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
 
-$qry = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
-
-if ($qry->num_rows > 0) {
-    $row = $qry->fetch_assoc();
-    $latestDocNo = $row['max_doc_no'];
-    $newDocNo = '2' . str_pad(($latestDocNo + 1), 5, '0', STR_PAD_LEFT);
-
-    $qry = $conn->query("SELECT * FROM `tbl_gl_trans` WHERE gr_id = '{$_GET['id']}'");
-    if ($qry->num_rows > 0) {
-        $row = $qry->fetch_assoc();
-        $po_id = $row['po_id'];
-        $doc_no = $newDocNo; 
+if ($query) {
+    $row = $query->fetch_assoc();
+    $maxDocNo = $row['max_doc_no'];
+    if ($maxDocNo === null) {
+        $maxDocNo = 0;
     }
+    $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+
+    //echo $newDocNo;
 } else {
-    
+
+    echo "Error executing query: " . $conn->error;
 }
+
 ?>
+
 
 <script>
 $(document).ready(function() {
@@ -249,20 +248,20 @@ $(document).ready(function() {
 					<tbody>
 						
 					<?php 
-    					$generalLedgerButton = ''; 
-						$doc_no = '';
-						if(isset($id)):
+
+					if (isset($id)) :
 						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code, i.type, i.item_code
-						FROM approved_order_items o
-						INNER JOIN item_list i ON o.item_id = i.id
-						WHERE o.po_id = '$id'
-						  AND o.gr_id = (
-							SELECT MAX(gr_id)
-							FROM approved_order_items
-							WHERE po_id = '$id'
-						  );
+							FROM approved_order_items o
+							INNER JOIN item_list i ON o.item_id = i.id
+							WHERE o.po_id = '$id'
+							AND o.gr_id = (
+								SELECT MAX(gr_id)
+								FROM approved_order_items
+								WHERE po_id = '$id'
+							);
 						");
 						echo $conn->error;
+
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 						<tr class="po-item" data-id="">
@@ -273,7 +272,7 @@ $(document).ready(function() {
 								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="text" name="doc_no" id="doc_no" value="<?php echo $doc_no; ?>" readonly>
+								<input type="hidden" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 								<input type="hidden" name="account_code[]" value="<?php echo $row['account_code'] ?>">
 								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
@@ -306,10 +305,10 @@ $(document).ready(function() {
 						?>
 						<!-- <a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="<?php echo $row['gr_id']; ?>"><span class="fa fa-file-export text-secondary"></span> General Ledger</a> -->
 						<?php endwhile;
-						 $generalLedgerButton = '<a class="dropdown-item gl_data" href="javascript:void(0)" data-id ="'.$grIdValue.'"><span class="fa fa-file-export"></span> View GL Journal Entries for this Delivery</a>';
+						 
 						endif;
 						?>
-						<?php echo $generalLedgerButton; ?>
+
 					</tbody>
 					
 					<?php 

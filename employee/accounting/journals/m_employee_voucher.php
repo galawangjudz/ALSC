@@ -20,6 +20,22 @@ if(isset($_GET['id'])){
 }
 $is_new_vn = true;
 
+$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+
+if ($query) {
+    $row = $query->fetch_assoc();
+    $maxDocNo = $row['max_doc_no'];
+    if ($maxDocNo === null) {
+        $maxDocNo = 0;
+    }
+    $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+
+    echo $newDocNo;
+} else {
+
+    echo "Error executing query: " . $conn->error;
+}
+
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
 
@@ -297,10 +313,11 @@ function format_num($number){
                                 </td>
                                
                                 <td class="">
-                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+                                    <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                     <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
                                     <span class="account_code"><?= $row['account_code'] ?></span>
                                 </td>
                                 <td class="">
@@ -415,10 +432,11 @@ function format_num($number){
 
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
-            <input type="hidden" name="account_code[]" value="">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="text" name="account_code[]" value="">
             <input type="hidden" name="account_id[]" value="">
             <input type="hidden" name="group_id[]" value="">
-            <input type="hidden" name="amount[]" value="">
+            <input type="text" name="amount[]" value="">
             <span class="account"></span>
         </td>
         <td class="">

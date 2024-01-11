@@ -10,38 +10,7 @@ $group_arr = [];
         $po_id = $row['po_id'];
         $doc_no = $row['doc_no'];
         }
-$is_new_vn = true;
 
-if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $existing_v_id = $_GET['id'];
-
-    $qry = $conn->query("SELECT v_num FROM `vs_entries` WHERE v_num = $existing_v_id");
-    if ($qry->num_rows > 0) {
-        $row = $qry->fetch_assoc();
-        $v_num = $row['v_num'];
-        $is_new_vn = false;
-    } else {
-        $v_num = 'Selected voucher not found';
-    }
-} else {
-    $qry = $conn->query("SELECT MAX(v_num) AS max_id FROM `vs_entries`");
-    if ($qry->num_rows > 0) {
-        $row = $qry->fetch_assoc();
-        $next_v_num = $row['max_id'] + 1;
-    } else {
-        $next_v_num = 1;
-    }
-    $v_num = str_pad($next_v_num, STR_PAD_LEFT);
-}
-
-$qry1 = $conn->query("SELECT MAX(c_num) AS max_id FROM `cv_entries`");
-if ($qry1->num_rows > 0) {
-    $row = $qry1->fetch_assoc();
-    $next_cv_num = $row['max_id'] + 1;
-} else {
-    $next_cv_num = 1;
-}
-$cv_num = str_pad($next_cv_num, STR_PAD_LEFT);
 ?>
 <?php
 function format_num($number){
@@ -121,7 +90,7 @@ function format_num($number){
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">Transaction Date</th>
+                                <th class="text-center">Journal Date</th>
                                 <th class="text-center">Document Number</th>
                                 <th class="text-center">Supplier</th>
                             </tr>

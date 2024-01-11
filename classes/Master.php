@@ -4023,10 +4023,31 @@ Class Master extends DBConnection {
 		$save = $this->conn->query($sql);
 		if($save){
 			$data = "";
+			$gl_data = "";
 			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
 				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+			}
+
+			foreach ($account_id as $k => $v) {
+				foreach ($doc_no as $key => $doc) {
+					if (!empty($gl_data)) $gl_data .= ", ";
+					$gl_data .= "('{$doc}', '{$amount[$key]}', '{$account_code[$key]}', NOW())";
+				}
+			}
+
+			if(!empty($gl_data)){
+				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `amount`, `account`, `journal_date`) VALUES {$gl_data}";
+				$save_gl = $this->conn->query($gl_sql);
+				if($save_gl){
+					$resp['status'] = 'success';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has successfully added. GL Transactions have been successfully added.";
+					} else {
+						$resp['msg'] = " Voucher Setup has been updated successfully. GL Transactions have been successfully updated.";
+					}
+				}
 			}
 			if(!empty($data)){
 				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
@@ -4574,9 +4595,9 @@ Class Master extends DBConnection {
 		
 		$data .= ", po_no = '{$po_no}' ";
 
-		$data2 .= " '{$po_id}', '{$doc_no}','{$gr_no}','{$account_code_vat}', '{$item_code_vat}', '" . str_replace(',', '', $amount_vat) . "', NOW()";
-		$data3 .= " '{$po_id}', '{$doc_no}','{$gr_no}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt) . "', NOW()";
-		$data4 .= " '{$po_id}', '{$doc_no}','{$gr_no}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr) . "', NOW()";
+		$data2 .= " '{$doc_no}','{$po_id}','{$gr_no}','{$account_code_vat}', '{$item_code_vat}', '" . str_replace(',', '', $amount_vat) . "', NOW()";
+		$data3 .= " '{$doc_no}','{$po_id}','{$gr_no}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt) . "', NOW()";
+		$data4 .= " '{$doc_no}','{$po_id}','{$gr_no}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr) . "', NOW()";
 
 		if (empty($id)) {
 			$sql = "INSERT INTO `po_approved_list` SET {$data} ";
@@ -4584,9 +4605,9 @@ Class Master extends DBConnection {
 			$sql = "UPDATE `po_approved_list` SET {$data} WHERE id = '{$id}' ";
 		}
 	
-		$sql2 = "INSERT INTO `tbl_gl_trans` (`po_id`, `doc_no`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data2})";
-		$sql3 = "INSERT INTO `tbl_gl_trans` (`po_id`, `doc_no`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data3})";
-		$sql4 = "INSERT INTO `tbl_gl_trans` (`po_id`, `doc_no`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data4})";
+		$sql2 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data2})";
+		$sql3 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data3})";
+		$sql4 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data4})";
 	
 		$save1 = $this->conn->query($sql);
 		$save2 = $this->conn->query($sql2);
@@ -4616,14 +4637,14 @@ Class Master extends DBConnection {
 					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$received[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
 	
 					if (!empty($query1)) $query1 .= ",";
-					$query1 .= "('{$po_id}','{$doc_no}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
+					$query1 .= "('{$doc_no}','{$po_id}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
 
 					
 					
 				}
 	
 				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");
-				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`po_id`,`doc_no`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`journal_date`) VALUES {$query1}");
+				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`doc_no`,`po_id`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`journal_date`) VALUES {$query1}");
 				
 	
 				if ($save_order_items && $save_trans) {

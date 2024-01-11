@@ -697,7 +697,7 @@ $('.accountSelect').each(function () {
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="2"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
+        <td colspan="4"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
 
         <td class="text-right" id="total-debit"></td>
         <td class="text-right" id="total-credit"></td>
