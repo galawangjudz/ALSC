@@ -8,17 +8,46 @@ $wtTotal=0;
 $totalCredit = 0;
 $totalDebit = 0;
 $due_date = date('Y-m-d', strtotime('+1 week'));
-if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
-    if($qry->num_rows > 0){
+?>
+<?php
+$publicId = '';
+
+if (isset($_GET['id'])) {
+    $qry = $conn->query("SELECT a.*, b.* FROM `vs_entries` AS a INNER JOIN `tbl_gr_list` AS b ON a.v_num = b.vs_num WHERE a.v_num = '{$_GET['id']}'");
+    if ($qry->num_rows > 0) {
         $res = $qry->fetch_array();
-        foreach($res as $k => $v){
-            if(!is_numeric($k))
-            $$k = $v;
+        $doc_no = $res['doc_no'];
+        foreach ($res as $k => $v) {
+            if (!is_numeric($k)) {
+                $$k = $v;
+            }
         }
+
+        $publicId = $_GET['id'];
     }
+    echo $publicId;
 }
 $is_new_vn = true;
+
+$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+
+if ($query) {
+    $row = $query->fetch_assoc();
+    $maxDocNo = $row['max_doc_no'];
+    if ($maxDocNo === null) {
+        $maxDocNo = 0;
+    }
+    if($publicId > 0){
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
+    }else{
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+    }
+
+    //echo $newDocNo;
+} else {
+
+    echo "Error executing query: " . $conn->error;
+}
 
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
@@ -39,7 +68,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     } else {
         $next_v_number = 1;
     }
-    $v_number = str_pad($next_v_number, STR_PAD_LEFT);
+    $vs_num = str_pad($next_v_number, STR_PAD_LEFT);
+    echo $vs_num;
 }
 ?>
 <?php
@@ -145,31 +175,31 @@ function updateAmount(input) {
     table.find('.total-balance').text(balance.toFixed(2));
 }
 
-$(document).ready(function() {
-    function handleAccountSelectChange() {
-        var selectedOption = $(this).find(':selected');
-        var type = selectedOption.data('type');
+// $(document).ready(function() {
+//     function handleAccountSelectChange() {
+//         var selectedOption = $(this).find(':selected');
+//         var type = selectedOption.data('type');
 
-        var $row = $(this).closest('tr'); 
-        var $debitInput = $row.find('.debit-amount-input');
-        var $creditInput = $row.find('.credit-amount-input');
+//         var $row = $(this).closest('tr'); 
+//         var $debitInput = $row.find('.debit-amount-input');
+//         var $creditInput = $row.find('.credit-amount-input');
 
-        if (type == 1) {
-            $creditInput.prop('disabled', true);
-            $debitInput.prop('disabled', false);
-        } else if (type == 2) {
-            $creditInput.prop('disabled', false);
-            $debitInput.prop('disabled', true);
-        }
-    }
+//         if (type == 1) {
+//             $creditInput.prop('disabled', true);
+//             $debitInput.prop('disabled', false);
+//         } else if (type == 2) {
+//             $creditInput.prop('disabled', false);
+//             $debitInput.prop('disabled', true);
+//         }
+//     }
 
-    $(document).on('change', '.accountSelect', handleAccountSelectChange);
+//     $(document).on('change', '.accountSelect', handleAccountSelectChange);
 
-    $('.accountSelect').each(function () {
-        handleAccountSelectChange.call(this);
-    });
+//     $('.accountSelect').each(function () {
+//         handleAccountSelectChange.call(this);
+//     });
 
-});
+// });
 </script>
 </head>
 
@@ -308,6 +338,8 @@ $(document).ready(function() {
                                
                                 <td class="accountInfo">
                                 <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
+                                <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+                                <input type="text" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
                                 <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
                                 <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                 <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
@@ -392,8 +424,6 @@ $(document).ready(function() {
                                 </div>
                                 </td>
                                 <!-- <td class="group"><?= $row['gr_id'] ?></td> -->
-                                
-
                                 <td class="debit_amount text-right">
                                     <?php if ($row['account'] == 'GR/IR' || $row['account'] == 'Deferred Expanded Withholding Tax Payable' || ($row['type'] == 1 && $row['account'] != 'Deferred Input VAT')): ?>
                                         <input type="text" class="debit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
@@ -455,17 +485,7 @@ $(document).ready(function() {
                             var lastRow = table.find('tbody tr:last');
                             var clone = lastRow.clone();
 
-                            clone.find('input, select, span').val('');
-
-                            clone.find('[name^="phase"]').val(clone.find('[name^="phase"] option:first').val());
-
-                            clone.find('[name^="gr_id"]').val('');
-                            clone.find('[name^="account_code"]').val('');
-                            clone.find('[name^="account_id"]').val('');
-                            clone.find('[name^="group_id"]').val('');
-                            clone.find('[name^="amount"]').val('');
-                            clone.find('.account_code').val('');
-                            clone.find('.type').val('');
+                           
 
                             table.find('tbody').append(clone);
 

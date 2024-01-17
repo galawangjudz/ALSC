@@ -1,5 +1,6 @@
 <?php 
 require_once('../../config.php');
+
 $userid = $_settings->userdata('user_code');
 $account_arr = [];
 $group_arr = [];
@@ -8,17 +9,43 @@ $wtTotal=0;
 $totalCredit = 0;
 $totalDebit = 0;
 $due_date = date('Y-m-d', strtotime('+1 week'));
-if(isset($_GET['id'])){
+$publicId = '';
+
+if (isset($_GET['id'])) {
     $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
-    if($qry->num_rows > 0){
+    if ($qry->num_rows > 0) {
         $res = $qry->fetch_array();
-        foreach($res as $k => $v){
-            if(!is_numeric($k))
-            $$k = $v;
+        foreach ($res as $k => $v) {
+            if (!is_numeric($k)) {
+                $$k = $v;
+            }
         }
+
+        $publicId = $_GET['id'];
     }
+    echo $publicId;
 }
 $is_new_vn = true;
+
+$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+
+if ($query) {
+    $row = $query->fetch_assoc();
+    $maxDocNo = $row['max_doc_no'];
+    if ($maxDocNo === null) {
+        $maxDocNo = 0;
+    }
+    if($publicId > 0){
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
+    }else{
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+    }
+
+    echo $newDocNo;
+} else {
+
+    echo "Error executing query: " . $conn->error;
+}
 
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
@@ -43,6 +70,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 }
 ?>
 <?php
+
 function format_num($number){
 	$decimals = 0;
 	$num_ex = explode('.',$number);
@@ -136,7 +164,7 @@ function format_num($number){
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="po_no">P.O. #: </label>
-                            <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                            <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
                                 <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
                                 <?php 
                                 $po_qry = $conn->query("SELECT * FROM `po_list` WHERE status = 1 ORDER BY `po_no` ASC");
@@ -206,9 +234,7 @@ function format_num($number){
                         </div>
                     </div>
                     <table id="account_list" class="table table-bordered">
-                    
                     </table>
-                    
                 <div class="row">
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
@@ -219,7 +245,6 @@ function format_num($number){
         </div>
     </div>
 </div>
-
 <noscript id="item-clone">
     <tr>
         <td class="text-center">
@@ -228,10 +253,13 @@ function format_num($number){
 
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
-            <input type="hidden" name="account_code[]" value="">
-            <input type="hidden" name="account_id[]" value="">
-            <input type="hidden" name="group_id[]" value="">
-            <input type="hidden" name="amount[]" value="">
+        <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+            <!-- <input type="text" name="account_code[]" value=""> -->
+            <input type="text" name="account_id[]" value="">
+            <input type="text" name="group_id[]" value="">
+            <input type="text" name="amount[]" value="">
             <span class="account"></span>
         </td>
         <td class="">
@@ -700,4 +728,5 @@ $('#zeroAccountCodeModal').modal('show');
     });    
     }
 });
+
 </script>

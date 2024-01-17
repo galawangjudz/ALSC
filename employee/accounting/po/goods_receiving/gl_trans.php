@@ -4,13 +4,21 @@ $account_arr = [];
 $group_arr = [];
 
 
-    $qry = $conn->query("SELECT * FROM `tbl_gl_trans` where gr_id = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT * FROM `tbl_gr_list` where doc_no = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $row = $qry->fetch_assoc();
         $po_id = $row['po_id'];
         $doc_no = $row['doc_no'];
+        $supplier_id = $row['supplier_id'];
+        $vsStats = $row['vs_status'];
+        $vsNo = $row['vs_num'];
         }
-
+echo "PO: " . $po_id . "<br>";
+echo "ID: " . $_GET['id'] . "<br>";
+echo "Doc_No: " . $doc_no . "<br>";;
+echo "Sup: " . $supplier_id . "<br>";;
+echo "vsStats: " . $vsStats . "<br>";;
+echo "vs No: " . $vsNo . "<br>";;
 ?>
 <?php
 function format_num($number){
@@ -96,12 +104,11 @@ function format_num($number){
                             </tr>
                         </thead>
                         <tbody>
-                            
                             <tr style="text-align:center;">
                             <?php 
                             $date_qry = $conn->query("SELECT tran_date
                                                     FROM tbl_gr_list 
-                                                    WHERE gr_id = '{$_GET['id']}'");   
+                                                    WHERE doc_no = '{$_GET['id']}'");   
                             $date = $date_qry->fetch_array();
                             ?>
                                 <td><p class="m-0"><b><?php echo $date['tran_date'] ?></b></p></td>
@@ -109,14 +116,55 @@ function format_num($number){
                                     <p class="m-0"><b><?php echo $doc_no ?></b></p>
                                 </td>
                                 <td>
-                                <?php 
-                            $sup_qry = $conn->query("SELECT s.id, s.name 
-                                                    FROM supplier_list s 
-                                                    INNER JOIN po_approved_list p ON s.id = p.supplier_id 
-                                                    WHERE p.id = '{$po_id}'");   
-                            $supplier = $sup_qry->fetch_array();
-                            ?>
-                                    <p class="m-0"><b><?php echo $supplier['name'] ?></b></p>
+                                <?php
+                                // $sup_qry = $conn->query("SELECT s.id, s.name 
+                                //                             FROM supplier_list s 
+                                //                             INNER JOIN po_approved_list p ON s.id = p.supplier_id 
+                                //                             WHERE p.id = '{$po_id}'");   
+                                $sup_qry = $conn->query("SELECT *
+                                                            FROM supplier_list WHERE id = '{$supplier_id}'");   
+                                    $supplier = $sup_qry->fetch_array();
+
+                                    if ($supplier) {
+                                        ?>
+                                        <p class="m-0"><b><?php echo $supplier['name'] ?></b></p>
+                                        <?php
+                                    } else {
+                                        $emp_qry = $conn->query("SELECT e.lastname, e.firstname
+                                                                FROM users e 
+                                                                INNER JOIN vs_entries p ON e.user_code = p.supplier_id 
+                                                                WHERE p.supplier_id = '{$supplier_id}'");   
+                                        $emp = $emp_qry->fetch_array();
+
+                                        if ($emp) {
+                                            ?>
+                                            <p class="m-0"><b><?php echo strtoupper($emp['firstname'] . ' ' . $emp['lastname']) ?></b></p>
+                                            <?php
+                                        } else {
+                                            $agent_qry = $conn->query("SELECT a.c_last_name, a.c_first_name
+                                                                        FROM t_agents a 
+                                                                        INNER JOIN vs_entries p ON a.c_code = p.supplier_id 
+                                                                        WHERE p.supplier_id = '{$supplier_id}'");   
+                                            $agent = $agent_qry->fetch_array();
+                                            if ($agent) {
+                                                ?>
+                                                <p class="m-0"><b><?php echo strtoupper($agent['c_first_name'] . ' ' . $agent['c_last_name']) ?></b></p>
+                                                <?php
+                                            } else {
+
+                                                $clients_qry = $conn->query("SELECT pp.first_name, pp.last_name
+                                                                            FROM property_clients pp 
+                                                                            INNER JOIN vs_entries p ON pp.client_id = p.supplier_id 
+                                                                            WHERE p.supplier_id = '{$supplier_id}'");   
+                                                $clients = $clients_qry->fetch_array();
+
+                                                ?>
+                                                <p class="m-0"><b><?php echo strtoupper($clients['first_name'] . ' ' . $clients['last_name']) ?></b></p>
+                                                <?php
+                                            }
+                                        }
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -127,7 +175,6 @@ function format_num($number){
                             <col width="5%">
                             <col width="10%">
                             <col width="10%">
-
                             <col width="45%">
                             <col width="10%">
                             <col width="10%">
@@ -145,58 +192,183 @@ function format_num($number){
                                 <th class="text-center">Item Code</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            
-                            <?php 
-                            if (!isset($id) || $id === null) :
-                                $counter = 1;
-                                $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                // $jitems = $conn->query("SELECT gl.amount, gl.journal_date, a.code,a.group_id,g.type,a.name,i.item_code
-                                //     FROM tbl_gl_list l
-                                //     INNER JOIN tbl_gl_items gl ON l.gl_id = gl.gl_id
-                                //     INNER JOIN item_list i ON gl.item_id = i.id
-                                //     INNER JOIN account_list a ON i.account_code = a.code
-                                //     INNER JOIN group_list g ON a.group_id = g.id
-                                //     WHERE gl.gl_id = {$_GET['id']};");
+                      
+                        <?php
+                            $sql = "SELECT tbl_gr_list.supplier_id 
+                                    FROM tbl_gr_list 
+                                    INNER JOIN supplier_list 
+                                    ON tbl_gr_list.supplier_id = supplier_list.id WHERE supplier_list.id = '{$supplier_id}'";
 
-                                $grId = $_GET['id'];
-                                $jitems = $conn->query("SELECT gl.amount, gl.account, gl.journal_date, i.item_code, ac.name, g.type 
-                                                        FROM tbl_gl_trans gl
-                                                        INNER JOIN account_list ac ON gl.account = ac.code
-                                                        INNER JOIN group_list g ON ac.group_id = g.id
-                                                        LEFT JOIN item_list i ON i.id = gl.item_id
-                                                        WHERE gr_id = $grId
-                                                        ORDER BY 
-                                                            g.type,
-                                                            CASE WHEN g.type = 2 THEN gl.account END ASC,
-                                                            i.item_code DESC");
-                                while($row = $jitems->fetch_assoc()):
+                            $result = mysqli_query($conn, $sql);
+
+                            if ($result) {
+                               
+                                $matchedSuppliers = array();
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $matchedSuppliers[] = $row['supplier_id'];
+                                }
+
+                               
+                                if (!empty($matchedSuppliers) && $vsStats != 0) {?>
+                                <tbody>
+                                <?php 
+                                if (!isset($id) || $id === null) :
+                                    $counter = 1;
+                                    $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                    $docNo = $_GET['id'];
+                                    
+                                    $desiredOrder = [
+                                        'GR/IR', 
+                                        'Input VAT', 
+                                        'Deferred Expanded Withholding Tax Payable', 
+                                        'Accounts Payable Trade', 
+                                        'Deferred Input VAT', 
+                                        'Expanded Withholding Tax Payable'
+                                    ];
+                                    
+                                    $typeData = array_fill_keys($desiredOrder, []);
+                                    $otherData = [];
+
+                                    $jitems = $conn->query("SELECT gl.amount, gl.account, gl.journal_date, i.item_code, ac.name, g.type 
+                                                            FROM tbl_gl_trans gl
+                                                            INNER JOIN account_list ac ON gl.account = ac.code
+                                                            INNER JOIN group_list g ON ac.group_id = g.id
+                                                            LEFT JOIN item_list i ON i.id = gl.item_id
+                                                            WHERE doc_no = $docNo
+                                                            ORDER BY 
+                                                                g.type,
+                                                                CASE WHEN g.type = 2 THEN gl.account END ASC,
+                                                                i.item_code DESC");
+                                    
+                                    while ($row = $jitems->fetch_assoc()) {
+                                        $type = $row['name'];
+
+                                        if (in_array($type, $desiredOrder)) {
+                                            $typeData[$type][] = $row;
+                                        } else {
+                                            $otherData[] = $row;
+                                        }
+                                    }
+
+                                   
+                                    usort($otherData, function($a, $b) {
+                                        if ($a['amount'] == $b['amount']) {
+                                            return $a['type'] - $b['type'];
+                                        }
+                                        return $a['amount'] - $b['amount'];
+                                    });
+                                    foreach ($desiredOrder as $type) {
+                                        foreach ($typeData[$type] as $row) :
+                                        ?>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;">
+                                                        </td>
+                                                        <td class="">
+                                                            <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;">
+                                                        </td>
+                                                        <td class="">
+                                                            <span><?= $row['name'] ?></span>
+                                                        </td>
+                                                        <?php if ($row['name'] == 'GR/IR'): ?>
+                                                            <td class="debit_amount text-right"><?= number_format($row['amount'], 2) ?></td>
+                                                            <td class="credit_amount text-right"></td>
+                                                        <?php elseif ($row['name'] == 'Deferred Expanded Withholding Tax Payable'): ?>
+                                                            <td class="debit_amount text-right"><?= number_format($row['amount'], 2) ?></td>
+                                                            <td class="credit_amount text-right"></td>
+                                                        <?php elseif ($row['name'] == 'Input VAT'): ?>
+                                                            <td class="debit_amount text-right"><?= number_format($row['amount'], 2) ?></td>
+                                                            <td class="credit_amount text-right"></td>
+                                                        <?php elseif ($row['name'] == 'Deferred Input VAT'): ?>
+                                                            <td class="debit_amount text-right"></td>
+                                                            <td class="credit_amount text-right"><?= number_format($row['amount'], 2) ?></td>
+                                                        <?php else: ?>
+                                                            <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                                            <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
+                                                        <?php endif; ?>
+                                                        <td class="text-right"><?= $row['item_code'] ?></td>
+                                                    </tr>
+                                                <?php 
+                                                    $counter++;
+                                                endforeach;
+                                            }
+                                        endif;
+
+                                        foreach ($otherData as $row) :
+                                            ?>
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;">
+                                                    </td>
+                                                    <td class="">
+                                                        <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;">
+                                                    </td>
+                                                    <td class="">
+                                                        <span><?= $row['name'] ?></span>
+                                                    </td>
+                                                    <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                                    <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
+                                                    <td class="text-right"><?= $row['item_code'] ?></td>
+                                                </tr>
+                                            <?php
+                                                $counter++;
+                                            endforeach;
+                                            
+                                    ?>
+                                    
+                                </tbody>
+                                <?php 
+                                } else {?>
+                                <tbody>
+                                <?php 
+                                if (!isset($id) || $id === null) :
+                                    $counter = 1;
+                                    $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                    $docNo = $_GET['id'];
+                                    $jitems = $conn->query("SELECT gl.amount, gl.account, gl.journal_date, i.item_code, ac.name, g.type 
+                                                            FROM tbl_gl_trans gl
+                                                            INNER JOIN account_list ac ON gl.account = ac.code
+                                                            INNER JOIN group_list g ON ac.group_id = g.id
+                                                            LEFT JOIN item_list i ON i.id = gl.item_id
+                                                            WHERE doc_no = $docNo
+                                                            ORDER BY 
+                                                                g.type,
+                                                                CASE WHEN g.type = 2 THEN gl.account END ASC,
+                                                                i.item_code DESC");
+                                    while($row = $jitems->fetch_assoc()):
+                                ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;">
+                                    </td>
+                                    <td class="">
+                                        <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;">
+    
+                                    </td>
+                                    <td class="">
+                                        <span><?= $row['name'] ?></span>
+                                    </td>
+                                    <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                    <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
+                                    <td class="text-right"><?= $row['item_code'] ?></td>
+                                </tr>
+                                <?php 
+                                $counter++;
+                                endwhile; ?>
+                                <?php endif; ?> 
+                            </tbody>
+                            <?php }
+                            }
                             ?>
-                            <tr>
-                                
-                                <td class="text-center">
-                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;">
-                                </td>
-                                <td class="">
-                                    <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;">
-
-                                </td>
-                                <td class="">
-                                    <span><?= $row['name'] ?></span>
-                                </td>
-
-                                <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
-                                <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
-                                <td class="text-right"><?= $row['item_code'] ?></td>
-                            </tr>
-                            <?php 
-                            $counter++;
-                            endwhile; ?>
-                            <?php endif; ?>
-                        </tbody>
                         <tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
@@ -217,10 +389,7 @@ function format_num($number){
         </div>
     </div>
 </div>
-
 </body>
-
-
 <script>
     var account = $.parseJSON('<?= json_encode($account_arr) ?>');
     var group = $.parseJSON('<?= json_encode($group_arr) ?>');

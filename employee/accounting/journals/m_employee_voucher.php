@@ -8,16 +8,24 @@ $wtTotal=0;
 $totalCredit = 0;
 $totalDebit = 0;
 $due_date = date('Y-m-d', strtotime('+1 week'));
-if(isset($_GET['id'])){
+
+$publicId = '';
+
+if (isset($_GET['id'])) {
     $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
-    if($qry->num_rows > 0){
+    if ($qry->num_rows > 0) {
         $res = $qry->fetch_array();
-        foreach($res as $k => $v){
-            if(!is_numeric($k))
-            $$k = $v;
+        foreach ($res as $k => $v) {
+            if (!is_numeric($k)) {
+                $$k = $v;
+            }
         }
+
+        $publicId = $_GET['id'];
     }
+    echo $publicId;
 }
+
 $is_new_vn = true;
 
 $query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
@@ -28,7 +36,11 @@ if ($query) {
     if ($maxDocNo === null) {
         $maxDocNo = 0;
     }
-    $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+    if($publicId > 0){
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
+    }else{
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+    }
 
     echo $newDocNo;
 } else {
@@ -182,14 +194,14 @@ function format_num($number){
                                                 <option 
                                                     value="<?php echo $row['user_id'] ?>" 
                                                     data-emp-code="<?php echo $row['user_code'] ?>"
-                                                    <?php echo isset($supplier_id) && $supplier_id == $row['user_id'] ? 'selected' : '' ?>
+                                                    <?php echo isset($supplier_id) && $supplier_id == $row['user_code'] ? 'selected' : '' ?>
                                                 ><?php echo $row['lastname'] ?>, <?php echo $row['firstname'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </td>
                                         <td style="width:50%; padding-left: 10px;"> 
                                             <label for="emp_code" class="control-label">Employee Code:</label>
-                                            <input type="text" id="emp_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                                            <input type="text" name="emp_id" id="emp_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                         </td>
                                     </tr>
                                 </table>
@@ -304,7 +316,7 @@ function format_num($number){
                             if (!isset($id) || $id === null) :
                                
                                 $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
+                                $jitems = $conn->query("SELECT j.*, a.code AS account_code, a.name AS account, g.name AS `group`, g.type, glt.doc_no FROM `vs_items` j INNER JOIN account_list a ON j.account_id = a.id INNER JOIN group_list g ON j.group_id = g.id INNER JOIN tbl_gr_list glt ON j.journal_id = glt.vs_num WHERE j.journal_id ='{$journalId}'");
                                 while($row = $jitems->fetch_assoc()):
                             ?>
                             <tr>
@@ -313,7 +325,8 @@ function format_num($number){
                                 </td>
                                
                                 <td class="">
-                                    <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+                                    <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+                                    <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
                                     <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                     <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
@@ -432,8 +445,9 @@ function format_num($number){
 
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
+            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
             <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
-            <input type="text" name="account_code[]" value="">
+            <!-- <input type="text" name="account_code[]" value=""> -->
             <input type="hidden" name="account_id[]" value="">
             <input type="hidden" name="group_id[]" value="">
             <input type="text" name="amount[]" value="">

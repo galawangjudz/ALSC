@@ -111,7 +111,7 @@ function format_num($number){
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
-					<col width="15%">
+					<!-- <col width="15%"> -->
 					<col width="45%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
@@ -120,7 +120,7 @@ function format_num($number){
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <th>P.O. #</th>
+                        <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
                         <!-- <th>Preparer</th> -->
 						<th>Action</th>
@@ -138,7 +138,7 @@ function format_num($number){
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-						<td class=""><?= $row['po_no'] ?></td>
+						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['sname'] ?></td>
 
@@ -168,7 +168,7 @@ function format_num($number){
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
-					<col width="15%">
+					<!-- <col width="15%"> -->
 					<col width="45%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
@@ -177,7 +177,7 @@ function format_num($number){
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <th>P.O. #</th>
+                        <!-- <th>P.O. #</th> -->
 						<th>Agent Name</th>
                         <!-- <th>Preparer</th> -->
 						<th>Action</th>
@@ -195,7 +195,7 @@ function format_num($number){
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-						<td class=""><?= $row['po_no'] ?></td>
+						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
 
@@ -224,7 +224,7 @@ function format_num($number){
 			<table class="table table-hover table-striped table-bordered" id="emp-div">
 				<colgroup>
 					<col width="15%">
-					<col width="15%">
+					<!-- <col width="15%"> -->
 					<col width="15%">
 					<col width="45%">
 					<!-- <col width="15%"> -->
@@ -234,7 +234,7 @@ function format_num($number){
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <th>P.O. #</th>
+                        <!-- <th>P.O. #</th> -->
 						<th>Employee Name</th>
                         <!-- <th>Preparer</th> -->
 						<th>Action</th>
@@ -246,13 +246,13 @@ function format_num($number){
 					
 					//$users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					//$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_id order by date(journal_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_code order by date(journal_date) asc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-						<td class=""><?= $row['po_no'] ?></td>
+						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
 
@@ -282,7 +282,7 @@ function format_num($number){
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
-					<col width="15%">
+					<!-- <col width="15%"> -->
 					<col width="45%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
@@ -291,7 +291,7 @@ function format_num($number){
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <th>P.O. #</th>
+                        <!-- <th>P.O. #</th> -->
 						<th>Client Name</th>
                         <!-- <th>Preparer</th> -->
 						<th>Action</th>
@@ -309,7 +309,7 @@ function format_num($number){
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-						<td class=""><?= $row['po_no'] ?></td>
+						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['last_name'] ?>, <?= $row['first_name'] ?></td>
 

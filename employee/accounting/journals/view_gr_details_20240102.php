@@ -3,18 +3,14 @@ require_once('../../../config.php');
 if (isset($_POST['gr_id'])) {
     $gr_id = $_POST['gr_id'];
 }
-
 ?>
 <script>
-  
 function handleAccountSelectChange() {
     var selectedOption = $(this).find(':selected');
     var type = selectedOption.data('type');
-
     var $row = $(this).closest('tr');
     var $debitInput = $row.find('.debit_amount');
     var $creditInput = $row.find('.credit_amount');
-
     if (type == 1) {
         $creditInput.prop('disabled', true);
         $debitInput.prop('disabled', false);
@@ -26,9 +22,7 @@ function handleAccountSelectChange() {
         $creditInput.prop('disabled', false);
     }
 }
-
 $(document).on('change', '.accountSelect', handleAccountSelectChange);
-
 
 $('.accountSelect').each(function () {
     handleAccountSelectChange.call(this);
@@ -36,27 +30,84 @@ $('.accountSelect').each(function () {
 
 </script>
 
+<?php
+$publicId = '';
+
+if (isset($_GET['id'])) {
+    $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
+    if ($qry->num_rows > 0) {
+        $res = $qry->fetch_array();
+        foreach ($res as $k => $v) {
+            if (!is_numeric($k)) {
+                $$k = $v;
+            }
+        }
+
+        $publicId = $_GET['id'];
+    }
+    echo $publicId;
+}
+$is_new_vn = true;
+
+$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+
+if ($query) {
+    $row = $query->fetch_assoc();
+    $maxDocNo = $row['max_doc_no'];
+    if ($maxDocNo === null) {
+        $maxDocNo = 0;
+    }
+    if($publicId > 0){
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
+    }else{
+        $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+    }
+
+    echo $newDocNo;
+} else {
+
+    echo "Error executing query: " . $conn->error;
+}
+
+if (isset($_GET['id']) && $_GET['id'] > 0) {
+    $existing_v_id = $_GET['id'];
+
+    $qry = $conn->query("SELECT v_num FROM `vs_entries` WHERE v_num = $existing_v_id");
+    if ($qry->num_rows > 0) {
+        $row = $qry->fetch_assoc();
+        $v_number = $row['v_num'];
+        $is_new_vn = false;
+    } else {
+        $v_number = 'Selected voucher not found';
+    }
+} else {
+    $qry = $conn->query("SELECT MAX(v_num) AS max_id FROM `vs_entries`");
+    if ($qry->num_rows > 0) {
+        $row = $qry->fetch_assoc();
+        $next_v_number = $row['max_id'] + 1;
+    } else {
+        $next_v_number = 1;
+    }
+    $vs_num = str_pad($next_v_number, STR_PAD_LEFT);
+    echo $vs_num;
+}
+?>
+<body>
 <table class="table-bordered tbl_acc" style="width: 100%" data-gr-id="<?php echo $gr_id; ?>" id="account_list_<?= $gr_id ?>" >
     <colgroup>
         <col width="5%">
-        <!-- <col width="5%"> -->
         <col width="2%">
         <col width="43%">
         <col width="30%">
-        <!-- <col width="10%"> -->
         <col width="10%">
         <col width="10%">
-
     </colgroup>
     <thead>
         <tr>
             <th class="text-center"></th>
-            <!-- <th class="text-center">Item No.</th> -->
             <th class="text-center">Account Code</th>
             <th class="text-center">Account Name</th>
             <th class="text-center">Location</th>
-            <!-- <th class="text-center">Group</th> -->
-            <!-- <th class="text-center">Item Type</th> -->
             <th class="text-center">Debit</th>
             <th class="text-center">Credit</th>
         </tr>
@@ -64,7 +115,7 @@ $('.accountSelect').each(function () {
     <tbody>
     <?php 
     $id = $gr_id;
-    $query = "SELECT po.vatable, gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
+    $query = "SELECT po.po_no, po.vatable, gt.amount, gt.account, gt.item_code, al.name,al.id AS alId, gl.id AS glId,gl.type
     FROM tbl_gl_trans gt INNER JOIN
     account_list al ON gt.account = al.code 
     INNER JOIN po_approved_list po ON
@@ -80,19 +131,16 @@ $('.accountSelect').each(function () {
         $glType = $row['type'];
         $amount = $row['amount'];
         $vat = $row['vatable'];
-
+        $po_no = $row['po_no'];
         if($account_name == 'Deferred Input VAT'){
              $iEWT = $row['amount'];
         }
-
         if($account_name == 'GR/IR'){
             $n_apTotal = $row['amount'];
         }
-
         if($account_name == 'Deferred Expanded Withholding Tax Payable'){
             $e_total = $row['amount'];
         }
-
         if ($account_name === 'Deferred Input VAT') {
             continue; 
         }
@@ -109,20 +157,21 @@ $('.accountSelect').each(function () {
             continue; 
         }
        ?>
-
     <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $account_code ?>" style="border:none;background-color:transparent;" readonly></td>
+        <td class="account_code"><input type="text" value="<?php echo $account_code ?>" style="border:none;background-color:transparent;" readonly></td>
         <td class="accountInfo">
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
-            <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
-            <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
-            <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="hidden" name="amount[]" value="<?php echo $amount; ?>" class="amount-textbox">
+            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="text" name="account_code[]" value="<?php echo $row['account'] ?>">
+            <input type="text" name="account_id[]" value="<?php echo $alId; ?>">
+            <input type="text" name="group_id[]" value="<?php echo $glId; ?>">
+            <input type="text" name="amount[]" value="<?php echo $amount; ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
                 <?php 
@@ -160,7 +209,6 @@ $('.accountSelect').each(function () {
             $(document).ready(function () {
                 $('.lot, .block, .phase').on('input', function () {
                     var currentRow = $(this).closest('td');
-
                     var enteredPhase = currentRow.find('.phase').val();
                     var enteredBlock = currentRow.find('.block').val();
                     var enteredLot = currentRow.find('.lot').val();
@@ -170,7 +218,6 @@ $('.accountSelect').each(function () {
                         block: enteredBlock,
                         lot: enteredLot
                     });
-
                     $.ajax({
                         type: 'POST',
                         url: 'journals/check_loc.php',
@@ -206,7 +253,6 @@ $('.accountSelect').each(function () {
         </td>
     </tr>
     <?php endwhile; ?>
-
     <?php 
     if($vat == 1 || $vat == 2){
     $id = $gr_id;
@@ -215,7 +261,6 @@ $('.accountSelect').each(function () {
     JOIN `group_list` gl ON al.group_id = gl.id
     WHERE al.name = 'Input VAT';
     ";
-
     $qry_iv = $conn->query($query_iv);
     while ($row_iv = $qry_iv->fetch_assoc()):
         $groupname = $row_iv['group_name'];
@@ -225,31 +270,30 @@ $('.accountSelect').each(function () {
         $account_name = $row_iv['name'];
     ?>
     <tr>
-
     <input type="text" value="<?php echo $vat ?>">
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_iv["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
+        <td class="account_code"><input type="text" value="<?php echo $row_iv["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
             <td class="accountInfo">
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
+            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <input type="hidden" name="account_code[]" value="<?php echo $row_iv["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
             <input type="hidden" name="amount[]" value="<?php echo $iEWT; ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
                 <?php 
                 $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
                 $currentGroup = null;
                 $groupedAccounts = array();
-
                 while($account = $accounts->fetch_assoc()):
                 ?>
                     <option value="<?= $account['id'] ?>" data-gr-id="<?= $gr_id ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($alId == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
                 <?php endwhile; ?>
             </select>
         </td>
@@ -276,17 +320,14 @@ $('.accountSelect').each(function () {
             $(document).ready(function () {
                 $('.lot, .block, .phase').on('input', function () {
                     var currentRow = $(this).closest('td');
-
                     var enteredPhase = currentRow.find('.phase').val();
                     var enteredBlock = currentRow.find('.block').val();
                     var enteredLot = currentRow.find('.lot').val();
-
                     console.log("AJAX Data:", {
                         phase: enteredPhase,
                         block: enteredBlock,
                         lot: enteredLot
                     });
-
                     $.ajax({
                         type: 'POST',
                         url: 'journals/check_loc.php',
@@ -306,10 +347,6 @@ $('.accountSelect').each(function () {
             });
             </script>
         </td>
-        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
         <td class="debit_amount text-right">
             <?php if ($glType == 1) : ?>
                 <input type="text" class="debit_amount" value="<?= number_format($iEWT,2) ?>" oninput="updateAmount(this)">
@@ -326,10 +363,8 @@ $('.accountSelect').each(function () {
             <?php endif; ?>
         </td>
     </tr>
-    
     <?php endwhile; ?>
     <?php }; ?>
-
     <?php 
     $id = $gr_id;
     $query_ap = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
@@ -337,7 +372,6 @@ $('.accountSelect').each(function () {
     JOIN `group_list` gl ON al.group_id = gl.id
     WHERE al.name = 'Accounts Payable Trade';
     ";
-
     $qry_ap = $conn->query($query_ap);
     while ($row_ap = $qry_ap->fetch_assoc()):
         $groupname = $row_ap['group_name'];
@@ -350,15 +384,17 @@ $('.accountSelect').each(function () {
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ap["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
+        <td class="account_code"><input type="text" value="<?php echo $row_ap["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
         <td class="accountInfo">
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
+            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <input type="hidden" name="account_code[]" value="<?php echo $row_ap["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
             <input type="hidden" name="amount[]" value="<?php echo $n_apTotal?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
                 <?php 
@@ -396,7 +432,6 @@ $('.accountSelect').each(function () {
             $(document).ready(function () {
                 $('.lot, .block, .phase').on('input', function () {
                     var currentRow = $(this).closest('td');
-
                     var enteredPhase = currentRow.find('.phase').val();
                     var enteredBlock = currentRow.find('.block').val();
                     var enteredLot = currentRow.find('.lot').val();
@@ -406,7 +441,6 @@ $('.accountSelect').each(function () {
                         block: enteredBlock,
                         lot: enteredLot
                     });
-
                     $.ajax({
                         type: 'POST',
                         url: 'journals/check_loc.php',
@@ -426,10 +460,6 @@ $('.accountSelect').each(function () {
             });
             </script>
         </td>
-        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($e_total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($n_apTotal,2) : '' ?></td> -->
         <td class="debit_amount text-right">
             <?php if ($glType == 1) : ?>
                 <input type="text" class="debit_amount" value="<?= number_format($n_apTotal,2) ?>" oninput="updateAmount(this)">
@@ -468,15 +498,17 @@ $('.accountSelect').each(function () {
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $row_ewt["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
+        <td class="account_code"><input type="text" value="<?php echo $row_ewt["code"] ?>" style="border:none;background-color:transparent;" readonly></td>
             <td class="accountInfo">
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
+            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
             <input type="hidden" name="amount[]" value="<?php echo $e_total; ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- <input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
                 <?php 
@@ -544,10 +576,6 @@ $('.accountSelect').each(function () {
             });
             </script>
         </td>
-        <!-- <td class="group_name"><input type="text" name="group[]" value="<?php echo $groupname; ?>"></td> -->
-
-        <!-- <td class="debit_amount text-right"><?= $glType == 1 ? number_format($total,2) : '' ?></td>
-        <td class="credit_amount text-right"><?= $glType == 2 ? number_format($iEWT,2) : '' ?></td> -->
         <td class="debit_amount text-right">
             <?php if ($glType == 1) : ?>
                 <input type="text" class="debit_amount" value="<?= number_format($e_total,2) ?>" oninput="updateAmount(this)">
@@ -565,7 +593,6 @@ $('.accountSelect').each(function () {
         </td>
     </tr>
     <?php endwhile; ?>
-
     <?php 
     if($vat == 1 || $vat == 2){
     $id = $gr_id;
@@ -582,7 +609,6 @@ $('.accountSelect').each(function () {
         $glId = $row['glId'];
         $glType = $row['type'];
         $amount = $row['amount'];
-
         if($account_name == 'Deferred Input VAT'){
              $iEWT = $row['amount'];
         }
@@ -595,20 +621,22 @@ $('.accountSelect').each(function () {
             continue; 
         }
        ?>
-
     <tr>
         <td class="text-center">
             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="account_code"><input type="text" name="account_code[]" value="<?php echo $account_code ?>" style="border:none;background-color:transparent;" readonly></td>
+        <td class="account_code"><input type="text" value="<?php echo $account_code ?>" style="border:none;background-color:transparent;" readonly></td>
         <td class="accountInfo">
+            
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
+            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
             <input type="hidden" name="amount[]" value="<?php echo $amount; ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
-            <!-- Name:<input type="text" name="account[]" value="<?php echo $account_name; ?>"> -->
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
                 <?php 
@@ -646,17 +674,14 @@ $('.accountSelect').each(function () {
             $(document).ready(function () {
                 $('.lot, .block, .phase').on('input', function () {
                     var currentRow = $(this).closest('td');
-
                     var enteredPhase = currentRow.find('.phase').val();
                     var enteredBlock = currentRow.find('.block').val();
                     var enteredLot = currentRow.find('.lot').val();
-
                     console.log("AJAX Data:", {
                         phase: enteredPhase,
                         block: enteredBlock,
                         lot: enteredLot
                     });
-
                     $.ajax({
                         type: 'POST',
                         url: 'journals/check_loc.php',
@@ -692,22 +717,21 @@ $('.accountSelect').each(function () {
         </td>
     </tr>
     <?php endwhile; ?>
-    <?php }; ?>
-
+    <?php }; ?>        
 </tbody>
 <tfoot>
     <tr>
         <td colspan="4"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1 add_row" data-gr-id="<?= $gr_id ?>" type="button">Add Row</button><strong>Total</strong></td>
-
         <td class="text-right" id="total-debit"></td>
         <td class="text-right" id="total-credit"></td>
     </tr>
 </tfoot>
 </table>
+</body>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     updateTotalsAfterRowDeletion(grId);
-    });
+});
 $(document).ready(function () {
     $('#account_list_<?= $gr_id ?>').on('change', '.accountSelect', function () {
         var selectedOption = $(this).find(':selected');
@@ -764,7 +788,6 @@ $(document).ready(function () {
 
 <script>
     $(document).ready(function () {
-
         $(".accountSelect").change(function () {
 
             var selectedAccountCode = $(this).find(":selected").data("account-code");
@@ -803,9 +826,7 @@ function updateTotalsAfterRowDeletion(grId) {
     $('table[data-gr-id="' + grId + '"] tfoot #total-debit').text(totalDebit.toFixed(2));
     $('table[data-gr-id="' + grId + '"] tfoot #total-credit').text(totalCredit.toFixed(2));
 }
-
 </script>
-
 <script>
 function updateAmount(input) {
     var inputValue = parseFloat($(input).val().replace(/,/g, '')) || 0;
@@ -830,6 +851,4 @@ function updateAmount(input) {
     table.find('#total-debit').text(totalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     table.find('#total-credit').text(totalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ''));
 }
-
-
 </script>

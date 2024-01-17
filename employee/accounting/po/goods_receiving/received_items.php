@@ -73,8 +73,17 @@ if ($query) {
     echo "Error executing query: " . $conn->error;
 }
 
-?>
+$qry = $conn->query("SELECT MAX(v_num) AS max_id FROM `vs_entries`");
+if ($qry->num_rows > 0) {
+	$row = $qry->fetch_assoc();
+	$next_v_number = $row['max_id'] + 1;
+} else {
+	$next_v_number = 1;
+}
+$v_number = str_pad($next_v_number, STR_PAD_LEFT);
 
+echo $v_number;
+?>
 
 <script>
 $(document).ready(function() {
@@ -113,6 +122,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<div class="card-body" id="out-print">
+		<input type="text" name ="vatableValue" value="<?php echo $vatableValue ?>">
 		<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 		<div class="row">
 			<div class="col-6 d-flex align-items-center">
@@ -272,10 +282,11 @@ $(document).ready(function() {
 								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="hidden" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
+								<input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+								<input type="text" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 								<input type="hidden" name="account_code[]" value="<?php echo $row['account_code'] ?>">
-								<input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
+								<input type="text" class="w-100 border-0 item_id" data-item-id="<?php echo $row['item_id']; ?>" value="<?php echo $row['name']; ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
 							<input type="hidden" name="unit_price[]" value="<?php echo ($row['unit_price']) ?>"/>
@@ -313,20 +324,23 @@ $(document).ready(function() {
 					
 					<?php 
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT * FROM account_list
-							WHERE code = '11081'");
-						echo $conn->error;
-						while($row = $order_items_qry->fetch_assoc()):
-						?>
-						<tr class="po-item" data-id="" style="display:none;">
-							<td class="align-middle p-1">
-							<br>
-								<input type="text" name="account_code_vat" value="<?php echo $row['code'] ?>">
-								<input type="text" name="item_code_vat" value="0">
-								<input type="text" value="0" name="amount_vat" id="vat_total">
-							</td>
-						</tr>
-						<?php endwhile;endif; ?>
+							$order_items_qry = $conn->query("SELECT * FROM account_list
+								WHERE code = '11081'");
+							echo $conn->error;
+							while($row = $order_items_qry->fetch_assoc()):
+					?>
+							<tr class="po-item" data-id="" style="display:none;">
+								<td class="align-middle p-1">
+									<br>
+									<input type="text" name="account_code_vat" value="<?php echo $row['code'] ?>">
+									<input type="text" name="item_code_vat" value="0">
+									<input type="text" value="0" name="amount_vat" id="vat_total">
+								</td>
+							</tr>
+					<?php
+							endwhile;
+						endif;
+					?>
 
 						
 						<?php 
@@ -467,7 +481,106 @@ $(document).ready(function() {
 	</table>
 	
 </div>
+<div class="modal fade" id="zeroAccountCodeModal" tabindex="-1" role="dialog" aria-labelledby="zeroAccountCodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="zeroAccountCodeModalLabel"><b>Unlinked Item/s</b></h5>
+                
+            </div>
+            <div class="modal-body" id="zeroAccountCodeModalBody">
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+
+    $('#save-button').on('click', function () {
+      
+        var itemsAreUnlinked = checkUnlinkedItems(); 
+
+        if (itemsAreUnlinked) {
+
+            displayUnlinkedItemModal();
+        }
+    });
+
+    function checkUnlinkedItems() {
+
+        var selectedSupplierId = $('#supplier_id').val();
+        var itemsWithZeroAccountCode = getUnlinkedItems(selectedSupplierId);
+        return itemsWithZeroAccountCode.length > 0;
+    }
+
+    function getUnlinkedItems(supplierId) {
+    console.log('Supplier ID:', supplierId);
+    $.ajax({
+        url: 'journals/items-link.php',
+        type: 'POST',
+        data: { supplier_id: supplierId },
+        success: function (data) {
+            var items = JSON.parse(data);
+
+            console.log(items);
+            var itemsWithZeroAccountCode = items.filter(function (item) {
+                return item.account_code == 0;
+            });
+
+            if (itemsWithZeroAccountCode.length > 0) {
+                displayZeroAccountCodeModal(itemsWithZeroAccountCode, supplierId); 
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+
+    function displayUnlinkedItemModal() {
+        var selectedSupplierId = $('#supplier_id').val();
+        var itemsWithZeroAccountCode = getUnlinkedItems(selectedSupplierId);
+
+        if (itemsWithZeroAccountCode.length > 0) {
+            displayZeroAccountCodeModal(itemsWithZeroAccountCode, selectedSupplierId);
+        }
+    }
+
+	
+	function displayZeroAccountCodeModal(items, supplierId) {
+    var modalBody = $('#zeroAccountCodeModalBody');
+    modalBody.empty();
+    var table = $('<table class="table table-bordered">');
+    var thead = $('<thead>').append('<tr><th style="width:40%;">Name</th><th style="width:10%">Code</th><th style="width:50%">Description</th></tr>');
+
+    table.append(thead);
+
+    var tbody = $('<tbody>');
+    items.forEach(function (item) {
+        var row = $('<tr>');
+        row.append('<td>' + item.name + '</td>');
+        row.append('<td>' + item.item_code + '</td>');
+        row.append('<td>' + item.description + '</td>');
+        tbody.append(row);
+    });
+    table.append(tbody);
+    modalBody.append(table);
+    var modal = $('#zeroAccountCodeModal');
+    modal.find('.modal-dialog').removeClass('modal-lg'); 
+    modal.find('.modal-dialog').addClass('custom-modal-width'); 
+    modalBody.append('<button id="redirectButton" class="btn btn-primary" style="width:100%;">Manage Items</button>');
+    $('#zeroAccountCodeModal').modal({
+    backdrop: 'static',
+    keyboard: false
+});
+
+$('#zeroAccountCodeModal').modal('show');
+    $('#redirectButton').on('click', function () {
+        window.location.href = '.?page=po/items&supplier_id=' + supplierId;
+    });    
+}
+
+
 	function calculateAmount(input) {
 		var tr = $(input).closest('.po-item');
 		var delitems = parseFloat(input.value);

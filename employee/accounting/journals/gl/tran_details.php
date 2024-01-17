@@ -12,7 +12,8 @@
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 				<colgroup>
-                    <col width="20%">
+					<col width="10%">
+                    <col width="10%">
 					<col width="30%">
 					<col width="30%">
 					<col width="20%">
@@ -20,6 +21,7 @@
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
+						<th>VS No.</th>
 						<th>Doc No.</th>
 						<th>Doc Date</th>
 						<th>Action</th>
@@ -28,11 +30,12 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT DISTINCT(doc_no),journal_date,gr_id from `tbl_gl_trans` order by (`journal_date`) desc ");
+					$qry = $conn->query("SELECT DISTINCT(vs_num),doc_no,journal_date from `tbl_gl_trans` order by (`journal_date`) desc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
+							<td><?php echo ($row['vs_num'] == 0) ? '-' : $row['vs_num']; ?></td>
 							<td><?php echo $row['doc_no'] ?></td>
                             <td><?php echo date("Y-m-d H:i",strtotime($row['journal_date'])) ?></td>
 							<td align="center">
@@ -41,7 +44,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['gr_id'] ?>"><span class="fa fa-info text-primary"></span>&nbsp;&nbsp;View</a>
+				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['doc_no'] ?>"><span class="fa fa-info text-primary"></span>&nbsp;&nbsp;View</a>
 				                  </div>
 							</td>
 						</tr>

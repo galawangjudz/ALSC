@@ -45,7 +45,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <tbody>
             <?php 
             $i = 1;
-            $qry = $conn->query("SELECT o.date_purchased,g.gr_id, g.po_id, SUM(o.outstanding * o.unit_price) AS total_amount
+            $qry = $conn->query("SELECT o.date_purchased,g.doc_no,g.gr_id, g.po_id, SUM(o.outstanding * o.unit_price) AS total_amount
                                 FROM tbl_gr_list g
                                 INNER JOIN approved_order_items o ON g.gr_id = o.gr_id
                                 WHERE g.po_id = '{$_GET['id']}'
@@ -70,9 +70,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <a class="dropdown-item basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>"><span class="fa fa-solid fa-info"></span> Details</a>
                         <div class='dropdown-divider'></div>
                         <?php
-                            $grIdValue = $row['gr_id'];
+                            $docNoValue = $row['doc_no'];
                         ?>
-                        <a class="dropdown-item gl_data" href="javascript:void(0)" data-id="<?php echo $grIdValue; ?>"><span class="fa fa-file-export"></span> View GL Journal Entries for this Delivery</a>
+                        <a class="dropdown-item gl_data" href="javascript:void(0)" data-id="<?php echo $docNoValue; ?>"><span class="fa fa-file-export"></span> View GL Journal Entries for this Delivery</a>
                     </div>
                 </td>
             </tr>
