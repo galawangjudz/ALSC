@@ -37,6 +37,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 <script src="js/po_scripts.js"></script>
 <link rel="stylesheet" href="css/manage_po.css">
 <script>
+
 document.addEventListener('change', function(event) {
 	if (event.target.classList.contains('item-checkbox')) {
 		var textboxId = 'item_status_' + event.target.dataset.rowid;
@@ -152,29 +153,52 @@ $(document).ready(function() {
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-md-6 form-group">
-							<div class="sup_cont">
+					<div class="col-md-4 form-group">
 								<label for="supplier_id">Supplier:</label>
-								<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-									<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-									<?php 
+								<?php
 									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-									while ($row = $supplier_qry->fetch_assoc()):
-										//$vatable = $row['vatable'];
+									$terms = '';
 									?>
-									<option 
-										value="<?php echo $row['id'] ?>" 
-										data-vatable="<?php echo $vatable ?>"
-										<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
-									><?php echo $row['name'] ?></option>
-									<?php endwhile; ?>
-								</select>
+
+									<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+										<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+										<?php while ($row = $supplier_qry->fetch_assoc()): ?>
+											<option
+												value="<?php echo $row['id'] ?>"
+												data-vatable="<?php echo $row['vatable'] ?>"
+												data-terms="<?php echo $row['terms']; ?>"
+												<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>
+												<?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+											><?php echo $row['name'] ?></option>
+											<?php
+											if (isset($supplier_id) && $supplier_id == $row['id']) {
+												$terms = $row['terms'];
+											}
+											?>
+										<?php endwhile; ?>
+									</select>
 							</div>
-						</div>
-						<div class="col-md-6 form-group">
-							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
-							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
+							<div class="col-md-4 form-group">
+								<label for="p_terms">Payment Terms:</label>
+								<?php
+								if ($terms !== '') {
+									$terms_qry = $conn->query("SELECT terms FROM `payment_terms` WHERE terms_indicator = $terms;");
+									while ($row = $terms_qry->fetch_assoc()):
+										$pterms = $row['terms'];
+										?>
+										<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" value="<?php echo $pterms; ?>" readonly>
+									<?php endwhile;
+								} else {
+									?>
+									<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
+								<?php } ?>
+							</div>
+							<input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control">
+						<div class="col-md-4 form-group">
+							<label for="department">Delivery Date:</label>
+							<?php
+							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
+							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
 						</div>
 					</div>
 					<div class="row">
@@ -196,10 +220,9 @@ $(document).ready(function() {
 							</select>
 						</div>
 						<div class="col-md-6 form-group">
-							<label for="department">Delivery Date:</label>
-							<?php
-							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
+							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
 					</div>
 				</div>
@@ -383,8 +406,8 @@ $(document).ready(function() {
 						</div>
 					</div>
 					<div class="form-group">
-						<input type="hidden" value="<?php echo $level; ?>" name="level">
-						<input type="hidden" value="0" name="selected_index">
+						<input type="text" value="<?php echo $level; ?>" name="level">
+						<input type="text" value="0" name="selected_index">
 						<label for="status">Status:</label>
 						<select name="status" id="status" class="form-control">
 							<option value="0"></option>

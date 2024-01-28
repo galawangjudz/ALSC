@@ -1,6 +1,7 @@
 
 <?php
-$delivery_date = date('Y-m-d', strtotime('+1 week'));
+$delivery_date = date('Y-m-d');
+
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `po_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -51,26 +52,52 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-6 form-group">
+							<div class="col-md-4 form-group">
 								<label for="supplier_id">Supplier:</label>
-								<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-									<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-									<?php 
+								<?php
 									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-									while ($row = $supplier_qry->fetch_assoc()):
-										//$vatable = $row['vatable'];
+									$terms = '';
 									?>
-									<option 
-										value="<?php echo $row['id'] ?>" 
-										data-vatable="<?php echo $vatable ?>"
-										<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
-									><?php echo $row['name'] ?></option>
-									<?php endwhile; ?>
-								</select>
+
+									<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+										<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+										<?php while ($row = $supplier_qry->fetch_assoc()): ?>
+											<option
+												value="<?php echo $row['id'] ?>"
+												data-vatable="<?php echo $row['vatable'] ?>"
+												data-terms="<?php echo $row['terms']; ?>"
+												<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>
+												<?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+											><?php echo $row['name'] ?></option>
+											<?php
+											if (isset($supplier_id) && $supplier_id == $row['id']) {
+												$terms = $row['terms'];
+											}
+											?>
+										<?php endwhile; ?>
+									</select>
 							</div>
-							<div class="col-md-6 form-group">
-								<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-								<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
+							<div class="col-md-4 form-group">
+								<label for="p_terms">Payment Terms:</label>
+								<?php
+								if ($terms !== '') {
+									$terms_qry = $conn->query("SELECT terms FROM `payment_terms` WHERE terms_indicator = $terms;");
+									while ($row = $terms_qry->fetch_assoc()):
+										$pterms = $row['terms'];
+										?>
+										<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" value="<?php echo $pterms; ?>" readonly>
+									<?php endwhile;
+								} else {
+									?>
+									<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
+								<?php } ?>
+							</div>
+							<input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control">
+							<div class="col-md-4 form-group">
+								<label for="department">Delivery Date:</label>
+								<?php
+								$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
+								<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
 							</div>
 						</div>
 						<div class="row">
@@ -92,10 +119,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 								</select>
 							</div>
 							<div class="col-md-6 form-group">
-								<label for="department">Delivery Date:</label>
-								<?php
-								$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-								<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+								<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+								<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 							</div>
 						</div>
 					</div>
@@ -193,7 +218,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 												<input type="number" class="text-center w-100 border-0 quantity" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
 											</td>
 											<td class="align-middle p-0 text-center">
-												<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
+												<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:gainsboro;" readonly/>
 											</td>
 											<td class="align-middle p-1">
 												<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
@@ -290,7 +315,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
 			</td>
 			<td class="align-middle p-1 item-unit">
-				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]">
+				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]" style="background-color:gainsboro;" readonly>
 			</td>
 			<td class="align-middle p-1">
 				<input type="hidden" name="item_id[]">
@@ -301,7 +326,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="text" class="text-center w-100 border-0 item-price" name="unit_price[]" oninput="formatDecimal(this)">
 			</td>
 			<td class="align-middle p-1">
-				<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
+				<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:gainsboro;" readonly>
 			</td>
 			
 			<!-- <td class="align-middle p-1 text-right total-vat">0</td> -->
@@ -354,8 +379,48 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			textBox.value = 0;
 		}
 	}
-</script>
-<script>
+	function updateDeliveryDate() {
+    var termsId = $('#termsTextbox').val();
+
+    $.ajax({
+        type: 'POST',
+        url: 'po_purchase_orders/get_terms.php',
+        data: { termsId: termsId },
+        success: function(response) {
+            try {
+                var data = JSON.parse(response);
+
+                var deliveryDateInput = $('#delivery_date');
+				var pterms = $('#p_terms');
+
+                var daysToAdd = parseInt(data.days_before_due);
+
+				if (daysToAdd === 0) {
+                    daysToAdd = parseInt(data.days_in_following_month);
+                }
+
+                if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
+                    var currentDate = new Date();
+                    deliveryDateInput.val(currentDate.toISOString().split('T')[0]);
+                    return;
+                }
+                var currentDeliveryDate = new Date(deliveryDateInput.val());
+
+                currentDeliveryDate.setDate(currentDeliveryDate.getDate() + daysToAdd);
+
+                deliveryDateInput.val(currentDeliveryDate.toISOString().split('T')[0]);
+				pterms.val(data.terms);
+
+            } catch (error) {
+                console.error('Error parsing JSON response:', error);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error in AJAX request:', xhr.responseText);
+        }
+    });
+}
+
 function copyTaxValue() {
 	var taxAmountValue = document.getElementById('vat_total').textContent;
 	var taxAmountWithoutCommas = taxAmountValue.replace(/,/g, ''); 
@@ -546,16 +611,19 @@ _item.find('.item_id').autocomplete({
 	})
 }
 var item = $('#item');
+
 $(document).ready(function() {
 	$("#supplier_id").change(function() {
 		selectedSupplierId = $(this).val();
 		selectedSupplierId = parseInt($(this).val(), 10);
-
+		var terms = $(this).find(':selected').data('terms');
+        $('#termsTextbox').val(terms);
+        
+        updateDeliveryDate();
 		console.log("Selected Supplier ID: " + selectedSupplierId);
 		_autocomplete(item, selectedSupplierId);
 	});
 });
-
 $(document).ready(function(){
 	$('#add_row').click(function(){
 		var tr = $('#item-clone tr').clone()

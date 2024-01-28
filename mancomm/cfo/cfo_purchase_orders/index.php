@@ -77,6 +77,18 @@ $level = $_settings->userdata('type');
 			
 			<div id="pending-table" style="display: none;">
 				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+					<colgroup>
+						<col width="3%">
+						<col width="10%">
+						<col width="3%">
+						<col width="30%">
+						<col width="15%">
+						<col width="10%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+					</colgroup>
 					<thead>
 						<tr class="bg-navy disabled">
 							<th>#</th>
@@ -85,185 +97,12 @@ $level = $_settings->userdata('type');
 							<th>Supplier</th>
 							<th>Requesting Dept.</th>
 							<th>Total Amount</th>
+							<th>PM Status</th>
 							<th>FM Status</th>
 							<th>CFO Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
-						<?php if ($usertype=="Purchasing Officer"): ?>
-						<tbody>
-							<?php 
-							$i = 1;
-							$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status='1' and po.status2='0' and po.status3='0' order by po.date_created DESC");
-							while($row = $qry->fetch_assoc()):
-								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
-
-								$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
-								$rowFromPoList = $result->fetch_assoc();
-								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-								$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
-
-								
-								if ($vatable == 1) {
-									$totalAmountWithTax = $orderItemsTotal;
-								} elseif ($vatable == 2) {
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
-								} else {
-									$totalAmountWithTax = $orderItemsTotal;
-								}
-
-								$row['total_amount'] = $totalAmountWithTax;
-							?>
-							<tr>
-								<td class="text-center"><?php echo $i++; ?></td>
-								<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-								<td class=""><?php echo $row['po_no'] ?></td>
-								<td class=""><?php echo $row['sname'] ?></td>
-								<td class=""><?php echo $row['department'] ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-								<td>
-								<?php 
-								switch ($row['status2']) {
-									case '1':
-										echo '<span class="badge badge-success">Approved</span>';
-										break;
-									case '2':
-										echo '<span class="badge badge-danger">Declined</span>';
-										break;
-									case '3':
-										echo '<span class="badge badge-warning">For Review</span>';
-										break;
-									default:
-										echo '<span class="badge badge-secondary">Pending</span>';
-										break;
-								}
-								?>
-								</td>
-								<td>
-								<?php 
-								switch ($row['status3']) {
-									case '1':
-										echo '<span class="badge badge-success">Approved</span>';
-										break;
-									case '2':
-										echo '<span class="badge badge-danger">Declined</span>';
-										break;
-									case '3':
-										echo '<span class="badge badge-warning">For Review</span>';
-										break;
-									default:
-										echo '<span class="badge badge-secondary">Pending</span>';
-										break;
-								}
-								?>
-								</td>
-								<td align="center">
-									<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-											Action
-										<span class="sr-only">Toggle Dropdown</span>
-									</button>
-									<div class="dropdown-menu" role="menu">
-										<?php 
-											if ($row['fpo_status'] != '3'){?>
-												<a class="dropdown-item" href="?page=cfo_purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-											<?php } else{ ?>
-												<a class="dropdown-item" href="?page=cfo_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-											<?php } ?>
-											
-
-											<?php if ($row['fpo_status'] != '3'){?>
-												<div class="dropdown-divider"></div>
-											<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-										<?php }?>
-									</div>
-								</td>
-							</tr>
-							<?php endwhile; ?>
-						</tbody>
-						<?php elseif ($level == 3): ?>
-						<tbody>
-							<?php 
-							$i = 1;
-							$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status='1' and po.status2='0' and po.status3='0' order by po.date_created DESC");
-							while($row = $qry->fetch_assoc()):
-								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
-
-								$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
-								$rowFromPoList = $result->fetch_assoc();
-								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-								$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
-
-								
-								if ($vatable == 1) {
-									$totalAmountWithTax = $orderItemsTotal;
-								} elseif ($vatable == 2) {
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
-								} else {
-									$totalAmountWithTax = $orderItemsTotal;
-								}
-
-								$row['total_amount'] = $totalAmountWithTax;
-							?>
-								<tr>
-									<td class="text-center"><?php echo $i++; ?></td>
-									<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-									<td class=""><?php echo $row['po_no'] ?></td>
-									<td class=""><?php echo $row['sname'] ?></td>
-									<td class=""><?php echo $row['department'] ?></td>
-									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-									<td>
-										<?php 
-											switch ($row['status2']) {
-												case '1':
-													echo '<span class="badge badge-success">Approved</span>';
-													break;
-												case '2':
-													echo '<span class="badge badge-danger">Declined</span>';
-													break;
-												case '3':
-													echo '<span class="badge badge-warning">For Review</span>';
-													break;
-												default:
-													echo '<span class="badge badge-secondary">Pending</span>';
-													break;
-											}
-										?>
-									</td>
-									<td>
-										<?php 
-											switch ($row['status3']) {
-												case '1':
-													echo '<span class="badge badge-success">Approved</span>';
-													break;
-												case '2':
-													echo '<span class="badge badge-danger">Declined</span>';
-													break;
-												case '3':
-													echo '<span class="badge badge-warning">For Review</span>';
-													break;
-												default:
-													echo '<span class="badge badge-secondary">Pending</span>';
-													break;
-											}
-										?>
-									</td>
-									<td align="center">
-										<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-												Action
-											<span class="sr-only">Toggle Dropdown</span>
-										</button>
-										<div class="dropdown-menu" role="menu">
-											<a class="dropdown-item" href="?page=cfo_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>	
-										</div>
-									</td>
-								</tr>
-							<?php endwhile; ?>
-						</tbody>
-						<?php elseif ($level == 2): ?>
 						<tbody>
 							<?php 
 							$i = 1;
@@ -298,6 +137,24 @@ $level = $_settings->userdata('type');
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 									<td>
 										<?php 
+											switch ($row['status']) {
+												case '1':
+													echo '<span class="badge badge-success">Approved</span>';
+													break;
+												case '2':
+													echo '<span class="badge badge-danger">Declined</span>';
+													break;
+												case '3':
+													echo '<span class="badge badge-warning">For Review</span>';
+													break;
+												default:
+													echo '<span class="badge badge-secondary">Pending</span>';
+													break;
+											}
+										?>
+									</td>
+									<td>
+										<?php 
 											switch ($row['status2']) {
 												case '1':
 													echo '<span class="badge badge-success">Approved</span>';
@@ -344,191 +201,36 @@ $level = $_settings->userdata('type');
 								</tr>
 							<?php endwhile; ?>
 						</tbody>
-					<?php endif; ?>
 				</table>
 			</div>
-			
 			<div id="approved-table" style="display: none;">
 				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
-						<thead>
-							<tr class="bg-navy disabled">
-								<th>#</th>
-								<th>Date Created</th>
-								<th>PO #</th>
-								<th>Supplier</th>
-								<th>Requesting Dept.</th>
-								<th>Total Amount</th>
-								<th>FM Status</th>
-								<th>CFO Status</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<?php if ($usertype == "Purchasing Officer"): ?>
-						<tbody>
-							<?php 
-							$i = 1;
-							//$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=1 and ((po.status2=1 or po.status3=1) and (po.status2!=2 and po.status3!=2)) order by po.date_created DESC");
-							$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=1 and (po.status2 = 1 or po.status3 = 1) order by po.date_created DESC");
-							while($row = $qry->fetch_assoc()):
-								$id =  $row['id'];
-								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
-
-								$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
-								$rowFromPoList = $result->fetch_assoc();
-								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-								$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
-
-								
-								if ($vatable == 1) {
-									$totalAmountWithTax = $orderItemsTotal;
-								} elseif ($vatable == 2) {
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
-								} else {
-									$totalAmountWithTax = $orderItemsTotal;
-								}
-
-								$row['total_amount'] = $totalAmountWithTax;
-							?>
-							<tr>
-								<td class="text-center"><?php echo $i++; ?></td>
-								<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-								<td class=""><?php echo $row['po_no'] ?></td>
-								<td class=""><?php echo $row['sname'] ?></td>
-								<td class=""><?php echo ($row['department']) ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-								<td>
-									<?php 
-										switch ($row['status2']) {
-											case '1':
-												echo '<span class="badge badge-success">Approved</span>';
-												break;
-											case '2':
-												echo '<span class="badge badge-danger">Declined</span>';
-												break;
-											case '3':
-												echo '<span class="badge badge-warning">For Review</span>';
-												break;
-											default:
-												echo '<span class="badge badge-secondary">Pending</span>';
-												break;
-										}
-									?>
-								</td>
-								<td>
-									<?php 
-										switch ($row['status3']) {
-											case '1':
-												echo '<span class="badge badge-success">Approved</span>';
-												break;
-											case '2':
-												echo '<span class="badge badge-danger">Declined</span>';
-												break;
-											case '3':
-												echo '<span class="badge badge-warning">For Review</span>';
-												break;
-											default:
-												echo '<span class="badge badge-secondary">Pending</span>';
-												break;
-										}
-									?>
-								</td>
-								<td align="center">
-									<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-											Action
-										<span class="sr-only">Toggle Dropdown</span>
-									</button>
-									<div class="dropdown-menu" role="menu">
-										<a class="dropdown-item" href="?page=cfo_purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-									</div>
-								</td>
-							</tr>
-							<?php endwhile; ?>
-						</tbody>
-						<?php elseif ($level == 3): ?>
-						<tbody>
-							<?php 
-							$i = 1;
-							$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=1 and po.status2=1 order by po.date_created DESC");
-							while($row = $qry->fetch_assoc()):
-								$id =  $row['id'];
-								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-								$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-								$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
-
-								$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
-								$rowFromPoList = $result->fetch_assoc();
-								$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-								$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
-
-								
-								if ($vatable == 1) {
-									$totalAmountWithTax = $orderItemsTotal;
-								} elseif ($vatable == 2) {
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
-								} else {
-									$totalAmountWithTax = $orderItemsTotal;
-								}
-
-								$row['total_amount'] = $totalAmountWithTax;
-							?>
-							<tr>
-								<td class="text-center"><?php echo $i++; ?></td>
-								<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-								<td class=""><?php echo $row['po_no'] ?></td>
-								<td class=""><?php echo $row['sname'] ?></td>
-								<td class=""><?php echo ($row['department']) ?></td>
-								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-								<td>
-									<?php 
-									switch ($row['status2']) {
-										case '1':
-											echo '<span class="badge badge-success">Approved</span>';
-											break;
-										case '2':
-											echo '<span class="badge badge-danger">Declined</span>';
-											break;
-										case '3':
-											echo '<span class="badge badge-warning">For Review</span>';
-											break;
-										default:
-											echo '<span class="badge badge-secondary">Pending</span>';
-											break;
-									}
-									?>
-								</td>
-								<td>
-									<?php 
-									switch ($row['status3']) {
-										case '1':
-											echo '<span class="badge badge-success">Approved</span>';
-											break;
-										case '2':
-											echo '<span class="badge badge-danger">Declined</span>';
-											break;
-										case '3':
-											echo '<span class="badge badge-warning">For Review</span>';
-											break;
-										default:
-											echo '<span class="badge badge-secondary">Pending</span>';
-											break;
-									}
-									?>
-								</td>
-								<td align="center">
-									<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-											Action
-										<span class="sr-only">Toggle Dropdown</span>
-									</button>
-									<div class="dropdown-menu" role="menu">
-										<a class="dropdown-item" href="?page=cfo_purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-									</div>
-								</td>
-							</tr>
-							<?php endwhile; ?>
-						</tbody>
-						<?php elseif ($level == 2): ?>
+					<colgroup>
+						<col width="3%">
+						<col width="10%">
+						<col width="3%">
+						<col width="30%">
+						<col width="15%">
+						<col width="10%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+					</colgroup>
+					<thead>
+						<tr class="bg-navy disabled">
+							<th>#</th>
+							<th>Date Created</th>
+							<th>PO #</th>
+							<th>Supplier</th>
+							<th>Requesting Dept.</th>
+							<th>Total Amount</th>
+							<th>PM Status</th>
+							<th>FM Status</th>
+							<th>CFO Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
 						<tbody>
 							<?php 
 							$i = 1;
@@ -562,6 +264,24 @@ $level = $_settings->userdata('type');
 								<td class=""><?php echo $row['sname'] ?></td>
 								<td class=""><?php echo ($row['department']) ?></td>
 								<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+								<td>
+								<?php 
+									switch ($row['status']) {
+										case '1':
+											echo '<span class="badge badge-success">Approved</span>';
+											break;
+										case '2':
+											echo '<span class="badge badge-danger">Declined</span>';
+											break;
+										case '3':
+											echo '<span class="badge badge-warning">For Review</span>';
+											break;
+										default:
+											echo '<span class="badge badge-secondary">Pending</span>';
+											break;
+									}
+								?>
+								</td>
 								<td>
 								<?php 
 									switch ($row['status2']) {
@@ -610,12 +330,23 @@ $level = $_settings->userdata('type');
 							</tr>
 							<?php endwhile; ?>
 						</tbody>
-					<?php endif; ?>
 				</table>
 			</div>
 
 			<div id="declined-table" style="display: none;">
 				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+					<colgroup>
+						<col width="3%">
+						<col width="10%">
+						<col width="3%">
+						<col width="30%">
+						<col width="15%">
+						<col width="10%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+					</colgroup>
 					<thead>
 						<tr class="bg-navy disabled">
 							<th>#</th>
@@ -624,168 +355,12 @@ $level = $_settings->userdata('type');
 							<th>Supplier</th>
 							<th>Requesting Dept.</th>
 							<th>Total Amount</th>
+							<th>PM Status</th>
 							<th>FM Status</th>
 							<th>CFO Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
-					<?php if ($usertype == "Purchasing Officer"): ?>
-					<tbody>
-						<?php 
-						$i = 1;
-						$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=1 and (po.status2='2' or po.status3='2') order by po.date_created DESC");
-						while($row = $qry->fetch_assoc()):
-							$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-							$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
-
-							$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
-							$rowFromPoList = $result->fetch_assoc();
-							$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-							$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
-
-							
-							if ($vatable == 1) {
-								$totalAmountWithTax = $orderItemsTotal;
-							} elseif ($vatable == 2) {
-								$totalAmountWithTax = $orderItemsTotal + $totalVat;
-							} else {
-								$totalAmountWithTax = $orderItemsTotal;
-							}
-
-							$row['total_amount'] = $totalAmountWithTax;
-						?>
-						<tr>
-							<td class="text-center"><?php echo $i++; ?></td>
-							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-							<td class=""><?php echo $row['po_no'] ?></td>
-							<td class=""><?php echo $row['sname'] ?></td>
-							<td class=""><?php echo ($row['department']) ?></td>
-							<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-							<td>
-							<?php 
-							switch ($row['status2']) {
-								case '1':
-									echo '<span class="badge badge-success">Approved</span>';
-									break;
-								case '2':
-									echo '<span class="badge badge-danger">Declined</span>';
-									break;
-								case '3':
-									echo '<span class="badge badge-warning">For Review</span>';
-									break;
-								default:
-									echo '<span class="badge badge-secondary">Pending</span>';
-									break;
-							}
-							?>
-							</td>
-							<td>
-							<?php 
-							switch ($row['status3']) {
-								case '1':
-									echo '<span class="badge badge-success">Approved</span>';
-									break;
-								case '2':
-									echo '<span class="badge badge-danger">Declined</span>';
-									break;
-								case '3':
-									echo '<span class="badge badge-warning">For Review</span>';
-									break;
-								default:
-									echo '<span>--</span>';
-									break;
-							}
-							?>
-							</td>
-							<td align="center">
-								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-								Action
-								<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu" role="menu">
-									<a class="dropdown-item" href="?page=cfo_purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-								</div>
-							</td>
-						</tr>
-						<?php endwhile; ?>
-					</tbody>
-					<?php elseif ($level== 3): ?>
-					<tbody>
-						<?php 
-						$i = 1;
-						$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status2='2' order by po.date_created DESC");
-						while($row = $qry->fetch_assoc()):
-							$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-							$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
-
-							$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
-							$rowFromPoList = $result->fetch_assoc();
-							$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-							$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
-
-							
-							if ($vatable == 1) {
-								$totalAmountWithTax = $orderItemsTotal;
-							} elseif ($vatable == 2) {
-								$totalAmountWithTax = $orderItemsTotal + $totalVat;
-							} else {
-								$totalAmountWithTax = $orderItemsTotal;
-							}
-
-							$row['total_amount'] = $totalAmountWithTax;
-						?>
-						<tr>
-							<td class="text-center"><?php echo $i++; ?></td>
-							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-							<td class=""><?php echo $row['po_no'] ?></td>
-							<td class=""><?php echo $row['sname'] ?></td>
-							<td class=""><?php echo ($row['department']) ?></td>
-							<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-							<td>
-							<?php 
-								switch ($row['status2']) {
-									case '1':
-										echo '<span class="badge badge-success">Approved</span>';
-										break;
-									case '2':
-										echo '<span class="badge badge-danger">Declined</span>';
-										break;
-									case '3':
-										echo '<span class="badge badge-warning">For Review</span>';
-										break;
-									default:
-										echo '<span class="badge badge-secondary">Pending</span>';
-										break;
-								}
-							?>
-							</td>
-							<td>
-								<?php 
-									echo '--';
-								?>
-							</td>
-							<td align="center">
-								<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu" role="menu">
-									<a class="dropdown-item" href="?page=cfo_purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-									<!-- <?php 
-										if ($level== 1 || $usertype == "Purchasing Officer"){?>
-											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="?page=po/purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-										<?php } ?>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
-								</div>
-							</td>
-						</tr>
-						<?php endwhile; ?>
-					</tbody>
-					<?php elseif ($level == 2): ?>
 					<tbody>
 						<?php 
 						$i = 1;
@@ -818,6 +393,24 @@ $level = $_settings->userdata('type');
 							<td class=""><?php echo $row['sname'] ?></td>
 							<td class=""><?php echo ($row['department']) ?></td>
 							<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+							<td>
+							<?php 
+								switch ($row['status']) {
+									case '1':
+										echo '<span class="badge badge-success">Approved</span>';
+										break;
+									case '2':
+										echo '<span class="badge badge-danger">Declined</span>';
+										break;
+									case '3':
+										echo '<span class="badge badge-warning">For Review</span>';
+										break;
+									default:
+										echo '<span class="badge badge-secondary">Pending</span>';
+										break;
+								}
+								?>
+							</td>
 							<td>
 							<?php 
 								switch ($row['status2']) {
@@ -873,12 +466,22 @@ $level = $_settings->userdata('type');
 						</tr>
 						<?php endwhile; ?>
 					</tbody>
-					<?php endif; ?>
 				</table>
 			</div>
-
 			<div id="review-table" style="display: none;">
 				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+					<colgroup>
+						<col width="3%">
+						<col width="10%">
+						<col width="3%">
+						<col width="30%">
+						<col width="15%">
+						<col width="10%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+						<col width="7%">
+					</colgroup>
 					<thead>
 						<tr class="bg-navy disabled">
 							<th>#</th>
@@ -886,101 +489,46 @@ $level = $_settings->userdata('type');
 							<th>PO #</th>
 							<th>Supplier</th>
 							<th>Requesting Dept.</th>
+							<th>Total Amount</th>
+							<th>PM Status</th>
 							<th>FM Status</th>
 							<th>CFO Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
-					<?php if ($level == 3): ?>
-						<tbody>
-							<?php 
-							$i = 1;
-								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE (po.status=3 or po.status2='3') order by po.date_created DESC");
-								while($row = $qry->fetch_assoc()):
-									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-								?>
-								<tr>
-									<td class="text-center"><?php echo $i++; ?></td>
-									<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-									<td class=""><?php echo $row['po_no'] ?></td>
-									<td class=""><?php echo $row['sname'] ?></td>
-									<td class=""><?php echo $row['department'] ?></td>
-									<td>
-									<?php 
-										switch ($row['status2']) {
-											case '1':
-												echo '<span class="badge badge-success">Approved</span>';
-												break;
-											case '2':
-												echo '<span class="badge badge-danger">Declined</span>';
-												break;
-											case '3':
-												echo '<span class="badge badge-warning">For Review</span>';
-												break;
-											default:
-												echo '<span class="badge badge-secondary">Pending</span>';
-												break;
-										}
-									?>
-									</td>
-									<td>
-									<?php 
-										switch ($row['status3']) {
-											case '1':
-												echo '<span class="badge badge-success">Approved</span>';
-												break;
-											case '2':
-												echo '<span class="badge badge-danger">Declined</span>';
-												break;
-											case '3':
-												echo '<span class="badge badge-warning">For Review</span>';
-												break;
-											default:
-												echo '<span class="badge badge-secondary">Pending</span>';
-												break;
-										}
-									?>
-									</td>
-									<td align="center">
-										<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-												Action
-											<span class="sr-only">Toggle Dropdown</span>
-										</button>
-										<div class="dropdown-menu" role="menu">
-											<a class="dropdown-item" href="?page=cfo_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-										</div>
-									</td>
-								</tr>
-							<?php endwhile; ?>
-						</tbody>
-						<?php elseif ($usertype == "Purchasing Officer"): ?>
-						<!-- <thead>
-							<tr class="bg-navy disabled">
-								<th>#</th>
-								<th>Date Created</th>
-								<th>PO #</th>
-								<th>Supplier</th>
-								<th>Requesting Dept.</th>
-								<th>PS Status</th>
-								<th>FM Status</th>
-								<th>CFO Status</th>
-								<th>Action</th>
-							</tr>
-						</thead> -->
 						<tbody>
 							<?php 
 							$i = 1;
 								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=3 or po.status2=3 or po.status3=3 order by po.date_created DESC");
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
+									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
+		
+									$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$rowFromPoList = $result->fetch_assoc();
+									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+									$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
+		
+									
+									if ($vatable == 1) {
+										$totalAmountWithTax = $orderItemsTotal;
+									} elseif ($vatable == 2) {
+										$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									} else {
+										$totalAmountWithTax = $orderItemsTotal;
+									}
+		
+									$row['total_amount'] = $totalAmountWithTax;
 								?>
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
 									<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
 									<td class=""><?php echo $row['po_no'] ?></td>
 									<td class=""><?php echo $row['sname'] ?></td>
-									<td class=""><?php echo $row['department'] ?></td>
-									<!-- <td>
+									<td class=""><?php echo ($row['department']) ?></td>
+									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+									<td>
 									<?php 
 										switch ($row['status']) {
 											case '1':
@@ -997,7 +545,7 @@ $level = $_settings->userdata('type');
 												break;
 										}
 									?>
-									</td> -->
+									</td>
 									<td>
 									<?php 
 										switch ($row['status2']) {
@@ -1046,100 +594,6 @@ $level = $_settings->userdata('type');
 								</tr>
 							<?php endwhile; ?>
 						</tbody>
-					<?php elseif ($level == 2): ?>
-						<!-- <thead>
-							<tr class="bg-navy disabled">
-								<th>#</th>
-								<th>Date Created</th>
-								<th>PO #</th>
-								<th>Supplier</th>
-								<th>Requesting Dept.</th>
-								<th>PS Status</th>
-								<th>FM Status</th>
-								<th>CFO Status</th>
-								<th>Action</th>
-							</tr>
-						</thead> -->
-						<tbody>
-							<?php 
-							$i = 1;
-							$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status='1' and po.status2='1' and po.status3='3' order by po.date_created DESC");
-							while($row = $qry->fetch_assoc()):
-								$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
-							?>
-								<tr>
-									<td class="text-center"><?php echo $i++; ?></td>
-									<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-									<td class=""><?php echo $row['po_no'] ?></td>
-									<td class=""><?php echo $row['sname'] ?></td>
-									<td class=""><?php echo $row['department'] ?></td>
-									<!-- <td>
-									<?php 
-										switch ($row['status']) {
-											case '1':
-												echo '<span class="badge badge-success">Approved</span>';
-												break;
-											case '2':
-												echo '<span class="badge badge-danger">Declined</span>';
-												break;
-											case '3':
-												echo '<span class="badge badge-warning">For Review</span>';
-												break;
-											default:
-												echo '<span class="badge badge-secondary">Pending</span>';
-												break;
-										}
-									?>
-									</td> -->
-									<td>
-									<?php 
-										switch ($row['status2']) {
-										case '1':
-											echo '<span class="badge badge-success">Approved</span>';
-											break;
-										case '2':
-											echo '<span class="badge badge-danger">Declined</span>';
-											break;
-										case '3':
-											echo '<span class="badge badge-warning">For Review</span>';
-											break;
-										default:
-											echo '<span class="badge badge-secondary">Pending</span>';
-											break;
-										}
-									?>
-									</td>
-									<td>
-									<?php 
-									switch ($row['status3']) {
-										case '1':
-											echo '<span class="badge badge-success">Approved</span>';
-											break;
-										case '2':
-											echo '<span class="badge badge-danger">Declined</span>';
-											break;
-										case '3':
-											echo '<span class="badge badge-warning">For Review</span>';
-											break;
-										default:
-											echo '<span class="badge badge-secondary">Pending</span>';
-											break;
-									}
-									?>
-									</td>
-									<td align="center">
-										<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-												Action
-											<span class="sr-only">Toggle Dropdown</span>
-										</button>
-										<div class="dropdown-menu" role="menu">
-											<a class="dropdown-item" href="?page=cfo_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-										</div>
-									</td>
-								</tr>
-							<?php endwhile; ?>
-						</tbody>
-					<?php endif; ?>
 				</table>
 			</div>
 		</div>

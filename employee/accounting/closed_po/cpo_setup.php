@@ -430,7 +430,7 @@ function format_num($number){
                                 $vat_qry = $conn->query("SELECT account_list.*, group_list.name AS group_name, group_list.type
                                 FROM account_list
                                 JOIN group_list ON account_list.group_id = group_list.id
-                                WHERE account_list.code = '1201';
+                                WHERE account_list.code = '11076';
                                 ");
                                 if ($vatable == 1){                              
                                     if ($vat_qry->num_rows > 0) {
@@ -612,7 +612,7 @@ function format_num($number){
                                 $wt_qry = $conn->query("SELECT account_list.*, group_list.name AS group_name, group_list.type
                                 FROM account_list
                                 JOIN group_list ON account_list.group_id = group_list.id
-                                WHERE account_list.code = '2118';
+                                WHERE account_list.code = '21012';
                                 ");                    
                                     if ($wt_qry->num_rows > 0) {
                                         while ($wt_row = $wt_qry->fetch_assoc()) {
@@ -707,7 +707,7 @@ function format_num($number){
                                 $apt_qry = $conn->query("SELECT account_list.*, group_list.name AS group_name, group_list.type
                                 FROM account_list
                                 JOIN group_list ON account_list.group_id = group_list.id
-                                WHERE account_list.code = '2001';
+                                WHERE account_list.code = '21002';
                                 ");                     
                                 if ($apt_qry->num_rows > 0) {
                                     while ($apt_row = $apt_qry->fetch_assoc()) {

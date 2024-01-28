@@ -1,7 +1,7 @@
 <?php 
 
 if(isset($_GET['id'])){
-$user = $conn->query("SELECT * FROM users where id ='{$_GET['id']}'");
+$user = $conn->query("SELECT * FROM users where user_code ='{$_GET['id']}'");
 foreach($user->fetch_array() as $k =>$v){
 	$meta[$k] = $v;
 
@@ -69,6 +69,7 @@ foreach($user->fetch_array() as $k =>$v){
 						<option value="Cashier" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Cashier" ? 'selected': '' ?>>Cashier</option>
 						<option value="Manager" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Finance Manager" ? 'selected': '' ?>>Finance Manager</option>
 						<option value="Manager" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Marketing Supervisor" ? 'selected': '' ?>>Marketing Supervisor</option>
+						<option value="Manager" <?php echo isset($meta['user_type']) && $meta['user_type'] == "Purchasing Supervisor" ? 'selected': '' ?>>Purchasing Supervisor</option>
 					</select>
 				</div>
 				<div class="form-group">

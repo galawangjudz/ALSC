@@ -28,14 +28,15 @@
 					<div id="pending-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -46,6 +47,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -54,7 +56,7 @@
 							<tbody>
 								<?php 
 								$i = 1;
-								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status='1' and po.status2='0' and po.status3='0' order by po.date_created DESC");
+								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE (po.status=0 or po.status = 1) and (po.status2 = 0 or po.status3 = 0) order by po.date_created DESC");
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -87,6 +89,24 @@
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo $row['department'] ?></td>
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+									<td>
+									<?php 
+									switch ($row['status']) {
+										case '1':
+											echo '<span class="badge badge-success">Approved</span>';
+											break;
+										case '2':
+											echo '<span class="badge badge-danger">Declined</span>';
+											break;
+										case '3':
+											echo '<span class="badge badge-warning">For Review</span>';
+											break;
+										default:
+											echo '<span class="badge badge-secondary">Pending</span>';
+											break;
+									}
+									?>
+									</td>
 									<td>
 									<?php 
 									switch ($row['status2']) {
@@ -151,14 +171,15 @@
 					<div id="approved-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -169,6 +190,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -210,6 +232,24 @@
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo ($row['department']) ?></td>
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+									<td>
+										<?php 
+											switch ($row['status']) {
+												case '1':
+													echo '<span class="badge badge-success">Approved</span>';
+													break;
+												case '2':
+													echo '<span class="badge badge-danger">Declined</span>';
+													break;
+												case '3':
+													echo '<span class="badge badge-warning">For Review</span>';
+													break;
+												default:
+													echo '<span class="badge badge-secondary">Pending</span>';
+													break;
+											}
+										?>
+									</td>
 									<td>
 										<?php 
 											switch ($row['status2']) {
@@ -263,14 +303,15 @@
 					<div id="declined-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -281,6 +322,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -289,7 +331,7 @@
 							<tbody>
 								<?php 
 								$i = 1;
-								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=1 and (po.status2='2' or po.status3='2') order by po.date_created DESC");
+								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE (po.status=2 or po.status2=2 or po.status3=2) order by po.date_created DESC");
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -324,7 +366,7 @@
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 									<td>
 									<?php 
-									switch ($row['status2']) {
+									switch ($row['status']) {
 										case '1':
 											echo '<span class="badge badge-success">Approved</span>';
 											break;
@@ -336,6 +378,24 @@
 											break;
 										default:
 											echo '<span class="badge badge-secondary">Pending</span>';
+											break;
+									}
+									?>
+									</td>
+									<td>
+									<?php 
+									switch ($row['status2']) {
+										case '1':
+											echo '<span class="badge badge-success">Approved</span>';
+											break;
+										case '2':
+											echo '<span class="badge badge-danger">Declined</span>';
+											break;
+										case '3':
+											echo '<span class="badge badge-warning">For Review</span>';
+											break;
+										default:
+											echo '<span>--</span>';
 											break;
 									}
 									?>
@@ -375,14 +435,15 @@
 					<div id="review-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -393,6 +454,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -432,6 +494,24 @@
 										<td class=""><?php echo $row['sname'] ?></td>
 										<td class=""><?php echo $row['department'] ?></td>
 										<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+										<td>
+										<?php 
+											switch ($row['status']) {
+												case '1':
+													echo '<span class="badge badge-success">Approved</span>';
+													break;
+												case '2':
+													echo '<span class="badge badge-danger">Declined</span>';
+													break;
+												case '3':
+													echo '<span class="badge badge-warning">For Review</span>';
+													break;
+												default:
+													echo '<span class="badge badge-secondary">Pending</span>';
+													break;
+											}
+										?>
+										</td>
 										<td>
 										<?php 
 											switch ($row['status2']) {

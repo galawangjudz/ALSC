@@ -69,7 +69,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $next_v_number = 1;
     }
     $vs_num = str_pad($next_v_number, STR_PAD_LEFT);
-    echo $vs_num;
+    //echo $vs_num;
 }
 ?>
 <?php
@@ -220,7 +220,7 @@ function updateAmount(input) {
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="po_no">P.O. #: </label>
-                            <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                            <!-- <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                 <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
                                 <?php 
                                 $po_qry = $conn->query("SELECT * FROM `po_list` WHERE status = 1 ORDER BY `po_no` ASC");
@@ -231,16 +231,17 @@ function updateAmount(input) {
                                     <?php echo isset($po_no) && $po_no == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
                                 ><?php echo $row['po_no'] ?></option>
                                 <?php endwhile; ?>
-                            </select>
+                            </select> -->
+                            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="journal_date" class="control-label">Date:</label>
+                            <label for="journal_date" class="control-label">Transaction Date:</label>
                             <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Due Date:</label>
+                            <label for="due_date" class="control-label">Check Date:</label>
                             <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                         </div>
                     </div>
@@ -338,12 +339,12 @@ function updateAmount(input) {
                                
                                 <td class="accountInfo">
                                 <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
-                                <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
-                                <input type="text" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
+                                <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+                                <input type="hidden" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
                                 <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
                                 <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                 <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>" class="amount-textbox">
+                                <input type="text" name="amount[]" value="<?= abs($row['amount']) ?>" class="amount-textbox">
                                 <span class="account_code"><?= $row['account_code'] ?></span>
                                 <span class="type" style="display:none;"><?= $row['type'] ?></span>
                                 </td>
@@ -425,15 +426,17 @@ function updateAmount(input) {
                                 </td>
                                 <!-- <td class="group"><?= $row['gr_id'] ?></td> -->
                                 <td class="debit_amount text-right">
-                                    <?php if ($row['account'] == 'GR/IR' || $row['account'] == 'Deferred Expanded Withholding Tax Payable' || ($row['type'] == 1 && $row['account'] != 'Deferred Input VAT')): ?>
-                                        <input type="text" class="debit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
-                                    <?php else : ?>
+                                    <?php if ($row['account'] == 'Goods Receipt' || $row['account'] == 'Deferred Expanded Withholding Tax Payable' || ($row['type'] == 1 && $row['account'] != 'Deferred Input VAT')): ?>
+                                        <input type="text" class="debit-amount-input" value="<?= abs($row['amount']) ?>" oninput="updateAmount(this)">
+                                        <input type="text" name="gtype[]" value="1">
+                                        <?php else : ?>
                                         <input type="text" class="debit-amount-input" value="" oninput="updateAmount(this)">
                                     <?php endif; ?>
                                 </td>
                                 <td class="credit_amount text-right">
-                                    <?php if ($row['type'] == 2 && $row['account'] != 'GR/IR' && $row['account'] != 'Deferred Expanded Withholding Tax Payable' || $row['account'] == 'Deferred Input VAT') : ?>
-                                        <input type="text" class="credit-amount-input" value="<?= $row['amount'] ?>" oninput="updateAmount(this)">
+                                    <?php if ($row['type'] == 2 && $row['account'] != 'Goods Receipt' && $row['account'] != 'Deferred Expanded Withholding Tax Payable' || $row['account'] == 'Deferred Input VAT') : ?>
+                                        <input type="text" class="credit-amount-input" value="<?= abs($row['amount']) ?>" oninput="updateAmount(this)">
+                                        <input type="text" name="gtype[]" value="2">
                                     <?php else : ?>
                                         <input type="text" class="credit-amount-input" value="" oninput="updateAmount(this)">
                                     <?php endif; ?>

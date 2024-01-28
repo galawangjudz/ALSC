@@ -258,10 +258,10 @@ $(document).ready(function() {
 						</select>
 					</div>
 					<div class="row">
-						<div class="col-md-6 form-group">
+						<div class="col-md-4 form-group">
 							<label><b>Supplier:</b></label>
 							<?php 
-							$supplier_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
+							$supplier_qry = $conn->query("SELECT a.*,b.terms as pterms FROM supplier_list a JOIN payment_terms b ON a.terms = b.terms_indicator where id = '{$supplier_id}'");
 							while ($row = $supplier_qry->fetch_assoc()):
 								//$vatable = $row['vatable'];
 							?>
@@ -269,25 +269,28 @@ $(document).ready(function() {
 								<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
 								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $row['name'] ?>" readonly>
 							</div>
+							</div>
+							<div class="col-md-4 form-group">
+								<label for="p_terms">Payment Terms:</label>
+								<input type="text" id="p_terms" value="<?php echo $row['pterms'] ?>" class="form-control form-control-sm rounded-0" readonly>
+							</div>
 							<?php endwhile; ?>
-						</div>
-					<div class="col-md-6 form-group">
-						<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
-						<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-						<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
-					</div>
-				</div>
-
-					<div class="row">
-						<div class="col-md-6 form-group">
-						<label><b>Requesting Department:</b></label>
-                    	<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
-						</div>
-						<div class="col-md-6 form-group">
+						<div class="col-md-4 form-group">
 							<label for="department">Delivery Date:</label>
 							<?php
 							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label><b>Requesting Department:</b></label>
+                    		<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
+						</div>
+						<div class="col-md-6 form-group">
+							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
+							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
 					</div>
 				</div>

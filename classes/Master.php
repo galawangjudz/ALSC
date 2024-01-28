@@ -3920,8 +3920,7 @@ Class Master extends DBConnection {
 					//echo "Value of vs_num: $v";
 				}
 		
-		
-				if ($k !== 'vs_num' && !in_array($k, array('id'))) {
+				if ($k !== 'vs_num' && !in_array($k, array('id','gtype'))) {
 					if (!is_numeric($v) && !is_null($v))
 						$v = $this->conn->real_escape_string($v);
 					if (!empty($data)) $data .= ",";
@@ -3948,24 +3947,32 @@ Class Master extends DBConnection {
 			$gl_data = '';
 			$data = '';
 
-			foreach ($account_id as $k => $v) {
-				$doc = $doc_no[$k];
-				$amount_value = $amount[$k];
-				$account_code_value = $account_code[$k];
-				$vs_num_value = $vs_num;
-
-
-				if (!empty($gl_data)) $gl_data .= ", ";
-				$gl_data .= "('{$doc}','{$po_no}','{$gr_id[$k]}','{$vs_num_value}','{$amount_value}', '{$account_code_value}', NOW())";
-
-				if (!empty($data)) $data .= ", ";
-				$data .= "('{$gr_id[$k]}','{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
-			}
-
-			if (!empty($gl_data) && !empty($data)) {
-				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `po_id`, `gr_id`,`vs_num`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
-				$save_gl = $this->conn->query($gl_sql);
-
+				foreach ($account_id as $k => $v) {
+					$doc = $doc_no[$k];
+					$gtype = isset($_POST['gtype'][$k]) ? $_POST['gtype'][$k] : null;
+					//echo $gtype;
+				
+					if ((int)$gtype == 2) {
+						$amount_value = isset($amount[$k]) ? -$amount[$k] : 0;
+					} else {
+						$amount_value = isset($amount[$k]) ? $amount[$k] : 0;
+					}
+				
+					$account_code_value = $account_code[$k];
+					$vs_num_value = $vs_num;
+				
+					if (!empty($gl_data)) $gl_data .= ", ";
+					$gl_data .= "('{$doc}','{$gtype}','AP','{$po_no}','{$gr_id[$k]}','{$vs_num_value}','{$amount_value}', '{$account_code_value}', NOW())";
+				
+					if (!empty($data)) $data .= ", ";
+					$data .= "('{$gr_id[$k]}','{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+				}
+				
+				if (!empty($gl_data) && !empty($data)) {
+					$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `gtype`, `doc_type`,`po_id`, `gr_id`,`vs_num`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
+					$save_gl = $this->conn->query($gl_sql);
+				
+				
 				$vs_items_sql = "INSERT INTO `vs_items` (`gr_id`,`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
 				$save_vs_items = $this->conn->query($vs_items_sql);
 
@@ -4030,14 +4037,15 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$data = "";
 		$gl_data = "";
+		
 		foreach ($_POST as $k => $v) {
 			if (!is_array($_POST[$k])) {
-				if ($k === 'vs_num') {
-					//echo "Value of vs_num: $v";
-				}
+				// if ($k === 'vs_num') {
+				// 	//echo "Value of vs_num: $v";
+				// }
 		
 		
-				if ($k !== 'vs_num' && !in_array($k, array('id'))) {
+				if ($k !== 'vs_num' && !in_array($k, array('id','gtype'))) {
 					if (!is_numeric($v) && !is_null($v))
 						$v = $this->conn->real_escape_string($v);
 					if (!empty($data)) $data .= ",";
@@ -4063,18 +4071,27 @@ Class Master extends DBConnection {
 			
 			$data = "";
 			foreach ($account_id as $k => $v) {
-
 				$doc = $doc_no[$k];
-				$amount_value = $amount[$k];
-				$account_code_value = $account_code[$k];
+				//$gtype = $gtype[$k];
+				$gtype = isset($_POST['type'][$k]) ? $_POST['type'][$k] : null;
+
+				if ((int)$gtype == 2) {
+					$amount_value = isset($amount[$k]) ? -$amount[$k] : 0;
+				} else {
+					$amount_value = isset($amount[$k]) ? $amount[$k] : 0;
+				}
+				
+			
+				$account_code_value = isset($account_code[$k]) ? $account_code[$k] : '';
 				$vs_num_value = $vs_num;
 			
 				if (!empty($gl_data)) $gl_data .= ", ";
-				$gl_data .= "('{$doc}','{$vs_num_value}','{$amount_value}', '{$account_code_value}', NOW())";
+				$gl_data .= "('{$doc}','{$gtype}','{$vs_num_value}','AP','{$amount_value}', '{$account_code_value}', NOW())";
 			}
 			
+			
 			if (!empty($gl_data)) {
-				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `vs_num`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
+				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `gtype`, `vs_num`,`doc_type`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
 				$save_gl = $this->conn->query($gl_sql);
 			
 				if ($save_gl) {
@@ -4184,16 +4201,23 @@ Class Master extends DBConnection {
 			foreach ($account_id as $k => $v) {
 
 				$doc = $doc_no[$k];
-				$amount_value = $amount[$k];
+				$gtype = isset($_POST['gtype'][$k]) ? $_POST['gtype'][$k] : null;
+
+				if ((int)$gtype == 2) {
+					$amount_value = isset($amount[$k]) ? -$amount[$k] : 0;
+				} else {
+					$amount_value = isset($amount[$k]) ? $amount[$k] : 0;
+				}
+
 				$account_code_value = $account_code[$k];
 				$vs_num_value = $vs_num;
 			
 				if (!empty($gl_data)) $gl_data .= ", ";
-				$gl_data .= "('{$doc}','{$vs_num_value}','{$po_no}','{$gr_id[$k]}','{$amount_value}', '{$account_code_value}', NOW())";
+				$gl_data .= "('{$doc}','AP','{$gtype}','{$vs_num_value}','{$po_no}','{$gr_id[$k]}','{$amount_value}', '{$account_code_value}', NOW())";
 			}
 			
 			if (!empty($gl_data)) {
-				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `vs_num`,`po_id`,`gr_id`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
+				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`,`doc_type`,`gtype`,`vs_num`,`po_id`,`gr_id`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
 				$save_gl = $this->conn->query($gl_sql);
 			
 				if ($save_gl) {
@@ -4242,8 +4266,126 @@ Class Master extends DBConnection {
 			$po_no = $this->conn->real_escape_string($po_no); 
 			$doc_no_value = $this->conn->real_escape_string($doc_no[0]); 
 			$sup_code = $_POST['supplier_id'];
+			
 			$vs_status = 1;
 			$gr_list_sql = "INSERT INTO `tbl_gr_list` (`po_id`,`doc_no`,`vs_num`,`vs_status`,`supplier_id`) VALUES ('{$po_no}','{$doc_no_value}','{$v_num}','{$vs_status}','{$sup_code}')";
+			$save_gr_list = $this->conn->query($gr_list_sql);
+		}else{
+			$resp['status'] = 'failed';
+			$resp['msg'] = $this->conn->error."[{$sql}]";
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		if($resp['status'] =='success')
+			$this->settings->set_flashdata('success',$resp['msg']);
+		return json_encode($resp);
+	}
+
+	function modify_cv() {
+		
+		$c_num = isset($_POST['c_num']) ? $_POST['c_num'] : '';
+		$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
+
+		extract($_POST);
+		
+		$data = "";
+		$gl_data = "";
+		$doc_no = $_POST['doc_no'];
+		foreach($_POST as $k =>$v){
+			if ($k === 'divChoice') {
+				continue; 
+			}
+			// if ($k === 'c_num' && $v !== null) {
+			// 	continue;
+			// }
+
+			if(!in_array($k,array('id','gtype'))  && !is_array($_POST[$k])){
+				if(!is_numeric($v) && !is_null($v))
+					$v = $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=",";
+				if(!is_null($v))
+				$data .= " `{$k}`='{$v}' ";
+				else
+				$data .= " `{$k}`= NULL ";
+			}
+		}
+
+	
+		//$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
+		$sql = "UPDATE `cv_entries` SET `check_date`='{$check_date}',`check_date`='{$check_date}',`check_num`='{$check_num}',`check_date`='{$check_date}',`description`='{$description}',`date_updated`=NOW() WHERE c_num = '{$c_num}' ";
+
+		$save = $this->conn->query($sql);
+		
+		if($save){
+			$data = "";
+			$this->conn->query("DELETE FROM `tbl_gl_trans` where cv_num = " . (int)($c_num[0]));
+			$this->conn->query("DELETE FROM `tbl_gr_list` where cv_num = " . (int)($c_num[0]));
+			
+			foreach ($account_id as $k => $v) {
+
+				$doc = $doc_no[$k];
+				$gtype = isset($_POST['type'][$k]) ? $_POST['type'][$k] : null;
+				
+				if ((int)$gtype == 2) {
+					$amount_value = isset($amount[$k]) ? -$amount[$k] : 0;
+				} else {
+					$amount_value = isset($amount[$k]) ? $amount[$k] : 0;
+				}
+				
+				$account_code_value = $account_id[$k];
+			
+				if (!empty($gl_data)) $gl_data .= ", ";
+				$gl_data .= "('{$doc}','{$gtype}','{$v_num}','{$c_num}','CV','{$amount_value}', '{$account_code_value}', NOW())";
+			}
+			if (!empty($gl_data)) {
+				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`,`gtype`,`vs_num`,`cv_num`,`doc_type`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
+				
+				$save_gl = $this->conn->query($gl_sql);
+			
+				if ($save_gl) {
+					$resp['status'] = 'success';
+					if (empty($id)) {
+						$resp['msg'] = " Voucher Setup Entry has successfully added. GL Transactions have been successfully added.";
+					} else {
+						$resp['msg'] = " Voucher Setup has been updated successfully. GL Transactions have been successfully updated.";
+					}
+				}
+			}
+			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$c_num}'");
+			
+			foreach($account_id as $k=>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$c_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+			}
+			if(!empty($data)){
+				$sql = "INSERT INTO `cv_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
+				$save2 = $this->conn->query($sql);
+				if($save2){
+					$resp['status'] = 'success';
+					if(empty($id)){
+						$resp['msg'] = " Voucher Setup Entry has successfully added.";
+					}else
+						$resp['msg'] = " Voucher Setup has been updated successfully.";
+				}else{
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$resp['msg'] = $this->conn->error."[{$sql}]";
+						$this->conn->query("DELETE FROM `vs_entries` where c_num = '{$c_num}'");
+					}else
+						$resp['msg'] = " Voucher Setup Entry has failed to update.";
+					$resp['error'] = $this->conn->error;
+				}
+			}else{
+				$resp['status'] = 'failed';
+				if(empty($id)){
+					$resp['msg'] = $this->conn->error."[{$sql}]";
+					$this->conn->query("DELETE FROM `cv_entries` where c_num = '{$c_num}'");
+				}else
+					$resp['msg'] = " Voucher Setup Entry has failed to update.";
+				$resp['error'] = "Voucher Setup Entry Items is empty";
+			}
+			$doc_no_value = $this->conn->real_escape_string($doc_no[0]); 
+			$sup_code = $_POST['supplier_id'];
+			$gr_list_sql = "INSERT INTO `tbl_gr_list` (`doc_no`,`vs_num`,`cv_num`,`supplier_id`) VALUES ('{$doc_no_value}','{$v_num}','{$c_num}','{$sup_code}')";
 			$save_gr_list = $this->conn->query($gr_list_sql);
 		}else{
 			$resp['status'] = 'failed';
@@ -4371,10 +4513,10 @@ Class Master extends DBConnection {
 		$gl_data = "";
 		$doc_no = $_POST['doc_no'];
 		foreach($_POST as $k =>$v){
-			if ($k === 'vs_num') {
-				//echo "Value of vs_num: $v";
-			}
-			if($k !== 'vs_num' && !in_array($k,array('id'))  && !is_array($_POST[$k])){
+			// if ($k === 'vs_num') {
+			// 	//echo "Value of vs_num: $v";
+			// }
+			if($k !== 'vs_num' && !in_array($k,array('id','gtype'))  && !is_array($_POST[$k])){
 				if(!is_numeric($v) && !is_null($v))
 					$v = $this->conn->real_escape_string($v);
 				if(!empty($data)) $data .=",";
@@ -4403,15 +4545,22 @@ Class Master extends DBConnection {
 			foreach ($account_id as $k => $v) {
 
 				$doc = $doc_no[$k];
-				$amount_value = $amount[$k];
+				$gtype = isset($_POST['type'][$k]) ? $_POST['type'][$k] : null;
+				
+				if ((int)$gtype == 2) {
+					$amount_value = isset($amount[$k]) ? -$amount[$k] : 0;
+				} else {
+					$amount_value = isset($amount[$k]) ? $amount[$k] : 0;
+				}
+				
 				$account_code_value = $account_code[$k];
 				$vs_num_value = $vs_num;
 			
 				if (!empty($gl_data)) $gl_data .= ", ";
-				$gl_data .= "('{$doc}','{$vs_num_value}','{$amount_value}', '{$account_code_value}', NOW())";
+				$gl_data .= "('{$doc}','{$gtype}','{$vs_num_value}','AP','{$amount_value}', '{$account_code_value}', NOW())";
 			}
 			if (!empty($gl_data)) {
-				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
+				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`,`gtype`,`vs_num`,`doc_type`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
 				
 				$save_gl = $this->conn->query($gl_sql);
 			
@@ -4720,12 +4869,16 @@ Class Master extends DBConnection {
 		$vs_num = 0;
 			
 		$vatableValue = $_POST['vatableValue'];
+		$gtype_vat = $_POST['gtype_vat'];
+		$gtype_ewt = $_POST['gtype_ewt'];
+		$gtype_gr = $_POST['gtype_gr'];
+		
 
 		foreach ($_POST as $k => $v) {
 			if (in_array($k, array('discount_amount', 'tax_amount'))) {
 				$v = str_replace(',', '', $v);
 			}
-			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr','doc_no','vatableValue','vs_num')) && !is_array($_POST[$k])) {
+			if (!in_array($k, array('id', 'po_no', 'po_id', 'usertype', 'gr_no', 'prev_del_items', 'prev_outstanding', 'gr_id','account_code_vat','item_code_vat','amount_vat','amount_ewt','account_code_ewt','item_code_ewt','amount_gr','account_code_gr','item_code_gr','doc_no','vatableValue','vs_num','vat_amt','ex_vat','tot','totDec','gtype_gr','gtype_ewt','gtype_vat')) && !is_array($_POST[$k])) {
 				$v = addslashes(trim($v));
 				if (!empty($data)) $data .= ",";
 				$data .= " `{$k}`='{$v}' ";
@@ -4735,11 +4888,26 @@ Class Master extends DBConnection {
 		$data .= ", po_no = '{$po_no}' ";
 
 		if ($vatableValue < 3) {
-			$data2 .= " '{$doc_no}','{$vs_num}','{$po_id}','{$gr_no}','{$account_code_vat}', '{$item_code_vat}', '" . str_replace(',', '', $amount_vat) . "', NOW()";
+			$amount_vat_value = str_replace(',', '', $amount_vat);
+
+			if ($gtype_vat == 2) {
+				$amount_vat_value = -$amount_vat_value;
+			}
+
+			$data2 .= " '{$doc_no}','{$vs_num}','GR','{$po_id}','{$gr_no}','{$account_code_vat}', '{$item_code_vat}', '{$amount_vat_value}', NOW()";
 		}
 
-		$data3 .= " '{$doc_no}','{$vs_num}','{$po_id}','{$gr_no}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt) . "', NOW()";
-		$data4 .= " '{$doc_no}','{$vs_num}','{$po_id}','{$gr_no}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr) . "', NOW()";
+		$amount_ewt_value = str_replace(',', '', $amount_ewt);
+		$amount_gr_value = str_replace(',', '', $amount_gr);
+
+		if ($gtype_ewt == 2) {
+			$amount_ewt_value = -$amount_ewt_value;
+		}
+		if ($gtype_gr == 2) {
+			$amount_gr_value = -$amount_gr_value;
+		}
+		$data3 .= " '{$doc_no}','{$vs_num}','GR','{$po_id}','{$gr_no}','{$account_code_ewt}', '{$item_code_ewt}', '" . str_replace(',', '', $amount_ewt_value) . "', NOW()";
+		$data4 .= " '{$doc_no}','{$vs_num}','GR','{$po_id}','{$gr_no}','{$account_code_gr}', '{$item_code_gr}', '" . str_replace(',', '', $amount_gr_value) . "', NOW()";
 
 		if (empty($id)) {
 			$sql = "INSERT INTO `po_approved_list` SET {$data} ";
@@ -4747,9 +4915,9 @@ Class Master extends DBConnection {
 			$sql = "UPDATE `po_approved_list` SET {$data} WHERE id = '{$id}' ";
 		}
 
-		$sql2 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data2})";
-		$sql3 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data3})";
-		$sql4 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data4})";
+		$sql2 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`doc_type`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data2})";
+		$sql3 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`doc_type`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data3})";
+		$sql4 = "INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`doc_type`,`po_id`,`gr_id`,`account`, `item_code`, `amount`, `journal_date`) VALUES ({$data4})";
 
 		$save1 = $this->conn->query($sql);
 		$save2 = (int)$vatableValue < 3 ? $this->conn->query($sql2) : true;
@@ -4781,14 +4949,14 @@ Class Master extends DBConnection {
 					$query .= "('{$gr_id}', '{$po_id}', '{$v}', '{$unit[$k]}', '{$unit_price[$k]}', '{$qty[$k]}', '{$received[$k]}', '{$outstanding[$k]}', '{$del_items[$k]}')";
 	
 					if (!empty($query1)) $query1 .= ",";
-					$query1 .= "('{$doc_no}','{$vs_num}','{$po_id}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
+					$query1 .= "('{$doc_no}','{$vs_num}','GR','{$po_id}','{$gr_id}','{$item_id[$k]}','{$account_code[$k]}','{$item_code[$k]}','{$amount[$k]}',NOW())";
 
 					
 					
 				}
 	
 				$save_order_items = $this->conn->query("INSERT INTO `approved_order_items` (`gr_id`,`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`received`,`outstanding`, `del_items`) VALUES {$query}");
-				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`po_id`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`journal_date`) VALUES {$query1}");
+				$save_trans = $this->conn->query("INSERT INTO `tbl_gl_trans` (`doc_no`,`vs_num`,`doc_type`,`po_id`,`gr_id`,`item_id`,`account`,`item_code`,`amount`,`journal_date`) VALUES {$query1}");
 				
 	
 				if ($save_order_items && $save_trans) {
@@ -4818,7 +4986,7 @@ Class Master extends DBConnection {
 		//$discount_amount = str_replace(',', '', $discount_amount,$tax_amount);
 		if($level == 4 and $selected_index == 1){
 			#$update = $this->conn->query("UPDATE `po_list` set `status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
-			$update = $this->conn->query("UPDATE `po_list` set `vatable`='{$vatable}',`tax_amount`='{$tax_amount}',`status` = '1', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
+			$update = $this->conn->query("UPDATE `po_list` set `vatable`='{$vatable}',`tax_amount`='{$tax_amount}',`status` = '0', `status2` = '0', `status3` = '0' where id = '{$po_id}'");
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
@@ -4830,7 +4998,23 @@ Class Master extends DBConnection {
 				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
 			}
 		}
-		else if($level == 3){
+		else if($level == 3 && $usertype == "Purchasing Supervisor"){
+		//else if($level == 3){
+			$update = $this->conn->query("UPDATE `po_list` set `status` = '{$status}',`fpo_status` = '{$status}' where id = '{$po_id}'");
+			//$po_id = empty($id) ? $this->conn->insert_id : $id ;
+			//$resp['id'] = $po_id;
+			$data = "";
+			foreach($item_id as $k =>$v){
+				if(!empty($data)) $data .=",";
+				$item_notes[$k] = $this->conn->real_escape_string($item_notes[$k]);
+				$data .= "('{$po_id}','{$v}','{$default_unit[$k]}','{$unit_price[$k]}','{$qty[$k]}','{$item_status[$k]}','{$item_notes[$k]}')";
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}' and item_status != 2");
+				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
+			}
+		}
+		else if($level == 3 && $usertype != "Purchasing Supervisor"){
 			$update = $this->conn->query("UPDATE `po_list` set `status2` = '{$status2}',`fpo_status` = '{$status2}' where id = '{$po_id}'");
 			//$po_id = empty($id) ? $this->conn->insert_id : $id ;
 			//$resp['id'] = $po_id;
@@ -4858,6 +5042,7 @@ Class Master extends DBConnection {
 				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
 			}
 		}
+		
 		else if ($level == 2 && $selected_index == 1) {
 			$update = $this->conn->query("UPDATE `po_list` SET `status` = '1',`status2` = '1',`status3` = '{$status3}',`fpo_status` = '{$status3}' WHERE id = '{$po_id}'");
 			$data = "";
@@ -5145,7 +5330,7 @@ Class Master extends DBConnection {
 		extract($_POST);
 		
 		$data = "";
-		
+		$gl_data = "";
 		foreach($_POST as $k =>$v){
 			if ($k === 'divChoice') {
 				continue; 
@@ -5154,7 +5339,7 @@ Class Master extends DBConnection {
 			// 	continue;
 			// }
 
-			if(!in_array($k,array('id'))  && !is_array($_POST[$k])){
+			if(!in_array($k,array('id','gtype'))  && !is_array($_POST[$k])){
 				if(!is_numeric($v) && !is_null($v))
 					$v = $this->conn->real_escape_string($v);
 				if(!empty($data)) $data .=",";
@@ -5164,9 +5349,12 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE c_num = '{$id}'");
+
+		
+		$checkIdQuery = $this->conn->query("SELECT * FROM `cv_entries` WHERE c_num = '{$c_num}'");
+		//echo $c_num;
 		if ($checkIdQuery->num_rows > 0) {
-			
+			//$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
 			$sql = "UPDATE `cv_entries` SET {$data} WHERE c_num = '{$id}'";
 		} else {
 			$sql = "INSERT INTO `cv_entries` SET {$data}";
@@ -5181,7 +5369,39 @@ Class Master extends DBConnection {
 			}
 			
 			$data = "";
+			foreach ($account_id as $k => $v) {
+				$doc = $doc_no[$k];
+				//$gtype = $gtype[$k];
+				$gtype = isset($_POST['type'][$k]) ? $_POST['type'][$k] : null;
 
+				if ((int)$gtype == 2) {
+					$amount_value = isset($amount[$k]) ? -$amount[$k] : 0;
+				} else {
+					$amount_value = isset($amount[$k]) ? $amount[$k] : 0;
+				}
+				
+			
+				$account_code_value = isset($account_id[$k]) ? $account_id[$k] : '';
+				$vs_num_value = $v_num;
+			
+				if (!empty($gl_data)) $gl_data .= ", ";
+				$gl_data .= "('{$doc}','CV','{$gtype}','{$vs_num_value}','{$c_num}','{$amount_value}', '{$account_code_value}', NOW())";
+			}
+			
+			
+			if (!empty($gl_data)) {
+				$gl_sql = "INSERT INTO `tbl_gl_trans` (`doc_no`, `doc_type`,`gtype`, `vs_num`,`cv_num`,`amount`,`account`,`journal_date`) VALUES {$gl_data}";
+				$save_gl = $this->conn->query($gl_sql);
+			
+				if ($save_gl) {
+					$resp['status'] = 'success';
+					if (empty($id)) {
+						$resp['msg'] = " Voucher Setup Entry has successfully added. GL Transactions have been successfully added.";
+					} else {
+						$resp['msg'] = " Voucher Setup has been updated successfully. GL Transactions have been successfully updated.";
+					}
+				}
+			}
 			$this->conn->query("DELETE FROM `cv_items` where journal_id = '{$c_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
@@ -5214,6 +5434,12 @@ Class Master extends DBConnection {
 					$resp['msg'] = " Voucher Setup Entry has failed to update.";
 				$resp['error'] = "Voucher Setup Entry Items is empty";
 			}
+			$doc_no_value = $this->conn->real_escape_string($doc_no[0]); 
+			$sup_code = $_POST['supplier_id'];
+
+			$gr_list_sql = "INSERT INTO `tbl_gr_list` (`doc_no`,`vs_num`,`cv_num`,`supplier_id`) VALUES ('{$doc_no_value}','{$v_num}','{$c_num}','{$sup_code}')";
+			
+			$save_gr_list = $this->conn->query($gr_list_sql);
 		}else {
 	
 			error_log("CV Items Error: " . $this->conn->error . " [{$sql}]");
@@ -5226,9 +5452,6 @@ Class Master extends DBConnection {
 		if($resp['status'] =='success')
 		    $this->settings->set_flashdata('success',$resp['msg']);
 		return json_encode($resp);
-		
-		
-		
 	}
 
 	function edit_cv() {
@@ -5683,6 +5906,9 @@ switch ($action) {
 	break;
 	case 'manage_cv':
 		echo $Master->manage_cv();
+	break;
+	case 'modify_cv':
+		echo $Master->modify_cv();
 	break;
 	case 'edit_cv':
 		echo $Master->edit_cv();

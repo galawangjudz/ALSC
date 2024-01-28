@@ -67,7 +67,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <select name="account_title[]" class="form-control">
                         <option value="" disabled>Select an option</option>
                             <?php
-                                $account_list_qry = $conn->query("SELECT * FROM account_list WHERE code !='2001' and code != '1201' and code != '2118'");
+                                $account_list_qry = $conn->query("SELECT * FROM account_list WHERE code !='21002' and code != '11076' and code != '21012'");
                                 while($account_row = $account_list_qry->fetch_assoc()):
                             ?>
                                 <option value="<?php echo $account_row['code']; ?>" <?php echo ($row['account_code'] == $account_row['code']) ? 'selected' : ''; ?>><?php echo $account_row['name']; ?></option>

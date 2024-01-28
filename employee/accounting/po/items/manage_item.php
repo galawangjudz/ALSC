@@ -163,7 +163,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             $query = "SELECT a.*, g.name AS group_name 
                     FROM account_list a 
                     INNER JOIN group_list g ON a.group_id = g.id 
-                    WHERE a.code != '2001' AND a.code != '1201' AND a.code != '2118'
+                    WHERE a.code != '21002' AND a.code != '11076' AND a.code != '21012'
                     ORDER BY g.name, a.name";
 
             $result = $conn->query($query);

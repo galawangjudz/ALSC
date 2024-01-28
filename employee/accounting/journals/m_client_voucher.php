@@ -12,7 +12,7 @@ $due_date = date('Y-m-d', strtotime('+1 week'));
 $publicId = '';
 
 if (isset($_GET['id'])) {
-    $qry = $conn->query("SELECT * FROM `vs_entries` where v_num = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT * FROM `vs_entries` WHERE v_num = '{$_GET['id']}'");
     if ($qry->num_rows > 0) {
         $res = $qry->fetch_array();
         foreach ($res as $k => $v) {
@@ -22,13 +22,28 @@ if (isset($_GET['id'])) {
         }
 
         $publicId = $_GET['id'];
+
+        if ($publicId > 0) {
+            $docNoQuery = $conn->query("SELECT doc_no FROM tbl_gl_trans WHERE vs_num = '$publicId'");
+            if ($docNoQuery) {
+                $docNoRow = $docNoQuery->fetch_assoc();
+                $docNo = $docNoRow['doc_no'];
+                echo "Document Number for vs_num $publicId: $docNo" . "<br>";
+
+
+                $doc_no = $docNo;
+            } else {
+                echo "Error executing doc_no query: " . $conn->error;
+            }
+        }
     }
-    echo $publicId;
+    echo "VS NO: " . $publicId . "<br>";
 }
 
 $is_new_vn = true;
 
-$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+
+$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'AP'");
 
 if ($query) {
     $row = $query->fetch_assoc();
@@ -36,17 +51,21 @@ if ($query) {
     if ($maxDocNo === null) {
         $maxDocNo = 0;
     }
-    if($publicId > 0){
-        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
-    }else{
+    if ($publicId > 0) {
+
+        $newDocNo = $doc_no;
+        echo "New_DOC" . $newDocNo . "<br>";
+    } else {
         $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+        echo "Max_DOC" . $maxDocNo;
     }
 
-    echo $newDocNo;
+    
+    
 } else {
-
     echo "Error executing query: " . $conn->error;
 }
+
 
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
@@ -167,11 +186,11 @@ function format_num($number){
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="journal_date" class="control-label">Date:</label>
+                            <label for="journal_date" class="control-label">Transaction Date:</label>
                             <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Due Date:</label>
+                            <label for="due_date" class="control-label">Check Date:</label>
                             <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                         </div>
                     </div>
@@ -221,43 +240,43 @@ function format_num($number){
                         <div class="form-group col-md-4">
                             <label for="account_id" class="control-label">Account Name:</label>
                             <select id="account_id" class="form-control form-control-sm form-control-border select2">
-                            <option value="" disabled selected></option>
-							<?php 
-							$accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-							$currentGroup = null;
-							$groupedAccounts = array();
+                                <option value="" disabled selected></option>
+                                <?php 
+                                $accounts = $conn->query("SELECT a.*, g.name AS gname FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
+                                $currentGroup = null;
+                                $groupedAccounts = array();
 
-							while($row = $accounts->fetch_assoc()):
-								$account_arr[$row['id']] = $row;
+                                while($row = $accounts->fetch_assoc()):
+                                    $account_arr[$row['id']] = $row;
 
-								if ($row['gname'] != $currentGroup) {
-									
-									if ($currentGroup !== null) {
-										echo '</optgroup>';
+                                    if ($row['gname'] != $currentGroup) {
+                                        
+                                        if ($currentGroup !== null) {
+                                            echo '</optgroup>';
 
-										foreach ($groupedAccounts[$currentGroup] as $account) {
-											echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
-										}
+                                            foreach ($groupedAccounts[$currentGroup] as $account) {
+                                                echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
+                                            }
 
-										$groupedAccounts[$currentGroup] = array();
-									}
+                                            $groupedAccounts[$currentGroup] = array();
+                                        }
 
-									echo '<optgroup label="' . $row['gname'] . '">';
-									$currentGroup = $row['gname'];
-								}
+                                        echo '<optgroup label="' . $row['gname'] . '">';
+                                        $currentGroup = $row['gname'];
+                                    }
 
-								$groupedAccounts[$currentGroup][] = $row;
-							endwhile;
+                                    $groupedAccounts[$currentGroup][] = $row;
+                                endwhile;
 
-							if ($currentGroup !== null) {
-								echo '</optgroup>';
+                                if ($currentGroup !== null) {
+                                    echo '</optgroup>';
 
-								foreach ($groupedAccounts[$currentGroup] as $account) {
-									echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
-								}
-							}
-							?>
-						</select>
+                                    foreach ($groupedAccounts[$currentGroup] as $account) {
+                                        echo '<option value="' . $account['id'] . '" data-group-id="' . $account['group_id'] . '">' . $account['name'] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="account_code" class="control-label">Account Code:</label>
@@ -273,11 +292,26 @@ function format_num($number){
                                     unset($row['description']);
                                     $group_arr[$row['id']] = $row;
                                 ?>
-                                <option value="<?= $row['id'] ?>" data-group-name="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                <option value="<?= $row['id'] ?>" data-group-type="<?= $row['type'] ?>" data-group-name="<?= $row['name'] ?>"><?= $row['name'] ?></option>
                                 <?php endwhile; ?>
                             </select>
                         </div>
                     </div>
+                    <input type="text" id="gtype" name="gtype">
+                    <script>
+                        $(document).ready(function(){
+                            function updateGType(selectedAccountId) {
+                                var selectedOption = $('#account_id option[value="' + selectedAccountId + '"]');
+                                var selectedGroupId = selectedOption.data('group-id');
+                                var selectedType = $('#group_id option[value="' + selectedGroupId + '"]').data('group-type');
+                                $('#gtype').val(selectedType);
+                            }
+                            $('#account_id').change(function(){
+                                var selectedAccountId = $(this).val();
+                                updateGType(selectedAccountId);
+                            });
+                        });
+                    </script>
                     <div class="row align-items-end">
                         <div class="form-group col-md-12">
                             <label for="amount" class="control-label">Amount:</label>
@@ -327,9 +361,10 @@ function format_num($number){
                                 <td class="">
                                     <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
                                     <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                    <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                    <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                    <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="text" name="type[]" value="<?= $row['type'] ?>">
+                                    <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                    <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
                                     <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
                                     <span class="account_code"><?= $row['account_code'] ?></span>
                                 </td>
@@ -448,8 +483,9 @@ function format_num($number){
             <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
             <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <!-- <input type="hidden" name="account_code[]" value=""> -->
-            <input type="hidden" name="account_id[]" value="">
-            <input type="hidden" name="group_id[]" value="">
+            <input type="text" name="type[]" value="<?= $row['type'] ?>">
+            <input type="text" name="account_id[]" value="">
+            <input type="text" name="group_id[]" value="">
             <input type="hidden" name="amount[]" value="">
             <span class="account"></span>
         </td>
@@ -601,54 +637,58 @@ $(document).ready(function () {
         var counter = 1; 
 
         $('#add_to_list').click(function () {
-        var account_id = $('#account_id').val();
-        var account_code = $('#account_code').val();
-        var group_id = $('#group_id').val();
-        var amount = $('#amount').val();
+            var type = $('#gtype').val();
+            var account_id = $('#account_id').val();
+            var account_code = $('#account_code').val();
+            var group_id = $('#group_id').val();
+
+            var amount = $('#amount').val();
 
 
-        if (account_code.trim() === '') {
-            alert('Please enter an account code.'); 
-            return; 
-        }
-        if (amount.trim() === '') {
-            alert('Please enter amount.'); 
-            return; 
-        }
+            if (account_code.trim() === '') {
+                alert('Please enter an account code.'); 
+                return; 
+            }
+            if (amount.trim() === '') {
+                alert('Please enter amount.'); 
+                return; 
+            }
 
-        var tr = $($('noscript#item-clone').html()).clone();
-        var account_data = !!account[account_id] ? account[account_id] : {};
-        var group_data = !!group[group_id] ? group[group_id] : {};
+            var tr = $($('noscript#item-clone').html()).clone();
+            var account_data = !!account[account_id] ? account[account_id] : {};
+            var group_data = !!group[group_id] ? group[group_id] : {};
 
-        tr.find('#item_no').val(counter);
-        tr.find('input[name="account_code[]"]').val(account_code);
-        tr.find('input[name="account_id[]"]').val(account_id);
-        tr.find('input[name="group_id[]"]').val(group_id);
-        tr.find('input[name="amount[]"]').val(amount);
+            tr.find('#item_no').val(counter);
+            tr.find('input[name="account_code[]"]').val(account_code);
+            tr.find('input[name="type[]"]').val(type);
+            tr.find('input[name="account_id[]"]').val(account_id);
+            tr.find('input[name="group_id[]"]').val(group_id);
+            tr.find('input[name="amount[]"]').val(amount);
 
-        tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
-        tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
+            tr.find('.account').text(!!account_data.name ? account_data.name : "N/A");
+            tr.find('.group').text(!!group_data.name ? group_data.name : "N/A");
 
-        if (!!group_data.type && group_data.type == 1)
-            tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
-        else
-            tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+            if (!!group_data.type && group_data.type == 1)
+                tr.find('.debit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
+            else
+                tr.find('.credit_amount').text(parseFloat(amount).toLocaleString('en-US', { style: 'decimal' }));
 
-        $('#account_list').append(tr);
+            $('#account_list').append(tr);
 
-        tr.find('.delete-row').click(function () {
-            $(this).closest('tr').remove();
+            tr.find('.delete-row').click(function () {
+                $(this).closest('tr').remove();
+                cal_tb();
+            });
             cal_tb();
+
+            $('#account_code').val('').trigger('change');
+            $('#type').val('').trigger('change');
+            $('#account_id').val('').trigger('change');
+            $('#group_id').val('').trigger('change');
+            $('#amount').val('').trigger('change');
+
+            counter++;
         });
-        cal_tb();
-
-        $('#account_code').val('').trigger('change');
-        $('#account_id').val('').trigger('change');
-        $('#group_id').val('').trigger('change');
-        $('#amount').val('').trigger('change');
-
-        counter++;
-    });
 
         $('#journal-form').submit(function (e) {
             e.preventDefault();

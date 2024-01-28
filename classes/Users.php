@@ -14,7 +14,7 @@ Class Users extends DBConnection {
 		extract($_POST);
 		$data = '';
 		foreach($_POST as $k => $v){
-			if(!in_array($k,array('id','password'))){
+			if(!in_array($k,array('user_id','password'))){
 				if(!empty($data)) $data .=" , ";
 				$data .= " {$k} = '{$v}' ";
 			}
@@ -39,7 +39,7 @@ Class Users extends DBConnection {
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully added.');
 				foreach($_POST as $k => $v){
-				$this->settings->set_userdata($k,$v);	if($k != 'id'){
+				$this->settings->set_userdata($k,$v);	if($k != 'user_id'){
 						if(!empty($data)) $data .=" , ";
 						
 					}
@@ -50,11 +50,11 @@ Class Users extends DBConnection {
 			}
 
 		}else{
-			$qry = $this->conn->query("UPDATE users set $data where id = {$id}");
+			$qry = $this->conn->query("UPDATE users set $data where user_id = {$id}");
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully updated.');
 				foreach($_POST as $k => $v){
-					if($k != 'id'){
+					if($k != 'user_id'){
 						if(!empty($data)) $data .=" , ";
 						$this->settings->set_userdata($k,$v);
 					}
@@ -64,7 +64,7 @@ Class Users extends DBConnection {
 
 				return 1;
 			}else{
-				return "UPDATE users set $data where id = {$id}";
+				return "UPDATE users set $data where user_id = {$id}";
 			}
 			
 		}
@@ -73,7 +73,7 @@ Class Users extends DBConnection {
 		extract($_POST);
 		$data = '';
 		foreach($_POST as $k => $v){
-			if(!in_array($k,array('id','password'))){
+			if(!in_array($k,array('user_code','password'))){
 				if(!empty($data)) $data .=" , ";
 				$data .= " {$k} = '{$v}' ";
 			}
@@ -102,19 +102,19 @@ Class Users extends DBConnection {
 			}
 
 		}else{
-			$qry = $this->conn->query("UPDATE users set $data where id = {$id}");
+			$qry = $this->conn->query("UPDATE users set $data where user_code = {$id}");
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully updated.');
 				return 1;
 			}else{
-				return "UPDATE users set $data where id = {$id}";
+				return "UPDATE users set $data where user_code = {$id}";
 			}
 			
 		}
 	}
 	public function delete_users(){
 		extract($_POST);
-		$qry = $this->conn->query("DELETE FROM users where id = $id");
+		$qry = $this->conn->query("DELETE FROM users where user_id = $id");
 		if($qry){
 			$this->settings->set_flashdata('success','User Details successfully deleted.');
 			return 1;
@@ -126,7 +126,7 @@ Class Users extends DBConnection {
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id','password'))){
+			if(!in_array($k, array('user_id','password'))){
 				if(!empty($data)) $data .= ", ";
 				$data .= " `{$k}` = '{$v}' ";
 			}
@@ -144,13 +144,13 @@ Class Users extends DBConnection {
 						unlink('../'.$_SESSION['userdata']['avatar']);
 				}
 			}
-			$sql = "UPDATE faculty set {$data} where id = $id";
+			$sql = "UPDATE faculty set {$data} where user_id = $id";
 			$save = $this->conn->query($sql);
 
 			if($save){
 			$this->settings->set_flashdata('success','User Details successfully updated.');
 			foreach($_POST as $k => $v){
-				if(!in_array($k,array('id','password'))){
+				if(!in_array($k,array('user_id','password'))){
 					if(!empty($data)) $data .=" , ";
 					$this->settings->set_userdata($k,$v);
 				}
@@ -165,48 +165,7 @@ Class Users extends DBConnection {
 
 	} 
 
-	public function save_susers(){
-		extract($_POST);
-		$data = "";
-		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id','password'))){
-				if(!empty($data)) $data .= ", ";
-				$data .= " `{$k}` = '{$v}' ";
-			}
-		}
-
-			if(!empty($password))
-			$data .= ", `password` = '".md5($password)."' ";
-		
-			if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
-				if($move){
-					$data .=" , avatar = '{$fname}' ";
-					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']))
-						unlink('../'.$_SESSION['userdata']['avatar']);
-				}
-			}
-			$sql = "UPDATE students set {$data} where id = $id";
-			$save = $this->conn->query($sql);
-
-			if($save){
-			$this->settings->set_flashdata('success','User Details successfully updated.');
-			foreach($_POST as $k => $v){
-				if(!in_array($k,array('id','password'))){
-					if(!empty($data)) $data .=" , ";
-					$this->settings->set_userdata($k,$v);
-				}
-			}
-			if(isset($fname) && isset($move))
-			$this->settings->set_userdata('avatar',$fname);
-			return 1;
-			}else{
-				$resp['error'] = $sql;
-				return json_encode($resp);
-			}
-
-	} 
+	
 	
 }
 
@@ -221,9 +180,6 @@ switch ($action) {
 	break;
 	case 'fsave':
 		echo $users->save_fusers();
-	break;
-	case 'ssave':
-		echo $users->save_susers();
 	break;
 	case 'delete':
 		echo $users->delete_users();

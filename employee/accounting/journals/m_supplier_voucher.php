@@ -8,7 +8,7 @@ $adjustedTotalDebit=0;
 $wtTotal=0;
 $totalCredit = 0;
 $totalDebit = 0;
-$due_date = date('Y-m-d', strtotime('+1 week'));
+// $due_date = date('Y-m-d', strtotime('+1 week'));
 $publicId = '';
 
 if (isset($_GET['id'])) {
@@ -23,11 +23,11 @@ if (isset($_GET['id'])) {
 
         $publicId = $_GET['id'];
     }
-    echo $publicId;
+    //echo $publicId;
 }
 $is_new_vn = true;
 
-$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'AP'");
 
 if ($query) {
     $row = $query->fetch_assoc();
@@ -35,17 +35,21 @@ if ($query) {
     if ($maxDocNo === null) {
         $maxDocNo = 0;
     }
-    if($publicId > 0){
-        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
-    }else{
+    if ($publicId > 0) {
+
+        $newDocNo = $doc_no;
+        echo "New_DOC" . $newDocNo . "<br>";
+    } else {
         $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+        echo "Max_DOC" . $maxDocNo;
     }
 
-    echo $newDocNo;
+    
+    
 } else {
-
     echo "Error executing query: " . $conn->error;
 }
+
 
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_v_id = $_GET['id'];
@@ -164,7 +168,7 @@ function format_num($number){
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="po_no">P.O. #: </label>
-                            <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                            <!-- <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
                                 <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
                                 <?php 
                                 $po_qry = $conn->query("SELECT * FROM `po_list` WHERE status = 1 ORDER BY `po_no` ASC");
@@ -175,18 +179,27 @@ function format_num($number){
                                     <?php echo isset($po_no) && $po_no == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
                                 ><?php echo $row['po_no'] ?></option>
                                 <?php endwhile; ?>
-                            </select>
+                            </select> -->
+                            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="journal_date" class="control-label">Date:</label>
+                            <label for="journal_date" class="control-label">Transaction Date:</label>
                             <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Due Date:</label>
-                            <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
+                            <label for="due_date" class="control-label">Check Date:</label>
+                            <?php
+                            if (!empty($due_date)) {
+                                $dueformattedDate = date('Y-m-d', strtotime($due_date));
+                            } else {
+                                $dueformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" id="due_date" name="due_date" value="<?php echo isset($dueformattedDate) ? $dueformattedDate : '' ?>" required>
                         </div>
+                            <!-- <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required> -->
                     </div>
 
                     <div class="paid_to_main">
@@ -253,13 +266,13 @@ function format_num($number){
 
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
-        <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+        <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
 
-            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <!-- <input type="text" name="account_code[]" value=""> -->
-            <input type="text" name="account_id[]" value="">
-            <input type="text" name="group_id[]" value="">
-            <input type="text" name="amount[]" value="">
+            <input type="hidden" name="account_id[]" value="">
+            <input type="hidden" name="group_id[]" value="">
+            <input type="hidden" name="amount[]" value="">
             <span class="account"></span>
         </td>
         <td class="">
@@ -532,8 +545,7 @@ $(document).ready(function () {
             });
         })
     })
-</script>
-<script>
+
   $(document).ready(function () {
         $('#supplier_id').on('change', function () {
         var selectedSupplierId = $(this).val();
@@ -632,7 +644,30 @@ $('#display-selected-gr-details').on('click', async function () {
     } catch (error) {
         console.error('Error in processCheckboxes:', error);
     }
+
+    checkedGrIds.forEach(function (grId) {
+        let localTotalCredit = 0;
+        let localTotalDebit = 0;
+
+        $('table[data-gr-id="' + grId + '"] .debit_amount').each(function () {
+            localTotalDebit += parseFloat($(this).val().replace(/,/g, '')) || 0;
+        });
+
+        $('table[data-gr-id="' + grId + '"] .credit_amount').each(function () {
+            localTotalCredit += parseFloat($(this).val().replace(/,/g, '')) || 0;
+        });
+
+        $('table[data-gr-id="' + grId + '"] #total-debit').text(localTotalDebit.toFixed(2));
+        $('table[data-gr-id="' + grId + '"] #total-credit').text(localTotalCredit.toFixed(2));
+    });
 });
+
+
+function buildMainTableHtml(tableRows) {
+    return '<table class="table-bordered" style="width: 100%">' +
+        '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th></tr></thead>' +
+        '<tbody>' + tableRows.join('') + '</tbody></table>';
+}
 function buildMainTableRows(grData) {
     return grData.map(function (grData) {
         return '<tr>' +
@@ -645,11 +680,22 @@ function buildMainTableRows(grData) {
             '</tr>';
     });
 }
-function buildMainTableHtml(tableRows) {
-    return '<table class="table-bordered" style="width: 100%">' +
-        '<thead><tr><th>GR #</th><th>PO #</th><th>Date/Time Received</th></tr></thead>' +
-        '<tbody>' + tableRows.join('') + '</tbody></table>';
-}
+$(document).on('change', '.selected-gr-checkbox', function () {
+    updatePoNoTextbox();
+});
+function updatePoNoTextbox() {
+        var selectedPoNos = [];
+
+        $('.selected-gr-checkbox:checked').each(function () {
+            var grId = $(this).data('id');
+            var poNo = $('[data-id="' + grId + '"]').closest('tr').find('td:eq(1)').text();
+            selectedPoNos.push(poNo);
+        });
+
+
+        $('#po_no').val(selectedPoNos.join(', '));
+    }
+    $('#mainTable').append(buildMainTableRows(grData));
 function getCheckedGrIds() {
     const checkedGrIds = [];
     $('.selected-gr-checkbox:checked').each(function () {

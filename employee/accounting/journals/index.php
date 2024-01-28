@@ -132,7 +132,7 @@ function format_num($number){
 					
 					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					// $user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by date(journal_date) asc");
+					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by date_created desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>

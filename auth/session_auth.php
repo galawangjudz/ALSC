@@ -59,6 +59,11 @@ if(isset($_SESSION['userdata'])){
             redirect('employee/accounting/index.php');
         }
     }  
+    if($_SESSION['userdata']['user_type'] == 'Purchasing Supervisor'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/po_m/index.php');
+        }
+    }  
 }
 
 ?>

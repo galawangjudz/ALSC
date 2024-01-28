@@ -1,0 +1,119 @@
+
+	/* index.php */
+	.nav-cpo{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-cpo:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
+    .hidden-cell {
+        display: none;
+    }
+	/* input{
+		border:none;
+	} */
+    .nav-cpo {
+		background-color: #007bff;
+		color: white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	}
+	.main_menu {
+		float: left;
+		width: 227px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		color: black!important;
+		border-right: solid 3px white;
+	}
+	#main-title {
+		font-style: italic;
+		font-weight: bold;
+	}
+	.main_menu:hover {
+		border-bottom: solid 2px blue;
+		background-color: #E8E8E8;
+	}
+	#container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: transparent;
+	}
+	.navbar-menu {
+		width: 908px; 
+		margin: auto; 
+		display: flex;
+		flex-direction: row;
+		align-items: center; 
+		justify-content: space-around;
+	}
+
+
+/*view_po.php*/
+	.label-danger {
+        background-color: #FF0000;
+        color: #FFFFFF;
+    }
+    .label-success {
+        background-color: #28A745;
+        color: #FFFFFF;
+    }
+    .label-secondary {
+        background-color: #888888; 
+        color: #ffffff; 
+    }
+    #notes {
+        min-width: 590px;
+        min-height: 100px;
+        resize: none; 
+    }
+    /* input{
+        border:none !important;
+    } */
+    span.select2-selection.select2-selection--single {
+        border-radius: 0;
+        padding: 0.25rem 0.5rem;
+        padding-top: 0.25rem;
+        padding-right: 0.5rem;
+        padding-bottom: 0.25rem;
+        padding-left: 0.5rem;
+        height: auto;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+    [name="tax_percentage"],[name="discount_percentage"]{
+        width:5vw;
+    }
+    .disabled-link {
+        pointer-events: none;
+        opacity: 0.6; 
+    }
+    input{
+        pointer-events:none;
+        border:none;
+        background-color: transparent;
+    }
+    .nav-orders{
+        background-color:#007bff;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-orders:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
+	.table{
+		font-size:12px;
+	}

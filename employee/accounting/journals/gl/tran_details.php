@@ -14,14 +14,16 @@
 				<colgroup>
 					<col width="10%">
                     <col width="10%">
+					<col width="10%">
 					<col width="30%">
 					<col width="30%">
-					<col width="20%">
+					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
 						<th>VS No.</th>
+						<th>Doc Type</th>
 						<th>Doc No.</th>
 						<th>Doc Date</th>
 						<th>Action</th>
@@ -30,12 +32,13 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT DISTINCT(vs_num),doc_no,journal_date from `tbl_gl_trans` order by (`journal_date`) desc ");
+					$qry = $conn->query("SELECT DISTINCT(vs_num),doc_type,doc_no,journal_date from `tbl_gl_trans` order by (`journal_date`) desc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo ($row['vs_num'] == 0) ? '-' : $row['vs_num']; ?></td>
+							<td><?php echo $row['doc_type'] ?></td>
 							<td><?php echo $row['doc_no'] ?></td>
                             <td><?php echo date("Y-m-d H:i",strtotime($row['journal_date'])) ?></td>
 							<td align="center">

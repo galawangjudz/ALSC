@@ -13,9 +13,9 @@
     .hidden-cell {
         display: none;
     }
-	input{
+	/* input{
 		border:none;
-	}
+	} */
     .nav-cpo {
 		background-color: #007bff;
 		color: white!important;
@@ -72,9 +72,9 @@
         min-height: 100px;
         resize: none; 
     }
-    input{
+    /* input{
         border:none !important;
-    }
+    } */
     span.select2-selection.select2-selection--single {
         border-radius: 0;
         padding: 0.25rem 0.5rem;
@@ -101,7 +101,7 @@
     }
     input{
         pointer-events:none;
-        border:none;
+        /* border:none; */
         background-color: transparent;
     }
     .nav-orders{

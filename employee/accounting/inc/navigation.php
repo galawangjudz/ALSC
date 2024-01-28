@@ -13,7 +13,11 @@
   list-style: none;
   padding: 0;
 }
-
+.cv-nav-list {
+  display: none;
+  list-style: none;
+  padding: 0;
+}
 
 </style>
 <?php $usertype = $_settings->userdata('user_type'); 
@@ -22,7 +26,7 @@ $level = $_settings->userdata('type');
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>employee/coo" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;
@@ -165,12 +169,13 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    
                     <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>Create Voucher Setup</i></b>
                       </li>
                     </div>
-                    <ul class="nav-list">
+
                       <li class="nav-item">
                         <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_agent_voucher" class="nav-link">
                           <i class="nav-icon fas fa-id-card"></i>
@@ -195,7 +200,14 @@ $level = $_settings->userdata('type');
                           <p>Suppliers</p>
                         </a>
                       </li>
-                    </ul>
+
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=cv/manage_check_voucher">
+                          <b><i>Create Check Voucher Setup</i></b>
+                        </a>
+                      </li>
+                    </div>
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
                         <i class="nav-icon fas fa-folder"></i>
@@ -262,8 +274,11 @@ $level = $_settings->userdata('type');
     const navList = document.querySelector('.nav-list');
     navList.style.display = (navList.style.display === 'none' || navList.style.display === '') ? 'block' : 'none';
   }
-
-  // Prevent toggling when a link is clicked
+  function togglecvNavList() {
+    const navList = document.querySelector('.cv-nav-list');
+    navList.style.display = (navList.style.display === 'none' || navList.style.display === '') ? 'block' : 'none';
+  }
+  
   const navLinks = document.querySelectorAll('.nav-list a');
   navLinks.forEach(link => {
     link.addEventListener('click', function (event) {

@@ -218,7 +218,7 @@ if ($vat == 1){ ?>
     $query_vat = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '1201';
+    WHERE al.code = '11076';
     ";
 
     $qry_vat = $conn->query($query_vat);
@@ -308,7 +308,7 @@ if ($vat == 1){ ?>
     $query_ewt = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '2118';
+    WHERE al.code = '21012';
     ";
 
     $qry_ewt = $conn->query($query_ewt);
@@ -397,7 +397,7 @@ if ($vat == 1){ ?>
     $query_ap = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '2001';
+    WHERE al.code = '21002';
     ";
 
     $qry_ap = $conn->query($query_ap);
@@ -666,7 +666,7 @@ if ($vat == 1){ ?>
     $query_vat = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '1201';
+    WHERE al.code = '11076';
     ";
 
     $qry_vat = $conn->query($query_vat);
@@ -756,7 +756,7 @@ if ($vat == 1){ ?>
     $query_ewt = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '2118';
+    WHERE al.code = '21012';
     ";
 
     $qry_ewt = $conn->query($query_ewt);
@@ -845,7 +845,7 @@ if ($vat == 1){ ?>
     $query_ap = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '2001';
+    WHERE al.code = '21002';
     ";
 
     $qry_ap = $conn->query($query_ap);
@@ -1114,7 +1114,7 @@ if ($vat == 1){ ?>
     $query_ewt = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '2118';
+    WHERE al.code = '21012';
     ";
 
     $qry_ewt = $conn->query($query_ewt);
@@ -1203,7 +1203,7 @@ if ($vat == 1){ ?>
     $query_ap = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
     FROM `account_list` al
     JOIN `group_list` gl ON al.group_id = gl.id
-    WHERE al.code = '2001';
+    WHERE al.code = '21002';
     ";
 
     $qry_ap = $conn->query($query_ap);

@@ -57,19 +57,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	$level = $_settings->userdata('type');
 ?>
 <?php
-$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+$query = $conn->query("SELECT COUNT(DISTINCT po_id) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'GR'");
 
 if ($query) {
     $row = $query->fetch_assoc();
     $maxDocNo = $row['max_doc_no'];
-    if ($maxDocNo === null) {
-        $maxDocNo = 0;
-    }
-    $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+    $newDocNo = '1' . sprintf('%05d', $maxDocNo + 1);
 
-    //echo $newDocNo;
+    echo $newDocNo;
 } else {
-
     echo "Error executing query: " . $conn->error;
 }
 
@@ -122,7 +118,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<div class="card-body" id="out-print">
-		<input type="text" name ="vatableValue" value="<?php echo $vatableValue ?>">
+		<input type="hidden" name ="vatableValue" value="<?php echo $vatableValue ?>">
 		<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 		<div class="row">
 			<div class="col-6 d-flex align-items-center">
@@ -245,9 +241,7 @@ $(document).ready(function() {
 							<th class="px-1 py-1 text-center">Received</th>
 							<th class="px-1 py-1 text-center">Outstanding</th>
 							<th class="px-1 py-1 text-center">No. of Delivered Items</th>
-							<!-- <th class="px-1 py-1 text-center">Item Code</th>
-							<th class="px-1 py-1 text-center">Subtotal</th>
-							<th class="px-1 py-1 text-center">Type</th>
+<!-- 						
 							<th class="px-1 py-1 text-center">VAT per Item</th>
 							<th class="px-1 py-1 text-center">Ex-VAT</th> -->
 							<?php if($level < 0): ?>
@@ -284,8 +278,9 @@ $(document).ready(function() {
 							<td class="align-middle p-1">
 								<input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
 								<input type="text" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
+								<input type="hidden" name="type" value="<?php echo $row['type'] ?>" readonly>
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-								<input type="hidden" name="account_code[]" value="<?php echo $row['account_code'] ?>">
+								<input type="text" name="account_code[]" value="<?php echo $row['account_code'] ?>">
 								<input type="text" class="w-100 border-0 item_id" data-item-id="<?php echo $row['item_id']; ?>" value="<?php echo $row['name']; ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
@@ -302,13 +297,14 @@ $(document).ready(function() {
 								<input type="number" step="any" class="text-right w-100 border-0" name="outstanding[]"  id="txtoutstanding" value="<?php echo ($row['outstanding']) ?>"  style="pointer-events:none;border:none;background-color: gainsboro;" readonly/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" oninput="calculateAmount(this)"/>
+								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" onblur="calculateAmount(this)"/>
 							</td>
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
 							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
-							<!-- <td><input type='text' name='vat_amt' id='vat_amt'></td>
-							<td><input type='text' name='ex_vat' id='ex_vat'></td> -->
+							<td><input type='text' name='vat_amt' id='vat_amt'></td>
+							<td><input type='text' name='ex_vat' id='ex_vat'></td>
+							<td><input type='text' name='tot' id='tot'></td>
 							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
@@ -324,40 +320,41 @@ $(document).ready(function() {
 					
 					<?php 
 						if(isset($id)):
-							$order_items_qry = $conn->query("SELECT * FROM account_list
-								WHERE code = '11081'");
+							$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
+								ON ac.group_id = g.id WHERE ac.code = '11081'");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
-							<tr class="po-item" data-id="" style="display:none;">
+							<tr class="po-item" data-id="">
 								<td class="align-middle p-1">
 									<br>
+									GType:<input type="text" name="gtype_vat" id="gtype_vat" value="<?php echo $row['type'] ?>">
 									<input type="text" name="account_code_vat" value="<?php echo $row['code'] ?>">
 									<input type="text" name="item_code_vat" value="0">
-									<input type="text" value="0" name="amount_vat" id="vat_total">
+									VAT <input type="text" value="0" name="amount_vat" id="vat_total">
+									Extra Ko Na. Total ng TOTSUM - VAT <input type="text" value="0" name="totDec" id="totDec">
 								</td>
 							</tr>
 					<?php
 							endwhile;
 						endif;
 					?>
-
-						
 						<?php 
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT * FROM account_list
-							WHERE code = '20147'");
+						$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
+						ON ac.group_id = g.id WHERE ac.code = '20147'");
 						
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="" style="display:none;">
+						<tr class="po-item" data-id="">
 							<td class="align-middle p-1">
 							<br>
-								<input type="hidden" name="account_code_gr" value="<?php echo $row['code'] ?>">
-								<input type="hidden" name="item_code_gr" value="0">
-								<input type="hidden" value="0" name="amount_gr" id="gr_total">
+								GType:<input type="text" name="gtype_gr" id="gtype_gr" value="<?php echo $row['type'] ?>">
+								<input type="text" name="account_code_gr" value="<?php echo $row['code'] ?>">
+								<input type="text" name="item_code_gr" value="0">
+								GR <input type="text" value="0" name="amount_gr" id="gr_total">
 							</td>
 						</tr>
 						
@@ -366,25 +363,26 @@ $(document).ready(function() {
 
 						<?php 
 						if(isset($id)):
-						$order_items_qry = $conn->query("SELECT * FROM account_list
-							WHERE code = '21032'");
+						$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
+						ON ac.group_id = g.id WHERE ac.code = '21032'");
 						
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="" style="display:none;">
+						<tr class="po-item" data-id="">
 						
 							<td class="align-middle p-1">
 							<br>
-								<input type="hidden" name="account_code_ewt" value="<?php echo $row['code'] ?>">
-								<input type="hidden" name="item_code_ewt" value="0">
-								<input type="hidden" value="0" name="amount_ewt" id="ewt_total">
+								GType:<input type="text" name="gtype_ewt" id="gtype_ewt" value="<?php echo $row['type'] ?>">
+								<input type="text" name="account_code_ewt" value="<?php echo $row['code'] ?>">
+								<input type="text" name="item_code_ewt" value="0">
+								EWT<input type="text" value="0" name="amount_ewt" id="ewt_total">
 							</td>
 						</tr>
 						
 						<?php endwhile;endif; ?>
-					<tr style="display:none;">
+					<tr>
 						<td class="p-1 text-right" colspan="8">Total Outstanding:</td>
 						<td class="p-1 text-right" id="outstanding-total">0</td>
 					</tr>
@@ -513,7 +511,7 @@ $(document).ready(function() {
     }
 
     function getUnlinkedItems(supplierId) {
-    console.log('Supplier ID:', supplierId);
+    //console.log('Supplier ID:', supplierId);
     $.ajax({
         url: 'journals/items-link.php',
         type: 'POST',
@@ -521,7 +519,7 @@ $(document).ready(function() {
         success: function (data) {
             var items = JSON.parse(data);
 
-            console.log(items);
+            //console.log(items);
             var itemsWithZeroAccountCode = items.filter(function (item) {
                 return item.account_code == 0;
             });
@@ -580,102 +578,307 @@ $('#zeroAccountCodeModal').modal('show');
     });    
 }
 
+function calculateAmount(input){
+	var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
+	console.log(vatableValue);
+	if (vatableValue == 1){
+		calculateAmountInc(input);
+	}else if(vatableValue == 2){
+		calculateAmountExc(input);
+	}else{
+		calculateAmountNonVATZeroR(input);
+	}
+}
 
-	function calculateAmount(input) {
-		var tr = $(input).closest('.po-item');
-		var delitems = parseFloat(input.value);
-		var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
-		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
-		var amount = delitems * unitPrice;
+// function calculateAmountInc(input) {
+//     var tr = $(input).closest('.po-item');
+//     var delitems = parseFloat(input.value);
+//     var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
+//     var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
+//     var currentType = tr.find('[name="type"]').val();
+//     var originalAmount = delitems * unitPrice;
 
-		tr.find('[name="amount[]"]').val(amount.toFixed(2));
+//     var amount = originalAmount;
+//     tr.find('[name="amount[]"]').val(amount.toFixed(2));
 
-		var vatAmtField = tr.find('[name="vat_amt"]');
-		var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
-		var vatAmount = amount * vatRate;
-		vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+//     var exVatField = tr.find('[name="ex_vat"]');
+//     var originalExVatValue = vatableValue == 1 ? originalAmount / 1.12 * 0.12 : originalAmount * 0.12;
 
-		var exVatField = tr.find('[name="ex_vat"]');
-		var exVatValue = vatableValue == 1 ? amount / 1.12 * 0.12 : amount * 0.12;
-		exVatField.val(exVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+//     var exVatValueCopy = originalExVatValue;
+//     exVatField.val(originalExVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-		updateVatTotal();
-		updateEWTTotal();
-		updateGR();
+//     var amountAfterSubtraction = originalAmount - exVatValueCopy;
+//     tr.find('[name="amount[]"]').val(amountAfterSubtraction.toFixed(2));
+
+//     var vatAmtField = tr.find('[name="vat_amt"]');
+//     var vatRate = currentType == 1 ? 0.01 : 0.02;
+//     var vatAmount = amountAfterSubtraction * vatRate;
+//     vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+//     var totField = tr.find('[name="tot"]');
+//     var totAmount = originalAmount;
+
+//     totField.val(totAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+// 	var totSum = 0;
+//     $('.po-item [name="tot"]').each(function() {
+//         var totValue = parseFloat($(this).val().replace(/,/g, '')) || 0;
+//         totSum += totValue;
+		
+//     });
+// 	var totalVat = parseFloat($('#vat_total').val().replace(/,/g, '')) || 0;
+	
+   
+
+// 	console.log(totSum);
+//     $('#tot_total').val(totSum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+
+//     tr.find('[name="tot"]').val(totAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+//     var totalVat = parseFloat($('#vat_total').val().replace(/,/g, '')) || 0;
+//     var totalEwt = parseFloat($('#ewt_total').val().replace(/,/g, '')) || 0;
+// 	var totalGR = parseFloat($('#gr_total').val().replace(/,/g, '')) || 0;
+
+//     totalVat += originalExVatValue;
+//     totalEwt += vatAmount;
+// 	totSum -= totalEwt;
+	
+// 	console.log("VAT", totalVat);
+//     var vatRate = currentType == 1 ? 0.01 : 0.02;
+
+	
+
+// 	console.log("GR", totSum);
+   
+
+//     $('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+//     $('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+// 	$('#gr_total').val(totSum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+// }
+
+function calculateAmountInc(input) {
+    var tr = $(input).closest('.po-item');
+    var delitems = parseFloat(input.value);
+    var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
+    var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
+    var currentType = tr.find('[name="type"]').val();
+    var originalAmount = delitems * unitPrice;
+
+    var amount = originalAmount;
+    tr.find('[name="amount[]"]').val(amount.toFixed(2));
+
+    var exVatField = tr.find('[name="ex_vat"]');
+    var originalExVatValue = vatableValue == 1 ? originalAmount / 1.12 * 0.12 : originalAmount * 0.12;
+
+    var exVatValueCopy = originalExVatValue;
+    exVatField.val(originalExVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+    var amountAfterSubtraction = originalAmount - exVatValueCopy;
+    tr.find('[name="amount[]"]').val(amountAfterSubtraction.toFixed(2));
+
+    var vatAmtField = tr.find('[name="vat_amt"]');
+    var vatRate = currentType == 1 ? 0.01 : 0.02;
+    var vatAmount = amountAfterSubtraction * vatRate;
+    vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+    var totField = tr.find('[name="tot"]');
+    var totAmount = originalAmount;
+	totField.val(totAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+	var totSum = 0;
+    var totalEwt = 0;
+    var totalVat = 0;  
+	var totDeduct = 0;
+
+    $('.po-item [name="tot"]').each(function() {
+        totSum += parseFloat($(this).val().replace(/,/g, '')) || 0;
+    });
+
+
+    $('[name="vat_amt"]').each(function() {
+        totalEwt += parseFloat($(this).val().replace(/,/g, ''));
+    });
+
+    $('[name="ex_vat"]').each(function() {
+        totalVat+= parseFloat($(this).val().replace(/,/g, ''));
+    });
+
+	totDeduct = (totSum - totalVat);
+	totSum = (totDeduct + totalVat) - totalEwt;
+
+	$('#totDec').val(totDeduct.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+    $('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+    $('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+    $('#gr_total').val(totSum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+}
+
+
+function calculateAmountNonVATZeroR(input) {
+    var tr = $(input).closest('.po-item');
+    var delitems = parseFloat(input.value);
+    var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
+    var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
+	var currentType = $(this).closest('.po-item').find('[name="type"]').val();
+    var amount = delitems * unitPrice;
+
+    tr.find('[name="amount[]"]').val(amount.toFixed(2));
+
+    var vatAmtField = tr.find('[name="vat_amt"]');
+    var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
+    var vatAmount = amount * vatRate;
+    vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+    var exVatField = tr.find('[name="ex_vat"]');
+    var originalExVatValue = vatableValue == 1 ? amount / 1.12 * 0.12 : amount * 0.12;
+
+	var exVatValueCopy = originalExVatValue;
+    exVatField.val(originalExVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+	if(vatableValue < 3){
+		var amountAfterSubtraction = amount - exVatValueCopy;
+		tr.find('[name="amount[]"]').val(amountAfterSubtraction.toFixed(2));
+	}else{
+		console.log(originalExVatValue);
+		exVatField.val(originalExVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 	}
 
+	/////////////////////////VATABLE SIDE///////////////////////
+	var totalAmount = 0;
+	var totalVat = 0;
+	var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
 
-	function updateVatTotal() {
-		var totalAmount = 0;
-		var totalVat = 0;
-		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
+	$('[name="amount[]"]').each(function () {
+		totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+	});
 
-		$('[name="amount[]"]').each(function () {
-			totalAmount += parseFloat($(this).val().replace(/,/g, ''));
-		});
+	if (vatableValue == 1) {
+		totalVat = totalAmount / 1.12 * 0.12;
+	} else if (vatableValue == 2) {
+		totalVat = totalAmount * 0.12;
+	}else{
+		totalVat = 0;
+	}
+	$('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-		if (vatableValue == 1) {
-			totalVat = totalAmount / 1.12 * 0.12;
+
+	/////////////////////////EWT SIDE///////////////////////
+	var totalAmount = 0;
+	var totalEwt = 0;
+
+	$('[name="amount[]"]').each(function() {
+		totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+
+		var currentType = $(this).closest('.po-item').find('[name="type"]').val();
+
+		if (currentType == 1) {
+			totalEwt = totalAmount * 0.01;
 		} else {
-			totalVat = totalAmount * 0.12;
+			totalEwt = totalAmount * 0.02;
 		}
+	});
 
-		$('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-	}
+	$('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-
-	function updateGR() {
-        var totalAmount = 0;
-		var totalGR = 0;
-		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
+	/////////////////////////Goods Receipt SIDE///////////////////////
+	var totalAmount = 0;
+	var totalGR = 0;
 
         $('[name="amount[]"]').each(function() {
             totalAmount += parseFloat($(this).val().replace(/,/g, ''));
 			
-			if (vatableValue == 1) {
+			if (currentType == 1) {
 				totalVat = totalAmount / 1.12 * 0.12;
 			} else {
 				totalVat = totalAmount * 0.12;
 			}
-			
-
-			if ($('[name="type[]"]').val() == 1) {
-				totalEwt = totalAmount * 0.01;
-			} else {
-				totalEwt = totalAmount * 0.02;
+			//totalGR = (totalAmount + totalVat) - totalEwt;
+			if (vatableValue > 2) {
+				totalGR = (totalAmount) - totalEwt;
+			}else{
+				totalGR = (totalAmount + totalVat) - totalEwt;
 			}
 
-			totalGR = (totalAmount + totalVat) - totalEwt;
         });
 
         $('#gr_total').val(totalGR.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-    }
+}
 
 
-	function updateEWTTotal() {
-		var totalAmount = 0;
-		var totalEwt = 0;
-		var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
+function calculateAmountExc(input) {
+    var tr = $(input).closest('.po-item');
+    var delitems = parseFloat(input.value);
+    var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
+    var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
+	var currentType = $(this).closest('.po-item').find('[name="type"]').val();
+    var amount = delitems * unitPrice;
 
-		$('[name="amount[]"]').each(function() {
-			totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+    tr.find('[name="amount[]"]').val(amount.toFixed(2));
 
-			if (vatableValue == 1) {
+    var vatAmtField = tr.find('[name="vat_amt"]');
+    var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
+    var vatAmount = amount * vatRate;
+    vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+    var exVatField = tr.find('[name="ex_vat"]');
+    var originalExVatValue = vatableValue == 1 ? amount / 1.12 * 0.12 : amount * 0.12;
+
+	var totalAmount = 0;
+	var totalVat = 0;
+	var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>; 
+
+	$('[name="amount[]"]').each(function () {
+		totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+	});
+
+	if (vatableValue == 1) {
+		totalVat = totalAmount / 1.12 * 0.12;
+	} else if (vatableValue == 2) {
+		totalVat = totalAmount * 0.12;
+	}else{
+		totalVat = 0;
+	}
+	$('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+	var totalAmount = 0;
+	var totalEwt = 0;
+
+	$('[name="amount[]"]').each(function() {
+		totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+
+		var currentType = $(this).closest('.po-item').find('[name="type"]').val();
+
+		if (currentType == 1) {
+			totalEwt = totalAmount * 0.01;
+		} else {
+			totalEwt = totalAmount * 0.02;
+		}
+	});
+
+	$('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+	var totalAmount = 0;
+	var totalGR = 0;
+
+        $('[name="amount[]"]').each(function() {
+            totalAmount += parseFloat($(this).val().replace(/,/g, ''));
+			
+			if (currentType == 1) {
 				totalVat = totalAmount / 1.12 * 0.12;
 			} else {
 				totalVat = totalAmount * 0.12;
 			}
 
-			if ($('[name="type[]"]').val() == 1) {
-				totalEwt = totalAmount * 0.01;
-			} else {
-				totalEwt = totalAmount * 0.02;
+			if (vatableValue > 2) {
+				totalGR = (totalAmount) - totalEwt;
+			}else{
+				totalGR = (totalAmount + totalVat) - totalEwt;
 			}
-		});
 
-		$('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-	}
+        });
 
+        $('#gr_total').val(totalGR.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+}
 </script>
 
 
@@ -739,7 +942,7 @@ $('#zeroAccountCodeModal').modal('show');
 					data:{q:request.term},
 					dataType:'json',
 					error:err=>{
-						console.log(err)
+						//console.log(err)
 					},
 					success:function(resp){
 						response(resp)
@@ -747,7 +950,7 @@ $('#zeroAccountCodeModal').modal('show');
 				})
 			},
 			select:function(event,ui){
-				console.log(ui)
+				//console.log(ui)
 				_item.find('input[name="item_id[]"]').val(ui.item.id)
 				_item.find('.item-description').text(ui.item.description)
 			}
@@ -795,7 +998,7 @@ $('#zeroAccountCodeModal').modal('show');
                 type: 'POST',
                 dataType: 'json',
 				error:err=>{
-					console.log(err)
+					//console.log(err)
 					alert_toast("An error occured",'error');
 					end_loader();
 				},
@@ -816,7 +1019,7 @@ $('#zeroAccountCodeModal').modal('show');
                     }else{
 						alert_toast("An error occured",'error');
 						end_loader();
-                        console.log(resp)
+                       // console.log(resp)
 					}
 				}
 			})
