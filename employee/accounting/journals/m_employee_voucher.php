@@ -158,7 +158,16 @@ function format_num($number){
     #uni_modal .modal-footer{
         display: none;
     }
-
+	.nav-emp{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-emp:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
 </style>
 <head>
     <?php                                 
@@ -704,13 +713,13 @@ $(document).ready(function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             }
-            // if ($('#account_list tfoot .total-balance').text() != '0') {
-            //     el.addClass('alert-danger').text(" Trial Balance is not equal.");
-            //     _this.prepend(el);
-            //     el.show('slow');
-            //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-            //     return false;
-            // }
+            if ($('#account_list tfoot .total-balance').text() != '0') {
+                el.addClass('alert-danger').text(" Hindi equal, lods.");
+                _this.prepend(el);
+                el.show('slow');
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
+                return false;
+            }
             start_loader();
             var urlSuffix;
             <?php if (!empty($_GET['id'])) { ?>

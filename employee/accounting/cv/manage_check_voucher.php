@@ -23,7 +23,6 @@ if (isset($_GET['id'])) {
                 $$k = $v;
             }
         }
-
         $acc_id = $account_id;
         $publicId = $_GET['id'];
 
@@ -41,7 +40,6 @@ if (isset($_GET['id'])) {
         }
     }
 }
-
 $is_new_cn = true;
 $query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'CV'");
 
@@ -101,116 +99,137 @@ function format_num($number){
 }
 ?>
 <style>
-    #vs-cont{
-        border-radius: 5px;
-        border: 1px solid #ddd;  
-        padding: 20px; 
-        max-width:49%;
-        margin-right:1%;
-        font-size:13px;
-        box-sizing: border-box; 
-        float: left;
-        overflow: auto;
-    }
-    #cv-cont{
-        border-radius: 5px;
-        border: 1px solid #ddd;  
-        padding: 20px; 
-        max-width:49%;
-        margin-left:1%;
-        font-size:13px;
-        box-sizing: border-box; 
-        float: right;
-        overflow: auto;
-    }
-    #custom-container {
-      border-radius: 5px;
-      border: 1px solid #ddd; 
-      padding: 20px; 
-      transition: margin-left 0.5s;
-    }
-    .paid_to_main{
-        border:solid 1px gainsboro;
-        padding:10px;
-        border-radius:5px;
-    }
-    .paid_to{
-        padding:10px;
-    }
-    /* #sup-div{
-        display:none;
-    }
-    #agent-div{
-        display:none;
-    }
-    #emp-div{
-        display:none;
-    } */
-    .rdo-btn {
-        display: flex;
-        width: 100%;
-    }
+.disabled-table {
+    pointer-events: none;
+}
+.modal {
+    display: none;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('cv/preview.gif') center/contain no-repeat fixed;
+    background-size: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); 
+    z-index: 9998; 
+}
+.modal-overlay img {
+    width: 100%;
+    height: 100%;
+}
+#vs-cont{
+    border-radius: 5px;
+    border: 1px solid #ddd;  
+    padding: 20px; 
+    max-width:49%;
+    margin-right:1%;
+    font-size:13px;
+    box-sizing: border-box; 
+    float: left;
+    overflow: auto;
+}
+#cv-cont{
+    border-radius: 5px;
+    border: 1px solid #ddd;  
+    padding: 20px; 
+    max-width:49%;
+    margin-left:1%;
+    font-size:13px;
+    box-sizing: border-box; 
+    float: right;
+    overflow: auto;
+}
+#custom-container {
+    border-radius: 5px;
+    border: 1px solid #ddd; 
+    padding: 20px; 
+    transition: margin-left 0.5s;
+}
+.paid_to_main{
+    border:solid 1px gainsboro;
+    padding:10px;
+    border-radius:5px;
+}
+.paid_to{
+    padding:10px;
+}
+.rdo-btn {
+    display: flex;
+    width: 100%;
+}
 
-    .rdo-btn label {
-        flex: 1;
-        text-align: center; 
-        margin: 0; 
-        padding: 10px; 
-        box-sizing: border-box; 
-    }
+.rdo-btn label {
+    flex: 1;
+    text-align: center; 
+    margin: 0; 
+    padding: 10px; 
+    box-sizing: border-box; 
+}
 
-    .rdo-btn input[type="radio"] {
-        margin: 0;
-        vertical-align: middle; 
-    }
-    .hidden {
-        display: none;
-    }
-    .phase{
-        width:30%;
-    }
-    .block, .lot{
-        width:10%;
-    }
-    .account-row:hover {
-        cursor: pointer;
-        background-color: #f5f5f5;
-    }
-    .account-row:hover, .account-row.selected {
-        cursor: pointer;
-        background-color: #f5f5f5; 
-    }
-    #acc-table {
-        width: 100%;
-        table-layout: fixed;
-    }
+.rdo-btn input[type="radio"] {
+    margin: 0;
+    vertical-align: middle; 
+}
+.hidden {
+    display: none;
+}
+.phase{
+    width:30%;
+}
+.block, .lot{
+    width:10%;
+}
+.account-row:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+.account-row:hover, .account-row.selected {
+    cursor: pointer;
+    background-color: #f5f5f5; 
+}
+#acc-table {
+    width: 100%;
+    table-layout: fixed;
+}
 
-    .account-row:hover {
-        cursor: pointer;
-        background-color: #f5f5f5; 
-    }
+.account-row:hover {
+    cursor: pointer;
+    background-color: #f5f5f5; 
+}
 
-    .account-row.selected {
-        background-color: #a9cce3; 
-    }
-    #data-table tbody tr.selected {
-        background-color: gainsboro; 
-    }
-    .small-btn {
-        padding-top:2px;
-        padding-bottom:2px;
-    }
-    tr:hover {
-        cursor: pointer;
-    }
-    #account_list {
-        display: none;
-    }
-    .selected-row {
-        background-color: gainsboro; 
-    }
-</style>
-
+.account-row.selected {
+    background-color: #a9cce3; 
+}
+#data-table tbody tr.selected {
+    background-color: gainsboro; 
+}
+.small-btn {
+    padding-top:2px;
+    padding-bottom:2px;
+}
+tr:hover {
+    cursor: pointer;
+}
+#account_list {
+    display: none;
+}
+.selected-row {
+    background-color: gainsboro; 
+}
 </style>
 <head>
 </head>
@@ -231,7 +250,7 @@ function format_num($number){
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="v_num" class="control-label">Voucher Setup #:</label>
-                        <input type="text" class="form-control form-control-sm form-control-border rounded-0" name="v_num" id="v_num" value="<?php echo $v_num ?>" readonly>
+                        <input type="text" class="form-control form-control-sm form-control-border rounded-0" name="v_num" id="v_num" value="<?php echo ($v_num == 0) ? '' : $v_num; ?>" readonly>
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="po_no">P.O. #: </label>
@@ -278,11 +297,11 @@ function format_num($number){
             <div class="container-fluid">
                 <div class="row">                
                     <div class="col-md-6" id="vs-cont">
-                        <table style="float:right;margin-bottom:10px;">
+                        <!-- <table style="float:right;margin-bottom:10px;">
                             <tr>
                                 <td>VS #: <input type="text" id="searchInput" style="border-radius:3px;border-color:#ddd;"></td>
                             </tr>
-                        </table>
+                        </table> -->
                         <table class="table table-bordered" id="data-table" style="text-align:center;width:100%;">
                             <colgroup>
                                 <col width="10%">
@@ -341,7 +360,7 @@ function format_num($number){
                     </div>
                     <div class="col-md-6" id="cv-cont">
                         <div id="table-container">
-                            <div style="float:right;margin-bottom:10px;">Code: <input type="text" id="searchAccCode" style="border-radius:3px;border-color:#ddd;"></div>
+                            <!-- <div style="float:right;margin-bottom:10px;">Code: <input type="text" id="searchAccCode" style="border-radius:3px;border-color:#ddd;"></div> -->
                             <table class="table table-bordered" id="acc-table">
                                 <colgroup>
                                     <col width="20%">
@@ -373,21 +392,21 @@ function format_num($number){
                             </table>
                         <script>
                             $(document).ready(function() {
-                                $('#searchAccCode').on('input', function() {
-                                    var searchTerm = $(this).val().trim().toLowerCase();
+                                // $('#searchAccCode').on('input', function() {
+                                //     var searchTerm = $(this).val().trim().toLowerCase();
 
-                                    $('.account-row').each(function() {
-                                        var accountCode = $(this).find('td:eq(0)').text().toLowerCase();
-                                        var accountName = $(this).find('td:eq(1)').text().toLowerCase();
-                                        var grpId = $(this).find('td:eq(2)').text().toLowerCase();
+                                //     $('.account-row').each(function() {
+                                //         var accountCode = $(this).find('td:eq(0)').text().toLowerCase();
+                                //         var accountName = $(this).find('td:eq(1)').text().toLowerCase();
+                                //         var grpId = $(this).find('td:eq(2)').text().toLowerCase();
 
-                                        if (accountCode.includes(searchTerm) || accountName.includes(searchTerm)) {
-                                            $(this).show();
-                                        } else {
-                                            $(this).hide();
-                                        }
-                                    });
-                                });
+                                //         if (accountCode.includes(searchTerm) || accountName.includes(searchTerm)) {
+                                //             $(this).show();
+                                //         } else {
+                                //             $(this).hide();
+                                //         }
+                                //     });
+                                // });
                             
                                 $('.account-row').on('click', function() {
                                     $('.account-row').removeClass('selected');
@@ -408,40 +427,47 @@ function format_num($number){
                                 });
 
                                 function addRowToTable(accCode, accName, vsAmt, grpId) {
-                                    var table = document.getElementById('account_list');
-                                    var row = table.insertRow();
-                                    row.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
-                                    row.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent; class="form-control" name="item_no[]" readonly>';
-                                    row.insertCell(2).innerHTML = '<input type="hidden" name="account_id[]" value="' + accCode + '">' + accCode;
-                                    row.insertCell(3).innerHTML = accName;
-                                    var locationCell = row.insertCell(4);
-                                    locationCell.innerHTML = '<label class="control-label">Phase: </label>' +
-                                    '<select name="phase[]" class="phase">' +
-                                    '<option value="" selected></option>' + 
-                                    '<?php 
-                                        $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                        while ($row = $cat->fetch_assoc()):
-                                            $cat_name[$row['c_code']] = $row['c_acronym'];
-                                            $code = $row['c_code'];
-                                    ?>' +
-                                    '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
-                                    '<?php endwhile; ?>' +
-                                    '</select>' +
-                                    '<label class="control-label">Block: </label>' +
-                                    '<input type="text" name="block[]" value="" class="block">' +
-                                    '<label class="control-label">Lot: </label>' +
-                                    '<input type="text" name="lot[]" value="" class="lot">';
+                                var table = document.getElementById('account_list');
+                                var tbody = table.getElementsByTagName('tbody')[0];
+                                
+                                tbody.innerHTML = '';
 
-                                    row.insertCell(5).innerHTML = '';
-                                    row.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent; id="amount" name="amount[]" class="form-control" value="' + vsAmt + '">';
-                                    row.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + grpId + '">';
-                                    row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
-                                    
-                                    var newDocNo = '<?php echo $newDocNo; ?>';
-                                    row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
-                                    updateItemNumbers();
-                                    updateTotalCreditDebit();
-                                }
+                           
+                                var row = tbody.insertRow();
+                                row.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
+                                row.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent;" class="form-control" name="item_no[]" readonly>';
+                                row.insertCell(2).innerHTML = '<input type="hidden" name="account_id[]" value="' + accCode + '">' + accCode;
+                                row.insertCell(3).innerHTML = accName;
+                                var locationCell = row.insertCell(4);
+                                locationCell.innerHTML = '<label class="control-label">Phase: </label>' +
+                                '<select name="phase[]" class="phase">' +
+                                '<option value="" selected></option>' + 
+                                '<?php 
+                                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                    while ($row = $cat->fetch_assoc()):
+                                        $cat_name[$row['c_code']] = $row['c_acronym'];
+                                        $code = $row['c_code'];
+                                ?>' +
+                                '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
+                                '<?php endwhile; ?>' +
+                                '</select>' +
+                                '<label class="control-label">Block: </label>' +
+                                '<input type="text" name="block[]" value="" class="block">' +
+                                '<label class="control-label">Lot: </label>' +
+                                '<input type="text" name="lot[]" value="" class="lot">';
+
+                                row.insertCell(5).innerHTML = '';
+                                row.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + vsAmt + '">';
+                                row.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + grpId + '">';
+                                row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
+                                
+                                var newDocNo = '<?php echo $newDocNo; ?>';
+                                row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
+                                
+                                updateItemNumbers();
+                                updateTotalCreditDebit();
+                            }
+
 
                                 function updateItemNumbers() {
                                     var table = document.getElementById('account_list');
@@ -567,6 +593,10 @@ function format_num($number){
                         </div>
                     </div>
                     <button id="btnProceed">Create Check Voucher</button>
+                    <div id="loadingModal" class="modal">
+                        <div class="modal-overlay"></div>
+                        <div class="overlay"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -577,18 +607,18 @@ function format_num($number){
                         <input type="hidden" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
                         <table id="account_list" class="table table-bordered">
                             <colgroup>
-                                    <col width="5%">
+                                    <!-- <col width="5%"> -->
                                     <col width="5%">
                                     <col width="10%">
-                                    <col width="20%">
+                                    <col width="25%">
                                     <col width="30%">
                                     <!-- <col width="10%"> -->
-                                    <col width="10%">
-                                    <col width="10%">
+                                    <col width="15%">
+                                    <col width="15%">
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        <th class="text-center"></th>
+                                        <!-- <th class="text-center"></th> -->
                                         <th class="text-center">Item No.</th>
                                         <th class="text-center">Account Code</th>
                                         <th class="text-center">Account Name</th>
@@ -608,9 +638,9 @@ function format_num($number){
                                         while($row = $jitems->fetch_assoc()):
                                     ?>
                                     <tr>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-                                        </td>
+                                        </td> -->
                                         <td class=""><span class="item-counter"><?= $counter ?></span></td>
                                         <td class="">
                                             <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
@@ -675,10 +705,7 @@ function format_num($number){
                                                     success: function (response) {
                                                         console.log("AJAX Response:", response);
                                                         var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                                                        
-                                                        
                                                             lotExistsMsg.html(response);
-                                                        
                                                     }
                                                 });
                                             });
@@ -704,7 +731,7 @@ function format_num($number){
                                 <tfoot>
                                     <tr class="bg-gradient-secondary">
                                         <tr>
-                                            <th colspan="5" class="text-right">TOTAL</th>
+                                            <th colspan="4" class="text-right">TOTAL</th>
                                             <th class="text-right total_debit">0.00</th>
                                             <th class="text-right total_credit">0.00</th>
                                         </tr>
@@ -718,6 +745,7 @@ function format_num($number){
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
+                                <button type="button" class="btn btn-primary" id="cancel">Cancel</button>
                             </div>
                         </div>
                 </div>
@@ -727,6 +755,23 @@ function format_num($number){
 </div>
 </body>
 
+<script>
+    $(document).ready(function() {
+    var id = <?php echo json_encode($id); ?>;
+    if (id !== '') {
+
+        disableElements();
+    }
+});
+
+function disableElements() {
+    $('#btnProceed').prop('disabled', true);
+    $('#data-table').addClass('disabled-table');
+    $('#acc-table').addClass('disabled-table');
+    $('#account_list').addClass('disabled-table');
+    $('#amount').prop('readonly', true);
+}
+</script>
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : '';
 $c_num = isset($c_num) ? $c_num : '';
@@ -765,10 +810,7 @@ $c_num = isset($c_num) ? $c_num : '';
     }
 
     updateTotals();
-$('#btnProceed').on('click', function() {
-    event.preventDefault();
-    $('#account_list').show();
-});
+
 function selectRow(selectedVNum, poNo, checkDate, Amt, supId) {
     
     var tableRows = document.querySelectorAll('#data-table tbody tr');
@@ -809,41 +851,77 @@ function selectRow(selectedVNum, poNo, checkDate, Amt, supId) {
     });
 }
 
-
 $(document).ready(function () {
         var dataTable = $('#data-table').DataTable({
-        dom: 'lrtip', 
-        lengthChange: false,
+        // dom: 'lrtip', 
+        // lengthChange: false,
     });
 });
 $(document).ready(function () {
         var accTable = $('#acc-table').DataTable({
-        dom: 'lrtip', 
-        lengthChange: false,
+        // dom: 'lrtip', 
+        // lengthChange: false,
     });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("searchInput");
-    const tableRows = document.querySelectorAll("#data-table tbody tr");
 
-    searchInput.addEventListener("input", function () {
-        const searchTerm = searchInput.value.toLowerCase();
+    $('#cancel').on('click', function() {
+        var isConfirmed = confirm('Are you sure you want to cancel creating the check voucher?');
 
-        tableRows.forEach(function (row) {
-            const vsColumn = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-
-            if (vsColumn.includes(searchTerm)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
+        if (isConfirmed) {
+            // window.history.back();
+            location.reload();
+        }
     });
+    $('#btnProceed').on('click', function(event) {
+    var amountValue = $('#amount').val();
+    var accNameValue = $('#AccName').val();
+
+    if (!amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '') {
+        alert('Please select a client and an account before proceeding.');
+        event.preventDefault(); 
+        return;
+    } else {
+        var isConfirmed = confirm('Are you sure you want to create the check voucher?');
+        if (isConfirmed) {
+            event.preventDefault();
+            $('#loadingModal').show();
+            setTimeout(function() {
+                $('#loadingModal').hide();
+                $('#account_list').show();
+                $('#btnProceed').prop('disabled', true);
+                $('#check_date').prop('readonly', true);
+                $('#check_num').prop('readonly', true);
+                $('#data-table').addClass('disabled-table');
+                $('#acc-table').addClass('disabled-table');
+                $('#amount').prop('readonly', true);
+                $('#description').prop('readonly', true);
+            }, 2000);
+        }
+    }
 });
 
-$(document).on('click', '.delete-row', function() {
-    $(this).closest('tr').remove();
 });
+// document.addEventListener("DOMContentLoaded", function () {
+//     const searchInput = document.getElementById("searchInput");
+//     const tableRows = document.querySelectorAll("#data-table tbody tr");
+
+//     searchInput.addEventListener("input", function () {
+//         const searchTerm = searchInput.value.toLowerCase();
+
+//         tableRows.forEach(function (row) {
+//             const vsColumn = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+
+//             if (vsColumn.includes(searchTerm)) {
+//                 row.style.display = "";
+//             } else {
+//                 row.style.display = "none";
+//             }
+//         });
+//     });
+// });
+
+// $(document).on('click', '.delete-row', function() {
+//     $(this).closest('tr').remove();
+// });
 
 $('#journal-form').submit(function (e) {
     e.preventDefault();

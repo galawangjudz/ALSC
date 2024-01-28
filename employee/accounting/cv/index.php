@@ -77,6 +77,16 @@ function format_num($number){
         padding:10px;
         border-radius:5px;
     }
+	.nav-cv{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-cv:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -188,7 +198,7 @@ function format_num($number){
 					
 					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					// $user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(cv_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(cv_date) desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -245,7 +255,7 @@ function format_num($number){
 					
 					//$users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					//$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `users` s on j.supplier_id = s.user_code order by date(cv_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `users` s on j.supplier_id = s.user_code order by date(cv_date) desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -302,7 +312,7 @@ function format_num($number){
 					
 					//$users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					//$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `property_clients` s on j.supplier_id = s.client_id order by date(cv_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `property_clients` s on j.supplier_id = s.client_id order by date(cv_date) desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>

@@ -22,6 +22,16 @@ if ($_settings->chk_flashdata('success')) :
     .view_data:hover .badge i {
         font-size: 1em;
     }
+	.nav-items{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    }
+    .nav-items:hover{
+        background-color:#007bff!important;
+        color:white!important;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+    }
 </style>
 
 <link rel="stylesheet" href="css/items.css">
