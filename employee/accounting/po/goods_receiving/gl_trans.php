@@ -9,6 +9,7 @@ $group_arr = [];
         $row = $qry->fetch_assoc();
         $po_id = $row['po_id'];
         $doc_no = $row['doc_no'];
+        $docfirstDigit = substr($doc_no, 0, 1);
         $supplier_id = $row['supplier_id'];
         $vsStats = $row['vs_status'];
         $vsNo = $row['vs_num'];
@@ -97,7 +98,7 @@ function format_num($number){
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">Journal Date</th>
+                                <th class="text-center">Transaction Date</th>
                                 <th class="text-center">Document Number</th>
                                 <th class="text-center">Supplier</th>
                             </tr>
@@ -184,7 +185,111 @@ function format_num($number){
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $matchedSuppliers[] = $row['supplier_id'];
                                 }
-                                if (!empty($matchedSuppliers) && $vsStats != 0) {?>
+                                if ($docfirstDigit == 3) {?>
+                  
+                                    <?php
+                                        if (!isset($id) || $id === null) :
+                                            $counter = 1;
+                                            $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                            $docNo = $_GET['id'];
+    
+                                            $jitems = $conn->query("SELECT 
+                                                gl.gr_id, 
+                                                gl.amount, 
+                                                gl.account, 
+                                                gl.journal_date, 
+                                                i.item_code, 
+                                                ac.name, 
+                                                g.type 
+                                            FROM 
+                                                tbl_gl_trans gl
+                                                INNER JOIN account_list ac ON gl.account = ac.code
+                                                INNER JOIN group_list g ON ac.group_id = g.id
+                                                LEFT JOIN item_list i ON i.id = gl.item_id
+                                            WHERE 
+                                                doc_no = $docNo
+                                            ORDER BY 
+                                                CASE 
+                                                    WHEN ac.name = 'Accounts Payable Trade' THEN 1
+                                                    ELSE 2
+                                                END,
+                                                g.type,
+                                                gr_id,
+                                                CASE WHEN g.type = 2 THEN gl.account END ASC,
+                                                i.item_code DESC;
+                                        "); 
+    
+                                        $groupedData = [];
+                                        while ($row = $jitems->fetch_assoc()) {
+                                            $groupedData[$row['gr_id']][] = $row;
+                                        }
+                                        foreach ($groupedData as $grId => $group) :
+                                            ?>
+                                        <hr>
+                                       <table id="account_list_<?= $grId ?>" class="table table-striped table-bordered">
+                                                <colgroup>
+                                                    <col width="5%">
+                                                    <col width="10%">
+                                                    <col width="10%">
+                                                    <col width="35%">
+                                                    <col width="10%">
+                                                    <col width="10%">
+                                                    <col width="10%">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Item No.</th>
+                                                        <th class="text-center">Document Date</th>
+                                                        <th class="text-center">Account Code</th>
+                                                        <th class="text-center">Account Name</th>
+                                                        <th class="text-center">Debit</th>
+                                                        <th class="text-center">Credit</th>
+                                                        <th class="text-center">Item Code</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($group as $row) : ?>
+                                                        <tr>
+                                                            <td class="text-center">
+                                                                <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;">
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;">
+                                                            </td>
+                                                            <td class="">
+                                                                <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;">
+                                                            </td>
+                                                            <td class="">
+                                                                <span><?= $row['name'] ?></span>
+                                                            </td>
+                                                            <td class="debit_amount text-right"><?= $row['type'] == 2 ? number_format(abs($row['amount']), 2) : '' ?></td>
+                                                            <td class="credit_amount text-right"><?= $row['type'] == 1 ? number_format(abs($row['amount']), 2) : '' ?></td>
+                                                            <td class="text-right"><?= $row['item_code'] ?></td>
+                                                        </tr>
+                                                        <?php
+                                                        $counter++;
+                                                    endforeach;
+                                                    ?>
+                                                </tbody>
+    
+                                                <tfoot data-gr_id="<?= $grId ?>">
+                                                    <tr>
+                                                        <th colspan="4" class="text-right">Total</th>
+                                                        <th class="text-right total_debit">0.00</th>
+                                                        <th class="text-right total_credit">0.00</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="4" class="text-center"></th>
+                                                        <th colspan="2" class="text-center total-balance">0</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        <?php
+                                        endforeach;
+                                    endif;
+                                    die();
+                                     } 
+                                if (!empty($matchedSuppliers) && $vsStats != 0 && $docfirstDigit != 3) {?>
                   
                                 <?php
                                     if (!isset($id) || $id === null) :
@@ -302,8 +407,6 @@ function format_num($number){
                                     endforeach;
                                 endif;
                                 ?>
-                          
-
                                 <tfoot>
                                     <tr>
                                         <tr>
@@ -317,12 +420,6 @@ function format_num($number){
                                         </tr>
                                     </tr>
                                 </tfoot>
-
-                              
-
-
-
-
                                 <?php 
                                 } else {?>
                                 <colgroup>

@@ -31,11 +31,11 @@ if (isset($_GET['id'])) {
             if ($docNoQuery) {
                 $docNoRow = $docNoQuery->fetch_assoc();
                 $docNo = $docNoRow['doc_no'];
-                echo "Document Number for vs_num $publicId: $docNo";
+                //echo "Document Number for vs_num $publicId: $docNo";
 
                 $doc_no = $docNo;
             } else {
-                echo "Error executing doc_no query: " . $conn->error;
+                //echo "Error executing doc_no query: " . $conn->error;
             }
         }
     }
@@ -52,10 +52,10 @@ if ($query) {
     if ($publicId > 0) {
 
         $newDocNo = $doc_no;
-        echo "New_DOC" . $newDocNo . "<br>";
+        //echo "New_DOC" . $newDocNo . "<br>";
     } else {
         $newDocNo = '3' . sprintf('%05d', $maxDocNo + 1);
-        echo "Max_DOC" . $maxDocNo;
+        //echo "Max_DOC" . $maxDocNo;
     }
     
 } else {
@@ -64,7 +64,7 @@ if ($query) {
 
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_c_id = $_GET['id'];
-    echo $existing_c_id;
+    //echo $existing_c_id;
 
     $qry = $conn->query("SELECT c_num,v_num FROM `cv_entries` WHERE c_num = $existing_c_id");
     if ($qry->num_rows > 0) {
@@ -88,7 +88,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     //echo $c_number;
 
 }
-echo "VNUM".$v_num;
+//echo "VNUM".$v_num;
 ?>
 <?php
 function format_num($number){
@@ -171,7 +171,16 @@ function format_num($number){
     display: flex;
     width: 100%;
 }
-
+.nav-check{
+		background-color:#007bff!important;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-check:hover{
+    background-color:#007bff!important;
+    color:white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
 .rdo-btn label {
     flex: 1;
     text-align: center; 
@@ -243,10 +252,36 @@ tr:hover {
         <div class="container-fluid" style="height:auto;width:auto;">
             <div class="container-fluid" id="custom-container">
                 <div class="row">
-                    <div class="col-md-4 form-group">
-                        <input type="text" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
+                    <div class="col-md-3 form-group">
+                        <input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
                         <label for="c_num" class="control-label">Check Voucher #:</label>
                         <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="check_date">Check Date: <span class="po_err_msg text-danger"></span></label>
+                        <?php
+                        if (!empty($check_date)) {
+                            $checkformattedDate = date('Y-m-d', strtotime($check_date));
+                        } else {
+                            $checkformattedDate = '';
+                        }
+                        ?>     
+                        <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" readonly required>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label class="control-label">Document #:</label>
+                        <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="check_num" class="control-label">Check #:</label>
+                        <input type="text" id="check_num" name="check_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($check_num) ? $check_num : "" ?>" required>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label for="tran_date">Transaction Date: <span class="po_err_msg text-danger"></span></label>
+                        <input type="date" class="form-control form-control-sm rounded-0" id="cv_date" name="cv_date" value="<?php echo isset($tranDate) ? $tranDate : date('Y-m-d'); ?>" readonly>
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -269,28 +304,6 @@ tr:hover {
                         <input type="text" class="form-control form-control-sm form-control-border rounded-0" name="po_no" id="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>" readonly>
                     </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-4 form-group">
-                        <label for="tran_date">Transaction Date: <span class="po_err_msg text-danger"></span></label>
-                        <input type="date" class="form-control form-control-sm rounded-0" id="cv_date" name="cv_date" value="<?php echo isset($tranDate) ? $tranDate : date('Y-m-d'); ?>" readonly>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <label for="check_date">Check Date: <span class="po_err_msg text-danger"></span></label>
-                        <?php
-                        if (!empty($check_date)) {
-                            $checkformattedDate = date('Y-m-d', strtotime($check_date));
-                        } else {
-                            $checkformattedDate = '';
-                        }
-                        ?>     
-                        <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>">
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <label for="check_num" class="control-label">Check #:</label>
-                        <input type="text" id="check_num" name="check_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($check_num) ? $check_num : "" ?>">
-                    </div>
-                </div>
             </div>
             <br>
 
@@ -305,14 +318,16 @@ tr:hover {
                         <table class="table table-bordered" id="data-table" style="text-align:center;width:100%;">
                             <colgroup>
                                 <col width="10%">
-                                <col width="30%">
-                                <col width="60%">
+                                <col width="10%">
+                                <col width="70%">
+                                <col width="10%">
                             </colgroup>
                             <thead>
                                 <tr class="bg-navy disabled">
                                     <th>#</th>
                                     <th>VS No.</th>
                                     <th>Supplier Name</th>
+                                    <th>Outstanding Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -325,6 +340,7 @@ tr:hover {
                                 ac.*,
                                 vs.v_num,
                                 vs.po_no,
+                                vs.due_date,
                                 COALESCE(s.id, pc.client_id, ta.c_code, u.user_code) AS supId,
                                 COALESCE(s.name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
                                         CONCAT(ta.c_last_name, ', ', ta.c_first_name, ' ', ta.c_middle_initial),
@@ -350,6 +366,7 @@ tr:hover {
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['v_num'] == 0) ? '-' : $row['v_num']; ?></td>
                                         <td><?php echo ($row['supplier_name']) ?></td>
+                                        <td><?php echo ($row['due_date']) ?></td>
                                     </tr>
                                 <?php
                                 }
@@ -463,7 +480,10 @@ tr:hover {
                                 
                                 var newDocNo = '<?php echo $newDocNo; ?>';
                                 row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
-                                
+                                row.cells[0].style.display = 'none';
+                                row.cells[7].style.display = 'none';
+                                row.cells[8].style.display = 'none';
+                                row.cells[9].style.display = 'none';
                                 updateItemNumbers();
                                 updateTotalCreditDebit();
                             }
@@ -501,10 +521,9 @@ tr:hover {
                                         newRow.insertCell(0).innerHTML = '<td colspan="1"></td>'; 
                                         newRow.insertCell(1).innerHTML = '<td colspan="1"></td>';
                                         newRow.insertCell(2).innerHTML = '<td colspan="1"></td>';
-                                        newRow.insertCell(3).innerHTML = '<td colspan="1"></td>';
-                                        newRow.insertCell(4).innerHTML = '<td align="right">TOTAL: </td>';
-                                        newRow.insertCell(5).innerHTML = '<td align="right">' + totalCredit.toFixed(2) + '</td>';
-                                        newRow.insertCell(6).innerHTML = '<td align="right">' + totalDebit.toFixed(2) + '</td>';
+                                        newRow.insertCell(3).innerHTML = '<td align="right"><b>TOTAL: </b></td>';
+                                        newRow.insertCell(4).innerHTML = '<td align="right">' + totalCredit.toFixed(2) + '</td>';
+                                        newRow.insertCell(5).innerHTML = '<td align="right">' + totalDebit.toFixed(2) + '</td>';
                                     table.appendChild(tfoot);
                                 }
 
@@ -549,6 +568,10 @@ tr:hover {
                                         row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 1 + '">';
                                         var newDocNo = '<?php echo $newDocNo; ?>';
                                         row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
+                                        row.cells[0].style.display = 'none';
+                                        row.cells[7].style.display = 'none';
+                                        row.cells[8].style.display = 'none';
+                                        row.cells[9].style.display = 'none';
                                     });
                                 }
                             }
@@ -592,7 +615,8 @@ tr:hover {
                             <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
                         </div>
                     </div>
-                    <button id="btnProceed">Create Check Voucher</button>
+                    <button id="btnProceed" class="btn btn-flat btn-sm btn-secondary"><i class="fas fa-money-check-alt"></i> Create Check Voucher</button>
+
                     <div id="loadingModal" class="modal">
                         <div class="modal-overlay"></div>
                         <div class="overlay"></div>
@@ -605,12 +629,12 @@ tr:hover {
             <div class="container-fluid">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                         <input type="hidden" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
-                        <table id="account_list" class="table table-bordered">
+                        <table id="account_list" class="table table-bordered" style="font-size:14px;">
                             <colgroup>
                                     <!-- <col width="5%"> -->
-                                    <col width="5%">
                                     <col width="10%">
-                                    <col width="25%">
+                                    <col width="10%">
+                                    <col width="20%">
                                     <col width="30%">
                                     <!-- <col width="10%"> -->
                                     <col width="15%">
@@ -630,12 +654,21 @@ tr:hover {
                                 </thead>
                                 <tbody>
                             
-                                    <?php 
-                                    
-                                        $counter = 1;
-                                        $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                        $jitems = $conn->query("SELECT j.*, a.code AS account_code, a.name AS account, g.name AS `group`, g.type, glt.doc_no FROM `cv_items` j INNER JOIN account_list a ON j.account_id = a.code INNER JOIN group_list g ON j.group_id = g.id INNER JOIN tbl_gr_list glt ON j.journal_id = glt.cv_num WHERE j.journal_id ='{$journalId}'");
-                                        while($row = $jitems->fetch_assoc()):
+                                <?php
+                                    $counter = 1;
+                                    $journalId = isset($_GET['id']) ? $_GET['id'] : null;
+                                    $jitems = $conn->query("SELECT j.*, a.code AS account_code, a.name AS account, g.name AS `group`, g.type, glt.doc_no FROM `cv_items` j INNER JOIN account_list a ON j.account_id = a.code INNER JOIN group_list g ON j.group_id = g.id INNER JOIN tbl_gr_list glt ON j.journal_id = glt.cv_num WHERE j.journal_id ='{$journalId}'");
+
+                                    $rows = [];
+                                    while ($row = $jitems->fetch_assoc()) {
+                                        $rows[] = $row;
+                                    }
+
+                                    usort($rows, function ($a, $b) {
+                                        return $b['type'] - $a['type'];
+                                    });
+
+                                    foreach ($rows as $row) :
                                     ?>
                                     <tr>
                                         <!-- <td class="text-center">
@@ -643,10 +676,10 @@ tr:hover {
                                         </td> -->
                                         <td class=""><span class="item-counter"><?= $counter ?></span></td>
                                         <td class="">
-                                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
-                                            <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-                                            <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                            <input type="text" name="type[]" value="<?= $row['type'] ?>">
+                                            <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
+                                            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
+                                            <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                            <input type="hidden" name="type[]" value="<?= $row['type'] ?>">
                                             <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                             <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
                                             <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
@@ -714,19 +747,19 @@ tr:hover {
                                     </div>
                                         </td>
                                         <!-- <td class="group"><?= $row['group'] ?></td> -->
-                                        <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
+                                        
                                         <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
-                                    </tr>
-                                    <?php 
-                                    if ($row['type'] == 2) {
-                                        $totalCredit += $row['amount'];
-                                    }
-                                    if ($row['type'] == 1) {
-                                        $totalDebit += $row['amount'];
-                                    }
-                                    $counter++;
-                                    endwhile; ?>
-                                   
+                                        <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
+                                        <?php
+                                            if ($row['type'] == 2) {
+                                                $totalCredit += $row['amount'];
+                                            }
+                                            if ($row['type'] == 1) {
+                                                $totalDebit += $row['amount'];
+                                            }
+                                            $counter++;
+                                        endforeach;
+                                        ?>
                                 </tbody>
                                 <tfoot>
                                     <tr class="bg-gradient-secondary">
@@ -742,12 +775,18 @@ tr:hover {
                                     </tr>
                                 </tfoot>
                             </table>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
-                                <button type="button" class="btn btn-primary" id="cancel">Cancel</button>
+                            <div class="card-footer">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_journal"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-                        </div>
                 </div>
             </div>
         </form>
@@ -854,13 +893,13 @@ function selectRow(selectedVNum, poNo, checkDate, Amt, supId) {
 $(document).ready(function () {
         var dataTable = $('#data-table').DataTable({
         // dom: 'lrtip', 
-        // lengthChange: false,
+        lengthChange: false,
     });
 });
 $(document).ready(function () {
         var accTable = $('#acc-table').DataTable({
         // dom: 'lrtip', 
-        // lengthChange: false,
+        lengthChange: false,
     });
 
     $('#cancel').on('click', function() {
@@ -874,9 +913,15 @@ $(document).ready(function () {
     $('#btnProceed').on('click', function(event) {
     var amountValue = $('#amount').val();
     var accNameValue = $('#AccName').val();
+    var checkNum = $('#check_num').val();
 
-    if (!amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '') {
+    if (!amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '' || !checkNum || checkNum.trim() === '') {
         alert('Please select a client and an account before proceeding.');
+        event.preventDefault(); 
+        return;
+    }
+    if (!checkNum || checkNum.trim() === '') {
+        alert('Please enter check number before proceeding.');
         event.preventDefault(); 
         return;
     } else {
@@ -894,7 +939,7 @@ $(document).ready(function () {
                 $('#acc-table').addClass('disabled-table');
                 $('#amount').prop('readonly', true);
                 $('#description').prop('readonly', true);
-            }, 2000);
+            }, 1000);
         }
     }
 });

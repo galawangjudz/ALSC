@@ -1,6 +1,6 @@
 
 <?php
-$delivery_date = date('Y-m-d', strtotime('+1 week'));
+$delivery_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +1 week'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `po_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -153,7 +153,7 @@ $(document).ready(function() {
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="card-body">
 					<div class="row">
-					<div class="col-md-4 form-group">
+					<div class="col-md-6 form-group">
 								<label for="supplier_id">Supplier:</label>
 								<?php
 									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
@@ -178,7 +178,7 @@ $(document).ready(function() {
 										<?php endwhile; ?>
 									</select>
 							</div>
-							<div class="col-md-4 form-group">
+							<!-- <div class="col-md-4 form-group">
 								<label for="p_terms">Payment Terms:</label>
 								<?php
 								if ($terms !== '') {
@@ -192,13 +192,13 @@ $(document).ready(function() {
 									?>
 									<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
 								<?php } ?>
-							</div>
-							<input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control">
-						<div class="col-md-4 form-group">
+							</div> -->
+							<!-- <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control"> -->
+						<div class="col-md-6 form-group">
 							<label for="department">Delivery Date:</label>
 							<?php
-							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
+							// $formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
+							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>" style="background-color:yellow;">
 						</div>
 					</div>
 					<div class="row">

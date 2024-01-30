@@ -1,7 +1,6 @@
 
 <?php
-$delivery_date = date('Y-m-d');
-
+$delivery_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +1 week'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `po_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -52,7 +51,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-4 form-group">
+							<div class="col-md-6 form-group">
 								<label for="supplier_id">Supplier:</label>
 								<?php
 									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
@@ -77,7 +76,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 										<?php endwhile; ?>
 									</select>
 							</div>
-							<div class="col-md-4 form-group">
+							<!-- <div class="col-md-4 form-group">
 								<label for="p_terms">Payment Terms:</label>
 								<?php
 								if ($terms !== '') {
@@ -91,13 +90,13 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 									?>
 									<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
 								<?php } ?>
-							</div>
-							<input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control">
-							<div class="col-md-4 form-group">
+							</div> -->
+							<!-- <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control"> -->
+							<div class="col-md-6 form-group">
 								<label for="department">Delivery Date:</label>
 								<?php
-								$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-								<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
+								// $formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
+								<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>" style="background-color:yellow;">
 							</div>
 						</div>
 						<div class="row">
@@ -379,47 +378,47 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			textBox.value = 0;
 		}
 	}
-	function updateDeliveryDate() {
-    var termsId = $('#termsTextbox').val();
+// 	function updateDeliveryDate() {
+//     var termsId = $('#termsTextbox').val();
 
-    $.ajax({
-        type: 'POST',
-        url: 'po_purchase_orders/get_terms.php',
-        data: { termsId: termsId },
-        success: function(response) {
-            try {
-                var data = JSON.parse(response);
+//     $.ajax({
+//         type: 'POST',
+//         url: 'po_purchase_orders/get_terms.php',
+//         data: { termsId: termsId },
+//         success: function(response) {
+//             try {
+//                 var data = JSON.parse(response);
 
-                var deliveryDateInput = $('#delivery_date');
-				var pterms = $('#p_terms');
+//                 var deliveryDateInput = $('#delivery_date');
+// 				var pterms = $('#p_terms');
 
-                var daysToAdd = parseInt(data.days_before_due);
+//                 var daysToAdd = parseInt(data.days_before_due);
 
-				if (daysToAdd === 0) {
-                    daysToAdd = parseInt(data.days_in_following_month);
-                }
+// 				if (daysToAdd === 0) {
+//                     daysToAdd = parseInt(data.days_in_following_month);
+//                 }
 
-                if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
-                    var currentDate = new Date();
-                    deliveryDateInput.val(currentDate.toISOString().split('T')[0]);
-                    return;
-                }
-                var currentDeliveryDate = new Date(deliveryDateInput.val());
+//                 if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
+//                     var currentDate = new Date();
+//                     deliveryDateInput.val(currentDate.toISOString().split('T')[0]);
+//                     return;
+//                 }
+//                 var currentDeliveryDate = new Date(deliveryDateInput.val());
 
-                currentDeliveryDate.setDate(currentDeliveryDate.getDate() + daysToAdd);
+//                 currentDeliveryDate.setDate(currentDeliveryDate.getDate() + daysToAdd);
 
-                deliveryDateInput.val(currentDeliveryDate.toISOString().split('T')[0]);
-				pterms.val(data.terms);
+//                 deliveryDateInput.val(currentDeliveryDate.toISOString().split('T')[0]);
+// 				pterms.val(data.terms);
 
-            } catch (error) {
-                console.error('Error parsing JSON response:', error);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error in AJAX request:', xhr.responseText);
-        }
-    });
-}
+//             } catch (error) {
+//                 console.error('Error parsing JSON response:', error);
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error in AJAX request:', xhr.responseText);
+//         }
+//     });
+// }
 
 function copyTaxValue() {
 	var taxAmountValue = document.getElementById('vat_total').textContent;
@@ -616,10 +615,10 @@ $(document).ready(function() {
 	$("#supplier_id").change(function() {
 		selectedSupplierId = $(this).val();
 		selectedSupplierId = parseInt($(this).val(), 10);
-		var terms = $(this).find(':selected').data('terms');
-        $('#termsTextbox').val(terms);
+		// var terms = $(this).find(':selected').data('terms');
+        // $('#termsTextbox').val(terms);
         
-        updateDeliveryDate();
+        // updateDeliveryDate();
 		console.log("Selected Supplier ID: " + selectedSupplierId);
 		_autocomplete(item, selectedSupplierId);
 	});

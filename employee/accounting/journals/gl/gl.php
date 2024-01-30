@@ -125,8 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
             displayName.textContent = "";
         } else {
             tableRows.forEach(function (row) {
-                const accountColumn = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
-                const nameColumn = row.querySelector("td:nth-child(4)").textContent;
+                const accountColumn = row.querySelector("td:nth-child(4)").textContent.toLowerCase();
+                const nameColumn = row.querySelector("td:nth-child(5)").textContent;
 
                 if (accountColumn.includes(searchTerm)) {
                     row.style.display = "";

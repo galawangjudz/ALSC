@@ -64,7 +64,7 @@ if ($query) {
     $maxDocNo = $row['max_doc_no'];
     $newDocNo = '1' . sprintf('%05d', $maxDocNo + 1);
 
-    echo $newDocNo;
+    //echo $newDocNo;
 } else {
     echo "Error executing query: " . $conn->error;
 }
@@ -78,7 +78,7 @@ if ($qry->num_rows > 0) {
 }
 $v_number = str_pad($next_v_number, STR_PAD_LEFT);
 
-echo $v_number;
+//echo $v_number;
 ?>
 
 <script>
@@ -217,17 +217,11 @@ $(document).ready(function() {
 						<col width="10%">
 						<col width="30%">
 						<col width="30%">
-						<?php if($level < 0): ?>
-							<col width="15%">
-						<?php endif; ?>
+					
 						<col width="8%">
 						<col width="8%">
 						<col width="8%">
-						<col width="8%">
-						<col width="8%">
-						<?php if($level < 0): ?>
-							<col width="9%">
-						<?php endif; ?>
+						
 					</colgroup>
 					<thead>
 						<tr class="bg-navy disabled">
@@ -235,18 +229,10 @@ $(document).ready(function() {
 							<th class="px-1 py-1 text-center">Unit</th>
 							<th class="px-1 py-1 text-center">Item</th>
 							<th class="px-1 py-1 text-center">Description</th>
-							<?php if($level < 0): ?>
-								<th class="px-1 py-1 text-center">Price (per piece)</th>
-							<?php endif; ?>
+						
 							<th class="px-1 py-1 text-center">Received</th>
 							<th class="px-1 py-1 text-center">Outstanding</th>
 							<th class="px-1 py-1 text-center">No. of Delivered Items</th>
-<!-- 						
-							<th class="px-1 py-1 text-center">VAT per Item</th>
-							<th class="px-1 py-1 text-center">Ex-VAT</th> -->
-							<?php if($level < 0): ?>
-								<th class="px-1 py-1 text-center">Total</th>
-							<?php endif; ?>
 						</tr>
 					</thead>
 					<tbody>
@@ -276,11 +262,11 @@ $(document).ready(function() {
 								<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" style="pointer-events:none;border:none;background-color: transparent;"/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
-								<input type="text" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
+								<input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+								<input type="hidden" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
 								<input type="hidden" name="type" value="<?php echo $row['type'] ?>" readonly>
 								<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-								<input type="text" name="account_code[]" value="<?php echo $row['account_code'] ?>">
+								<input type="hidden" name="account_code[]" value="<?php echo $row['account_code'] ?>">
 								<input type="text" class="w-100 border-0 item_id" data-item-id="<?php echo $row['item_id']; ?>" value="<?php echo $row['name']; ?>" style="pointer-events:none;border:none;background-color: transparent;" required/>
 							</td>
 							<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
@@ -302,9 +288,9 @@ $(document).ready(function() {
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
 							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
-							<td><input type='text' name='vat_amt' id='vat_amt'></td>
-							<td><input type='text' name='ex_vat' id='ex_vat'></td>
-							<td><input type='text' name='tot' id='tot'></td>
+							<td style="display:none;"><input type='hidden' name='vat_amt' id='vat_amt'></td>
+							<td style="display:none;"><input type='hidden' name='ex_vat' id='ex_vat'></td>
+							<td style="display:none;"><input type='hidden' name='tot' id='tot'></td>
 							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
@@ -325,7 +311,7 @@ $(document).ready(function() {
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
-							<tr class="po-item" data-id="">
+							<tr class="po-item" data-id="" style="display:none;">
 								<td class="align-middle p-1">
 									<br>
 									GType:<input type="text" name="gtype_vat" id="gtype_vat" value="<?php echo $row['type'] ?>">
@@ -348,7 +334,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_gr" id="gtype_gr" value="<?php echo $row['type'] ?>">
@@ -370,7 +356,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 						
 							<td class="align-middle p-1">
 							<br>
@@ -382,7 +368,7 @@ $(document).ready(function() {
 						</tr>
 						
 						<?php endwhile;endif; ?>
-					<tr>
+					<tr style="display:none;">
 						<td class="p-1 text-right" colspan="8">Total Outstanding:</td>
 						<td class="p-1 text-right" id="outstanding-total">0</td>
 					</tr>

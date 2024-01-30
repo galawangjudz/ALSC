@@ -28,16 +28,16 @@ if (isset($_GET['id'])) {
             if ($docNoQuery) {
                 $docNoRow = $docNoQuery->fetch_assoc();
                 $docNo = $docNoRow['doc_no'];
-                echo "Document Number for vs_num $publicId: $docNo";
+                //echo "Document Number for vs_num $publicId: $docNo";
 
 
                 $doc_no = $docNo;
             } else {
-                echo "Error executing doc_no query: " . $conn->error;
+                //echo "Error executing doc_no query: " . $conn->error;
             }
         }
     }
-    echo "VS NO: " . $publicId . "<br>";
+   //echo "VS NO: " . $publicId . "<br>";
 }
 
 $is_new_vn = true;
@@ -53,10 +53,10 @@ if ($query) {
     if ($publicId > 0) {
 
         $newDocNo = $doc_no;
-        echo "New_DOC" . $newDocNo . "<br>";
+        //echo "New_DOC" . $newDocNo . "<br>";
     } else {
         $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
-        echo "Max_DOC" . $maxDocNo;
+        //echo "Max_DOC" . $maxDocNo;
     }
 
     
@@ -190,16 +190,20 @@ function format_num($number){
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label class="control-label">Document #:</label>
+                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="journal_date" class="control-label">Transaction Date:</label>
-                            <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
+                            <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Check Date:</label>
+                            <label for="due_date" class="control-label">Due Date:</label>
                             <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                         </div>
                     </div>
@@ -306,7 +310,7 @@ function format_num($number){
                             </select>
                         </div>
                     </div>
-                    <input type="text" id="gtype" name="gtype">
+                    <input type="hidden" id="gtype" name="gtype">
 
                     <script>
                         $(document).ready(function(){
@@ -370,10 +374,10 @@ function format_num($number){
                                 </td>
                                
                                 <td class="">
-                                    <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
-                                    <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-                                    <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                    <input type="text" name="type[]" value="<?= $row['type'] ?>">
+                                    <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+                                    <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
+                                    <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                    <input type="hidden" name="type[]" value="<?= $row['type'] ?>">
                                     <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
                                     <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
                                     <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
@@ -471,11 +475,18 @@ function format_num($number){
                             </tr>
                         </tfoot>
                     </table>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
+                    <div class="card-footer">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_journal"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                                </td>
+                                <td>
+                                    <a href="?page=journals/"  class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                </div>
                 </form>
             </div>
         </div>
@@ -491,13 +502,13 @@ function format_num($number){
 
         <td class="account_code"><input type="text" name="account_code[]" value="" style="border:none;background-color:transparent;" readonly></td>
         <td class="">
-            <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
-            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <!-- <input type="text" name="account_code[]" value=""> -->
-            <input type="text" name="type[]" value="">
-            <input type="text" name="account_id[]" value="">
-            <input type="text" name="group_id[]" value="">
-            <input type="text" name="amount[]" value="">
+            <input type="hidden" name="type[]" value="">
+            <input type="hidden" name="account_id[]" value="">
+            <input type="hidden" name="group_id[]" value="">
+            <input type="hidden" name="amount[]" value="">
             <span class="account"></span>
         </td>
         <td class="">

@@ -91,7 +91,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $next_v_number = 1;
     }
     $vs_num = str_pad($next_v_number, STR_PAD_LEFT);
-    echo "GR #: " . $gr_id;
+    echo "<strong><i>GR #:</i></strong> " . "<strong><i>" . $gr_id . "</i></strong>";
 }
 ?>
 <body>
@@ -153,11 +153,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name="gr_id[]" value="<?php echo $gr_id ?>">
             <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
             <input type="hidden" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>">
-            <input type="text" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo; ?>" readonly>
             <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="text" name="amount[]" value="<?php echo abs($amount); ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo abs($amount); ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -227,7 +227,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="debit_amount text-right">
             <?php if ($account_name == 'Goods Receipt' || $account_name == 'Deferred Expanded Withholding Tax Payable' || ($glType == 1 && $account_name != 'Deferred Input VAT')): ?>
                 <input type="text" class="debit_amount" value="<?php echo number_format(abs($amount), 2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="1">
+                <input type="hidden" name="gtype[]" value="1">
             <?php else : ?>
                 <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -235,7 +235,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="credit_amount text-right">
             <?php if ($glType == 2 && $account_name != 'Goods Receipt' && $account_name != 'Deferred Expanded Withholding Tax Payable' || $account_name == 'Deferred Input VAT') : ?>
                 <input type="text" class="credit_amount" value="<?php echo number_format(abs($amount), 2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="2">
+                <input type="hidden" name="gtype[]" value="2">
             <?php else : ?>
                 <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -306,7 +306,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="text" name="amount[]" value="<?php echo abs($amount); ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo abs($amount); ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -376,7 +376,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="debit_amount text-right">
             <?php if ($account_name == 'Goods Receipt' || $account_name == 'Deferred Expanded Withholding Tax Payable' || ($glType == 1 && $account_name != 'Deferred Input VAT')): ?>
                 <input type="text" class="debit_amount" value="<?php echo number_format(abs($amount), 2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="1">
+                <input type="hidden" name="gtype[]" value="1">
             <?php else : ?>
                 <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -384,7 +384,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="credit_amount text-right">
             <?php if ($glType == 2 && $account_name != 'Goods Receipt' && $account_name != 'Deferred Expanded Withholding Tax Payable' || $account_name == 'Deferred Input VAT') : ?>
                 <input type="text" class="credit_amount" value="<?php echo number_format(abs($amount), 2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="2">
+                <input type="hidden" name="gtype[]" value="2">
             <?php else : ?>
                 <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -421,7 +421,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name="account_code[]" value="<?php echo $row_iv["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="text" name="amount[]" value="<?php echo abs($iEWT); ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo abs($iEWT); ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -488,7 +488,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="debit_amount text-right">
             <?php if ($glType == 1) : ?>
                 <input type="text" class="debit_amount" value="<?= number_format(abs($iEWT),2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="1">
+                <input type="hidden" name="gtype[]" value="1">
             <?php else : ?>
                 <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -497,7 +497,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="credit_amount text-right">
             <?php if ($glType == 2) : ?>
                 <input type="text" class="credit_amount" value="<?= number_format(abs($iEWT),2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="2">
+                <input type="hidden" name="gtype[]" value="2">
             <?php else : ?>
                 <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -533,7 +533,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name="account_code[]" value="<?php echo $row_ap["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="text" name="amount[]" value="<?php echo abs($n_apTotal) ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo abs($n_apTotal) ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -603,7 +603,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="debit_amount text-right">
             <?php if ($glType == 1) : ?>
                 <input type="text" class="debit_amount" value="<?= number_format(abs($n_apTotal),2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="1">
+                <input type="hidden" name="gtype[]" value="1">
             <?php else : ?>
                 <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -612,7 +612,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="credit_amount text-right">
             <?php if ($glType == 2) : ?>
                 <input type="text" class="credit_amount" value="<?= number_format(abs($n_apTotal),2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="2">
+                <input type="hidden" name="gtype[]" value="2">
             <?php else : ?>
                 <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -662,7 +662,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name="account_code[]" value="<?php echo $row['account'] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="text" name="amount[]" value="<?php echo abs($amount); ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo abs($amount); ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -731,7 +731,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="debit_amount text-right">
             <?php if ($account_name == 'Goods Receipt' || $account_name == 'Deferred Expanded Withholding Tax Payable' || ($glType == 1 && $account_name != 'Deferred Input VAT')): ?>
                 <input type="text" class="debit_amount" value="<?php echo number_format(abs($amount), 2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="1">
+                <input type="hidden" name="gtype[]" value="1">
             <?php else : ?>
                 <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -739,7 +739,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="credit_amount text-right">
             <?php if ($glType == 2 && $account_name != 'Goods Receipt' && $account_name != 'Deferred Expanded Withholding Tax Payable' || $account_name == 'Deferred Input VAT') : ?>
                 <input type="text" class="credit_amount" value="<?php echo number_format(abs($amount), 2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="2">
+                <input type="hidden" name="gtype[]" value="2">
             <?php else : ?>
                 <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -777,7 +777,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name="account_code[]" value="<?php echo $row_ewt["code"] ?>">
             <input type="hidden" name="account_id[]" value="<?php echo $alId; ?>">
             <input type="hidden" name="group_id[]" value="<?php echo $glId; ?>">
-            <input type="text" name="amount[]" value="<?php echo abs($e_total); ?>" class="amount-textbox">
+            <input type="hidden" name="amount[]" value="<?php echo abs($e_total); ?>" class="amount-textbox">
             <span class="type" style="display:none;"><?= $glType ?></span>
             <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
                 <option value="" disabled selected></option>
@@ -849,7 +849,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="debit_amount text-right">
             <?php if ($glType == 1) : ?>
                 <input type="text" class="debit_amount" value="<?= number_format(abs($e_total),2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="1">
+                <input type="hidden" name="gtype[]" value="1">
             <?php else : ?>
                 <input type="text" class="debit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>
@@ -858,7 +858,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="credit_amount text-right">
             <?php if ($glType == 2) : ?>
                 <input type="text" class="credit_amount" value="<?= number_format(abs($e_total),2) ?>" oninput="updateAmount(this)">
-                <input type="text" name="gtype[]" value="2">
+                <input type="hidden" name="gtype[]" value="2">
             <?php else : ?>
                 <input type="text" class="credit_amount" value="" oninput="updateAmount(this)">
             <?php endif; ?>

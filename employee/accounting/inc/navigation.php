@@ -201,7 +201,7 @@ $level = $_settings->userdata('type');
                         </a>
                       </li>
 
-                    <div style="background-color:gainsboro;">
+                    <div style="background-color:gainsboro;" class="nav-check nav-check">
                       <li class="nav-header">
                         <a href="<?php echo base_url ?>employee/accounting/?page=cv/manage_check_voucher">
                           <b><i>Create Check Voucher Setup</i></b>
@@ -217,7 +217,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=cv" class="nav-link nav-cv">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=cv" class="nav-link nav-maincv">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           Check Voucher Entries

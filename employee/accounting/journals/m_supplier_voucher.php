@@ -38,10 +38,10 @@ if ($query) {
     if ($publicId > 0) {
 
         $newDocNo = $doc_no;
-        echo "New_DOC" . $newDocNo . "<br>";
+        //echo "New_DOC" . $newDocNo . "<br>";
     } else {
         $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
-        echo "Max_DOC" . $maxDocNo;
+        //echo "Max_DOC" . $maxDocNo;
     }
 
     
@@ -172,11 +172,11 @@ function format_num($number){
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="po_no">P.O. #: </label>
                             <!-- <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
                                 <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
@@ -190,16 +190,31 @@ function format_num($number){
                                 ><?php echo $row['po_no'] ?></option>
                                 <?php endwhile; ?>
                             </select> -->
-                            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0">
+                            <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Document #:</label>
+                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="journal_date" class="control-label">Transaction Date:</label>
-                            <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required>
+                            <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required readonly>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Check Date:</label>
+                        <div class="col-md-4 form-group">
+                            <label for="bill_date" class="control-label">Bill Date:</label>
+                            <?php
+                            if (!empty($bill_date)) {
+                                $billformattedDate = date('Y-m-d', strtotime($bill_date));
+                            } else {
+                                $billformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" id="bill_date" name="bill_date" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($billformattedDate) ? $billformattedDate : '' ?>" required style="background-color:yellow;">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="due_date" class="control-label">Due Date:</label>
                             <?php
                             if (!empty($due_date)) {
                                 $dueformattedDate = date('Y-m-d', strtotime($due_date));
@@ -207,7 +222,7 @@ function format_num($number){
                                 $dueformattedDate = '';
                             }
                             ?>     
-                            <input type="date" class="form-control form-control-sm rounded-0" id="due_date" name="due_date" value="<?php echo isset($dueformattedDate) ? $dueformattedDate : '' ?>" required>
+                            <input type="date" class="form-control form-control-sm rounded-0" id="due_date" name="due_date" value="<?php echo isset($dueformattedDate) ? $dueformattedDate : '' ?>" required readonly>
                         </div>
                             <!-- <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required> -->
                     </div>
@@ -217,36 +232,59 @@ function format_num($number){
                             <label class="control-label">Paid To:</label>
                             <hr>
                             <div class="container" id="sup-div">
-                                <table style="width:100%;">
-                                    <tr>
-                                        <td style="width:50%; padding-right: 10px;">
-                                            <label for="supplier_id">Supplier:</label>
-                                            <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                                                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-                                                <?php 
-                                                $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-                                                while ($row = $supplier_qry->fetch_assoc()):
-                                                    $vatable = $row['vatable'];
-                                                ?>
-                                                <option 
-                                                    value="<?php echo $row['id'] ?>" 
-                                                    data-supplier-code="<?php echo $row['id'] ?>"
-                                                    <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="supplier_id">Supplier:</label>
+                                        <?php
+                                        $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
+                                        $terms = '';
+                                        ?>
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                            <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+                                            <?php while ($row = $supplier_qry->fetch_assoc()): ?>
+                                                <option
+                                                    value="<?php echo $row['id'] ?>"
+                                                    data-vatable="<?php echo $row['vatable'] ?>"
+                                                    data-terms="<?php echo $row['terms']; ?>"
+                                                    <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>
+                                                    <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
                                                 ><?php echo $row['name'] ?></option>
-                                                <?php endwhile; ?>
-                                            </select>
-                                        </td>
-                                        <td style="width:50%; padding-left: 10px;"> 
-                                            <label for="sup_code" class="control-label">Supplier Code:</label>
-                                            <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
-                                        </td>
-                                    </tr>
-                                </table>
+                                                <?php
+                                                if (isset($supplier_id) && $supplier_id == $row['id']) {
+                                                    $terms = $row['terms'];
+                                                }
+                                                ?>
+                                            <?php endwhile; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="p_terms">Payment Terms:</label>
+                                        <?php if ($terms !== ''): ?>
+                                            <?php
+                                            $terms_qry = $conn->query("SELECT terms FROM `payment_terms` WHERE terms_indicator = $terms;");
+                                            while ($row = $terms_qry->fetch_assoc()):
+                                                $pterms = $row['terms'];
+                                                ?>
+                                                <input type="text" id="p_terms" class="form-control form-control-sm rounded-0" value="<?php echo $pterms; ?>" readonly>
+                                            <?php endwhile; ?>
+                                        <?php else: ?>
+                                            <input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="sup_code" class="control-label">Supplier Code:</label>
+                                        <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
+                            </div>
                             </div>
                             <br>
                             <br>
                             <div class="gr-container"></div>
-                            <button id="display-selected-gr-details">Display Selected Tables</button>
+                            <hr>
+                            <button id="display-selected-gr-details" class="btn btn-flat btn-sm btn-secondary"><i class="fas fa-table"></i> Display Selected Tables</button>
                         </div>
                     </div>
                     <br>
@@ -258,11 +296,18 @@ function format_num($number){
                     </div>
                     <table id="account_list" class="table table-bordered">
                     </table>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-primary" id="save_journal">Save</button>
+                    <div class="card-footer">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_journal"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                                </td>
+                                <td>
+                                    <a href="?page=journals/"  class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                </div>
                 </form>
             </div>
         </div>
@@ -360,7 +405,62 @@ function format_num($number){
 </div>
 
 <script>
+function updateDueDate() {
+    var termsId = $('#termsTextbox').val();
 
+    $.ajax({
+        type: 'POST',
+        url: 'journals/get_terms.php',
+        data: { termsId: termsId },
+        success: function(response) {
+                try {
+                    var data = JSON.parse(response);
+                    var billDateInput = $('#bill_date');
+                    var dueDateInput = $('#due_date');  
+                    var pterms = $('#p_terms');
+                    var daysToAdd = parseInt(data.days_before_due);
+                    var daysInMonth = parseInt(data.days_in_following_month);
+                    if (!billDateInput.val()) {
+                  
+                    alert('Please provide a billing date.');
+                    return;
+                }
+                    if (daysToAdd === 0) {
+                        daysToAdd = parseInt(data.days_in_following_month);
+                    }
+
+                    if (daysInMonth === 0) {
+                        daysToAdd = parseInt(data.days_before_due);
+                    }
+
+                    if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
+                        var currentDate = new Date();
+                        daysToAdd = 0;
+                        pterms.val(data.terms);
+                        return;
+                    }
+
+                    console.log("DAYS TO ADD", daysToAdd);
+
+                    var userProvidedBillDate = new Date(billDateInput.val());
+
+                    var dueDate = new Date(userProvidedBillDate);
+                    dueDate.setDate(userProvidedBillDate.getDate() + daysToAdd);
+
+                    dueDateInput.val(dueDate.toISOString().split('T')[0]);
+
+                    pterms.val(data.terms);
+
+                } catch (error) {
+                    console.error('Error parsing JSON response:', error);
+                }
+
+        },
+        error: function(xhr, status, error) {
+            console.error('Error in AJAX request:', xhr.responseText);
+        }
+    });
+}
 $(document).ready(function () {
     $('.delete-row').on('click', function () {
         $(this).closest('tr').remove();
@@ -384,6 +484,10 @@ document.getElementById('supplier_id').addEventListener('change', function() {
 });
 
 $(document).ready(function () {
+    $('#bill_date').on('change', function () {
+       updateDueDate();
+    });
+
     $("#account_id").on("change", function () {
         var selectedAccountId = $(this).val();
         var accountCodeInput = $("#account_code");
@@ -558,6 +662,15 @@ $(document).ready(function () {
 
   $(document).ready(function () {
         $('#supplier_id').on('change', function () {
+        var billDateInput = $('#bill_date');
+            if (!billDateInput.val()) {
+                alert('Please provide a billing date.');
+                return;
+            }
+        var terms = $(this).find(':selected').data('terms');
+        $('#termsTextbox').val(terms);
+        
+        updateDueDate();
         var selectedSupplierId = $(this).val();
         console.log('Supplier ID:', selectedSupplierId);
         $.ajax({

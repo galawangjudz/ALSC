@@ -253,7 +253,7 @@ $(document).ready(function() {
 						</select>
 					</div>
 					<div class="row">
-						<div class="col-md-4 form-group">
+						<div class="col-md-6 form-group">
 							<label><b>Supplier:</b></label>
 							<?php 
 							$supplier_qry = $conn->query("SELECT a.*,b.terms as pterms FROM supplier_list a JOIN payment_terms b ON a.terms = b.terms_indicator where id = '{$supplier_id}'");
@@ -265,12 +265,12 @@ $(document).ready(function() {
 								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $row['name'] ?>" readonly>
 							</div>
 							</div>
-							<div class="col-md-4 form-group">
+							<!-- <div class="col-md-4 form-group">
 								<label for="p_terms">Payment Terms:</label>
 								<input type="text" id="p_terms" value="<?php echo $row['pterms'] ?>" class="form-control form-control-sm rounded-0" readonly>
-							</div>
+							</div> -->
 							<?php endwhile; ?>
-						<div class="col-md-4 form-group">
+						<div class="col-md-6 form-group">
 							<label for="department">Delivery Date:</label>
 							<?php
 							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
