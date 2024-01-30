@@ -236,9 +236,7 @@ $(document).ready(function() {
 						</tr>
 					</thead>
 					<tbody>
-						
 					<?php 
-
 					if (isset($id)) :
 						$order_items_qry = $conn->query("SELECT o.*, i.name, i.description, i.account_code, i.type, i.item_code
 							FROM approved_order_items o
@@ -288,9 +286,9 @@ $(document).ready(function() {
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
 							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
-							<td style="display:none;"><input type='hidden' name='vat_amt' id='vat_amt'></td>
-							<td style="display:none;"><input type='hidden' name='ex_vat' id='ex_vat'></td>
-							<td style="display:none;"><input type='hidden' name='tot' id='tot'></td>
+							<td><input type='text' name='vat_amt' id='vat_amt'></td>
+							<td><input type='text' name='ex_vat' id='ex_vat'></td>
+							<td><input type='text' name='tot' id='tot'></td>
 							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
@@ -311,7 +309,7 @@ $(document).ready(function() {
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
-							<tr class="po-item" data-id="" style="display:none;">
+							<tr class="po-item" data-id="">
 								<td class="align-middle p-1">
 									<br>
 									GType:<input type="text" name="gtype_vat" id="gtype_vat" value="<?php echo $row['type'] ?>">
@@ -334,7 +332,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="" style="display:none;">
+						<tr class="po-item" data-id="">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_gr" id="gtype_gr" value="<?php echo $row['type'] ?>">
@@ -356,7 +354,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="" style="display:none;">
+						<tr class="po-item" data-id="">
 						
 							<td class="align-middle p-1">
 							<br>
@@ -368,7 +366,7 @@ $(document).ready(function() {
 						</tr>
 						
 						<?php endwhile;endif; ?>
-					<tr style="display:none;">
+					<tr>
 						<td class="p-1 text-right" colspan="8">Total Outstanding:</td>
 						<td class="p-1 text-right" id="outstanding-total">0</td>
 					</tr>
@@ -477,92 +475,85 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unlinkedItemsModalLabel">Unlinked Items</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="unlinkedItemsModalContent">
+                <!-- Content will be dynamically added here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unlinkedItemsModalLabel">Unlinked Items</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>The item is not linked. Please link the item before entering received quantity.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    var supplierId = '<?php echo $supplier_id; ?>';
 
-    $('#save-button').on('click', function () {
-      
-        var itemsAreUnlinked = checkUnlinkedItems(); 
+    function handleReceivedClick(element) {
+        var row = element.closest('tr');
+        var accountCode = row.querySelector('input[name="account_code[]"]').value;
 
-        if (itemsAreUnlinked) {
-
-            displayUnlinkedItemModal();
+        if (accountCode == 0) {
+            $('#unlinkedItemsModal').modal('show');
+            fetchUnlinkedItems(supplierId);
         }
-    });
-
-    function checkUnlinkedItems() {
-
-        var selectedSupplierId = $('#supplier_id').val();
-        var itemsWithZeroAccountCode = getUnlinkedItems(selectedSupplierId);
-        return itemsWithZeroAccountCode.length > 0;
     }
 
-    function getUnlinkedItems(supplierId) {
-    //console.log('Supplier ID:', supplierId);
-    $.ajax({
-        url: 'journals/items-link.php',
-        type: 'POST',
-        data: { supplier_id: supplierId },
-        success: function (data) {
-            var items = JSON.parse(data);
+    document.querySelectorAll('input[name="del_items[]"]').forEach(function (element) {
+        element.addEventListener('click', function () {
+            handleReceivedClick(this);
+        });
+    });
 
-            //console.log(items);
-            var itemsWithZeroAccountCode = items.filter(function (item) {
-                return item.account_code == 0;
-            });
+    function fetchUnlinkedItems(supplierId) {
+        var selectedSupplierId = $(this).val();
+        console.log('Supplier ID:', selectedSupplierId);
+        $.ajax({
+            url: 'goods_receiving/fetch_unlinked_items.php',
+            type: 'POST',
+            data: { supplier_id: selectedSupplierId },
+            success: function (data) {
+                var items = JSON.parse(data);
 
-            if (itemsWithZeroAccountCode.length > 0) {
-                displayZeroAccountCodeModal(itemsWithZeroAccountCode, supplierId); 
+                console.log(items);
+                
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
             }
-        },
-        error: function (xhr, status, error) {
-            console.error(error);
-        }
-    });
-}
-
-
-    function displayUnlinkedItemModal() {
-        var selectedSupplierId = $('#supplier_id').val();
-        var itemsWithZeroAccountCode = getUnlinkedItems(selectedSupplierId);
-
-        if (itemsWithZeroAccountCode.length > 0) {
-            displayZeroAccountCodeModal(itemsWithZeroAccountCode, selectedSupplierId);
-        }
+		});
     }
+</script>
 
-	
-	function displayZeroAccountCodeModal(items, supplierId) {
-    var modalBody = $('#zeroAccountCodeModalBody');
-    modalBody.empty();
-    var table = $('<table class="table table-bordered">');
-    var thead = $('<thead>').append('<tr><th style="width:40%;">Name</th><th style="width:10%">Code</th><th style="width:50%">Description</th></tr>');
 
-    table.append(thead);
 
-    var tbody = $('<tbody>');
-    items.forEach(function (item) {
-        var row = $('<tr>');
-        row.append('<td>' + item.name + '</td>');
-        row.append('<td>' + item.item_code + '</td>');
-        row.append('<td>' + item.description + '</td>');
-        tbody.append(row);
-    });
-    table.append(tbody);
-    modalBody.append(table);
-    var modal = $('#zeroAccountCodeModal');
-    modal.find('.modal-dialog').removeClass('modal-lg'); 
-    modal.find('.modal-dialog').addClass('custom-modal-width'); 
-    modalBody.append('<button id="redirectButton" class="btn btn-primary" style="width:100%;">Manage Items</button>');
-    $('#zeroAccountCodeModal').modal({
-    backdrop: 'static',
-    keyboard: false
-});
-
-$('#zeroAccountCodeModal').modal('show');
-    $('#redirectButton').on('click', function () {
-        window.location.href = '.?page=po/items&supplier_id=' + supplierId;
-    });    
-}
+<script>
 
 function calculateAmount(input){
 	var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
