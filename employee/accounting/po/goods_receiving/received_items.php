@@ -486,7 +486,7 @@ $(document).ready(function() {
                 </button>
             </div>
             <div class="modal-body" id="unlinkedItemsModalContent">
-                <!-- Content will be dynamically added here -->
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -518,38 +518,63 @@ $(document).ready(function() {
     function handleReceivedClick(element) {
         var row = element.closest('tr');
         var accountCode = row.querySelector('input[name="account_code[]"]').value;
+		var itemId = row.querySelector('input[name="item_id[]"]').value;
 
         if (accountCode == 0) {
-            $('#unlinkedItemsModal').modal('show');
-            fetchUnlinkedItems(supplierId);
+           
+            $.ajax({
+				type: 'POST',
+				url: 'po/goods_receiving/fetch_unlinked_items.php', 
+				data: {
+					supplier_id: supplierId,
+					item_id: itemId,
+				},
+				success: function(response) {
+					console.log("Supp:", supplierId);
+					console.log("Supp:", itemId);
+
+					try {
+						var data = JSON.parse(response);
+
+						if (data.error) {
+							$('#unlinkedItemsModal .modal-body').html('<p class="text-danger">' + data.error + '</p>');
+						} else {
+							$('#unlinkedItemsModal .modal-body').empty();
+							var table = $('<table class="table table-bordered"></table>');
+							var thead = $('<thead><tr><th>Name</th><th>Account Code</th><th>Item Code</th><th>Description</th><th>Supplier Name</th></tr></thead>');
+							var tbody = $('<tbody></tbody>');
+
+							$.each(data, function(index, item) {
+								var row = $('<tr><td>' + item.name + '</td><td>' + item.account_code + '</td><td>' + item.item_code + '</td><td>' + item.description + '</td><td>' + item.supplier_name + '</td></tr>');
+								tbody.append(row);
+							});
+
+							table.append(thead).append(tbody);
+
+							$('#unlinkedItemsModal .modal-body').append(table);
+						}
+
+						$('#unlinkedItemsModal').modal('show');
+					} catch (e) {
+						console.error('Error parsing JSON:', e);
+						$('#unlinkedItemsModal .modal-body').html('<p class="text-danger">Error parsing JSON</p>');
+					}
+				},
+				error: function(error) {
+					console.error('Error fetching data:', error);
+				}
+			});
+
         }
     }
-
+	
     document.querySelectorAll('input[name="del_items[]"]').forEach(function (element) {
         element.addEventListener('click', function () {
             handleReceivedClick(this);
         });
     });
-
-    function fetchUnlinkedItems(supplierId) {
-        var selectedSupplierId = $(this).val();
-        console.log('Supplier ID:', selectedSupplierId);
-        $.ajax({
-            url: 'goods_receiving/fetch_unlinked_items.php',
-            type: 'POST',
-            data: { supplier_id: selectedSupplierId },
-            success: function (data) {
-                var items = JSON.parse(data);
-
-                console.log(items);
-                
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-		});
-    }
 </script>
+
 
 
 
