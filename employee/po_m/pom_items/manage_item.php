@@ -90,13 +90,39 @@ $type="";
             e.preventDefault();
             var _this = $(this);
             $('.err-msg').remove();
+
+            var requiredFields = ['name','item_code','supplier_id','type','description','default_unit','status'];
+            var isValid = true;
+
+            for (var i = 0; i < requiredFields.length; i++) {
+                var fieldName = requiredFields[i];
+                var fieldValue = _this.find('[name="' + fieldName + '"]').val().trim();
+
+                if (fieldValue === '') {
+                    isValid = false;
+                    var errorMsg = 'May kulang, par.';
+                    var existingError = _this.find('.err-msg:contains("' + errorMsg + '")');
+                    
+                    if (existingError.length === 0) {
+                        var el = $('<div>').addClass("alert alert-danger err-msg").text(errorMsg);
+                        _this.prepend(el);
+                        el.show('slow');
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    }
+                }
+            }
+
+            if (!isValid) {
+                return false;
+            }
+            
             start_loader();
             var supplierId = $('#supplier_id').val();
             var mainId = <?php echo isset($id) ? $id : 'null' ?>;
 
             if (supplierId) {
                 $.ajax({
-                    url: _base_url_ + "employee/po/po_items/get_max_item_code.php",
+                    url: _base_url_ + "employee/po_m/pom_items/get_max_item_code.php",
                     data: { supplier_id: supplierId, item_id: mainId }, 
                     method: 'GET',
                     dataType: 'json',
@@ -164,7 +190,7 @@ $type="";
             var supplierId = $(this).val();
             if (supplierId) {
                 $.ajax({
-                    url: _base_url_ + "employee/po/po_items/get_max_item_code.php",
+                    url: _base_url_ + "employee/po_m/pom_items/get_max_item_code.php",
                     data: { supplier_id: supplierId },
                     method: 'GET',
                     dataType: 'json',

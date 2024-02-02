@@ -100,13 +100,13 @@
 			_conf("Are you sure you want to delete this supplier permanently?","delete_supplier",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Register New Supplier","po_suppliers/manage_supplier.php")
+			uni_modal("<i class='fa fa-plus'></i> Register New Supplier","pom_suppliers/manage_supplier.php")
 		})
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-info-circle'></i> Supplier's Details","po_suppliers/view_details.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-info-circle'></i> Supplier's Details","pom_suppliers/view_details.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Supplier's Details","po_suppliers/manage_supplier.php?id="+$(this).attr('data-id'))
+			uni_modal("<i class='fa fa-edit'></i> Edit Supplier's Details","pom_suppliers/manage_supplier.php?id="+$(this).attr('data-id'))
 		})
 		$('.modal-title').css('font-size', '18px');
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')

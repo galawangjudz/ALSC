@@ -780,8 +780,8 @@ $('#display-selected-gr-details').on('click', async function () {
             localTotalCredit += parseFloat($(this).val().replace(/,/g, '')) || 0;
         });
 
-        $('table[data-gr-id="' + grId + '"] #total-debit').text(localTotalDebit.toFixed(2));
-        $('table[data-gr-id="' + grId + '"] #total-credit').text(localTotalCredit.toFixed(2));
+        $('table[data-gr-id="' + grId + '"] #total-debit').text(localTotalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+        $('table[data-gr-id="' + grId + '"] #total-credit').text(localTotalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     });
 });
 

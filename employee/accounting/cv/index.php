@@ -87,6 +87,9 @@ function format_num($number){
         color:white!important;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
     }
+	body{
+		font-size:14px;
+	}
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -121,17 +124,18 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="45%">
+					<col width="50%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
+					<col width="10%">
 				</colgroup>
-				<thead>
+				<thead style="text-align:center;">
 					<tr>
 						<th>CV #</th>
 						<th>CV Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
-                        <!-- <th>Preparer</th> -->
+                        <th>Claim Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -150,8 +154,24 @@ function format_num($number){
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['sname'] ?></td>
-
-						
+						<td class="text-center">
+							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+								<?php if ($row['c_status'] == 1): ?>
+									<span class="fa fa-check text-primary"></span> Claimed
+								<?php else: ?>
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								<?php endif; ?>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item claim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="1">
+									<span class="fa fa-check text-primary"></span> Claimed
+								</a>
+								<a class="dropdown-item unclaim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="0">
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								</a>
+							</div>
+						</td>
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -159,9 +179,7 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
@@ -178,27 +196,27 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="45%">
+					<col width="50%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
+					<col width="10%">
 				</colgroup>
-				<thead>
+				<thead style="text-align:center;">
 					<tr>
 						<th>CV #</th>
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Agent Name</th>
-                        <!-- <th>Preparer</th> -->
+                        <th>Claim Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-                    
 					<?php 
 					
 					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					// $user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `cv_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(cv_date) desc");
+					$journals = $conn->query("SELECT j.c_num, j.c_status as claimStats, j.cv_date, s.* FROM `cv_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(cv_date) desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -208,7 +226,25 @@ function format_num($number){
 						
                         <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
 
-						
+						<td class="text-center">
+							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+								<?php if ($row['claimStats'] == 1): ?>
+									<span class="fa fa-check text-primary"></span> Claimed
+								<?php else: ?>
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								<?php endif; ?>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item claim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="1">
+									<span class="fa fa-check text-primary"></span> Claimed
+								</a>
+								<a class="dropdown-item unclaim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="0">
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								</a>
+							</div>
+						</td>
+
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -216,8 +252,6 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
 								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
@@ -233,19 +267,20 @@ function format_num($number){
 			<table class="table table-hover table-striped table-bordered" id="emp-div">
 				<colgroup>
 					<col width="15%">
-					<!-- <col width="15%"> -->
 					<col width="15%">
-					<col width="45%">
+					<!-- <col width="15%"> -->
+					<col width="50%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
+					<col width="10%">
 				</colgroup>
-				<thead>
+				<thead style="text-align:center;">
 					<tr>
 						<th>CV #</th>
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Employee Name</th>
-                        <!-- <th>Preparer</th> -->
+                        <th>Claim Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -265,7 +300,25 @@ function format_num($number){
 						
                         <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
 
-						
+						<td class="text-center">
+							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+								<?php if ($row['c_status'] == 1): ?>
+									<span class="fa fa-check text-primary"></span> Claimed
+								<?php else: ?>
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								<?php endif; ?>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item claim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="1">
+									<span class="fa fa-check text-primary"></span> Claimed
+								</a>
+								<a class="dropdown-item unclaim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="0">
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								</a>
+							</div>
+						</td>
+
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -273,8 +326,6 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
 								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
@@ -292,17 +343,18 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="45%">
+					<col width="50%">
 					<!-- <col width="15%"> -->
 					<col width="10%">
+					<col width="10%">
 				</colgroup>
-				<thead>
+				<thead style="text-align:center;">
 					<tr>
 						<th>CV #</th>
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Client Name</th>
-                        <!-- <th>Preparer</th> -->
+                        <th>Claim Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -323,6 +375,25 @@ function format_num($number){
                         <td class=""><?= $row['last_name'] ?>, <?= $row['first_name'] ?></td>
 
 						
+						<td class="text-center">
+							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+								<?php if ($row['c_status'] == 1): ?>
+									<span class="fa fa-check text-primary"></span> Claimed
+								<?php else: ?>
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								<?php endif; ?>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu" role="menu">
+								<a class="dropdown-item claim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="1">
+									<span class="fa fa-check text-primary"></span> Claimed
+								</a>
+								<a class="dropdown-item unclaim_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>" data-status="0">
+									<span class="fa fa-times text-secondary"></span> Not Claimed
+								</a>
+							</div>
+						</td>
+
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -330,8 +401,6 @@ function format_num($number){
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
 								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
@@ -371,10 +440,11 @@ $(document).ready(function() {
 		// $('.edit_data').click(function(){
 		// 	uni_modal("Edit Voucher Setup Entry","journals/manage_journal.php?id="+$(this).attr('data-id'),"mid-large")
 		// })
-		$('.export_data').click(function() {
-			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=cv/manage_check_voucher&id=' + dataId;
-			window.location.href = redirectUrl;
+		$('.claim_data').click(function(){
+			_conf("Are you sure you want to update this check voucher details?","claim_cv",[$(this).attr('data-id')])
+		})
+		$('.unclaim_data').click(function(){
+			_conf("Are you sure you want to update this check voucher details?","unclaimed_cv",[$(this).attr('data-id')])
 		})
 		$('.edit_data').click(function() {
 			var dataId = $(this).attr('data-id');
@@ -395,6 +465,50 @@ $(document).ready(function() {
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=delete_vs",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+	function claim_cv($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=claim_cv",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+	function unclaimed_cv($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=unclaimed_cv",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

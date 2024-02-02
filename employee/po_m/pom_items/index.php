@@ -104,19 +104,19 @@
 <script>
 	$(document).ready(function(){
 		$('.view_item_price_history').click(function(){
-			uni_modal_right("<i class='fa fa-info'></i> Price History", "po_items/item_price_history.php?id=" + $(this).attr('data-id') + "&name=" + $(this).attr('data-name'), "mid-large");
+			uni_modal_right("<i class='fa fa-info'></i> Price History", "pom_items/item_price_history.php?id=" + $(this).attr('data-id') + "&name=" + $(this).attr('data-name'), "mid-large");
 		});
 		$('.delete_data').click(function(){
 			_conf("Are you sure you want to delete this item/service permanently?","delete_item",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Create New Item/Service","po_items/manage_item.php")
+			uni_modal("<i class='fa fa-plus'></i> Create New Item/Service","pom_items/manage_item.php")
 		})
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-info-circle'></i> Details","po_items/view_details.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-info-circle'></i> Details","pom_items/view_details.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Details","po_items/manage_item.php?id="+$(this).attr('data-id'))
+			uni_modal("<i class='fa fa-edit'></i> Edit Details","pom_items/manage_item.php?id="+$(this).attr('data-id'))
 		})
 		$('.modal-title').css('font-size', '18px');
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')

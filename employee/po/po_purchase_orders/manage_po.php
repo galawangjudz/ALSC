@@ -220,7 +220,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 												<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:gainsboro;" readonly/>
 											</td>
 											<td class="align-middle p-1">
-												<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+												<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 												<input type="text" class="text-left w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
 											</td>
 											<td class="align-middle p-1 item-description">
@@ -249,7 +249,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 											<th class="p-1 text-right" colspan="7">
 											VAT</th>
 											<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
-											<input type="hidden" id="copytax" name="tax_amount">
+											<input type="text" id="copytax" name="tax_amount">
 										</tr>
 										<tr>
 											<th class="p-1 text-right" colspan="7">Total:</th>
@@ -275,7 +275,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 													<label for="exclusiveRadio">Exclusive</label>
 												</td>
 											</tr>
-											<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>" />
+											<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>" />
 										</table>
 										</tr>
 									</tr>
@@ -317,7 +317,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]" style="background-color:gainsboro;" readonly>
 			</td>
 			<td class="align-middle p-1">
-				<input type="hidden" name="item_id[]">
+				<input type="text" name="item_id[]">
 				<input type="text" class="text-left w-100 border-0 item_id" id="item" required/>
 			</td>
 			<td class="align-middle p-1 item-description"></td>
@@ -495,7 +495,7 @@ function calculate() {
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
+	$('#vat_total').text(parseFloat(_vat_total).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
     if (rdoText === "1") {
 		$('#total').text(parseFloat(_total).toLocaleString("en-US"));
@@ -623,6 +623,7 @@ $(document).ready(function() {
 		_autocomplete(item, selectedSupplierId);
 	});
 });
+
 $(document).ready(function(){
 	$('#add_row').click(function(){
 		var tr = $('#item-clone tr').clone()
@@ -664,7 +665,7 @@ $(document).ready(function(){
 		// });
 
 		// if (invalidItem) {
-		// 	alert_toast("Please make sure all entered items are valid.", 'warning');
+		// 	alert_toast("Please make sure all entered items are from the list.", 'warning');
 		// 	return false;
 		// }
 

@@ -626,7 +626,7 @@ function calculate() {
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
+	$('#vat_total').text(parseFloat(_vat_total).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
     if (rdoText === "2") {
 		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));

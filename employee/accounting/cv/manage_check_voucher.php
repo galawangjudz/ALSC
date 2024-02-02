@@ -362,7 +362,7 @@ tr:hover {
                                 while ($row = $qry->fetch_assoc()) {
                                     $selectedClass = ($row['v_num'] == $selectedVNum) ? 'selected-row' : '';
                                 ?>
-                                    <tr data-v-num="<?php echo $row['v_num']; ?>" class="<?php echo $selectedClass; ?>" onclick="selectRow('<?php echo $row['v_num']; ?>', '<?php echo $row['po_no']; ?>', '<?php echo $row['due_date']; ?>', '<?php echo $row['amount']; ?>','<?php echo $row['supId']; ?>')">
+                                    <tr data-v-num="<?php echo $row['v_num']; ?>" class="<?php echo $selectedClass; ?>" onclick="selectRow('<?php echo $row['v_num']; ?>', '<?php echo $row['po_no']; ?>', '<?php echo $row['due_date']; ?>', '<?php echo $row['amount']; ?>','<?php echo $row['supId']; ?>','<?php echo $row['supplier_name']; ?>')">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['v_num'] == 0) ? '-' : $row['v_num']; ?></td>
                                         <td><?php echo ($row['supplier_name']) ?></td>
@@ -481,6 +481,7 @@ tr:hover {
                                 var newDocNo = '<?php echo $newDocNo; ?>';
                                 row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
                                 row.cells[0].style.display = 'none';
+                                row.cells[4].style.display = 'none';
                                 row.cells[7].style.display = 'none';
                                 row.cells[8].style.display = 'none';
                                 row.cells[9].style.display = 'none';
@@ -520,10 +521,9 @@ tr:hover {
                                     var newRow = tfoot.insertRow();
                                         newRow.insertCell(0).innerHTML = '<td colspan="1"></td>'; 
                                         newRow.insertCell(1).innerHTML = '<td colspan="1"></td>';
-                                        newRow.insertCell(2).innerHTML = '<td colspan="1"></td>';
-                                        newRow.insertCell(3).innerHTML = '<td align="right"><b>TOTAL: </b></td>';
-                                        newRow.insertCell(4).innerHTML = '<td align="right">' + totalCredit.toFixed(2) + '</td>';
-                                        newRow.insertCell(5).innerHTML = '<td align="right">' + totalDebit.toFixed(2) + '</td>';
+                                        newRow.insertCell(2).innerHTML = '<td align="right"><b>TOTAL: </b></td>';
+                                        newRow.insertCell(3).innerHTML = '<td align="right">' + totalCredit.toFixed(2) + '</td>';
+                                        newRow.insertCell(4).innerHTML = '<td align="right">' + totalDebit.toFixed(2) + '</td>';
                                     table.appendChild(tfoot);
                                 }
 
@@ -569,6 +569,7 @@ tr:hover {
                                         var newDocNo = '<?php echo $newDocNo; ?>';
                                         row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
                                         row.cells[0].style.display = 'none';
+                                        row.cells[4].style.display = 'none';
                                         row.cells[7].style.display = 'none';
                                         row.cells[8].style.display = 'none';
                                         row.cells[9].style.display = 'none';
@@ -615,6 +616,12 @@ tr:hover {
                             <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="description" class="control-label">Check Name:</label>
+                            <input type="text" id="supplier_name" name="check_name" class="form-control" value="<?php echo isset($check_name) ? $check_name : '' ?>">
+                        </div>
+                    </div>
                     <button id="btnProceed" class="btn btn-flat btn-sm btn-secondary"><i class="fas fa-money-check-alt"></i> Create Check Voucher</button>
 
                     <div id="loadingModal" class="modal">
@@ -634,11 +641,11 @@ tr:hover {
                                     <!-- <col width="5%"> -->
                                     <col width="10%">
                                     <col width="10%">
-                                    <col width="20%">
                                     <col width="30%">
+                                    <!-- <col width="30%"> -->
                                     <!-- <col width="10%"> -->
-                                    <col width="15%">
-                                    <col width="15%">
+                                    <col width="25%">
+                                    <col width="25%">
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -646,7 +653,7 @@ tr:hover {
                                         <th class="text-center">Item No.</th>
                                         <th class="text-center">Account Code</th>
                                         <th class="text-center">Account Name</th>
-                                        <th class="text-center">Location</th>
+                                        <!-- <th class="text-center">Location</th> -->
                                         <!-- <th class="text-center">Group</th> -->
                                         <th class="text-center">Debit</th>
                                         <th class="text-center">Credit</th>
@@ -778,8 +785,11 @@ tr:hover {
                             <div class="card-footer">
                                 <table style="width:100%;">
                                     <tr>
+                                        <!-- <td>
+                                            <a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+                                        </td> -->
                                         <td>
-                                            <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_journal"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                                            <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_journal" disabled><i class='fa fa-save'></i>&nbsp;&nbsp;Save & Print</button>
                                         </td>
                                         <td>
                                             <a class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
@@ -792,24 +802,57 @@ tr:hover {
         </form>
     </div>
 </div>
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your data has been saved successfully!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" class="btn btn-secondary" id="printButton">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
+<script>
+$(document).ready(function () {
+    var cNumber = <?php echo json_encode($c_number); ?>;
+    $('#printButton').on('click', function () {
+        console.log("Print button clicked"); 
+        alert("Print " + cNumber);
+
+        window.location.href = "/ALSC/report/print_check_voucher.php?id=<?php echo htmlspecialchars($c_number); ?>";
+    });
+});
+</script>
+
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     var id = <?php echo json_encode($id); ?>;
+    
     if (id !== '') {
-
         disableElements();
+    }
+
+    function disableElements() {
+        $('#btnProceed').prop('disabled', true);
+        $('#data-table').addClass('disabled-table');
+        $('#acc-table').addClass('disabled-table');
+        $('#account_list').addClass('disabled-table');
+        $('#amount').prop('readonly', true);
     }
 });
 
-function disableElements() {
-    $('#btnProceed').prop('disabled', true);
-    $('#data-table').addClass('disabled-table');
-    $('#acc-table').addClass('disabled-table');
-    $('#account_list').addClass('disabled-table');
-    $('#amount').prop('readonly', true);
-}
 </script>
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : '';
@@ -850,7 +893,7 @@ $c_num = isset($c_num) ? $c_num : '';
 
     updateTotals();
 
-function selectRow(selectedVNum, poNo, checkDate, Amt, supId) {
+function selectRow(selectedVNum, poNo, checkDate, Amt, supId, supName) {
     
     var tableRows = document.querySelectorAll('#data-table tbody tr');
     tableRows.forEach(function (row) {
@@ -867,6 +910,7 @@ function selectRow(selectedVNum, poNo, checkDate, Amt, supId) {
     document.getElementById('check_date').value = checkDate;
     document.getElementById('amount').value = Amt;
     document.getElementById('supplier_id').value = supId;
+    document.getElementById('supplier_name').value = supName;
 
     $.ajax({
         type: 'POST',
@@ -915,13 +959,8 @@ $(document).ready(function () {
     var accNameValue = $('#AccName').val();
     var checkNum = $('#check_num').val();
 
-    if (!amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '' || !checkNum || checkNum.trim() === '') {
-        alert('Please select a client and an account before proceeding.');
-        event.preventDefault(); 
-        return;
-    }
-    if (!checkNum || checkNum.trim() === '') {
-        alert('Please enter check number before proceeding.');
+    if (!checkNum || checkNum.trim() === '' || !amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '' || !checkNum || checkNum.trim() === '') {
+        alert('Please check empty fields before proceeding.');
         event.preventDefault(); 
         return;
     } else {
@@ -939,6 +978,7 @@ $(document).ready(function () {
                 $('#acc-table').addClass('disabled-table');
                 $('#amount').prop('readonly', true);
                 $('#description').prop('readonly', true);
+                $('#save_journal').prop('disabled', false);
             }, 1000);
         }
     }
@@ -1013,8 +1053,8 @@ $('#journal-form').submit(function (e) {
         success: function (resp) {
             var el = $("<div class='alert'></div>");
             if (resp.status == 'success') {
-                // location.reload();
-                location.replace('./?page=cv')
+                $('#successModal .modal-body p').text('Your data with c_number ' + <?php echo json_encode($c_number); ?> + ' has been saved successfully!');
+                $('#successModal').modal('show');
             } else if (!!resp.msg) {
                 el.addClass("alert-danger");
                 el.text(resp.msg);

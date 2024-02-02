@@ -12,24 +12,19 @@ if (isset($_GET['id'])) {
     echo "<b>GR #: </b><i> $gr_id</i>";
 }
 ?>
-<style>
-    table {
-        width: 100%;
-    }
-</style>
 <br>
 <b>Date Received: </b><i><?php echo $formatted_date = date('F j, Y', strtotime($date_purchased)); ?></i>
 <br>
-<table class="table table-striped table-hover table-bordered">
+<table class="table table-striped table-hover table-bordered" style="width: 100%">
     <thead>
         <tr>
             <th style="width:25%">Item Name</th>
-            <th style="width:25%">Unit of Measurement</th>
-            <th style="width:15%">Unit Price</th>
-            <th style="width:15%">Quantity</th>
-            <th style="width:15%">Total # of Prev Delivered Items</th>
-            <th style="width:15%"># of Delivered Items</th>
-            <th style="width:20%">Outstanding</th>
+            <th>Unit of Measurement</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Total # of Prev Delivered Items</th>
+            <th># of Delivered Items</th>
+            <th>Outstanding</th>
         </tr>
     </thead>
     <tbody>

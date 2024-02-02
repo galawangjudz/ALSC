@@ -975,8 +975,8 @@ function updateTotalsAfterRowDeletion(grId) {
         totalCredit += parseFloat($(this).val().replace(/,/g, '')) || 0;
     });
 
-    $('table[data-gr-id="' + grId + '"] tfoot #total-debit').text(totalDebit.toFixed(2));
-    $('table[data-gr-id="' + grId + '"] tfoot #total-credit').text(totalCredit.toFixed(2));
+    $('table[data-gr-id="' + grId + '"] tfoot #total-debit').text(totalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('table[data-gr-id="' + grId + '"] tfoot #total-credit').text(totalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 }
 </script>
 <script>
@@ -1002,5 +1002,6 @@ function updateAmount(input) {
 
     table.find('#total-debit').text(totalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     table.find('#total-credit').text(totalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ''));
+    
 }
 </script>

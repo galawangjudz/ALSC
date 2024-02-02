@@ -98,7 +98,7 @@
                                 $qry = $conn->query("SELECT u.*, po.*, s.name as sname
                                 FROM `po_approved_list` po
                                 INNER JOIN `supplier_list` s ON po.supplier_id = s.id
-                                INNER JOIN `users` u ON (po.receiver_id = u.id OR po.receiver2_id = u.id)
+                                INNER JOIN `users` u ON (po.receiver_id = u.user_code OR po.receiver2_id = u.user_code)
                                 WHERE po.status = 1 AND (po.receiver_id = '$type' OR po.receiver2_id = '$type')
                                 GROUP BY po.po_no
                                 ORDER BY po.date_created DESC;
@@ -176,7 +176,7 @@
                                 $qry = $conn->query("SELECT u.*, po.*, s.name as sname
                                 FROM `po_approved_list` po
                                 INNER JOIN `supplier_list` s ON po.supplier_id = s.id
-                                INNER JOIN `users` u ON (po.receiver_id = u.id OR po.receiver2_id = u.id)
+                                INNER JOIN `users` u ON (po.receiver_id = u.user_code OR po.receiver2_id = u.user_code)
                                 WHERE po.status = 0 AND (po.receiver_id = '$type' OR po.receiver2_id = '$type')
                                 GROUP BY po.po_no
                                 ORDER BY po.date_created DESC;

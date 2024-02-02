@@ -75,7 +75,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li>  -->
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/po_m/?page=po_suppliers" class="nav-link nav-suppliers">
+                      <a href="<?php echo base_url ?>employee/po_m/?page=pom_suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
                           Suppliers List
@@ -83,7 +83,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/po_m/?page=po_items" class="nav-link nav-items">
+                      <a href="<?php echo base_url ?>employee/po_m/?page=pom_items" class="nav-link nav-items">
                       <i class="nav-icon fas fa-th-list"></i>
                         <p>
                           Items/Services List
@@ -93,7 +93,7 @@ $level = $_settings->userdata('type');
                
 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/po_m/?page=po_goods_receiving/received_items_status" class="nav-link nav-gr">
+                      <a href="<?php echo base_url ?>employee/po_m/?page=pom_goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
                         <p>
                           Goods Receiving
@@ -102,7 +102,7 @@ $level = $_settings->userdata('type');
                     </li> 
 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/po_m/?page=po_goods_receiving/po_status" class="nav-link nav-monitoring">
+                      <a href="<?php echo base_url ?>employee/po_m/?page=pom_goods_receiving/po_status" class="nav-link nav-monitoring">
                       <i class="nav-icon fas fa-search"></i>
                         <p>
                           Monitoring

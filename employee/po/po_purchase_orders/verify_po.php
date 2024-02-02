@@ -515,10 +515,14 @@ if (radioValue === 'inclusive') {
 }
 </script>
 <script>
-	function copyTaxValue() {
-	var taxAmountValue = document.getElementById('vat_total').textContent;
-	document.getElementById('copytax').value = taxAmountValue;
+function copyTaxValue() {
+    var taxAmountValue = document.getElementById('vat_total').textContent;
+
+    var taxAmountWithoutCommas = taxAmountValue.replace(/,/g, '');
+
+    document.getElementById('copytax').value = taxAmountWithoutCommas;
 }
+
 	$(document).ready(function() {
 		function updateContactInfo() {
 			var selectedOption = $('#receiver_id').find(':selected');
@@ -589,7 +593,7 @@ if (radioValue === 'inclusive') {
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
+	$('#vat_total').text(parseFloat(_vat_total).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
 	if (rdoText === "2") {
 		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
@@ -651,47 +655,7 @@ $('input[name="vatType"]').change(function() {
 		});
 	});
 	
-	$(document).ready(function() {
-		$("#supplier_id").change(function() {
-			$('[name="vatable"]').val('');
-
-			var selectedOption = $(this).find("option:selected");
-			var vatable = selectedOption.data("vatable");
-
-			if (vatable !== null) {
-				$('[name="vatable"]').val(vatable);
-			}
-
-			var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
-			var discount = (subtotal * vatable) / 100;
-
-			$('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
-
-			var total = subtotal - discount;
-
-			$('#total').text(total.toLocaleString('en-US'));
-			tax_perc = $('[name="vatable"]').val();
-
-			var taxLabel = $('#tax_label');
-			console.log('tax_perc:', tax_perc);
-
-			if (tax_perc === '0') {
-				taxLabel.text('Non-VAT');
-			} else if (tax_perc === '1') {
-				taxLabel.text('Inclusive');
-			} else if (tax_perc === '2') {
-				taxLabel.text('Exclusive');
-			} else if (tax_perc === '3') {
-				taxLabel.text('Zero rated');
-			} else {
-				taxLabel.text('');
-				//console.log('Unexpected tax percentage value:', tax_perc);
-				//alert('Oops! Looks like there\'s no tax group set for this supplier. Please make sure to assign the correct tax group.');
-			}
-		});
-
-		$("#supplier_id").trigger("change");
-	});
+	
 
 	$(document).ready(function(){
 		$('#add_row').click(function(){
@@ -724,6 +688,7 @@ $('input[name="vatType"]').change(function() {
             var _this = $(this)
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger')
+			
 			if($('#item-list .po-item').length <= 0){
 				alert_toast(" Please add atleast 1 item on the list.",'warning')
 				return false;

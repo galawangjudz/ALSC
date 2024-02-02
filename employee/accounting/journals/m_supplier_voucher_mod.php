@@ -178,11 +178,11 @@ function updateAmount(input) {
         totalCredit += value;
     });
 
-    table.find('.total_debit').text(totalDebit.toFixed(2));
-    table.find('.total_credit').text(totalCredit.toFixed(2));
+    table.find('.total_debit').text(totalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    table.find('.total_credit').text(totalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 
     var balance = totalDebit - totalCredit;
-    table.find('.total-balance').text(balance.toFixed(2));
+    table.find('.total-balance').text(balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 }
 
 // $(document).ready(function() {
@@ -666,9 +666,9 @@ function cal_tb(account_list_<?= $grId ?>) {
         credit += parseFloat($(this).find('.credit-amount-input').val()) || 0;
     });
 
-    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2));
-    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2));
-    $('#' + account_list_<?= $grId ?>).find('.total-balance').text((debit - credit).toFixed(2));
+    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('#' + account_list_<?= $grId ?>).find('.total-balance').text((debit - credit).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 
 
     updateGrandTotals();
@@ -687,8 +687,8 @@ function updateGrandTotals() {
         grandTotalCredit += totalCredit;
     });
 
-    $('.main_total_debit').text(grandTotalDebit.toFixed(2));
-    $('.main_total_credit').text(grandTotalCredit.toFixed(2));
+    $('.main_total_debit').text(grandTotalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('.main_total_credit').text(grandTotalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 }
 
 $(document).on('click', '.delete-row', function () {

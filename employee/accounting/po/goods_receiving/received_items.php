@@ -11,6 +11,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 //echo $vatableValue;
 }
 ?>
+
 <style>
     .readonly-row {
         background-color: #f0f0f0;
@@ -55,6 +56,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	$usertype = $_settings->userdata('user_type'); 
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
+	$dept = $_settings->userdata('department');
+
 ?>
 <?php
 $query = $conn->query("SELECT COUNT(DISTINCT po_id) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'GR'");
@@ -281,7 +284,7 @@ $(document).ready(function() {
 								<input type="number" step="any" class="text-right w-100 border-0" name="outstanding[]"  id="txtoutstanding" value="<?php echo ($row['outstanding']) ?>"  style="pointer-events:none;border:none;background-color: gainsboro;" readonly/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="number" step="any" class="text-right w-100 border-0" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" onblur="calculateAmount(this)"/>
+								<input type="number" step="any" class="text-right w-100 border-0 txtdel" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" onblur="calculateAmount(this)"/>
 							</td>
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
@@ -463,18 +466,6 @@ $(document).ready(function() {
 	</table>
 	
 </div>
-<div class="modal fade" id="zeroAccountCodeModal" tabindex="-1" role="dialog" aria-labelledby="zeroAccountCodeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="zeroAccountCodeModalLabel"><b>Unlinked Item/s</b></h5>
-                
-            </div>
-            <div class="modal-body" id="zeroAccountCodeModalBody">
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -486,10 +477,9 @@ $(document).ready(function() {
                 </button>
             </div>
             <div class="modal-body" id="unlinkedItemsModalContent">
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" id="redirectButton" data-dismiss="modal">Manage Items</button>
             </div>
         </div>
     </div>
@@ -514,7 +504,8 @@ $(document).ready(function() {
 </div>
 <script>
     var supplierId = '<?php echo $supplier_id; ?>';
-
+	var dept = '<?php echo $dept; ?>';
+	
     function handleReceivedClick(element) {
         var row = element.closest('tr');
         var accountCode = row.querySelector('input[name="account_code[]"]').value;
@@ -532,7 +523,7 @@ $(document).ready(function() {
 				success: function(response) {
 					console.log("Supp:", supplierId);
 					console.log("Supp:", itemId);
-
+					console.log("Supp:", dept);
 					try {
 						var data = JSON.parse(response);
 
@@ -575,10 +566,31 @@ $(document).ready(function() {
     });
 </script>
 
-
-
-
 <script>
+$(document).ready(function () {
+    var saveButton = document.getElementById("save-button");
+
+    $('#redirectButton').on('click', function () {
+        var dept = '<?php echo $dept; ?>';
+
+        if (dept !== 'Accounting') {
+            $('#redirectButton').prop('disabled', true);
+            alert('You need to contact the Accounting department for linking.');
+        } else {
+            window.location.href = '.?page=po/items&supplier_id=' + supplierId;
+        }
+
+        $(saveButton).prop('disabled', true);
+    });
+
+    $('#unlinkedItemsModal').on('hidden.bs.modal', function () {
+        $('.txtdel').prop('disabled', true);
+
+        $(saveButton).prop('disabled', true);
+    });
+});
+
+
 
 function calculateAmount(input){
 	var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;

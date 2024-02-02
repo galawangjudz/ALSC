@@ -23,9 +23,10 @@
     $cv_id = $row['c_num'];
     $po_no = $row['po_no'];
     $supp_code = $row['supplier_id'];
-    $cvdate = $row['cv_date'];
+    $cvdate = $row['check_date'];
     // $due = $row['due_date'];
     $desc = $row['description'];
+    $check_name = $row['check_name'];
 
     $qry_supp = $conn->query("SELECT * FROM supplier_list WHERE id = '$supp_code'; ");
     $row_supp = $qry_supp->fetch_assoc();
@@ -47,7 +48,7 @@
         }
     }
     ?>
-    <style>
+<style>
 .phase {
 
 -webkit-appearance: none;
@@ -83,13 +84,13 @@ border-color: #007BFF;
                                 <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher No:</td>
                                 <td style="width:50%; padding: 4px 10px;"><?php echo $cv_id; ?></td>
                                 <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
-                                <td style="padding: 4px 10px;"><?php echo $cvdate; ?></td>
+                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d'); ?></td>
                             </tr>
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">PO No:</td>
                                 <td style="padding: 4px 10px;"><?php echo $po_no; ?></td>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Due Date:</td>
-                                <!-- Add your code for Due Date here -->
+                                <td style="padding: 4px 10px;"><?php echo $cvdate; ?></td>
                             </tr>
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Paid To:</td>
@@ -107,6 +108,10 @@ border-color: #007BFF;
                                 </td>
                                 <td style="padding: 4px 10px;"><?php echo $supp_code; ?></td>
                             </tr>
+                            <tr>
+                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Check Name:</td>
+                                <td style="padding: 4px 10px;"><?php echo $check_name; ?></td>
+                            </tr>
                         </table>
                             <hr>
                             <h6 style="font-weight:bold;margin-left:10px;">Particulars:</h6>
@@ -119,18 +124,18 @@ border-color: #007BFF;
                             <colgroup>
                             <col width="5%">
                             <col width="5%">
-                            <col width="35%">
-                            <col width="40%">
-                            <col width="5%">
-                            <col width="5%">
+                            <col width="55%">
+                            <!-- <col width="40%"> -->
+                            <col width="15%">
+                            <col width="15%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center">Item No.</th>
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
-                                <th class="text-center">Location</th>
-                                <th class="text-center">Group</th>
+                                <!-- <th class="text-center">Location</th> -->
+                                <!-- <th class="text-center">Group</th> -->
                                 <th class="text-center">Debit</th>
                                 <th class="text-center">Credit</th>
                             </tr>
@@ -138,7 +143,7 @@ border-color: #007BFF;
                             <tbody>
                                 <?php 
                                 $counter = 1;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `cv_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '$cv_id'");
+                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `cv_items` j inner join account_list a on j.account_id = a.code inner join group_list g on j.group_id = g.id where journal_id = '$cv_id'");
                                 while($row = $jitems->fetch_assoc()):
                                 ?>
                                 <tr>  
@@ -151,7 +156,7 @@ border-color: #007BFF;
                                     <td class="" style="padding: 4px 10px;">
                                         <span class="account"><?= $row['account'] ?></span>
                                     </td>
-                                    <td class="">
+                                    <!-- <td class="">
                                         <div class="loc-cont">
                                             <select name="phase[]" id="phase[]" class="phase">
                                             <?php 
@@ -169,10 +174,6 @@ border-color: #007BFF;
                                             </select>
                                             
                                             <?php echo $row['block'] ?>/<?php echo $row['lot'] ?>
-                                            
-                                            
-                                    
-
                                             <script>
                                                 $(document).ready(function () {
                                                     $('.lot, .block, .phase').on('input', function () {
@@ -210,8 +211,8 @@ border-color: #007BFF;
                                                 });
                                             </script>
                                         </div>
-                                    </td>
-                                    <td class="group"><?= $row['group'] ?></td>
+                                    </td> -->
+                                    <!-- <td class="group"><?= $row['group'] ?></td> -->
                                     <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount'],2) : '' ?></td>
                                     <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount'],2) : '' ?></td>
                                 </tr>
@@ -221,7 +222,7 @@ border-color: #007BFF;
                             <tfoot>
                                 <tr class="bg-gradient-secondary">
                                     <tr>
-                                        <th colspan="5" class="text-center">Total</th>
+                                        <th colspan="3" class="text-center">Total</th>
                                         <th class="text-right total_debit">0.00</th>
                                         <th class="text-right total_credit">0.00</th>
                                     </tr>

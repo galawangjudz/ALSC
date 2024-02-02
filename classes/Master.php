@@ -4492,6 +4492,34 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function claim_cv(){
+		extract($_POST);
+		$del = $this->conn->query("UPDATE cv_entries SET c_status = 1 where c_num = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success'," Check Voucher has been updated successfully.");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	function unclaimed_cv(){
+		extract($_POST);
+		$del = $this->conn->query("UPDATE cv_entries SET c_status = 0 where c_num = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success'," Check Voucher has been updated successfully.");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
 	function modify_voucher(){
 		if(empty($_POST['id'])){
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
@@ -5451,6 +5479,7 @@ Class Master extends DBConnection {
 
 		if($resp['status'] =='success')
 		    $this->settings->set_flashdata('success',$resp['msg']);
+
 		return json_encode($resp);
 	}
 
@@ -5821,6 +5850,12 @@ switch ($action) {
 	break;
 	case 'delete_vs':
 		echo $Master->delete_vs();
+	break;
+	case 'claim_cv':
+		echo $Master->claim_cv();
+	break;
+	case 'unclaimed_cv':
+		echo $Master->unclaimed_cv();
 	break;
 	case 'delete_cv':
 		echo $Master->delete_cv();
