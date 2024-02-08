@@ -444,50 +444,50 @@ tr:hover {
                                 });
 
                                 function addRowToTable(accCode, accName, vsAmt, grpId) {
-                                var table = document.getElementById('account_list');
-                                var tbody = table.getElementsByTagName('tbody')[0];
-                                
-                                tbody.innerHTML = '';
+                                    var table = document.getElementById('account_list');
+                                    var tbody = table.getElementsByTagName('tbody')[0];
+                                    
+                                    tbody.innerHTML = '';
 
-                           
-                                var row = tbody.insertRow();
-                                row.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
-                                row.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent;" class="form-control" name="item_no[]" readonly>';
-                                row.insertCell(2).innerHTML = '<input type="hidden" name="account_id[]" value="' + accCode + '">' + accCode;
-                                row.insertCell(3).innerHTML = accName;
-                                var locationCell = row.insertCell(4);
-                                locationCell.innerHTML = '<label class="control-label">Phase: </label>' +
-                                '<select name="phase[]" class="phase">' +
-                                '<option value="" selected></option>' + 
-                                '<?php 
-                                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                    while ($row = $cat->fetch_assoc()):
-                                        $cat_name[$row['c_code']] = $row['c_acronym'];
-                                        $code = $row['c_code'];
-                                ?>' +
-                                '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
-                                '<?php endwhile; ?>' +
-                                '</select>' +
-                                '<label class="control-label">Block: </label>' +
-                                '<input type="text" name="block[]" value="" class="block">' +
-                                '<label class="control-label">Lot: </label>' +
-                                '<input type="text" name="lot[]" value="" class="lot">';
+                            
+                                    var row = tbody.insertRow();
+                                    row.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
+                                    row.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent;" class="form-control" name="item_no[]" readonly>';
+                                    row.insertCell(2).innerHTML = '<input type="hidden" name="account_id[]" value="' + accCode + '">' + accCode;
+                                    row.insertCell(3).innerHTML = accName;
+                                    var locationCell = row.insertCell(4);
+                                    locationCell.innerHTML = '<label class="control-label">Phase: </label>' +
+                                    '<select name="phase[]" class="phase">' +
+                                    '<option value="" selected></option>' + 
+                                    '<?php 
+                                        $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                        while ($row = $cat->fetch_assoc()):
+                                            $cat_name[$row['c_code']] = $row['c_acronym'];
+                                            $code = $row['c_code'];
+                                    ?>' +
+                                    '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
+                                    '<?php endwhile; ?>' +
+                                    '</select>' +
+                                    '<label class="control-label">Block: </label>' +
+                                    '<input type="text" name="block[]" value="" class="block">' +
+                                    '<label class="control-label">Lot: </label>' +
+                                    '<input type="text" name="lot[]" value="" class="lot">';
 
-                                row.insertCell(5).innerHTML = '';
-                                row.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + vsAmt + '">';
-                                row.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + grpId + '">';
-                                row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
-                                
-                                var newDocNo = '<?php echo $newDocNo; ?>';
-                                row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
-                                row.cells[0].style.display = 'none';
-                                row.cells[4].style.display = 'none';
-                                row.cells[7].style.display = 'none';
-                                row.cells[8].style.display = 'none';
-                                row.cells[9].style.display = 'none';
-                                updateItemNumbers();
-                                updateTotalCreditDebit();
-                            }
+                                    row.insertCell(5).innerHTML = '';
+                                    row.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + vsAmt + '">';
+                                    row.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + grpId + '">';
+                                    row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
+                                    
+                                    var newDocNo = '<?php echo $newDocNo; ?>';
+                                    row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
+                                    row.cells[0].style.display = 'none';
+                                    row.cells[4].style.display = 'none';
+                                    row.cells[7].style.display = 'none';
+                                    row.cells[8].style.display = 'none';
+                                    row.cells[9].style.display = 'none';
+                                    updateItemNumbers();
+                                    updateTotalCreditDebit();
+                                }
 
 
                                 function updateItemNumbers() {
@@ -522,8 +522,8 @@ tr:hover {
                                         newRow.insertCell(0).innerHTML = '<td colspan="1"></td>'; 
                                         newRow.insertCell(1).innerHTML = '<td colspan="1"></td>';
                                         newRow.insertCell(2).innerHTML = '<td align="right"><b>TOTAL: </b></td>';
-                                        newRow.insertCell(3).innerHTML = '<td align="right">' + totalCredit.toFixed(2) + '</td>';
-                                        newRow.insertCell(4).innerHTML = '<td align="right">' + totalDebit.toFixed(2) + '</td>';
+                                        newRow.insertCell(3).innerHTML = '<td align="right">' + totalCredit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>';
+                                        newRow.insertCell(4).innerHTML = '<td align="right">' + totalDebit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>';
                                     table.appendChild(tfoot);
                                 }
 
@@ -755,8 +755,8 @@ tr:hover {
                                         </td>
                                         <!-- <td class="group"><?= $row['group'] ?></td> -->
                                         
-                                        <td class="credit_amount text-right"><?= $row['type'] == 2 ? $row['amount'] : '' ?></td>
-                                        <td class="debit_amount text-right"><?= $row['type'] == 1 ? $row['amount'] : '' ?></td>
+                                        <td class="credit_amount text-right"><?php echo $row['type'] == 2 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
+                                        <td class="debit_amount text-right"><?php echo $row['type'] == 2 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
                                         <?php
                                             if ($row['type'] == 2) {
                                                 $totalCredit += $row['amount'];
@@ -827,8 +827,8 @@ tr:hover {
 $(document).ready(function () {
     var cNumber = <?php echo json_encode($c_number); ?>;
     $('#printButton').on('click', function () {
-        console.log("Print button clicked"); 
-        alert("Print " + cNumber);
+        // console.log("Print button clicked"); 
+        // alert("Print " + cNumber);
 
         window.location.href = "/ALSC/report/print_check_voucher.php?id=<?php echo htmlspecialchars($c_number); ?>";
     });
@@ -1053,7 +1053,7 @@ $('#journal-form').submit(function (e) {
         success: function (resp) {
             var el = $("<div class='alert'></div>");
             if (resp.status == 'success') {
-                $('#successModal .modal-body p').text('Your data with c_number ' + <?php echo json_encode($c_number); ?> + ' has been saved successfully!');
+                $('#successModal .modal-body p').text('Your data has been saved successfully!');
                 $('#successModal').modal('show');
             } else if (!!resp.msg) {
                 el.addClass("alert-danger");

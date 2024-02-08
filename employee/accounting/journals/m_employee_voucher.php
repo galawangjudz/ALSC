@@ -194,7 +194,7 @@ function format_num($number){
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="control-label">Document #:</label>
-                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" id="doc_no" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
                         </div>
                     </div>
                     <div class="row">

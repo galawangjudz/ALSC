@@ -14,6 +14,11 @@
         color:white!important;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
     }
+	.view_data:hover span.badge {
+        background-color: #007bff!important;
+        color: white!important;
+        border-color: #007bff!important;
+    }
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -54,13 +59,7 @@
 							<td><?php echo $row['doc_no'] ?></td>
                             <td><?php echo date("Y-m-d H:i",strtotime($row['journal_date'])) ?></td>
 							<td align="center">
-								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
-				                  		Action
-				                    <span class="sr-only">Toggle Dropdown</span>
-				                  </button>
-				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['doc_no'] ?>"><span class="fa fa-info text-primary"></span>&nbsp;&nbsp;View</a>
-				                  </div>
+				                <a class="view_data" href="javascript:void(0)" data-id = "<?php echo $row['doc_no'] ?>"><span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye fa-lg"></i></span></a>
 							</td>
 						</tr>
 					<?php endwhile; ?>
@@ -72,6 +71,7 @@
 </div>
 <script>
 	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
         $('.view_data').click(function() {
 			var dataId = $(this).attr('data-id');
 			var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;

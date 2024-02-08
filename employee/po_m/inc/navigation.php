@@ -105,7 +105,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>employee/po_m/?page=pom_goods_receiving/po_status" class="nav-link nav-monitoring">
                       <i class="nav-icon fas fa-search"></i>
                         <p>
-                          Monitoring
+                          PO Monitoring
                         </p>
                       </a>
                     </li> 

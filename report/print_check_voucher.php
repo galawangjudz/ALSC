@@ -33,7 +33,7 @@
     if (!empty($row_supp)) {
         $supp_name = $row_supp['name'];
     } else {
-        $qry_supp = $conn->query("SELECT * FROM users WHERE user_id = '$supp_code'; ");
+        $qry_supp = $conn->query("SELECT * FROM users WHERE user_code = '$supp_code'; ");
         $row_supp = $qry_supp->fetch_assoc();
         if (!empty($row_supp)) {
             $supp_name = $row_supp['firstname'] . ' ' . $row_supp['lastname'];

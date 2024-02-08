@@ -94,7 +94,7 @@ border-color: #007BFF;
                                 <td style="padding: 4px 10px;"><?php echo $supp_code; ?></td>
                             </tr>
                         </table>
-                        <hr>
+                        <br>
                         <h6 style="font-weight:bold;margin-left:10px;">Particulars:</h6>
                         <table class="table table-bordered">
                             <tr>
@@ -106,9 +106,9 @@ border-color: #007BFF;
                             <col width="5%">
                             <col width="5%">
                             <col width="35%">
-                            <col width="40%">
-                            <col width="5%">
-                            <col width="5%">
+                            <col width="30%">
+                            <col width="10%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
@@ -116,7 +116,7 @@ border-color: #007BFF;
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
                                 <th class="text-center">Location</th>
-                                <th class="text-center">Group</th>
+                                <!-- <th class="text-center">Group</th> -->
                                 <th class="text-center">Debit</th>
                                 <th class="text-center">Credit</th>
                             </tr>
@@ -197,7 +197,7 @@ border-color: #007BFF;
                                         </script>
                                     </div>
                                 </td>
-                                <td class="group"><?= $row['group'] ?></td>
+                                <!-- <td class="group"><?= $row['group'] ?></td> -->
                                 <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
                                 <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
                             </tr>
@@ -205,12 +205,10 @@ border-color: #007BFF;
                             endwhile; ?>
                         </tbody>
                         <tfoot>
-                            <tr class="bg-gradient-secondary">
-                                <tr>
-                                    <th colspan="5" class="text-center">Total</th>
-                                    <th class="text-right total_debit">0.00</th>
-                                    <th class="text-right total_credit">0.00</th>
-                                </tr>
+                            <tr>
+                                <th colspan="4" class="text-right">TOTAL</th>
+                                <th class="text-right total_debit">0.00</th>
+                                <th class="text-right total_credit">0.00</th>
                             </tr>
                         </tfoot>
                     </table>

@@ -115,10 +115,13 @@ function format_num($number){
 					<input type="radio" name="divChoice" value="client-div" id="sup-radio"> Clients
 				</label>
 			</div>
+			
 		</div>
 	</div>
+
 	<div class="card-body">
         <div class="container-fluid">
+		
 			<table class="table table-hover table-striped table-bordered" id="sup-div">
 				<colgroup>
 					<col width="15%">
@@ -140,7 +143,6 @@ function format_num($number){
 					</tr>
 				</thead>
 				<tbody>
-                    
 					<?php 
 					
 					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");

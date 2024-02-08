@@ -4038,6 +4038,7 @@ Class Master extends DBConnection {
 		$data = "";
 		$gl_data = "";
 		
+		
 		foreach ($_POST as $k => $v) {
 			if (!is_array($_POST[$k])) {
 				// if ($k === 'vs_num') {
@@ -4107,10 +4108,11 @@ Class Master extends DBConnection {
 			$this->conn->query("DELETE FROM `vs_items` where journal_id = '{$v_num}'");
 			foreach($account_id as $k=>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$v_num}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
+				$doc_no_value = $this->conn->real_escape_string($doc_no[0]); 
+				$data .= "('{$v_num}','{$doc_no_value}','{$v}','{$group_id[$k]}','{$phase[$k]}','{$block[$k]}','{$lot[$k]}','{$amount[$k]}')";
 			}
 			if(!empty($data)){
-				$sql = "INSERT INTO `vs_items` (`journal_id`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
+				$sql = "INSERT INTO `vs_items` (`journal_id`,`doc_no`,`account_id`,`group_id`,`phase`,`block`,`lot`,`amount`) VALUES {$data}";
 				$save2 = $this->conn->query($sql);
 				if($save2){
 					$resp['status'] = 'success';

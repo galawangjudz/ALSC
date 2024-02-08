@@ -289,9 +289,9 @@ $(document).ready(function() {
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
 							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
-							<td><input type='text' name='vat_amt' id='vat_amt'></td>
-							<td><input type='text' name='ex_vat' id='ex_vat'></td>
-							<td><input type='text' name='tot' id='tot'></td>
+							<td style="display:none;"><input type='text' name='vat_amt' id='vat_amt'></td>
+							<td style="display:none;"><input type='text' name='ex_vat' id='ex_vat'></td>
+							<td style="display:none;"><input type='text' name='tot' id='tot'></td>
 							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
@@ -312,7 +312,7 @@ $(document).ready(function() {
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
-							<tr class="po-item" data-id="">
+							<tr class="po-item" data-id="" style="display:none;">
 								<td class="align-middle p-1">
 									<br>
 									GType:<input type="text" name="gtype_vat" id="gtype_vat" value="<?php echo $row['type'] ?>">
@@ -335,7 +335,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_gr" id="gtype_gr" value="<?php echo $row['type'] ?>">
@@ -357,7 +357,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 						
 							<td class="align-middle p-1">
 							<br>
@@ -369,7 +369,7 @@ $(document).ready(function() {
 						</tr>
 						
 						<?php endwhile;endif; ?>
-					<tr>
+					<tr style="display:none;">
 						<td class="p-1 text-right" colspan="8">Total Outstanding:</td>
 						<td class="p-1 text-right" id="outstanding-total">0</td>
 					</tr>
@@ -484,7 +484,7 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-<div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -501,7 +501,7 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <script>
     var supplierId = '<?php echo $supplier_id; ?>';
 	var dept = '<?php echo $dept; ?>';

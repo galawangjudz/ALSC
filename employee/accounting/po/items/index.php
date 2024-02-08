@@ -7,20 +7,20 @@ if ($_settings->chk_flashdata('success')) :
 <?php endif; ?>
 
 <style>
-    .link_data .badge i {
-        transition: font-size 0.3s ease-in-out;
+    .view_data:hover span.badge {
+        background-color: #007bff!important;
+        color: white!important;
+        border-color: #007bff!important;
     }
-
-    .link_data:hover .badge i {
-        font-size: 1em;
+    .link_data:hover span.badge {
+        background-color: #28a745!important;
+        color: white!important;
+        border-color: #28a745!important;
     }
-
-    .view_data .badge i {
-        transition: font-size 0.3s ease-in-out;
-    }
-
-    .view_data:hover .badge i {
-        font-size: 1em;
+    .unlink_data:hover span.badge {
+        background-color:#dc3545!important;
+        color: white!important;
+        border-color: #dc3545!important;
     }
 	.nav-items{
 		background-color:#007bff;
@@ -52,16 +52,16 @@ if ($_settings->chk_flashdata('success')) :
                     $result = $qry->get_result();
 
                     if ($result->num_rows > 0) {
-                        echo '<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+                        echo '<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;font-size:13px;">
                             <colgroup>
                                 <col width="5%">
                                 <col width="12%">
                                 <col width="22%">
                                 <col width="22%">
-                                <col width="20%">
-                                <col width="12%">
-                                <col width="6%">
+                                <col width="17%">
                                 <col width="8%">
+                                <col width="6%">
+                                <col width="15%">
                             </colgroup>
                             <thead>
                                 <tr class="bg-navy disabled">
@@ -100,11 +100,11 @@ if ($_settings->chk_flashdata('success')) :
                             echo '</td>
                                 <td>' . $row['date_created'] . '</td>
                                 <td class="text-center">';
-                            echo ($row['status'] == 1) ? '<span class="badge rounded-pill badge-primary"><i class="fa fa-check fa-xs" aria-hidden="true"></i></span>' : '<span class="badge rounded-pill badge-secondary"><i class="fa fa-times fa-xs" aria-hidden="true"></i></span>';
-                            echo '</td>
-                                <td align="center">';
-                            echo ($row['account_code'] == 0) ? '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge rounded-pill badge-danger"><i class="fa fa-link fa-xs" aria-hidden="true"></i></span></a>' : '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge rounded-pill badge-primary"><i class="fa fa-link fa-xs" aria-hidden="true"></i></span></a>';
-                            echo '<a class="view_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge rounded-pill badge-info"><i class="fa fa-eye fa-xs"></i></span></a>
+                                    echo ($row['status'] == 1) ? '<span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;"><i class="fa fa-check" aria-hidden="true"></i></span>' : '<span class="badge rounded-circle p-2" style="background-color:white; color:#dc3545; border:1px solid gainsboro;"><i class="fa fa-times fa-lg" aria-hidden="true"></i></span>';
+                                    echo '</td>
+                                        <td align="center">';
+                                    echo ($row['account_code'] == 0) ? '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-danger"><i class="fa fa-link" aria-hidden="true"></i></span></a>' : '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-primary"><i class="fa fa-link fa-lg" aria-hidden="true"></i></span></a>';
+                                    echo '<a class="view_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-info"><i class="fa fa-eye"></i></span></a>
                                 </td>
                             </tr>';
                         }
@@ -115,16 +115,16 @@ if ($_settings->chk_flashdata('success')) :
                     $qry->close();
                 } else {
                     ?>
-                    <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+                    <table class="table table-hover table-bordered" id="data-table" style="text-align:center;width:100%;font-size:13px;">
                         <colgroup>
                             <col width="5%">
                             <col width="12%">
                             <col width="22%">
                             <col width="22%">
-                            <col width="20%">
-                            <col width="12%">
-                            <col width="6%">
+                            <col width="17%">
                             <col width="8%">
+                            <col width="6%">
+                            <col width="15%">
                         </colgroup>
                         <thead>
                             <tr class="bg-navy disabled">
@@ -176,19 +176,23 @@ if ($_settings->chk_flashdata('success')) :
                                     <td><?php echo $row['date_created'] ?></td>
                                     <td class="text-center">
                                         <?php if ($row['status'] == 1) : ?>
-                                            <span class="badge rounded-pill badge-primary"><i class="fa fa-check fa-xs" aria-hidden="true"></i></span>
+                                            <span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="Active"><i class="fa fa-check fa-lg" aria-hidden="true"></i></span>
                                         <?php else : ?>
-                                            <span class="badge rounded-pill badge-secondary"><i class="fa fa-times fa-xs" aria-hidden="true"></i></span>
+                                            <span class="badge rounded-circle p-2" style="background-color:white; color:#dc3545; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="Inactive"><i class="fa fa-times fa-lg" aria-hidden="true"></i></span>
                                         <?php endif; ?>
                                     </td>
                                     <td align="center">
                                         <?php if ($row['account_code'] == 0) : ?>
-                                            <a class="link_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="badge rounded-pill badge-danger"><i class="fa fa-link fa-xs" aria-hidden="true"></i></span></a>
+                                            <a class="unlink_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="badge rounded-circle p-2" style="background-color:white; color:#dc3545; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="Link"><i class="fa fa-link fa-lg" aria-hidden="true"></i></span></a>
                                         <?php else : ?>
-                                            <a class="link_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="badge rounded-pill badge-primary"><i class="fa fa-link fa-xs" aria-hidden="true"></i></span></a>
+                                            <a class="link_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">
+                                                <span class="badge rounded-circle p-2" style="background-color: white; color: #28a745; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Link">
+                                                    <i class="fa fa-link fa-lg" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
                                         <?php endif; ?>
 
-                                        <a class="view_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="badge rounded-pill badge-info"><i class="fa fa-eye fa-xs"></i></span></a>
+                                        <a class="view_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="badge rounded-circle p-2" class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye fa-lg"></i></span></a>
                                         <!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
                                             Action
                                         <span class="sr-only">Toggle Dropdown</span>
@@ -212,6 +216,7 @@ if ($_settings->chk_flashdata('success')) :
 
 <script>
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
         $('.view_item_price_history').click(function () {
             uni_modal_right("<i class='fa fa-info'></i> Price History", "po/items/item_price_history.php?id=" + $(this).attr('data-id') + "&name=" + $(this).attr('data-name'), "mid-large");
         });

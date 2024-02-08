@@ -87,6 +87,27 @@ function format_num($number){
         color:white!important;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
     }
+	.custom-badge {
+        border-radius: 50% !important;
+        overflow: hidden!important;
+		background-color:white!important;
+    }
+	table{
+		font-size:14px;
+	}
+	.edit_data_supplier:hover .custom-badge {
+        background-color: #007bff!important; 
+        color: white!important;
+    }
+    .delete_data:hover .custom-badge {
+        background-color: #dc3545!important;
+        color: white!important;
+    }
+
+    .print_data:hover .custom-badge {
+        background-color: #28a745!important;
+        color: white!important;
+    }
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -117,7 +138,7 @@ function format_num($number){
 	</div>
 	<div class="card-body">
         <div class="container-fluid">
-			<table class="table table-hover table-striped table-bordered" id="sup-div">
+			<table class="table table-hover table-bordered" id="sup-div">
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
@@ -133,7 +154,7 @@ function format_num($number){
                         <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
                         <!-- <th>Preparer</th> -->
-						<th>Action</th>
+						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -155,18 +176,31 @@ function format_num($number){
 						
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 									Action
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
-							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+							<div class="dropdown-menu" role="menu"> -->
+								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
+								<div class="dropdown-divider"></div> -->
+								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data_supplier" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
+								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Edit">
+									<span class="fa fa-edit text-primary"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Delete">
+									<span class="fa fa-trash text-danger"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['v_num'] ?>', '_blank')"
+										data-toggle="tooltip" data-placement="top" title="Print">
+									<span class="fas fa-print"></span>
+								</button>
 							</div>
 						</td>
 					</tr>
@@ -174,7 +208,7 @@ function format_num($number){
 				</tbody>
 			</table>
 
-			<table class="table table-hover table-striped table-bordered" id="agent-div">
+			<table class="table table-hover table-bordered" id="agent-div">
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
@@ -190,7 +224,7 @@ function format_num($number){
                         <!-- <th>P.O. #</th> -->
 						<th>Agent Name</th>
                         <!-- <th>Preparer</th> -->
-						<th>Action</th>
+						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -212,26 +246,40 @@ function format_num($number){
 						
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 									Action
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
-							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+							<div class="dropdown-menu" role="menu"> -->
+								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
+								<div class="dropdown-divider"></div> -->
+								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data_agent" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-							</div>
+							</div> -->
+
+							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Edit">
+								<span class="fa fa-edit text-primary fa-small"></span>
+							</button>
+							<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Delete">
+								<span class="fa fa-trash text-danger fa-small"></span>
+							</button>
+							<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['v_num'] ?>', '_blank')"
+									data-toggle="tooltip" data-placement="top" title="Print">
+								<span class="fas fa-print fa-small"></span>
+							</button>
 						</td>
 					</tr>
 					<?php endwhile; ?>
 				</tbody>
 			</table>
 
-			<table class="table table-hover table-striped table-bordered" id="emp-div">
+			<table class="table table-hover table-bordered" id="emp-div">
 				<colgroup>
 					<col width="15%">
 					<!-- <col width="15%"> -->
@@ -247,7 +295,7 @@ function format_num($number){
                         <!-- <th>P.O. #</th> -->
 						<th>Employee Name</th>
                         <!-- <th>Preparer</th> -->
-						<th>Action</th>
+						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -269,26 +317,40 @@ function format_num($number){
 						
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 									Action
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
-							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+							<div class="dropdown-menu" role="menu"> -->
+								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
+								<div class="dropdown-divider"></div> -->
+								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data_employee" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-							</div>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
+								
+							<!-- </div> -->
+							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Edit">
+								<span class="fa fa-edit text-primary"></span>
+							</button>
+							<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Delete">
+								<span class="fa fa-trash text-danger"></span>
+							</button>
+							<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['v_num'] ?>', '_blank')"
+									data-toggle="tooltip" data-placement="top" title="Print">
+								<span class="fas fa-print"></span>
+							</button>
 						</td>
 					</tr>
 					<?php endwhile; ?>
 				</tbody>
 			</table>
 
-			<table class="table table-hover table-striped table-bordered" id="client-div">
+			<table class="table table-hover table-bordered" id="client-div">
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
@@ -304,7 +366,7 @@ function format_num($number){
                         <!-- <th>P.O. #</th> -->
 						<th>Client Name</th>
                         <!-- <th>Preparer</th> -->
-						<th>Action</th>
+						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -326,19 +388,32 @@ function format_num($number){
 						
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 									Action
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
-							<div class="dropdown-menu" role="menu">
-								<a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div>
-								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
+							<div class="dropdown-menu" role="menu"> -->
+								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
+								<div class="dropdown-divider"></div> -->
+								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data_client" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-							</div>
+							</div> -->
+							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_client custom-badge " data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Edit">
+								<span class="fa fa-edit text-primary fa-small"></span>
+							</button>
+							<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Delete">
+								<span class="fa fa-trash text-danger fa-small"></span>
+							</button>
+							<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+									onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['v_num'] ?>', '_blank')"
+									data-toggle="tooltip" data-placement="top" title="Print">
+								<span class="fas fa-print fa-small"></span>
+							</button>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -372,11 +447,14 @@ $(document).ready(function() {
 		// $('.edit_data').click(function(){
 		// 	uni_modal("Edit Voucher Setup Entry","journals/manage_journal.php?id="+$(this).attr('data-id'),"mid-large")
 		// })
-		$('.export_data').click(function() {
-			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/export_voucher&id=' + dataId;
-			window.location.href = redirectUrl;
-		})
+		// $('.export_data').click(function() {
+		// 	var dataId = $(this).attr('data-id');
+		// 	var redirectUrl = '?page=journals/export_voucher&id=' + dataId;
+		// 	window.location.href = redirectUrl;
+		// })
+		
+        $('[data-toggle="tooltip"]').tooltip();
+    
 		$('.edit_data_supplier').click(function() {
 			var dataId = $(this).attr('data-id');
 			var redirectUrl = '?page=journals/m_supplier_voucher_mod&id=' + dataId;

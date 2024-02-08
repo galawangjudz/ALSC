@@ -274,7 +274,7 @@ function format_num($number){
     
                                                 <tfoot data-gr_id="<?= $grId ?>">
                                                     <tr>
-                                                        <th colspan="4" class="text-right">Total</th>
+                                                        <th colspan="4" class="text-right"><b>Total:</b></th>
                                                         <th class="text-right total_debit">0.00</th>
                                                         <th class="text-right total_credit">0.00</th>
                                                     </tr>
@@ -337,7 +337,7 @@ function format_num($number){
                                     foreach ($groupedData as $grId => $group) :
                                         ?>
                                     <hr>
-                                    GR ID: <?= $grId ?>
+                                    <b>GR ID: </b> <i><?= $grId ?></i>
                                    <table id="account_list_<?= $grId ?>" class="table table-striped table-bordered">
                                             <colgroup>
                                                 <col width="5%">
@@ -393,7 +393,7 @@ function format_num($number){
 
                                             <tfoot data-gr_id="<?= $grId ?>">
                                                 <tr>
-                                                    <th colspan="4" class="text-right">Total</th>
+                                                    <th colspan="4" class="text-right"><b>Total:</b></th>
                                                     <th class="text-right total_debit">0.00</th>
                                                     <th class="text-right total_credit">0.00</th>
                                                 </tr>
@@ -410,7 +410,7 @@ function format_num($number){
                                 <tfoot>
                                     <tr>
                                         <tr>
-                                            <th colspan="4" class="text-right">Total</th>
+                                        <th colspan="4" class="text-right"><b>Total:</b></th>
                                             <th class="text-right total_debit">0.00</th>
                                             <th class="text-right total_credit">0.00</th>
                                         </tr>
@@ -490,7 +490,7 @@ function format_num($number){
                         <tfoot>
                             <tr>
                                 <tr>
-                                    <th colspan="4" class="text-right">Total</th>
+                                    <th colspan="4" class="text-right"><b>Total:</b></th>
                                     <th class="text-right total_debit">0.00</th>
                                     <th class="text-right total_credit">0.00</th>
                                 </tr>
@@ -509,6 +509,10 @@ function format_num($number){
 </div>
 </body>
 <script>
+    function formatNumberWithCommas(number) {
+        return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
     $(document).ready(function () {
 
         function updateTotals() {
@@ -528,15 +532,13 @@ function format_num($number){
                     totalCredit += credit;
                 });
 
-                $('#' + tableId + ' .total_debit').text(totalDebit.toFixed(2));
-                $('#' + tableId + ' .total_credit').text(totalCredit.toFixed(2));
-
+                $('#' + tableId + ' .total_debit').text(formatNumberWithCommas(totalDebit));
+                $('#' + tableId + ' .total_credit').text(formatNumberWithCommas(totalCredit));
 
                 var balance = totalDebit - totalCredit;
                 $('#' + tableId + ' .total-balance').text(balance.toFixed(2));
             });
         }
-
         updateTotals();
     });
 </script>

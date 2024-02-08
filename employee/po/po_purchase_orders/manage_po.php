@@ -333,7 +333,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		</tr>
 	</table>
 </body>
+
 <script>
+	
 	document.addEventListener("DOMContentLoaded", function() {
 
 		updateValueOnPageLoad();
@@ -649,30 +651,32 @@ $(document).ready(function(){
 	$('#add_row').trigger('click')
 	}
 	$('.select2').select2({placeholder:"Please Select here",width:"relative"})
+
+	
+
 	$('#po-form').submit(function(e) {
 		e.preventDefault();
 		var _this = $(this)
 		$('.err-msg').remove();
 		$('[name="po_no"]').removeClass('border-danger')
 
-		// var invalidItem = false;
-		// $('#item-list .po-item').each(function() {
-		// 	var description = $(this).find('.item-description').text().trim();
-		// 	if (!description) {
-		// 		invalidItem = true;
-		// 		return false; 
-		// 	}
-		// });
-
-		// if (invalidItem) {
-		// 	alert_toast("Please make sure all entered items are from the list.", 'warning');
-		// 	return false;
-		// }
-
 		if ($('#item-list .po-item').length <= 0) {
 			alert_toast("Please add at least 1 item to the list.", 'warning')
 			return false;
 		}
+
+		// var emptyDescriptionFound = false;
+		// $('#item-list .po-item .item-description').each(function() {
+		// 	if ($(this).text().trim() === '') {
+		// 		emptyDescriptionFound = true;
+		// 		return false; 
+		// 	}
+		// });
+
+		// if (emptyDescriptionFound) {
+		// 	alert("Please enter a valid item.");
+		// 	return false;
+		// }
 
 		start_loader();
 		$.ajax({
@@ -710,5 +714,6 @@ $(document).ready(function(){
 			}
 		})
 	});
+
 })
 </script>
