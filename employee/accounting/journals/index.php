@@ -144,7 +144,7 @@ function format_num($number){
 					<col width="15%">
 					<!-- <col width="15%"> -->
 					<col width="45%">
-					<!-- <col width="15%"> -->
+					<col width="15%">
 					<col width="10%">
 				</colgroup>
 				<thead>
@@ -153,7 +153,7 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
-                        <!-- <th>Preparer</th> -->
+                        <th>PO Type</th>
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
@@ -172,6 +172,10 @@ function format_num($number){
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['sname'] ?></td>
+						<td class="">
+							<input type="text" value="<?php echo !empty($row['po_no']) ? 'PO' : 'non-PO'; ?>" id="po_no" style="border:none;cursor:default;background:transparent;" readonly>
+						</td>
+
 
 						
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
@@ -457,9 +461,18 @@ $(document).ready(function() {
     
 		$('.edit_data_supplier').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/m_supplier_voucher_mod&id=' + dataId;
+			var poNoValue = $(this).closest('tr').find('#po_no').val();
+			var redirectUrl = '';
+
+			if (poNoValue === 'PO') {
+				redirectUrl = '?page=journals/m_supplier_voucher_mod&id=' + dataId;
+			} else {
+				redirectUrl = '?page=journals/m_nonpo_supplier_voucher_mod&id=' + dataId;
+			}
+
 			window.location.href = redirectUrl;
-		})
+		});
+
 		$('.edit_data_agent').click(function() {
 			var dataId = $(this).attr('data-id');
 			var redirectUrl = '?page=journals/m_agent_voucher&id=' + dataId;

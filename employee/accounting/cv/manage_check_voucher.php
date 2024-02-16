@@ -242,7 +242,55 @@ tr:hover {
 </style>
 <head>
 </head>
-<body">
+<body>
+<form action="" method="post" enctype="multipart/form-data" id="picform">
+    <table class="table table-bordered">
+        <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+        <tr>
+            <td>
+                <label for="name" class="control-label">Name:</label>
+            </td>
+            <td>
+                <input type="text" name="name" id="name" required value="">
+            </td>
+            <td>
+                <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+            </td>
+            <td>
+                <button type="submit" name="submit">Submit</button>
+            </td>
+        </tr>
+    </table>    
+</form>
+<table border="1" cellspacing="0" cellpadding="10">
+<tr>
+    <td>Name</td>
+    <td>Attachment</td>
+</tr>
+<?php 
+$i = 1;
+$rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
+?>
+<?php foreach($rows as $row):?>
+<tr>
+    <td><?php echo $row["name"]; ?></td>
+    <td>
+        <?php
+        $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+        $filePath = "journals/attachments/" . $row['image'];
+        if (strtolower($fileExtension) == 'pdf'): ?>
+            <a href="<?php echo $filePath; ?>" data-lightbox="pdfs" data-title="<?php echo $row['name']; ?>">
+                <img src="path/to/pdf-icon.jpg" alt="PDF Icon" width="200" height="200">
+            </a>
+        <?php else: ?>
+            <a href="<?php echo $filePath; ?>" data-lightbox="images" data-title="<?php echo $row['name']; ?>">
+                <img src="<?php echo $filePath; ?>" alt="<?php echo $row['name']; ?>" width="200" height="200">
+            </a>
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Check Voucher Entry": "Add New Check Voucher Entry" ?></b></i></h5>
@@ -371,7 +419,6 @@ tr:hover {
                                 <?php
                                 }
                                 ?>
-                                
                             </tbody>
                         </table>
                     </div>
@@ -636,16 +683,15 @@ tr:hover {
             <div class="container-fluid">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                         <input type="hidden" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
-                        <table id="account_list" class="table table-bordered" style="font-size:14px;">
+                        <table id="account_list" class="table table-bordered" style="font-size:14px;width:auto;.">
                             <colgroup>
                                     <!-- <col width="5%"> -->
                                     <col width="10%">
                                     <col width="10%">
                                     <col width="30%">
-                                    <!-- <col width="30%"> -->
                                     <!-- <col width="10%"> -->
-                                    <col width="25%">
-                                    <col width="25%">
+                                    <col width="20%">
+                                    <col width="20%">
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -665,7 +711,6 @@ tr:hover {
                                     $counter = 1;
                                     $journalId = isset($_GET['id']) ? $_GET['id'] : null;
                                     $jitems = $conn->query("SELECT j.*, a.code AS account_code, a.name AS account, g.name AS `group`, g.type, glt.doc_no FROM `cv_items` j INNER JOIN account_list a ON j.account_id = a.code INNER JOIN group_list g ON j.group_id = g.id INNER JOIN tbl_gr_list glt ON j.journal_id = glt.cv_num WHERE j.journal_id ='{$journalId}'");
-
                                     $rows = [];
                                     while ($row = $jitems->fetch_assoc()) {
                                         $rows[] = $row;
@@ -695,68 +740,11 @@ tr:hover {
                                         <td class="">
                                             <span class="account"><?= $row['account'] ?></span>
                                         </td>
-                                        <td class="">
-                                        <div class="loc-cont">
-                                        <label class="control-label">Phase: </label>
-                                        <select name="phase[]" id="phase[]" class="phase">
-                                        <?php 
-                                            $meta = array();
-                                            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                            while($row1 = $cat->fetch_assoc()):
-                                        ?>
-                                            <?php
-                                                echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
-                                            ?>
-                                            <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
-                                        <?php
-                                            endwhile;
-                                        ?>
-                                        </select>
-                                            <label class="control-label">Block: </label>
-                                            <input type="text" name="block[]" class="block" value="<?= $row['block'] ?>">
-                                            <label class="control-label">Lot: </label>
-                                            <input type="text" name="lot[]" class="lot" value="<?= $row['lot'] ?>">
-                                            <div class="lotExistsMsg" style="color: #ff0000;"></div>
-
-                                            <script>
-                                        $(document).ready(function () {
-                                            $('.lot, .block, .phase').on('input', function () {
-                                                var currentRow = $(this).closest('td');
-
-                                                var enteredPhase = currentRow.find('.phase').val();
-                                                var enteredBlock = currentRow.find('.block').val();
-                                                var enteredLot = currentRow.find('.lot').val();
-
-                                                console.log("AJAX Data:", {
-                                                    phase: enteredPhase,
-                                                    block: enteredBlock,
-                                                    lot: enteredLot
-                                                });
-
-                                                $.ajax({
-                                                    type: 'POST',
-                                                    url: 'journals/check_loc.php',
-                                                    data: JSON.stringify({
-                                                        phase: enteredPhase,
-                                                        block: enteredBlock,
-                                                        lot: enteredLot
-                                                    }),
-                                                    contentType: 'application/json', 
-                                                    success: function (response) {
-                                                        console.log("AJAX Response:", response);
-                                                        var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                                                            lotExistsMsg.html(response);
-                                                    }
-                                                });
-                                            });
-                                        });
-                                    </script>
-                                    </div>
-                                        </td>
+                                        
                                         <!-- <td class="group"><?= $row['group'] ?></td> -->
                                         
                                         <td class="credit_amount text-right"><?php echo $row['type'] == 2 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
-                                        <td class="debit_amount text-right"><?php echo $row['type'] == 2 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
+                                        <td class="debit_amount text-right"><?php echo $row['type'] == 1 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
                                         <?php
                                             if ($row['type'] == 2) {
                                                 $totalCredit += $row['amount'];
@@ -771,13 +759,13 @@ tr:hover {
                                 <tfoot>
                                     <tr class="bg-gradient-secondary">
                                         <tr>
-                                            <th colspan="4" class="text-right">TOTAL</th>
+                                            <th colspan="3" class="text-right">TOTAL</th>
                                             <th class="text-right total_debit">0.00</th>
                                             <th class="text-right total_credit">0.00</th>
                                         </tr>
                                         <tr>
-                                            <th colspan="5" class="text-center"></th>
-                                            <th colspan="4" class="text-center total-balance">0</th>
+                                            <th colspan="3" class="text-center"></th>
+                                            <th colspan="3" class="text-center total-balance">0</th>
                                         </tr>
                                     </tr>
                                 </tfoot>
@@ -823,6 +811,24 @@ tr:hover {
 </div>
 
 </body>
+<script>
+    document.getElementById('picform').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        var formData = new FormData(this);
+        fetch('journals/vs_attachments.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 <script>
 $(document).ready(function () {
     var cNumber = <?php echo json_encode($c_number); ?>;
@@ -893,8 +899,7 @@ $c_num = isset($c_num) ? $c_num : '';
 
     updateTotals();
 
-function selectRow(selectedVNum, poNo, checkDate, Amt, supId, supName) {
-    
+    function selectRow(selectedVNum, poNo, checkDate, Amt, supId, supName) {
     var tableRows = document.querySelectorAll('#data-table tbody tr');
     tableRows.forEach(function (row) {
         row.classList.remove('selected');
@@ -905,34 +910,44 @@ function selectRow(selectedVNum, poNo, checkDate, Amt, supId, supName) {
         selectedRow.classList.add('selected');
     }
 
+
     document.getElementById('v_num').value = selectedVNum;
     document.getElementById('po_no').value = poNo;
     document.getElementById('check_date').value = checkDate;
     document.getElementById('amount').value = Amt;
     document.getElementById('supplier_id').value = supId;
     document.getElementById('supplier_name').value = supName;
+    document.getElementById('AccName').value = '';
+    document.getElementById('AccCode').value = '';
+
+    var accTableRows = document.querySelectorAll('#acc-table tbody tr');
+    accTableRows.forEach(function (row) {
+        row.classList.remove('selected-row');
+    });
+
+    var selectedAccRow = document.querySelector('.account-row[data-account-code="' + selectedVNum + '"]');
+    if (selectedAccRow) {
+        selectedAccRow.classList.add('selected-row');
+    }
 
     $.ajax({
         type: 'POST',
         url: 'cv/get_account_details.php',
         data: {
-            v_num: selectedVNum  
+            v_num: selectedVNum
         },
-       
         success: function (vsItems) {
-        console.log("Received vsItems:", vsItems);
-        try {
-     
-            vsItems = JSON.parse(vsItems);
-
-            displayDataInTable(vsItems);
-        } catch (error) {
-            console.error('Error parsing vsItems:', error);
+            console.log("Received vsItems:", vsItems);
+            try {
+                vsItems = JSON.parse(vsItems);
+                displayDataInTable(vsItems);
+            } catch (error) {
+                console.error('Error parsing vsItems:', error);
+            }
         }
-    }
-
     });
 }
+
 
 $(document).ready(function () {
         var dataTable = $('#data-table').DataTable({

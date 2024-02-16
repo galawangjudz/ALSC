@@ -102,7 +102,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 						<div class="row">
 							<div class="col-md-6 form-group">
 								<label for="department">Requesting Department:</label>
-								<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
+								<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2" required>
 									<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
 									<?php 
 									$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
@@ -220,7 +220,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 												<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:gainsboro;" readonly/>
 											</td>
 											<td class="align-middle p-1">
-												<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+												<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 												<input type="text" class="text-left w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
 											</td>
 											<td class="align-middle p-1 item-description">
@@ -249,7 +249,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 											<th class="p-1 text-right" colspan="7">
 											VAT</th>
 											<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
-											<input type="text" id="copytax" name="tax_amount">
+											<input type="hidden" id="copytax" name="tax_amount">
 										</tr>
 										<tr>
 											<th class="p-1 text-right" colspan="7">Total:</th>
@@ -275,7 +275,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 													<label for="exclusiveRadio">Exclusive</label>
 												</td>
 											</tr>
-											<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>" />
+											<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>" />
 										</table>
 										</tr>
 									</tr>
@@ -296,7 +296,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			<table style="width:100%;">
 				<tr>
 					<td>
-						<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;" onclick="copyTaxValue()"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+						<button id="saveButton" class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;" onclick="copyTaxValue()"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 					</td>
 					<td>
 						<a class="btn btn-flat btn-default" href="?page=po_purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
@@ -305,7 +305,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			</table>
 		</div>
 	</div>
+
 	<table class="d-none" id="item-clone">
+
 		<tr class="po-item" data-id="">
 			<td class="align-middle p-1 text-center">
 				<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
@@ -314,11 +316,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
 			</td>
 			<td class="align-middle p-1 item-unit">
-				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]" style="background-color:gainsboro;" readonly>
+				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]" style="background-color:gainsboro;" readonly/>
 			</td>
-			<td class="align-middle p-1">
+			<td class="align-middle p-1 item-id">
 				<input type="text" name="item_id[]">
-				<input type="text" class="text-left w-100 border-0 item_id" id="item" required/>
+				<input type="text" class="text-left w-100 border-0 item_id" id="item" required oninput="clearDescriptionAndUnit(this)" onblur="checkItemExistence(this.value)">
+				<div id="status"></div>
 			</td>
 			<td class="align-middle p-1 item-description"></td>
 			<td class="align-middle p-1">
@@ -335,7 +338,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </body>
 
 <script>
-	
+	function clearDescriptionAndUnit(input) {
+		var inputValue = input.value.trim();
+		var row = $(input).closest('tr');
+
+		if (inputValue === '') {
+			row.find('.item-description').text('');
+			row.find('.item-unit input').val('');
+			row.find('.item-id input').val('');
+		}
+	}
+
 	document.addEventListener("DOMContentLoaded", function() {
 
 		updateValueOnPageLoad();
@@ -380,47 +393,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			textBox.value = 0;
 		}
 	}
-// 	function updateDeliveryDate() {
-//     var termsId = $('#termsTextbox').val();
 
-//     $.ajax({
-//         type: 'POST',
-//         url: 'po_purchase_orders/get_terms.php',
-//         data: { termsId: termsId },
-//         success: function(response) {
-//             try {
-//                 var data = JSON.parse(response);
-
-//                 var deliveryDateInput = $('#delivery_date');
-// 				var pterms = $('#p_terms');
-
-//                 var daysToAdd = parseInt(data.days_before_due);
-
-// 				if (daysToAdd === 0) {
-//                     daysToAdd = parseInt(data.days_in_following_month);
-//                 }
-
-//                 if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
-//                     var currentDate = new Date();
-//                     deliveryDateInput.val(currentDate.toISOString().split('T')[0]);
-//                     return;
-//                 }
-//                 var currentDeliveryDate = new Date(deliveryDateInput.val());
-
-//                 currentDeliveryDate.setDate(currentDeliveryDate.getDate() + daysToAdd);
-
-//                 deliveryDateInput.val(currentDeliveryDate.toISOString().split('T')[0]);
-// 				pterms.val(data.terms);
-
-//             } catch (error) {
-//                 console.error('Error parsing JSON response:', error);
-//             }
-//         },
-//         error: function(xhr, status, error) {
-//             console.error('Error in AJAX request:', xhr.responseText);
-//         }
-//     });
-// }
 
 function copyTaxValue() {
 	var taxAmountValue = document.getElementById('vat_total').textContent;
@@ -432,40 +405,52 @@ function copyTaxValue() {
 $('input[name="vatType"]').change(function() {
     calculate();
 });
+function clearDescriptionAndUnit(input) {
+		var inputValue = input.value.trim();
+		var row = $(input).closest('tr');
 
-// function updateInclusiveValues() {
-//     $('input[name="unit_price[]"]').each(function() {
-//         var unitPrice = parseFloat($(this).val());
-//         var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
+		if (inputValue === '') {
+			row.find('.item-description').text('');
+			row.find('.item-unit input').val('');
+			row.find('.item-id input').val('');
+		}
+	}
 
-//         if (!isNaN(unitPrice) && !isNaN(qty)) {
-//             var taxRate = 0.12;
-//             var totalPrice = unitPrice * qty;
-//             var inclusiveVatPrice = (totalPrice / 1.12) * taxRate;
+function checkItemExistence(itemValue) {
+    const statusElement = document.getElementById('status');
+    const saveButton = document.getElementById('saveButton');
 
-//             $(this).closest('.po-item').find('input[name="vat_included[]"]').val(inclusiveVatPrice.toFixed(2));
-//         }
-//     });
+    fetch('po_purchase_orders/check_item.php?item=' + encodeURIComponent(itemValue))
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                // Item exists
+                // statusElement.innerText = 'Item exists.';
+                // statusElement.style.backgroundColor = 'green';
+                saveButton.disabled = false;
+            } else {
+                statusElement.innerText = 'Entered item does not exist.';
+                statusElement.style.backgroundColor = 'red';
+                statusElement.style.color = 'white';
+                statusElement.style.fontWeight = 'bold';
+                statusElement.style.padding = '5px';
+                statusElement.style.borderRadius = '5px';
+                saveButton.disabled = true;
 
-//     calculate();
-// }
-
-// function updateExclusiveValues() {
-//     $('input[name="unit_price[]"]').each(function() {
-//         var unitPrice = parseFloat($(this).val());
-//         var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
-
-//         if (!isNaN(unitPrice) && !isNaN(qty)) {
-//             var taxRate = 0.12;
-//             var totalPrice = unitPrice * qty;
-//             var exclusiveVatPrice = totalPrice * taxRate;
-
-//             $(this).closest('.po-item').find('input[name="vat_included[]"]').val(exclusiveVatPrice.toFixed(2));
-//         }
-//     });
-
-//     calculate();
-// }
+                setTimeout(() => {
+                    statusElement.innerText = ''; 
+                    statusElement.style.backgroundColor = ''; 
+                    statusElement.style.color = '';
+                    statusElement.style.fontWeight = '';
+                    statusElement.style.padding = '';
+                    statusElement.style.borderRadius = '';
+                }, 5000);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking item existence:', error);
+        });
+}
 
 function calculate() {
     var _total = 0;
@@ -525,7 +510,6 @@ function calculate() {
 		}
 	});
 });
-
 
 
 $(document).ready(function() {
@@ -628,15 +612,20 @@ $(document).ready(function() {
 
 $(document).ready(function(){
 	$('#add_row').click(function(){
-		var tr = $('#item-clone tr').clone()
-		$('#item-list tbody').append(tr)
-		_autocomplete(tr)
-		tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
-		calculate();
-	});
+        var tr = $('#item-clone tr').clone();
+        $('#item-list tbody').append(tr);
+        _autocomplete(tr);
+
+        tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+            calculate();
+        });
+
+        // Clone the status element and append it to the new row
+        var statusClone = $('#status').clone().attr('id', ''); // Remove the ID to ensure it's unique
+        tr.find('.item-id').append(statusClone.html());
+    });
 
 
-	})
 	if($('#item-list .po-item').length > 0){
 		$('#item-list .po-item').each(function(){
 			var tr = $(this)
@@ -656,28 +645,41 @@ $(document).ready(function(){
 
 	$('#po-form').submit(function(e) {
 		e.preventDefault();
-		var _this = $(this)
+		var _this = $(this);
 		$('.err-msg').remove();
-		$('[name="po_no"]').removeClass('border-danger')
+		$('[name="po_no"]').removeClass('border-danger');
 
-		if ($('#item-list .po-item').length <= 0) {
-			alert_toast("Please add at least 1 item to the list.", 'warning')
-			return false;
+		var validItems = false;
+		var itemIds = [];
+		var duplicateFound = false; 
+
+		$('#item-list .po-item').each(function () {
+			var description = $(this).find('.item-description').text().trim();
+			var itemId = $(this).find('[name="item_id[]"]').val();
+
+			if (description !== '') {
+				validItems = true;
+
+				if (itemIds.indexOf(itemId) !== -1) {
+					duplicateFound = true;
+					alert_toast("Duplicate item/service found.", 'warning');
+					return false; 
+				}
+
+				itemIds.push(itemId);
+				
+			}
+		});
+
+		if (duplicateFound) {
+			return false; 
 		}
 
-		// var emptyDescriptionFound = false;
-		// $('#item-list .po-item .item-description').each(function() {
-		// 	if ($(this).text().trim() === '') {
-		// 		emptyDescriptionFound = true;
-		// 		return false; 
-		// 	}
-		// });
-
-		// if (emptyDescriptionFound) {
-		// 	alert("Please enter a valid item.");
-		// 	return false;
-		// }
-
+		if (!validItems) {
+			alert_toast("Please enter a valid item/service.", 'warning');
+			return false;
+		}
+		
 		start_loader();
 		$.ajax({
 			url: _base_url_ + "classes/Master.php?f=manage_po",

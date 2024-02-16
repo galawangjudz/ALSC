@@ -32,8 +32,9 @@
 					<col width="10%">
                     <col width="10%">
 					<col width="10%">
-					<col width="30%">
-					<col width="30%">
+					<col width="20%">
+					<col width="20%">
+					<col width="20%">
 					<col width="10%">
 				</colgroup>
 				<thead>
@@ -42,6 +43,7 @@
 						<th>VS No.</th>
 						<th>Doc Type</th>
 						<th>Doc No.</th>
+						<th>PO No.</th>
 						<th>Doc Date</th>
 						<th>Action</th>
 					</tr>
@@ -49,7 +51,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT DISTINCT(vs_num),doc_type,doc_no,journal_date from `tbl_gl_trans` order by (`journal_date`) desc ");
+					$qry = $conn->query("SELECT DISTINCT(vs_num),doc_type,doc_no,journal_date,po_id from `tbl_gl_trans` order by (`journal_date`) desc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
@@ -57,6 +59,7 @@
 							<td><?php echo ($row['vs_num'] == 0) ? '-' : $row['vs_num']; ?></td>
 							<td><?php echo $row['doc_type'] ?></td>
 							<td><?php echo $row['doc_no'] ?></td>
+							<td><?php echo ($row['doc_type'] == 'AP') ? '-' : $row['po_id']; ?></td>
                             <td><?php echo date("Y-m-d H:i",strtotime($row['journal_date'])) ?></td>
 							<td align="center">
 				                <a class="view_data" href="javascript:void(0)" data-id = "<?php echo $row['doc_no'] ?>"><span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye fa-lg"></i></span></a>

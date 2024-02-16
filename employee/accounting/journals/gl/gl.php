@@ -24,17 +24,17 @@
 	<div class="card-body">
 		<div class="container-fluid">
             <div class="row mb-3">
-            <table>
+            <table style="width:100%;">
                 <tr>
-                    <td><b>GL Account:</b> <input type="text" id="searchInput" placeholder="Account Code"></td>
-                    <td><div id="displayName" style="padding-left:20px;font-weight:bold;"></div></td>
+                    <td style="width:21%;"><b>GL Account:</b> <input type="text" id="searchInput" placeholder="Account Code"></td>
+                    <td><div id="displayName" style="font-weight:bold;"></div></td>
+                    <td style="text-align:right;padding-right:5px"><button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button></td>
                 </tr>
             </table>
         </div>
         <hr>
-        <button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
-        <br><br>
-        <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+        <br>
+        <table class="table table-bordered table-striped" id="data-table" style="text-align:center;width:100%;">
             <!-- <colgroup>
                 <col width="5%">
                 <col width="5%">
@@ -94,11 +94,17 @@
                     <td><?php echo $row['acName'] ?></td>
                     <td><?php echo $row['name'] ?></td>
                     <td><?php echo date("Y-m-d H:i", strtotime($row['journal_date'])) ?></td>
-                    <td><?php echo number_format($row['amount'], 2, '.', ','); ?></td>
+
+                    <td style="color: <?php echo $row['amount'] < 0 ? 'red' : 'inherit'; ?>"><?php echo $row['amount'] < 0 ? '(' . number_format(abs($row['amount']), 2, '.', ',') . ')' : number_format($row['amount'], 2, '.', ','); ?></td>
+                    <td style="display:none;"><?php echo number_format($row['amount'], 2, '.', ','); ?></td>
+
                 </tr>
             <?php endwhile; ?>
         </tbody>
     </table>
+    <div class="table-container">
+        <div id="totalAmountDisplay" style="font-weight:bold;border:solid 1px gainsboro;text-align:right;"></div>
+    </div>
 </div>
 
 <script>
@@ -106,7 +112,7 @@
     var displayCode = <?php echo json_encode($displayCode); ?>;
     console.log(displayName);
 </script>
-        </table>
+    
         </div>
 		</div>
 	</div>
@@ -174,21 +180,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
     const displayName = document.getElementById("displayName");
     const tableRows = document.querySelectorAll("#data-table tbody tr");
+    const totalAmountDisplay = document.getElementById("totalAmountDisplay");
 
     searchInput.addEventListener("input", function () {
         const searchTerm = searchInput.value.trim().toLowerCase();
         let foundMatch = false;
+        let totalAmount = 0;
 
         if (searchTerm === "") {
             displayName.textContent = "";
         } else {
             tableRows.forEach(function (row) {
                 const accountColumn = row.querySelector("td:nth-child(4)").textContent.toLowerCase();
-                const nameColumn = row.querySelector("td:nth-child(5)").textContent;
+                const amountColumn = parseFloat(row.querySelector("td:nth-child(9)").textContent.replace(/,/g, ''));
 
                 if (accountColumn.includes(searchTerm)) {
                     row.style.display = "";
-                    displayName.textContent = nameColumn;
+                    displayName.textContent = row.dataset.acname;
+                    totalAmount += amountColumn;
                     foundMatch = true;
                 } else {
                     row.style.display = "none";
@@ -199,7 +208,24 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!foundMatch) {
             displayName.textContent = "";
         }
+
+        totalAmountDisplay.textContent = "Total Amount: " + formatNumber(totalAmount);
     });
+
+    function formatNumber(number) {
+        return number.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+    function calculateTotalAmount() {
+        let totalAmount = 0;
+
+        tableRows.forEach(function (row) {
+            const amountColumn = parseFloat(row.querySelector("td:nth-child(9)").textContent.replace(/,/g, ''));
+            totalAmount += amountColumn;
+        });
+
+        totalAmountDisplay.textContent = "Total Amount: " + formatNumber(totalAmount);
+    }
+    calculateTotalAmount();
 });
 
 </script>

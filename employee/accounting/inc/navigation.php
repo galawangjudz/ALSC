@@ -195,11 +195,26 @@ $level = $_settings->userdata('type');
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_supplier_voucher" class="nav-link nav-sup">
-                          <i class="nav-icon fa fa-truck"></i>
-                          <p>Suppliers</p>
-                        </a>
+                          <a href="#" class="nav-link nav-sup">
+                              <i class="nav-icon fa fa-truck"></i>
+                              <p>Suppliers</p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_supplier_voucher" class="nav-link">
+                                      <i class="nav-icon fa fa-file"></i>
+                                      <p>PO</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_nonpo_supplier_voucher" class="nav-link">
+                                      <i class="nav-icon fa fa-times"></i>
+                                      <p>Non-PO</p>
+                                  </a>
+                              </li>
+                          </ul>
                       </li>
+
 
                     <div style="background-color:gainsboro;" class="nav-check nav-check">
                       <li class="nav-header">

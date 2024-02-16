@@ -162,6 +162,54 @@ function format_num($number){
 </head>
 
 <body onload="cal_tb()">
+<form action="" method="post" enctype="multipart/form-data" id="picform">
+        <table class="table table-bordered">
+            <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+            <tr>
+                <td>
+                    <label for="name" class="control-label">Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="name" id="name" required value="">
+                </td>
+                <td>
+                    <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+                </td>
+                <td>
+                    <button type="submit" name="submit">Submit</button>
+                </td>
+            </tr>
+        </table>    
+    </form>
+<table border="1" cellspacing="0" cellpadding="10">
+    <tr>
+        <td>Name</td>
+        <td>Attachment</td>
+    </tr>
+    <?php 
+    $i = 1;
+    $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
+    ?>
+    <?php foreach($rows as $row):?>
+    <tr>
+        <td><?php echo $row["name"]; ?></td>
+        <td>
+            <?php
+            $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+            $filePath = "journals/attachments/" . $row['image'];
+            if (strtolower($fileExtension) == 'pdf'): ?>
+                <a href="<?php echo $filePath; ?>" data-lightbox="pdfs" data-title="<?php echo $row['name']; ?>">
+                    <img src="path/to/pdf-icon.jpg" alt="PDF Icon" width="200" height="200">
+                </a>
+            <?php else: ?>
+                <a href="<?php echo $filePath; ?>" data-lightbox="images" data-title="<?php echo $row['name']; ?>">
+                    <img src="<?php echo $filePath; ?>" alt="<?php echo $row['name']; ?>" width="200" height="200">
+                </a>
+            <?php endif; ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -205,14 +253,11 @@ function format_num($number){
                         <div class="col-md-4 form-group">
                             <label for="bill_date" class="control-label">Bill Date:</label>
                             <?php
-                            if (!empty($bill_date)) {
-                                $billformattedDate = date('Y-m-d', strtotime($bill_date));
-                            } else {
-                                $billformattedDate = '';
-                            }
+                            $billformattedDate = empty($bill_date) ? date('Y-m-d') : date('Y-m-d', strtotime($bill_date));
                             ?>     
-                            <input type="date" id="bill_date" name="bill_date" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($billformattedDate) ? $billformattedDate : '' ?>" required style="background-color:yellow;">
+                            <input type="date" id="bill_date" name="bill_date" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $billformattedDate ?>" required style="background-color: yellow;">
                         </div>
+
                         <div class="col-md-4 form-group">
                             <label for="due_date" class="control-label">Due Date:</label>
                             <?php
@@ -390,6 +435,24 @@ function format_num($number){
     </tr>
 </noscript>
 </body>
+<script>
+    document.getElementById('picform').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        var formData = new FormData(this);
+        fetch('journals/vs_attachments.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 <div class="modal fade" id="zeroAccountCodeModal" tabindex="-1" role="dialog" aria-labelledby="zeroAccountCodeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

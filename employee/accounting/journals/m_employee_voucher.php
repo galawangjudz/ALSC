@@ -178,6 +178,58 @@ function format_num($number){
 </head>
 
 <body onload="cal_tb()">
+<div class="form-group col-md-6">
+    <form action="" method="post" enctype="multipart/form-data" id="picform">
+        <table class="table table-bordered">
+            <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+            <tr>
+                <td>
+                    <label for="name" class="control-label">Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="name" id="name" required value="">
+                </td>
+                <td>
+                    <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+                </td>
+                <td>
+                    <button type="submit" name="submit" id="picform_submit_button">Submit</button>
+                </td>
+            </tr>
+        </table>    
+    </form>
+<table border="1" cellspacing="0" cellpadding="10">
+    <tr>
+        <td>Name</td>
+        <td>Attachment</td>
+    </tr>
+    <?php 
+    $i = 1;
+    $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
+    ?>
+    <?php foreach($rows as $row):?>
+    <tr>
+        <td><?php echo $row["name"]; ?></td>
+        <td>
+            <?php
+            $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+            $filePath = "journals/attachments/" . $row['image'];
+            if (strtolower($fileExtension) == 'pdf'): ?>
+                <a href="<?php echo $filePath; ?>" data-lightbox="pdfs" data-title="<?php echo $row['name']; ?>">
+                    <img src="path/to/pdf-icon.jpg" alt="PDF Icon" width="200" height="200">
+                </a>
+            <?php else: ?>
+                <a href="<?php echo $filePath; ?>" data-lightbox="images" data-title="<?php echo $row['name']; ?>">
+                    <img src="<?php echo $filePath; ?>" alt="<?php echo $row['name']; ?>" width="200" height="200">
+                </a>
+            <?php endif; ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
+
+</table>
+</div>  
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -185,7 +237,7 @@ function format_num($number){
     <div class="card-body">
         <div class="container-fluid">
             <div class="container-fluid">
-                <form action="" id="journal-form">
+                <form action="" id="journal-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <div class="row">
                         <div class="col-md-6 form-group">
@@ -194,7 +246,7 @@ function format_num($number){
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="control-label">Document #:</label>
-                            <input type="text" class="form-control form-control-sm form-control-border rounded-0" id="doc_no" name="doc_no" value="<?php echo $newDocNo; ?>" readonly>
+                            <input type="text" id="newDocNo" name="newDocNo" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -574,6 +626,23 @@ function format_num($number){
 </noscript>
 </body>
 <script>
+document.getElementById('picform').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    var formData = new FormData(this);
+    fetch('journals/vs_attachments.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+<script>
  $(document).ready(function () {
     $('.delete-row').on('click', function () {
         $(this).closest('tr').remove();
@@ -773,4 +842,14 @@ $(document).ready(function () {
             });
         })
     })
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var saveJournalButton = document.getElementById("save_journal");
+        var submitButton = document.getElementById("picform_submit_button");
+
+        saveJournalButton.addEventListener("click", function () {
+            submitButton.click();
+        });
+    });
 </script>

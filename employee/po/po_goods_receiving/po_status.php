@@ -18,9 +18,9 @@
 <!-- <link rel="stylesheet" href="css/cpo.css"> -->
 <div class="card card-outline card-primary">
 	<div class="card-header">
-	<h3 class="card-title"><b><i>Closed Purchase Orders</b></i></h3><br>
+	<h3 class="card-title"><b><i>PO Monitoring</b></i></h3><br>
 	<hr>
-	<table class="table table-bordered">
+	<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 	<tr>
 		<td>
 			<h3 class="card-title"><b><i>Approval Status</b></i></h3><br>
@@ -35,6 +35,8 @@
 			<hr>
 			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger"><i class="fa fa-truck" aria-hidden="true"></i></span> - Still to be delivered</div>
 			<div style="color:blue; font-weight:bold; font-style:italic;"><span class="badge badge-primary"><i class="fa fa-truck" aria-hidden="true"></i></span> - Successfully delivered</div>
+			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger" style="background-color:transparent;">   </span></div>
+			<div style="color:blue; font-weight:bold; font-style:italic;"><span class="badge badge-primary" style="background-color:transparent;">   </span></div>
 		</td>
 	</tr>
 	</table>
@@ -132,8 +134,15 @@
 	</div>
 </div>
 <script>
-	$(document).ready(function(){
-		$('.table th,.table td').addClass('px-1 py-0 align-middle')
-		$('.table').dataTable();
-	})
+    $(document).ready(function(){
+        $('.table th, .table td').addClass('px-1 py-0 align-middle');
+        $('#closed-purchase-orders-table table').DataTable({
+            "paging": true,      
+            "lengthChange": true, 
+            "searching": true,   
+            "ordering": true,    
+            "info": true,        
+            "autoWidth": false  
+        });
+    });
 </script>

@@ -440,7 +440,7 @@ $(document).ready(function() {
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
 										</tr>
-										<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
 									</table>
 								</tr>
 							</tr>

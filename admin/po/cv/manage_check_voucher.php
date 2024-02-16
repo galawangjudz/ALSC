@@ -270,17 +270,14 @@ function format_num($number){
                                                             $amt = $row1['amount'];
                                                         ?>
                                                         <a href="#" class="btn btn-flat btn-primary btn-xs select-apv"
-
                                                             data-amount="<?php echo $row1["amount"] ?>">
                                                             <center><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>&nbsp;&nbsp;Select</center>
                                                         </a>
-
                                                         <?php endwhile; ?>
                                                     </td>
                                                 </tr>
                                             <?php endwhile; ?>
                                         </tbody>
-
                                     </table>
                                 </div>
                             </div>

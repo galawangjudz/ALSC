@@ -214,6 +214,57 @@ function updateAmount(input) {
 </head>
 
 <body onload="cal_tb()">
+<div class="form-group col-md-6">
+    <form action="" method="post" enctype="multipart/form-data" id="picform">
+        <table class="table table-bordered">
+            <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+            <tr>
+                <td>
+                    <label for="name" class="control-label">Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="name" id="name" required value="">
+                </td>
+                <td>
+                    <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+                </td>
+                <td>
+                    <button type="submit" name="submit" id="picform_submit_button">Submit</button>
+                </td>
+            </tr>
+        </table>    
+    </form>
+<table border="1" cellspacing="0" cellpadding="10">
+    <tr>
+        <td>Name</td>
+        <td>Attachment</td>
+    </tr>
+    <?php 
+    $i = 1;
+    $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
+    ?>
+    <?php foreach($rows as $row):?>
+    <tr>
+        <td><?php echo $row["name"]; ?></td>
+        <td>
+            <?php
+            $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+            $filePath = "journals/attachments/" . $row['image'];
+            if (strtolower($fileExtension) == 'pdf'): ?>
+                <a href="<?php echo $filePath; ?>" data-lightbox="pdfs" data-title="<?php echo $row['name']; ?>">
+                    <img src="path/to/pdf-icon.jpg" alt="PDF Icon" width="200" height="200">
+                </a>
+            <?php else: ?>
+                <a href="<?php echo $filePath; ?>" data-lightbox="images" data-title="<?php echo $row['name']; ?>">
+                    <img src="<?php echo $filePath; ?>" alt="<?php echo $row['name']; ?>" width="200" height="200">
+                </a>
+            <?php endif; ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>
+</div>  
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -363,15 +414,13 @@ function updateAmount(input) {
                     <hr>
                     <i><b>GR #: </b><b><?= $grId ?></b></i>
                     <table id="account_list_<?= $grId ?>" class="table table-bordered tbl_acc">
-                    <colgroup>
-                            <col width="5%">
-                            <!-- <col width="5%"> -->
-                            <col width="10%">
-                            <col width="20%">
-                            <col width="30%">
-                            <!-- <col width="10%"> -->
-                            <col width="10%">
-                            <col width="10%">
+                        <colgroup>
+                            <col style="width: 5%;">
+                            <col style="width: 5%;">
+                            <col style="width: 40%;">
+                            <col style="width: 30%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
                         </colgroup>
                         <thead>
                             <tr>
@@ -666,8 +715,8 @@ function cal_tb(account_list_<?= $grId ?>) {
         credit += parseFloat($(this).find('.credit-amount-input').val()) || 0;
     });
 
-    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2));
+    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2));
     $('#' + account_list_<?= $grId ?>).find('.total-balance').text((debit - credit).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 
 
