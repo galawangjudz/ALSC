@@ -169,7 +169,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/jv/manage_jv" class="nav-link nav-jv">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Journal Voucher
+                        </p>
+                      </a>
+                    </li> 
                     <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>Create Voucher Setup</i></b>
@@ -177,19 +184,19 @@ $level = $_settings->userdata('type');
                     </div>
 
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_agent_voucher" class="nav-link nav-agent">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_agent_voucher" class="nav-link nav-agent">
                           <i class="nav-icon fas fa-id-card"></i>
                           <p>Agents</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_employee_voucher" class="nav-link nav-emp">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_employee_voucher" class="nav-link nav-emp">
                           <i class="nav-icon fas fa-id-badge"></i>
                           <p>Employees</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_client_voucher" class="nav-link nav-client">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_client_voucher" class="nav-link nav-client">
                           <i class="nav-icon fas fa-users"></i>
                           <p>Clients</p>
                         </a>
@@ -207,7 +214,7 @@ $level = $_settings->userdata('type');
                                   </a>
                               </li>
                               <li class="nav-item">
-                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_nonpo_supplier_voucher" class="nav-link">
+                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_nonpo_supplier_voucher" class="nav-link">
                                       <i class="nav-icon fa fa-times"></i>
                                       <p>Non-PO</p>
                                   </a>
@@ -236,6 +243,14 @@ $level = $_settings->userdata('type');
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           Check Voucher Entries
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/jv/" class="nav-link nav-jv-list">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Journal Voucher Entries
                         </p>
                       </a>
                     </li> 

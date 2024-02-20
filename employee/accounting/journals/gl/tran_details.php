@@ -59,7 +59,7 @@
 							<td><?php echo ($row['vs_num'] == 0) ? '-' : $row['vs_num']; ?></td>
 							<td><?php echo $row['doc_type'] ?></td>
 							<td><?php echo $row['doc_no'] ?></td>
-							<td><?php echo ($row['doc_type'] == 'AP') ? '-' : $row['po_id']; ?></td>
+							<td><?php echo ($row['doc_type'] == 'AP' || $row['doc_type'] == 'JV') ? '-' : $row['po_id']; ?></td>
                             <td><?php echo date("Y-m-d H:i",strtotime($row['journal_date'])) ?></td>
 							<td align="center">
 				                <a class="view_data" href="javascript:void(0)" data-id = "<?php echo $row['doc_no'] ?>"><span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye fa-lg"></i></span></a>
@@ -74,14 +74,28 @@
 </div>
 <script>
 	$(document).ready(function(){
-		$('[data-toggle="tooltip"]').tooltip();
-        $('.view_data').click(function() {
-			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;
-			window.location.href = redirectUrl;
-		})
-        $('.modal-title').css('font-size', '18px');
-		$('.table th,.table td').addClass('px-1 py-0 align-middle')
-		$('.table').dataTable();
-	})
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('.view_data').click(function() {
+        var docNo = $(this).data('id').toString();
+
+        if (docNo.substring(0, 1) === '4') {
+            var redirectUrl = '?page=journals/jv/jv_trans&id=' + docNo;
+			
+        }else if (docNo.substring(0, 1) === '2') {
+            var redirectUrl = '?page=po/goods_receiving/ap_trans&id=' + docNo;
+			
+        } else {
+            var dataId = $(this).data('id');
+            var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;
+           
+        }
+		window.location.href = redirectUrl;
+    });
+
+    $('.modal-title').css('font-size', '18px');
+    $('.table th,.table td').addClass('px-1 py-0 align-middle')
+    $('.table').dataTable();
+});
+
 </script>

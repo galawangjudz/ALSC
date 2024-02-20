@@ -21,12 +21,14 @@ if(isset($_FILES["image"])){
 
         if(!in_array($imageExtension, $validImageExtension)){
             echo
-            "Invalid Image Extension."
+            "Invalid Image Extension.";
+            return;
             ;
         }
         else if($fileSize > 1000000){
             echo 
-            "Image Size Is Too Large."
+            "Image Size Is Too Large.";
+                return;
             ;
         }else{
             $newImageName = uniqid();
@@ -34,7 +36,7 @@ if(isset($_FILES["image"])){
 
             move_uploaded_file($tmpName, 'attachments/' . $newImageName);
 
-            $query = "INSERT INTO tbl_vs_attachments VALUES('','$name', '$newImageName', '0', 'AP', '$v_num')";
+            $query = "INSERT INTO tbl_vs_attachments VALUES('','$name', '$newImageName', '0', 'AP', '$v_num',NOW())";
             mysqli_query($conn,$query);
             echo
             "'$name' successfully uploaded."

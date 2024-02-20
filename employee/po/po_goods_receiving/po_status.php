@@ -53,7 +53,7 @@
 					<col width="20%">
 					<col width="10%">
 					<col width="5%">
-					<!-- <col width="7%"> -->
+					<col width="7%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
@@ -64,7 +64,7 @@
 						<th>Requesting Dept.</th>
 						<th>Total Amount</th>
 						<th>Status</th>
-						<!-- <th>Action</th> -->
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -106,25 +106,22 @@
 							endwhile;
 							?>
 						</td>
-
-						<!-- <td align="center">
+						<td align="center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-								Action
+									Action
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<div class="dropdown-menu" role="menu">
-								<?php 
-								if ($row['fpo_status'] != '3'){?>
-									<a class="dropdown-item" href="?page=po_purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<?php } else{ ?>
-									<a class="dropdown-item" href="?page=po_purchase_orders/verify_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<?php } ?>
-								<?php if ($row['fpo_status'] != '3'){?>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-								<?php }?>
+								<!-- <a class="dropdown-item" href="?page=po/goods_receiving/received_items&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a> -->
+								<?php
+									$qry_get_gr = $conn->query("SELECT g.*, o.* FROM tbl_gr_list g INNER JOIN approved_order_items o ON g.gr_id = o.gr_id WHERE g.po_id = '" . $row['id'] . "'");
+									if ($qry_get_gr->num_rows > 0) {
+										// echo "<div class='dropdown-divider'></div>";
+										echo "<a class='dropdown-item gr-list' gr-id='" . $row["id"] . "'><span class='fa fa-list text-primary'></span> GR List</a>";
+									}
+									?>                                            
 							</div>
-						</td> -->
+						</td>
 					</tr>
 					<?php endwhile; ?>
 				</tbody>
@@ -145,4 +142,7 @@
             "autoWidth": false  
         });
     });
+	 $('.gr-list').click(function(){
+		uni_modal_right("GR List",'po_goods_receiving/gr_list.php?id='+$(this).attr('gr-id'),"mid-large")
+	})
 </script>

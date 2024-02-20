@@ -307,7 +307,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	</div>
 
 	<table class="d-none" id="item-clone">
-
 		<tr class="po-item" data-id="">
 			<td class="align-middle p-1 text-center">
 				<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
@@ -320,8 +319,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			</td>
 			<td class="align-middle p-1 item-id">
 				<input type="text" name="item_id[]">
-				<input type="text" class="text-left w-100 border-0 item_id" id="item" required oninput="clearDescriptionAndUnit(this)" onblur="checkItemExistence(this.value)">
-				<div id="status"></div>
+				<input type="text" class="text-left w-100 border-0 item_id" id="item" required oninput="clearDescriptionAndUnit(this)">
 			</td>
 			<td class="align-middle p-1 item-description"></td>
 			<td class="align-middle p-1">
@@ -415,42 +413,6 @@ function clearDescriptionAndUnit(input) {
 			row.find('.item-id input').val('');
 		}
 	}
-
-function checkItemExistence(itemValue) {
-    const statusElement = document.getElementById('status');
-    const saveButton = document.getElementById('saveButton');
-
-    fetch('po_purchase_orders/check_item.php?item=' + encodeURIComponent(itemValue))
-        .then(response => response.json())
-        .then(data => {
-            if (data.exists) {
-                // Item exists
-                // statusElement.innerText = 'Item exists.';
-                // statusElement.style.backgroundColor = 'green';
-                saveButton.disabled = false;
-            } else {
-                statusElement.innerText = 'Entered item does not exist.';
-                statusElement.style.backgroundColor = 'red';
-                statusElement.style.color = 'white';
-                statusElement.style.fontWeight = 'bold';
-                statusElement.style.padding = '5px';
-                statusElement.style.borderRadius = '5px';
-                saveButton.disabled = true;
-
-                setTimeout(() => {
-                    statusElement.innerText = ''; 
-                    statusElement.style.backgroundColor = ''; 
-                    statusElement.style.color = '';
-                    statusElement.style.fontWeight = '';
-                    statusElement.style.padding = '';
-                    statusElement.style.borderRadius = '';
-                }, 5000);
-            }
-        })
-        .catch(error => {
-            console.error('Error checking item existence:', error);
-        });
-}
 
 function calculate() {
     var _total = 0;
@@ -554,9 +516,12 @@ $(document).ready(function() {
 	});
 });
 
-function rem_item(_this){
-	_this.closest('tr').remove()
-	calculate();
+function rem_item(_this) {
+    var row = _this.closest('tr');
+    var selectedItemID = row.find('input[name="item_id[]"]').val();
+    selectedItems = selectedItems.filter(itemID => itemID !== selectedItemID);
+    row.remove();
+    calculate();
 }
 
 var selectedSupplierId; 
@@ -566,6 +531,7 @@ $(document).ready(function() {
 
 _autocomplete(item, selectedSupplierId);
 });
+var selectedItems = [];
 function _autocomplete(_item, supplierId) {
 _item.find('.item_id').autocomplete({
 	source: function(request, response) {
@@ -574,7 +540,8 @@ _item.find('.item_id').autocomplete({
 			method: 'POST',
 			data: {
 				q: request.term,
-				supplier_id: selectedSupplierId
+				supplier_id: selectedSupplierId,
+				selected_items: selectedItems
 			},
 			dataType: 'json',
 			error: err => {
@@ -582,7 +549,7 @@ _item.find('.item_id').autocomplete({
 			},
 			success: function(resp) {
 				console.log("Supplier ID from PHP:", resp.supplier_id);
-				response(resp.items); 
+				response(resp.items.filter(item => !selectedItems.includes(item.id))); 
 			}
 		});
 	},
@@ -592,6 +559,7 @@ _item.find('.item_id').autocomplete({
 			_item.find('.item-description').text(ui.item.description)
 			_item.find('.item-unit').val(ui.item.default_unit);
 			_item.find('.item-price').val(ui.item.unit_price || 0);
+			selectedItems.push(ui.item.id);
 		}
 	})
 }
@@ -601,10 +569,6 @@ $(document).ready(function() {
 	$("#supplier_id").change(function() {
 		selectedSupplierId = $(this).val();
 		selectedSupplierId = parseInt($(this).val(), 10);
-		// var terms = $(this).find(':selected').data('terms');
-        // $('#termsTextbox').val(terms);
-        
-        // updateDeliveryDate();
 		console.log("Selected Supplier ID: " + selectedSupplierId);
 		_autocomplete(item, selectedSupplierId);
 	});
@@ -619,9 +583,7 @@ $(document).ready(function(){
         tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
             calculate();
         });
-
-        // Clone the status element and append it to the new row
-        var statusClone = $('#status').clone().attr('id', ''); // Remove the ID to ensure it's unique
+        var statusClone = $('#status').clone().attr('id', '');
         tr.find('.item-id').append(statusClone.html());
     });
 

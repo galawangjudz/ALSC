@@ -52,7 +52,7 @@ if (isset($_GET['id'])) {
         <tr>
             <td style="width:25%;"><?php echo $row["name"] ?></td>
             <td><?php echo $row["default_unit"] ?></td>
-            <td><?php echo number_format($row["unit_price"]) ?></td>
+            <td><?php echo number_format($row["unit_price"],2) ?></td>
             <td><?php echo $row["quantity"] ?></td>
             <td><?php echo ($row["quantity"] - $row["outstanding"]) - $row["del_items"] ?></td>
             <td><?php echo $row["del_items"] ?></td>

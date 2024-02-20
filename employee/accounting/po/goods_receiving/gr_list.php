@@ -8,6 +8,7 @@ if($_settings->chk_flashdata('success')): ?>
 <?php
 $username = $_settings->userdata('username');
 $usertype = $_settings->userdata('user_type');
+
 ?>
 <?php
 
@@ -59,7 +60,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <td>
                     <a data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
                 </td>
-                <td><?php echo number_format($row['total_amount']) ?></td>
+                <td><?php echo number_format($row['total_amount'],2) ?></td>
                 <td><?php echo $row["date_purchased"] ?></td>
                 <td align="center">
                     <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">

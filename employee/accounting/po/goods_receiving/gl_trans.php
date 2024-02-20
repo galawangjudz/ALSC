@@ -37,15 +37,6 @@ function format_num($number){
     .paid_to{
         padding:10px;
     }
-    /* #sup-div{
-        display:none;
-    }
-    #agent-div{
-        display:none;
-    }
-    #emp-div{
-        display:none;
-    } */
     .rdo-btn {
         display: flex;
         width: 100%;
@@ -121,10 +112,6 @@ function format_num($number){
                                 </td>
                                 <td>
                                 <?php
-                                // $sup_qry = $conn->query("SELECT s.id, s.name 
-                                //                             FROM supplier_list s 
-                                //                             INNER JOIN po_approved_list p ON s.id = p.supplier_id 
-                                //                             WHERE p.id = '{$po_id}'");   
                                 $sup_qry = $conn->query("SELECT *
                                                             FROM supplier_list WHERE id = '{$supplier_id}'");   
                                     $supplier = $sup_qry->fetch_array();
@@ -479,8 +466,12 @@ function format_num($number){
                                         <td class="">
                                             <span><?= $row['name'] ?></span>
                                         </td>
-                                        <td class="debit_amount text-right"><?= $row['type'] == 1 ? number_format(abs($row['amount']), 2) : '' ?></td>
-                                        <td class="credit_amount text-right"><?= $row['type'] == 2 ? number_format(abs($row['amount']), 2) : '' ?></td>
+                                        <td class="debit_amount text-right">
+                                            <?= $row['gtype'] == 1 ? preg_replace('/\.0+$/', '', number_format(abs($row['amount']), 2)) : '' ?>
+                                        </td>
+                                        <td class="credit_amount text-right">
+                                            <?= $row['gtype'] == 2 ? preg_replace('/\.0+$/', '', number_format(abs($row['amount']), 2)) : '' ?>
+                                        </td>
                                         <td class="text-right"><?= $row['item_code'] ?></td>
                                     </tr>
                                     <?php 
@@ -553,15 +544,24 @@ function format_num($number){
     function cal_tb() {
         var debit = 0;
         var credit = 0;
+
         $('#account_list tbody tr').each(function () {
-            if ($(this).find('.debit_amount').text() != "")
-                debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
-            if ($(this).find('.credit_amount').text() != "")
-                credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
+            if ($(this).find('.debit_amount').text() !== "") {
+                debit += parseFloat(($(this).find('.debit_amount').text().replace(/,/g, ''))) || 0;
+            }
+            if ($(this).find('.credit_amount').text() !== "") {
+                credit += parseFloat(($(this).find('.credit_amount').text().replace(/,/g, ''))) || 0;
+            }
         });
-        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total-balance').text(parseFloat(debit - credit).toLocaleString('en-US', { style: 'decimal' }));
+
+        var formattedDebit = debit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 });
+        var formattedCredit = credit.toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 });
+
+        $('#account_list').find('.total_debit').text(formattedDebit);
+        $('#account_list').find('.total_credit').text(formattedCredit);
+
+        var totalBalance = (debit - credit).toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2 });
+        $('#account_list').find('.total-balance').text(totalBalance);
     }
 
     $(function () {

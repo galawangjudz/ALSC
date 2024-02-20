@@ -142,7 +142,6 @@ function format_num($number){
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
-					<!-- <col width="15%"> -->
 					<col width="45%">
 					<col width="15%">
 					<col width="10%">
@@ -151,18 +150,13 @@ function format_num($number){
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
                         <th>PO Type</th>
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
-                    
 					<?php 
-					
-					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
-					// $user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
 					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by date_created desc");
 					while($row = $journals->fetch_assoc()):
 					?>
@@ -175,23 +169,7 @@ function format_num($number){
 						<td class="">
 							<input type="text" value="<?php echo !empty($row['po_no']) ? 'PO' : 'non-PO'; ?>" id="po_no" style="border:none;cursor:default;background:transparent;" readonly>
 						</td>
-
-
-						
-						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu"> -->
-								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div> -->
-								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data_supplier" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary"></span>
@@ -216,54 +194,27 @@ function format_num($number){
 				<colgroup>
 					<col width="15%">
 					<col width="15%">
-					<!-- <col width="15%"> -->
 					<col width="45%">
-					<!-- <col width="15%"> -->
 					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <!-- <th>P.O. #</th> -->
 						<th>Agent Name</th>
-                        <!-- <th>Preparer</th> -->
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
-                    
 					<?php 
-					
-					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
-					// $user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
 					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(journal_date) asc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-						<!-- <td class=""><?= $row['po_no'] ?></td> -->
-						
                         <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
-
-						
-						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu"> -->
-								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div> -->
-								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data_agent" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-							</div> -->
-
 							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
@@ -286,55 +237,28 @@ function format_num($number){
 			<table class="table table-hover table-bordered" id="emp-div">
 				<colgroup>
 					<col width="15%">
-					<!-- <col width="15%"> -->
 					<col width="15%">
 					<col width="45%">
-					<!-- <col width="15%"> -->
 					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
-                        <!-- <th>P.O. #</th> -->
 						<th>Employee Name</th>
-                        <!-- <th>Preparer</th> -->
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
-                    
 					<?php 
-					
-					//$users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
-					//$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
 					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_code order by date(journal_date) asc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-						<!-- <td class=""><?= $row['po_no'] ?></td> -->
-						
                         <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
-
-						
-						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu"> -->
-								<!-- <a class="dropdown-item export_data" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-file-export text-secondary"></span> Export</a>
-								<div class="dropdown-divider"></div> -->
-								<!-- <a href="<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['v_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data_employee" href="javascript:void(0)" data-id ="<?php echo $row['v_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
-								
-							<!-- </div> -->
 							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary"></span>
@@ -353,7 +277,6 @@ function format_num($number){
 					<?php endwhile; ?>
 				</tbody>
 			</table>
-
 			<table class="table table-hover table-bordered" id="client-div">
 				<colgroup>
 					<col width="15%">
@@ -465,9 +388,9 @@ $(document).ready(function() {
 			var redirectUrl = '';
 
 			if (poNoValue === 'PO') {
-				redirectUrl = '?page=journals/m_supplier_voucher_mod&id=' + dataId;
+				redirectUrl = '?page=journals/vs/m_supplier_voucher_mod&id=' + dataId;
 			} else {
-				redirectUrl = '?page=journals/m_nonpo_supplier_voucher_mod&id=' + dataId;
+				redirectUrl = '?page=journals/vs/m_nonpo_supplier_voucher&id=' + dataId;
 			}
 
 			window.location.href = redirectUrl;
@@ -475,17 +398,17 @@ $(document).ready(function() {
 
 		$('.edit_data_agent').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/m_agent_voucher&id=' + dataId;
+			var redirectUrl = '?page=journals/vs/m_agent_voucher&id=' + dataId;
 			window.location.href = redirectUrl;
 		})
 		$('.edit_data_employee').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/m_employee_voucher&id=' + dataId;
+			var redirectUrl = '?page=journals/vs/m_employee_voucher&id=' + dataId;
 			window.location.href = redirectUrl;
 		})
 		$('.edit_data_client').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=journals/m_client_voucher&id=' + dataId;
+			var redirectUrl = '?page=journals/vs/m_client_voucher&id=' + dataId;
 			window.location.href = redirectUrl;
 		})
 		$('.delete_data').click(function(){

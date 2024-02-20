@@ -8,7 +8,8 @@ $acc_id = '';
 $totalCredit = 0;
 $totalDebit = 0;
 $v_num = 0;
-
+$globalSupId = '';
+$globalSupType = '';
 if (isset($_GET['id'])) {
     $qry = $conn->query("SELECT a.*, b.*
                         FROM `cv_entries` a
@@ -233,9 +234,9 @@ function format_num($number){
 tr:hover {
     cursor: pointer;
 }
-#account_list {
+/* #account_list {
     display: none;
-}
+} */
 .selected-row {
     background-color: gainsboro; 
 }
@@ -301,7 +302,9 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
             <div class="container-fluid" id="custom-container">
                 <div class="row">
                     <div class="col-md-3 form-group">
-                        <input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
+                        <input type="text" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
+                        <div id="item_code_display"></div>
+
                         <label for="c_num" class="control-label">Check Voucher #:</label>
                         <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
                     </div>
@@ -365,15 +368,17 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                         </table> -->
                         <table class="table table-bordered" id="data-table" style="text-align:center;width:100%;">
                             <colgroup>
+                                <col width="7%">
                                 <col width="10%">
-                                <col width="10%">
-                                <col width="70%">
+                                <col width="13%">
+                                <col width="60%">
                                 <col width="10%">
                             </colgroup>
                             <thead>
                                 <tr class="bg-navy disabled">
                                     <th>#</th>
                                     <th>VS No.</th>
+                                    <th>Code</th>
                                     <th>Supplier Name</th>
                                     <th>Outstanding Date</th>
                                 </tr>
@@ -406,13 +411,13 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                             WHERE ac.name='Accounts Payable Trade'
                             ORDER BY vs.`date_updated` DESC;
                             ");
-                                
                                 while ($row = $qry->fetch_assoc()) {
                                     $selectedClass = ($row['v_num'] == $selectedVNum) ? 'selected-row' : '';
                                 ?>
-                                    <tr data-v-num="<?php echo $row['v_num']; ?>" class="<?php echo $selectedClass; ?>" onclick="selectRow('<?php echo $row['v_num']; ?>', '<?php echo $row['po_no']; ?>', '<?php echo $row['due_date']; ?>', '<?php echo $row['amount']; ?>','<?php echo $row['supId']; ?>','<?php echo $row['supplier_name']; ?>')">
+                                    <tr data-v-num="<?php echo $row['v_num']; ?>" class="<?php echo $selectedClass; ?>" onclick="selectRow('<?php echo $row['v_num']; ?>', '<?php echo $row['po_no']; ?>', '<?php echo $row['due_date']; ?>', '<?php echo $row['amount']; ?>','<?php echo $row['supId']; ?>','<?php echo $row['supplier_name']; ?>')" onclick=" checkInputLength()">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['v_num'] == 0) ? '-' : $row['v_num']; ?></td>
+                                        <td><?php echo ($row['supId']) ?></td>
                                         <td><?php echo ($row['supplier_name']) ?></td>
                                         <td><?php echo ($row['due_date']) ?></td>
                                     </tr>
@@ -446,7 +451,7 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                                     while($row = $qry->fetch_assoc()):
                                         $isSelected = ($selected_account_id != '' && $row['code'] == $selected_account_id) ? 'selected-row' : '';
                                     ?>
-                                        <tr class="account-row <?php echo $isSelected; ?>">
+                                        <tr class="account-row <?php echo $isSelected; ?>" onclick="calculateVAT()">
                                             <td><?php echo $row['code']; ?></td>
                                             <td><?php echo $row['name']; ?></td>
                                             <td style="display:none;"><?php echo $row['group_id']; ?></td>
@@ -476,66 +481,162 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                                     $('.account-row').removeClass('selected');
                                     $(this).addClass('selected');
 
+                                    var vatCode = $('#vatCode').val();
+                                    var vatName = $('#vatName').val();
+                                    var vatAmt = $('#vat_amount').val();
+                                    var vatgrpId = $('#vatgrpId').val();
+
+                                    var divCode = $('#divCode').val();
+                                    var divName = $('#divName').val();
+                                    var divAmt = $('#div_amount').val();
+                                    var divGrpId = $('#divGrpId').val();
                                     var accCode = $(this).find('td:eq(0)').text();
                                     var accName = $(this).find('td:eq(1)').text();
-                                    var grpId = $(this).find('td:eq(2)').text();
+                                    var accGrpId = $(this).find('td:eq(2)').text();
 
                                     $('#AccCode').val(accCode);
                                     $('#AccName').val(accName);
-                                    $('#grpId').val(grpId);
+                                    $('#grpId').val(accGrpId);
                                     var vsAmt = $('#amount').val();
-                                    var grpId = $('#grpId').val();
 
-                                    addRowToTable(accCode, accName, vsAmt, grpId);
-                                    updateTotalCreditDebit();
+                                    var globalSupType = '<?php echo $globalSupType; ?>';
+
+                                    if (globalSupType != '0') {
+                                        addRowToTable(vatCode, vatName, vatAmt, vatgrpId);
+                                        addRowToTable2(divCode, divName, divAmt, divGrpId);
+                                    }
+
+                                    addRowToTable1(accCode, accName, vsAmt, accGrpId);
+
+                                    //updateTotalCreditDebit();
                                 });
 
-                                function addRowToTable(accCode, accName, vsAmt, grpId) {
+                                function addRowToTable(vatCode, vatName, vatAmt, vatgrpId) {
                                     var table = document.getElementById('account_list');
                                     var tbody = table.getElementsByTagName('tbody')[0];
-                                    
-                                    tbody.innerHTML = '';
 
-                            
                                     var row = tbody.insertRow();
                                     row.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
                                     row.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent;" class="form-control" name="item_no[]" readonly>';
-                                    row.insertCell(2).innerHTML = '<input type="hidden" name="account_id[]" value="' + accCode + '">' + accCode;
-                                    row.insertCell(3).innerHTML = accName;
-                                    var locationCell = row.insertCell(4);
-                                    locationCell.innerHTML = '<label class="control-label">Phase: </label>' +
-                                    '<select name="phase[]" class="phase">' +
-                                    '<option value="" selected></option>' + 
-                                    '<?php 
-                                        $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                        while ($row = $cat->fetch_assoc()):
-                                            $cat_name[$row['c_code']] = $row['c_acronym'];
-                                            $code = $row['c_code'];
-                                    ?>' +
-                                    '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
-                                    '<?php endwhile; ?>' +
-                                    '</select>' +
-                                    '<label class="control-label">Block: </label>' +
-                                    '<input type="text" name="block[]" value="" class="block">' +
-                                    '<label class="control-label">Lot: </label>' +
-                                    '<input type="text" name="lot[]" value="" class="lot">';
-
-                                    row.insertCell(5).innerHTML = '';
-                                    row.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + vsAmt + '">';
-                                    row.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + grpId + '">';
-                                    row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
-                                    
-                                    var newDocNo = '<?php echo $newDocNo; ?>';
-                                    row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo + '">';
+                                    row.insertCell(2).innerHTML = '<input type="text" name="account_id[]" value="' + vatCode + '">' + vatCode;
+                                    row.insertCell(3).innerHTML = vatName;
+                                    var locationCell1 = row.insertCell(4);
+                                    locationCell1.innerHTML = '<label class="control-label">Phase: </label>' +
+                                        '<select name="phase[]" class="phase">' +
+                                        '<option value="" selected></option>' + 
+                                        '<?php 
+                                            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                            while ($row = $cat->fetch_assoc()):
+                                                $cat_name[$row['c_code']] = $row['c_acronym'];
+                                                $code = $row['c_code'];
+                                        ?>' +
+                                        '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
+                                        '<?php endwhile; ?>' +
+                                        '</select>' +
+                                        '<label class="control-label">Block: </label>' +
+                                        '<input type="text" name="block[]" value="" class="block">' +
+                                        '<label class="control-label">Lot: </label>' +
+                                        '<input type="text" name="lot[]" value="" class="lot">';
+                                    row.insertCell(5).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + vatAmt + '">';
+                                    row.insertCell(6).innerHTML = '';
+                                    row.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + vatgrpId + '">';
+                                    row.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 1 + '">';
+                                    var newDocNo1 = '<?php echo $newDocNo; ?>';
+                                    row.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo1 + '">';
                                     row.cells[0].style.display = 'none';
                                     row.cells[4].style.display = 'none';
                                     row.cells[7].style.display = 'none';
                                     row.cells[8].style.display = 'none';
                                     row.cells[9].style.display = 'none';
-                                    updateItemNumbers();
-                                    updateTotalCreditDebit();
-                                }
 
+                                    updateItemNumbers();
+                                    //updateTotalCreditDebit();
+                                }
+                                function addRowToTable1(accCode, accName, vsAmt, accGrpId) {
+                                    var table = document.getElementById('account_list');
+                                    var tbody = table.getElementsByTagName('tbody')[0];
+
+
+                                    var row1 = tbody.insertRow();
+                                    row1.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
+                                    row1.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent;" class="form-control" name="item_no[]" readonly>';
+                                    row1.insertCell(2).innerHTML = '<input type="text" name="account_id[]" value="' + accCode + '">' + accCode;
+                                    row1.insertCell(3).innerHTML = accName;
+                                    var locationCell1 = row1.insertCell(4);
+                                    locationCell1.innerHTML = '<label class="control-label">Phase: </label>' +
+                                        '<select name="phase[]" class="phase">' +
+                                        '<option value="" selected></option>' + 
+                                        '<?php 
+                                            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                            while ($row = $cat->fetch_assoc()):
+                                                $cat_name[$row['c_code']] = $row['c_acronym'];
+                                                $code = $row['c_code'];
+                                        ?>' +
+                                        '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
+                                        '<?php endwhile; ?>' +
+                                        '</select>' +
+                                        '<label class="control-label">Block: </label>' +
+                                        '<input type="text" name="block[]" value="" class="block">' +
+                                        '<label class="control-label">Lot: </label>' +
+                                        '<input type="text" name="lot[]" value="" class="lot">';
+                                    row1.insertCell(5).innerHTML = '';
+                                    row1.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + vsAmt + '">';
+                                    row1.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + accGrpId + '">';
+                                    row1.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
+                                    var newDocNo1 = '<?php echo $newDocNo; ?>';
+                                    row1.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo1 + '">';
+                                    row1.cells[0].style.display = 'none';
+                                    row1.cells[4].style.display = 'none';
+                                    row1.cells[7].style.display = 'none';
+                                    row1.cells[8].style.display = 'none';
+                                    row1.cells[9].style.display = 'none';
+
+                                    updateItemNumbers();
+                                    //updateTotalCreditDebit();
+                                }
+                                
+                                function addRowToTable2(divCode, divName, divAmt, divGrpId) {
+                                    var table = document.getElementById('account_list');
+                                    var tbody = table.getElementsByTagName('tbody')[0];
+
+
+                                    var row1 = tbody.insertRow();
+                                    row1.insertCell(0).innerHTML = '<button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>';
+                                    row1.insertCell(1).innerHTML = '<input type="text" style="border:none;background-color:transparent;" class="form-control" name="item_no[]" readonly>';
+                                    row1.insertCell(2).innerHTML = '<input type="text" name="account_id[]" value="' + divCode + '">' + divCode;
+                                    row1.insertCell(3).innerHTML = divName;
+                                    var locationCell1 = row1.insertCell(4);
+                                    locationCell1.innerHTML = '<label class="control-label">Phase: </label>' +
+                                        '<select name="phase[]" class="phase">' +
+                                        '<option value="" selected></option>' + 
+                                        '<?php 
+                                            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                            while ($row = $cat->fetch_assoc()):
+                                                $cat_name[$row['c_code']] = $row['c_acronym'];
+                                                $code = $row['c_code'];
+                                        ?>' +
+                                        '<option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>><?php echo $row['c_acronym'] ?></option>' +
+                                        '<?php endwhile; ?>' +
+                                        '</select>' +
+                                        '<label class="control-label">Block: </label>' +
+                                        '<input type="text" name="block[]" value="" class="block">' +
+                                        '<label class="control-label">Lot: </label>' +
+                                        '<input type="text" name="lot[]" value="" class="lot">';
+                                    row1.insertCell(5).innerHTML = '';
+                                    row1.insertCell(6).innerHTML = '<input type="text" style="border:none;background-color:transparent;" id="amount" name="amount[]" class="form-control" value="' + divAmt + '">';
+                                    row1.insertCell(7).innerHTML = '<input type="text" name="group_id[]" value="' + divGrpId + '">';
+                                    row1.insertCell(8).innerHTML = '<input type="text" name="type[]" value="' + 2 + '">';
+                                    var newDocNo1 = '<?php echo $newDocNo; ?>';
+                                    row1.insertCell(9).innerHTML = '<input type="text" name="doc_no[]" value="' + newDocNo1 + '">';
+                                    row1.cells[0].style.display = 'none';
+                                    row1.cells[4].style.display = 'none';
+                                    row1.cells[7].style.display = 'none';
+                                    row1.cells[8].style.display = 'none';
+                                    row1.cells[9].style.display = 'none';
+
+                                    updateItemNumbers();
+                                    //updateTotalCreditDebit();
+                                }
 
                                 function updateItemNumbers() {
                                     var table = document.getElementById('account_list');
@@ -543,36 +644,36 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                                         table.rows[i].cells[1].getElementsByTagName('input')[0].value = i;
                                     }
                                 }
-                                function updateTotalCreditDebit() {
-                                    var table = document.getElementById('account_list');
-                                    var totalCredit = 0;
-                                    var totalDebit = 0;
+                                // function updateTotalCreditDebit() {
+                                //     var table = document.getElementById('account_list');
+                                //     var totalCredit = 0;
+                                //     var totalDebit = 0;
 
-                                    for (var i = 1; i < table.rows.length; i++) {
-                                        var creditInput = table.rows[i].cells[6].querySelector('input');
-                                        var debitInput = table.rows[i].cells[5].querySelector('input');
+                                //     for (var i = 1; i < table.rows.length; i++) {
+                                //         var debitInput = table.rows[i].cells[5].querySelector('input');
+                                //         var creditInput = table.rows[i].cells[6].querySelector('input');
                                         
-                                        if (creditInput && creditInput.value) {
-                                            var creditValue = parseFloat(creditInput.value) || 0;
-                                            totalCredit += creditValue;
-                                        }
-                                        if (debitInput && debitInput.value) {
-                                            var debitValue = parseFloat(debitInput.value) || 0;
-                                            totalDebit += debitValue;
-                                        }
-                                    }
+                                //         if (creditInput && creditInput.value) {
+                                //             var creditValue = parseFloat(creditInput.value) || 0;
+                                //             totalCredit += creditValue;
+                                //         }
+                                //         if (debitInput && debitInput.value) {
+                                //             var debitValue = parseFloat(debitInput.value) || 0;
+                                //             totalDebit += debitValue;
+                                //         }
+                                //     }
 
-                                    $('#account_list tfoot').remove();
+                                //     $('#account_list tfoot').remove();
 
-                                    var tfoot = document.createElement('tfoot');
-                                    var newRow = tfoot.insertRow();
-                                        newRow.insertCell(0).innerHTML = '<td colspan="1"></td>'; 
-                                        newRow.insertCell(1).innerHTML = '<td colspan="1"></td>';
-                                        newRow.insertCell(2).innerHTML = '<td align="right"><b>TOTAL: </b></td>';
-                                        newRow.insertCell(3).innerHTML = '<td align="right">' + totalCredit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>';
-                                        newRow.insertCell(4).innerHTML = '<td align="right">' + totalDebit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>';
-                                    table.appendChild(tfoot);
-                                }
+                                //     var tfoot = document.createElement('tfoot');
+                                //     var newRow = tfoot.insertRow();
+                                //         newRow.insertCell(0).innerHTML = '<td colspan="1"></td>'; 
+                                //         newRow.insertCell(1).innerHTML = '<td colspan="1"></td>';
+                                //         newRow.insertCell(2).innerHTML = '<td align="right"><b>TOTAL: </b></td>';
+                                //         newRow.insertCell(3).innerHTML = '<td align="right">' + totalDebit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>';
+                                //         newRow.insertCell(4).innerHTML = '<td align="right">' + totalCredit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '</td>';
+                                //     table.appendChild(tfoot);
+                                // }
 
                             });
                         </script>
@@ -656,6 +757,57 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                         </div>
                         <input type="hidden" id="grpId" class="form-control">
                     </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-4 form-group">
+                            <?php
+                                $sql = "SELECT code,name,group_id FROM account_list WHERE name = 'Input VAT'";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    $row = $result->fetch_assoc();
+                                    $code = $row['code'];
+                                    $name = $row['name'];
+                                    $vatgrpId = $row['group_id'];
+                                } else {
+                                    $code = '';
+                                }
+                            ?>
+                            <input type="text" id="vatCode" class="form-control" value="<?php echo isset($code) ? $code : '' ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="vatName" class="form-control" value="<?php echo isset($name) ? $name : '' ?>" readonly><br>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="vat_amount" name="vat_amount" class="form-control">
+                        </div>
+                        <input type="text" id="vatgrpId" class="form-control" value="<?php echo isset($vatgrpId) ? $vatgrpId : '' ?>">
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-4 form-group">
+                            <?php
+                                $sql = "SELECT code,name,group_id FROM account_list WHERE name = 'Deferred Input VAT'";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    $row = $result->fetch_assoc();
+                                    $code = $row['code'];
+                                    $name = $row['name'];
+                                    $divGrpId = $row['group_id'];
+                                } else {
+                                    $code = '';
+                                }
+                            ?>
+                            <input type="text" id="divCode" class="form-control" value="<?php echo isset($code) ? $code : '' ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="divName" class="form-control" value="<?php echo isset($name) ? $name : '' ?>" readonly><br>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <input type="text" id="div_amount" name="div_amount" class="form-control">
+                        </div>
+                        <input type="text" id="divGrpId" class="form-control" value="<?php echo isset($divGrpId) ? $divGrpId : '' ?>">
+                    </div>
+
                     <hr>
                     <div class="row">
                         <div class="col-md-12 form-group">
@@ -685,72 +837,76 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
                         <input type="hidden" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
                         <table id="account_list" class="table table-bordered" style="font-size:14px;width:auto;.">
                             <colgroup>
-                                    <!-- <col width="5%"> -->
                                     <col width="10%">
                                     <col width="10%">
                                     <col width="30%">
-                                    <!-- <col width="10%"> -->
                                     <col width="20%">
                                     <col width="20%">
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        <!-- <th class="text-center"></th> -->
                                         <th class="text-center">Item No.</th>
                                         <th class="text-center">Account Code</th>
                                         <th class="text-center">Account Name</th>
-                                        <!-- <th class="text-center">Location</th> -->
-                                        <!-- <th class="text-center">Group</th> -->
                                         <th class="text-center">Debit</th>
                                         <th class="text-center">Credit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                            
                                 <?php
                                     $counter = 1;
                                     $journalId = isset($_GET['id']) ? $_GET['id'] : null;
                                     $jitems = $conn->query("SELECT j.*, a.code AS account_code, a.name AS account, g.name AS `group`, g.type, glt.doc_no FROM `cv_items` j INNER JOIN account_list a ON j.account_id = a.code INNER JOIN group_list g ON j.group_id = g.id INNER JOIN tbl_gr_list glt ON j.journal_id = glt.cv_num WHERE j.journal_id ='{$journalId}'");
                                     $rows = [];
+
                                     while ($row = $jitems->fetch_assoc()) {
+                                        if ($row['account'] == 'Accounts Payable Trade' || $row['account'] == 'Input VAT') {
+                                            $row['type'] = 1;
+                                        } else {
+                                            $row['type'] = 2;
+                                        }
+
                                         $rows[] = $row;
                                     }
 
                                     usort($rows, function ($a, $b) {
-                                        return $b['type'] - $a['type'];
+                                        if ($a['account'] == 'Accounts Payable Trade') {
+                                            return -1; 
+                                        } elseif ($b['account'] == 'Accounts Payable Trade') {
+                                            return 1; 
+                                        } else {
+                                            return $a['type'] - $b['type']; 
+                                        }
                                     });
 
                                     foreach ($rows as $row) :
                                     ?>
+                                    
                                     <tr>
-                                        <!-- <td class="text-center">
-                                            <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" type="button"><i class="fa fa-times"></i></button>
-                                        </td> -->
                                         <td class=""><span class="item-counter"><?= $counter ?></span></td>
                                         <td class="">
-                                            <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
-                                            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-                                            <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                            <input type="hidden" name="type[]" value="<?= $row['type'] ?>">
-                                            <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                            <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                            <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
+                                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
+                                            <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
+                                            <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                            <input type="text" name="type[]" value="<?= $row['type'] ?>">
+                                            <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                            <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                            <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
                                             <span class="account_code"><?= $row['account_code'] ?></span>
                                         </td>
                                         <td class="">
                                             <span class="account"><?= $row['account'] ?></span>
                                         </td>
-                                        
-                                        <!-- <td class="group"><?= $row['group'] ?></td> -->
-                                        
-                                        <td class="credit_amount text-right"><?php echo $row['type'] == 2 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
+
                                         <td class="debit_amount text-right"><?php echo $row['type'] == 1 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
+                                        <td class="credit_amount text-right"><?php echo $row['type'] == 2 ? number_format($row['amount'], 2, '.', ',') : ''; ?></td>
+                                        
                                         <?php
-                                            if ($row['type'] == 2) {
-                                                $totalCredit += $row['amount'];
-                                            }
                                             if ($row['type'] == 1) {
                                                 $totalDebit += $row['amount'];
+                                            }
+                                            if ($row['type'] == 2) {
+                                                $totalCredit += $row['amount'];
                                             }
                                             $counter++;
                                         endforeach;
@@ -811,6 +967,58 @@ $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $ne
 </div>
 
 </body>
+<script>
+function checkInputLength() {
+    var supplierIdInput = document.getElementById('supplier_id');
+    var supplierIdValue = supplierIdInput.value;
+
+    if (supplierIdValue.length < 4) {
+        console.log('Length is less than 4. Proceed with the query.');
+
+        $.ajax({
+            type: 'POST',
+            url: 'cv/check_item_type.php',
+            data: {
+                action: 'checkItemType',
+                supplierId: supplierIdValue
+            },
+            success: function (result) {
+                console.log('Received result:', result);
+
+                try {
+                    var data = JSON.parse(result);
+                   
+                    if (data.length > 0) {
+                        <?php $globalSupType = 1; ?>
+                        console.log('<?php echo $globalSupType; ?>');
+                    } else{
+                        <?php $globalSupType = 0; ?>
+                        console.log('<?php echo $globalSupType; ?>');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error parsing result:', error);
+                }
+            }
+        });
+    } else {
+        console.log('Length is 4 or more.');
+    }
+}
+</script>
+<script>
+function calculateVAT() {
+    var amount = parseFloat(document.getElementById('amount').value) || 0;
+    var vatAmount = amount * 0.12;
+    document.getElementById('vat_amount').value = vatAmount.toFixed(2);
+    calculateDIV();
+}
+function calculateDIV() {
+    var amount = parseFloat(document.getElementById('amount').value) || 0;
+    var divAmount = amount * 0.12;
+    document.getElementById('div_amount').value = divAmount.toFixed(2);
+}
+</script>
 <script>
     document.getElementById('picform').addEventListener('submit', function(event) {
         event.preventDefault(); 
@@ -910,7 +1118,6 @@ $c_num = isset($c_num) ? $c_num : '';
         selectedRow.classList.add('selected');
     }
 
-
     document.getElementById('v_num').value = selectedVNum;
     document.getElementById('po_no').value = poNo;
     document.getElementById('check_date').value = checkDate;
@@ -946,6 +1153,7 @@ $c_num = isset($c_num) ? $c_num : '';
             }
         }
     });
+    checkInputLength();
 }
 
 
