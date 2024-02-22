@@ -60,14 +60,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 ?>
 <?php
-$query = $conn->query("SELECT COUNT(DISTINCT po_id) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'GR'");
+$query = $conn->query("SELECT COUNT(DISTINCT gr_id) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'GR'");
 
 if ($query) {
     $row = $query->fetch_assoc();
     $maxDocNo = $row['max_doc_no'];
     $newDocNo = '1' . sprintf('%05d', $maxDocNo + 1);
 
-    //echo $newDocNo;
+    echo $newDocNo;
 } else {
     echo "Error executing query: " . $conn->error;
 }
@@ -83,6 +83,7 @@ $v_number = str_pad($next_v_number, STR_PAD_LEFT);
 
 //echo $v_number;
 ?>
+
 
 <script>
 $(document).ready(function() {
@@ -111,6 +112,7 @@ $(document).ready(function() {
 });
 
 </script>
+
 
 <div class="card card-outline card-info">
 	<div class="card-header">
@@ -284,14 +286,24 @@ $(document).ready(function() {
 								<input type="number" step="any" class="text-right w-100 border-0" name="outstanding[]"  id="txtoutstanding" value="<?php echo ($row['outstanding']) ?>"  style="pointer-events:none;border:none;background-color: gainsboro;" readonly/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="number" step="any" class="text-right w-100 border-0 txtdel" name="del_items[]" id="txtdelitems" style="background-color:yellow;;text-align:center;" value="0" onblur="calculateAmount(this)"/>
+							<input 
+    type="number" 
+    step="any" 
+    class="text-right w-100 border-0 txtdel" 
+    name="del_items[]" 
+    id="txtdelitems" 
+    style="background-color: yellow; text-align: center;" 
+    value="0" 
+    onblur="calculateAmount(this)"
+/>
+
 							</td>
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
 							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
-							<td style="display:none;"><input type='text' name='vat_amt' id='vat_amt'></td>
-							<td style="display:none;"><input type='text' name='ex_vat' id='ex_vat'></td>
-							<td style="display:none;"><input type='text' name='tot' id='tot'></td>
+							<td><input type='text' name='vat_amt' id='vat_amt' value='0'></td>
+							<td><input type='text' name='ex_vat' id='ex_vat' value='0'></td>
+							<td><input type='text' name='tot' id='tot' value='0'></td>
 							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
@@ -312,7 +324,7 @@ $(document).ready(function() {
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
-							<tr class="po-item" data-id="" style="display:none;">
+							<tr class="po-item" data-id="">
 								<td class="align-middle p-1">
 									<br>
 									GType:<input type="text" name="gtype_vat" id="gtype_vat" value="<?php echo $row['type'] ?>">
@@ -335,7 +347,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="" style="display:none;">
+						<tr class="po-item" data-id="">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_gr" id="gtype_gr" value="<?php echo $row['type'] ?>">
@@ -357,8 +369,7 @@ $(document).ready(function() {
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="" style="display:none;">
-						
+						<tr class="po-item" data-id="">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_ewt" id="gtype_ewt" value="<?php echo $row['type'] ?>">
@@ -484,7 +495,7 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-<div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="unlinkedItemsModal" tabindex="-1" role="dialog" aria-labelledby="unlinkedItemsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -501,7 +512,7 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <script>
     var supplierId = '<?php echo $supplier_id; ?>';
 	var dept = '<?php echo $dept; ?>';
@@ -900,7 +911,7 @@ function calculateAmountExc(input) {
 	$(document).ready(function(){
 		$('.gl_data').click(function() {
 			var dataId = $(this).attr('data-id');
-			var redirectUrl = '?page=po_goods_receiving/gl_trans&id=' + dataId;
+			var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;
 			window.location.href = redirectUrl;
 			
 		})
@@ -992,52 +1003,60 @@ function calculateAmountExc(input) {
 		$('#add_row').trigger('click')
 		}
         $('.select2').select2({placeholder:"Please Select here",width:"relative"})
-		$('#po-form').submit(function(e){
+		$('#po-form').submit(function (e) {
 			e.preventDefault();
-            var _this = $(this)
+			var _this = $(this);
+
+			var confirmed = confirm("Are you sure you want to save?");
+
+			if (!confirmed) {
+				return false; 
+			}
+
 			$('.err-msg').remove();
-			$('[name="po_no"]').removeClass('border-danger')
-			if($('#item-list .po-item').length <= 0){
-				alert_toast(" Please add atleast 1 item on the list.",'warning')
+			$('[name="po_no"]').removeClass('border-danger');
+
+			if ($('#item-list .po-item').length <= 0) {
+				alert_toast(" Please add at least 1 item on the list.", 'warning');
 				return false;
 			}
+
 			start_loader();
+
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=update_status_gr",
+				url: _base_url_ + "classes/Master.php?f=update_status_gr",
 				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					//console.log(err)
-					alert_toast("An error occured",'error');
+				cache: false,
+				contentType: false,
+				processData: false,
+				method: 'POST',
+				type: 'POST',
+				dataType: 'json',
+				error: err => {
+					alert_toast("An error occurred", 'error');
 					end_loader();
 				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-						//location.href = "./?page=po/purchase_orders/view_po&id="+resp.id;
-                        location.reload();
-					}else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            $("html, body").animate({ scrollTop: 0 }, "fast");
-                            end_loader()
-							if(resp.status == 'po_failed'){
-								$('[name="po_no"]').addClass('border-danger').focus()
-							}
-                    }else{
-						alert_toast("An error occured",'error');
+				success: function (resp) {
+					if (typeof resp == 'object' && resp.status == 'success') {
+						location.href = "./?page=po/goods_receiving/received_items_status";
+					} else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
+						var el = $('<div>')
+						el.addClass("alert alert-danger err-msg").text(resp.msg)
+						_this.prepend(el)
+						el.show('slow')
+						$("html, body").animate({ scrollTop: 0 }, "fast");
+						end_loader()
+						if (resp.status == 'po_failed') {
+							$('[name="po_no"]').addClass('border-danger').focus()
+						}
+					} else {
+						alert_toast("An error occurred", 'error');
 						end_loader();
-                       // console.log(resp)
 					}
 				}
-			})
-		}) 
+			});
+		});
+
 		initDeliveredItemsEvents();
 		$('#add_row').click(function() {
 			var tr = $('#item-clone tr').clone();

@@ -60,7 +60,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	echo $dept;
 ?>
 <?php
-$query = $conn->query("SELECT COUNT(DISTINCT po_id) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'GR'");
+$query = $conn->query("SELECT COUNT(DISTINCT gr_id) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'GR'");
 
 if ($query) {
     $row = $query->fetch_assoc();

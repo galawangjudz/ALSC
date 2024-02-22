@@ -219,9 +219,6 @@ echo $publicId;
 tr:hover {
     cursor: pointer;
 }
-/* #account_list {
-    display: none;
-} */
 .selected-row {
     background-color: gainsboro; 
 }
@@ -299,9 +296,9 @@ tr:hover {
             <div class="container-fluid" id="custom-container">
                 <div class="row">
                     <div class="col-md-3 form-group">
-                        <input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
-                        <div id="item_code_display" style="display:none;"></div>
-                        <input type="hidden" id="globalSupTypeInput">
+                        <input type="text" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
+                        <div id="item_code_display"></div>
+                        <input type="text" id="globalSupTypeInput">
                         <label for="c_num" class="control-label">Check Voucher #:</label>
                         <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
                     </div>
@@ -350,8 +347,7 @@ tr:hover {
                                 <col width="7%">
                                 <col width="10%">
                                 <col width="13%">
-                                <col width="50%">
-                                <col width="10%">
+                                <col width="60%">
                                 <col width="10%">
                             </colgroup>
                             <thead>
@@ -360,7 +356,6 @@ tr:hover {
                                     <th>VS No.</th>
                                     <th>Code</th>
                                     <th>Supplier Name</th>
-                                    <th>Amount</th>
                                     <th>Outstanding Date</th>
                                 </tr>
                             </thead>
@@ -375,7 +370,6 @@ tr:hover {
                                 vs.v_num,
                                 vs.po_no,
                                 vs.due_date,
-                                vi.amount,
                                 COALESCE(s.id, pc.client_id, ta.c_code, u.user_code) AS supId,
                                 COALESCE(s.name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
                                         CONCAT(ta.c_last_name, ', ', ta.c_first_name, ' ', ta.c_middle_initial),
@@ -395,12 +389,11 @@ tr:hover {
                                 while ($row = $qry->fetch_assoc()) {
                                     $selectedClass = ($row['v_num'] == $selectedVNum) ? 'selected-row' : '';
                                 ?>
-                                    <tr data-v-num="<?php echo $row['v_num']; ?>" data-v-amt="<?php echo $row['amount']; ?>" class="<?php echo $selectedClass; ?>" onclick="selectRow('<?php echo $row['v_num']; ?>', '<?php echo $row['po_no']; ?>', '<?php echo $row['due_date']; ?>', '<?php echo $row['amount']; ?>','<?php echo $row['supId']; ?>','<?php echo $row['supplier_name']; ?>')" onclick=" checkInputLength()">
+                                    <tr data-v-num="<?php echo $row['v_num']; ?>" class="<?php echo $selectedClass; ?>" onclick="selectRow('<?php echo $row['v_num']; ?>', '<?php echo $row['po_no']; ?>', '<?php echo $row['due_date']; ?>', '<?php echo $row['amount']; ?>','<?php echo $row['supId']; ?>','<?php echo $row['supplier_name']; ?>')" onclick=" checkInputLength()">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['v_num'] == 0) ? '-' : $row['v_num']; ?></td>
                                         <td><?php echo ($row['supId']) ?></td>
                                         <td><?php echo ($row['supplier_name']) ?></td>
-                                        <td><?php echo preg_replace('/\.0+$/', '', number_format((abs($row['amount'])), 2)) ?></td>
                                         <td><?php echo ($row['due_date']) ?></td>
                                     </tr>
                                 <?php
@@ -441,6 +434,7 @@ tr:hover {
                                 </tbody>
                             </table>
                         <script>
+                            $(document).ready(function() {
                                 $('.account-row').on('click', function() {
                                     $('.account-row').removeClass('selected');
                                     $(this).addClass('selected');
@@ -467,7 +461,7 @@ tr:hover {
 
                                     var globalSupType = '<?php echo $globalSupType; ?>';
                                 });
-                           
+                            });
                         </script>
                     </div>
                 </div>
@@ -489,15 +483,15 @@ tr:hover {
                                     $code = '';
                                 }
                             ?>
-                            <input type="text" id="AccCode" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($code) ? $code : '' ?>" readonly>
+                            <input type="text" id="AccCode" class="form-control" value="<?php echo isset($code) ? $code : '' ?>" readonly>
                         </div>
                         <div class="col-md-4 form-group">
                             <label class="control-label">Account Name:</label>
-                            <input type="text" id="AccName" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($name) ? $name : '' ?>" readonly><br>
+                            <input type="text" id="AccName" class="form-control" value="<?php echo isset($name) ? $name : '' ?>" readonly><br>
                         </div>
                         <div class="col-md-4 form-group">
                             <label class="control-label">Amount:</label>
-                            <input type="text" id="amount" name="amount" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($amount) ? $amount : '' ?>">
+                            <input type="text" id="amount" name="amount" class="form-control" value="<?php echo isset($amount) ? $amount : '' ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -622,14 +616,12 @@ tr:hover {
                             <?php 
                             if (isset($_GET['id'])):
                                 
-                                $jitems = $conn->query("
-                                SELECT gl.account, gl.amount, gl.doc_no, gl.gtype, a.name 
-                                FROM tbl_gl_trans gl
-                                LEFT JOIN account_list a ON gl.account = a.code
-                                WHERE gl.cv_num = '$publicId' AND gl.doc_type = 'CV'
-                                ORDER BY (a.name = 'Accounts Payable Trade') DESC, (gl.gtype = 1) DESC, gl.gtype;
-                            ");
-
+                                $jitems = $conn->query("SELECT gl.account, gl.amount, gl.doc_no, gl.gtype, a.name 
+                                FROM tbl_gl_trans gl LEFT JOIN account_list a ON
+                                gl.account = a.code
+                                WHERE gl.cv_num = '$publicId' and gl.doc_type = 'CV'
+                                ORDER BY (gl.gtype = 1) DESC, gl.gtype;
+                                ");
                                 $counter = 1;
                                 while($row = $jitems->fetch_assoc()):
                             ?>
@@ -638,7 +630,7 @@ tr:hover {
                                     <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                 </td>
                                 <td class="align-middle p-0 text-center">
-                                    <input type="number" class="text-center w-100 border-0" step="any" name="ctr" style="background-color:transparent;" readonly required/>
+                                    <input type="number" class="text-center w-100 border-0" step="any" name="ctr" required/>
                                 </td>
                                 <td class="align-middle p-1">
                                     <input type="text" class="text-center w-100 border-0" name="account_id[]" value="<?= $row['account'] ?>" readonly>
@@ -659,8 +651,8 @@ tr:hover {
                                     ?>
                                 </select>
                                 </td>
-                                <td class="debit_amount text-right" name="debit"><input type="text" class="text-right w-100 border-0 debit" name="debit[]" value="<?= $row['gtype'] == 1 ? number_format(($row['amount']), 2) : '' ?>"></td>
-                                <td class="credit_amount text-right" name="credit"><input type="text" class="text-right w-100 border-0 credit" name="credit[]" value="<?= $row['gtype'] == 2 ? number_format(abs($row['amount']), 2) : '' ?>"></td>
+                                <td class="debit_amount text-right" name="debit"><input type="text" class="text-right w-100 border-0 debit" name="debit[]" value="<?= $row['gtype'] == 1 ? $row['amount'] : '' ?>"></td>
+                                <td class="credit_amount text-right" name="credit"><input type="text" class="text-right w-100 border-0 credit" name="credit[]" value="<?= $row['gtype'] == 2 ? abs($row['amount']) : '' ?>"></td>
                             </tr>
                             <?php 
                             $counter++;
@@ -699,32 +691,14 @@ tr:hover {
         </form>
     </div>
 </div>
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Success</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Your data has been saved successfully!</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-                <button type="button" class="btn btn-secondary" id="printButton">Print</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <table class="d-none" id="item-clone">
 	<tr class="check-item" data-id="accname">
 		<td class="align-middle p-1 text-center">
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 		</td>
 		<td class="align-middle p-0 text-center">
-			<input type="number" class="text-center w-100 border-0" step="any" name="ctr" style="background-color:transparent;" readonly required/>
+			<input type="number" class="text-center w-100 border-0" step="any" name="ctr" required/>
 		</td>
 		<td class="align-middle p-1">
 			<input type="text" class="text-center w-100 border-0" name="account_id[]" readonly>
@@ -753,6 +727,25 @@ tr:hover {
 		</td>
 	</tr>
 </table>
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your data has been saved successfully!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" class="btn btn-secondary" id="printButton">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script>
 $(document).ready(function() {
@@ -770,52 +763,45 @@ $(document).ready(function() {
         if (globalSupTypeInputValue === '1') {
             addRow($('#divCode').val(), $('#div_amount').val(), 2);
         }
-        updateCounter();
-        updateTotals();
+
         $("#addRowBtn").off('click');
     });
 
     function addRow(accountCode, amount, groupID) {
         var newRow = $("#item-clone tr.check-item").clone();
         newRow.find("input[name='account_id[]']").val(accountCode);
-
         var selectedOption = newRow.find("select#account_id option").filter(function() {
             return $.trim($(this).data('code')).toLowerCase() === $.trim(accountCode).toLowerCase();
         });
         selectedOption.prop('selected', true);
-
         newRow.find("input#vs_num").val(groupID);
 
-        newRow.find("input[name='credit[]']").val(amount.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-
-        var amountWithoutCommas = amount.replace(/,/g, '');
-        var amountAsNumber = parseFloat(amountWithoutCommas);
-
-        if (!isNaN(amountAsNumber)) {
-            if (groupID === 1) {
-                newRow.find("input[name='debit[]']").val(amount.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-                newRow.find("input[name='credit[]']").val('');
-                newRow.find("input[name='amount[]']").val(amountAsNumber);
-            } else if (groupID === 2) {
-                newRow.find("input[name='debit[]']").val('');
-                newRow.find("input[name='credit[]']").val(Math.abs(amountAsNumber).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-                newRow.find("input[name='amount[]']").val(-amountAsNumber);
-            } else {
-                newRow.find("input[name='debit[]']").val('');
-                newRow.find("input[name='credit[]']").val('');
-                newRow.find("input[name='amount[]']").val('');
-            }
+        if (groupID === 1) {
+            newRow.find("input[name='debit[]']").val(amount);
+            newRow.find("input[name='credit[]']").val('');
+            newRow.find("input[name='amount[]']").val(amount);
+        } else if (groupID === 2) {
+            newRow.find("input[name='debit[]']").val('');
+            newRow.find("input[name='credit[]']").val(amount);
+            newRow.find("input[name='amount[]']").val(-amount);
         } else {
-            console.log("Invalid number");
+            newRow.find("input[name='debit[]']").val('');
+            newRow.find("input[name='credit[]']").val('');
+            newRow.find("input[name='amount[]']").val('');
         }
-            $("#acc_list").append(newRow);
-            newRow.find("input[type='number']").val('');
-        }
-    });
+
+        newRow.find("input[type='number']").val('');
+
+        $("#acc_list").append(newRow);
+    }
+});
 
 </script>
 <script>
 $(document).ready(function () {
+    // var clone = $("#item-clone").find(".check-item").clone();
+    // $("#item-clone").append(clone);
+
     $(document).on('change', '.check-item select', function () {
         updateHiddenOptions();
         updateAccCode($(this));
@@ -872,25 +858,20 @@ function updateTotals() {
     var totalCredit = 0;
 
     $('.check-item').each(function () {
-        var debitValue = parseFloat($(this).find('.debit').val().replace(/,/g, '')) || 0;
-        var creditValue = parseFloat($(this).find('.credit').val().replace(/,/g, '')) || 0;
+        var debitValue = parseFloat($(this).find('.debit').val().replace(',', '')) || 0;
+        var creditValue = parseFloat($(this).find('.credit').val().replace(',', '')) || 0;
 
         totalDebit += debitValue;
         totalCredit += creditValue;
     });
 
-    $('.total_debit').text(addCommasWithoutRounding(totalDebit.toString()));
-    $('.total_credit').text(addCommasWithoutRounding(totalCredit.toString()));
+    $('.total_debit').text(totalDebit.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    $('.total_credit').text(totalCredit.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
     var balance = totalDebit - totalCredit;
 
-    $('.total-balance').text(addCommasWithoutRounding(balance.toString()));
+    $('.total-balance').text(balance.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 }
-
-function addCommasWithoutRounding(number) {
-    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 
 function updateAmountDebit(debitInput) {
     var amountInput = debitInput.closest('tr').querySelector("input[name='amount[]']");
@@ -1002,20 +983,16 @@ function checkInputLength() {
 </script>
 <script>
 function calculateVAT() {
-    var amountInput = document.getElementById('amount');
-    var amount = parseFloat(amountInput.value.replace(/,/g, '')) || 0;
+    var amount = parseFloat(document.getElementById('amount').value) || 0;
     var vatAmount = amount * 0.12;
     document.getElementById('vat_amount').value = vatAmount.toFixed(2);
     calculateDIV();
 }
-
 function calculateDIV() {
-    var amountInput = document.getElementById('amount');
-    var amount = parseFloat(amountInput.value.replace(/,/g, '')) || 0;
+    var amount = parseFloat(document.getElementById('amount').value) || 0;
     var divAmount = amount * 0.12;
     document.getElementById('div_amount').value = divAmount.toFixed(2);
 }
-
 </script>
 <script>
 $(document).ready(function () {
@@ -1028,6 +1005,8 @@ $(document).ready(function () {
     });
 });
 </script>
+
+
 <script>
 $(document).ready(function() {
     var id = <?php echo json_encode($id); ?>;
@@ -1063,33 +1042,35 @@ $c_num = isset($c_num) ? $c_num : '';
     }
 
     function selectRow(selectedVNum, poNo, checkDate, Amt, supId, supName) {
-    
-    $('#data-table tbody tr').removeClass('selected');
-
-   
-    $('#data-table tbody tr[data-v-num="' + selectedVNum + '"][data-v-amt="' + Amt + '"]').addClass('selected');
-
-  
-    $('#v_num').val(selectedVNum);
-    $('#po_no').val(poNo);
-    $('#check_date').val(checkDate);
-    $('#amount').val(Number(Math.abs(Amt)).toFixed(2).replace(/\.?0*$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    $('#apamount').val(Number(Math.abs(Amt)).toFixed(2).replace(/\.?0*$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    $('#supplier_id').val(supId);
-    $('#supplier_name').val(supName);
-    $('#AccName').val('');
-    $('#AccCode').val('');
-
-   
-    $('#acc-table tbody tr').removeClass('selected-row');
-
-    $('#acc-table tbody tr').each(function() {
-        var rowAmount = parseFloat($(this).find('td:nth-child(1)').text()); 
-
-        // if (Math.abs(rowAmount) === Math.abs(Amt)) {
-        //     $(this).addClass('selected-row');
-        // }
+        var tableRows = document.querySelectorAll('#data-table tbody tr');
+        tableRows.forEach(function (row) {
+            row.classList.remove('selected');
     });
+
+    var selectedRow = document.querySelector('tr[data-v-num="' + selectedVNum + '"]');
+    if (selectedRow) {
+        selectedRow.classList.add('selected');
+    }
+
+    document.getElementById('v_num').value = selectedVNum;
+    document.getElementById('po_no').value = poNo;
+    document.getElementById('check_date').value = checkDate;
+    document.getElementById('amount').value = Math.abs(Amt);
+    document.getElementById('apamount').value = Math.abs(Amt);
+    document.getElementById('supplier_id').value = supId;
+    document.getElementById('supplier_name').value = supName;
+    document.getElementById('AccName').value = '';
+    document.getElementById('AccCode').value = '';
+
+    var accTableRows = document.querySelectorAll('#acc-table tbody tr');
+    accTableRows.forEach(function (row) {
+        row.classList.remove('selected-row');
+    });
+
+    var selectedAccRow = document.querySelector('.account-row[data-account-code="' + selectedVNum + '"]');
+    if (selectedAccRow) {
+        selectedAccRow.classList.add('selected-row');
+    }
 
     $.ajax({
         type: 'POST',
@@ -1101,6 +1082,7 @@ $c_num = isset($c_num) ? $c_num : '';
             console.log("Received vsItems:", vsItems);
             try {
                 vsItems = JSON.parse(vsItems);
+                //displayDataInTable(vsItems);
             } catch (error) {
                 console.error('Error parsing vsItems:', error);
             }
@@ -1109,43 +1091,14 @@ $c_num = isset($c_num) ? $c_num : '';
     checkInputLength();
 }
 
-
-</script>
-<script>
-    
-console.log('Script is running');
 $('#journal-form').submit(function (e) {
     e.preventDefault();
+    console.log('Form submitted');
     var _this = $(this);
     $('.pop-msg').remove();
     var el = $('<div>');
     el.addClass("pop-msg alert");
     el.hide();
-    // if ($('#acc_list tbody tr').length <= 0) {
-    //     el.addClass('alert-danger').text(" Account Table is empty.");
-    //     _this.prepend(el);
-    //     el.show('slow');
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //     return false;
-    // }
-    // if ($('#acc_list tfoot .total-balance').text() !== '0') {
-    //     console.log($('#acc_list tfoot .total-balance').text());
-
-    //     el.addClass('alert-danger').text(" Hindi equal, lods.");
-    //     _this.prepend(el);
-    //     el.show('slow');
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //     return false;
-    // }
-    // if ($('.total_debit').text() == '0' && $('.total_credit').text() == '0') {
-    //     console.log($('#acc_list tfoot .total-balance').text());
-
-    //     el.addClass('alert-danger').text(" Account table is empty.");
-    //     _this.prepend(el);
-    //     el.show('slow');
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //     return false;
-    // }
     start_loader();
     var urlSuffix;
     <?php if (!empty($_GET['id'])) { ?>
@@ -1188,6 +1141,7 @@ $('#journal-form').submit(function (e) {
     });
 });
 </script>
+
 
 
 

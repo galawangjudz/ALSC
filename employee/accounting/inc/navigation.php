@@ -208,7 +208,7 @@ $level = $_settings->userdata('type');
                           </a>
                           <ul class="nav nav-treeview">
                               <li class="nav-item">
-                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_supplier_voucher" class="nav-link">
+                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_supplier_voucher" class="nav-link">
                                       <i class="nav-icon fa fa-file"></i>
                                       <p>PO</p>
                                   </a>

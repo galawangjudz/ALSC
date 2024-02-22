@@ -220,11 +220,11 @@ function format_num($number){
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <div class="row">
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-3 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
                             <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-3 form-group">
                             <label for="po_no">P.O. #: </label>
                             <!-- <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
                                 <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
@@ -240,9 +240,13 @@ function format_num($number){
                             </select> -->
                             <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" readonly>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-3 form-group">
                             <label class="control-label">Document #:</label>
                             <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label class="control-label">Reference #:</label>
+                            <input type="text" id="ref_no" name="ref_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($ref_no) ? $ref_no : "" ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -294,7 +298,7 @@ function format_num($number){
                                                     data-terms="<?php echo $row['terms']; ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>
                                                     <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
-                                                ><?php echo $row['name'] ?></option>
+                                                ><?php echo $row['short_name'] ?></option>
                                                 <?php
                                                 if (isset($supplier_id) && $supplier_id == $row['id']) {
                                                     $terms = $row['terms'];

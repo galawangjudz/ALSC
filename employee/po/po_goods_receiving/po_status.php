@@ -14,15 +14,16 @@
     color: white!important;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 }
+
 </style>
 <!-- <link rel="stylesheet" href="css/cpo.css"> -->
 <div class="card card-outline card-primary">
 	<div class="card-header">
 	<h3 class="card-title"><b><i>PO Monitoring</b></i></h3><br>
 	<hr>
-	<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+	<table id="data-table" class="table-responsive-sm table-striped table-bordered">
 	<tr>
-		<td>
+		<td style="padding: 10px;">
 			<h3 class="card-title"><b><i>Approval Status</b></i></h3><br>
 			<hr>
 			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger"><i class="fa fa-hourglass-half" aria-hidden="true"></i></span> - Pending for Approvals</div>
@@ -30,7 +31,7 @@
 			<div style="color:green; font-weight:bold; font-style:italic;"><span class="badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span> - Finance Manager Approved</div>
 			<div style="color:gray; font-weight:bold; font-style:italic;"><span class="badge badge-secondary"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span> - Chief Finance Officer Approved</div>
 		</td>
-		<td>
+		<td style="padding: 10px;">
 			<h3 class="card-title"><b><i>Delivery Status</b></i></h3><br>
 			<hr>
 			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger"><i class="fa fa-truck" aria-hidden="true"></i></span> - Still to be delivered</div>

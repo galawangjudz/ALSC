@@ -22,7 +22,7 @@
 	<hr>
 	<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 	<tr>
-		<td>
+        <td style="padding: 10px;">
 			<h3 class="card-title"><b><i>Approval Status</b></i></h3><br>
 			<hr>
 			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger"><i class="fa fa-hourglass-half" aria-hidden="true"></i></span> - Pending for Approvals</div>
@@ -30,14 +30,14 @@
 			<div style="color:green; font-weight:bold; font-style:italic;"><span class="badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span> - Finance Manager Approved</div>
 			<div style="color:gray; font-weight:bold; font-style:italic;"><span class="badge badge-secondary"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span> - Chief Finance Officer Approved</div>
 		</td>
-		<td>
+		<td style="padding: 10px;">
 			<h3 class="card-title"><b><i>Delivery Status</b></i></h3><br>
 			<hr>
 			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger"><i class="fa fa-truck" aria-hidden="true"></i></span> - Still to be delivered</div>
 			<div style="color:blue; font-weight:bold; font-style:italic;"><span class="badge badge-primary"><i class="fa fa-truck" aria-hidden="true"></i></span> - Successfully delivered</div>
-            <div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger" style="background-color:transparent;">   </span></div>
+			<div style="color:red; font-weight:bold; font-style:italic;"><span class="badge badge-danger" style="background-color:transparent;">   </span></div>
 			<div style="color:blue; font-weight:bold; font-style:italic;"><span class="badge badge-primary" style="background-color:transparent;">   </span></div>
-        </td>
+		</td>
 	</tr>
 	</table>
 	</div>

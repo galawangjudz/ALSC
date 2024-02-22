@@ -64,7 +64,7 @@
                 $displayCode = '';
 
                 $qry = $conn->query("SELECT
-                    COALESCE(s.name, CONCAT(t.c_last_name, ', ', t.c_first_name, ' ',t.c_middle_initial), CONCAT(pc.last_name, ', ',pc.first_name, ' ' ,pc.middle_name), CONCAT(u.lastname, ', ',u.firstname)) AS name,
+                    COALESCE(s.short_name, CONCAT(t.c_last_name, ', ', t.c_first_name, ' ',t.c_middle_initial), CONCAT(pc.last_name, ', ',pc.first_name, ' ' ,pc.middle_name), CONCAT(u.lastname, ', ',u.firstname)) AS name,
                     a.doc_type, a.account,
                     a.doc_no,
                     a.journal_date,

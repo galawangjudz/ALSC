@@ -234,13 +234,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <form action="" id="journal-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
                             <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label class="control-label">Document #:</label>
                             <input type="text" id="newDocNo" name="newDocNo" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Reference #:</label>
+                            <input type="text" id="ref_no" name="ref_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($ref_no) ? $ref_no : "" ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -461,8 +465,6 @@ document.getElementById('emp_id').addEventListener('change', function() {
     }
 });
 $(document).ready(function () {
-    var clone = $("#item-clone").find(".po-item").clone();
-    $("#item-clone").append(clone);
 
     $(document).on('change', '.po-item select', function () {
         updateHiddenOptions();
@@ -527,20 +529,25 @@ function updateTotals() {
     var totalCredit = 0;
 
     $('.po-item').each(function () {
-        var debitValue = parseFloat($(this).find('.debit').val().replace(',', '')) || 0;
-        var creditValue = parseFloat($(this).find('.credit').val().replace(',', '')) || 0;
+        var debitValue = parseFloat($(this).find('.debit').val().replace(/,/g, '')) || 0;
+        var creditValue = parseFloat($(this).find('.credit').val().replace(/,/g, '')) || 0;
 
         totalDebit += debitValue;
         totalCredit += creditValue;
     });
 
-    $('.total_debit').text(totalDebit.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
-    $('.total_credit').text(totalCredit.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    $('.total_debit').text(addCommasWithoutRounding(totalDebit.toString()));
+    $('.total_credit').text(addCommasWithoutRounding(totalCredit.toString()));
 
     var balance = totalDebit - totalCredit;
 
-    $('.total-balance').text(balance.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    $('.total-balance').text(addCommasWithoutRounding(balance.toString()));
 }
+
+function addCommasWithoutRounding(number) {
+    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 
 function updateAmountDebit(debitInput) {
     var amountInput = debitInput.closest('tr').querySelector("input[name='amount[]']");

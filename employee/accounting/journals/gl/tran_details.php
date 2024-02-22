@@ -34,6 +34,7 @@
 					<col width="10%">
 					<col width="20%">
 					<col width="20%">
+					<!-- <col width="10%"> -->
 					<col width="20%">
 					<col width="10%">
 				</colgroup>
@@ -44,6 +45,7 @@
 						<th>Doc Type</th>
 						<th>Doc No.</th>
 						<th>PO No.</th>
+						<!-- <th>GR No.</th> -->
 						<th>Doc Date</th>
 						<th>Action</th>
 					</tr>
@@ -60,6 +62,7 @@
 							<td><?php echo $row['doc_type'] ?></td>
 							<td><?php echo $row['doc_no'] ?></td>
 							<td><?php echo ($row['doc_type'] == 'AP' || $row['doc_type'] == 'JV') ? '-' : $row['po_id']; ?></td>
+							<!-- <td><?php echo ($row['doc_type'] == 'AP' || $row['doc_type'] == 'GR') ? $row['gr_id'] : '-' ?></td> -->
                             <td><?php echo date("Y-m-d H:i",strtotime($row['journal_date'])) ?></td>
 							<td align="center">
 				                <a class="view_data" href="javascript:void(0)" data-id = "<?php echo $row['doc_no'] ?>"><span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye fa-lg"></i></span></a>
@@ -82,12 +85,15 @@
         if (docNo.substring(0, 1) === '4') {
             var redirectUrl = '?page=journals/jv/jv_trans&id=' + docNo;
 			
-        }else if (docNo.substring(0, 1) === '2') {
-            var redirectUrl = '?page=po/goods_receiving/ap_trans&id=' + docNo;
+        }else if (docNo.substring(0, 1) === '3') {
+            var redirectUrl = '?page=po/goods_receiving/transaction_details/cv_trans&id=' + docNo;
 			
-        } else {
+        } else if (docNo.substring(0, 1) === '2') {
+            var redirectUrl = '?page=po/goods_receiving/transaction_details/ap_trans&id=' + docNo;
+			
+        } else if (docNo.substring(0, 1) === '1') {
             var dataId = $(this).data('id');
-            var redirectUrl = '?page=po/goods_receiving/gl_trans&id=' + dataId;
+            var redirectUrl = '?page=po/goods_receiving/transaction_details/gl_trans&id=' + dataId;
            
         }
 		window.location.href = redirectUrl;
