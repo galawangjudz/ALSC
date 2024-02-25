@@ -284,7 +284,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 							<br>
 							<div class="row">
 								<div class="col-md-12">
-									<label for="notes" class="control-label">Notes:</label>
+									<label for="notes" class="control-label">Remarks:</label>
 									<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 								</div>
 							</div>
@@ -403,16 +403,7 @@ function copyTaxValue() {
 $('input[name="vatType"]').change(function() {
     calculate();
 });
-function clearDescriptionAndUnit(input) {
-		var inputValue = input.value.trim();
-		var row = $(input).closest('tr');
 
-		if (inputValue === '') {
-			row.find('.item-description').text('');
-			row.find('.item-unit input').val('');
-			row.find('.item-id input').val('');
-		}
-	}
 
 function calculate() {
     var _total = 0;
@@ -531,38 +522,50 @@ $(document).ready(function() {
 
 _autocomplete(item, selectedSupplierId);
 });
+
 var selectedItems = [];
+
+var selectedItems = [];
+
 function _autocomplete(_item, supplierId) {
-_item.find('.item_id').autocomplete({
-	source: function(request, response) {
-		$.ajax({
-			url: _base_url_ + "classes/Master.php?f=search_items",
-			method: 'POST',
-			data: {
-				q: request.term,
-				supplier_id: selectedSupplierId,
-				selected_items: selectedItems
-			},
-			dataType: 'json',
-			error: err => {
-				console.log(err);
-			},
-			success: function(resp) {
-				console.log("Supplier ID from PHP:", resp.supplier_id);
-				response(resp.items.filter(item => !selectedItems.includes(item.id))); 
-			}
-		});
-	},
-		select: function(event, ui) {
-			console.log(ui)
-			_item.find('input[name="item_id[]"]').val(ui.item.id)
-			_item.find('.item-description').text(ui.item.description)
-			_item.find('.item-unit').val(ui.item.default_unit);
-			_item.find('.item-price').val(ui.item.unit_price || 0);
-			selectedItems.push(ui.item.id);
-		}
-	})
+    _item.find('.item_id').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=search_items",
+                method: 'POST',
+                data: {
+                    q: request.term,
+                    supplier_id: selectedSupplierId,
+                    selected_items: selectedItems
+                },
+                dataType: 'json',
+                error: function (err) {
+                    console.log(err);
+                },
+                success: function (resp) {
+                    console.log("Supplier ID from PHP:", resp.supplier_id);
+
+                    var availableItems = resp.items.filter(function (item) {
+                        return selectedItems.indexOf(item.id.toString()) === -1;
+                    });
+
+                    response(availableItems);
+                }
+            });
+        },
+        select: function (event, ui) {
+            console.log(ui);
+            _item.find('input[name="item_id[]"]').val(ui.item.id);
+            _item.find('.item-description').text(ui.item.description);
+            _item.find('.item-unit').val(ui.item.default_unit);
+            _item.find('.item-price').val(ui.item.unit_price || 0);
+
+            selectedItems.push(ui.item.id);
+			calculate();
+        }
+    });
 }
+
 var item = $('#item');
 
 $(document).ready(function() {
@@ -575,7 +578,9 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
-	$('#add_row').click(function(){
+	$('#add_row').click(function () {
+        $('#item-list tbody tr:last-child').find('.item_id').prop('readonly', true).css('background-color', 'gainsboro');
+
         var tr = $('#item-clone tr').clone();
         $('#item-list tbody').append(tr);
         _autocomplete(tr);
@@ -583,10 +588,10 @@ $(document).ready(function(){
         tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
             calculate();
         });
+
         var statusClone = $('#status').clone().attr('id', '');
         tr.find('.item-id').append(statusClone.html());
     });
-
 
 	if($('#item-list .po-item').length > 0){
 		$('#item-list .po-item').each(function(){
@@ -613,34 +618,24 @@ $(document).ready(function(){
 
 		var validItems = false;
 		var itemIds = [];
-		var duplicateFound = false; 
 
 		$('#item-list .po-item').each(function () {
 			var description = $(this).find('.item-description').text().trim();
 			var itemId = $(this).find('[name="item_id[]"]').val();
 
-			if (description !== '') {
+			if (description === '') {
+				validItems = false; 
+			} else {
 				validItems = true;
-
-				if (itemIds.indexOf(itemId) !== -1) {
-					duplicateFound = true;
-					alert_toast("Duplicate item/service found.", 'warning');
-					return false; 
-				}
-
 				itemIds.push(itemId);
-				
 			}
 		});
-
-		if (duplicateFound) {
-			return false; 
-		}
 
 		if (!validItems) {
 			alert_toast("Please enter a valid item/service.", 'warning');
 			return false;
 		}
+
 		
 		start_loader();
 		$.ajax({

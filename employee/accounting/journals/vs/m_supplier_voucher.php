@@ -73,15 +73,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     $v_number = str_pad($next_v_number, STR_PAD_LEFT);
 }
 ?>
-<?php
 
-function format_num($number){
-	$decimals = 0;
-	$num_ex = explode('.',$number);
-	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
-	return number_format($number,$decimals);
-}
-?>
 <style>
     table{
         font-size:14px;
@@ -154,62 +146,99 @@ function format_num($number){
     }
 </style>
 <head>
-    <?php                                 
-    echo '<script>';
-    echo 'var totalCredit = ' . json_encode($totalCredit) . ';';
-    echo '</script>'; 
-?>
-</head>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+</head>
 <body onload="cal_tb()">
-<form action="" method="post" enctype="multipart/form-data" id="picform">
-        <table class="table table-bordered">
-            <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
-            <tr>
-                <td>
-                    <label for="name" class="control-label">Name:</label>
-                </td>
-                <td>
-                    <input type="text" name="name" id="name" required value="">
-                </td>
-                <td>
-                    <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
-                </td>
-                <td>
-                    <button type="submit" name="submit">Submit</button>
-                </td>
-            </tr>
-        </table>    
-    </form>
-<table border="1" cellspacing="0" cellpadding="10">
-    <tr>
-        <td>Name</td>
-        <td>Attachment</td>
-    </tr>
-    <?php 
-    $i = 1;
-    $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
-    ?>
-    <?php foreach($rows as $row):?>
-    <tr>
-        <td><?php echo $row["name"]; ?></td>
-        <td>
-            <?php
-            $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
-            $filePath = "journals/attachments/" . $row['image'];
-            if (strtolower($fileExtension) == 'pdf'): ?>
-                <a href="<?php echo $filePath; ?>" data-lightbox="pdfs" data-title="<?php echo $row['name']; ?>">
-                    <img src="path/to/pdf-icon.jpg" alt="PDF Icon" width="200" height="200">
-                </a>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+		<h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Voucher Setup Entry (Employee)": "Add New Voucher Setup Entry (Employee)" ?></b></i></h5>
+	</div>
+    <div class="card-body">
+        <label class="control-label">Add Attachment:</label>
+        <div id="picform-container">
+            <form action="" method="post" enctype="multipart/form-data" id="picform">
+                <table class="table table-bordered">
+                    <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+                    <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+                    <tr>
+                        <td>
+                        <!-- <label for="image" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Custom Upload
+                        </label>
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" style="display:none;"> -->
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+                        </td>
+                        <td style="display:none;">
+                            <input type="hidden" name="imageName" id="imageName" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                        </td>
+                        <td style="display:none;">
+                            <button type="submit" name="submit" id="picform_submit_button"  class="btn btn-flat btn-sm btn-secondary">
+                            <i class="fa fa-paperclip" aria-hidden="true"></i> Confirm Attachment </button>
+                        </td>
+                    </tr>
+                </table> 
+                <hr>
+            </form>
+        </div>
+        <div id="attachments-container">
+        <table class="table table-striped table-bordered" id="data-table" style="text-align:center;width:100%;">
+                <colgroup>
+                    <col width="25%">
+                    <col width="50%">
+                    <col width="25%">
+                </colgroup>
+                <thead>
+                    <tr class="bg-navy disabled">
+                        <th class="px-1 py-1 text-center">Name</th>
+                        <th class="px-1 py-1 text-center">Attachment</th>
+                        <th class="px-1 py-1 text-center">Date/Time Attached</th>
+                    </tr>
+                </thead>
+            <?php 
+            $i = 1;
+            $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
+            ?>
+            <?php if (mysqli_num_rows($rows) > 0): ?>
+                <?php foreach($rows as $row):?>
+                <tr>
+                    <td>
+                            <?php echo $row["name"]; ?>
+                    </td>
+                    <td>
+                    <?php
+                        $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+                        $filePath = "journals/attachments/" . $row['image'];
+
+                        if (strtolower($fileExtension) == 'pdf'): ?>
+                            <a data-fancybox data-src="<?php echo $filePath; ?>" data-type="iframe" href="javascript:;">
+                                <img src="journals/vs/pdf-icon.png" alt="PDF Icon" width="25" height="25">
+                            </a>
+                        <?php else: ?>
+                            <a data-fancybox="images" href="<?php echo $filePath; ?>" data-caption="<?php echo $row['name']; ?>">
+                                <img src="<?php echo $filePath; ?>" alt="" width="200" height="200">
+                            </a>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php $timestamp = strtotime($row["date_attached"]);
+                        $formattedDate = date('F j, Y g:i:sA', $timestamp);
+                        echo $formattedDate; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
             <?php else: ?>
-                <a href="<?php echo $filePath; ?>" data-lightbox="images" data-title="<?php echo $row['name']; ?>">
-                    <img src="<?php echo $filePath; ?>" alt="<?php echo $row['name']; ?>" width="200" height="200">
-                </a>
+                <tr>
+                    <td colspan="3">No rows found</td>
+                </tr>
             <?php endif; ?>
-        </td>
-    </tr>
-<?php endforeach; ?>
-</table>
+        </table>
+        </div>
+    </div>
+</div>
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -289,7 +318,7 @@ function format_num($number){
                                         $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
                                         $terms = '';
                                         ?>
-                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
                                             <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                             <?php while ($row = $supplier_qry->fetch_assoc()): ?>
                                                 <option
@@ -326,7 +355,7 @@ function format_num($number){
                                         <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                     </div>
                                 </div>
-                                <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
+                                <input type="text" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
                             </div>
                             </div>
                             <br>
@@ -470,8 +499,59 @@ function format_num($number){
         </div>
     </div>
 </div>
-
 <script>
+    document.getElementById('image').addEventListener('change', function() {
+    var formData = new FormData(document.getElementById('picform'));
+
+    fetch('journals/vs_attachments.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.startsWith('Attached na, ssob. Hihe.')) {
+            alert_toast(data, 'success'); 
+        } else {
+            alert_toast(" Invalid file. Huwag ipilit bhe. Hindi iyan mag-save.", 'error'); 
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+<script>
+function validateAndFormat(input) {
+    input.value = input.value.replace(/[^0-9.]/g, '');
+}
+function formatNumber(input) {
+    let inputValue = input.value;
+    let numericValue = inputValue.replace(/[^0-9.]/g, '');
+    let floatValue = parseFloat(numericValue);
+    if (!isNaN(floatValue)) {
+        input.value = floatValue.toLocaleString('en-US');
+    } else {
+        input.value = 0;
+    }
+}
+</script>
+<script>
+
+document.getElementById('picform').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    var formData = new FormData(this);
+    fetch('journals/vs_attachments.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        //alert(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
 function updateDueDate() {
     var termsId = $('#termsTextbox').val();
 
@@ -966,3 +1046,14 @@ $('#zeroAccountCodeModal').modal('show');
 });
 
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var saveJournalButton = document.getElementById("save_journal");
+        var submitButton = document.getElementById("picform_submit_button");
+
+        saveJournalButton.addEventListener("click", function () {
+            submitButton.click();
+        });
+    });
+</script>
+</html>

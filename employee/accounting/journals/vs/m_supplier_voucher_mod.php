@@ -213,58 +213,7 @@ function updateAmount(input) {
 </script>
 </head>
 
-<body onload="cal_tb()">
-<div class="form-group col-md-6">
-    <form action="" method="post" enctype="multipart/form-data" id="picform">
-        <table class="table table-bordered">
-            <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
-            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
-            <tr>
-                <td>
-                    <label for="name" class="control-label">Name:</label>
-                </td>
-                <td>
-                    <input type="text" name="name" id="name" required value="">
-                </td>
-                <td>
-                    <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
-                </td>
-                <td>
-                    <button type="submit" name="submit" id="picform_submit_button">Submit</button>
-                </td>
-            </tr>
-        </table>    
-    </form>
-<table border="1" cellspacing="0" cellpadding="10">
-    <tr>
-        <td>Name</td>
-        <td>Attachment</td>
-    </tr>
-    <?php 
-    $i = 1;
-    $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
-    ?>
-    <?php foreach($rows as $row):?>
-    <tr>
-        <td><?php echo $row["name"]; ?></td>
-        <td>
-            <?php
-            $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
-            $filePath = "journals/attachments/" . $row['image'];
-            if (strtolower($fileExtension) == 'pdf'): ?>
-                <a href="<?php echo $filePath; ?>" data-lightbox="pdfs" data-title="<?php echo $row['name']; ?>">
-                    <img src="path/to/pdf-icon.jpg" alt="PDF Icon" width="200" height="200">
-                </a>
-            <?php else: ?>
-                <a href="<?php echo $filePath; ?>" data-lightbox="images" data-title="<?php echo $row['name']; ?>">
-                    <img src="<?php echo $filePath; ?>" alt="<?php echo $row['name']; ?>" width="200" height="200">
-                </a>
-            <?php endif; ?>
-        </td>
-    </tr>
-<?php endforeach; ?>
-</table>
-</div>  
+<body>
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -273,13 +222,13 @@ function updateAmount(input) {
         <div class="container-fluid">
             <div class="container-fluid">
                 <form action="" id="journal-form">
-                    <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
+                    <input type="text" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <div class="row">
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
                             <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
                         </div>
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="po_no">P.O. #: </label>
                             <!-- <select name="po_no" id="po_no" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                 <option value="" disabled <?php echo !isset($po_no) ? "selected" : '' ?>></option>
@@ -295,13 +244,9 @@ function updateAmount(input) {
                             </select> -->
                             <input type="text" id="po_no" name="po_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($po_no) ? $po_no : "" ?>" readonly>
                         </div>
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label class="control-label">Document #:</label>
                             <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
-                        </div>
-                        <div class="col-md-3 form-group">
-                            <label class="control-label">Reference #:</label>
-                            <input type="text" id="ref_no" name="ref_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($ref_no) ? $ref_no : "" ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -340,35 +285,34 @@ function updateAmount(input) {
                             <hr>
                             <div class="container" id="sup-div">
                                 <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-4 form-group">
-                                            <label for="supplier_id">Supplier:</label>
-                                            <?php
-                                            $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-                                            $terms = '';
-                                            ?>
-                                            <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                                                <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-                                                <?php while ($row = $supplier_qry->fetch_assoc()): 
-                                                    
-                                                    ?>
-                                                <option 
-                                                    value="<?php echo $row['id'] ?>" 
-                                                    data-supplier-code="<?php echo $row['id'] ?>"
-                                                    <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="supplier_id">Supplier:</label>
+                                        <?php
+                                        $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
+                                        $terms = '';
+                                        ?>
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+                                            <?php while ($row = $supplier_qry->fetch_assoc()): ?>
+                                                <option
+                                                    value="<?php echo $row['id'] ?>"
+                                                    data-vatable="<?php echo $row['vatable'] ?>"
+                                                    data-terms="<?php echo $row['terms']; ?>"
+                                                    <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>
+                                                    <?php echo $row['status'] == 0 ? 'disabled' : '' ?>
                                                 ><?php echo $row['short_name'] ?></option>
                                                 <?php
                                                 if (isset($supplier_id) && $supplier_id == $row['id']) {
                                                     $terms = $row['terms'];
-                                                   
                                                 }
                                                 ?>
-                                                <?php endwhile; ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="p_terms">Payment Terms:</label>
-                                            <?php if ($terms !== ''): ?>
+                                            <?php endwhile; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="p_terms">Payment Terms:</label>
+                                        <?php if ($terms !== ''): ?>
                                             <?php
                                             $terms_qry = $conn->query("SELECT terms FROM `payment_terms` WHERE terms_indicator = $terms;");
                                             while ($row = $terms_qry->fetch_assoc()):
@@ -376,15 +320,16 @@ function updateAmount(input) {
                                                 ?>
                                                 <input type="text" id="p_terms" class="form-control form-control-sm rounded-0" value="<?php echo $pterms; ?>" readonly>
                                             <?php endwhile; ?>
-                                            <?php else: ?>
+                                        <?php else: ?>
                                             <input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
                                         <?php endif; ?>
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="sup_code" class="control-label">Supplier Code:</label>
-                                            <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
-                                        </div>
                                     </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="sup_code" class="control-label">Supplier Code:</label>
+                                        <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                                    </div>
+                                </div>
+                                <input type="text" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
                                 </div>
                             </div>
                             <br>
@@ -393,7 +338,6 @@ function updateAmount(input) {
                         </div>
                     </div>
                     <hr>
-                    <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label for="description" class="control-label">Particulars:</label>
@@ -402,14 +346,34 @@ function updateAmount(input) {
                     </div>
                     
                     <?php 
-                        if (!isset($id) || $id === null) :
+                        if (isset($publicId) || $publicId !== null) :
                             
-                            $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                            $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
+                            $journalId = $publicId;
+                            $jitems = $conn->query("SELECT DISTINCT 
+                            vi.phase,
+                            vi.block,
+                            vi.lot,
+                            gl.gr_id,
+                            gl.account AS account_code,
+                            gl.amount,
+                            gl.doc_no,
+                            gl.gtype,
+                            a.name,
+                            a.id AS account_id,
+                            a.group_id
+                        FROM 
+                            tbl_gl_trans gl
+                            LEFT JOIN account_list a ON gl.account = a.code
+                            INNER JOIN vs_items vi ON vi.journal_id = gl.vs_num
+                        WHERE 
+                            gl.vs_num = '{$journalId}' AND gl.doc_type = 'AP'
+                        ORDER BY 
+                            (gl.gtype = 1) DESC, 
+                            gl.gtype;");
                             $groupedData = array();
                             while ($row = $jitems->fetch_assoc()) {
                                 $grId = $row['gr_id'];
-                                $account_name = $row['account'];
+                                $account_name = $row['account_code'];
                                 $groupedData[$grId][] = $row;
                             }
                         
@@ -418,13 +382,15 @@ function updateAmount(input) {
                     <hr>
                     <i><b>GR #: </b><b><?= $grId ?></b></i>
                     <table id="account_list_<?= $grId ?>" class="table table-bordered tbl_acc">
-                        <colgroup>
-                            <col style="width: 5%;">
-                            <col style="width: 5%;">
-                            <col style="width: 40%;">
-                            <col style="width: 30%;">
-                            <col style="width: 10%;">
-                            <col style="width: 10%;">
+                    <colgroup>
+                            <col width="5%">
+                            <!-- <col width="5%"> -->
+                            <col width="10%">
+                            <col width="30%">
+                            <col width="20%">
+                            <!-- <col width="10%"> -->
+                            <col width="10%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
@@ -446,30 +412,28 @@ function updateAmount(input) {
                                     <button class="btn btn-sm btn-outline btn-danger btn-flat delete-row" data-gr-id="account_list_<?= $grId ?>" type="button"><i class="fa fa-times"></i></button>
                                 </td>
                                
-                                <td class="accountInfo">
-                                <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
-                                <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
-                                <input type="hidden" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
-                                <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                <input type="hidden" name="amount[]" value="<?= abs($row['amount']) ?>" class="amount-textbox">
+                                <td class="accountInfo text-center">
+                                <input type="text" name="gr_id[]" value="<?= $row['gr_id'] ?>">
+                                <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+                                <input type="text" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
+                                <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                <input type="text" name="amount[]" value="<?= abs($row['amount']) ?>" class="amount-textbox">
                                 <span class="account_code"><?= $row['account_code'] ?></span>
                                 <span class="type" style="display:none;"><?= $row['type'] ?></span>
                                 </td>
                                 <td class="">
-                                    <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
+                                    <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
                                         <option value="" disabled selected></option>
                                         <?php 
-                                        $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
-                                        $currentGroup = null;
-                                        $groupedAccounts = array();
-
-                                        while($account = $accounts->fetch_assoc()):
+                                        $selectedAccountIds = array();
+                                        $accountsResult = $conn->query("SELECT * FROM `account_list` WHERE delete_flag = 0 AND status = 1 ORDER BY name;");
+                                        while ($accountRow = $accountsResult->fetch_assoc()):
+                                            $selected = ($accountRow['code'] == $row['account_code']) ? 'selected' : '';
+                                            echo '<option value="' . $accountRow['id'] . '" data-code="' . $accountRow['code'] . '" ' . $selected . '>' . $accountRow['name'] . '</option>';
+                                        endwhile;
                                         ?>
-                                            <option value="<?= $account['id'] ?>" data-group-id="<?= $account['group_id'] ?>" data-type="<?= $account['type'] ?>" data-gr-id="<?= $row['gr_id'] ?>" data-account-code="<?= $account['code'] ?>" data-account-id="<?= $account['id'] ?>" data-amount="" <?= ($row['account_id'] == $account['id']) ? 'selected' : '' ?>><?= $account['name'] ?></option>
-
-                                        <?php endwhile; ?>
                                     </select>
                                 </td>
                                 <td class="">
@@ -535,17 +499,17 @@ function updateAmount(input) {
                                 </td>
                                 <!-- <td class="group"><?= $row['gr_id'] ?></td> -->
                                 <td class="debit_amount text-right">
-                                    <?php if ($row['account'] == 'Goods Receipt' || $row['account'] == 'Deferred Expanded Withholding Tax Payable' || ($row['type'] == 1 && $row['account'] != 'Deferred Input VAT')): ?>
+                                    <?php if ($row['account_code'] == 'Goods Receipt' || $row['account_code'] == 'Deferred Expanded Withholding Tax Payable' || ($row['gtype'] == 1 && $row['account_code'] != 'Deferred Input VAT')): ?>
                                         <input type="text" class="debit-amount-input" value="<?= abs($row['amount']) ?>" oninput="updateAmount(this)">
-                                        <input type="hidden" name="gtype[]" value="1">
+                                        <input type="text" name="gtype[]" value="1">
                                         <?php else : ?>
                                         <input type="text" class="debit-amount-input" value="" oninput="updateAmount(this)">
                                     <?php endif; ?>
                                 </td>
                                 <td class="credit_amount text-right">
-                                    <?php if ($row['type'] == 2 && $row['account'] != 'Goods Receipt' && $row['account'] != 'Deferred Expanded Withholding Tax Payable' || $row['account'] == 'Deferred Input VAT') : ?>
+                                    <?php if ($row['gtype'] == 2 && $row['account_code'] != 'Goods Receipt' && $row['account_code'] != 'Deferred Expanded Withholding Tax Payable' || $row['account_code'] == 'Deferred Input VAT') : ?>
                                         <input type="text" class="credit-amount-input" value="<?= abs($row['amount']) ?>" oninput="updateAmount(this)">
-                                        <input type="hidden" name="gtype[]" value="2">
+                                        <input type="text" name="gtype[]" value="2">
                                     <?php else : ?>
                                         <input type="text" class="credit-amount-input" value="" oninput="updateAmount(this)">
                                     <?php endif; ?>
@@ -553,10 +517,10 @@ function updateAmount(input) {
 
                             </tr>
                             <?php 
-                            if ($row['type'] == 2) {
+                            if ($row['gtype'] == 2) {
                                 $totalCredit += $row['amount'];
                             }
-                            if ($row['type'] == 1) {
+                            if ($row['gtype'] == 1) {
                                 $totalDebit += $row['amount'];
                             }
                             ?>
@@ -606,6 +570,7 @@ function updateAmount(input) {
                                 $(this).closest('tr').remove();
                                 cal_tb();
                             });
+                           
                         });
                     });
                     </script>
@@ -654,6 +619,7 @@ function updateAmount(input) {
 </div>
 
 <script>
+
 function updateDueDate() {
     var termsId = $('#termsTextbox').val();
 
@@ -719,22 +685,21 @@ function cal_tb(account_list_<?= $grId ?>) {
         credit += parseFloat($(this).find('.credit-amount-input').val()) || 0;
     });
 
-    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2));
-    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2));
+    $('#' + account_list_<?= $grId ?>).find('.total_debit').text(debit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('#' + account_list_<?= $grId ?>).find('.total_credit').text(credit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     $('#' + account_list_<?= $grId ?>).find('.total-balance').text((debit - credit).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 
 
     updateGrandTotals();
 }
-
 function updateGrandTotals() {
     var grandTotalDebit = 0;
     var grandTotalCredit = 0;
 
     $('.tbl_acc').each(function () {
         var currentTable = $(this);
-        var totalDebit = parseFloat(currentTable.find('.total_debit').text()) || 0;
-        var totalCredit = parseFloat(currentTable.find('.total_credit').text()) || 0;
+        var totalDebit = parseFloat(currentTable.find('.total_debit').text().replace(/,/g, '')) || 0;
+        var totalCredit = parseFloat(currentTable.find('.total_credit').text().replace(/,/g, '')) || 0;
 
         grandTotalDebit += totalDebit;
         grandTotalCredit += totalCredit;
@@ -743,6 +708,7 @@ function updateGrandTotals() {
     $('.main_total_debit').text(grandTotalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     $('.main_total_credit').text(grandTotalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 }
+
 
 $(document).on('click', '.delete-row', function () {
     var grId = $(this).data('gr-id');
@@ -769,10 +735,12 @@ document.getElementById('supplier_id').addEventListener('change', function() {
     }
 });
 
+
 $(document).ready(function () {
     $('#bill_date').on('change', function () {
        updateDueDate();
     });
+
     $("#account_id").on("change", function () {
         var selectedAccountId = $(this).val();
         var accountCodeInput = $("#account_code");
@@ -802,7 +770,9 @@ $(document).ready(function () {
 
     });
 });
+</script>
 
+<script>
 
     var account = $.parseJSON('<?= json_encode($account_arr) ?>');
     var group = $.parseJSON('<?= json_encode($group_arr) ?>');
@@ -937,7 +907,16 @@ $(document).ready(function () {
 </script>
 <script>
   $(document).ready(function () {
-        $('#supplier_id').on('change', function () {
+    $('#supplier_id').on('change', function () {
+        var billDateInput = $('#bill_date');
+            if (!billDateInput.val()) {
+                alert('Please provide a billing date.');
+                return;
+            }
+        var terms = $(this).find(':selected').data('terms');
+        $('#termsTextbox').val(terms);
+        
+        updateDueDate();
         var selectedSupplierId = $(this).val();
         console.log('Supplier ID:', selectedSupplierId);
         $.ajax({

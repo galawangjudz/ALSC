@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
         $publicId = $_GET['id'];
 
         if ($publicId > 0) {
-            $docNoQuery = $conn->query("SELECT doc_no FROM tbl_gl_trans WHERE vs_num = '$publicId' and doc_type='JV'");
+            $docNoQuery = $conn->query("SELECT doc_no FROM tbl_gl_trans WHERE vs_num = '$publicId' and fk_jv=1");
             if ($docNoQuery) {
                 $docNoRow = $docNoQuery->fetch_assoc();
                 $docNo = $docNoRow['doc_no'];
@@ -30,7 +30,7 @@ if (isset($_GET['id'])) {
 
 $is_new_vn = true;
 
-$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'JV'");
+$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE fk_jv=1");
 
 if ($query) {
     $row = $query->fetch_assoc();
@@ -142,15 +142,34 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <div class="container-fluid">
             <div class="container-fluid">
                 <form action="" id="journal-form">
-                    <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
+                    <input type="text" name="id" value="<?= isset($_GET['id']) ? ($_GET['id']) :'' ?>">
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="jv_num" class="control-label">Journal Voucher #:</label>
                             <input type="text" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>" readonly>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label class="control-label">Document #:</label>
                             <input type="text" id="newDocNo" name="newDocNo" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Document Type:</label>
+                            <?php
+                                $doc_type = isset($doc_type) ? $doc_type : '';
+                                ?>
+
+                                <select id="doc_type" name="doc_type" class="form-control form-control-sm form-control-border rounded-0">
+                                    <option value='' <?= $doc_type == '' ? 'selected' : '' ?>>Select Doc. Type</option>
+                                    <?php
+                                    $documentTypes = ['JV', 'AP', 'GR', 'CV']; 
+
+                                    foreach ($documentTypes as $docType) {
+                                        $selected = ($doc_type == $docType) ? 'selected' : '';
+                                        echo "<option value=\"$docType\" $selected>$docType</option>";
+                                    }
+                                    ?>
+                                </select>
+
                         </div>
                     </div>
                     <div class="row">
@@ -202,7 +221,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 $jitems = $conn->query("SELECT gl.account,gl.amount, gl.doc_no, gl.gtype, a.name 
                                 FROM tbl_gl_trans gl LEFT JOIN account_list a ON
                                 gl.account = a.code
-                                WHERE gl.vs_num = '{$journalId}' and gl.doc_type = 'JV'
+                                WHERE gl.vs_num = '{$journalId}' and gl.fk_jv = 1
                                 ORDER BY (gl.gtype = 1) DESC, gl.gtype;
                                 ");
                                 $counter = 1;
@@ -217,9 +236,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 </td>
                                 <td class="align-middle p-1">
                                     <input type="text" class="text-center w-100 border-0" name="account_id[]" value="<?= $row['account'] ?>" readonly>
-                                    <input type="hidden" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
-                                    <input type="hidden" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
-                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="text" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
+                                    <input type="text" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
+                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
                                 </td>
                                 <td class="align-middle p-1">
                                 <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -318,9 +337,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		</td>
 		<td class="align-middle p-1">
 			<input type="text" class="text-center w-100 border-0" name="account_id[]" readonly>
-			<input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
-            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-            <input type="hidden" name="amount[]" value="">
+			<input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
+            <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
+            <input type="text" name="amount[]" value="">
 		</td>
 		<td class="align-middle p-1">
 		<select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -535,29 +554,67 @@ $('#journal-form').submit(function (e) {
     var el = $('<div>');
     el.addClass("pop-msg alert");
     el.hide();
-    if ($('#acc_list tbody tr').length <= 0) {
-        el.addClass('alert-danger').text(" Account table is empty.");
-        _this.prepend(el);
-        el.show('slow');
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    var selectedDocType = $('#doc_type').val();
+    if (selectedDocType === '') {
+        alert_toast(" Please select a document type.", 'warning');
         return false;
     }
+
+    
+    if ($('#acc_list tbody tr').length <= 0) {
+        alert_toast(" Account Table is empty.", 'warning');
+        return false;
+    }
+
     if ($('#acc_list tfoot .total-balance').text() !== '0') {
         console.log($('#acc_list tfoot .total-balance').text());
-
-        el.addClass('alert-danger').text(" Hindi equal, lods.");
-        _this.prepend(el);
-        el.show('slow');
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        alert_toast(" Hindi equal. :((", 'warning');
         return false;
     }
+
     if ($('.total_debit').text() == '0' && $('.total_credit').text() == '0') {
         console.log($('#acc_list tfoot .total-balance').text());
+        alert_toast(" Account table is empty.", 'warning');
+        return false;
+    }
 
-        el.addClass('alert-danger').text(" Account table is empty.");
-        _this.prepend(el);
-        el.show('slow');
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    // function hasAPT() {
+    //     var hasAPT = false;
+
+    //     $('#acc_list .po-item input[name="account_id[]"]').each(function () {
+    //         var accountValue = $(this).val().trim();
+
+    //         if (accountValue === '21002') {
+    //             hasAPT = true;
+    //             return false; 
+    //         }
+    //     });
+
+    //     return hasAPT;
+    // }
+
+    // if (!hasAPT()) {
+    //     alert_toast(" Accounts Payable Trade is missing!", 'warning');
+    //     return false;
+    // }
+
+    function hasZeroAmount() {
+        var hasZeroAmount = false;
+
+        $('#acc_list .po-item input[name="amount[]"]').each(function () {
+            var amountValue = parseFloat($(this).val().trim());
+
+            if (amountValue === 0 || isNaN(amountValue)) {
+                hasZeroAmount = true;
+                return false;
+            }
+        });
+
+        return hasZeroAmount;
+    }
+
+    if (hasZeroAmount()) {
+        alert_toast(" One or more amount fields have zero value.", 'warning');
         return false;
     }
     start_loader();

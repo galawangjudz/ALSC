@@ -297,7 +297,7 @@ $(document).ready(function() {
 				</table>
 				<div class="row">
 					<div class="col-md-6">
-						<label for="notes" class="control-label">Notes:</label>
+						<label for="notes" class="control-label">Remarks:</label>
 						<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0" style="pointer-events:none;"><?php echo isset($notes) ? $notes : '' ?></textarea>
 					</div>
 					<div class="col-md-6" id="hidden-status">

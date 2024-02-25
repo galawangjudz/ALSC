@@ -177,34 +177,34 @@ require_once('../../config.php');
                                             $docNo = $_GET['id'];
 
                                             $jitems = $conn->query("SELECT 
-                                                gl.gr_id, 
-                                                gl.amount, 
-                                                gl.account, 
-                                                gl.journal_date, 
-                                                i.item_code, 
-                                                ac.name, 
-                                                g.type 
-                                            FROM 
-                                                tbl_gl_trans gl
-                                                INNER JOIN account_list ac ON gl.account = ac.code
-                                                INNER JOIN group_list g ON ac.group_id = g.id
-                                                LEFT JOIN item_list i ON i.id = gl.item_id
-                                            WHERE 
-                                                doc_no = $docNo
-                                            ORDER BY 
-                                                CASE 
-                                                    WHEN ac.name = 'Goods Receipt' THEN 1
-                                                    WHEN ac.name = 'Input VAT' THEN 2
-                                                    WHEN ac.name = 'Deferred Expanded Withholding Tax Payable' THEN 3
-                                                    WHEN ac.name = 'Accounts Payable Trade' THEN 4
-                                                    WHEN ac.name = 'Deferred Input VAT' THEN 5
-                                                    WHEN ac.name = 'Expanded Withholding Tax Payable' THEN 6
-                                                    ELSE 7
-                                                END,
-                                                g.type,
-                                                gr_id,
-                                                CASE WHEN g.type = 2 THEN gl.account END ASC,
-                                                i.item_code DESC;
+                                            gl.gr_id, 
+                                            gl.amount, 
+                                            gl.account, 
+                                            gl.journal_date, 
+                                            i.item_code, 
+                                            ac.name, 
+                                            gl.gtype 
+                                        FROM 
+                                            tbl_gl_trans gl
+                                            INNER JOIN account_list ac ON gl.account = ac.code
+                                            LEFT JOIN item_list i ON i.id = gl.item_id
+                                        WHERE 
+                                            doc_no = $docNo
+                                        ORDER BY 
+                                            gl.gtype,  
+                                            CASE 
+                                                WHEN ac.name = 'Goods Receipt' THEN 1
+                                                WHEN ac.name = 'Input VAT' THEN 2
+                                                WHEN ac.name = 'Deferred Expanded Withholding Tax Payable' THEN 3
+                                                WHEN ac.name = 'Accounts Payable Trade' THEN 4
+                                                WHEN ac.name = 'Deferred Input VAT' THEN 5
+                                                WHEN ac.name = 'Expanded Withholding Tax Payable' THEN 6
+                                                ELSE 7
+                                            END,
+                                            gr_id,
+                                            CASE WHEN gl.gtype = 2 THEN gl.account END ASC,
+                                            i.item_code DESC;
+                                        
                                         "); 
 
                                         $groupedData = [];
@@ -258,8 +258,8 @@ require_once('../../config.php');
                                                                     $row['type'] = 2;
                                                                 }
                                                                 ?>
-                                                                <td class="debit_amount2 text-right"><?= $row['type'] == 1 ? number_format(abs($row['amount']), 2) : '' ?></td>
-                                                                <td class="credit_amount2 text-right"><?= $row['type'] == 2 ? number_format(abs($row['amount']), 2) : '' ?></td>
+                                                                <td class="debit_amount2 text-right"><?= $row['gtype'] == 1 ? number_format(abs($row['amount']), 2) : '' ?></td>
+                                                                <td class="credit_amount2 text-right"><?= $row['gtype'] == 2 ? number_format(abs($row['amount']), 2) : '' ?></td>
                                                                 <!-- <td class="text-right"><?= $row['item_code'] ?></td> -->
                                                             </tr>
                                                             <?php

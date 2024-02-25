@@ -149,8 +149,8 @@ $(document).ready(function() {
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="hidden" value="<?php echo $level; ?>">
-			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<input type="text" value="<?php echo $level; ?>">
+			<input type="text" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="card-body">
 					<div class="row">
 					<div class="col-md-6 form-group">
@@ -193,7 +193,7 @@ $(document).ready(function() {
 									<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
 								<?php } ?>
 							</div> -->
-							<!-- <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control"> -->
+							<!-- <input type="text" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control"> -->
 						<div class="col-md-6 form-group">
 							<label for="department">Delivery Date:</label>
 							<?php
@@ -220,7 +220,7 @@ $(document).ready(function() {
 							</select>
 						</div>
 						<div class="col-md-6 form-group">
-							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
+							<input type="text" name ="po_id" value="<?php echo $id; ?>">
 							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
 							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
@@ -330,7 +330,7 @@ $(document).ready(function() {
 									<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
 								</td>
 								<td class="align-middle p-1">
-									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+									<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 									<input type="text" class="text-left w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
 								</td>
 								<td class="align-middle p-1 item-description">
@@ -342,11 +342,11 @@ $(document).ready(function() {
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'],2) ?>
 								</td>
 			
-									<input type="hidden" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
+									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
 			
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
 								</td>
 								<td class="align-middle p-0 text-center">
 									<textarea id="item_notes" name="item_notes[]"><?php echo empty($row['item_notes']) ? '' : $row['item_notes']; ?></textarea>
@@ -401,7 +401,7 @@ $(document).ready(function() {
 					</table>
 					<div class="row">
                         <div class="col-md-12">
-							<label for="notes" class="control-label">Notes:</label>
+							<label for="notes" class="control-label">Remarks:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
@@ -410,7 +410,7 @@ $(document).ready(function() {
 						<input type="text" value="0" name="selected_index">
 						<label for="status">Status:</label>
 						<select name="status" id="status" class="form-control">
-							<option value="0"></option>
+							<option value="0" disabled selected>Select a Status</option>
 							<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
 							<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
 							<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
@@ -447,7 +447,7 @@ $(document).ready(function() {
 			<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]">
 		</td>
 		<td class="align-middle p-1">
-			<input type="hidden" name="item_id[]">
+			<input type="text" name="item_id[]">
 			<input type="text" class="text-left w-100 border-0 item_id" id="item" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
@@ -457,11 +457,11 @@ $(document).ready(function() {
 		
 		<td class="align-middle p-1 text-right total-price">0</td>
 
-			<input type="hidden" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
+			<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
 
 		<td class="align-middle p-0 text-center">
-			<input type="hidden" class="item-checkbox">
-			<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+			<input type="text" class="item-checkbox">
+			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
 		</td>
 		<td class="align-middle p-0 text-center">
 			<textarea name="item_notes[]" id="item_notes"></textarea>

@@ -111,7 +111,7 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>employee/accounting/?page=po/items/" class="nav-link nav-items">
                       <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
-                        Items List
+                        Items/Services List
                         </p>
                       </a>
                     </li> 

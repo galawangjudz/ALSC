@@ -2,7 +2,7 @@
 require_once('../../../config.php');
 
 if(isset($_FILES["image"])){
-    $name = $_POST["name"];
+    $name = $_POST["imageName"];
     if($_FILES["image"]["error"] === 4){
         echo
         "<script> alert('Image Does Not Exist'); </script>"
@@ -31,16 +31,16 @@ if(isset($_FILES["image"])){
                 return;
             ;
         }else{
-            $newImageName = uniqid();
+            $newImageName = $fileName;
             $newImageName .= '.' . $imageExtension;
 
             move_uploaded_file($tmpName, 'attachments/' . $newImageName);
 
-            $query = "INSERT INTO tbl_vs_attachments VALUES('','$name', '$newImageName', '0', 'AP', '$v_num',NOW())";
-            mysqli_query($conn,$query);
-            echo
-            "'$name' successfully uploaded."
-            ;
+           $query = "INSERT INTO tbl_vs_attachments VALUES('','$newImageName', '0', 'AP', '$v_num',NOW())";
+           mysqli_query($conn,$query);
+           echo
+           "Attached na, ssob. Hihe."
+           ;
         }
     }
 }

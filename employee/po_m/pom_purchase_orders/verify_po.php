@@ -132,7 +132,7 @@ $(document).ready(function() {
 		// $('#discount_percentage').prop('readonly', true);
 		$('#tax_percentage').prop('readonly', true);
 		$('#tax_percentage').css('background-color', 'whitesmoke');
-        $('#notes').prop('readonly', true);
+        // $('#notes').prop('readonly', true);
 		$('#receiver').prop('readonly', true);
 		$('#receiver_contact_no').prop('readonly', true);
     }
@@ -233,7 +233,7 @@ $(document).ready(function() {
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<input type="text" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="card-body">
 					<div class="sup_cont">
 						<label for="supplier_id">Supplier:</label>
@@ -261,7 +261,7 @@ $(document).ready(function() {
 								//$vatable = $row['vatable'];
 							?>
 							<div>
-								<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
+								<p class="m-0"><input type="text" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
 								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $row['name'] ?>" readonly>
 							</div>
 							</div>
@@ -274,7 +274,7 @@ $(document).ready(function() {
 							<label for="department">Delivery Date:</label>
 							<?php
 							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
+							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;" readonly>
 						</div>
 					</div>
 					<div class="row">
@@ -283,7 +283,7 @@ $(document).ready(function() {
                     		<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
 						</div>
 						<div class="col-md-6 form-group">
-							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
+							<input type="text" name ="po_id" value="<?php echo $id; ?>">
 							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
 							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
@@ -329,7 +329,7 @@ $(document).ready(function() {
 							<p class="m-0"></p>
 						<?php endif; ?>
 					</div>
-			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
+			<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;">The checkbox is for viewing the computation in case an item was removed. Changes won't be saved. For item updates, use the Note Area/Remarks and set the status to 'For Review' for the Purchasing Officer's action.</div>
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="item-list">
@@ -380,7 +380,7 @@ $(document).ready(function() {
 									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:transparent"/>
 								</td>
 								<td class="align-middle p-1">
-									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+									<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" style="background-color:transparent" readonly/>
 								</td>
 								<td class="align-middle p-1 item-description">
@@ -391,10 +391,10 @@ $(document).ready(function() {
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
 								</td>
-									<input type="hidden" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
+									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
 								</td>
 
 								<td class="align-middle p-0 text-center">
@@ -441,34 +441,29 @@ $(document).ready(function() {
 											</td>
 										</tr>
 										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;">The following options are for viewing only; any changes you make will not be saved. </div>
 									</table>
 								</tr>
 							</tr>
 						</tfoot>
 					</table>
-					<input type="hidden" name="usertype" id="usertype" value="<?php echo $usertype; ?>">
+					<input type="text" name="usertype" id="usertype" value="<?php echo $usertype; ?>">
 					<div class="row">
                         <div class="col-md-12">
-							<label for="notes" class="control-label">Notes:</label>
-							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
+							<label for="notes" class="control-label">Remarks:</label>
+							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : ''; ?></textarea>
 						</div>
 					</div>
 					<div class="form-group">
-						<input type="hidden" value="<?php echo $level; ?>" name="level">
-						<input type="hidden" value="0" name="selected_index">
+						<input type="text" value="<?php echo $level; ?>" name="level">
+						<input type="text" value="0" name="selected_index">
 						<label for="status">Status:</label>
-
-
-				
-					
-							<select name="status" id="status" class="form-control">
-								<option value="0"></option>
-								<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
-								<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
-								<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
-							</select>
-
-					
+						<select name="status" id="status" class="form-control">
+							<option value="0" <?php echo $status == 0 ? 'selected' : ''; ?>>Select a Status</option>
+							<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
+							<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
+							<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
+						</select>
 					</div>
 			    </div>
             </div>
@@ -482,7 +477,7 @@ $(document).ready(function() {
 					<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" href="?page=fm_purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" href="?page=pom_purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -503,7 +498,7 @@ $(document).ready(function() {
 			<input type="text" class="text-right w-100 border-0 item-unit" name="default_unit[]">
 		</td>
 		<td class="align-middle p-1">
-			<input type="hidden" name="item_id[]">
+			<input type="text" name="item_id[]">
 			<input type="text" class="text-center w-100 border-0 item_id" id="item" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
@@ -516,7 +511,7 @@ $(document).ready(function() {
 		<td class="align-middle p-1 text-right total-price">0</td>
 		<td class="align-middle p-0 text-center">
 			<input type="checkbox" class="item-checkbox">
-			<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
 		</td>
 		<td class="align-middle p-0 text-center">
 			<textarea name="item_notes[]" id="item_notes"></textarea>
@@ -809,6 +804,12 @@ $('input[name="vatType"]').change(function() {
             var _this = $(this)
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger')
+
+			if ($('[name="status"]').val() == 0) {
+				alert_toast("Please select a valid status.", 'warning');
+				return false;
+			}
+			
 			if($('#item-list .po-item').length <= 0){
 				alert_toast(" Please add atleast 1 item on the list.",'warning')
 				return false;

@@ -415,7 +415,7 @@ $(document).ready(function() {
 				</table>
 				<div class="row">
 					<div class="col-md-6">
-						<label for="notes" class="control-label">Notes:</label>
+						<label for="notes" class="control-label">Remarks:</label>
 						<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0" style="pointer-events:none;"><?php echo isset($notes) ? $notes : '' ?></textarea>
 					</div>
 					<div class="col-md-6" id="hidden-status">
@@ -437,7 +437,7 @@ $(document).ready(function() {
 					<button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" form="po-form" id="save-button">Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/goods_receiving"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/goods_receiving/received_items_status"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -1006,6 +1006,12 @@ function calculateAmountExc(input) {
 		$('#po-form').submit(function (e) {
 			e.preventDefault();
 			var _this = $(this);
+			if ($('[name="del_items[]"]').filter(function () {
+        		return $(this).val() != 0;
+			}).length === 0) {
+				alert_toast(" Hala. Wala ka pong ni-received.", 'warning');
+				return false;
+			}
 
 			var confirmed = confirm("Are you sure you want to save?");
 

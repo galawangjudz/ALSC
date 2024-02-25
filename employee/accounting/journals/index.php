@@ -157,7 +157,7 @@ function format_num($number){
 				</thead>
 				<tbody>
 					<?php 
-					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by date_created desc");
+					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -174,10 +174,10 @@ function format_num($number){
 									data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary"></span>
 								</button>
-								<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+								<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Delete">
 									<span class="fa fa-trash text-danger"></span>
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['v_num'] ?>', '_blank')"
 										data-toggle="tooltip" data-placement="top" title="Print">
@@ -207,7 +207,7 @@ function format_num($number){
 				</thead>
 				<tbody>
 					<?php 
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(journal_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -219,10 +219,10 @@ function format_num($number){
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
 							</button>
-							<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['v_num'] ?>', '_blank')"
 									data-toggle="tooltip" data-placement="top" title="Print">
@@ -251,7 +251,7 @@ function format_num($number){
 				</thead>
 				<tbody>
 					<?php 
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_code order by date(journal_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_code order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -263,10 +263,10 @@ function format_num($number){
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary"></span>
 							</button>
-							<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger"></span>
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['v_num'] ?>', '_blank')"
 									data-toggle="tooltip" data-placement="top" title="Print">
@@ -302,7 +302,7 @@ function format_num($number){
 					
 					//$users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					//$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `property_clients` s on j.supplier_id = s.client_id order by date(journal_date) asc");
+					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `property_clients` s on j.supplier_id = s.client_id order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -332,10 +332,10 @@ function format_num($number){
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
 							</button>
-							<button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['v_num'] ?>', '_blank')"
 									data-toggle="tooltip" data-placement="top" title="Print">
@@ -349,23 +349,32 @@ function format_num($number){
 		</div>
 	</div>
 </div>
-
 <script>
 $(document).ready(function() {
     $("input[type=radio][name=divChoice]").change(function() {
         var selectedValue = $(this).val();
 
-        $("#emp-div, #agent-div, #sup-div,#client-div").hide();
+        $("#emp-div, #agent-div, #sup-div, #client-div").hide();
         $(".dataTables_length, .dataTables_info, .dataTables_paginate, .dataTables_filter").hide();
 
-
         $("#" + selectedValue).show();
+        
+        // Destroy existing DataTables instances
+        $(".table").DataTable().destroy();
+
+        // Initialize DataTable for the selected table
+        $("#" + selectedValue).DataTable({
+            // your DataTable options here
+        });
+
         $("#" + selectedValue + "_wrapper .dataTables_length, " +
             "#" + selectedValue + "_wrapper .dataTables_info, " +
             "#" + selectedValue + "_wrapper .dataTables_paginate, " +
             "#" + selectedValue + "_wrapper .dataTables_filter").show();
     });
 });
+</script>
+<script>
 
 	$(document).ready(function(){
 		// $('#create_new').click(function(){
@@ -414,12 +423,6 @@ $(document).ready(function() {
 		$('.delete_data').click(function(){
 			_conf("Are you sure you want to delete this voucher setup entry permanently?","delete_vs",[$(this).attr('data-id')])
 		})
-		$('.table td,.table th').addClass('py-1 px-2 align-middle')
-		$('.table').dataTable({
-            columnDefs: [
-                { orderable: false, targets: [2,4] }
-            ],
-        });
 	})
 	function delete_vs($id){
 		start_loader();

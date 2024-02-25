@@ -146,6 +146,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 </head>
 <body>
 <div class="card card-outline card-primary">
@@ -161,56 +163,55 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
                     <tr>
                         <td>
-                            <label for="name" class="control-label" >File Name:</label>
-                        </td>
-                        <td>
-                            <input type="text" name="name" id="name" class="form-control form-control-sm form-control-border rounded-0" required value="">
-                        </td>
-                        <td>
-                            <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value=""><i>(.jpg, .png, .jpeg, .pdf, .gif)</i>
+                        <!-- <label for="image" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Custom Upload
+                        </label>
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" style="display:none;"> -->
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
                         </td>
                         <td style="display:none;">
-                            <button type="submit" name="submit" id="picform_submit_button">Submit</button>
+                            <input type="hidden" name="imageName" id="imageName" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                        </td>
+                        <td style="display:none;">
+                            <button type="submit" name="submit" id="picform_submit_button"  class="btn btn-flat btn-sm btn-secondary">
+                            <i class="fa fa-paperclip" aria-hidden="true"></i> Confirm Attachment </button>
                         </td>
                     </tr>
-                </table>    
+                </table> 
+                <hr>
             </form>
         </div>
         <div id="attachments-container">
         <table class="table table-striped table-bordered" id="data-table" style="text-align:center;width:100%;">
-                <colgroup>
-                    <col width="25%">
-                    <col width="50%">
-                    <col width="25%">
-                </colgroup>
-                <thead>
-                    <tr class="bg-navy disabled">
-                        <th class="px-1 py-1 text-center">Name</th>
-                        <th class="px-1 py-1 text-center">Attachment</th>
-                        <th class="px-1 py-1 text-center">Date/Time Attached</th>
-                    </tr>
-                </thead>
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <thead>
+                <tr class="bg-navy disabled">
+                    <th class="px-1 py-1 text-center">Attachment/s</th>
+                    <th class="px-1 py-1 text-center">Date/Time Attached</th>
+                </tr>
+            </thead>
             <?php 
             $i = 1;
-            $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo;");
+            $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo ORDER BY date_attached DESC");
             ?>
             <?php if (mysqli_num_rows($rows) > 0): ?>
                 <?php foreach($rows as $row):?>
                 <tr>
                     <td>
-                            <?php echo $row["name"]; ?>
-                    </td>
-                    <td>
-                        <?php
+                    <?php
                         $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
                         $filePath = "journals/attachments/" . $row['image'];
+
                         if (strtolower($fileExtension) == 'pdf'): ?>
-                            <a href="<?php echo $filePath; ?>" data-lightbox="<?php echo $row['name']; ?>" data-title="<?php echo $row['name']; ?>">
-                                <img src="<?php echo $filePath; ?>" alt="PDF Icon" width="200" height="200">
+                            <a data-fancybox data-src="<?php echo $filePath; ?>" data-type="iframe" href="javascript:;">
+                                <img src="journals/vs/pdf-icon.png" alt="PDF Icon" width="25" height="25">
                             </a>
                         <?php else: ?>
-                            <a href="<?php echo $filePath; ?>" data-lightbox="<?php echo $row['name']; ?>" data-title="<?php echo $row['name']; ?>">
-                                <img src="<?php echo $filePath; ?>" alt="" width="200" height="200">
+                            <a data-fancybox="images" href="<?php echo $filePath; ?>" data-caption="<?php echo $row['image']; ?>">
+                                <img src="<?php echo $filePath; ?>" alt="" width="25" height="25">
                             </a>
                         <?php endif; ?>
                     </td>
@@ -269,7 +270,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="client_id">Client:</label>
-                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
+                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM property_clients ORDER BY `last_name` ASC");
@@ -437,21 +438,35 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </table>
 </body>
 <script>
-document.getElementById('picform').addEventListener('submit', function(event) {
-    event.preventDefault(); 
-    var formData = new FormData(this);
+$(document).ready(function() {
+    $('.table th, .table td').addClass('px-1 py-0 align-middle');
+    $('#data-table').DataTable({
+        "lengthMenu": [[2], [2]], 
+        "paging": true 
+    });
+});
+</script>   
+<script>
+document.getElementById('image').addEventListener('change', function() {
+    var formData = new FormData(document.getElementById('picform'));
+
     fetch('journals/vs_attachments.php', {
         method: 'POST',
         body: formData,
     })
     .then(response => response.text())
     .then(data => {
-        alert(data);
+        if (data.startsWith('Attached na, ssob. Hihe.')) {
+            alert_toast(data, 'success'); 
+        } else {
+            alert_toast(" Invalid file. Huwag ipilit bhe. Hindi iyan mag-save.", 'error'); 
+        }
     })
     .catch(error => {
         console.error('Error:', error);
     });
 });
+
 document.addEventListener("DOMContentLoaded", function() {
     var selectedOption = document.getElementById('client_id').options[document.getElementById('client_id').selectedIndex];
     console.log("Selected Option:", selectedOption);
@@ -630,28 +645,59 @@ function updateAccCode(_this) {
         el.addClass("pop-msg alert");
         el.hide();
         if ($('#acc_list tbody tr').length <= 0) {
-            el.addClass('alert-danger').text(" Account Table is empty.");
-            _this.prepend(el);
-            el.show('slow');
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            alert_toast(" Account Table is empty.", 'warning');
             return false;
         }
+
         if ($('#acc_list tfoot .total-balance').text() !== '0') {
             console.log($('#acc_list tfoot .total-balance').text());
-
-            el.addClass('alert-danger').text(" Hindi equal, lods.");
-            _this.prepend(el);
-            el.show('slow');
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            alert_toast(" Hindi equal. :((", 'warning');
             return false;
         }
+
         if ($('.total_debit').text() == '0' && $('.total_credit').text() == '0') {
             console.log($('#acc_list tfoot .total-balance').text());
+            alert_toast(" Account table is empty.", 'warning');
+            return false;
+        }
 
-            el.addClass('alert-danger').text(" Account table is empty.");
-            _this.prepend(el);
-            el.show('slow');
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
+        function hasAPT() {
+            var hasAPT = false;
+
+            $('#acc_list .po-item input[name="account_id[]"]').each(function () {
+                var accountValue = $(this).val().trim();
+
+                if (accountValue === '21002') {
+                    hasAPT = true;
+                    return false; 
+                }
+            });
+
+            return hasAPT;
+        }
+
+        if (!hasAPT()) {
+            alert_toast(" Accounts Payable Trade is missing!", 'warning');
+            return false;
+        }
+
+        function hasZeroAmount() {
+            var hasZeroAmount = false;
+
+            $('#acc_list .po-item input[name="amount[]"]').each(function () {
+                var amountValue = parseFloat($(this).val().trim());
+
+                if (amountValue === 0 || isNaN(amountValue)) {
+                    hasZeroAmount = true;
+                    return false;
+                }
+            });
+
+            return hasZeroAmount;
+        }
+
+        if (hasZeroAmount()) {
+            alert_toast(" One or more amount fields have zero value.", 'warning');
             return false;
         }
         start_loader();
@@ -704,10 +750,10 @@ function updateAccCode(_this) {
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var saveJournalButton = document.getElementById("save_journal");
-        var submitButton = document.getElementById("picform_submit_button");
+        //var submitButton = document.getElementById("picform_submit_button");
 
         saveJournalButton.addEventListener("click", function () {
-            submitButton.click();
+           // submitButton.click();
         });
     });
 </script>

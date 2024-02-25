@@ -286,17 +286,7 @@ $(document).ready(function() {
 								<input type="number" step="any" class="text-right w-100 border-0" name="outstanding[]"  id="txtoutstanding" value="<?php echo ($row['outstanding']) ?>"  style="pointer-events:none;border:none;background-color: gainsboro;" readonly/>
 							</td>
 							<td class="align-middle p-1">
-							<input 
-    type="number" 
-    step="any" 
-    class="text-right w-100 border-0 txtdel" 
-    name="del_items[]" 
-    id="txtdelitems" 
-    style="background-color: yellow; text-align: center;" 
-    value="0" 
-    onblur="calculateAmount(this)"
-/>
-
+								<input type="number" step="any" class="text-right w-100 border-0 txtdel" name="del_items[]" id="txtdelitems" style="background-color: yellow; text-align: center;" value="0" onblur="calculateAmount(this)"/>
 							</td>
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
@@ -415,7 +405,7 @@ $(document).ready(function() {
 				</table>
 				<div class="row">
 					<div class="col-md-6">
-						<label for="notes" class="control-label">Notes:</label>
+						<label for="notes" class="control-label">Remarks:</label>
 						<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0" style="pointer-events:none;"><?php echo isset($notes) ? $notes : '' ?></textarea>
 					</div>
 					<div class="col-md-6" id="hidden-status">
@@ -1016,6 +1006,13 @@ function calculateAmountExc(input) {
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger');
 
+			if ($('[name="del_items[]"]').filter(function () {
+				return $(this).val() != 0;
+			}).length === 0) {
+				alert_toast("Zero delivered items!", 'warning');
+				return false;
+			}
+			
 			if ($('#item-list .po-item').length <= 0) {
 				alert_toast(" Please add at least 1 item on the list.", 'warning');
 				return false;

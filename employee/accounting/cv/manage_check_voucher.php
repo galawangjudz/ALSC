@@ -33,6 +33,7 @@ if (isset($_GET['id'])) {
                 $docNoRow = $docNoQuery->fetch_assoc();
                 $docNo = $docNoRow['doc_no'];
                 $doc_no = $docNo;
+
             } else {
                 echo "Error executing doc_no query: " . $conn->error;
             }
@@ -40,7 +41,7 @@ if (isset($_GET['id'])) {
     }
 }
 $is_new_cn = true;
-$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'CV'");
+$query = $conn->query("SELECT COUNT(DISTINCT cv_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'CV'");
 
 if ($query) {
     $row = $query->fetch_assoc();
@@ -262,6 +263,7 @@ tr:hover {
                 event.preventDefault();
                 $('#loadingModal').show();
                 setTimeout(function() {
+                    
                     $('#loadingModal').hide();
                     $('#account_list').show();
                     $('#btnProceed').prop('disabled', true);
@@ -377,7 +379,7 @@ tr:hover {
                                 vs.due_date,
                                 vi.amount,
                                 COALESCE(s.id, pc.client_id, ta.c_code, u.user_code) AS supId,
-                                COALESCE(s.name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
+                                COALESCE(s.short_name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
                                         CONCAT(ta.c_last_name, ', ', ta.c_first_name, ' ', ta.c_middle_initial),
                                         CONCAT(u.lastname, ', ', u.firstname)) AS supplier_name,
                                 vs.due_date,
@@ -474,6 +476,12 @@ tr:hover {
                 </div>
                 <br>
                 <div class="container-fluid" id="custom-container">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                            <label for="description" class="control-label">Check Name:</label>
+                            <input type="text" id="supplier_name" name="check_name" class="form-control" value="<?php echo isset($check_name) ? $check_name : '' ?>">
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label class="control-label">Account Code:</label>
@@ -577,14 +585,8 @@ tr:hover {
                             <textarea rows="2" id="description" name="description" class="form-control form-control-sm rounded-0" required><?= isset($description) ? $description : "" ?></textarea>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="description" class="control-label">Check Name:</label>
-                            <input type="text" id="supplier_name" name="check_name" class="form-control" value="<?php echo isset($check_name) ? $check_name : '' ?>">
-                        </div>
-                    </div>
-                    <button id="btnProceed" class="btn btn-flat btn-sm btn-secondary"><i class="fas fa-money-check-alt"></i> Create Check Voucher</button>
-                    <button type="button" id="addRowBtn" class="btn btn-primary">Add Row</button>
+                    <!-- <button id="btnProceed" class="btn btn-flat btn-sm btn-secondary"><i class="fas fa-money-check-alt"></i> Create Check Voucher</button> -->
+                    <button type="button" id="addRowBtn" class="btn btn-flat btn-sm btn-secondary"><i class="fas fa-money-check-alt"></i> Create Check Voucher</button>
 
 
                     <div id="loadingModal" class="modal">
@@ -756,25 +758,54 @@ tr:hover {
 </body>
 <script>
 $(document).ready(function() {
-    $("#addRowBtn").one('click', function(event) {
-        event.preventDefault();
-        console.log("Button Clicked");
-
+    $("#addRowBtn").on('click', function(event) {
+        var amountValue = $('#amount').val();
+        var accNameValue = $('#AccName').val();
+        var checkNum = $('#check_num').val();
         var globalSupTypeInputValue = $("#globalSupTypeInput").val();
 
-        addRow($('#apCode').val(), $('#amount').val(), 1);
-        if (globalSupTypeInputValue === '1') {
-            addRow($('#vatCode').val(), $('#vat_amount').val(), 1);
-        }
-        addRow($('#AccCode').val(), $('#amount').val(), 2);
-        if (globalSupTypeInputValue === '1') {
-            addRow($('#divCode').val(), $('#div_amount').val(), 2);
-        }
-        updateCounter();
-        updateTotals();
-        $("#addRowBtn").off('click');
-    });
+        if (!checkNum || checkNum.trim() === '' || !amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '' || !checkNum || checkNum.trim() === '') {
+            alert_toast(' Please check empty fields before proceeding.', 'warning');
+            event.preventDefault(); 
+            return;
+        } else {
+            // var isConfirmed = confirm('Are you sure you want to create the check voucher?');
+            // if (isConfirmed) {
+            //     event.preventDefault();
+            // $('#loadingModal').show();
+            // setTimeout(function() {
+                // $('#loadingModal').hide();
+                // $('#account_list').show();
+                // $('#btnProceed').prop('disabled', true);
+                // $('#check_date').prop('readonly', true);
+                // $('#check_num').prop('readonly', true);
+                // $('#data-table').addClass('disabled-table');
+                // $('#acc-table').addClass('disabled-table');
+                // $('#amount').prop('readonly', true);
+                // $('#description').prop('readonly', true);
+                // $('#save_journal').prop('disabled', false);
 
+                console.log("Button Clicked");
+                clearTable();
+                var globalSupTypeInputValue = $("#globalSupTypeInput").val();
+
+                addRow($('#apCode').val(), $('#amount').val(), 1);
+                if (globalSupTypeInputValue === '1') {
+                    addRow($('#vatCode').val(), $('#vat_amount').val(), 1);
+                }
+                addRow($('#AccCode').val(), $('#amount').val(), 2);
+                if (globalSupTypeInputValue === '1') {
+                    addRow($('#divCode').val(), $('#div_amount').val(), 2);
+                }
+                updateCounter();
+                updateTotals();
+                // }, 1000);
+            //}
+        }
+    });
+    function clearTable() {
+        $('#acc_list tbody').empty();
+    }
     function addRow(accountCode, amount, groupID) {
         var newRow = $("#item-clone tr.check-item").clone();
         newRow.find("input[name='account_id[]']").val(accountCode);
@@ -1112,8 +1143,6 @@ $c_num = isset($c_num) ? $c_num : '';
 
 </script>
 <script>
-    
-console.log('Script is running');
 $('#journal-form').submit(function (e) {
     e.preventDefault();
     var _this = $(this);
@@ -1121,31 +1150,64 @@ $('#journal-form').submit(function (e) {
     var el = $('<div>');
     el.addClass("pop-msg alert");
     el.hide();
-    // if ($('#acc_list tbody tr').length <= 0) {
-    //     el.addClass('alert-danger').text(" Account Table is empty.");
-    //     _this.prepend(el);
-    //     el.show('slow');
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //     return false;
-    // }
-    // if ($('#acc_list tfoot .total-balance').text() !== '0') {
-    //     console.log($('#acc_list tfoot .total-balance').text());
+    if ($('#acc_list tbody tr').length <= 0) {
+        alert_toast(" Account Table is empty.", 'warning');
+        return false;
+    }
 
-    //     el.addClass('alert-danger').text(" Hindi equal, lods.");
-    //     _this.prepend(el);
-    //     el.show('slow');
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //     return false;
-    // }
-    // if ($('.total_debit').text() == '0' && $('.total_credit').text() == '0') {
-    //     console.log($('#acc_list tfoot .total-balance').text());
+    if ($('#acc_list tfoot .total-balance').text() !== '0') {
+        console.log($('#acc_list tfoot .total-balance').text());
+        alert_toast(" Hindi balance. :((", 'warning');
+        return false;
+    }
 
-    //     el.addClass('alert-danger').text(" Account table is empty.");
-    //     _this.prepend(el);
-    //     el.show('slow');
-    //     $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //     return false;
-    // }
+    if ($('.total_debit').text() == '0' && $('.total_credit').text() == '0') {
+        console.log($('#acc_list tfoot .total-balance').text());
+        alert_toast(" Account table is empty.", 'warning');
+        return false;
+    }
+
+    function hasAPT() {
+        var hasAPT = false;
+
+        $('tr.check-item').each(function () {
+            var accountValue = $(this).find('input[name="account_id[]"]').val().trim();
+
+            if (accountValue === '21002') {
+                hasAPT = true;
+                return false; // Break the loop since we found the account
+            }
+        });
+
+        return hasAPT;
+    }
+
+
+
+    if (!hasAPT()) {
+        alert_toast(" Accounts Payable Trade is missing!", 'warning');
+        return false;
+    }
+
+    function hasZeroAmount() {
+        var hasZeroAmount = false;
+
+        $('#acc_list .po-item input[name="amount[]"]').each(function () {
+            var amountValue = parseFloat($(this).val().trim());
+
+            if (amountValue === 0 || isNaN(amountValue)) {
+                hasZeroAmount = true;
+                return false;
+            }
+        });
+
+        return hasZeroAmount;
+    }
+
+    if (hasZeroAmount()) {
+        alert_toast(" One or more amount fields have zero value.", 'warning');
+        return false;
+    }
     start_loader();
     var urlSuffix;
     <?php if (!empty($_GET['id'])) { ?>
@@ -1172,6 +1234,7 @@ $('#journal-form').submit(function (e) {
             if (resp.status == 'success') {
                 $('#successModal .modal-body p').text('Your data has been saved successfully!');
                 $('#successModal').modal('show');
+                location.replace('./?page=cv')
             } else if (!!resp.msg) {
                 el.addClass("alert-danger");
                 el.text(resp.msg);

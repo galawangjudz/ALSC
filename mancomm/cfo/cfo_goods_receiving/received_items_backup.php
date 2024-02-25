@@ -173,7 +173,7 @@ $level = $_settings->userdata('type');
 					</table>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="notes" class="control-label">Notes:</label>
+							<label for="notes" class="control-label">Remarks:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 						<?php if ($level < 4){ ?>

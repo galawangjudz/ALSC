@@ -64,22 +64,26 @@
                 $displayCode = '';
 
                 $qry = $conn->query("SELECT
-                    COALESCE(s.short_name, CONCAT(t.c_last_name, ', ', t.c_first_name, ' ',t.c_middle_initial), CONCAT(pc.last_name, ', ',pc.first_name, ' ' ,pc.middle_name), CONCAT(u.lastname, ', ',u.firstname)) AS name,
-                    a.doc_type, a.account,
-                    a.doc_no,
-                    a.journal_date,
-                    a.amount,
-                    ac.code,
-                    ac.name AS acName
-                    FROM
-                        tbl_gl_trans a
-                    JOIN tbl_gr_list b ON a.doc_no = b.doc_no
-                    JOIN account_list ac ON a.account = ac.code
-                    LEFT JOIN supplier_list s ON b.supplier_id = s.id
-                    LEFT JOIN t_agents t ON b.supplier_id = t.c_code
-                    LEFT JOIN property_clients pc ON b.supplier_id = pc.client_id
-                    LEFT JOIN users u ON b.supplier_id = u.user_code
-                    ORDER BY a.journal_date DESC;
+                COALESCE(je.name,s.short_name, CONCAT(t.c_last_name, ', ', t.c_first_name, ' ',t.c_middle_initial), CONCAT(pc.last_name, ', ',pc.first_name, ' ' ,pc.middle_name), CONCAT(u.lastname, ', ',u.firstname)) AS name,
+                a.doc_type,
+                a.account,
+                a.doc_no,
+                a.journal_date,
+                a.amount,
+                ac.code,
+                ac.name AS acName,
+                je.jv_num
+            FROM
+                tbl_gl_trans a
+            JOIN tbl_gr_list b ON a.doc_no = b.doc_no
+            JOIN account_list ac ON a.account = ac.code
+            LEFT JOIN supplier_list s ON b.supplier_id = s.id
+            LEFT JOIN t_agents t ON b.supplier_id = t.c_code
+            LEFT JOIN property_clients pc ON b.supplier_id = pc.client_id
+            LEFT JOIN users u ON b.supplier_id = u.user_code
+            LEFT JOIN jv_entries je ON a.vs_num = je.jv_num
+            ORDER BY a.journal_date DESC;
+            
                 ");
 
                 while ($row = $qry->fetch_assoc()):

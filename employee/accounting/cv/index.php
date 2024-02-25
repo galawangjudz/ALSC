@@ -184,8 +184,8 @@ function format_num($number){
 								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<!-- <div class="dropdown-divider"></div>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 							</div>
 						</td>
 					</tr>
@@ -257,8 +257,8 @@ function format_num($number){
 								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_agent.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<!-- <div class="dropdown-divider"></div>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 							</div>
 						</td>
 					</tr>
@@ -331,8 +331,8 @@ function format_num($number){
 								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_emp.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<!-- <div class="dropdown-divider"></div>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 							</div>
 						</td>
 					</tr>
@@ -406,8 +406,8 @@ function format_num($number){
 								<a href="<?php echo base_url ?>/report/voucher_report/print_voucher_client.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+								<!-- <div class="dropdown-divider"></div>
+								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 							</div>
 						</td>
 					</tr>
