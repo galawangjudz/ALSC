@@ -1,5 +1,5 @@
-<?php require ('../config.php'); ?>
-<?php include "../inc/header.php" ?>
+<?php require ('../../config.php'); ?>
+<?php include "../../inc/header.php" ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,42 +18,13 @@
 </head>
 <body>
 <?php
-$qry = $conn->query("SELECT * FROM cv_entries WHERE c_num = '{$_GET['id']}' ");
+$qry = $conn->query("SELECT * FROM jv_entries WHERE jv_num = '{$_GET['id']}' ");
 $row = $qry->fetch_assoc();
-$cv_id = $row['c_num'];
-$check_num = $row['check_num'];
-$po_no = $row['po_no'];
-$supp_code = $row['supplier_id'];
-$cvdate = $row['check_date'];
+$jv_id = $row['jv_num'];
+$name = $row['name'];
+$trandate = $row['transaction_date'];
+$postingdate = $row['posting_date'];
 $desc = $row['description'];
-$check_name = $row['check_name'];
-
-$supp_name = "Not found in any source"; 
-
-
-$qry_supp = $conn->query("SELECT * FROM supplier_list WHERE id = '$supp_code'; ");
-$row_supp = $qry_supp->fetch_assoc();
-if (!empty($row_supp)) {
-    $supp_name = $row_supp['name'];
-} else {
-    $qry_supp = $conn->query("SELECT * FROM users WHERE user_code = '$supp_code'; ");
-    $row_supp = $qry_supp->fetch_assoc();
-    if (!empty($row_supp)) {
-        $supp_name = $row_supp['firstname'] . ' ' . $row_supp['lastname'];
-    } else {
-        $qry_supp = $conn->query("SELECT * FROM t_agents WHERE c_code = '$supp_code'; ");
-        $row_supp = $qry_supp->fetch_assoc();
-        if (!empty($row_supp)) {
-            $supp_name = $row_supp['c_first_name'] . ' ' . $row_supp['c_last_name'];
-        }else{
-            $qry_supp = $conn->query("SELECT * FROM property_clients WHERE client_id = '$supp_code'; ");
-            $row_supp = $qry_supp->fetch_assoc();
-            if (!empty($row_supp)) {
-                $supp_name = $row_supp['first_name'] . ' ' . $row_supp['last_name'];
-            }
-        }
-    }
-}
 ?>
 
 <style>
@@ -81,46 +52,22 @@ border-color: #007BFF;
             <tr>
                 <th class="report-header-cell">
                     <div class="header-info">
-                        <img src="images/Header.jpg" class="img-thumbnail" style="margin-left:120px;height:110px;width:750px;border:none;margin-bottom:-5px;z-index:-1;position:relative;margin-bottom:-35px;" alt="">
+                        <img src="../images/Header.jpg" class="img-thumbnail" style="margin-left:120px;height:110px;width:750px;border:none;margin-bottom:-5px;z-index:-1;position:relative;margin-bottom:-35px;" alt="">
                         <h6 style="margin-top:-25px;margin-left:335px;font-weight:normal;">Grand Royale Subdivision, Bulihan, Malolos City, Bulacan, Philippines</h6>
 
-                        <h3 style="margin-top:50px;margin-left:435px;font-weight:bold;font-family: 'Armata', sans-serif;">CHECK VOUCHER</h3>
+                        <h3 style="margin-top:50px;margin-left:435px;font-weight:bold;font-family: 'Armata', sans-serif;">JOURNAL VOUCHER</h3>
 
                         <div class="container" style="margin-top:15px;">
                         <table class="table table-bordered">
                             <tr>
                                 <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher No:</td>
-                                <td style="width:50%; padding: 4px 10px;"><?php echo $cv_id; ?></td>
+                                <td style="width:50%; padding: 4px 10px;"><?php echo $jv_id; ?></td>
                                 <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
-                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d'); ?></td>
+                                <td style="padding: 4px 10px;"><?php echo $postingdate; ?></td>
                             </tr>
                             <tr>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">PO No:</td>
-                                <td style="padding: 4px 10px;"><?php echo $po_no; ?></td>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Due Date:</td>
-                                <td style="padding: 4px 10px;"><?php echo $cvdate; ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Paid To:</td>
-                                <td style="padding: 4px 10px;"><?php echo $supp_name; ?></td>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">
-                                    <?php
-                                    if (ctype_alpha(substr($supp_code, 0, 1))) {
-                                        echo "Employee Code:";
-                                    } elseif (preg_match('/^\d{5,}$/', $supp_code)) {
-                                        echo "Agent Code:";
-                                    } else {
-                                        echo "Supplier Code:";
-                                    }
-                                    ?>
-                                </td>
-                                <td style="padding: 4px 10px;"><?php echo $supp_code; ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Check Name:</td>
-                                <td style="padding: 4px 10px;"><?php echo $check_name; ?></td>
-                                <td style="padding: 4px 10px;font-weight:bold;">Check #:</td>
-                                <td style="padding: 4px 10px;"><?php echo $check_num; ?></td>
+                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Name:</td>
+                                <td style="padding: 4px 10px;"><?php echo $name; ?></td>
                             </tr>
                         </table>
                             <hr>
@@ -153,11 +100,11 @@ border-color: #007BFF;
                         <tbody>
                             <?php 
                             $counter = 1;
-                            $jitems = $conn->query("SELECT DISTINCT a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
+                            $jitems = $conn->query("SELECT DISTINCT a.name, gl.gtype, gl.amount,gl.account
                             FROM tbl_gl_trans gl
-                            LEFT JOIN vs_items vi ON gl.vs_num = vi.journal_id
+                            LEFT JOIN jv_items ji ON gl.vs_num = ji.journal_id
                             LEFT JOIN account_list a ON gl.account = a.code
-                            WHERE gl.cv_num = '{$_GET['id']}' AND gl.doc_type='CV'
+                            WHERE gl.vs_num = '{$_GET['id']}' AND gl.doc_type='JV'
                             GROUP BY gl.account
                             ORDER BY gl.gtype;
                             ");

@@ -15,6 +15,8 @@ if (isset($_GET['id'])) {
                         FROM `cv_entries` a
                         JOIN `cv_items` b ON a.c_num = b.journal_id
                         WHERE a.c_num = '{$_GET['id']}' and b.account_id != '21002';");
+// if (isset($_GET['id'])) {
+//         $qry = $conn->query("SELECT * FROM cv_entries WHERE c_num = '{$_GET['id']}';");
 
     if ($qry->num_rows > 0) {
         $res = $qry->fetch_array();
@@ -24,7 +26,7 @@ if (isset($_GET['id'])) {
                 $$k = $v;
             }
         }
-        $acc_id = $account_id;
+        //$acc_id = $account_id;
         $publicId = $_GET['id'];
 
         if ($publicId > 0) {
@@ -82,7 +84,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
     $c_number = str_pad($next_c_number, STR_PAD_LEFT);
 }
-echo $publicId;
+//echo $publicId;
 ?>
 
 <style>
@@ -300,14 +302,15 @@ tr:hover {
         <div class="container-fluid" style="height:auto;width:auto;">
             <div class="container-fluid" id="custom-container">
                 <div class="row">
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-4 form-group">
+                        <input type="hidden" value="<?php $acc_id; ?>">
                         <input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>">
                         <div id="item_code_display" style="display:none;"></div>
                         <input type="hidden" id="globalSupTypeInput">
                         <label for="c_num" class="control-label">Check Voucher #:</label>
                         <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
                     </div>
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-4 form-group">
                         <label for="check_date">Check Date: <span class="po_err_msg text-danger"></span></label>
                         <?php
                         if (!empty($check_date)) {
@@ -318,14 +321,14 @@ tr:hover {
                         ?>     
                         <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" readonly required>
                     </div>
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-4 form-group">
                         <label class="control-label">Document #:</label>
                         <input type="text" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
                     </div>
-                    <div class="col-md-3 form-group">
+                    <!-- <div class="col-md-3 form-group">
                         <label for="check_num" class="control-label">Check #:</label>
-                        <input type="text" id="check_num" name="check_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($check_num) ? $check_num : "" ?>" required>
-                    </div>
+                        <input type="text" id="check_num" name="check_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($check_num) ? $check_num : "" ?>" style="background-color:yellow;" required>
+                    </div> -->
                 </div>
                 <hr>
                 <div class="row">
@@ -476,27 +479,31 @@ tr:hover {
                 </div>
                 <br>
                 <div class="container-fluid" id="custom-container">
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                            <label for="description" class="control-label">Check Name:</label>
-                            <input type="text" id="supplier_name" name="check_name" class="form-control" value="<?php echo isset($check_name) ? $check_name : '' ?>">
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label class="control-label">Account Code:</label>
                             <?php
-                                $sql = "SELECT code,name FROM account_list WHERE code = '$acc_id'";
+                            $code = '';
+                            if (!empty($_GET['id'])) {
+                                $sql = "SELECT ci.account_id, a.name, ci.amount
+                                        FROM account_list a 
+                                        INNER JOIN cv_items ci ON ci.account_id = a.code 
+                                        WHERE a.name != 'Accounts Payable Trade' 
+                                        AND a.name != 'Input VAT' 
+                                        AND a.name != 'Deferred Input VAT' 
+                                        AND ci.journal_id = '{$_GET['id']}' 
+                                        AND a.name LIKE '%Cash In%'";
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     $row = $result->fetch_assoc();
-                                    $code = $row['code'];
+                                    $code = $row['account_id'];
                                     $name = $row['name'];
-                                } else {
-                                    $code = '';
+                                    $amount = $row['amount'];
                                 }
+                            }
                             ?>
+
                             <input type="text" id="AccCode" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($code) ? $code : '' ?>" readonly>
                         </div>
                         <div class="col-md-4 form-group">
@@ -505,10 +512,10 @@ tr:hover {
                         </div>
                         <div class="col-md-4 form-group">
                             <label class="control-label">Amount:</label>
-                            <input type="text" id="amount" name="amount" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($amount) ? $amount : '' ?>">
+                            <input type="text" id="amount" name="amount" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($amount) ? number_format(abs($amount),2) : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display:none;">
                         <div class="col-md-4 form-group">
                             <?php
                                 $sql = "SELECT code,name FROM account_list WHERE name = 'Accounts Payable Trade'";
@@ -531,7 +538,7 @@ tr:hover {
                             <input type="text" id="apamount" name="apamount" class="form-control" value="<?php echo isset($amount) ? $amount : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display:none;">
                         <div class="col-md-4 form-group">
                             <?php
                                 $sql = "SELECT code,name,group_id FROM account_list WHERE name = 'Input VAT'";
@@ -554,7 +561,7 @@ tr:hover {
                             <input type="text" id="vat_amount" name="vat_amount" class="form-control">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display:none;">
                         <div class="col-md-4 form-group">
                             <?php
                                 $sql = "SELECT code,name,group_id FROM account_list WHERE name = 'Deferred Input VAT'";
@@ -599,8 +606,8 @@ tr:hover {
         <br>
         <div class="container-fluid">
             <div class="container-fluid">
-                    <input type="text" name="id" value="<?= isset($id) ? $id :'' ?>">
-                    <input type="text" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
+                    <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
+                    <input type="hidden" id="c_num" name="c_num" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $c_number ?>" readonly>
                         <table class="table table-striped table-bordered" id="acc_list">
 					    <colgroup>
                             <col width="5%">
@@ -644,9 +651,9 @@ tr:hover {
                                 </td>
                                 <td class="align-middle p-1">
                                     <input type="text" class="text-center w-100 border-0" name="account_id[]" value="<?= $row['account'] ?>" readonly>
-                                    <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
-                                    <input type="text" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
-                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_num) ? $v_num : "" ?>">
+                                    <input type="hidden" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
+                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
                                 </td>
                                 <td class="align-middle p-1">
                                 <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -730,9 +737,9 @@ tr:hover {
 		</td>
 		<td class="align-middle p-1">
 			<input type="text" class="text-center w-100 border-0" name="account_id[]" readonly>
-			<input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
-            <input type="text" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-            <input type="text" name="amount[]" value="">
+			<input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
+            <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
+            <input type="hidden" name="amount[]" value="">
 		</td>
 		<td class="align-middle p-1">
 		<select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -761,10 +768,11 @@ $(document).ready(function() {
     $("#addRowBtn").on('click', function(event) {
         var amountValue = $('#amount').val();
         var accNameValue = $('#AccName').val();
-        var checkNum = $('#check_num').val();
+        // var checkNum = $('#check_num').val();
         var globalSupTypeInputValue = $("#globalSupTypeInput").val();
 
-        if (!checkNum || checkNum.trim() === '' || !amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '' || !checkNum || checkNum.trim() === '') {
+        //if (!checkNum || checkNum.trim() === '' || !amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '' || !checkNum || checkNum.trim() === '') {
+        if (!amountValue || amountValue.trim() === '' || !accNameValue || accNameValue.trim() === '') {
             alert_toast(' Please check empty fields before proceeding.', 'warning');
             event.preventDefault(); 
             return;
@@ -968,22 +976,22 @@ function updateHiddenOptions() {
         return $(this).val();
     }).get();
 
-    $('.check-item select').each(function () {
+    $('.po-item select').each(function () {
         var currentSelect = $(this);
         var currentSelectedValue = currentSelect.val();
 
         currentSelect.find('option').each(function () {
             var optionValue = $(this).val();
             if (selectedAccountIds.includes(optionValue) && optionValue !== currentSelectedValue) {
-                $(this).attr('data-select2-id', null); 
-                $(this).prop('disabled', true); 
+                $(this).prop('disabled', true);
             } else {
                 $(this).prop('disabled', false);
             }
         });
-        currentSelect.select2(); 
+        currentSelect.trigger('change.select2');
     });
 }
+
 
 function updateAccCode(_this) {
     var selectedOption = _this.find('option:selected');
@@ -1170,19 +1178,17 @@ $('#journal-form').submit(function (e) {
     function hasAPT() {
         var hasAPT = false;
 
-        $('tr.check-item').each(function () {
-            var accountValue = $(this).find('input[name="account_id[]"]').val().trim();
+        $('#acc_list .check-item input[name="account_id[]"]').each(function () {
+            var accountValue = $(this).val().trim();
 
             if (accountValue === '21002') {
                 hasAPT = true;
-                return false; // Break the loop since we found the account
+                return false; 
             }
         });
 
         return hasAPT;
     }
-
-
 
     if (!hasAPT()) {
         alert_toast(" Accounts Payable Trade is missing!", 'warning');
@@ -1192,7 +1198,7 @@ $('#journal-form').submit(function (e) {
     function hasZeroAmount() {
         var hasZeroAmount = false;
 
-        $('#acc_list .po-item input[name="amount[]"]').each(function () {
+        $('#acc_list .check-item input[name="amount[]"]').each(function () {
             var amountValue = parseFloat($(this).val().trim());
 
             if (amountValue === 0 || isNaN(amountValue)) {

@@ -192,7 +192,6 @@ require_once('../../config.php');
                                             </td>
                                             <td class="">
                                                 <input type="text" name="account_code[]" value="<?= $row['account'] ?>" style="background-color:transparent;border:none;" readonly>
-            
                                             </td>
                                             <td class="">
                                                 <span><?= $row['name'] ?></span>

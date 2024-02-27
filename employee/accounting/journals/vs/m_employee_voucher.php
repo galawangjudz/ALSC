@@ -616,14 +616,12 @@ function updateHiddenOptions() {
         currentSelect.find('option').each(function () {
             var optionValue = $(this).val();
             if (selectedAccountIds.includes(optionValue) && optionValue !== currentSelectedValue) {
-                $(this).attr('data-select2-id', null); 
-                $(this).prop('disabled', true); 
+                $(this).prop('disabled', true);
             } else {
                 $(this).prop('disabled', false);
             }
         });
-
-        currentSelect.select2(); 
+        currentSelect.trigger('change.select2');
     });
 }
 

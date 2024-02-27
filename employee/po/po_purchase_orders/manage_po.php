@@ -318,7 +318,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]" style="background-color:gainsboro;" readonly/>
 			</td>
 			<td class="align-middle p-1 item-id">
-				<input type="text" name="item_id[]">
+				<input type="hidden" name="item_id[]">
 				<input type="text" class="text-left w-100 border-0 item_id" id="item" required oninput="clearDescriptionAndUnit(this)">
 			</td>
 			<td class="align-middle p-1 item-description"></td>

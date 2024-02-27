@@ -29,7 +29,7 @@ if (isset($_GET['id'])) {
 }
 $is_new_vn = true;
 
-$query = $conn->query("SELECT MAX(CAST(SUBSTRING(doc_no, 2) AS UNSIGNED)) AS max_doc_no FROM `tbl_gl_trans`");
+$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type = 'AP'");
 
 if ($query) {
     $row = $query->fetch_assoc();
@@ -37,15 +37,18 @@ if ($query) {
     if ($maxDocNo === null) {
         $maxDocNo = 0;
     }
-    if($publicId > 0){
-        $newDocNo = '2' . sprintf('%05d', $maxDocNo);
-    }else{
+    if ($publicId > 0) {
+
+        $newDocNo = $doc_no;
+        //echo "New_DOC" . $newDocNo . "<br>";
+    } else {
         $newDocNo = '2' . sprintf('%05d', $maxDocNo + 1);
+        //echo "Max_DOC" . $maxDocNo;
     }
 
-    //echo $newDocNo;
+    
+    
 } else {
-
     echo "Error executing query: " . $conn->error;
 }
 
@@ -161,8 +164,12 @@ function format_num($number){
 function updateAmount(input) {
     var inputValue = parseFloat($(input).val()) || 0;
     var amountTextbox = $(input).closest('tr').find('.amount-textbox');
+    var creditInput = $(input).closest('tr').find('.credit-amount-input');
+    var debitInput = $(input).closest('tr').find('.debit-amount-input');
     $(amountTextbox).val(inputValue);
-
+    var gtypeInput = $(input).closest('tr').find('input[name="gtype[]"]');
+    var isDebitTextbox = $(input).hasClass('debit-amount-input');
+    $(gtypeInput).val(isDebitTextbox ? '1' : '2');
     var table = $(input).closest('table');
 
     var totalDebit = 0;
@@ -178,42 +185,133 @@ function updateAmount(input) {
         totalCredit += value;
     });
 
-    table.find('.total_debit').text(totalDebit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    table.find('.total_credit').text(totalCredit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    function formatNumberWithCommas(number) {
+        return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    table.find('.total_debit').text(formatNumberWithCommas(totalDebit));
+    table.find('.total_credit').text(formatNumberWithCommas(totalCredit));
+
+    if (isDebitTextbox) {
+        $(creditInput).val('0');
+    } else {
+        $(debitInput).val('0');
+    }
 
     var balance = totalDebit - totalCredit;
     table.find('.total-balance').text(balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 }
+$('.tbl_acc').on('input', '.debit-amount-input, .credit-amount-input', function() {
+    validateAndFormat(this);
+});
 
-// $(document).ready(function() {
-//     function handleAccountSelectChange() {
-//         var selectedOption = $(this).find(':selected');
-//         var type = selectedOption.data('type');
+$('.tbl_acc').on('input', '.debit-amount-input, .credit-amount-input', function() {
+    formatNumber(this);
+});
+document.addEventListener('DOMContentLoaded', function() {
+    updateTotalsAfterRowDeletion(grId);
+    
+});
 
-//         var $row = $(this).closest('tr'); 
-//         var $debitInput = $row.find('.debit-amount-input');
-//         var $creditInput = $row.find('.credit-amount-input');
-
-//         if (type == 1) {
-//             $creditInput.prop('disabled', true);
-//             $debitInput.prop('disabled', false);
-//         } else if (type == 2) {
-//             $creditInput.prop('disabled', false);
-//             $debitInput.prop('disabled', true);
-//         }
-//     }
-
-//     $(document).on('change', '.accountSelect', handleAccountSelectChange);
-
-//     $('.accountSelect').each(function () {
-//         handleAccountSelectChange.call(this);
-//     });
-
-// });
 </script>
+<script>
+function validateAndFormat(input) {
+    input.value = input.value.replace(/[^0-9.]/g, '');
+}
+function formatNumber(input) {
+    let inputValue = input.value;
+    let numericValue = inputValue.replace(/[^0-9.]/g, '');
+    let floatValue = parseFloat(numericValue);
+    if (!isNaN(floatValue)) {
+        input.value = floatValue.toLocaleString('en-US');
+    } else {
+        input.value = 0;
+    }
+}
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 </head>
-
 <body>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+		<h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Voucher Setup Entry (Supplier)": "Add New Voucher Setup Entry (Supplier)" ?></b></i></h5>
+	</div>
+    <div class="card-body">
+        <label class="control-label">Add Attachment:</label>
+        <div id="picform-container">
+            <form action="" method="post" enctype="multipart/form-data" id="picform">
+                <table class="table table-bordered">
+                    <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+                    <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+                    <tr>
+                        <td>
+                        <!-- <label for="image" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Custom Upload
+                        </label>
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" style="display:none;"> -->
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+                        </td>
+                        <td style="display:none;">
+                            <input type="hidden" name="imageName" id="imageName" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                        </td>
+                        <td style="display:none;">
+                            <button type="submit" name="submit" id="picform_submit_button"  class="btn btn-flat btn-sm btn-secondary">
+                            <i class="fa fa-paperclip" aria-hidden="true"></i> Confirm Attachment </button>
+                        </td>
+                    </tr>
+                </table> 
+                <hr>
+            </form>
+        </div>
+        <div id="attachments-container">
+        <table class="table table-striped table-bordered" id="data-table" style="text-align:center;width:100%;">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <thead>
+                <tr class="bg-navy disabled">
+                    <th class="px-1 py-1 text-center">Attachment/s</th>
+                    <th class="px-1 py-1 text-center">Date/Time Attached</th>
+                </tr>
+            </thead>
+            <?php 
+            $i = 1;
+            $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo ORDER BY date_attached DESC");
+            ?>
+            <?php if (mysqli_num_rows($rows) > 0): ?>
+                <?php foreach($rows as $row):?>
+                <tr>
+                    <td>
+                    <?php
+                        $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+                        $filePath = "journals/attachments/" . $row['image'];
+
+                        if (strtolower($fileExtension) == 'pdf'): ?>
+                            <a data-fancybox data-src="<?php echo $filePath; ?>" data-type="iframe" href="javascript:;">
+                                <img src="journals/vs/pdf-icon.png" alt="PDF Icon" width="25" height="25">
+                            </a>
+                        <?php else: ?>
+                            <a data-fancybox="images" href="<?php echo $filePath; ?>" data-caption="<?php echo $row['image']; ?>">
+                                <img src="<?php echo $filePath; ?>" alt="" width="25" height="25">
+                            </a>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php $timestamp = strtotime($row["date_attached"]);
+                        $formattedDate = date('F j, Y g:i:sA', $timestamp);
+                        echo $formattedDate; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="3">No rows found</td>
+                </tr>
+            <?php endif; ?>
+        </table>
+        </div>
+    </div>
+</div>
 <div class="card card-outline card-primary">
     <div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Voucher Setup Entry": "Add New Voucher Setup Entry" ?></b></i></h5>
@@ -222,7 +320,8 @@ function updateAmount(input) {
         <div class="container-fluid">
             <div class="container-fluid">
                 <form action="" id="journal-form">
-                    <input type="text" name="id" value="<?= isset($id) ? $id :'' ?>">
+                    <input type="hidden" name="id" value="<?= isset($_GET['id']) ? $_GET['id'] :'' ?>">
+                    <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -329,7 +428,7 @@ function updateAmount(input) {
                                         <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                     </div>
                                 </div>
-                                <input type="text" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
+                                <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
                                 </div>
                             </div>
                             <br>
@@ -413,28 +512,37 @@ function updateAmount(input) {
                                 </td>
                                
                                 <td class="accountInfo text-center">
-                                <input type="text" name="gr_id[]" value="<?= $row['gr_id'] ?>">
-                                <input type="text" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
-                                <input type="text" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
-                                <input type="text" name="account_code[]" value="<?= $row['account_code'] ?>">
-                                <input type="text" name="account_id[]" value="<?= $row['account_id'] ?>">
-                                <input type="text" name="group_id[]" value="<?= $row['group_id'] ?>">
-                                <input type="text" name="amount[]" value="<?= abs($row['amount']) ?>" class="amount-textbox">
+                                <input type="hidden" name="gr_id[]" value="<?= $row['gr_id'] ?>">
+                                <input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($vs_num) ? $vs_num : "" ?>">
+                                <input type="hidden" name="doc_no[]" value="<?php echo $doc_no; ?>" readonly>
+                                <input type="hidden" name="account_code[]" value="<?= $row['account_code'] ?>">
+                                <input type="hidden" name="account_id[]" value="<?= $row['account_id'] ?>">
+                                <input type="hidden" name="group_id[]" value="<?= $row['group_id'] ?>">
+                                <input type="hidden" name="amount[]" value="<?= abs($row['amount']) ?>" class="amount-textbox">
                                 <span class="account_code"><?= $row['account_code'] ?></span>
                                 <span class="type" style="display:none;"><?= $row['type'] ?></span>
                                 </td>
                                 <td class="">
-                                    <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
-                                        <option value="" disabled selected></option>
-                                        <?php 
-                                        $selectedAccountIds = array();
-                                        $accountsResult = $conn->query("SELECT * FROM `account_list` WHERE delete_flag = 0 AND status = 1 ORDER BY name;");
-                                        while ($accountRow = $accountsResult->fetch_assoc()):
-                                            $selected = ($accountRow['code'] == $row['account_code']) ? 'selected' : '';
-                                            echo '<option value="' . $accountRow['id'] . '" data-code="' . $accountRow['code'] . '" ' . $selected . '>' . $accountRow['name'] . '</option>';
-                                        endwhile;
-                                        ?>
-                                    </select>
+                                <select id="account_id[]" class="form-control form-control-sm form-control-border select2 accountSelect">
+                                    <option value="" disabled selected></option>
+                                    <?php 
+                                    $accounts = $conn->query("SELECT a.*, g.name AS gname, g.type FROM `account_list` a INNER JOIN group_list g ON a.group_id = g.id WHERE a.delete_flag = 0 AND a.status = 1 ORDER BY gname, a.name;");
+                                    $currentGroup = null;
+                                    $groupedAccounts = array();
+
+                                    while($account = $accounts->fetch_assoc()):
+                                    ?>
+                                    <option value="<?= $account['id'] ?>" 
+                                            data-gr-id="<?= $gr_id ?>" 
+                                            data-group-id="<?= $account['group_id'] ?>" 
+                                            data-type="<?= $account['type'] ?>" 
+                                            data-account-code="<?= $account['code'] ?>" 
+                                            data-account-id="<?= $account['id'] ?>" 
+                                            <?= ($account['code'] == $row['account_code']) ? 'selected' : '' ?>>
+                                        <?= $account['name'] ?>
+                                    </option>
+                                    <?php endwhile; ?>
+                                </select>
                                 </td>
                                 <td class="">
                                 <div class="loc-cont">
@@ -501,7 +609,7 @@ function updateAmount(input) {
                                 <td class="debit_amount text-right">
                                     <?php if ($row['account_code'] == 'Goods Receipt' || $row['account_code'] == 'Deferred Expanded Withholding Tax Payable' || ($row['gtype'] == 1 && $row['account_code'] != 'Deferred Input VAT')): ?>
                                         <input type="text" class="debit-amount-input" value="<?= abs($row['amount']) ?>" oninput="updateAmount(this)">
-                                        <input type="text" name="gtype[]" value="1">
+                                        <input type="hidden" name="gtype[]" value="1">
                                         <?php else : ?>
                                         <input type="text" class="debit-amount-input" value="" oninput="updateAmount(this)">
                                     <?php endif; ?>
@@ -509,7 +617,7 @@ function updateAmount(input) {
                                 <td class="credit_amount text-right">
                                     <?php if ($row['gtype'] == 2 && $row['account_code'] != 'Goods Receipt' && $row['account_code'] != 'Deferred Expanded Withholding Tax Payable' || $row['account_code'] == 'Deferred Input VAT') : ?>
                                         <input type="text" class="credit-amount-input" value="<?= abs($row['amount']) ?>" oninput="updateAmount(this)">
-                                        <input type="text" name="gtype[]" value="2">
+                                        <input type="hidden" name="gtype[]" value="2">
                                     <?php else : ?>
                                         <input type="text" class="credit-amount-input" value="" oninput="updateAmount(this)">
                                     <?php endif; ?>
@@ -617,9 +725,28 @@ function updateAmount(input) {
         </div>
     </div>
 </div>
-
 <script>
+document.getElementById('image').addEventListener('change', function() {
+    var formData = new FormData(document.getElementById('picform'));
 
+    fetch('journals/vs_attachments.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.startsWith('Attached na, ssob. Hihe.')) {
+            alert_toast(data, 'success'); 
+        } else {
+            alert_toast(" Invalid file. Huwag ipilit bhe. Hindi iyan mag-save.", 'error'); 
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+<script>
 function updateDueDate() {
     var termsId = $('#termsTextbox').val();
 

@@ -149,8 +149,8 @@ $(document).ready(function() {
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="text" value="<?php echo $level; ?>">
-			<input type="text" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<input type="hidden" value="<?php echo $level; ?>">
+			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="card-body">
 					<div class="row">
 					<div class="col-md-6 form-group">
@@ -220,7 +220,7 @@ $(document).ready(function() {
 							</select>
 						</div>
 						<div class="col-md-6 form-group">
-							<input type="text" name ="po_id" value="<?php echo $id; ?>">
+							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
 							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
 							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
@@ -330,7 +330,7 @@ $(document).ready(function() {
 									<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
 								</td>
 								<td class="align-middle p-1">
-									<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 									<input type="text" class="text-left w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" required/>
 								</td>
 								<td class="align-middle p-1 item-description">
@@ -346,7 +346,7 @@ $(document).ready(function() {
 			
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
 								</td>
 								<td class="align-middle p-0 text-center">
 									<textarea id="item_notes" name="item_notes[]"><?php echo empty($row['item_notes']) ? '' : $row['item_notes']; ?></textarea>
@@ -367,7 +367,7 @@ $(document).ready(function() {
 									<th class="p-1 text-right" colspan="5">
 									VAT</th>
 									<th class="p-1 text-right" id="vat_total" name="tax_amount">0</th>
-									<input type="text" id="copytax" name="tax_amount">
+									<input type="hidden" id="copytax" name="tax_amount">
 								</tr>
 								<tr>
 									<th class="p-1 text-right" colspan="5">Total:</th>
@@ -393,21 +393,23 @@ $(document).ready(function() {
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
 										</tr>
-										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
 									</table>
 								</tr>
 							</tr>
 						</tfoot>
 					</table>
+					<br>
 					<div class="row">
                         <div class="col-md-12">
 							<label for="notes" class="control-label">Remarks:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
+					<br>
 					<div class="form-group">
-						<input type="text" value="<?php echo $level; ?>" name="level">
-						<input type="text" value="0" name="selected_index">
+						<input type="hidden" value="<?php echo $level; ?>" name="level">
+						<input type="hidden" value="0" name="selected_index">
 						<label for="status">Status:</label>
 						<select name="status" id="status" class="form-control">
 							<option value="0" disabled selected>Select a Status</option>
@@ -457,7 +459,7 @@ $(document).ready(function() {
 		
 		<td class="align-middle p-1 text-right total-price">0</td>
 
-			<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
+			<input type="hidden" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
 
 		<td class="align-middle p-0 text-center">
 			<input type="text" class="item-checkbox">
@@ -689,6 +691,10 @@ $('input[name="vatType"]').change(function() {
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger')
 			
+			if ($('[name="status"]').val() < 1 || $('[name="status"]').val() == null) {
+				alert_toast("Please update the status.", 'warning');
+				return false;
+			}
 			if($('#item-list .po-item').length <= 0){
 				alert_toast(" Please add atleast 1 item on the list.",'warning')
 				return false;

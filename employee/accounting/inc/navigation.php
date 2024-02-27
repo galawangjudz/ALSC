@@ -177,6 +177,22 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/check_list" class="nav-link nav-cl">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Check List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/display_doc/manage_dd" class="nav-link nav-dd">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Display Document
+                        </p>
+                      </a>
+                    </li> 
                     <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>Create Voucher Setup</i></b>

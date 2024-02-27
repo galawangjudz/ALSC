@@ -116,12 +116,12 @@ function format_num($number){
 								<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['jv_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Delete">
 									<span class="fa fa-trash text-danger"></span>
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-flat btn-default btn-sm print_data custom-badge" data-id="<?php echo $row['jv_num'] ?>"
-										onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_voucher.php?id=<?php echo $row['jv_num'] ?>', '_blank')"
+										onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_journal_voucher.php?id=<?php echo $row['jv_num'] ?>', '_blank')"
 										data-toggle="tooltip" data-placement="top" title="Print">
 									<span class="fas fa-print"></span>
-								</button> -->
+								</button>
 							</div>
 						</td>
 					</tr>

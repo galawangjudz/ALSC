@@ -233,8 +233,8 @@ $(document).ready(function() {
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="text" value="<?php echo $level; ?>">
-			<input type="text" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<input type="hidden" value="<?php echo $level; ?>">
+			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="card-body">
 					<div class="sup_cont">
 						<label for="supplier_id">Supplier:</label>
@@ -262,7 +262,7 @@ $(document).ready(function() {
 								//$vatable = $row['vatable'];
 							?>
 							<div>
-								<p class="m-0"><input type="text" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
+								<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
 								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $row['name'] ?>" readonly>
 							</div>
 							</div>
@@ -284,7 +284,7 @@ $(document).ready(function() {
                     		<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
 						</div>
 						<div class="col-md-6 form-group">
-							<input type="text" name ="po_id" value="<?php echo $id; ?>">
+							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
 							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
 							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
@@ -330,7 +330,7 @@ $(document).ready(function() {
 							<p class="m-0"></p>
 						<?php endif; ?>
 					</div>
-			<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;">The checkbox is for viewing the computation in case an item was removed. Changes won't be saved. For item updates, use the Note Area/Remarks and set the status to 'For Review' for the Purchasing Officer's action.</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="item-list">
@@ -381,7 +381,7 @@ $(document).ready(function() {
 									<input type="text" class="align-middle p-1 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:transparent"/>
 								</td>
 								<td class="align-middle p-1">
-									<input type="text" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
 									<input type="text" class="text-center w-100 border-0 item_id" id="item" value="<?php echo $row['name'] ?>" style="background-color:transparent" readonly/>
 								</td>
 								<td class="align-middle p-1 item-description">
@@ -395,7 +395,7 @@ $(document).ready(function() {
 									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
-									<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
+									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
 								</td>
 
 								<td class="align-middle p-0 text-center">
@@ -422,6 +422,7 @@ $(document).ready(function() {
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 								<tr>
+								<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;height:auto;">The checkbox is for viewing the computation in case an item was removed. Changes won't be saved. For item updates, use the Note Area/Remarks and set the status to 'For Review' for the Purchasing Officer's action.</div>
 									<table class="table-bordered">
 										<tr style="padding-left:150px;align-items: center;text-align: center;">
 											<td>
@@ -441,23 +442,25 @@ $(document).ready(function() {
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
 										</tr>
-										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
 										<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;">The following options are for viewing only; any changes you make will not be saved. </div>
 									</table>
 								</tr>
 							</tr>
 						</tfoot>
 					</table>
-					<input type="text" name="usertype" id="usertype" value="<?php echo $usertype; ?>">
+					<input type="hidden" name="usertype" id="usertype" value="<?php echo $usertype; ?>">
+					<br>
 					<div class="row">
                         <div class="col-md-12">
 							<label for="notes" class="control-label">Remarks:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
+					<br>
 					<div class="form-group">
-						<input type="text" value="<?php echo $level; ?>" name="level">
-						<input type="text" value="0" name="selected_index">
+						<input type="hidden" value="<?php echo $level; ?>" name="level">
+						<input type="hidden" value="0" name="selected_index">
 						<label for="status">Status:</label>
 
 					

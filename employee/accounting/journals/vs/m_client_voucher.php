@@ -345,7 +345,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="text" class="text-center w-100 border-0" name="account_id[]" value="<?= $row['account'] ?>" readonly>
                                     <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
                                     <input type="hidden" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
-                                    <input type="text" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
                                 </td>
                                 <td class="align-middle p-1">
                                 <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -413,7 +413,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			<input type="text" class="text-center w-100 border-0" name="account_id[]" readonly>
 			<input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>">
             <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
-            <input type="text" name="amount[]" value="">
+            <input type="hidden" name="amount[]" value="">
 		</td>
 		<td class="align-middle p-1">
 		<select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -618,14 +618,12 @@ function updateHiddenOptions() {
         currentSelect.find('option').each(function () {
             var optionValue = $(this).val();
             if (selectedAccountIds.includes(optionValue) && optionValue !== currentSelectedValue) {
-                $(this).attr('data-select2-id', null); 
-                $(this).prop('disabled', true); 
+                $(this).prop('disabled', true);
             } else {
                 $(this).prop('disabled', false);
             }
         });
-
-        currentSelect.select2(); 
+        currentSelect.trigger('change.select2');
     });
 }
 

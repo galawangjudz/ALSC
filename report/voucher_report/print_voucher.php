@@ -107,7 +107,13 @@ border-color: #007BFF;
                         <?php 
                             if (!isset($id) || $id === null) :
                                 $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
+                                $jitems = $conn->query("SELECT DISTINCT gl.gr_id,a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
+                            FROM tbl_gl_trans gl
+                            LEFT JOIN vs_items vi ON gl.vs_num = vi.journal_id
+                            LEFT JOIN account_list a ON gl.account = a.code
+                            WHERE gl.vs_num = '{$_GET['id']}' AND gl.doc_type='AP'
+                            GROUP BY gl.account
+                            ORDER BY gl.gtype;");
                                 // $jitems = $conn->query("SELECT DISTINCT vi.gr_id, vi.amount, vs.doc_no, gl.gtype AS `type`, gl.account, al.name, vi.phase, vi.block, vi.lot FROM vs_items vi INNER JOIN
                                 // vs_entries vs ON vi.journal_id = vs.v_num INNER JOIN 
                                 // tbl_gl_trans gl ON vs.doc_no = gl.doc_no INNER JOIN
@@ -153,10 +159,10 @@ border-color: #007BFF;
                                                 <span class="account_code"><?= $counter; ?></span>
                                             </td>
                                             <td class="" style="padding: 4px 10px;">
-                                                <span class="account_code"><?= $row['account_code'] ?></span>
+                                                <span class="account_code"><?= $row['account'] ?></span>
                                             </td>
                                             <td class="" style="padding: 4px 10px;">
-                                                <span class="account"><?= $row['account'] ?></span>
+                                                <span class="account"><?= $row['name'] ?></span>
                                             </td>
                                             <td class="">
                                                 <div class="loc-cont">
@@ -221,8 +227,8 @@ border-color: #007BFF;
                                                 }
                                                 ?>
 
-                                            <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
-                                            <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
+                                            <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['gtype'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                            <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['gtype'] == 2 ? number_format(abs($row['amount']), 2) : '' ?></td>
                                         </tr>
                                         <?php $counter++; endforeach; ?>
                                     </tbody>

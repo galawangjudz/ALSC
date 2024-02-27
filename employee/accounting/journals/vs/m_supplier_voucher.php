@@ -355,7 +355,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <input type="text" id="sup_code" class="form-control form-control-sm form-control-border rounded-0" readonly>
                                     </div>
                                 </div>
-                                <input type="text" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
+                                <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>" class="form-control">
                             </div>
                             </div>
                             <br>
