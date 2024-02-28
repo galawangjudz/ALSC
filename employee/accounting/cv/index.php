@@ -336,7 +336,7 @@ function format_num($number){
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>" data-name ="<?php echo $row['last_name'] ?>"><span class="fa fa-money-check text-success"></span> Check Details</a>
+								<a class="dropdown-item check_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-money-check text-success"></span> Check Details</a>
 								<!-- <div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 							</div>
@@ -416,15 +416,6 @@ function format_num($number){
 								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
 									<span class="fa fa-money-check text-success"></span> Check Details
 								</a>
-
-							
-								<div class="modal" id="checkDetailsModal">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<!-- Modal content goes here -->
-										</div>
-									</div>
-								</div>
 								<!-- <div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
 							</div>
@@ -475,9 +466,14 @@ $(document).ready(function() {
 		})
 		$('.check_data').click(function () {
 			var dataId = $(this).attr('data-id');
-			var dataName = $(this).attr('data-name');
-			//uni_modal("<i class='fa fa-edit'></i> Check Details", "check/manage_check.php?id=" + dataId + "&name=" + dataName);
-			uni_modal("<i class='fa fa-edit'></i> Check Details", "check/manage_check.php?id=" + dataId);
+			var modalTitle = "<i class='fa fa-edit'></i> Check Details";
+
+			var closeButton = '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+			closeButton += '<span aria-hidden="true">&times;</span></button>';
+
+			var modalContent = '<div class="modal-header">' + modalTitle + closeButton + '</div>';
+			var url = "check/manage_check.php?id=" + dataId;
+			uni_modal(modalContent, url);
 		});
 
         $('.modal-title').css('font-size', '18px');
@@ -491,6 +487,7 @@ $(document).ready(function() {
             ],
         });
 	})
+	
 	function delete_vs($id){
 		start_loader();
 		$.ajax({

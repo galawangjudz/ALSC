@@ -480,6 +480,12 @@ tr:hover {
                 <br>
                 <div class="container-fluid" id="custom-container">
                     <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label class="control-label">Check Name:</label>
+                            <input type="text" id="check_name" name="check_name" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo isset($check_name) ? $check_name : '' ?>"><br>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4 form-group">
                             <label class="control-label">Account Code:</label>
                             <?php
@@ -1108,14 +1114,14 @@ $c_num = isset($c_num) ? $c_num : '';
    
     $('#data-table tbody tr[data-v-num="' + selectedVNum + '"][data-v-amt="' + Amt + '"]').addClass('selected');
 
-  
+
     $('#v_num').val(selectedVNum);
     $('#po_no').val(poNo);
     $('#check_date').val(checkDate);
     $('#amount').val(Number(Math.abs(Amt)).toFixed(2).replace(/\.?0*$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     $('#apamount').val(Number(Math.abs(Amt)).toFixed(2).replace(/\.?0*$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     $('#supplier_id').val(supId);
-    $('#supplier_name').val(supName);
+    $('#check_name').val(supName);
     $('#AccName').val('');
     $('#AccCode').val('');
 

@@ -4520,7 +4520,7 @@ Class Master extends DBConnection {
 			}
 		}
 
-		$sql = "UPDATE `cv_entries` SET `description`='{$description}',`date_updated`=NOW() WHERE c_num = '{$c_num}' ";
+		$sql = "UPDATE `cv_entries` SET `description`='{$description}',`check_name` = '{$check_name}', `date_updated`=NOW() WHERE c_num = '{$c_num}' ";
 
 		$save = $this->conn->query($sql);
 		
@@ -4704,7 +4704,7 @@ Class Master extends DBConnection {
 
 	function claim_cv(){
 		extract($_POST);
-		$del = $this->conn->query("UPDATE cv_entries SET c_status = 1 where c_num = '{$id}'");
+		$del = $this->conn->query("UPDATE check_details SET c_status = 1, date_updated = NOW() WHERE c_num = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success'," Check Voucher has been updated successfully.");
@@ -4718,7 +4718,7 @@ Class Master extends DBConnection {
 
 	function unclaimed_cv(){
 		extract($_POST);
-		$del = $this->conn->query("UPDATE cv_entries SET c_status = 0 where c_num = '{$id}'");
+		$del = $this->conn->query("UPDATE check_details SET c_status = 0,date_updated = NOW() where c_num = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success'," Check Voucher has been updated successfully.");
