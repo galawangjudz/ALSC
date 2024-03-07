@@ -112,6 +112,19 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/finance_manager/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

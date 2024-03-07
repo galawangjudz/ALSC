@@ -18,7 +18,7 @@
 </head>
 <body>
 <?php
-$qry = $conn->query("SELECT * FROM jv_entries WHERE jv_num = '{$_GET['id']}' ");
+$qry = $conn->query("SELECT * FROM jv_entries WHERE jv_num = '{$_GET['id']}'");
 $row = $qry->fetch_assoc();
 $jv_id = $row['jv_num'];
 $name = $row['name'];
@@ -70,7 +70,7 @@ border-color: #007BFF;
                                 <td style="padding: 4px 10px;"><?php echo $name; ?></td>
                             </tr>
                         </table>
-                            <hr>
+                            <br>
                             <h6 style="font-weight:bold;margin-left:10px;">Particulars:</h6>
                             <table class="table table-bordered">
                                 <tr>
@@ -79,16 +79,16 @@ border-color: #007BFF;
                             </table>
                         <table id="account_list" class="table table-striped table-bordered">
                         <colgroup>
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="50%">
+                            <!-- <col width="10%"> -->
+                            <col width="15%">
+                            <col width="55%">
                             <!-- <col width="30%"> -->
                             <col width="15%">
                             <col width="15%">
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">Item No.</th>
+                                <!-- <th class="text-center">Item No.</th> -->
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
                                 <!-- <th class="text-center">Location</th> -->
@@ -102,19 +102,19 @@ border-color: #007BFF;
                             $counter = 1;
                             $jitems = $conn->query("SELECT DISTINCT a.name, gl.gtype, gl.amount,gl.account
                             FROM tbl_gl_trans gl
-                            LEFT JOIN jv_items ji ON gl.vs_num = ji.journal_id
+                            LEFT JOIN jv_items ji ON gl.jv_num = ji.journal_id
                             LEFT JOIN account_list a ON gl.account = a.code
-                            WHERE gl.vs_num = '{$_GET['id']}' AND gl.doc_type='JV'
+                            WHERE gl.jv_num = '{$_GET['id']}' AND gl.doc_type='JV'
                             GROUP BY gl.account
                             ORDER BY gl.gtype;
                             ");
                             while($row = $jitems->fetch_assoc()):
                                 ?>
                                 <tr>  
-                                    <td class="" style="padding: 4px 10px;">
+                                    <!-- <td class="" style="padding: 4px 10px;">
                                         <span class="account_code"><?= $counter; ?></span>
-                                    </td>
-                                    <td class="" style="padding: 4px 10px;">
+                                    </td> -->
+                                    <td class="" style="padding: 4px 10px;text-align:center;">
                                         <span class="account_code"><?= $row['account'] ?></span>
                                     </td>
                                     <td class="" style="padding: 4px 10px;">
@@ -182,7 +182,7 @@ border-color: #007BFF;
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="3" class="text-right">TOTAL</th>
+                                <th colspan="2" class="text-right">TOTAL</th>
                                 <th class="text-right total_debit">0.00</th>
                                 <th class="text-right total_credit">0.00</th>
                             </tr>

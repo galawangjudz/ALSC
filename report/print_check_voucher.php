@@ -21,7 +21,7 @@
 $qry = $conn->query("SELECT * FROM cv_entries WHERE c_num = '{$_GET['id']}' ");
 $row = $qry->fetch_assoc();
 $cv_id = $row['c_num'];
-$check_num = $row['check_num'];
+// $check_num = $row['check_num'];
 $po_no = $row['po_no'];
 $supp_code = $row['supplier_id'];
 $cvdate = $row['check_date'];
@@ -98,7 +98,7 @@ border-color: #007BFF;
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">PO No:</td>
                                 <td style="padding: 4px 10px;"><?php echo $po_no; ?></td>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Due Date:</td>
-                                <td style="padding: 4px 10px;"><?php echo $cvdate; ?></td>
+                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d', strtotime($cvdate)); ?></td>
                             </tr>
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Paid To:</td>
@@ -119,8 +119,8 @@ border-color: #007BFF;
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Check Name:</td>
                                 <td style="padding: 4px 10px;"><?php echo $check_name; ?></td>
-                                <td style="padding: 4px 10px;font-weight:bold;">Check #:</td>
-                                <td style="padding: 4px 10px;"><?php echo $check_num; ?></td>
+                                <!-- <td style="padding: 4px 10px;font-weight:bold;">Check #:</td>
+                                <td style="padding: 4px 10px;"><?php echo $check_num; ?></td> -->
                             </tr>
                         </table>
                             <hr>

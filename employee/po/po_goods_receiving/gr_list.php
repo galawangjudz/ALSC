@@ -37,9 +37,9 @@ if($_settings->chk_flashdata('success')): ?>
                 <thead>
                     <tr>
                         <th>GR #</th>
-                        <th>Remaining Balance</th>
+                        <!-- <th>Remaining Balance</th> -->
                         <th>Date/Time Received</th>
-                        <th>Action</th>
+                        <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,7 +59,7 @@ if($_settings->chk_flashdata('success')): ?>
                     <td>
                         <a data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
                     </td>
-                    <td><?php echo number_format($row['total_amount'],2) ?></td>
+                    <!-- <td><?php echo number_format($row['total_amount'],2) ?></td> -->
                     <td><?php echo $row["date_purchased"] ?></td>
                     <td align="center">
                     <!-- <div class="dropdown-menu" role="menu"> -->

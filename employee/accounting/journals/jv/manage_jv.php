@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
         $publicId = $_GET['id'];
 
         if ($publicId > 0) {
-            $docNoQuery = $conn->query("SELECT doc_no FROM tbl_gl_trans WHERE vs_num = '$publicId' and doc_type='JV'");
+            $docNoQuery = $conn->query("SELECT doc_no FROM tbl_gl_trans WHERE jv_num = '$publicId' and doc_type='JV'");
             if ($docNoQuery) {
                 $docNoRow = $docNoQuery->fetch_assoc();
                 $docNo = $docNoRow['doc_no'];
@@ -30,7 +30,7 @@ if (isset($_GET['id'])) {
 
 $is_new_vn = true;
 
-$query = $conn->query("SELECT COUNT(DISTINCT vs_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type='JV'");
+$query = $conn->query("SELECT COUNT(DISTINCT jv_num) AS max_doc_no FROM `tbl_gl_trans` WHERE doc_type='JV'");
 
 if ($query) {
     $row = $query->fetch_assoc();
@@ -132,6 +132,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         updateTotals();
     });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 </head>
 <body>
 <div class="card card-outline card-primary">
@@ -139,18 +142,112 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		<h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Journal Voucher Entry": "Add New Journal Voucher Entry" ?></b></i></h5>
 	</div>
     <div class="card-body">
+        <label class="control-label">Add Attachment:</label>
+        <div id="picform-container">
+            <form action="" method="post" enctype="multipart/form-data" id="picform">
+                <table class="table table-bordered">
+                    <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
+                    <input type="hidden" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>" readonly>
+                    <tr>
+                        <td>
+                        <!-- <label for="image" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Custom Upload
+                        </label>
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" style="display:none;"> -->
+                        <input type="file" name="image" id="image" accept=".jpg, .png, .jpeg, .pdf, .gif" value="">
+                        </td>
+                        <td style="display:none;">
+                            <input type="text" name="imageName" id="imageName" class="form-control form-control-sm form-control-border rounded-0" readonly>
+                        </td>
+                        <td style="display:none;">
+                            <button type="submit" name="submit" id="picform_submit_button"  class="btn btn-flat btn-sm btn-secondary">
+                            <i class="fa fa-paperclip" aria-hidden="true"></i> Confirm Attachment </button>
+                        </td>
+                    </tr>
+                </table> 
+                <hr>
+            </form>
+        </div>
+        <div id="attachments-container">
+        <table class="table table-striped table-bordered" id="data-table" style="text-align:center;width:100%;">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <thead>
+                <tr class="bg-navy disabled">
+                    <th class="px-1 py-1 text-center">Attachment/s</th>
+                    <th class="px-1 py-1 text-center">Date/Time Attached</th>
+                </tr>
+            </thead>
+            <?php 
+            $i = 1;
+            $rows = mysqli_query($conn, "SELECT * FROM tbl_vs_attachments WHERE doc_no = $newDocNo ORDER BY date_attached DESC");
+            ?>
+            <?php if (mysqli_num_rows($rows) > 0): ?>
+                <?php foreach($rows as $row):?>
+                <tr>
+                    <td>
+                        <?php
+                        $fileExtension = pathinfo($row['image'], PATHINFO_EXTENSION);
+                        $filePath = base_url . "employee/attachments/" . $row['image']; 
+
+                        if (strtolower($fileExtension) == 'pdf'): ?>
+                            <a data-fancybox data-src="<?php echo $filePath; ?>" data-type="iframe" href="javascript:;">
+                                <img src="<?php echo base_url . 'employee/icons/pdf-icon.png'; ?>" alt="PDF Icon" width="25" height="25">
+                            </a>
+                        <?php elseif (in_array(strtolower($fileExtension), ['xlsx'])): ?>
+                            <a href="<?php echo $filePath; ?>" download>
+                                <img src="<?php echo base_url . 'employee/icons/excel.png'; ?>" alt="XLSX Icon" width="25" height="25">
+                            </a>
+                        <?php elseif (in_array(strtolower($fileExtension), ['docx'])): ?>
+                            <a href="<?php echo $filePath; ?>" download>
+                                <img src="<?php echo base_url . 'employee/icons/docx.jpg'; ?>" alt="DOCX Icon" width="25" height="25">
+                            </a>
+                        <?php elseif (in_array(strtolower($fileExtension), ['csv'])): ?>
+                            <a href="<?php echo $filePath; ?>" download>
+                                <img src="<?php echo base_url . 'employee/icons/csv.png'; ?>" alt="CSV Icon" width="25" height="25">
+                            </a>
+                        <?php else: ?>
+                            <a data-fancybox="images" href="<?php echo $filePath; ?>" data-caption="<?php echo $row['image']; ?>">
+                                <img src="<?php echo $filePath; ?>" alt="" width="25" height="25">
+                            </a>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php $timestamp = strtotime($row["date_attached"]);
+                        $formattedDate = date('F j, Y g:i:sA', $timestamp);
+                        echo $formattedDate; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="3">No rows found</td>
+                </tr>
+            <?php endif; ?>
+        </table>
+        </div>
+    </div>
+</div>
+<div class="card card-outline card-primary">
+    <div class="card-body">
         <div class="container-fluid">
             <div class="container-fluid">
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($_GET['id']) ? ($_GET['id']) :'' ?>">
+                    <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="jv_num" class="control-label">Journal Voucher #:</label>
                             <input type="text" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>" readonly>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label class="control-label">Document #:</label>
                             <input type="text" id="newDocNo" name="newDocNo" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Reference #:</label>
+                            <input type="text" id="ref_no" name="ref_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($ref_no) ? $ref_no : "" ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -179,7 +276,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 					<table class="table table-striped table-bordered" id="acc_list">
 					<colgroup>
                             <col width="5%">
-                            <col width="10%">
+                            <!-- <col width="10%"> -->
                             <col width="25%">
                             <col width="40%">
                             <col width="10%">
@@ -188,7 +285,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 						<thead>
 							<tr class="bg-navy disabled">
 								<th class="px-1 py-1 text-center"></th>
-								<th class="px-1 py-1 text-center">Item #</th>
+								<!-- <th class="px-1 py-1 text-center">Item #</th> -->
 								<th class="px-1 py-1 text-center">Account Code</th>
 								<th class="px-1 py-1 text-center">Account Name</th>
 								<th class="px-1 py-1 text-center">Debit</th>
@@ -199,10 +296,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <?php 
                             if (!isset($id) || $id === null) :
                                 $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT gl.account,gl.amount, gl.doc_no, gl.gtype, a.name 
+                                $jitems = $conn->query("SELECT gl.c_status, gl.account,gl.amount, gl.doc_no, gl.gtype, a.name 
                                 FROM tbl_gl_trans gl LEFT JOIN account_list a ON
                                 gl.account = a.code
-                                WHERE gl.vs_num = '{$journalId}' and gl.doc_type = 'JV'
+                                WHERE gl.jv_num = '{$journalId}' and gl.doc_type = 'JV'
                                 ORDER BY (gl.gtype = 1) DESC, gl.gtype;
                                 ");
                                 $counter = 1;
@@ -212,7 +309,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <td class="align-middle p-1 text-center">
                                     <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                 </td>
-                                <td class="align-middle p-0 text-center">
+                                <td class="align-middle p-0 text-center" style="display:none;">
                                     <input type="number" class="text-center w-100 border-0" step="any" name="ctr" value="<?= $counter ?>" readonly required/>
                                 </td>
                                 <td class="align-middle p-1">
@@ -220,6 +317,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="hidden" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
                                     <input type="hidden" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
                                     <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
+                                    <input type="hidden" name="c_status" value="<?= $row['c_status'] ?>">
                                 </td>
                                 <td class="align-middle p-1">
                                 <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -278,14 +376,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 						<tfoot>
                             <tr class="bg-gradient-secondary">
                                 <tr>
-									<th class="p-1 text-right" colspan="3"><span>
+									<th class="p-1 text-right" colspan="2"><span>
 									
                                     <th colspan="1" class="text-right"><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>TOTAL</th>
                                     <th class="text-right total_debit"></th>
                                     <th class="text-right total_credit"></th>
                                 </tr>
                                 <tr>
-                                    <th colspan="4" class="text-center"></th>
+                                    <th colspan="3" class="text-center"></th>
                                     <th colspan="2" class="text-center total-balance"></th>
                                 </tr>
                             </tr>
@@ -299,7 +397,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		<table style="width:100%;">
 			<tr>
 				<td>
-					<button class="btn btn-flat btn-default bg-maroon" form="journal-form" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+					<button class="btn btn-flat btn-default bg-maroon" form="journal-form" style="width:100%;margin-right:5px;font-size:14px;" id="save_journal"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 				</td>
 				<td>
 					<a class="btn btn-flat btn-default" href="?page=journals/jv" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
@@ -313,14 +411,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		<td class="align-middle p-1 text-center">
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 		</td>
-		<td class="align-middle p-0 text-center">
+		<td class="align-middle p-0 text-center" style="display:none;">
 			<input type="number" class="text-center w-100 border-0" step="any" name="ctr" required/>
 		</td>
 		<td class="align-middle p-1">
 			<input type="text" class="text-center w-100 border-0" name="account_id[]" readonly>
-			<input type="hidden" id="vs_num" name="vs_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
+			<input type="hidden" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
             <input type="hidden" name="doc_no[]" value="<?php echo $newDocNo ?>" readonly>
             <input type="hidden" name="amount[]" value="">
+            <input type="hidden" name="c_status" value="0">
 		</td>
 		<td class="align-middle p-1">
 		<select id="account_id" class="form-control form-control-sm form-control-border select2" required>
@@ -377,6 +476,26 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </body>
 
 <script>
+document.getElementById('image').addEventListener('change', function() {
+    var formData = new FormData(document.getElementById('picform'));
+
+    fetch('journals/jv_attachments.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.startsWith('Attached na, ssob. Hihe.')) {
+            alert_toast(data, 'success'); 
+        } else {
+            alert_toast(" Invalid file. Huwag ipilit bhe. Hindi iyan mag-save.", 'error'); 
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
 $('#acc_list').on('input', '.debit, .credit', function() {
     updateTotals();
     validateAndFormat(this);
@@ -531,6 +650,7 @@ $(document).ready(function () {
 $('#journal-form').submit(function (e) {
     e.preventDefault();
     var _this = $(this);
+    var p_Id = document.getElementById('publicId').value;
     $('.pop-msg').remove();
     var el = $('<div>');
     el.addClass("pop-msg alert");
@@ -552,6 +672,12 @@ $('#journal-form').submit(function (e) {
         alert_toast(" Account table is empty.", 'warning');
         return false;
     }
+    if (p_Id === null || p_Id.trim() === "") {
+            if ($('#image').val() === "") {
+                alert_toast("Attached file is required.", 'warning');
+                return false;
+            }
+        }
 
     // function hasAPT() {
     //     var hasAPT = false;
@@ -639,5 +765,15 @@ $(document).ready(function() {
     });
 });
 
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var saveJournalButton = document.getElementById("save_journal");
+        //var submitButton = document.getElementById("picform_submit_button");
+
+        saveJournalButton.addEventListener("click", function () {
+           // submitButton.click();
+        });
+    });
 </script>
 </html>

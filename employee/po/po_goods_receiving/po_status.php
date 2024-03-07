@@ -50,9 +50,10 @@
 					<col width="10%">
 					<col width="10%">
 					<col width="10%">
-					<col width="35%">
-					<col width="20%">
+					<col width="30%">
 					<col width="10%">
+					<col width="9%">
+					<col width="9%">
 					<col width="5%">
 					<col width="7%">
 				</colgroup>
@@ -63,6 +64,7 @@
 						<th>PO #</th>
 						<th>Supplier</th>
 						<th>Requesting Dept.</th>
+						<th>Remaining Balance</th>
 						<th>Total Amount</th>
 						<th>Status</th>
 						<th>Action</th>
@@ -75,7 +77,20 @@
 					while($row = $qry->fetch_assoc()):
 						$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 						$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
-					
+						$result = $conn->query("SELECT o.date_purchased, g.doc_no, g.gr_id, g.po_id, SUM(o.outstanding * o.unit_price) AS rem_bal
+                        FROM tbl_gr_list g
+                        INNER JOIN approved_order_items o ON g.gr_id = o.gr_id
+                        WHERE g.po_id = '{$row['id']}'
+                        GROUP BY g.gr_id, g.po_id
+                        ORDER BY g.gr_id DESC
+                        LIMIT 1");
+							if ($result && $result->num_rows > 0) {
+								$row_rem_bal = $result->fetch_assoc();
+
+								$row['rem_bal'] = $row_rem_bal['rem_bal'];
+							} else {
+								$row['rem_bal'] = 0; 
+							}
 					?>
 					<tr>
 						<td class="text-center"><?php echo $i++; ?></td>
@@ -83,6 +98,7 @@
 						<td class=""><?php echo $row['po_no'] ?></td>
 						<td class=""><?php echo $row['sname'] ?></td>
 						<td class=""><?php echo $row['department'] ?></td>
+						<td class="text-right"><?php echo number_format($row['rem_bal'],2) ?></td>
 						<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
 						<td>
 							<?php 

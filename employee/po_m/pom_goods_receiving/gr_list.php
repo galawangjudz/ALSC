@@ -37,7 +37,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <thead>
                 <tr>
                     <th>GR #</th>
-                    <th>Remaining Balance</th>
+                    <!-- <th>Remaining Balance</th> -->
                     <th>Date/Time Received</th>
                     <th>Action</th>
                 </tr>
@@ -59,7 +59,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <td>
                     <a data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
                 </td>
-                <td><?php echo number_format($row['total_amount'],2) ?></td>
+                <!-- <td><?php echo number_format($row['total_amount'],2) ?></td> -->
                 <td><?php echo $row["date_purchased"] ?></td>
                 <td align="center">
                     <!-- <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -67,7 +67,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <span class="sr-only">Toggle Dropdown</span>
                     </button> -->
                     <!-- <div class="dropdown-menu" role="menu"> -->
-                        <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>"><span class="fa fa-solid fa-info"></span> Details</a>
+                        <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>"><span class="fa fa-solid fa-info"></span> View Details</a>
                         <!-- <div class='dropdown-divider'></div> -->
                         <?php
                             $docNoValue = $row['doc_no'];

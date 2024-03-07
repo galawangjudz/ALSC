@@ -18,30 +18,32 @@
                 <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;">
                     <thead>
                         <tr>
-                        <th>No.</th>
-                        <th>Last Name</th>
-                        <th>First Name </th>	
-                        <th>Email</th>		
-                        <th>Phone</th>
-                        <th>Username</th>
-                        <th>User type</th>
-                        <th>Actions</th>
+                            <th>No.</th>
+                            <th>ID No.</th>
+                            <th>Last Name</th>
+                            <th>First Name </th>	
+                            <th>Email</th>		
+                            <th>Phone</th>
+                            <th>Username</th>
+                            <th>User type</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM users ORDER BY username ASC");
+                            $qry = $conn->query("SELECT * FROM users;");
                             while($row = $qry->fetch_assoc()):
-                                
                         ?>
                         <tr>
-                        <td> <?php echo $row['user_code'] ?></td>
+                        <td> <?php echo $i++ ?></td>
+                        <td><?php echo $row['user_code'] ?></td>
                         <td><?php echo $row["lastname"] ?></td>
                         <td><?php echo $row["firstname"] ?></td>
                         <td><?php echo $row["email"]  ?></td>
                         <td><?php echo $row["phone"]  ?></td>
                         <td><?php echo $row["username"]  ?></td>
+                        <td>
                         <?php if($row['type'] == 1): ?>
                             <td class="text-center"><span class="badge badge-primary">Admin</span></td>
                         <?php elseif($row['type'] == 2): ?>
@@ -53,6 +55,7 @@
                         <?php elseif($row['type'] == 5): ?>
                             <td class="text-center"><span class="badge badge-danger">Employee</span></td>
                         <?php endif; ?>
+                        </td>
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action

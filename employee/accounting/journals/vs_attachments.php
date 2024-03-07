@@ -15,7 +15,7 @@ if(isset($_FILES["image"])){
         $newDocNo = $_POST["newDocNo"];
         $v_num = $_POST["v_num"];
 
-        $validImageExtension = ['jpg', 'jpeg', 'png', 'pdf', 'gif'];
+        $validImageExtension = ['jpg', 'jpeg', 'png', 'pdf', 'gif','xlsx','csv','xls','txt','docx'];
         $imageExtension = explode('.',$fileName);
         $imageExtension = strtolower(end($imageExtension));
 
@@ -25,16 +25,15 @@ if(isset($_FILES["image"])){
             return;
             ;
         }
-        else if($fileSize > 1000000){
+        else if($fileSize > 5000000){
             echo 
             "Image Size Is Too Large.";
                 return;
             ;
         }else{
             $newImageName = $fileName;
-            $newImageName .= '.' . $imageExtension;
-
-            move_uploaded_file($tmpName, 'attachments/' . $newImageName);
+            //$newImageName .= '.' . $imageExtension;
+            move_uploaded_file($tmpName, '../../attachments/' . $newImageName);
 
            $query = "INSERT INTO tbl_vs_attachments VALUES('','$newImageName', '0', 'AP', '$v_num',NOW())";
            mysqli_query($conn,$query);

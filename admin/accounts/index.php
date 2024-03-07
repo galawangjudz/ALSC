@@ -96,7 +96,7 @@
 		uni_modal("Update Account Details","accounts/manage_account.php?id="+$(this).attr('data-id'),'mid-large')
 	})
 	$('.delete_data').click(function(){
-		_conf("Are you sure you want to delete '<b>"+$(this).attr('data-name')+"</b>' from Chart of Accounts permanently?","delete_account",[$(this).attr('data-id')])
+		_conf("Are you sure you want to delete this from Chart of Accounts permanently?","delete_account",[$(this).attr('data-id')])
 	})
 	$('.view_data').click(function(){
 		uni_modal("Account Details","accounts/view_account.php?id="+$(this).attr('data-id'),'mid-large')

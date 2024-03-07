@@ -114,7 +114,7 @@ function format_num($number){
                                     <?php 
                                     $name_qry = $conn->query("SELECT jve.name
                                                             FROM jv_entries jve LEFT JOIN tbl_gl_trans gl
-                                                            ON gl.vs_num = jve.jv_num WHERE gl.doc_no = '{$_GET['id']}'");   
+                                                            ON gl.jv_num = jve.jv_num WHERE gl.doc_no = '{$_GET['id']}'");   
                                     $name_row = $name_qry->fetch_array();
                                     $name = $name_row['name'];
                                     ?>

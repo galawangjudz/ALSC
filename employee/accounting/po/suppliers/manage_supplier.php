@@ -52,7 +52,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div> -->
         <div class="form-group">
             <label for="tin" class="control-label">TIN #:</label>
-            <textarea rows="3" name="tin" id="tin" class="form-control rounded-0" required><?php echo isset($tin) ? $tin :"" ?></textarea>
+            <input type="text" rows="3" name="tin" id="tin" class="form-control rounded-0" value="<?php echo isset($tin) ? $tin :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="atc_code" class="control-label">ATC Code:</label>
+            <input type="text" name="atc_code" id="atc_code" class="form-control rounded-0" value="<?php echo isset($atc_code) ? $atc_code :"" ?>" required>
         </div>
         <div class="form-group">
             <label for="address" class="control-label">Address:</label>
@@ -141,6 +145,32 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			e.preventDefault();
             var _this = $(this)
 			 $('.err-msg').remove();
+
+             var requiredFields = ['name', 'short_name', 'tin', 'atc_code', 'address', 'contact_person', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
+            var isValid = true;
+
+            for (var i = 0; i < requiredFields.length; i++) {
+                var fieldName = requiredFields[i];
+                var fieldValue = _this.find('[name="' + fieldName + '"]').val().trim();
+
+                if (fieldValue === '') {
+                    isValid = false;
+                    var errorMsg = 'May kulang po. Hehe.';
+                    var existingError = _this.find('.err-msg:contains("' + errorMsg + '")');
+                    
+                    if (existingError.length === 0) {
+                        var el = $('<div>').addClass("alert alert-danger err-msg").text(errorMsg);
+                        _this.prepend(el);
+                        el.show('slow');
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    }
+                }
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
 			start_loader();
 			$.ajax({
 				url:_base_url_+"classes/Master.php?f=save_supplier",
