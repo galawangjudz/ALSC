@@ -217,7 +217,7 @@ Class Master extends DBConnection {
 
 	function delete_user(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM users where id = ".$id);
+		$del = $this->conn->query("DELETE FROM users where user_id = ".$id);
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"User successfully deleted.");
@@ -506,7 +506,7 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area = '$service_area' ";
 			$data2 .= ", others = '$others' ";
 			$data2 .= ", conv_outlet = '$conv_outlet' ";
-			$data2 .= ", floor_elevation = '$floor_elev' ";
+			$data2 .= ", floor_elevation = '$flrelev_text' ";
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
@@ -3607,10 +3607,10 @@ Class Master extends DBConnection {
 		extract($_POST);
 		if ($value == 4):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no =  ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 3):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
-			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no =  ".$data_id);
+			$update = $this->conn->query("UPDATE t_av_summary SET lvl2='2' WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 2):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
@@ -3619,9 +3619,9 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE t_lots set c_status='Available' where c_lid = ".$get_lid);
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
 			//$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 			//$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		elseif($value == 1):
 			//$update = $this->conn->query("UPDATE t_av_summary SET lvl1='2',lvl2='2',lvl3='2' WHERE c_av_no = '".$this->conn->real_escape_string($data_id)."'");
 			$update = $this->conn->query("UPDATE properties set c_active='1',c_reopen = '1' where property_id = ".$prop_id);
@@ -3631,8 +3631,8 @@ Class Master extends DBConnection {
 			$update = $this->conn->query("UPDATE t_csr set c_active = 0  where c_lot_lid = ".$get_lid);+
 			// $update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = AV".$data_id);
 			// $update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = AV".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = ".$data_id);
-			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE av_no = ".$data_id);
+			$update = $this->conn->query("DELETE FROM t_av_summary WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
+			$update = $this->conn->query("DELETE FROM t_av_breakdown WHERE c_av_no = 'AV".$this->conn->real_escape_string($data_id)."'");
 		endif;
 		
 		if($update){
@@ -4060,7 +4060,7 @@ Class Master extends DBConnection {
 		if (empty($id)) {
 			//$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
 			//$sql = "INSERT INTO `vs_entries` set {$data} ";
-			$sql = "INSERT INTO `vs_entries` (`v_num`,`supplier_id`,`journal_date`,`due_date`,`description`,`ref_no`,`user_id`) VALUES ('{$v_num}','{$sup_code}','{$journal_date}','{$due_date}','{$description}','{$ref_no}','{$user_id}')";
+			$sql = "INSERT INTO `vs_entries` (`v_num`,`supplier_id`,`journal_date`,`due_date`,`description`,`ref_no`,`user_id`,`rfp_no`) VALUES ('{$v_num}','{$sup_code}','{$journal_date}','{$due_date}','{$description}','{$ref_no}','{$user_id}','{$rfp_no}')";
 		} 
 		
 		$save = $this->conn->query($sql);
@@ -4879,8 +4879,19 @@ Class Master extends DBConnection {
 	
 	function approved_rfp(){
 		extract($_POST);
-		$del = $this->conn->query("UPDATE tbl_rfp SET status1 = 1 WHERE id = '{$id}'");
-		if($del){
+		$app = $this->conn->query("UPDATE tbl_rfp_approvals AS a
+		JOIN tbl_rfp AS r ON a.rfp_no = r.rfp_no
+		SET
+		  a.status1 = CASE WHEN r.status1 = '{$userId}' THEN 1 ELSE a.status1 END,
+		  a.status2 = CASE WHEN r.status2 = '{$userId}' THEN 1 ELSE a.status2 END,
+		  a.status3 = CASE WHEN r.status3 = '{$userId}' THEN 1 ELSE a.status3 END,
+		  a.status4 = CASE WHEN r.status4 = '{$userId}' THEN 1 ELSE a.status4 END,
+		  a.status5 = CASE WHEN r.status5 = '{$userId}' THEN 1 ELSE a.status5 END,
+		  a.status6 = CASE WHEN r.status6 = '{$userId}' THEN 1 ELSE a.status6 END,
+		  a.status7 = CASE WHEN r.status7 = '{$userId}' THEN 1 ELSE a.status7 END
+		WHERE a.rfp_no = '{$id}';
+		");
+		if($app){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success'," Request for payment has been approved successfully.");
 
@@ -4890,6 +4901,31 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	function disapproved_rfp(){
+		extract($_POST);
+		$app = $this->conn->query("UPDATE tbl_rfp_approvals AS a
+			JOIN tbl_rfp AS r ON a.rfp_no = r.rfp_no
+			SET
+				a.status1 = CASE WHEN r.status1 = '{$userId}' THEN 2 ELSE a.status1 END,
+				a.status2 = CASE WHEN r.status2 = '{$userId}' THEN 2 ELSE a.status2 END,
+				a.status3 = CASE WHEN r.status3 = '{$userId}' THEN 2 ELSE a.status3 END,
+				a.status4 = CASE WHEN r.status4 = '{$userId}' THEN 2 ELSE a.status4 END,
+				a.status5 = CASE WHEN r.status5 = '{$userId}' THEN 2 ELSE a.status5 END,
+				a.status6 = CASE WHEN r.status6 = '{$userId}' THEN 2 ELSE a.status6 END,
+		  		a.status7 = CASE WHEN r.status7 = '{$userId}' THEN 2 ELSE a.status7 END
+			WHERE a.rfp_no = '{$id}';
+		");
+		if($app){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Request for payment has been disapproved successfully.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+	
 	function claim_cv(){
 		extract($_POST);
 		$del = $this->conn->query("UPDATE check_details SET c_status = 1, date_updated = NOW() WHERE check_id = '{$id}'");
@@ -4939,7 +4975,7 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$sql = "UPDATE `vs_entries` SET `due_date` = '{$due_date}', `description` = '{$description}', `ref_no` = '{$ref_no}', `user_id` = '{$user_id}' WHERE `v_num` = $v_num";
+		$sql = "UPDATE `vs_entries` SET `rfp_no` = '{$rfp_no}', `due_date` = '{$due_date}', `description` = '{$description}', `ref_no` = '{$ref_no}', `user_id` = '{$user_id}' WHERE `v_num` = $v_num";
 
 		$save = $this->conn->query($sql);
 		
@@ -5253,24 +5289,50 @@ Class Master extends DBConnection {
 
 	function save_rfp(){
 		extract($_POST);
+		$rfp_num = isset($_POST['rfp_no']) ? $_POST['rfp_no'] : '';
+		$num = isset($_POST['num']) ? $_POST['num'] : '';
+		$division = isset($_POST['division']) ? $_POST['division'] : '';
+		$usercode = isset($_POST['usercode']) ? $_POST['usercode'] : '';
 		$data = "";
 		foreach($_POST as $k =>$v){
 			
-			if(!in_array($k,array('id'))){
+			if(!in_array($k,array('id','doc_no','num','inputValue','division','usercode'))){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
 		
+		$gl_sql2 = "UPDATE `tbl_vs_attachments` SET `doc_no`  = '$rfp_num' WHERE `num` = '$num' and `doc_type` = 'RFP' ORDER BY `date_attached` DESC
+		LIMIT 1";
+		$gl_sql3 = "DELETE FROM `tbl_vs_attachments` WHERE `doc_no` = 0 and `num` = '$num' and `doc_type` = 'RFP'";
+		
+		$save_sql2 = $this->conn->query($gl_sql2);
+		$save_sql3 = $this->conn->query($gl_sql3);
+		
 		if(empty($id)){
 			$sql = "INSERT INTO `tbl_rfp` set {$data} ";
+			if(($division == "MNGR" || $division == "SPVR") && ($usercode == '20016' || $usercode == '10006' || $usercode == '10006' || $usercode == '20084'
+			|| $usercode == '10009' || $usercode == '10030' || $usercode == '20124' || $usercode == '10051' || $usercode == '20181' || $usercode == '10102'
+			|| $usercode == '20018' || $usercode == '20017' || $usercode == '20003' || $usercode == '10143' || $usercode == '10070'|| $usercode == '10100' || $usercode == '10131'
+			|| $usercode == '10041' || $usercode == '20001' || $usercode == '10131' || $usercode == '10017' || $usercode == '10007' || $usercode == '10012' || $usercode == '10026'
+			|| $usercode == '10015' || $usercode == '20186' || $usercode == '10038')){
+				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
+			}else if($usercode == '10114'){
+				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
+			}else{
+				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`rfp_no`)VALUES('$rfp_num');";
+			}
+			
 			$save = $this->conn->query($sql);
+			$save_sql4 = $this->conn->query($gl_sql4);
 		}else{
+			//$sql = "UPDATE `tbl_rfp` SET {$data}, status1=NULL, status2=NULL, status3=NULL, status4=NULL, status5=NULL, status6=NULL, status7=NULL WHERE id='{$id}'";
 			$sql = "UPDATE `tbl_rfp` set {$data} where id = '{$id}' ";
 			$save = $this->conn->query($sql);
 		}
-		if($save){
+
+		if($save && $save_sql2 && $save_sql3){
 			$resp['status'] = 'success';
 			if(empty($id))
 				$this->settings->set_flashdata('success',"New RFP successfully saved.");
@@ -5293,9 +5355,8 @@ Class Master extends DBConnection {
 			$resp['error'] = $this->conn->error;
 		}
 		return json_encode($resp);
-
 	}
-
+	
 	function save_check(){
 		extract($_POST);
 		$data = "";
@@ -5331,6 +5392,63 @@ Class Master extends DBConnection {
 		
 		return json_encode($resp);
 	}
+
+	function save_users(){
+		$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : '';
+		$user_pass = isset($_POST['password']) ? $_POST['password'] : '';
+		extract($_POST);
+		$data = "";
+	
+		foreach ($_POST as $k => $v) {
+			if ($k !== 'password') {
+			
+				$v = addslashes(trim($v));
+				if (!empty($data)) $data .= ",";
+				$data .= "`{$k}`='{$v}' ";
+			} elseif (!empty($user_pass)) {
+				
+				$v = md5($v);
+				if (!empty($data)) $data .= ",";
+				$data .= "`{$k}`='{$v}' ";
+			}
+		}
+		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
+			$uploadDir = '../uploads/';
+			$filename = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name']; 
+			$targetPath = $uploadDir . $filename;
+		
+			if(move_uploaded_file($_FILES['img']['tmp_name'], $targetPath)){
+				$databasePath = str_replace('../', './', $targetPath);
+				$data .=" , avatar = '{$databasePath}' ";
+			} else {
+				echo "File upload failed.";
+			}
+		}
+		
+		if(empty($user_id)){
+			$sql = "INSERT INTO `users` SET {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `users` SET {$data} WHERE user_id = '{$user_id}' ";
+			$save = $this->conn->query($sql);
+		}
+		
+		
+	
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($user_id))
+				$this->settings->set_flashdata('success', "New user details successfully saved.");
+			else
+				$this->settings->set_flashdata('success', "User details successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . " [{$sql}]";
+		}
+	
+		return json_encode($resp);
+	}
+	
 	
 	function save_item(){
 		extract($_POST);
@@ -5599,7 +5717,7 @@ Class Master extends DBConnection {
 				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_status`,`item_notes`) VALUES {$data} ");
 			}
 		}
-		else if($level == 3 && $usertype == "Purchasing Supervisor"){
+		else if($level == 3 && $usertype == "PURCHASING OFFICER"){
 		//else if($level == 3){
 			$update = $this->conn->query("UPDATE `po_list` set `status` = '{$status}',`fpo_status` = '{$status}', `notes` = '{$notes}' where id = '{$po_id}'");
 			//$po_id = empty($id) ? $this->conn->insert_id : $id ;
@@ -5615,7 +5733,7 @@ Class Master extends DBConnection {
 				$update = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`default_unit`,`unit_price`,`quantity`,`item_notes`) VALUES {$data} ");
 			}
 		}
-		else if($level == 3 && $usertype != "Purchasing Supervisor"){
+		else if($level == 3 && $usertype != "PURCHASING OFFICER"){
 			$update = $this->conn->query("UPDATE `po_list` set `status2` = '{$status2}',`fpo_status` = '{$status2}', `notes` = '{$notes}' where id = '{$po_id}'");
 			//$po_id = empty($id) ? $this->conn->insert_id : $id ;
 			//$resp['id'] = $po_id;
@@ -6298,6 +6416,9 @@ switch ($action) {
 	case 'save_agent':
 		echo $Master->save_agent();
 	break;
+	case 'save_users':
+		echo $Master->save_users();
+	break;
 	case 'delete_project':
 		echo $Master->delete_project();
 	break;
@@ -6488,6 +6609,9 @@ switch ($action) {
 	break;
 	case 'approved_rfp':
 		echo $Master->approved_rfp();
+	break;
+	case 'disapproved_rfp':
+		echo $Master->disapproved_rfp();
 	break;
 	case 'save_supplier_setup':
 		echo $Master->save_supplier_setup();

@@ -89,7 +89,7 @@
 
 								$row['rem_bal'] = $row_rem_bal['rem_bal'];
 							} else {
-								$row['rem_bal'] = 0; 
+								$row['rem_bal'] = $row['total_amount']; 
 							}
 					?>
 					<tr>

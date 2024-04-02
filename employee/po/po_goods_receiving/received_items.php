@@ -53,7 +53,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 </style>
 <?php
-	$usertype = $_settings->userdata('user_type'); 
+	$usertype = $_settings->userdata('position'); 
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 	$dept = $_settings->userdata('department');
@@ -67,7 +67,7 @@ if ($query) {
     $maxDocNo = $row['max_doc_no'];
     $newDocNo = '1' . sprintf('%05d', $maxDocNo + 1);
 
-    echo $newDocNo;
+   // echo $newDocNo;
 } else {
     echo "Error executing query: " . $conn->error;
 }
@@ -286,14 +286,14 @@ $(document).ready(function() {
 								<input type="number" step="any" class="text-right w-100 border-0" name="outstanding[]"  id="txtoutstanding" value="<?php echo ($row['outstanding']) ?>"  style="pointer-events:none;border:none;background-color: gainsboro;" readonly/>
 							</td>
 							<td class="align-middle p-1">
-								<input type="number" step="any" class="text-right w-100 border-0 txtdel" name="del_items[]" id="txtdelitems" style="background-color: yellow; text-align: center;" value="0" onblur="calculateAmount(this)"/>
+								<input type="number" step="any" class="text-right w-100 border-0 txtdel" name="del_items[]" id="txtdelitems" style="background-color: yellow; text-align: center;" value="0" onblur="calculateAmount(this)" onchange="setDefaultIfEmpty(this)"/>
 							</td>
 							<input type="hidden" name="item_code[]" id="item_code" value="<?php echo ($row['item_code']) ?>">
 							<input type="hidden" value="0" name="amount[]" id="amount">
 							<input type="hidden" name="type[]" id="type" value="<?php echo ($row['type']) ?>">
-							<td><input type='text' name='vat_amt' id='vat_amt' value='0'></td>
-							<td><input type='text' name='ex_vat' id='ex_vat' value='0'></td>
-							<td><input type='text' name='tot' id='tot' value='0'></td>
+							<td style="display:none;"><input type='text' name='vat_amt' id='vat_amt' value='0'></td>
+							<td style="display:none;"><input type='text' name='ex_vat' id='ex_vat' value='0'></td>
+							<td style="display:none;"><input type='text' name='tot' id='tot' value='0'></td>
 							<input type="hidden" value="<?php echo $max_gr_id ?>" id="gr_id" name="gr_id" style="border:none;color:black;pointer-events:none;">
 						</tr>
 						<?php
@@ -310,11 +310,11 @@ $(document).ready(function() {
 					<?php 
 						if(isset($id)):
 							$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
-								ON ac.group_id = g.id WHERE ac.code = '11081'");
+								ON ac.group_id = g.id WHERE ac.name = 'Deferred Input VAT'");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
-							<tr class="po-item" data-id="">
+							<tr class="po-item" data-id="" style="display:none;">
 								<td class="align-middle p-1">
 									<br>
 									GType:<input type="text" name="gtype_vat" id="gtype_vat" value="<?php echo $row['type'] ?>">
@@ -331,13 +331,13 @@ $(document).ready(function() {
 						<?php 
 						if(isset($id)):
 						$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
-						ON ac.group_id = g.id WHERE ac.code = '20147'");
+						ON ac.group_id = g.id WHERE ac.name = 'Goods Receipt'");
 						
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_gr" id="gtype_gr" value="<?php echo $row['type'] ?>">
@@ -353,13 +353,13 @@ $(document).ready(function() {
 						<?php 
 						if(isset($id)):
 						$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
-						ON ac.group_id = g.id WHERE ac.code = '21032'");
+						ON ac.group_id = g.id WHERE ac.name = 'Deferred Expanded Withholding Tax Payable'");
 						
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
 						?>
 					
-						<tr class="po-item" data-id="">
+						<tr class="po-item" data-id="" style="display:none;">
 							<td class="align-middle p-1">
 							<br>
 								GType:<input type="text" name="gtype_ewt" id="gtype_ewt" value="<?php echo $row['type'] ?>">
@@ -427,7 +427,7 @@ $(document).ready(function() {
 					<button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" form="po-form" id="save-button">Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/goods_receiving"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/po_goods_receiving/received_items_status"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -504,6 +504,12 @@ $(document).ready(function() {
     </div>
 </div> -->
 <script>
+	function setDefaultIfEmpty(inputElement) {
+    if (inputElement.value === "") {
+        inputElement.value = "0";
+    }
+}
+
     var supplierId = '<?php echo $supplier_id; ?>';
 	var dept = '<?php echo $dept; ?>';
 	
@@ -516,7 +522,7 @@ $(document).ready(function() {
            
             $.ajax({
 				type: 'POST',
-				url: 'po/goods_receiving/fetch_unlinked_items.php', 
+				url: 'po_goods_receiving/fetch_unlinked_items.php', 
 				data: {
 					supplier_id: supplierId,
 					item_id: itemId,
@@ -576,7 +582,7 @@ $(document).ready(function () {
 
         if (dept !== 'Accounting') {
             $('#redirectButton').prop('disabled', true);
-            alert('You need to contact the Accounting department for linking.');
+            alert('You need to contact the Accounting Department for linking.');
         } else {
             window.location.href = '.?page=po/items&supplier_id=' + supplierId;
         }
@@ -594,6 +600,7 @@ $(document).ready(function () {
 
 
 function calculateAmount(input){
+
 	var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
 	console.log(vatableValue);
 	if (vatableValue == 1){
@@ -604,73 +611,6 @@ function calculateAmount(input){
 		calculateAmountNonVATZeroR(input);
 	}
 }
-
-// function calculateAmountInc(input) {
-//     var tr = $(input).closest('.po-item');
-//     var delitems = parseFloat(input.value);
-//     var unitPrice = parseFloat(tr.find('[name="unit_price[]"]').val());
-//     var vatableValue = <?php echo isset($vatableValue) ? $vatableValue : 0; ?>;
-//     var currentType = tr.find('[name="type"]').val();
-//     var originalAmount = delitems * unitPrice;
-
-//     var amount = originalAmount;
-//     tr.find('[name="amount[]"]').val(amount.toFixed(2));
-
-//     var exVatField = tr.find('[name="ex_vat"]');
-//     var originalExVatValue = vatableValue == 1 ? originalAmount / 1.12 * 0.12 : originalAmount * 0.12;
-
-//     var exVatValueCopy = originalExVatValue;
-//     exVatField.val(originalExVatValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
-//     var amountAfterSubtraction = originalAmount - exVatValueCopy;
-//     tr.find('[name="amount[]"]').val(amountAfterSubtraction.toFixed(2));
-
-//     var vatAmtField = tr.find('[name="vat_amt"]');
-//     var vatRate = currentType == 1 ? 0.01 : 0.02;
-//     var vatAmount = amountAfterSubtraction * vatRate;
-//     vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
-//     var totField = tr.find('[name="tot"]');
-//     var totAmount = originalAmount;
-
-//     totField.val(totAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
-// 	var totSum = 0;
-//     $('.po-item [name="tot"]').each(function() {
-//         var totValue = parseFloat($(this).val().replace(/,/g, '')) || 0;
-//         totSum += totValue;
-		
-//     });
-// 	var totalVat = parseFloat($('#vat_total').val().replace(/,/g, '')) || 0;
-	
-   
-
-// 	console.log(totSum);
-//     $('#tot_total').val(totSum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
-
-//     tr.find('[name="tot"]').val(totAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
-//     var totalVat = parseFloat($('#vat_total').val().replace(/,/g, '')) || 0;
-//     var totalEwt = parseFloat($('#ewt_total').val().replace(/,/g, '')) || 0;
-// 	var totalGR = parseFloat($('#gr_total').val().replace(/,/g, '')) || 0;
-
-//     totalVat += originalExVatValue;
-//     totalEwt += vatAmount;
-// 	totSum -= totalEwt;
-	
-// 	console.log("VAT", totalVat);
-//     var vatRate = currentType == 1 ? 0.01 : 0.02;
-
-	
-
-// 	console.log("GR", totSum);
-   
-
-//     $('#ewt_total').val(totalEwt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-//     $('#vat_total').val(totalVat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-// 	$('#gr_total').val(totSum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-// }
 
 function calculateAmountInc(input) {
     var tr = $(input).closest('.po-item');
@@ -996,6 +936,12 @@ function calculateAmountExc(input) {
 		$('#po-form').submit(function (e) {
 			e.preventDefault();
 			var _this = $(this);
+			if ($('[name="del_items[]"]').filter(function () {
+        		return $(this).val() != 0;
+			}).length === 0) {
+				alert_toast(" Hala. Wala ka pong ni-received.", 'warning');
+				return false;
+			}
 
 			var confirmed = confirm("Are you sure you want to save?");
 
@@ -1006,13 +952,6 @@ function calculateAmountExc(input) {
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger');
 
-			if ($('[name="del_items[]"]').filter(function () {
-				return $(this).val() != 0;
-			}).length === 0) {
-				alert_toast("Zero delivered items!", 'warning');
-				return false;
-			}
-			
 			if ($('#item-list .po-item').length <= 0) {
 				alert_toast(" Please add at least 1 item on the list.", 'warning');
 				return false;
@@ -1035,7 +974,7 @@ function calculateAmountExc(input) {
 				},
 				success: function (resp) {
 					if (typeof resp == 'object' && resp.status == 'success') {
-						location.href = "./?page=po/goods_receiving/received_items_status";
+						location.href = "./?page=po_goods_receiving/received_items_status";
 					} else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
 						var el = $('<div>')
 						el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -1068,36 +1007,46 @@ function calculateAmountExc(input) {
 		});
 	})
 	function initDeliveredItemsEvents() {
-		$('#item-list .po-item').each(function () {
-			var tr = $(this);
-			tr.find('[name="received[]"]').data('initial-received', parseFloat(tr.find('[name="received[]"]').val()));
-			tr.find('[name="outstanding[]"]').data('initial-outstanding', parseFloat(tr.find('[name="outstanding[]"]').val()));
-			tr.find('[name="del_items[]"]').on('input', function (e) {
-			var deliveredItems = parseFloat($(this).val());
-			var initialReceived = tr.find('[name="received[]"]').data('initial-received');
-			var initialOutstanding = tr.find('[name="outstanding[]"]').data('initial-outstanding');
+    $('#item-list .po-item').each(function () {
+        var tr = $(this);
 
-			var maxDeliveredItems = initialOutstanding; 
+        tr.find('[name="received[]"]').data('initial-received', parseFloat(tr.find('[name="received[]"]').val()));
+        tr.find('[name="outstanding[]"]').data('initial-outstanding', parseFloat(tr.find('[name="outstanding[]"]').val()));
 
+        tr.find('[name="del_items[]"]').on('input', function (e) {
+            var deliveredItems = parseFloat($(this).val());
 
-			if (deliveredItems > maxDeliveredItems) {
-				deliveredItems = maxDeliveredItems;
-				$(this).val(deliveredItems);
-			}
+            if (isNaN(deliveredItems) || deliveredItems === 0) {
+                tr.find('[name="received[]"]').val(tr.find('[name="received[]"]').data('initial-received'));
+                tr.find('[name="outstanding[]"]').val(tr.find('[name="outstanding[]"]').data('initial-outstanding'));
+                tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('input');
+                return;
+            }
 
-			var received = initialReceived + deliveredItems;
-			var outstanding = initialOutstanding - deliveredItems;
+            var initialReceived = tr.find('[name="received[]"]').data('initial-received');
+            var initialOutstanding = tr.find('[name="outstanding[]"]').data('initial-outstanding');
 
-			if (outstanding < 0) {
-				outstanding = 0;
-			}
+            var maxDeliveredItems = initialOutstanding;
 
-			tr.find('[name="received[]"]').val(received);
-			tr.find('[name="outstanding[]"]').val(outstanding);
-			tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('input');
-			});
-		});
-	}
+            if (deliveredItems > maxDeliveredItems) {
+                deliveredItems = maxDeliveredItems;
+                $(this).val(deliveredItems);
+            }
+
+            var received = initialReceived + deliveredItems;
+            var outstanding = initialOutstanding - deliveredItems;
+
+            if (outstanding < 0) {
+                outstanding = 0;
+            }
+
+            tr.find('[name="received[]"]').val(received);
+            tr.find('[name="outstanding[]"]').val(outstanding);
+            tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('input');
+        });
+    });
+}
+
 
 	function calculateOutstandingTotal() {
 		var totalOutstanding = 0;

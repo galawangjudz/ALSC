@@ -48,7 +48,7 @@ $level = $_settings->userdata('type');
                     
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
                   
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
@@ -56,7 +56,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    
+                     -->
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
                       <i class="nav-icon fas fa-file"></i>
@@ -74,7 +74,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
@@ -89,11 +89,11 @@ $level = $_settings->userdata('type');
                           Items/Services List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                
 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/received_items_status" class="nav-link nav-gr">
+                      <a href="<?php echo base_url ?>employee/reg_emp/?page=goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
                         <p>
                           Goods Receiving
@@ -101,14 +101,29 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/po_status" class="nav-link nav-monitoring">
                       <i class="nav-icon fas fa-search"></i>
                         <p>
                           Monitoring
                         </p>
                       </a>
+                    </li>  -->
+                    <?php if($_settings->userdata('section') != 'Repair and Maintenance' && $_settings->userdata('user_code') != 10023){ ?> 
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/reg_emp/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
+                        </p>
+                      </a>
                     </li> 
+                    <?php } ?>
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

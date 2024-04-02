@@ -2,8 +2,10 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+$type = $_settings->userdata('type');
 $department = $_settings->userdata('department');
 if(isset($_SESSION['userdata'])){
+
     if($_SESSION['userdata']['user_type'] =='IT Admin'){
         if(strpos($link, 'login.php') === false){
             redirect('admin/index.php');
@@ -49,11 +51,6 @@ if(isset($_SESSION['userdata'])){
             redirect('mancomm/coo/index.php');
         }
     }  
-    if($_SESSION['userdata']['user_type'] == 'CFO'){
-        if(strpos($link, 'login.php') === false){
-            redirect('mancomm/cfo/index.php');
-        }
-    }  
     if($_SESSION['userdata']['position'] == 'ASSISTANT ACCOUNTING MANAGER'){
         if(strpos($link, 'login.php') === false){
             redirect('employee/accounting/index.php');
@@ -64,11 +61,32 @@ if(isset($_SESSION['userdata'])){
             redirect('employee/po_m/index.php');
         }
     }  
+    if($_SESSION['userdata']['position'] =='EA TO THE MANCOM' || $_SESSION['userdata']['position'] == 'EXECUTIVE ASSISTANT TO THE COO'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/ea/index.php');
+        }
+    }  
     if($_SESSION['userdata']['position'] == 'ACCOUNTING ASSISTANT' && $department == 'Accounting'){
         if(strpos($link, 'login.php') === false){
             redirect('employee/accounting_emp/index.php');
         }
     }  
+    if($_SESSION['userdata']['department'] == 'Billing'){
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/billing/index.php');
+        }
+    }  
+    else{
+        if(strpos($link, 'login.php') === false){
+            redirect('employee/reg_emp/index.php');
+        }
+    }
+
+    // if($_SESSION['userdata']['type'] =='5'){
+    //     if(strpos($link, 'login.php') === false){
+    //         redirect('employee/reg_emp/index.php');
+    //     }
+    // }  
 }
 
 ?>

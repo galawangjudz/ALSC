@@ -10,7 +10,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 }
 $is_new_po = true;
-
+$level = 2;
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $existing_po_id = $_GET['id'];
 
@@ -124,7 +124,7 @@ document.addEventListener('change', function(event) {
 	}
 });
 $(document).ready(function() {
-    var level = <?php echo $level; ?>;
+    var level = 2;
     var supplierValue = $('#supplier_id').val();
     var departmentValue = $('#department').val();
     var status2Val = <?php echo $status2; ?>;
@@ -172,7 +172,7 @@ $(document).ready(function() {
 });
 document.addEventListener("DOMContentLoaded", function () {
 		var statusDropdown = document.getElementById("status");
-        var level = <?php echo $level; ?>;
+        var level = 2;
 		var selectedStatus = statusDropdown.value;
 
         if (level === 4) {
@@ -226,9 +226,8 @@ $(document).ready(function() {
 
 <?php
 	$subtotal = 0;
-	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('user_code');
-	$level = $_settings->userdata('type');
+	$usertype = $_settings->userdata('position'); 
+	$level = 2;
 ?>
 <body onload="calculate()">
 <div class="card card-outline card-info">
@@ -529,14 +528,14 @@ $(document).ready(function() {
 			
 
 						<!-- COO/CFO -->
-						<?php if ($level == 2) { ?>
+						
 							<select name="status3" id="status3" class="form-control">
 								<option value="0" <?php echo $status3 == 0 ? 'selected' : ''; ?>>Select a Status</option>
 								<option value="1" <?php echo $status3 == 1 ? 'selected' : ''; ?>>Approved</option>
 								<option value="2" <?php echo $status3 == 2 ? 'selected' : ''; ?>>Declined</option>
 								<option value="3" <?php echo $status3 == 3 ? 'selected' : ''; ?>>For Review</option>
 							</select>
-						<?php } ?>
+						
 					</div>
 			    </div>
             </div>

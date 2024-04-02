@@ -179,7 +179,7 @@ function format_num($number){
 		})
 		
 		$('.approved_data').click(function(){
-			_conf("Are you sure you want to approve this journal voucher permanently?","approved_jv",[$(this).attr('data-id')])
+			_conf("Are you sure you want to approve this journal voucher?","approved_jv",[$(this).attr('data-id')])
 		})
 
 		$('.disapproved_data').click(function(){

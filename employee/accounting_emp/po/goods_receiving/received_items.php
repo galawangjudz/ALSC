@@ -53,7 +53,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 </style>
 <?php
-	$usertype = $_settings->userdata('user_type'); 
+	$usertype = $_settings->userdata('position'); 
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 	$dept = $_settings->userdata('department');
@@ -310,7 +310,7 @@ $(document).ready(function() {
 					<?php 
 						if(isset($id)):
 							$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
-								ON ac.group_id = g.id WHERE ac.code = '11081'");
+								ON ac.group_id = g.id WHERE ac.name = 'Deferred Input VAT'");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 					?>
@@ -331,7 +331,7 @@ $(document).ready(function() {
 						<?php 
 						if(isset($id)):
 						$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
-						ON ac.group_id = g.id WHERE ac.code = '20147'");
+						ON ac.group_id = g.id WHERE ac.name = 'Goods Receipt'");
 						
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
@@ -353,7 +353,7 @@ $(document).ready(function() {
 						<?php 
 						if(isset($id)):
 						$order_items_qry = $conn->query("SELECT ac.*,g.* FROM account_list ac JOIN group_list g
-						ON ac.group_id = g.id WHERE ac.code = '21032'");
+						ON ac.group_id = g.id WHERE ac.name = 'Deferred Expanded Withholding Tax Payable'");
 						
 						echo $conn->error;
 						while($row = $order_items_qry->fetch_assoc()):
@@ -427,7 +427,7 @@ $(document).ready(function() {
 					<button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" form="po-form" id="save-button">Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/goods_receiving/received_items_status"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" style="width:100%;margin-left:5px;font-size:14px;" href="?page=po/po_goods_receiving/received_items_status"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -582,7 +582,7 @@ $(document).ready(function () {
 
         if (dept !== 'Accounting') {
             $('#redirectButton').prop('disabled', true);
-            alert('You need to contact the Accounting department for linking.');
+            alert('You need to contact the Accounting Department for linking.');
         } else {
             window.location.href = '.?page=po/items&supplier_id=' + supplierId;
         }

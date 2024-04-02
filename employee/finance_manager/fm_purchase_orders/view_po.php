@@ -239,7 +239,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             </tr>
                             <tr>
                                 <th class="p-1 text-right" colspan="5">TOTAL:</th>
-                                <?php echo $vatable; ?>
+                                
                                 <?php if ($vatable == 2) { ?>
                                     <th class="p-1 text-right" id="total"><?php echo isset($tax_amount) ? number_format(($sub_total + $tax_amount), 2) : 0 ?></th>
                                 <?php } else{ ?>

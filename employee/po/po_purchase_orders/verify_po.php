@@ -135,7 +135,7 @@ $(document).ready(function() {
 });
 </script>
 <?php
-	$usertype = $_settings->userdata('user_type'); 
+	$usertype = $_settings->userdata('position'); 
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>

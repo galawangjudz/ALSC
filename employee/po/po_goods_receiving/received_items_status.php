@@ -4,7 +4,7 @@
 </script>
 <?php endif;?>
 <?php
-    $usertype = $_settings->userdata('user_type'); 
+    $usertype = $_settings->userdata('position'); 
     $type = $_settings->userdata('user_code');
     $level = $_settings->userdata('type');
     $department = $_settings->userdata('department');
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <?php if ($level > 3 and  $usertype != "Purchasing Officer"){ ?>
+    <?php if ($level > 3 and  $usertype != "PURCHASING ASSISTANT"){ ?>
     <div class="card card-outline card-primary">
         <div class="card-header">
             <input type="hidden" value="<?php echo $type; ?>">

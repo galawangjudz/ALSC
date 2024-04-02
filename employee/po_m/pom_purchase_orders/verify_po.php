@@ -222,7 +222,7 @@ $(document).ready(function() {
 
 <?php
 	$subtotal = 0;
-	$usertype = $_settings->userdata('user_type'); 
+	$usertype = $_settings->userdata('position'); 
 	$type = $_settings->userdata('user_code');
 	$level = 3;
 ?>

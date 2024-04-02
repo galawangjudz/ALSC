@@ -154,6 +154,14 @@ $level = $_settings->userdata('type');
                       </li>
                     </div>
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting_emp/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting_emp/?page=journals/gl/gl" class="nav-link nav-gl">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
@@ -185,14 +193,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting_emp/?page=journals/display_doc/manage_dd" class="nav-link nav-dd">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         Display Document
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>Create Voucher Setup</i></b>

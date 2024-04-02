@@ -23,9 +23,9 @@
 				<colgroup>
 					<col width="8%">
 					<col width="10%">
-					<col width="20%">
-					<col width="20%">
-					<col width="20%">
+					<col width="30%">
+					<!-- <col width="20%"> -->
+					<col width="30%">
 					<!-- <col width="6%"> -->
 					<col width="6%">
 					<col width="10%">
@@ -35,7 +35,7 @@
 						<th>#</th>
 						<th>Date Created</th>
 						<th>Supplier</th>
-						<th>Contact Person</th>
+						<!-- <th>Contact Person</th> -->
 						<th>Address</th>
 						<!-- <th>Vatable</th> -->
 						<th>Status</th>
@@ -52,12 +52,12 @@
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
 							<td><?php echo $row['short_name'] ?></td>
-							<td>
+							<!-- <td>
 								<p class="m-0">
 									<?php echo $row['contact_person'] ?><br>
 									<?php echo $row['contact'] ?>
 								</p>
-							</td>
+							</td> -->
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
 							<!-- <td>
 								<?php if($row['vatable'] == 0): ?>

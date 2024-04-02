@@ -26,7 +26,7 @@ Class Users extends DBConnection {
 		}
 
 		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
+				$fname = '../uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
 				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
 				if($move){
 					$data .=" , avatar = '{$fname}' ";
@@ -85,7 +85,7 @@ Class Users extends DBConnection {
 		}
 
 		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
+				$fname = '../uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
 				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
 				if($move){
 					$data .=" , avatar = '{$fname}' ";
@@ -136,7 +136,7 @@ Class Users extends DBConnection {
 			$data .= ", `password` = '".md5($password)."' ";
 		
 			if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
+				$fname = '../uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
 				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
 				if($move){
 					$data .=" , avatar = '{$fname}' ";

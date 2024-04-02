@@ -94,7 +94,7 @@
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_approved_list" class="main_menu">
 			<i class="fa fa-thumbs-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Approved List
 		</a>
-		<?php if ($usertype != "CFO" and $usertype != "COO"){ ?>
+		<?php if ($usertype != "CHIEF FINANCE OFFICER" and $usertype != "CHIEF OF OPERATION"){ ?>
         <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_disapproved_list" class="main_menu">
 			<i class="fa fa-thumbs-down" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Disapproved List
         </a>
@@ -305,14 +305,14 @@
 								<a class="btn btn-flat btn-sm view_av btn-info" data-id="<?php echo $row['c_av_no'] ?>">
 								<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 								<?php
-									if ($usertype == "CFO" or $usertype=="COO"):
+									if ($usertype == "CHIEF FINANCE OFFICER" or $usertype=="CHIEF OF OPERATION"):
 										echo '<a class="btn btn-flat btn-primary btn-s approved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 											<span class="tooltip">Approved</span>
 											</a>';
 									endif;
-									if ($usertype == "CFO" or $usertype=="COO"):
+									if ($usertype == "CHIEF FINANCE OFFICER" or $usertype=="CHIEF OF OPERATION"):
 										echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_av" data-id="' . $row['c_av_no'] . '" value="2" prop-id="' . $row['property_id'] . '" user-type="' . $usertype . '" 
 												style="font-size: 10px; height: 30px; width: 37px;">
 												<i class="fa fa-thumbs-down" aria-hidden="true"></i>

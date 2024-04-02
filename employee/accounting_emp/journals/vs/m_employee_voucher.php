@@ -252,27 +252,234 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
                     <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="v_num" class="control-label">Voucher Setup #:</label>
-                            <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="v_num" class="control-label">Voucher Setup #:</label>
+                                <input type="text" id="v_num" name="v_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($v_number) ? $v_number : "" ?>" readonly>
+                            </div>
                         </div>
-                        <div class="col-md-4 form-group">
-                            <label class="control-label">Document #:</label>
-                            <input type="text" id="newDocNo" name="newDocNo" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label class="control-label">Document #:</label>
+                                <input type="text" id="newDocNo" name="newDocNo" class="form-control form-control-sm form-control-border rounded-0" value="<?php echo $newDocNo; ?>" readonly>
+                            </div>
                         </div>
-                        <div class="col-md-4 form-group">
-                            <label class="control-label">Reference #:</label>
-                            <input type="text" id="ref_no" name="ref_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($ref_no) ? $ref_no : "" ?>">
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label class="control-label">Reference #:</label>
+                                <input type="text" id="ref_no" name="ref_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($ref_no) ? $ref_no : "" ?>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="journal_date" class="control-label">Transaction Date:</label>
+                                <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="due_date" class="control-label">Due Date:</label>
+                                <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label for="journal_date" class="control-label">Transaction Date:</label>
-                            <input type="date" id="journal_date" name="journal_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($journal_date) ? $journal_date : date("Y-m-d") ?>" required readonly>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label for="due_date" class="control-label">Due Date:</label>
-                            <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
+                    <div class="col-md-6">
+                        <div class="col-md-12 form-group">
+                            <label for="rfp_no">Approved RFPs:</label>
+                            <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
+                                <colgroup>
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="30%">
+                                    <col width="50%">
+                                </colgroup>
+                                <thead>
+                                    <tr class="bg-navy disabled">
+                                        <th>#</th>
+                                        <th>RFP #</th>
+                                        <th>Req. Dept.</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $i = 1;
+                                    $qry = $conn->query("SELECT 
+                                    tbl_rfp.rfp_no,
+                                    tbl_rfp.*,  
+                                    tbl_rfp_approvals.* 
+                                FROM 
+                                    tbl_rfp 
+                                JOIN 
+                                    tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                WHERE 
+                                    (tbl_rfp.rfp_for = 2 OR tbl_rfp.rfp_for = 5) 
+                                GROUP BY 
+                                    tbl_rfp.rfp_no
+                                HAVING 
+                                    (CASE WHEN tbl_rfp.status1 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp.status2 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp.status3 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp.status4 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp.status5 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp.status6 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp.status7 <> '' THEN 1 ELSE 0 END) 
+                                    = 
+                                    (CASE WHEN tbl_rfp_approvals.status1 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp_approvals.status2 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp_approvals.status3 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp_approvals.status4 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp_approvals.status5 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp_approvals.status6 <> '' THEN 1 ELSE 0 END +
+                                    CASE WHEN tbl_rfp_approvals.status7 <> '' THEN 1 ELSE 0 END)
+                                ORDER BY 
+                                    tbl_rfp.transaction_date ASC;");
+                                    while ($row = $qry->fetch_assoc()) {
+                                    ?>
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['id']; ?>" style="cursor:pointer;">
+                                        <td class="text-center"><?php echo $i++; ?></td>
+                                        <td><?php echo ($row['rfp_no']); ?></td>
+                                        <td><?php echo ($row['req_dept']) ?></td>
+                                        <td><?php echo ($row['name']) ?></td>
+                                    </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            <hr>
+                            <label for="rfp_no">Selected RFP #:</label>
+                            <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($rfp_no) ? $rfp_no : "" ?>" readonly> 
+                            <?php
+                            $qry = $conn->query("SELECT * FROM tbl_rfp ORDER BY transaction_date DESC;");
+                            while ($row = $qry->fetch_assoc()) {
+                                ?>
+                                <div class="modal fade" id="rfpModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">RFP Details</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered" style="width:100%;font-size:14px;">
+                                                    <tr>
+                                                    <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>RFP #: </b></td>
+                                                    <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['rfp_no']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Particulars: </b></td>
+                                                    <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['description']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Amount: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo number_format($row['amount'],2); ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Requesting Department: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['req_dept']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Name: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['name']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Address: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['address']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Payment Form: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;">
+                                                        <?php 
+                                                            if ($row['payment_form'] == 0) {
+                                                                echo 'Cash';
+                                                            } elseif ($row['payment_form'] == 1) {
+                                                                echo 'Check';
+                                                            } 
+                                                        ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Release Date: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['release_date']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Check Date: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['check_date']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Transaction Date: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo date('Y-m-d', strtotime($row['transaction_date'])); ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>PR #: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['pr_no']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Bank Name: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['bank_name']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>PO #: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['po_no']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>CDV #: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['cdv_no']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>OFV #: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['ofv_no']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Remarks: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['remarks']; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <?php 
+                                                            $query = "SELECT firstname, lastname FROM users WHERE user_code = '{$row['preparer']}'";
+                                                            $result = $conn->query($query);
+                                                        
+                                                            if ($result->num_rows > 0) {
+                                                                while ($preparer_row = $result->fetch_assoc()) {
+                                                                    echo '<tr>';
+                                                                    echo '<td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Preparer: </b></td>';
+                                                                    echo '<td style="padding-top:5px!important;padding-bottom:5px!important;">';
+                                                                    echo $preparer_row['firstname'] . ' ' . $preparer_row['lastname'];
+                                                                    echo '</td>';
+                                                                    echo '</tr>';
+                                                                }
+                                                            } 
+                                                            ?>
+                                                    </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>RFP for: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php 
+                                                            if ($row['rfp_for'] == 1) {
+                                                                echo 'Agent';
+                                                            } elseif ($row['rfp_for'] == 2) {
+                                                                echo 'Employee';
+                                                            } elseif ($row['rfp_for'] == 3) {
+                                                                echo 'Client';
+                                                            }elseif ($row['rfp_for'] == 4) {
+                                                                    echo 'Supplier';
+                                                            }elseif ($row['rfp_for'] == 5) {
+                                                                echo 'Others';
+                                                            }
+                                                        ?></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                            </div>
                         </div>
                     </div>
                     <div class="paid_to_main">
@@ -451,8 +658,25 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	</tr>
 </table>
 </body>
-
 <script>
+$(document).ready(function() {
+    $('.clickable-row').click(function() {
+        var rfpNo = $(this).data('rfp');
+        $('#rfp_no').val(rfpNo);
+    });
+});
+$(document).ready(function() {
+    $('.clickable-row').click(function() {
+        $('.clickable-row').css('background-color', ''); 
+        $(this).css('background-color', 'gainsboro'); 
+    });
+});
+$(document).ready(function () {
+    var accTable = $('#table2').DataTable({
+        lengthChange: false,
+        pageLength: 4 
+    });
+});
 $(document).ready(function() {
     $('.table th, .table td').addClass('px-1 py-0 align-middle');
     $('#data-table').DataTable({

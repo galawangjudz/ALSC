@@ -60,7 +60,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
         <div class="form-group">
             <label for="contact_person" class="control-label">Contact Person:</label>
-            <input type="text" name="contact_person" id="contact_person" class="form-control rounded-0" value="<?php echo isset($contact_person) ? $contact_person :"" ?>" required>
+            <input type="text" name="contact_person" id="contact_person" class="form-control rounded-0" value="<?php echo isset($contact_person) ? $contact_person :"" ?>">
         </div>
         <div class="form-group">
             <label for="email" class="control-label">Email:</label>
@@ -141,7 +141,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         var _this = $(this);
         $('.err-msg').remove();
         
-        var requiredFields = ['name', 'short_name', 'tin', 'address', 'contact_person', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
+        var requiredFields = ['name', 'short_name', 'tin', 'address', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
         var isValid = true;
 
         for (var i = 0; i < requiredFields.length; i++) {

@@ -103,7 +103,7 @@ if ($_settings->chk_flashdata('success')) :
                                     echo ($row['status'] == 1) ? '<span class="badge rounded-circle p-2" style="background-color:white; color:#007bff; border:1px solid gainsboro;"><i class="fa fa-check" aria-hidden="true"></i></span>' : '<span class="badge rounded-circle p-2" style="background-color:white; color:#dc3545; border:1px solid gainsboro;"><i class="fa fa-times fa-lg" aria-hidden="true"></i></span>';
                                     echo '</td>
                                         <td align="center">';
-                                    echo ($row['account_code'] == 0) ? '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-danger"><i class="fa fa-link" aria-hidden="true"></i></span></a>' : '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-primary"><i class="fa fa-link fa-lg" aria-hidden="true"></i></span></a>';
+                                    echo ($row['account_code'] == '0') ? '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-danger"><i class="fa fa-link" aria-hidden="true"></i></span></a>' : '<a class="link_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-primary"><i class="fa fa-link fa-lg" aria-hidden="true"></i></span></a>';
                                     echo '<a class="view_data" href="javascript:void(0)" data-id="' . $row['id'] . '"><span class="badge badge-info"><i class="fa fa-eye"></i></span></a>
                                 </td>
                             </tr>';
@@ -224,6 +224,9 @@ if ($_settings->chk_flashdata('success')) :
             uni_modal("<i class='fa fa-info-circle'></i> Details", "po/items/view_details.php?id=" + $(this).attr('data-id'), "")
         })
         $('.link_data').click(function () {
+            uni_modal("<i class='fa fa-edit'></i> Edit Details", "po/items/manage_item.php?id=" + $(this).attr('data-id'))
+        })
+        $('.unlink_data').click(function () {
             uni_modal("<i class='fa fa-edit'></i> Edit Details", "po/items/manage_item.php?id=" + $(this).attr('data-id'))
         })
         $('.modal-title').css('font-size', '18px');
