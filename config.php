@@ -30,6 +30,7 @@ function validate_image($file){
 		return base_url.'dist/img/no-image-available.png';
 	}
 }
+
 /* function validate_image($file){
 	if(!empty($file)){
 			// exit;

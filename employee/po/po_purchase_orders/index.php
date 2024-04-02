@@ -1,4 +1,6 @@
-<?php if($_settings->chk_flashdata('success')): ?>
+<?php 
+require_once('../../config.php');
+if($_settings->chk_flashdata('success')):?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
@@ -18,9 +20,11 @@
 	<div class="card card-outline card-primary">
 		<div class="card-header">
 			<b><i><h5 class="card-title" id="main-title">List of Pending Purchase Orders</b></i></h5>
+			<?php if ($_settings->userdata('position') == "PURCHASING ASSISTANT"){ ?>
 			<div class="card-tools">
 				<a href="./?page=po_purchase_orders/manage_po" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New Purchase Order</a>
 			</div>
+			<?php } ?>
 		</div>
 		<div class="card-body">
 			<div class="container-fluid">
@@ -28,14 +32,15 @@
 					<div id="pending-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -46,6 +51,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -54,22 +60,32 @@
 							<tbody>
 								<?php 
 								$i = 1;
-								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status='1' and po.status2='0' and po.status3='0' order by po.date_created DESC");
+								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE (po.status=0 or po.status = 1) and (po.status2 = 0 or po.status3 = 0) order by po.date_created DESC");
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
 
 									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
 
-									$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
 									$rowFromPoList = $result->fetch_assoc();
 									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+									$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
 
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									
+									if ($vatable == 1) {
+										$totalAmountWithTax = $orderItemsTotal;
+									} elseif ($vatable == 2) {
+										$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									} else {
+										$totalAmountWithTax = $orderItemsTotal;
+									}
 
 									$row['total_amount'] = $totalAmountWithTax;
 
+    
 								?>
+								
 								<tr>
 									<td class="text-center"><?php echo $i++; ?></td>
 									<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
@@ -77,6 +93,24 @@
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo $row['department'] ?></td>
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+									<td>
+									<?php 
+									switch ($row['status']) {
+										case '1':
+											echo '<span class="badge badge-success">Approved</span>';
+											break;
+										case '2':
+											echo '<span class="badge badge-danger">Declined</span>';
+											break;
+										case '3':
+											echo '<span class="badge badge-warning">For Review</span>';
+											break;
+										default:
+											echo '<span class="badge badge-secondary">Pending</span>';
+											break;
+									}
+									?>
+									</td>
 									<td>
 									<?php 
 									switch ($row['status2']) {
@@ -141,14 +175,15 @@
 					<div id="approved-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -159,6 +194,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -172,15 +208,25 @@
 									$id =  $row['id'];
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
+									
 									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
 
-									$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
 									$rowFromPoList = $result->fetch_assoc();
 									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+									$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
 
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									
+									if ($vatable == 1) {
+										$totalAmountWithTax = $orderItemsTotal;
+									} elseif ($vatable == 2) {
+										$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									} else {
+										$totalAmountWithTax = $orderItemsTotal;
+									}
 
 									$row['total_amount'] = $totalAmountWithTax;
+
 								
 								?>
 								<tr>
@@ -190,6 +236,24 @@
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo ($row['department']) ?></td>
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+									<td>
+										<?php 
+											switch ($row['status']) {
+												case '1':
+													echo '<span class="badge badge-success">Approved</span>';
+													break;
+												case '2':
+													echo '<span class="badge badge-danger">Declined</span>';
+													break;
+												case '3':
+													echo '<span class="badge badge-warning">For Review</span>';
+													break;
+												default:
+													echo '<span class="badge badge-secondary">Pending</span>';
+													break;
+											}
+										?>
+									</td>
 									<td>
 										<?php 
 											switch ($row['status2']) {
@@ -243,14 +307,15 @@
 					<div id="declined-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -261,6 +326,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -269,20 +335,30 @@
 							<tbody>
 								<?php 
 								$i = 1;
-								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE po.status=1 and (po.status2='2' or po.status3='2') order by po.date_created DESC");
+								$qry = $conn->query("SELECT po.*, s.name as sname FROM `po_list` po inner join `supplier_list` s on po.supplier_id = s.id WHERE (po.status=2 or po.status2=2 or po.status3=2) order by po.date_created DESC");
 								while($row = $qry->fetch_assoc()):
 									$row['item_count'] = $conn->query("SELECT * FROM order_items where po_id = '{$row['id']}'")->num_rows;
 									$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM order_items where po_id = '{$row['id']}'")->fetch_array()['total'];
 								
+								
 									$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
 
-									$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+									$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
 									$rowFromPoList = $result->fetch_assoc();
 									$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
+									$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
 
-									$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									
+									if ($vatable == 1) {
+										$totalAmountWithTax = $orderItemsTotal;
+									} elseif ($vatable == 2) {
+										$totalAmountWithTax = $orderItemsTotal + $totalVat;
+									} else {
+										$totalAmountWithTax = $orderItemsTotal;
+									}
 
 									$row['total_amount'] = $totalAmountWithTax;
+
 
 								?>
 								<tr>
@@ -292,6 +368,24 @@
 									<td class=""><?php echo $row['sname'] ?></td>
 									<td class=""><?php echo ($row['department']) ?></td>
 									<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+									<td>
+									<?php 
+									switch ($row['status']) {
+										case '1':
+											echo '<span class="badge badge-success">Approved</span>';
+											break;
+										case '2':
+											echo '<span class="badge badge-danger">Declined</span>';
+											break;
+										case '3':
+											echo '<span class="badge badge-warning">For Review</span>';
+											break;
+										default:
+											echo '<span class="badge badge-secondary">Pending</span>';
+											break;
+									}
+									?>
+									</td>
 									<td>
 									<?php 
 									switch ($row['status2']) {
@@ -305,7 +399,7 @@
 											echo '<span class="badge badge-warning">For Review</span>';
 											break;
 										default:
-											echo '<span class="badge badge-secondary">Pending</span>';
+											echo '<span>--</span>';
 											break;
 									}
 									?>
@@ -345,14 +439,15 @@
 					<div id="review-table" style="display: none;">
 						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
 							<colgroup>
-								<col width="6%">
+								<col width="3%">
 								<col width="10%">
-								<col width="6%">
+								<col width="3%">
 								<col width="30%">
 								<col width="15%">
 								<col width="10%">
-								<col width="8%">
-								<col width="8%">
+								<col width="7%">
+								<col width="7%">
+								<col width="7%">
 								<col width="7%">
 							</colgroup>
 							<thead>
@@ -363,6 +458,7 @@
 									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
+									<th>PM Status</th>
 									<th>FM Status</th>
 									<th>CFO Status</th>
 									<th>Action</th>
@@ -378,15 +474,22 @@
 										
 										$orderItemsTotal = $conn->query("SELECT SUM(quantity * unit_price) as total FROM order_items WHERE po_id = '{$row['id']}'")->fetch_array()['total'];
 
-										$result = $conn->query("SELECT tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
+										$result = $conn->query("SELECT vatable, tax_amount FROM po_list WHERE po_no = '{$row['id']}'");
 										$rowFromPoList = $result->fetch_assoc();
 										$totalVat = isset($rowFromPoList['tax_amount']) ? $rowFromPoList['tax_amount'] : 0;
-	
-										$totalAmountWithTax = $orderItemsTotal + $totalVat;
-	
+										$vatable = isset($rowFromPoList['vatable']) ? $rowFromPoList['vatable'] : 0;
+
+										
+										if ($vatable == 1) {
+											$totalAmountWithTax = $orderItemsTotal;
+										} elseif ($vatable == 2) {
+											$totalAmountWithTax = $orderItemsTotal + $totalVat;
+										} else {
+											$totalAmountWithTax = $orderItemsTotal;
+										}
+
 										$row['total_amount'] = $totalAmountWithTax;
-	
-									
+
 									?>
 									<tr>
 										<td class="text-center"><?php echo $i++; ?></td>
@@ -395,6 +498,24 @@
 										<td class=""><?php echo $row['sname'] ?></td>
 										<td class=""><?php echo $row['department'] ?></td>
 										<td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+										<td>
+										<?php 
+											switch ($row['status']) {
+												case '1':
+													echo '<span class="badge badge-success">Approved</span>';
+													break;
+												case '2':
+													echo '<span class="badge badge-danger">Declined</span>';
+													break;
+												case '3':
+													echo '<span class="badge badge-warning">For Review</span>';
+													break;
+												default:
+													echo '<span class="badge badge-secondary">Pending</span>';
+													break;
+											}
+										?>
+										</td>
 										<td>
 										<?php 
 											switch ($row['status2']) {

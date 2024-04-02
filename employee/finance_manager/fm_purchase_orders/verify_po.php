@@ -132,7 +132,7 @@ $(document).ready(function() {
 		// $('#discount_percentage').prop('readonly', true);
 		$('#tax_percentage').prop('readonly', true);
 		$('#tax_percentage').css('background-color', 'whitesmoke');
-        $('#notes').prop('readonly', true);
+        // $('#notes').prop('readonly', true);
 		$('#receiver').prop('readonly', true);
 		$('#receiver_contact_no').prop('readonly', true);
     }
@@ -222,8 +222,7 @@ $(document).ready(function() {
 
 <?php
 	$subtotal = 0;
-	$usertype = $_settings->userdata('user_type'); 
-	$type = $_settings->userdata('user_code');
+	$usertype = $_settings->userdata('position'); 
 	$level = $_settings->userdata('type');
 ?>
 <body onload="calculate()">
@@ -257,7 +256,7 @@ $(document).ready(function() {
 						<div class="col-md-6 form-group">
 							<label><b>Supplier:</b></label>
 							<?php 
-							$supplier_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
+							$supplier_qry = $conn->query("SELECT a.*,b.terms as pterms FROM supplier_list a JOIN payment_terms b ON a.terms = b.terms_indicator where id = '{$supplier_id}'");
 							while ($row = $supplier_qry->fetch_assoc()):
 								//$vatable = $row['vatable'];
 							?>
@@ -265,24 +264,28 @@ $(document).ready(function() {
 								<p class="m-0"><input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $row['id'] ?>"></p>
 								<input type="text" class="form-control form-control-sm rounded-0" value="<?php echo $row['name'] ?>" readonly>
 							</div>
+							</div>
+							<!-- <div class="col-md-4 form-group">
+								<label for="p_terms">Payment Terms:</label>
+								<input type="text" id="p_terms" value="<?php echo $row['pterms'] ?>" class="form-control form-control-sm rounded-0" readonly>
+							</div> -->
 							<?php endwhile; ?>
-						</div>
-					<div class="col-md-6 form-group">
-						<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
-						<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-						<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
-					</div>
-				</div>
-					<div class="row">
-						<div class="col-md-6 form-group">
-						<label><b>Requesting Department:</b></label>
-                    	<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
-						</div>
 						<div class="col-md-6 form-group">
 							<label for="department">Delivery Date:</label>
 							<?php
 							$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+							<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>" style="background-color:yellow;">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label><b>Requesting Department:</b></label>
+                    		<p><input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" readonly></p>
+						</div>
+						<div class="col-md-6 form-group">
+							<input type="hidden" name ="po_id" value="<?php echo $id; ?>">
+							<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+							<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 						</div>
 					</div>
 				</div>
@@ -326,7 +329,7 @@ $(document).ready(function() {
 							<p class="m-0"></p>
 						<?php endif; ?>
 					</div>
-			<!-- <div>Please deselect the item you wish to remove and provide your justification in the notes section for removing the item.</div> -->
+			
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered" id="item-list">
@@ -335,7 +338,6 @@ $(document).ready(function() {
 							<col width="10%">
 							<col width="25%">
 							<col width="20%">
-							<col width="10%">
 							<col width="10%">
 							<col width="10%">
 							<col width="5%">
@@ -352,7 +354,7 @@ $(document).ready(function() {
 								<th class="px-1 py-1 text-center">Description</th>
 								<th class="px-1 py-1 text-center">Price before Tax</th>
 								<th class="px-1 py-1 text-center">Total</th>
-								<th class="px-1 py-1 text-center">Vat Amount</th>
+								<!-- <th class="px-1 py-1 text-center">Vat Amount</th> -->
 								<th class="px-1 py-1 text-center">Select</th>
 								<th class="px-1 py-1 text-center">Note</th>
 							</tr>
@@ -389,9 +391,7 @@ $(document).ready(function() {
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
 								</td>
-								<td class="align-middle p-1">
 									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
-								</td>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
 									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
@@ -406,21 +406,22 @@ $(document).ready(function() {
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6">
+									<th class="p-1 text-right" colspan="5">
 										Sub-Total
 									</th>
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">
+									<th class="p-1 text-right" colspan="5">
 									VAT</th>
 									<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Total:</th>
+									<th class="p-1 text-right" colspan="5">Total:</th>
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 								<tr>
+								<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;height:auto;">The checkbox is for viewing the computation in case an item was removed. Changes won't be saved. For item updates, use the Note Area/Remarks and set the status to 'For Review' for the Purchasing Officer's action.</div>
 									<table class="table-bordered">
 										<tr style="padding-left:150px;align-items: center;text-align: center;">
 											<td>
@@ -440,50 +441,39 @@ $(document).ready(function() {
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
 										</tr>
-										<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+										<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;">The following options are for viewing only; any changes you make will not be saved. </div>
 									</table>
 								</tr>
 							</tr>
 						</tfoot>
 					</table>
+					<input type="hidden" name="usertype" id="usertype" value="<?php echo $usertype; ?>">
+					<br>
 					<div class="row">
                         <div class="col-md-12">
-							<label for="notes" class="control-label">Notes:</label>
+							<label for="notes" class="control-label">Remarks:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>
+					<br>
 					<div class="form-group">
 						<input type="hidden" value="<?php echo $level; ?>" name="level">
 						<input type="hidden" value="0" name="selected_index">
 						<label for="status">Status:</label>
 
-						<!-- Purchasing Officer -->
-						<?php if ($level == 4) { ?>
-							<select name="status" id="status" class="form-control">
-								<option value="0"></option>
-								<option value="1" <?php echo $status == 1 ? 'selected' : ''; ?>>Approved</option>
-								<option value="2" <?php echo $status == 2 ? 'selected' : ''; ?>>Declined</option>
-								<option value="3" <?php echo $status == 3 ? 'selected' : ''; ?>>For Review</option>
-							</select>
-
+					
 
 						<!-- Finance Manager -->
-						<?php } elseif ($level == 3) { ?>
+						<?php if ($level == 3) { ?>
 							<select name="status2" id="status2" class="form-control">
-								<option value="0"></option>
+								<option value="0" <?php echo $status2 == 0 ? 'selected' : ''; ?>>Select a Status</option>
 								<option value="1" <?php echo $status2 == 1 ? 'selected' : ''; ?>>Approved</option>
 								<option value="2" <?php echo $status2 == 2 ? 'selected' : ''; ?>>Declined</option>
 								<option value="3" <?php echo $status2 == 3 ? 'selected' : ''; ?>>For Review</option>
 							</select>
 
-						<!-- COO/CFO -->
-						<?php } elseif ($level == 2) { ?>
-							<select name="status3" id="status3" class="form-control">
-								<option value="0"></option>
-								<option value="1" <?php echo $status3 == 1 ? 'selected' : ''; ?>>Approved</option>
-								<option value="2" <?php echo $status3 == 2 ? 'selected' : ''; ?>>Declined</option>
-								<option value="3" <?php echo $status3 == 3 ? 'selected' : ''; ?>>For Review</option>
-							</select>
+						
 						<?php } ?>
 					</div>
 			    </div>
@@ -519,7 +509,7 @@ $(document).ready(function() {
 			<input type="text" class="text-right w-100 border-0 item-unit" name="default_unit[]">
 		</td>
 		<td class="align-middle p-1">
-			<input type="hidden" name="item_id[]">
+			<input type="text" name="item_id[]">
 			<input type="text" class="text-center w-100 border-0 item_id" id="item" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
@@ -532,7 +522,7 @@ $(document).ready(function() {
 		<td class="align-middle p-1 text-right total-price">0</td>
 		<td class="align-middle p-0 text-center">
 			<input type="checkbox" class="item-checkbox">
-			<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
+			<input type="text" name="item_status[]" id="item_status_<?php echo $row['id'] ?>">
 		</td>
 		<td class="align-middle p-0 text-center">
 			<textarea name="item_notes[]" id="item_notes"></textarea>
@@ -595,39 +585,42 @@ function copyTaxValue() {
 function calculate() {
     var _total = 0;
     var _vat_total = 0;
+    var rdoText = document.getElementById('rdoText').value;
 
-    $('.po-item').each(function() {
+    $('.po-item').each(function () {
         var qty = parseFloat($(this).find('[name="qty[]"]').val()) || 0;
         var unit_price = parseFloat($(this).find('[name="unit_price[]"]').val()) || 0;
         var item_status = $(this).find("[name='item_status[]']").val();
-        var rdoText = document.getElementById('rdoText').value;
         var row_total = 0;
-        var result;
-
-		if (rdoText === "1") {
-            result = (qty * unit_price) / 1.12 * 0.12;
-        } else if (rdoText === "2") {
-            result = qty * unit_price * 0.12;
-        }else{
-			result = 0;
-		}
+        var result = 0;
 
         if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
             row_total = parseFloat(qty) * parseFloat(unit_price);
-        }else{
-			result = 0;
-		}
+        }
 
-        
+        if (rdoText === "1") {
+            result = (qty * unit_price) / 1.12 * 0.12;
+        } else if (rdoText === "2") {
+            result = qty * unit_price * 0.12;
+        }
+		if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
+            _vat_total += result;
+        }
         _total += row_total;
-        _vat_total += result;
+        
+
         $(this).find('[name="vat_included[]"]').val(result.toFixed(2));
         $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
-    $('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+	$('#vat_total').text(parseFloat(_vat_total).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+    if (rdoText === "2") {
+		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+    } else {
+		$('#total').text(parseFloat(_total).toLocaleString("en-US"));
+    }
 }
 
 $('input[name="vatType"]').change(function() {
@@ -779,47 +772,7 @@ $('input[name="vatType"]').change(function() {
 			_autocomplete(item, selectedSupplierId);
 		});
 	});
-	$(document).ready(function() {
-		$("#supplier_id").change(function() {
-			$('[name="vatable"]').val('');
-
-			var selectedOption = $(this).find("option:selected");
-			var vatable = selectedOption.data("vatable");
-
-			if (vatable !== null) {
-				$('[name="vatable"]').val(vatable);
-			}
-
-			var subtotal = parseFloat($('#sub_total').text().replace(/,/g, '')) || 0;
-			var discount = (subtotal * vatable) / 100;
-
-			$('[name="tax_amount"]').val(discount.toLocaleString('en-US'));
-
-			var total = subtotal - discount;
-
-			$('#total').text(total.toLocaleString('en-US'));
-			tax_perc = $('[name="vatable"]').val();
-
-			var taxLabel = $('#tax_label');
-			console.log('tax_perc:', tax_perc);
-
-			if (tax_perc === '0') {
-				taxLabel.text('Non-VAT');
-			} else if (tax_perc === '1') {
-				taxLabel.text('Inclusive');
-			} else if (tax_perc === '2') {
-				taxLabel.text('Exclusive');
-			} else if (tax_perc === '3') {
-				taxLabel.text('Zero rated');
-			} else {
-				taxLabel.text('');
-				//console.log('Unexpected tax percentage value:', tax_perc);
-				//alert('Oops! Looks like there\'s no tax group set for this supplier. Please make sure to assign the correct tax group.');
-			}
-		});
-
-		$("#supplier_id").trigger("change");
-	});
+	
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 		var tr = $('#item-clone tr').clone()
@@ -862,6 +815,12 @@ $('input[name="vatType"]').change(function() {
             var _this = $(this)
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger')
+
+			if ($('[name="status2"]').val() == 0) {
+				alert_toast("Please select a valid status.", 'warning');
+				return false;
+			}
+
 			if($('#item-list .po-item').length <= 0){
 				alert_toast(" Please add atleast 1 item on the list.",'warning')
 				return false;

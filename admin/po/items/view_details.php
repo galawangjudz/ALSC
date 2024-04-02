@@ -13,13 +13,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     #uni_modal .modal-footer{
         display:none
     }
+    body{
+        font-size:14px;
+    }
 </style>
 <div class="container fluid">
     <callout class="callout-primary">
         <dl class="row">
             <table class="table table-bordered">
                 <tr>
-                    <td><b>Item Name:</b></dt></td>
+                    <td><b>Code:</b></dt></td>
+                    <td><b><?php echo $item_code ?></b></dd></td>
+                </tr>
+                <tr>
+                    <td><b>Name:</b></dt></td>
                     <td><b><?php echo $name ?></b></dd></td>
                 </tr>
                 <tr>
@@ -27,7 +34,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <td><?php echo $description ?></td>
                 </tr>
                 <tr>
-                    <td><b>Unit of Measurement:</b></td>
+                    <td><b>Type:</b></td>
+                    <td> <?php if($type == 1): ?>
+                            Goods
+                        <?php elseif($type == 2): ?>
+                            Services
+                        <?php else: ?>
+                            <span class='badge badge-secondary'>Not yet tagged</span>
+                        <?php endif; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Unit of Measure:</b></td>
                     <td><?php echo $default_unit ?></td>
                 </tr>
                 <tr>
@@ -63,9 +80,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <?php endif; ?>
                     </td>
                 </tr>
-            </table>
+            </table><br><br>
+            
         </dl>
     </callout>
+    <table class="table table-bordered">
+    <hr>
+    <div style="text-align:center;font-weight:bold;">GL Account:<br><hr></div>
+        <tr>
+            <td style="width:30%;"><b>Sales Account:</b></dt></td>
+            <td>
+            <?php
+                $account_list_qry = $conn->query("SELECT * FROM account_list WHERE code = $account_code");
+                while($account_row = $account_list_qry->fetch_assoc()):
+                    ?>
+                    <?php echo $account_row['name']; ?>
+                <?php endwhile; ?>
+            </select>
+            </td>
+        </tr>
+    </table>
     <table style="width:100%;">
         <tr>
             <td>

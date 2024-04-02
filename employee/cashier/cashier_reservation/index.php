@@ -84,19 +84,19 @@
 </style>
 
 <?php
+// $usertype = $_settings->userdata('user_type');
+// $pos = $_settings->userdata('position');
+// if (!isset($usertype)) {
+//     include '404.html';
+//   exit;
+// }
 
-$usertype = $_settings->userdata('user_type');
-if (!isset($usertype)) {
-    include '404.html';
-  exit;
-}
+// $user_role = $usertype;
 
-$user_role = $usertype;
-
-if ($user_role != 'IT Admin' && $user_role != 'Cashier') {
-    include '404.html';
-  exit;
-}
+// if ($usertype != 'IT Admin' || $pos != 'CASHIER') {
+//     include '404.html';
+//   exit;
+// }
 
 ?>
 

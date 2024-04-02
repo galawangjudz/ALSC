@@ -9,11 +9,13 @@
 </style>
 <?php $usertype = $_settings->userdata('user_type'); 
 $level = $_settings->userdata('type'); 
+$position = $_settings->userdata('position'); 
+$department = $_settings->userdata('department'); 
 ?>
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>admin" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;
@@ -188,6 +190,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
                       <i class="nav-icon fas fa-file"></i>
@@ -235,7 +238,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     
-                    <?php if ($usertype == "IT Admin" || $usertype == 'Cashier' || $usertype == 'Billing' || $usertype == 'Manager' || $usertype == 'COO' || $usertype == 'CFO'): ?>
+                    <?php if ($usertype == "IT Admin" || $position == 'CASHIER' || $department == 'Billing' || $position == 'CHIEF FINANCE OFFICER' || $position == 'CHIEF OF OPERATION'): ?>
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Report</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=clients/av_logs/av_list" class="nav-link nav-av">

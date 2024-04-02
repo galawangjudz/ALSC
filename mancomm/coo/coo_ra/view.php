@@ -283,7 +283,7 @@ if($csr->num_rows > 0){
                                 <a class="dropdown-item" style="font-size:14px;" href="/ALSC/report/print_agreement.php?id=<?php echo $getID; ?>">Print Agreement Page</a>
                             </div>
                         </td>
-                        <?php if ($verify == 1 && $coo_approval == 0 && $usertype == "COO") { ?>
+                        <?php if ($verify == 1 && $coo_approval == 0 && $usertype == "CHIEF OF OPERATION") { ?>
                             <td style="width: 33.33%;">
                                 <button type="button" csr-id="<?php echo $getID; ?>" data-csr-id="<?php echo $getID; ?>" user-type="<?php echo $type; ?>" class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
                             </td>

@@ -11,7 +11,7 @@ $level = $_settings->userdata('type');
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>employee/sales_manager" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;
@@ -105,7 +105,20 @@ $level = $_settings->userdata('type');
                       <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/po_status" class="nav-link nav-monitoring">
                       <i class="nav-icon fas fa-search"></i>
                         <p>
-                          Monitoring
+                          PO Monitoring
+                        </p>
+                      </a>
+                    </li> 
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/po/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
                         </p>
                       </a>
                     </li> 

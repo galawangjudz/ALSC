@@ -298,7 +298,7 @@ if($csr->num_rows > 0){
                         <?php } ?>
                         </td>
                         <td>
-                        <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "CFO" or $usertype == "COO" or $usertype == "IT Admin" )){ ?>
+                        <?php if($verify == 1 && $coo_approval == 0 && ($usertype == "CHIEF FINANCE OFFICER" or $usertype == "CHIEF OF OPERATION" or $usertype == "IT Admin" )){ ?>
                             <button type="button" csr-id =<?php echo $getID; ?> data-csr-id =<?php echo $getID ?> user-type=<?php echo $type?> class="btn btn-success btn-flat new-coo-approval" style="margin-top:5px; font-size:14px;width:100%;"><span class="fa fa-check" aria-hidden="true"></span>&nbsp;&nbsp;COO Approved</button>
                         </td>
                         <td>

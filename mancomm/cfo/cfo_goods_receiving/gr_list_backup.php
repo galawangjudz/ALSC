@@ -41,7 +41,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <td>
                 <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>"><?php $_GET['id'] ?></a>
             </td>
-            <td><?php echo number_format($row['total_amount']) ?></td>
+            <td><?php echo number_format($row['total_amount'],2) ?></td>
             <td><?php echo $row["date_purchased"] ?></td>
         </tr>
         <?php endwhile; ?>

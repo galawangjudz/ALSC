@@ -77,7 +77,9 @@ class Login extends DBConnection
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
             <!-- Brand Logo -->
-            <a href="<?php echo base_url ?>admin" class="brand-link bg-blue text-sm">
+
+            <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
+
                 <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8;
                     width: 30px;
@@ -276,8 +278,9 @@ class Login extends DBConnection
                             <tbody>
                                 <?php
                                 $i = 1;
-                                $conn = mysqli_connect(DB_SERVER, DB_USERNAME, '', DB_NAME);
-                              
+
+                                $con = mysqli_connect("localhost", "root", "", "alscdb");
+
 
                                 if (isset($_GET['from_date']) && isset($_GET['to_date']) && isset($_GET['preparer'])) {
 

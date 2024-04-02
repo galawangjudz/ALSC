@@ -13,7 +13,7 @@ $level = $_settings->userdata('type');
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>employee/coo" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;
@@ -46,7 +46,15 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=goods_receiving/received_items_status" class="nav-link nav-gr">
+                      <i class="nav-icon fas fa-check-square"></i>
+                        <p>
+                          Goods Receiving
+                        </p>
+                      </a>
+                    </li> 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Reservation Application</li></div></b></i>
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/coo/?page=sm_sales" class="nav-link nav-sm_sales">
@@ -81,7 +89,19 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                   
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

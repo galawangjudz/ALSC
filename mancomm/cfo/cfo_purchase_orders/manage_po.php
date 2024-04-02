@@ -127,7 +127,7 @@ $(document).ready(function() {
 
 <?php
 	$subtotal = 0;
-	$usertype = $_settings->userdata('user_type'); 
+	$usertype = $_settings->userdata('position'); 
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>
@@ -327,7 +327,7 @@ $(document).ready(function() {
 					</table>
 					<div class="row">
                         <div class="col-md-12">
-							<label for="notes" class="control-label">Notes:</label>
+							<label for="notes" class="control-label">Remarks:</label>
 							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 						</div>
 					</div>

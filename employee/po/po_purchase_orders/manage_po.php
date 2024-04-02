@@ -1,6 +1,6 @@
 
 <?php
-$delivery_date = date('Y-m-d', strtotime('+1 week'));
+$delivery_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +1 week'));
 if(isset($_GET['id']) && $_GET['id'] > 0){
     $qry = $conn->query("SELECT * from `po_list` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
@@ -23,13 +23,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $po_number = 'Selected PO not found';
     }
 } else {
-    $qry = $conn->query("SELECT MAX(id) AS max_id FROM `po_list`");
+    $qry = $conn->query("SHOW TABLE STATUS LIKE 'po_list'");
+    
     if ($qry->num_rows > 0) {
         $row = $qry->fetch_assoc();
-        $next_po_number = $row['max_id'] + 1;
+        $next_po_number = $row['Auto_increment'];
     } else {
         $next_po_number = 1;
     }
+
     $po_number = str_pad($next_po_number, '0', STR_PAD_LEFT);
 }
 ?>
@@ -51,30 +53,56 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 						<div class="row">
 							<div class="col-md-6 form-group">
 								<label for="supplier_id">Supplier:</label>
-								<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-									<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
-									<?php 
+								<?php
 									$supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
-									while ($row = $supplier_qry->fetch_assoc()):
-										//$vatable = $row['vatable'];
+									$terms = '';
 									?>
-									<option 
-										value="<?php echo $row['id'] ?>" 
-										data-vatable="<?php echo $vatable ?>"
-										<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>
-									><?php echo $row['name'] ?></option>
-									<?php endwhile; ?>
-								</select>
+
+									<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
+										<option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
+										<?php while ($row = $supplier_qry->fetch_assoc()): ?>
+											<option
+												value="<?php echo $row['id'] ?>"
+												data-vatable="<?php echo $row['vatable'] ?>"
+												data-terms="<?php echo $row['terms']; ?>"
+												<?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?>
+												<?php echo $row['status'] == 0 ? 'disabled' : '' ?>
+											><?php echo $row['name'] ?></option>
+											<?php
+											if (isset($supplier_id) && $supplier_id == $row['id']) {
+												$terms = $row['terms'];
+											}
+											?>
+										<?php endwhile; ?>
+									</select>
 							</div>
+							<!-- <div class="col-md-4 form-group">
+								<label for="p_terms">Payment Terms:</label>
+								<?php
+								if ($terms !== '') {
+									$terms_qry = $conn->query("SELECT terms FROM `payment_terms` WHERE terms_indicator = $terms;");
+									while ($row = $terms_qry->fetch_assoc()):
+										$pterms = $row['terms'];
+										?>
+										<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" value="<?php echo $pterms; ?>" readonly>
+									<?php endwhile;
+								} else {
+									?>
+									<input type="text" id="p_terms" class="form-control form-control-sm rounded-0" readonly>
+								<?php } ?>
+							</div> -->
+							<!-- <input type="hidden" id="termsTextbox" value="<?php echo $terms; ?>"  class="form-control"> -->
 							<div class="col-md-6 form-group">
-								<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
-								<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
+								<label for="department">Delivery Date:</label>
+								<?php
+								// $formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
+								<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>" style="background-color:yellow;">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6 form-group">
 								<label for="department">Requesting Department:</label>
-								<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2">
+								<select name="department" id="department" class="custom-select custom-select-sm rounded-0 select2" required>
 									<option value="" disabled <?php echo !isset($department) ? "selected" : '' ?>></option>
 									<?php 
 									$dept_qry = $conn->query("SELECT * FROM `department_list` order by `department` asc");
@@ -90,10 +118,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 								</select>
 							</div>
 							<div class="col-md-6 form-group">
-								<label for="department">Delivery Date:</label>
-								<?php
-								$formattedDate = date('Y-m-d', strtotime($delivery_date)); ?>
-								<input type="date" class="form-control form-control-sm rounded-0" id="delivery_date" name="delivery_date" value="<?php echo isset($formattedDate) ? $formattedDate : '' ?>">
+								<label for="po_no">P.O. #: <span class="po_err_msg text-danger"></span></label>
+								<input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo $po_number; ?>" readonly>
 							</div>
 						</div>
 					</div>
@@ -191,7 +217,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 												<input type="number" class="text-center w-100 border-0 quantity" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
 											</td>
 											<td class="align-middle p-0 text-center">
-												<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>"/>
+												<input type="text" class="text-center w-100 border-0 item-unit" step="any" name="default_unit[]" value="<?php echo $row['default_unit'] ?>" style="background-color:gainsboro;" readonly/>
 											</td>
 											<td class="align-middle p-1">
 												<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
@@ -223,7 +249,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 											<th class="p-1 text-right" colspan="7">
 											VAT</th>
 											<th class="p-1 text-right" id="vat_total" name="tax_amount" value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>">0</th>
-											<input type="text" id="copytax" name="tax_amount">
+											<input type="hidden" id="copytax" name="tax_amount">
 										</tr>
 										<tr>
 											<th class="p-1 text-right" colspan="7">Total:</th>
@@ -233,25 +259,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 										<table class="table-bordered">
 											<tr style="padding-left:150px;align-items: center;text-align: center;">
 												<td>
-													<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()" required />
 													<label for="nonVatRadio">Non-VAT</label>
 												</td>
 												<td>
-													<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()" required />
 													<label for="zeroRatedRadio">Zero-Rated</label>
 												</td>
 												<td>
-													<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()" required />
 													<label for="inclusiveRadio">Inclusive</label>
 												</td>
 												<td>
-													<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()"/>
+													<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()" required />
 													<label for="exclusiveRadio">Exclusive</label>
 												</td>
 											</tr>
-											<input type="text" id="rdoText" name="vatable" value="<?php echo $vatable ?>">
+											<input type="hidden" id="rdoText" name="vatable" value="<?php echo $vatable ?>" />
 										</table>
-
 										</tr>
 									</tr>
 								</tfoot>
@@ -259,7 +284,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 							<br>
 							<div class="row">
 								<div class="col-md-12">
-									<label for="notes" class="control-label">Notes:</label>
+									<label for="notes" class="control-label">Remarks:</label>
 									<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
 								</div>
 							</div>
@@ -271,7 +296,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			<table style="width:100%;">
 				<tr>
 					<td>
-						<button class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;" onclick="copyTaxValue()"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+						<button id="saveButton" class="btn btn-flat btn-default bg-maroon" form="po-form" style="width:100%;margin-right:5px;font-size:14px;" onclick="copyTaxValue()"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
 					</td>
 					<td>
 						<a class="btn btn-flat btn-default" href="?page=po_purchase_orders/" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
@@ -280,6 +305,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			</table>
 		</div>
 	</div>
+
 	<table class="d-none" id="item-clone">
 		<tr class="po-item" data-id="">
 			<td class="align-middle p-1 text-center">
@@ -289,18 +315,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
 			</td>
 			<td class="align-middle p-1 item-unit">
-				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]">
+				<input type="text" class="text-center w-100 border-0 item-unit" name="default_unit[]" style="background-color:gainsboro;" readonly/>
 			</td>
-			<td class="align-middle p-1">
+			<td class="align-middle p-1 item-id">
 				<input type="hidden" name="item_id[]">
-				<input type="text" class="text-left w-100 border-0 item_id" id="item" required/>
+				<input type="text" class="text-left w-100 border-0 item_id" id="item" required oninput="clearDescriptionAndUnit(this)">
 			</td>
 			<td class="align-middle p-1 item-description"></td>
 			<td class="align-middle p-1">
 				<input type="text" class="text-center w-100 border-0 item-price" name="unit_price[]" oninput="formatDecimal(this)">
 			</td>
 			<td class="align-middle p-1">
-				<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:red;" readonly>
+				<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" style="background-color:gainsboro;" readonly>
 			</td>
 			
 			<!-- <td class="align-middle p-1 text-right total-vat">0</td> -->
@@ -308,7 +334,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		</tr>
 	</table>
 </body>
+
 <script>
+	function clearDescriptionAndUnit(input) {
+		var inputValue = input.value.trim();
+		var row = $(input).closest('tr');
+
+		if (inputValue === '') {
+			row.find('.item-description').text('');
+			row.find('.item-unit input').val('');
+			row.find('.item-id input').val('');
+		}
+	}
+
 	document.addEventListener("DOMContentLoaded", function() {
 
 		updateValueOnPageLoad();
@@ -353,62 +391,31 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			textBox.value = 0;
 		}
 	}
-</script>
-<script>
+
+
 function copyTaxValue() {
 	var taxAmountValue = document.getElementById('vat_total').textContent;
-	document.getElementById('copytax').value = taxAmountValue;
+	var taxAmountWithoutCommas = taxAmountValue.replace(/,/g, ''); 
+
+	document.getElementById('copytax').value = taxAmountWithoutCommas;
 }
 
 $('input[name="vatType"]').change(function() {
     calculate();
 });
 
-// function updateInclusiveValues() {
-//     $('input[name="unit_price[]"]').each(function() {
-//         var unitPrice = parseFloat($(this).val());
-//         var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
-
-//         if (!isNaN(unitPrice) && !isNaN(qty)) {
-//             var taxRate = 0.12;
-//             var totalPrice = unitPrice * qty;
-//             var inclusiveVatPrice = (totalPrice / 1.12) * taxRate;
-
-//             $(this).closest('.po-item').find('input[name="vat_included[]"]').val(inclusiveVatPrice.toFixed(2));
-//         }
-//     });
-
-//     calculate();
-// }
-
-// function updateExclusiveValues() {
-//     $('input[name="unit_price[]"]').each(function() {
-//         var unitPrice = parseFloat($(this).val());
-//         var qty = parseFloat($(this).closest('.po-item').find('input[name="qty[]"]').val());
-
-//         if (!isNaN(unitPrice) && !isNaN(qty)) {
-//             var taxRate = 0.12;
-//             var totalPrice = unitPrice * qty;
-//             var exclusiveVatPrice = totalPrice * taxRate;
-
-//             $(this).closest('.po-item').find('input[name="vat_included[]"]').val(exclusiveVatPrice.toFixed(2));
-//         }
-//     });
-
-//     calculate();
-// }
 
 function calculate() {
     var _total = 0;
     var _vat_total = 0;
+    var rdoText = document.getElementById('rdoText').value;
 
-    $('.po-item').each(function() {
+    $('.po-item').each(function () {
         var qty = parseFloat($(this).find('[name="qty[]"]').val()) || 0;
         var unit_price = parseFloat($(this).find('[name="unit_price[]"]').val()) || 0;
         var item_status = $(this).find("[name='item_status[]']").val();
-        var rdoText = document.getElementById('rdoText').value;
         var row_total = 0;
-        var result;
+        var result = 0;
 
         if (item_status !== "1" && item_status !== "2" && qty > 0 && unit_price > 0) {
             row_total = parseFloat(qty) * parseFloat(unit_price);
@@ -418,19 +425,27 @@ function calculate() {
             result = (qty * unit_price) / 1.12 * 0.12;
         } else if (rdoText === "2") {
             result = qty * unit_price * 0.12;
-        }else{
-			result = 0;
-		}
+        }
+
         _total += row_total;
         _vat_total += result;
+
         $(this).find('[name="vat_included[]"]').val(result.toFixed(2));
         $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'));
     });
 
     $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"));
-    $('#vat_total').text(parseFloat(_vat_total).toLocaleString("en-US"));
-    $('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+	$('#vat_total').text(parseFloat(_vat_total).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+    if (rdoText === "1") {
+		$('#total').text(parseFloat(_total).toLocaleString("en-US"));
+    } else if (rdoText === "2") {
+		$('#total').text(parseFloat(_total + _vat_total).toLocaleString("en-US"));
+    } else {
+        $('#total').text(parseFloat(_total).toLocaleString("en-US"));
+    }
 }
+
 
  $(document).ready(function() {
 	var originalTbody = $('#item-list tbody').html();
@@ -448,7 +463,6 @@ function calculate() {
 		}
 	});
 });
-
 
 
 $(document).ready(function() {
@@ -493,9 +507,12 @@ $(document).ready(function() {
 	});
 });
 
-function rem_item(_this){
-	_this.closest('tr').remove()
-	calculate();
+function rem_item(_this) {
+    var row = _this.closest('tr');
+    var selectedItemID = row.find('input[name="item_id[]"]').val();
+    selectedItems = selectedItems.filter(itemID => itemID !== selectedItemID);
+    row.remove();
+    calculate();
 }
 
 var selectedSupplierId; 
@@ -505,59 +522,77 @@ $(document).ready(function() {
 
 _autocomplete(item, selectedSupplierId);
 });
+
+var selectedItems = [];
+
+var selectedItems = [];
+
 function _autocomplete(_item, supplierId) {
-_item.find('.item_id').autocomplete({
-	source: function(request, response) {
-		$.ajax({
-			url: _base_url_ + "classes/Master.php?f=search_items",
-			method: 'POST',
-			data: {
-				q: request.term,
-				supplier_id: selectedSupplierId
-			},
-			dataType: 'json',
-			error: err => {
-				console.log(err);
-			},
-			success: function(resp) {
-				console.log("Supplier ID from PHP:", resp.supplier_id);
-				response(resp.items); 
-			}
-		});
-	},
-		select: function(event, ui) {
-			console.log(ui)
-			_item.find('input[name="item_id[]"]').val(ui.item.id)
-			_item.find('.item-description').text(ui.item.description)
-			_item.find('.item-unit').val(ui.item.default_unit);
-			_item.find('.item-price').val(ui.item.unit_price || 0);
-		}
-	})
+    _item.find('.item_id').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=search_items",
+                method: 'POST',
+                data: {
+                    q: request.term,
+                    supplier_id: selectedSupplierId,
+                    selected_items: selectedItems
+                },
+                dataType: 'json',
+                error: function (err) {
+                    console.log(err);
+                },
+                success: function (resp) {
+                    console.log("Supplier ID from PHP:", resp.supplier_id);
+
+                    var availableItems = resp.items.filter(function (item) {
+                        return selectedItems.indexOf(item.id.toString()) === -1;
+                    });
+
+                    response(availableItems);
+                }
+            });
+        },
+        select: function (event, ui) {
+            console.log(ui);
+            _item.find('input[name="item_id[]"]').val(ui.item.id);
+            _item.find('.item-description').text(ui.item.description);
+            _item.find('.item-unit').val(ui.item.default_unit);
+            _item.find('.item-price').val(ui.item.unit_price || 0);
+
+            selectedItems.push(ui.item.id);
+			calculate();
+        }
+    });
 }
+
 var item = $('#item');
+
 $(document).ready(function() {
 	$("#supplier_id").change(function() {
 		selectedSupplierId = $(this).val();
 		selectedSupplierId = parseInt($(this).val(), 10);
-
 		console.log("Selected Supplier ID: " + selectedSupplierId);
 		_autocomplete(item, selectedSupplierId);
 	});
 });
 
 $(document).ready(function(){
-	$('#add_row').click(function(){
-		var tr = $('#item-clone tr').clone()
-		$('#item-list tbody').append(tr)
-		_autocomplete(tr)
-		tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
-		calculate();
-			
+	$('#add_row').click(function () {
+        $('#item-list tbody tr:last-child').find('.item_id').prop('readonly', true).css('background-color', 'gainsboro');
 
-	});
+        var tr = $('#item-clone tr').clone();
+        $('#item-list tbody').append(tr);
+        _autocomplete(tr);
 
+        tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+            calculate();
+        });
 
-	})
+        var statusClone = $('#status').clone().attr('id', '');
+        tr.find('.item-id').append(statusClone.html());
+    });
+
 	if($('#item-list .po-item').length > 0){
 		$('#item-list .po-item').each(function(){
 			var tr = $(this)
@@ -566,36 +601,42 @@ $(document).ready(function(){
 				calculate();
 			})
 			tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
+			calculate();
 		})
 	}else{
 	$('#add_row').trigger('click')
 	}
 	$('.select2').select2({placeholder:"Please Select here",width:"relative"})
+
+	
+
 	$('#po-form').submit(function(e) {
 		e.preventDefault();
-		var _this = $(this)
+		var _this = $(this);
 		$('.err-msg').remove();
-		$('[name="po_no"]').removeClass('border-danger')
+		$('[name="po_no"]').removeClass('border-danger');
 
-		// var invalidItem = false;
-		// $('#item-list .po-item').each(function() {
-		// 	var description = $(this).find('.item-description').text().trim();
-		// 	if (!description) {
-		// 		invalidItem = true;
-		// 		return false; 
-		// 	}
-		// });
+		var validItems = false;
+		var itemIds = [];
 
-		// if (invalidItem) {
-		// 	alert_toast("Please make sure all entered items are valid.", 'warning');
-		// 	return false;
-		// }
+		$('#item-list .po-item').each(function () {
+			var description = $(this).find('.item-description').text().trim();
+			var itemId = $(this).find('[name="item_id[]"]').val();
 
-		if ($('#item-list .po-item').length <= 0) {
-			alert_toast("Please add at least 1 item to the list.", 'warning')
+			if (description === '') {
+				validItems = false; 
+			} else {
+				validItems = true;
+				itemIds.push(itemId);
+			}
+		});
+
+		if (!validItems) {
+			alert_toast("Please enter a valid item/service.", 'warning');
 			return false;
 		}
 
+		
 		start_loader();
 		$.ajax({
 			url: _base_url_ + "classes/Master.php?f=manage_po",
@@ -632,5 +673,6 @@ $(document).ready(function(){
 			}
 		})
 	});
+
 })
 </script>

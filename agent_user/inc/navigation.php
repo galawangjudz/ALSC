@@ -3,7 +3,7 @@
 $level = $_settings->userdata('type'); 
 ?>
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
-        <a href="<?php echo base_url ?>agent_user" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;

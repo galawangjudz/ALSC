@@ -3,14 +3,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet"> -->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -107,7 +107,19 @@ border-color: #007BFF;
                         <?php 
                             if (!isset($id) || $id === null) :
                                 $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$journalId}'");
+                                $jitems = $conn->query("SELECT DISTINCT gl.gr_id,a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
+                            FROM tbl_gl_trans gl
+                            LEFT JOIN vs_items vi ON gl.vs_num = vi.journal_id
+                            LEFT JOIN account_list a ON gl.account = a.code
+                            WHERE gl.vs_num = '{$_GET['id']}' AND gl.doc_type='AP'
+                            GROUP BY gl.account
+                            ORDER BY gl.gtype;");
+                                // $jitems = $conn->query("SELECT DISTINCT vi.gr_id, vi.amount, vs.doc_no, gl.gtype AS `type`, gl.account, al.name, vi.phase, vi.block, vi.lot FROM vs_items vi INNER JOIN
+                                // vs_entries vs ON vi.journal_id = vs.v_num INNER JOIN 
+                                // tbl_gl_trans gl ON vs.doc_no = gl.doc_no INNER JOIN
+                                // account_list al ON gl.account = al.code
+                                // WHERE vi.journal_id = '{$journalId}';");
+                                
                                 $groupedData = array();
 
                                 while ($row = $jitems->fetch_assoc()) {
@@ -122,9 +134,9 @@ border-color: #007BFF;
                                         <col width="5%">
                                         <col width="5%">
                                         <col width="35%">
-                                        <col width="40%">
-                                        <col width="5%">
-                                        <col width="5%">
+                                        <col width="30%">
+                                        <col width="10%">
+                                        <col width="10%">
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -132,7 +144,7 @@ border-color: #007BFF;
                                             <th class="text-center">Account Code</th>
                                             <th class="text-center">Account Name</th>
                                             <th class="text-center">Location</th>
-                                            <th class="text-center">Group</th>
+                                            <!-- <th class="text-center">Group</th> -->
                                             <th class="text-center">Debit</th>
                                             <th class="text-center">Credit</th>
                                         </tr>
@@ -147,10 +159,10 @@ border-color: #007BFF;
                                                 <span class="account_code"><?= $counter; ?></span>
                                             </td>
                                             <td class="" style="padding: 4px 10px;">
-                                                <span class="account_code"><?= $row['account_code'] ?></span>
+                                                <span class="account_code"><?= $row['account'] ?></span>
                                             </td>
                                             <td class="" style="padding: 4px 10px;">
-                                                <span class="account"><?= $row['account'] ?></span>
+                                                <span class="account"><?= $row['name'] ?></span>
                                             </td>
                                             <td class="">
                                                 <div class="loc-cont">
@@ -205,15 +217,24 @@ border-color: #007BFF;
                                                     </script>
                                                 </div>
                                             </td>
-                                            <td class="group"><?= $row['group'] ?></td>
-                                            <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
-                                            <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
+                                            <!-- <td class="group"><?= $row['group'] ?></td> -->
+                                       
+                                                <?php
+                                                if ($row['account'] == "Goods Receipt" || $row['account'] == "Deferred Expanded Withholding Tax Payable" ) {
+                                                    $row['type'] = 1;
+                                                } else if($row['account'] == "Deferred Input VAT") {
+                                                    $row['type'] = 2;
+                                                }
+                                                ?>
+
+                                            <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['gtype'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                            <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['gtype'] == 2 ? number_format(abs($row['amount']), 2) : '' ?></td>
                                         </tr>
                                         <?php $counter++; endforeach; ?>
                                     </tbody>
                                     <tfoot>
-                                        <tr class="bg-gradient-secondary">
-                                            <th colspan="5" class="text-center">Total</th>
+                                        <tr>
+                                            <th colspan="4" class="text-right">TOTAL</th>
                                             <th class="text-right total_debit">0.00</th>
                                             <th class="text-right total_credit">0.00</th>
                                         </tr>

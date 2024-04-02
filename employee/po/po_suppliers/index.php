@@ -23,9 +23,9 @@
 				<colgroup>
 					<col width="8%">
 					<col width="10%">
-					<col width="20%">
-					<col width="20%">
-					<col width="20%">
+					<col width="30%">
+					<!-- <col width="20%"> -->
+					<col width="30%">
 					<!-- <col width="6%"> -->
 					<col width="6%">
 					<col width="10%">
@@ -35,7 +35,7 @@
 						<th>#</th>
 						<th>Date Created</th>
 						<th>Supplier</th>
-						<th>Contact Person</th>
+						<!-- <th>Contact Person</th> -->
 						<th>Address</th>
 						<!-- <th>Vatable</th> -->
 						<th>Status</th>
@@ -52,12 +52,12 @@
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
 							<td><?php echo $row['short_name'] ?></td>
-							<td>
+							<!-- <td>
 								<p class="m-0">
 									<?php echo $row['contact_person'] ?><br>
 									<?php echo $row['contact'] ?>
 								</p>
-							</td>
+							</td> -->
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
 							<!-- <td>
 								<?php if($row['vatable'] == 0): ?>
@@ -80,10 +80,15 @@
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
 				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-info text-primary"></span>&nbsp;&nbsp;View</a>
-				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span>&nbsp;&nbsp;Edit</a>
-				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span>&nbsp;&nbsp;Delete</a>
+									<?php $qry_get_svs = $conn->query("SELECT supplier_id FROM po_list WHERE supplier_id = '" . $row['id'] . "'"); ?>
+									<?php if ($qry_get_svs->num_rows <= 0): ?>
+										<div class="dropdown-divider"></div>
+											<a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+										<div class="dropdown-divider"></div>
+										<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">
+											<span class="fa fa-trash text-danger"></span> Delete
+										</a>
+									<?php endif; ?>
 				                  </div>
 							</td>
 						</tr>

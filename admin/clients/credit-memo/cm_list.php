@@ -277,7 +277,7 @@
 							<a class="btn btn-flat btn-sm view_cm btn-info" data-id="<?php echo $row['reference'] ?>">
 							<i class="fa fa-info-circle" aria-hidden="true"></i></a>
 							<?php
-								if ($usertype == "CFO" or $usertype=="COO"):
+								if ($usertype == "CHIEF FINANCE OFFICER" or $usertype=="CHIEF OF OPERATION"):
 									echo '<a class="btn btn-flat btn-primary btn-s approved_cm" data-id="' . $row['reference'] . '" value="2" prop-id="' . $row['property_id'] . '" cm-amt="' . $row['credit_amount'] . '"
 									style="font-size: 10px; height: 30px; width: 37px;">
 									<i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -285,7 +285,7 @@
 									</a>';
 
 								endif;
-								if ($usertype == "CFO" or $usertype=="COO"):
+								if ($usertype == "CHIEF FINANCE OFFICER" or $usertype=="CHIEF OF OPERATION"):
 									echo '&nbsp;<a class="btn btn-flat btn-danger btn-s disapproved_cm" data-id="' . $row['reference'] . '" value="2" prop-id="' . $row['property_id'] . '" cm-amt="' . $row['credit_amount'] . '"
 											style="font-size: 10px; height: 30px; width: 37px;">
 											<i class="fa fa-thumbs-down" aria-hidden="true"></i>

@@ -3,14 +3,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet"> -->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -95,7 +95,7 @@ border-color: #007BFF;
                                 <td style="padding: 4px 10px;"><?php echo $supp_code; ?></td>
                             </tr>
                         </table>
-                        <hr>
+                        <br>
                         <h6 style="font-weight:bold;margin-left:10px;">Particulars:</h6>
                         <table class="table table-bordered">
                             <tr>
@@ -104,20 +104,20 @@ border-color: #007BFF;
                         </table>
                         <table id="account_list" class="table table-striped table-bordered">
                         <colgroup>
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="35%">
-                            <col width="40%">
-                            <col width="5%">
-                            <col width="5%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="50%">
+                            <!-- <col width="30%"> -->
+                            <col width="15%">
+                            <col width="15%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center">Item No.</th>
                                 <th class="text-center">Account Code</th>
                                 <th class="text-center">Account Name</th>
-                                <th class="text-center">Location</th>
-                                <th class="text-center">Group</th>
+                                <!-- <th class="text-center">Location</th> -->
+                                <!-- <th class="text-center">Group</th> -->
                                 <th class="text-center">Debit</th>
                                 <th class="text-center">Credit</th>
                             </tr>
@@ -125,93 +125,91 @@ border-color: #007BFF;
                         <tbody>
                             <?php 
                             $counter = 1;
-                            $jitems = $conn->query("SELECT j.*,a.code as account_code, a.name as account, g.name as `group`, g.type FROM `vs_items` j inner join account_list a on j.account_id = a.id inner join group_list g on j.group_id = g.id where journal_id = '{$_GET['id']}'");
+                            $jitems = $conn->query("SELECT DISTINCT a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
+                            FROM tbl_gl_trans gl
+                            LEFT JOIN vs_items vi ON gl.vs_num = vi.journal_id
+                            LEFT JOIN account_list a ON gl.account = a.code
+                            WHERE gl.vs_num = '{$_GET['id']}' AND gl.doc_type='AP'
+                            GROUP BY gl.account
+                            ORDER BY gl.gtype;
+                            ");
                             while($row = $jitems->fetch_assoc()):
-                            ?>
-                            <tr>  
-                                <td class="" style="padding: 4px 10px;">
-                                    <span class="account_code"><?= $counter; ?></span>
-                                </td>
-                                <td class="" style="padding: 4px 10px;">
-                                    <span class="account_code"><?= $row['account_code'] ?></span>
-                                </td>
-                                <td class="" style="padding: 4px 10px;">
-                                    <span class="account"><?= $row['account'] ?></span>
-                                </td>
-                                <td class="">
-                                    <div class="loc-cont">
-                                        <select name="phase[]" id="phase[]" class="phase">
-                                        <?php 
-                                            $meta = array();
-                                            $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
-                                            while($row1 = $cat->fetch_assoc()):
-                                        ?>
-                                            <?php
-                                                echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                ?>
+                                <tr>  
+                                    <td class="" style="padding: 4px 10px;">
+                                        <span class="account_code"><?= $counter; ?></span>
+                                    </td>
+                                    <td class="" style="padding: 4px 10px;">
+                                        <span class="account_code"><?= $row['account'] ?></span>
+                                    </td>
+                                    <td class="" style="padding: 4px 10px;">
+                                        <span class="account"><?= $row['name'] ?></span>
+                                    </td>
+                                    <!-- <td class="">
+                                        <div class="loc-cont">
+                                            <select name="phase[]" id="phase[]" class="phase">
+                                            <?php 
+                                                $meta = array();
+                                                $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC ");
+                                                while($row1 = $cat->fetch_assoc()):
                                             ?>
-                                            <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
-                                        <?php
-                                            endwhile;
-                                        ?>
-                                        </select>
-                                        
-                                        <?php echo $row['block'] ?>/<?php echo $row['lot'] ?>
-                                        
-                                        
-                                
-
-                                        <script>
-                                            $(document).ready(function () {
-                                                $('.lot, .block, .phase').on('input', function () {
-                                                    var currentRow = $(this).closest('td');
-
-                                                    var enteredPhase = currentRow.find('.phase').val();
-                                                    var enteredBlock = currentRow.find('.block').val();
-                                                    var enteredLot = currentRow.find('.lot').val();
-
-                                                    console.log("AJAX Data:", {
-                                                        phase: enteredPhase,
-                                                        block: enteredBlock,
-                                                        lot: enteredLot
-                                                    });
-
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        url: 'journals/check_loc.php',
-                                                        data: JSON.stringify({
+                                                <?php
+                                                    echo "Meta Phase: " . $row['phase'] . ", Row1 c_code: " . $row1['c_code'];
+                                                ?>
+                                                <option value="<?php echo $row1['c_code'] ?>" <?php echo isset($row['phase']) && $row['phase'] == $row1['c_code'] ? 'selected' : '' ?>><?php echo $row1['c_acronym'] ?></option>
+                                            <?php
+                                                endwhile;
+                                            ?>
+                                            </select>
+                                            <?php echo $row['block'] ?>/<?php echo $row['lot'] ?>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    $('.lot, .block, .phase').on('input', function () {
+                                                        var currentRow = $(this).closest('td');
+    
+                                                        var enteredPhase = currentRow.find('.phase').val();
+                                                        var enteredBlock = currentRow.find('.block').val();
+                                                        var enteredLot = currentRow.find('.lot').val();
+    
+                                                        console.log("AJAX Data:", {
                                                             phase: enteredPhase,
                                                             block: enteredBlock,
                                                             lot: enteredLot
-                                                        }),
-                                                        contentType: 'application/json', 
-                                                        success: function (response) {
-                                                            console.log("AJAX Response:", response);
-                                                            var lotExistsMsg = currentRow.find('.lotExistsMsg');
-                                                            
-                                                            
-                                                                lotExistsMsg.html(response);
-                                                            
-                                                        }
+                                                        });
+    
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            url: 'journals/check_loc.php',
+                                                            data: JSON.stringify({
+                                                                phase: enteredPhase,
+                                                                block: enteredBlock,
+                                                                lot: enteredLot
+                                                            }),
+                                                            contentType: 'application/json', 
+                                                            success: function (response) {
+                                                                console.log("AJAX Response:", response);
+                                                                var lotExistsMsg = currentRow.find('.lotExistsMsg');
+                                                                    lotExistsMsg.html(response);
+                                                            }
+                                                        });
                                                     });
                                                 });
-                                            });
-                                        </script>
-                                    </div>
-                                </td>
-                                <td class="group"><?= $row['group'] ?></td>
-                                <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
-                                <td class="credit_amount text-right" style="padding: 4px 10px;"><?= $row['type'] == 2 ? number_format($row['amount'], 2) : '' ?></td>
-                            </tr>
-                            <?php $counter++;
-                            endwhile; ?>
+                                            </script>
+                                        </div>
+                                    </td> -->
+                                    <td class="debit_amount text-right" style="padding: 4px 10px;"><?= $row['gtype'] == 1 ? number_format($row['amount'], 2) : '' ?></td>
+                                    <td class="credit_amount text-right" style="padding: 4px 10px;">
+                                        <?= $row['gtype'] == 2 ? number_format(abs($row['amount']), 2) : '' ?>
+                                    </td>
+                                </tr>
+                                <?php $counter++;
+                                endwhile; ?>
                         </tbody>
                         <tfoot>
-                            <tr class="bg-gradient-secondary">
-                                <tr>
-                                    <th colspan="5" class="text-center">Total</th>
-                                    <th class="text-right total_debit">0.00</th>
-                                    <th class="text-right total_credit">0.00</th>
-                                </tr>
+                            <tr>
+                                <th colspan="3" class="text-right">TOTAL</th>
+                                <th class="text-right total_debit">0.00</th>
+                                <th class="text-right total_credit">0.00</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -223,22 +221,23 @@ border-color: #007BFF;
 </table>
 </body>
 <script>
-    function cal_tb() {
-        var debit = 0;
-        var credit = 0;
-        $('#account_list tbody tr').each(function () {
-            if ($(this).find('.debit_amount').text() != "") {
-                debit += parseFloat(($(this).find('.debit_amount').text()).replace(/,/gi, ''));
-            }
-            if ($(this).find('.credit_amount').text() != "") {
-                credit += parseFloat(($(this).find('.credit_amount').text()).replace(/,/gi, ''));
-            }
-        });
+function cal_tb() {
+    var debit = 0;
+    var credit = 0;
 
-        $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
-        $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
-    }
-    cal_tb();
+    $('#account_list tbody tr').each(function () {
+        if ($(this).find('.debit_amount').text() != "") {
+            debit += parseFloat(($(this).find('.debit_amount').text().replace(/,/gi, ''))) || 0;
+        }
+        if ($(this).find('.credit_amount').text() != "") {
+            credit += parseFloat(($(this).find('.credit_amount').text().replace(/,/gi, ''))) || 0;
+        }
+    });
+
+    $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
+    $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
+}
+cal_tb();
 </script>
 <script type="text/javascript">
 	function PrintPage() {

@@ -36,16 +36,16 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <table class="table table-striped table-hover table-bordered" style="width: 100%">
             <thead>
                 <tr>
-                    <th>G.R. #</th>
+                    <th>GR #</th>
                     <th>Remaining Balance</th>
                     <th>Date/Time Received</th>
-
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
             <?php 
             $i = 1;
-            $qry = $conn->query("SELECT o.date_purchased,g.gr_id, g.po_id, SUM(o.outstanding * o.unit_price) AS total_amount
+            $qry = $conn->query("SELECT o.date_purchased,g.doc_no,g.gr_id, g.po_id, SUM(o.outstanding * o.unit_price) AS total_amount
                                 FROM tbl_gr_list g
                                 INNER JOIN approved_order_items o ON g.gr_id = o.gr_id
                                 WHERE g.po_id = '{$_GET['id']}'
@@ -53,13 +53,25 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             while ($row = $qry->fetch_assoc()):
             ?>
             <tr>
-                <td>
+                <!-- <td>
                     <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
+                </td> -->
+                <td>
+                    <a data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>">GR - <?php echo $row['gr_id'] ?></a>
                 </td>
-                <td><?php echo number_format($row['total_amount']) ?></td>
+                <td><?php echo number_format($row['total_amount'],2) ?></td>
                 <td><?php echo $row["date_purchased"] ?></td>
+                <td align="center">
+                    <!-- <div class="dropdown-menu" role="menu"> -->
+                        <a class="basic-link view_gr" data-id="<?php echo $row['gr_id'] ?>" data-po-id="<?php echo $row['po_id'] ?>" style="cursor:pointer;"><span class="fa fa-solid fa-info"></span> View Details</a>
+                        <!-- <div class='dropdown-divider'></div> -->
+                        <?php
+                            $docNoValue = $row['doc_no'];
+                        ?>
+                        <!-- <a class="dropdown-item gl_data" href="javascript:void(0)" data-id="<?php echo $docNoValue; ?>"><span class="fa fa-file-export"></span> View GL Journal Entries for this Delivery</a> -->
+                    <!-- </div> -->
+                </td>
             </tr>
-
             <?php endwhile; ?>
             </tbody>
         </table>
@@ -67,6 +79,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 </body>
 <script>
+    $(document).ready(function(){
+		$('.gl_data').click(function() {
+			var dataId = $(this).attr('data-id');
+			var redirectUrl = '?page=cfo_goods_receiving/gl_trans&id=' + dataId;
+			window.location.href = redirectUrl;
+			
+		})
+	});
 $('.view_gr').click(function(){
     var grId = $(this).attr('data-id');
     var poId = $(this).data('po-id'); 

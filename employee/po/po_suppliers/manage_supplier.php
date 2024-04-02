@@ -60,7 +60,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
         <div class="form-group">
             <label for="contact_person" class="control-label">Contact Person:</label>
-            <input type="text" name="contact_person" id="contact_person" class="form-control rounded-0" value="<?php echo isset($contact_person) ? $contact_person :"" ?>" required>
+            <input type="text" name="contact_person" id="contact_person" class="form-control rounded-0" value="<?php echo isset($contact_person) ? $contact_person :"" ?>">
         </div>
         <div class="form-group">
             <label for="email" class="control-label">Email:</label>
@@ -73,7 +73,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="form-group">
             <label for="mop" class="control-label">Mode of Payment:</label>
             <select name="mop" id="mop" class="form-control rounded-0" required>
-                <option value="" disabled selected></option>
+                <!-- <option value="" disabled selected></option> -->
                 <option value="1" <?php echo ($mop === "1") ? "selected" : ""; ?>>Check</option>
                 <option value="0" <?php echo ($mop === "0") ? "selected" : ""; ?>>Cash on Delivery</option>
             </select>
@@ -81,7 +81,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="form-group">
             <label for="mop" class="control-label">Payment Terms:</label>
             <select name="terms" id="terms" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
-                <option value="" disabled selected></option>
+                <!-- <option value="" disabled selected></option> -->
                 <?php 
                 $terms_qry = $conn->query("SELECT * FROM `payment_terms` WHERE inactive = 0 ORDER BY `terms_indicator` ASC");
                 while ($terms_row = $terms_qry->fetch_assoc()):
@@ -96,7 +96,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="form-group">
             <label for="vatable" class="control-label">Tax Group:</label>
             <select name="vatable" id="vatable" class="form-control rounded-0" required>
-                <option value="" <?php echo (!isset($vatable) || $vatable === "") ? "selected" : "" ?> disabled></option>
+                <!-- <option value="" <?php echo (!isset($vatable) || $vatable === "") ? "selected" : "" ?> disabled></option> -->
                 <option value="0" <?php echo (isset($vatable) && $vatable == "0") ? "selected" : "" ?>>Non-VAT</option>
                 <option value="1" <?php echo (isset($vatable) && $vatable == "1") ? "selected" : "" ?>>Zero-rated</option>
                 <option value="2" <?php echo (isset($vatable) && $vatable == "2") ? "selected" : "" ?>>Vatable</option>
@@ -136,41 +136,72 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 <script>
     $(function(){
-        $('#supplier-form').submit(function(e){
-			e.preventDefault();
-            var _this = $(this)
-			 $('.err-msg').remove();
-			start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_supplier",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-						location.reload();
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            $("html, body").animate({ scrollTop: 0 }, "fast");
-                    }else{
-						alert_toast("An error occured",'error');
-                        console.log(resp)
-					}
-                    end_loader()
-				}
-			})
-		})
-	})
+    $('#supplier-form').submit(function(e){
+        e.preventDefault();
+        var _this = $(this);
+        $('.err-msg').remove();
+        
+        var requiredFields = ['name', 'short_name', 'tin', 'address', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
+        var isValid = true;
+
+        for (var i = 0; i < requiredFields.length; i++) {
+            var fieldName = requiredFields[i];
+            var fieldValue = _this.find('[name="' + fieldName + '"]').val().trim();
+
+            if (fieldValue === '') {
+                isValid = false;
+                var errorMsg = 'May kulang po. Hehe.';
+                var existingError = _this.find('.err-msg:contains("' + errorMsg + '")');
+                
+                if (existingError.length === 0) {
+                    var el = $('<div>').addClass("alert alert-danger err-msg").text(errorMsg);
+                    _this.prepend(el);
+                    el.show('slow');
+                    $("html, body").animate({ scrollTop: 0 }, "fast");
+                }
+            }
+        }
+
+        if (!isValid) {
+            return false;
+        }
+
+        start_loader();
+        $.ajax({
+            url: _base_url_ + "classes/Master.php?f=save_supplier",
+            data: new FormData($(this)[0]),
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            dataType: 'json',
+            error: err => {
+                console.log(err);
+                alert_toast("An error occurred", 'error');
+                end_loader();
+            },
+            success: function(resp) {
+                if (typeof resp == 'object' && resp.status == 'success') {
+                    location.reload();
+                } else if (resp.status == 'failed' && !!resp.msg) {
+                    var el = $('<div>')
+                    el.addClass("alert alert-danger err-msg").text(resp.msg)
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body").animate({ scrollTop: 0 }, "fast");
+                } else {
+                    alert_toast("An error occurred", 'error');
+                    console.log(resp);
+                }
+                end_loader();
+            }
+        });
+    });
+});
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 </script>

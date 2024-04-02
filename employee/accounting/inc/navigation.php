@@ -13,7 +13,11 @@
   list-style: none;
   padding: 0;
 }
-
+.cv-nav-list {
+  display: none;
+  list-style: none;
+  padding: 0;
+}
 
 </style>
 <?php $usertype = $_settings->userdata('user_type'); 
@@ -22,7 +26,7 @@ $level = $_settings->userdata('type');
 <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>employee/coo" class="brand-link bg-blue text-sm">
+        <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
             height: 30px;
@@ -91,12 +95,12 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <div style="background-color:gainsboro;">
-                      <li class="nav-header" onclick="toggleNavList()">
+                      <li class="nav-header">
                         <b><i>File Manager</i></b>
                       </li>
                     </div>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=po/suppliers/" class="nav-link nav-vs">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=po/suppliers/" class="nav-link nav-supplier">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
                         Suppliers List
@@ -104,15 +108,15 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=po/items/" class="nav-link nav-vs">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=po/items/" class="nav-link nav-items">
                       <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
-                        Items List
+                        Items/Services List
                         </p>
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=groups/" class="nav-link nav-vs">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=groups/" class="nav-link nav-group">
                       <i class="nav-icon fas fa-list-alt"></i>
                         <p>
                         Groups List
@@ -120,7 +124,7 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=accounts/" class="nav-link nav-vs">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=accounts/" class="nav-link nav-acc">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         Chart of Accounts
@@ -145,38 +149,113 @@ $level = $_settings->userdata('type');
                       </a>
                     </li>  -->
                     <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/gl/gl" class="nav-link nav-gl">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        General Ledger
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/gl/tran_details" class="nav-link nav-tran">
+                      <i class="nav-icon fas fa-money-bill"></i>
+                        <p>
+                        Transaction Details
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/jv/manage_jv" class="nav-link nav-jv">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Journal Voucher
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/check_list" class="nav-link nav-cl">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Checks List
+                        </p>
+                      </a>
+                    </li> 
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/display_doc/manage_dd" class="nav-link nav-dd">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Display Document
+                        </p>
+                      </a>
+                    </li>  -->
+                    <div style="background-color:gainsboro;">
                       <li class="nav-header" onclick="toggleNavList()">
                         <b><i>Create Voucher Setup</i></b>
                       </li>
                     </div>
-                    <ul class="nav-list">
+
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_agent_voucher" class="nav-link">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_agent_voucher" class="nav-link nav-agent">
                           <i class="nav-icon fas fa-id-card"></i>
                           <p>Agents</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_employee_voucher" class="nav-link">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_employee_voucher" class="nav-link nav-emp">
                           <i class="nav-icon fas fa-id-badge"></i>
                           <p>Employees</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_client_voucher" class="nav-link">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_client_voucher" class="nav-link nav-client">
                           <i class="nav-icon fas fa-users"></i>
                           <p>Clients</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo base_url ?>employee/accounting/?page=journals/m_supplier_voucher" class="nav-link">
-                          <i class="nav-icon fa fa-truck"></i>
-                          <p>Suppliers</p>
+                          <a href="#" class="nav-link nav-sup">
+                              <i class="nav-icon fa fa-truck"></i>
+                              <p>Suppliers</p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_supplier_voucher" class="nav-link">
+                                      <i class="nav-icon fa fa-file"></i>
+                                      <p>PO</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_nonpo_supplier_voucher" class="nav-link">
+                                      <i class="nav-icon fa fa-times"></i>
+                                      <p>Non-PO</p>
+                                  </a>
+                              </li>
+                          </ul>
+                      </li>
+
+
+                    <div style="background-color:gainsboro;" class="nav-check nav-check">
+                      <li class="nav-header">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=cv/manage_check_voucher">
+                          <b><i>Create Check Voucher Setup</i></b>
                         </a>
                       </li>
-                    </ul>
+                    </div>
                     <li class="nav-item">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals" class="nav-link nav-journal">
                         <i class="nav-icon fas fa-folder"></i>
                         <p>
                           Voucher Setup Entries
@@ -184,14 +263,24 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/accounting/?page=cv" class="nav-link nav-cv">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=cv" class="nav-link nav-maincv">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           Check Voucher Entries
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=journals/jv/" class="nav-link nav-jv-list">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Journal Voucher Entries
+                        </p>
+                      </a>
+                    </li> 
                   </ul>
+
+                  
                 </nav>
                 <!-- /.sidebar-menu -->
               </div>
@@ -239,8 +328,11 @@ $level = $_settings->userdata('type');
     const navList = document.querySelector('.nav-list');
     navList.style.display = (navList.style.display === 'none' || navList.style.display === '') ? 'block' : 'none';
   }
-
-  // Prevent toggling when a link is clicked
+  function togglecvNavList() {
+    const navList = document.querySelector('.cv-nav-list');
+    navList.style.display = (navList.style.display === 'none' || navList.style.display === '') ? 'block' : 'none';
+  }
+  
   const navLinks = document.querySelectorAll('.nav-list a');
   navLinks.forEach(link => {
     link.addEventListener('click', function (event) {
