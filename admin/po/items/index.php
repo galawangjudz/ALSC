@@ -42,6 +42,7 @@ if ($_settings->chk_flashdata('success')) :
     </div>
     <div class="card-body">
         <div class="container-fluid">
+
             <div class="container-fluid">
                 <?php
                 if (isset($_GET['supplier_id'])) {
@@ -212,6 +213,7 @@ if ($_settings->chk_flashdata('success')) :
             </div>
         </div>
     </div>
+
 </div>
 
 <script>

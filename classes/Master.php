@@ -2751,14 +2751,12 @@ Class Master extends DBConnection {
 
 		if ($retention == 0){
 
-	
-
-			if ($amount_paid < ($monthly_pay * 3)){
+		/* 	if ($amount_paid < ($monthly_pay * 3)){
 				$mustbe = number_format($monthly_pay * 3,2);
 				$resp['status'] = 'failed';
 				$resp['msg'] = "Credit Principal Amount must be P " . $mustbe . " or more." ;
 				return json_encode($resp);
-			}
+			} */
 			
 			if($datetime2 > $datetime1){
 				if($l_days >= 30){
