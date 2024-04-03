@@ -71,10 +71,11 @@
 
     /* Add the new styles for the background image */
     body.login-page {
-        background-image: url('<?php echo base_url ?>/images/login-page.jpg');
+        /* background-image: url('<?php echo base_url ?>/images/login-page.jpg'); */
+        
         background-size: cover;
         background-position: center;
-        background-color: rgba(0, 0, 0, 0.7); /* Adjust the alpha value (fourth parameter) for the desired transparency */
+        background-color: white; /* Adjust the alpha value (fourth parameter) for the desired transparency */
         
 
     }
@@ -95,14 +96,15 @@
   <script>
     start_loader()
   </script>
-<!--   <div style="background-color:white">
+  <div style="background-color:white">
   <h1 class="text-center"><?= $_settings->info('name') ?></h1>
-  </div> -->
+  </div>
 <div class="login-box">
   <!-- /.login-logo -->
+  
   <div class="card card-outline rounded-0 card-blue rounded-0">
     <div class="card-header text-center">
-      <img src="<?php echo validate_image($_settings->info('logo'))?>" style="opacity: .8">
+      <img src="<?php echo base_url ?>/images/logo.jpg" style="opacity: .8">
       <div>
       <a href="./" class="h5"><b>LOGIN</b></a>
       

@@ -2,6 +2,7 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+$link = isset($_GET['link']) ? $_GET['link'] : '';
 $type = $_settings->userdata('type');
 $department = $_settings->userdata('department');
 if(isset($_SESSION['userdata'])){
