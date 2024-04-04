@@ -228,7 +228,7 @@ function formatNumber(input) {
     }
 }
 </script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 </head>
 <body>
@@ -431,7 +431,7 @@ function formatNumber(input) {
                                     <?php
                                     $i = 1;
                                     $qry = $conn->query("SELECT 
-                                    tbl_rfp.rfp_no,
+                                    tbl_rfp.id AS mainId,
                                     tbl_rfp.*,  
                                     tbl_rfp_approvals.* 
                                 FROM 
@@ -462,7 +462,7 @@ function formatNumber(input) {
                                     tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['id']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
