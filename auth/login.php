@@ -66,7 +66,28 @@
   </head>
 
 
+<style type="text/css">
+    /* Existing styles */
 
+    /* Add the new styles for the background image */
+    body.login-page {
+        background-image: url('<?php echo base_url ?>/images/login-page.jpg');
+        background-size: cover;
+        background-position: center;
+        background-color: rgba(0, 0, 0, 0.7); /* Adjust the alpha value (fourth parameter) for the desired transparency */
+        
+
+    }
+
+    body.login-page h1,
+    body.login-page .card {
+        color: #000; /* Set text color to white or another suitable color */
+    }
+
+    body.login-page .login-box {
+        background: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background to the login box for better readability */
+    }
+</style>
 
 
 
@@ -74,13 +95,20 @@
   <script>
     start_loader()
   </script>
+<!--   <div style="background-color:white">
   <h1 class="text-center"><?= $_settings->info('name') ?></h1>
+  </div> -->
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline rounded-0 card-blue rounded-0">
     <div class="card-header text-center">
-      <a href="./" class="h1"><b>Login</b></a>
+      <img src="<?php echo validate_image($_settings->info('logo'))?>" style="opacity: .8">
+      <div>
+      <a href="./" class="h5"><b>LOGIN</b></a>
+      
     </div>
+    </div>
+   
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
