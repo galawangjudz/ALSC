@@ -149,9 +149,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+        <script src="../../libs/js/lightbox.min.js"></script>
+        <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
+    <script src="libs/js/jquery.fancybox.min.js"></script>
 </head>
 <body onload="cal_tb()">
 <div class="card card-outline card-primary">
@@ -348,7 +348,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <?php
                                     $i = 1;
                                     $qry = $conn->query("SELECT 
-                                    tbl_rfp.rfp_no,
+                                    tbl_rfp.id AS mainId,
                                     tbl_rfp.*,  
                                     tbl_rfp_approvals.* 
                                 FROM 
@@ -379,7 +379,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['id']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
