@@ -161,7 +161,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             background-color: #357ae8;
             border: 1px solid #357ae8;
         } */
-
     </style>
     <script>
         $(document).ready(function() {
