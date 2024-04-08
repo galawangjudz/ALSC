@@ -383,7 +383,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                                         <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['req_dept']; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Name: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Payable to: </b></td>
                                                         <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['name']; ?></td>
                                                     </tr>
                                                     <tr>

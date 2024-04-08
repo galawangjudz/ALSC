@@ -5312,17 +5312,17 @@ Class Master extends DBConnection {
 		
 		if(empty($id)){
 			$sql = "INSERT INTO `tbl_rfp` set {$data} ";
-			if(($division == "MNGR" || $division == "SPVR") && ($usercode == '20016' || $usercode == '10006' || $usercode == '10006' || $usercode == '20084'
-			|| $usercode == '10009' || $usercode == '10030' || $usercode == '20124' || $usercode == '10051' || $usercode == '20181' || $usercode == '10102'
-			|| $usercode == '20018' || $usercode == '20017' || $usercode == '20003' || $usercode == '10143' || $usercode == '10070'|| $usercode == '10100' || $usercode == '10131'
-			|| $usercode == '10041' || $usercode == '20001' || $usercode == '10131' || $usercode == '10017' || $usercode == '10007' || $usercode == '10012' || $usercode == '10026'
-			|| $usercode == '10015' || $usercode == '20186' || $usercode == '10038')){
-				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
-			}else if($usercode == '10114'){
-				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
-			}else{
+			// if(($division == "MNGR" || $division == "SPVR") && ($usercode == '20016' || $usercode == '10006' || $usercode == '10006' || $usercode == '20084' || $usercode == '10184'
+			// || $usercode == '10009' || $usercode == '10030' || $usercode == '20124' || $usercode == '10051' || $usercode == '20181' || $usercode == '10102'
+			// || $usercode == '20018' || $usercode == '20017' || $usercode == '20003' || $usercode == '10143' || $usercode == '10070'|| $usercode == '10100' || $usercode == '10131'
+			// || $usercode == '10041' || $usercode == '20001' || $usercode == '10131' || $usercode == '10017' || $usercode == '10007' || $usercode == '10012' || $usercode == '10026'
+			// || $usercode == '10015' || $usercode == '20186' || $usercode == '10038')){
+			// 	$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
+			// }else if($usercode == '10114'){
+			// 	$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
+			// }else{
 				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`rfp_no`)VALUES('$rfp_num');";
-			}
+			//}
 			
 			$save = $this->conn->query($sql);
 			$save_sql4 = $this->conn->query($gl_sql4);

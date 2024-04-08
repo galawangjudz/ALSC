@@ -59,7 +59,7 @@
 						<th style="display:none;">Status1</th> 
 						<th>Status</th> 
 						<th>Date/Time Claimed</th> 
-						<th>Action</th> 
+						<!-- <th>Action</th>  -->
 						</tr>
 					</thead>
 					<tbody>
@@ -100,7 +100,7 @@
 										echo ($row['c_status'] == 0) ? '-' : date('Y-m-d H:i:s', strtotime($row['date_updated']));
 									?>
 								</td>
-								<td class="text-center">
+								<!-- <td class="text-center">
 									<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 										<?php if ($row['c_status'] == 1): ?>
 											<span class="fa fa-check text-primary"></span> Claimed
@@ -122,7 +122,7 @@
 											<span class="fas fa-print"></span> Print
 										</button>
 									</div>
-								</td>
+								</td> -->
 							</tr>
 						<?php endwhile; ?>
 					</tbody>

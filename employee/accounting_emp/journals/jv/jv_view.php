@@ -134,7 +134,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </script>
         <script src="../../libs/js/lightbox.min.js"></script>
         <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-    <script src="../../libs/js/jquery.fancybox.min.js"></script>
+    <script src="libs/js/jquery.fancybox.min.js"></script>
 </head>
 <body>
 <div class="card card-outline card-primary">

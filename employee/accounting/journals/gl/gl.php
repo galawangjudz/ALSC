@@ -98,7 +98,7 @@
                     <td><?php echo $row['account'] ?></td>
                     <td><?php echo $row['acName'] ?></td>
                     <td><?php echo $row['name'] ?></td>
-                    <td><?php echo date("Y-m-d H:i", strtotime($row['journal_date'])) ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['journal_date'])) ?></td>
 
                     <td style="color: <?php echo $row['amount'] < 0 ? 'red' : 'inherit'; ?>"><?php echo $row['amount'] < 0 ? '(' . number_format(abs($row['amount']), 2, '.', ',') . ')' : number_format($row['amount'], 2, '.', ','); ?></td>
                     <td style="display:none;"><?php echo number_format($row['amount'], 2, '.', ','); ?></td>

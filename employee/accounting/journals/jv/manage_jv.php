@@ -142,7 +142,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		<h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Journal Voucher Entry": "Add New Journal Voucher Entry" ?></b></i></h5>
 	</div>
     <div class="card-body">
-        <label class="control-label">Add Attachment:</label>
+        <label class="control-label" style="float:left;">Add Attachment:</label>
         <div id="picform-container">
             <form action="" method="post" enctype="multipart/form-data" id="picform">
                 <table class="table table-bordered">

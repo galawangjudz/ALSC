@@ -134,7 +134,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </script>
         <script src="../../libs/js/lightbox.min.js"></script>
         <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-    <script src="../../libs/js/jquery.fancybox.min.js"></script>
+    <script src="libs/js/jquery.fancybox.min.js"></script>
 </head>
 <body>
 <div class="card card-outline card-primary">
@@ -142,7 +142,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 		<h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Journal Voucher Entry": "Add New Journal Voucher Entry" ?></b></i></h5>
 	</div>
     <div class="card-body">
-        <label class="control-label">Add Attachment:</label>
+        <label class="control-label" style="float:left;">Add Attachment:</label>
         <div id="picform-container">
             <form action="" method="post" enctype="multipart/form-data" id="picform">
                 <table class="table table-bordered">
@@ -317,7 +317,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="hidden" id="jv_num" name="jv_num" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($jv_number) ? $jv_number : "" ?>">
                                     <input type="hidden" name="doc_no[]" value="<?= $row['doc_no'] ?>" readonly>
                                     <input type="hidden" name="amount[]" value="<?= $row['amount'] ?>">
-                                    <input type="thidden" name="c_status" value="<?= $row['c_status'] ?>">
+                                    <input type="hidden" name="c_status" value="<?= $row['c_status'] ?>">
                                 </td>
                                 <td class="align-middle p-1">
                                 <select id="account_id" class="form-control form-control-sm form-control-border select2" required>
