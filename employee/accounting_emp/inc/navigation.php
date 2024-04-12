@@ -247,11 +247,16 @@ $level = $_settings->userdata('type');
                       </li>
 
 
-                    <div style="background-color:gainsboro;" class="nav-check nav-check">
+                    <!-- <div style="background-color:gainsboro;" class="nav-check nav-check">
                       <li class="nav-header">
                         <a href="<?php echo base_url ?>employee/accounting_emp/?page=cv/manage_check_voucher">
                           <b><i>Create Check Voucher Setup</i></b>
                         </a>
+                      </li>
+                    </div> -->
+                    <div style="background-color:gainsboro;" class="nav-check nav-check">
+                      <li class="nav-header">
+                          <b><i>Voucher Entries</i></b>
                       </li>
                     </div>
                     <li class="nav-item">
@@ -262,14 +267,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting_emp/?page=cv" class="nav-link nav-maincv">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           Check Voucher Entries
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting_emp/?page=journals/jv/" class="nav-link nav-jv-list">
                       <i class="nav-icon fas fa-file"></i>

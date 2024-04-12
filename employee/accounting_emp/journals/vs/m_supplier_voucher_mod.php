@@ -237,7 +237,7 @@ function formatNumber(input) {
 		<h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Voucher Setup Entry (Supplier)": "Add New Voucher Setup Entry (Supplier)" ?></b></i></h5>
 	</div>
     <div class="card-body">
-        <label class="control-label">Add Attachment:</label>
+        <label class="control-label" style="float:left;">Add Attachment:</label>
         <div id="picform-container">
             <form action="" method="post" enctype="multipart/form-data" id="picform">
                 <table class="table table-bordered">
@@ -508,7 +508,7 @@ function formatNumber(input) {
                                                         <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['req_dept']; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Name: </b></td>
+                                                        <td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Payable to: </b></td>
                                                         <td style="padding-top:5px!important;padding-bottom:5px!important;"><?php echo $row['name']; ?></td>
                                                     </tr>
                                                     <tr>
@@ -570,7 +570,7 @@ function formatNumber(input) {
                                                             if ($result->num_rows > 0) {
                                                                 while ($preparer_row = $result->fetch_assoc()) {
                                                                     echo '<tr>';
-                                                                    echo '<td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Preparer: </b></td>';
+                                                                    echo '<td style="padding-top:5px!important;padding-bottom:5px!important;"><b>Requestor: </b></td>';
                                                                     echo '<td style="padding-top:5px!important;padding-bottom:5px!important;">';
                                                                     echo $preparer_row['firstname'] . ' ' . $preparer_row['lastname'];
                                                                     echo '</td>';

@@ -94,6 +94,37 @@ $level = $_settings->userdata('type');
                         <b><i>Banking and General Ledger</i></b>
                       </li>
                     </div>
+                    <!-- <div style="background-color:gainsboro;" class="nav-check nav-check">
+                      <li class="nav-header">
+                        <a href="<?php echo base_url ?>employee/accounting/?page=cv/manage_check_voucher">
+                          <b><i>Create Check Voucher Setup</i></b>
+                        </a>
+                      </li>
+                    </div> -->
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=cv/manage_check_voucher" class="nav-link nav-check">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Create Check Voucher Setup
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=cv" class="nav-link nav-maincv">
+                      <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Check Voucher Entries
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=journals/check_list" class="nav-link nav-cl">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Checks List
+                        </p>
+                      </a>
+                    </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/cashier/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>

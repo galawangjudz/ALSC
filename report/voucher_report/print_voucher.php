@@ -107,7 +107,7 @@ border-color: #007BFF;
                         <?php 
                             if (!isset($id) || $id === null) :
                                 $journalId = isset($_GET['id']) ? $_GET['id'] : null;
-                                $jitems = $conn->query("SELECT DISTINCT gl.gr_id,a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
+                                $jitems = $conn->query("SELECT DISTINCT gl.preparer as prepp, gl.gr_id,a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
                             FROM tbl_gl_trans gl
                             LEFT JOIN vs_items vi ON gl.vs_num = vi.journal_id
                             LEFT JOIN account_list a ON gl.account = a.code
@@ -119,10 +119,11 @@ border-color: #007BFF;
                                 // tbl_gl_trans gl ON vs.doc_no = gl.doc_no INNER JOIN
                                 // account_list al ON gl.account = al.code
                                 // WHERE vi.journal_id = '{$journalId}';");
-                                
+                                $global_prepp = null;
                                 $groupedData = array();
 
                                 while ($row = $jitems->fetch_assoc()) {
+                                    $global_prepp = $row['prepp'];
                                     $grId = $row['gr_id'];
                                     $groupedData[$grId][] = $row;
                                 }
@@ -254,6 +255,14 @@ border-color: #007BFF;
                                     <th class="text-center main_total_credit">0.00</th>
                                 </tr>
                             </table>
+                            <br><br>Prepared by:
+                            <?php
+                                $prep = $conn->query("SELECT * FROM users WHERE user_code = '" . $row['prepp'] . "'");
+                                while($row2 = $prep->fetch_assoc()): ?>
+                              
+                                <?php echo $row2['firstname']; ?> <?php echo $row2['lastname']; ?>
+                                <i>(<?php echo $row2['section']; ?>)</i>
+                                <?php endwhile; ?>
                     </div>
                 </div>
             </th>

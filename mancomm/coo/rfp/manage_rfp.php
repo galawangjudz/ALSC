@@ -100,13 +100,12 @@ if (empty($_GET['id'])) {
 
 <body onload=initialize()">
     <div class="card card-outline card-primary">
-        <div class="card-header">
+               <div class="card-header">
             <h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Request for Payment" : "Add New Request for Payment" ?> (RFP #: <?php echo $concatenatedValue; ?>)</b></i></h5>
         </div>
         
         <div class="card-body">
-            <label class="control-label">Add Attachment:</label>
-            
+            <label class="control-label" style="float:left;">Add Attachment:</label>
             <div id="picform-container">
                 <form action="" method="post" enctype="multipart/form-data" id="picform">
                     <table class="table table-bordered">
@@ -251,7 +250,7 @@ if (empty($_GET['id'])) {
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label for="address" class="control-label">Address:</label>
-                            <textarea rows="3" name="address" id="address" class="form-control rounded-0" required><?php echo isset($address) ? $address :"" ?></textarea>
+                            <textarea rows="3" name="address" id="address" class="form-control rounded-0"><?php echo isset($address) ? $address :"" ?></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -270,7 +269,7 @@ if (empty($_GET['id'])) {
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4 form-group">
+                                                <div class="col-md-4 form-group">
                             <label for="release_date" class="control-label">Release Date:</label>
                             <?php
                             if (!empty($release_date)) {
@@ -290,7 +289,7 @@ if (empty($_GET['id'])) {
                                 $checkformattedDate = '';
                             }
                             ?>     
-                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" required>
+                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" disabled>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="transaction_date" class="control-label">Transaction Date:</label>
@@ -748,7 +747,7 @@ if (empty($_GET['id'])) {
                                                                         echo '<option value="' . $row['user_code'] . '" ' . $selected . '>' . $row['firstname'] . ' ' . $row['lastname'] . '</option>';
                                 }
                                 echo '</select>';
-                                echo '<button type="button" id="removeApproverButton' . ($i + 1) . '" class="btn btn-danger btn-sm removeApproverButton">Remove</button>';
+                                //echo '<button type="button" id="removeApproverButton' . ($i + 1) . '" class="btn btn-danger btn-sm removeApproverButton">Remove</button>';
                                 echo '</div>';
                             }
                             ?>
