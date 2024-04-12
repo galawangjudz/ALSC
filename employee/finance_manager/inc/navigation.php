@@ -125,6 +125,96 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/gl/gl" class="nav-link nav-gl">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        General Ledger
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/gl/tran_details" class="nav-link nav-tran">
+                      <i class="nav-icon fas fa-money-bill"></i>
+                        <p>
+                        Transaction Details
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/jv/manage_jv" class="nav-link nav-jv">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Journal Voucher
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/check_list" class="nav-link nav-cl">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Checks List
+                        </p>
+                      </a>
+                    </li> 
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header" onclick="toggleNavList()">
+                        <b><i>Create Voucher Setup</i></b>
+                      </li>
+                    </div>
+
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/vs/m_agent_voucher" class="nav-link nav-agent">
+                          <i class="nav-icon fas fa-id-card"></i>
+                          <p>Agents</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/vs/m_employee_voucher" class="nav-link nav-emp">
+                          <i class="nav-icon fas fa-id-badge"></i>
+                          <p>Employees</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/vs/m_client_voucher" class="nav-link nav-client">
+                          <i class="nav-icon fas fa-users"></i>
+                          <p>Clients</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="#" class="nav-link nav-sup">
+                              <i class="nav-icon fa fa-truck"></i>
+                              <p>Suppliers</p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/vs/m_supplier_voucher" class="nav-link">
+                                      <i class="nav-icon fa fa-file"></i>
+                                      <p>PO</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="<?php echo base_url ?>employee/finance_manager/?page=journals/vs/m_nonpo_supplier_voucher" class="nav-link">
+                                      <i class="nav-icon fa fa-times"></i>
+                                      <p>Non-PO</p>
+                                  </a>
+                              </li>
+                          </ul>
+                      </li>
+
+                    <div style="background-color:gainsboro;" class="nav-check nav-check">
+                      <li class="nav-header">
+                          <b><i>Voucher Entries</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>employee/finance_manager/?page=journals" class="nav-link nav-journal">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                          Voucher Setup Entries
+                        </p>
+                      </a>
+                    </li> 
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

@@ -100,13 +100,12 @@ if (empty($_GET['id'])) {
 
 <body onload=initialize()">
     <div class="card card-outline card-primary">
-        <div class="card-header">
+               <div class="card-header">
             <h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Request for Payment" : "Add New Request for Payment" ?> (RFP #: <?php echo $concatenatedValue; ?>)</b></i></h5>
         </div>
         
         <div class="card-body">
-            <label class="control-label">Add Attachment:</label>
-            
+            <label class="control-label" style="float:left;">Add Attachment:</label>
             <div id="picform-container">
                 <form action="" method="post" enctype="multipart/form-data" id="picform">
                     <table class="table table-bordered">
@@ -195,9 +194,9 @@ if (empty($_GET['id'])) {
             </div>
         </div>
         <div class="card-body">
-                        <form action="" id="rfp-form">
+            <form action="" id="rfp-form">
                 <input type="hidden" name="division" value="<?php echo $_settings->userdata('division'); ?>">
-<input type="hidden" name="usercode" value="<?php echo $_settings->userdata('user_code'); ?>">
+                <input type="hidden" name="usercode" value="<?php echo $_settings->userdata('user_code'); ?>">
                 <?php if ($_settings->userdata('type') < 5){ ?>
                     <input type="hidden" name="status1" value="1">
                 <?php }else{ ?>
@@ -207,14 +206,46 @@ if (empty($_GET['id'])) {
                 <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
                 <input type="hidden" class="control-label" name="rfp_no" id="rfp_no" value="<?php echo $concatenatedValue; ?>" readonly>
                 <input type="hidden" class="control-label" name="num" id="num" value="<?php echo $attachment_count; ?>" readonly>
-                
-              
                 <hr>
                 <br>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="rfp_for" class="control-label">RFP For:</label>
+                        <div class="col-md-6 form-group">
+                            <label for="req_dept" class="control-label">Requesting Department:</label>
+                            <input type="text" name="req_dept" id="req_dept" value="<?php echo $_settings->userdata('department'); ?>" class="form-control rounded-0" readonly>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="transaction_date" class="control-label">Transaction Date:</label>
+                            <?php
+                            if (!empty($transaction_date)) {
+                                $transaction_date = date('Y-m-d');
+                                $transactionformattedDateTime = date('Y-m-d\TH:i:s', strtotime($transaction_date));
+                            } else {
+                                $transaction_date = date('Y-m-d');
+                                $transactionformattedDateTime = date('Y-m-d\TH:i:s');
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" value="<?php echo isset($transaction_date) ? $transaction_date : '' ?>" readonly>
+                            <input type="datetime-local" class="form-control form-control-sm rounded-0" style="display:none;" id="transaction_date" name="transaction_date" value="<?php echo isset($transactionformattedDateTime) ? $transactionformattedDateTime : '' ?>" required readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label>
+                            <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
+                                <option value="" disabled selected>--Select Payment--</option>
+                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
+                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="bank_name" class="control-label" style="float:left;">Bank Name:</label>
+                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="rfp_for" class="control-label" style="float:left;">RFP For: </label>
                             <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required>
                                 <option value="" disabled <?php echo !isset($rfp_for) ? "selected" : '' ?>>Select an Item</option>
                                 <option value="1" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "1" ?> >Agents</option>
@@ -224,54 +255,44 @@ if (empty($_GET['id'])) {
                                 <option value="5" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "5" ?> >Others</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="description" class="control-label">Particulars:</label>
-                            <textarea rows="10" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-md-12 form-group">
-                            <label for="amount" class="control-label">Amount:</label>
-                            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ""; ?>" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                           <div id="amountToWords" class="text-display" style="background-color:yellow;"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="name" class="control-label">Payable to:</label>
+                        <div class="col-md-6 form-group">
+                            <label for="name" class="control-label" style="float:left;">Payable to:</label>
                             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                        <div class="col-md-6 form-group">
+                            <label for="amount" class="control-label" style="float:left;">Amount:</label>
+                            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ""; ?>" required>
+                        </div>
+                        <div class="col-md-6 form-group" style="padding-top:30px;">
+                            <div id="amountToWords" class="form-control rounded-0 text-display" style="background-color: gainsboro; overflow: auto;"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
                             <label for="address" class="control-label">Address:</label>
-                            <textarea rows="3" name="address" id="address" class="form-control rounded-0" required><?php echo isset($address) ? $address :"" ?></textarea>
+                            <textarea rows="1" name="address" id="address" class="form-control rounded-0"><?php echo isset($address) ? $address :"" ?></textarea>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="checkname" class="control-label" style="float:left;">Check Name:</label>
+                            <input type="text" name="check_name" id="check_name" class="form-control rounded-0" value="<?php echo isset($check_name) ? $check_name : ""; ?>" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="payment_form" class="control-label">Payment Form:</label>
-                            <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
-                                <option value="" disabled selected>--Select Payment--</option>
-                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
-                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
-                            </select>
+                            <label for="check_date" class="control-label">Check Date:</label>
+                            <?php
+                            if (!empty($check_date)) {
+                                $checkformattedDate = date('Y-m-d', strtotime($check_date));
+                            } else {
+                                $checkformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="bank_name" class="control-label">Bank Name:</label>
-                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>" required>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="release_date" class="control-label">Release Date:</label>
+                            <label for="release_date" class="control-label" style="float:left;">Release Date:</label>
                             <?php
                             if (!empty($release_date)) {
                                 $releaseformattedDate = date('Y-m-d', strtotime($release_date));
@@ -281,42 +302,13 @@ if (empty($_GET['id'])) {
                             ?>     
                             <input type="date" class="form-control form-control-sm rounded-0" id="release_date" name="release_date" value="<?php echo isset($releaseformattedDate) ? $releaseformattedDate : '' ?>" required>
                         </div>
-                        <div class="col-md-4 form-group">
-                            <label for="check_date" class="control-label">Check Date:</label>
-                            <?php
-                            if (!empty($check_date)) {
-                                $checkformattedDate = date('Y-m-d', strtotime($check_date));
-                            } else {
-                                $checkformattedDate = '';
-                            }
-                            ?>     
-                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" required>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="transaction_date" class="control-label">Transaction Date:</label>
-                            <?php
-                            if (!empty($transaction_date)) {
-                                $transactionformattedDate = date('Y-m-d', strtotime($transaction_date));
-                            } else {
-                                $transactionformattedDate = date('Y-m-d');
-                            }
-                            ?>     
-                            <input type="date" class="form-control form-control-sm rounded-0" id="transaction_date" name="transaction_date" value="<?php echo isset($transactionformattedDate) ? $transactionformattedDate : '' ?>" required readonly>
-                        </div>
-
                     </div>
-
                     <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="req_dept" class="control-label">Requesting Department:</label>
-                            <input type="text" name="req_dept" id="req_dept" value="<?php echo $_settings->userdata('department'); ?>" class="form-control rounded-0" readonly>
-                        </div>
-
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="pr_no" class="control-label">PR No:</label>
                             <input type="text" name="pr_no" id="pr_no" class="form-control rounded-0" value="<?php echo isset($pr_no) ? $pr_no :"" ?>">
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="po_no" class="control-label">PO No:</label>
                             <input type="text" name="po_no" id="po_no" class="form-control rounded-0" value="<?php echo isset($po_no) ? $po_no :"" ?>">
                         </div>
@@ -324,23 +316,29 @@ if (empty($_GET['id'])) {
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="cdv_no" class="control-label">CDV No:</label>
-                                                        <input type="text" name="cdv_no" id="cdv_no" class="form-control rounded-0" value="<?php echo isset($cdv_no) ? $cdv_no :"" ?>">
+                            <input type="text" name="cdv_no" id="cdv_no" class="form-control rounded-0" value="<?php echo isset($cdv_no) ? $cdv_no :"" ?>">
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="ofv_no" class="control-label">OFV No:</label>
-                                                        <input type="text" name="ofv_no" id="ofv_no" class="form-control rounded-0" value="<?php echo isset($ofv_no) ? $ofv_no :"" ?>">
+                            <input type="text" name="ofv_no" id="ofv_no" class="form-control rounded-0" value="<?php echo isset($ofv_no) ? $ofv_no :"" ?>">
                         </div>
                     </div>
                     
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="description" class="control-label" style="float:left;">Particulars:</label>
+                            <textarea rows="10" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label for="remarks" class="control-label">Remarks:</label>
+                        <label for="remarks" class="control-label" style="float:left;">Remarks:</label>
                         <textarea rows="3" name="remarks" id="remarks" class="form-control rounded-0" required><?php echo isset($remarks) ? $remarks :"" ?></textarea>
                     </div>
                 </div>
                 <br><hr><br>
                 <?php 
                 if (isset($_GET['id']) == ''){ ?>
-<div class="container-fluid">
+                <div class="container-fluid">
                 <div class="card-body" style="border:1px solid gainsboro;">
                     <label for="remarks" class="control-label">List of Approvers </label>
                         <br><hr>
@@ -371,6 +369,7 @@ if (empty($_GET['id'])) {
                         var container = document.querySelector('.approversDiv');
                         var originalSelect = document.getElementById('status1_orig');
                         var section = '<?php echo $_settings->userdata('section'); ?>'; 
+                        var code = '<?php echo $_settings->userdata('user_code'); ?>';
                         container.innerHTML = '';
 
                         var clonedSelectContainer = document.createElement('div');
@@ -505,7 +504,7 @@ if (empty($_GET['id'])) {
                                     select.value = '10055';
                                 }
                             } 
-                            if (section === 'Marketing') {
+                            if (section === 'Marketing' && code != '10100') {
                                 if (index === (inputValue - 5)) {
                                     select.value = '10100';
                                 }
@@ -517,6 +516,20 @@ if (empty($_GET['id'])) {
                                 }
                                 if (index === (inputValue - 2)) {
                                 select.value = '20124';
+                                }
+                                if (index === (inputValue - 1)) {
+                                    select.value = '10055';
+                                }
+                            } 
+                            if (section === 'Marketing' && code == '10100') {
+                                if (index === (inputValue - 4)) {
+                                    select.value = '10114';
+                                }
+                                if (index === (inputValue - 3)) {
+                                    select.value = '10051';
+                                }
+                                if (index === (inputValue - 2)) {
+                                    select.value = '20124';
                                 }
                                 if (index === (inputValue - 1)) {
                                     select.value = '10055';
@@ -750,7 +763,7 @@ if (empty($_GET['id'])) {
                                                                         echo '<option value="' . $row['user_code'] . '" ' . $selected . '>' . $row['firstname'] . ' ' . $row['lastname'] . '</option>';
                                 }
                                 echo '</select>';
-                                echo '<button type="button" id="removeApproverButton' . ($i + 1) . '" class="btn btn-danger btn-sm removeApproverButton">Remove</button>';
+                                //echo '<button type="button" id="removeApproverButton' . ($i + 1) . '" class="btn btn-danger btn-sm removeApproverButton">Remove</button>';
                                 echo '</div>';
                             }
                             ?>
@@ -781,7 +794,7 @@ if (isset($_GET['id']) == ''){
     echo 'window.onload = function() {';
     echo 'var inputValue = document.getElementById("inputValue").value;'; 
     echo 'var section = "' . $_settings->userdata('section') . '";'; 
-    
+    echo 'var code = "' . $_settings->userdata('user_code') . '";'; 
     echo 'if (section === "Accounting") {';
     echo '    inputValue = 4; '; 
     echo '    var selects = ["10184", "10030", "20124", "10055"];';
@@ -809,9 +822,12 @@ if (isset($_GET['id']) == ''){
     echo '} else if (section === "General Services") {';
     echo '    inputValue = 4; '; 
     echo '    var selects = ["10143", "10070","20124", "10055"];';
-    echo '} else if (section === "Marketing") {';
+    echo '} else if (section === "Marketing" && code == "10100") {';
+    echo '    inputValue = 4; '; 
+    echo '    var selects = ["10114","10051","20124", "10055"];';
+    echo '} else if (section === "Marketing" && code != "10100") {';
     echo '    inputValue = 5; '; 
-    echo '    var selects = ["10100", "10114","10051","20124", "10055"];';
+    echo '    var selects = ["10100","10114","10051","20124", "10055"];';
     echo '} else if (section === "Corporate Communications") {';
     echo '    inputValue = 3; '; 
     echo '    var selects = ["10131","20124", "10055"];';

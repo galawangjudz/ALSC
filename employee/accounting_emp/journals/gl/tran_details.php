@@ -51,7 +51,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT DISTINCT(doc_type),doc_no,journal_date,po_id from `tbl_gl_trans` WHERE c_status = 1 order by (`journal_date`) desc ");
+					$qry = $conn->query("SELECT DISTINCT(doc_type),doc_no,journal_date,po_id from `tbl_gl_trans` WHERE c_status = 1 and c_status2 = 1 order by (`journal_date`) desc ");
 					while($row = $qry->fetch_assoc()):
 					?>
 						<tr>

@@ -555,10 +555,13 @@ $columnName;
 											<?php endwhile; ?>
 										<?php endif; ?>
 										<?php 
-											if ($type > 4) {  
-												$qry_filtered = $conn->query("SELECT rfp_no, status1
-																				FROM tbl_rfp_approvals
-																				WHERE status1 = 0 AND rfp_no = '{$tblId}'");
+											//if ($type > 4) {  
+												$qry_filtered = $conn->query("SELECT a.rfp_no, a.status1, b.status1, b.status2, b.status3, b.status4, b.status5,
+																				b.status6, b.status7
+																				FROM tbl_rfp_approvals a JOIN tbl_rfp b ON
+																				a.rfp_no = b.rfp_no
+																				WHERE a.status1 = 0 AND (b.status1 != '{$a}') AND a.rfp_no = '{$tblId}'");
+
 
 												if ($qry_filtered->num_rows > 0) { 
 											?>
@@ -567,7 +570,7 @@ $columnName;
 													</a>
 											<?php 
 												}
-											} 
+											//} 
 											?>
 									<?php endwhile; ?>	
 										<a class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">

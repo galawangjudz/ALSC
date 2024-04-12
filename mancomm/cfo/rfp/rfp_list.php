@@ -31,9 +31,9 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
-		<div class="card-tools">
-			<!-- <a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a> -->
-		</div>
+		<!-- <div class="card-tools">
+			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+		</div> -->
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -79,8 +79,12 @@ $columnName;
 				<?php 
 					$i = 1;
 					//echo $_settings->userdata('division');
-					if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-						$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
+					// if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
+					// 	$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
+					// 	tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5 FROM tbl_rfp WHERE req_dept = '" . $_settings->userdata('department') . "' OR req_dept = 'Purchasing' OR req_dept = 'Accounting' OR req_dept = 'CALS' OR req_dept = 'Billing' OR req_dept = 'Audit';");
+					// } else {
+						if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
+							$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
 						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp ORDER BY tbl_rfp.transaction_date DESC");
 					} else {
 						$qry = $conn->query("SELECT 
@@ -128,6 +132,7 @@ $columnName;
 						tbl_rfp.release_date,
 						tbl_rfp.transaction_date,
 						tbl_rfp.payment_form ORDER BY tbl_rfp.transaction_date DESC;
+					
 						");
 					}
 					
@@ -528,50 +533,43 @@ $columnName;
 										$type = $row_approved['type'];
 										$userCode = $_settings->userdata('user_code');
 										$a = $userCode; 
+										$qry_filtered = $conn->query("SELECT a.rfp_no, a.status1, a.status2, a.status3, a.status4, a.status5, a.status6, a.status7
+										FROM tbl_rfp_approvals AS a
+										JOIN tbl_rfp AS r ON a.rfp_no = r.rfp_no
+										WHERE a.rfp_no = '{$tblId}' 
+										AND (
+											(r.status1 = '{$userCode}' AND a.status1 = 0) OR
+											(r.status2 = '{$userCode}' AND a.status2 = 0 AND a.status1 = 1) OR
+											(r.status3 = '{$userCode}' AND a.status3 = 0 AND a.status2 = 1 AND a.status1 = 1) OR
+											(r.status4 = '{$userCode}' AND a.status4 = 0 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1) OR
+											(r.status5 = '{$userCode}' AND a.status5 = 0 AND a.status4 = 1 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1) OR
+											(r.status6 = '{$userCode}' AND a.status6 = 0 AND a.status5 = 1 AND a.status4 = 1 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1) OR
+											(r.status7 = '{$userCode}' AND a.status7 = 0 AND a.status6 = 1 AND a.status5 = 1 AND a.status4 = 1 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1)
+										);");
+										while ($row_filtered = $qry_filtered->fetch_assoc()):
+											
+									$btnqry = "SELECT * FROM tbl_rfp WHERE rfp_no = '{$tblId}' and check_date = '0000-00-00'";
+									$btnqry_result = $conn->query($btnqry);
 
-										if ($type <= 4): 
-											$qry_filtered = $conn->query("SELECT a.rfp_no, a.status1, a.status2, a.status3, a.status4, a.status5, a.status6, a.status7
-											FROM tbl_rfp_approvals AS a
-											JOIN tbl_rfp AS r ON a.rfp_no = r.rfp_no
-											WHERE a.rfp_no = '{$tblId}'
-											AND (
-												(r.status1 = '{$userCode}' AND a.status1 = 0) OR
-												(r.status2 = '{$userCode}' AND a.status2 = 0 AND a.status1 = 1) OR
-												(r.status3 = '{$userCode}' AND a.status3 = 0 AND a.status2 = 1 AND a.status1 = 1) OR
-												(r.status4 = '{$userCode}' AND a.status4 = 0 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1) OR
-												(r.status5 = '{$userCode}' AND a.status5 = 0 AND a.status4 = 1 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1) OR
-												(r.status6 = '{$userCode}' AND a.status6 = 0 AND a.status5 = 1 AND a.status4 = 1 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1) OR
-												(r.status7 = '{$userCode}' AND a.status7 = 0 AND a.status6 = 1 AND a.status5 = 1 AND a.status4 = 1 AND a.status3 = 1 AND a.status2 = 1 AND a.status1 = 1)
-											);
-											");
-
-											while ($row_filtered = $qry_filtered->fetch_assoc()):
-											?>
-												<a class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-													<span class="fa fa-thumbs-up text-success"></span>
-												</a>
-												<a class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-													<span class="fa fa-thumbs-down text-danger"></span>
-												</a>
-												<div class="dropdown-divider"></div>
-											<?php endwhile; ?>
-
-										<?php endif; ?>
-
-										<?php 
-											if ($type > 4) {  
-												$qry_filtered = $conn->query("SELECT rfp_no, status1
-																				FROM tbl_rfp_approvals
-																				WHERE status1 = 0 AND rfp_no = '{$tblId}'");
-												if ($qry_filtered->num_rows > 0) { 
-											?>
-													<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
-														<span class="fa fa-edit text-primary"></span>
-													</a>
-											<?php 
-												}
-											} 
-											?>
+									if($btnqry_result->num_rows > 0){ ?>
+											<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+												<span class="fa fa-edit text-danger"></span>
+											</a>
+									<?php }else{ ?>
+										<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+										<span class="fa fa-edit text-success"></span>
+										<a class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
+											<span class="fa fa-thumbs-up text-primary"></span>
+										</a>
+										<a class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
+											<span class="fa fa-thumbs-down text-danger"></span>
+										</a>
+									</a>
+									<?php } ?>
+										
+									
+										<?php endwhile; ?>
+										
 									<?php endwhile; ?>	
 										<a class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
 											<span class="fa fa-eye text-dark"></span>
@@ -582,7 +580,6 @@ $columnName;
 											<span class="fas fa-print"></span>
 										</button>
 									</div>
-
 							</td>
 						</tr>
 					<?php endwhile; ?>

@@ -279,7 +279,19 @@ $department = $_settings->userdata('department');
                         </p>
                       </a>
                     </li>
-                 
+                    <div style="background-color:gainsboro;">
+                      <li class="nav-header">
+                        <b><i>Banking and General Ledger</i></b>
+                      </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/billing/?page=rfp/rfp_list" class="nav-link nav-rfp">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
 
 <!-- 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
