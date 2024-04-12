@@ -124,7 +124,7 @@ border-color: #007BFF;
                         <tbody>
                             <?php 
                             $counter = 1;
-                            $jitems = $conn->query("SELECT DISTINCT a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
+                            $jitems = $conn->query("SELECT DISTINCT gl.preparer as prepp, a.name, gl.gtype, gl.amount, vi.phase, vi.block, vi.lot, gl.account
                             FROM tbl_gl_trans gl
                             LEFT JOIN vs_items vi ON gl.vs_num = vi.journal_id
                             LEFT JOIN account_list a ON gl.account = a.code
@@ -132,7 +132,9 @@ border-color: #007BFF;
                             GROUP BY gl.account
                             ORDER BY gl.gtype;
                             ");
+                            $global_prepp = null;
                             while($row = $jitems->fetch_assoc()):
+                                $global_prepp = $row['prepp'];
                                 ?>
                                 <tr>  
                                     <td class="" style="padding: 4px 10px;">
@@ -201,8 +203,8 @@ border-color: #007BFF;
                                         <?= $row['gtype'] == 2 ? number_format(abs($row['amount']), 2) : '' ?>
                                     </td>
                                 </tr>
-                                <?php $counter++;
-                                endwhile; ?>
+                                <?php $counter++; ?>
+                                <?php endwhile; ?>
                         </tbody>
                         <tfoot>
                             <tr>
@@ -212,6 +214,14 @@ border-color: #007BFF;
                             </tr>
                         </tfoot>
                     </table>
+                    <br><br>Prepared by:
+                    <?php
+                        $prep = $conn->query("SELECT * FROM users WHERE user_code = '" . $global_prepp . "'");
+                        while($row2 = $prep->fetch_assoc()): ?>
+                        
+                        <?php echo $row2['firstname']; ?> <?php echo $row2['lastname']; ?>
+                        <i>(<?php echo $row2['section']; ?>)</i>
+                        <?php endwhile; ?>
                     </div>
                 </div>
             </th>

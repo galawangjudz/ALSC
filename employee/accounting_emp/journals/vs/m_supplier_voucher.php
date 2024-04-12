@@ -147,11 +147,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <head>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="../../libs/js/lightbox.min.js"></script>
         <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-    <script src="libs/js/jquery.fancybox.min.js"></script>
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 </head>
 <body onload="cal_tb()">
 <div class="card card-outline card-primary">
@@ -259,6 +257,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
+                                        <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="row">

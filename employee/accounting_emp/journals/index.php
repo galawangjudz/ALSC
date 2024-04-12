@@ -170,10 +170,13 @@ function format_num($number){
 							<input type="text" value="<?php echo !empty($row['po_no']) ? 'PO' : 'non-PO'; ?>" id="po_no" style="border:none;cursor:default;background:transparent;" readonly>
 						</td>
 						<td class="text-center">
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
 								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary"></span>
 								</button>
+								<?php endif; ?>
 								<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Delete">
 									<span class="fa fa-trash text-danger"></span>
@@ -215,10 +218,13 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
                         <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
 						<td class="text-center">
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
 							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
 							</button>
+							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>
@@ -259,10 +265,13 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
                         <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
 						<td class="text-center">
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
 							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary"></span>
 							</button>
+							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger"></span>
@@ -328,10 +337,13 @@ function format_num($number){
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div> -->
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
 							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_client custom-badge " data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
 							</button>
+							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>

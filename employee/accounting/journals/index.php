@@ -140,11 +140,12 @@ function format_num($number){
         <div class="container-fluid">
 			<table class="table table-hover table-bordered" id="sup-div">
 				<colgroup>
-					<col width="15%">
-					<col width="15%">
-					<col width="45%">
-					<col width="15%">
 					<col width="10%">
+					<col width="15%">
+					<col width="30%">
+					<col width="10%">
+					<col width="20%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr>
@@ -152,12 +153,14 @@ function format_num($number){
 						<th>Date</th>
 						<th>Supplier Name</th>
                         <th>PO Type</th>
+						<th>Status</th>
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
+				
 					<?php 
-					$journals = $conn->query("SELECT j.*, s.name as sname FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by j.date_updated desc");
+					$journals = $conn->query("SELECT j.po_no as poNo, s.name as sname, j.c_status as stats, j.journal_date, j.v_num, s.* FROM `vs_entries` j inner join `supplier_list` s on j.supplier_id = s.id order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -167,13 +170,38 @@ function format_num($number){
 						
                         <td class=""><?= $row['sname'] ?></td>
 						<td class="">
-							<input type="text" value="<?php echo !empty($row['po_no']) ? 'PO' : 'non-PO'; ?>" id="po_no" style="border:none;cursor:default;background:transparent;" readonly>
+							<input type="text" value="<?php echo !empty($row['poNo']) ? 'PO' : 'non-PO'; ?>" id="po_no" style="border:none;cursor:default;background:transparent;" readonly>
 						</td>
 						<td class="text-center">
+						<?php 
+							switch($row['stats']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						<td class="text-center">
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
 								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary"></span>
 								</button>
+								<?php endif; ?>
 								<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Delete">
 									<span class="fa fa-trash text-danger"></span>
@@ -192,22 +220,24 @@ function format_num($number){
 
 			<table class="table table-hover table-bordered" id="agent-div">
 				<colgroup>
-					<col width="15%">
-					<col width="15%">
-					<col width="45%">
 					<col width="10%">
+					<col width="15%">
+					<col width="40%">
+					<col width="20%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
 						<th>Agent Name</th>
+						<th>Status</th>
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by j.date_updated desc");
+					$journals = $conn->query("SELECT j.c_status as stats, j.journal_date, j.v_num, s.* FROM `vs_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -215,10 +245,35 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
                         <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
-									data-toggle="tooltip" data-placement="top" title="Edit">
-								<span class="fa fa-edit text-primary fa-small"></span>
-							</button>
+						<?php 
+							switch($row['stats']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+							<td class="text-center">
+								<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+									<?php if ($qry_get_pending->num_rows > 0): ?>
+									<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+											data-toggle="tooltip" data-placement="top" title="Approve">
+										<span class="fa fa-thumbs-up text-success"></span>
+									</button>
+									<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+											data-toggle="tooltip" data-placement="top" title="Disapprove">
+										<span class="fa fa-thumbs-down text-danger"></span>
+									</button>
+									<button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Edit">
+									<span class="fa fa-edit text-primary fa-small"></span>
+								</button>
+									<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>
@@ -236,22 +291,24 @@ function format_num($number){
 
 			<table class="table table-hover table-bordered" id="emp-div">
 				<colgroup>
-					<col width="15%">
-					<col width="15%">
-					<col width="45%">
 					<col width="10%">
+					<col width="15%">
+					<col width="40%">
+					<col width="20%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>Voucher #</th>
 						<th>Date</th>
 						<th>Employee Name</th>
+						<th>Status</th>
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_code order by j.date_updated desc");
+					$journals = $conn->query("SELECT j.c_status as stats, j.journal_date, j.v_num, s.* FROM `vs_entries` j inner join `users` s on j.supplier_id = s.user_code order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -259,10 +316,35 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
                         <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
-									data-toggle="tooltip" data-placement="top" title="Edit">
-								<span class="fa fa-edit text-primary"></span>
-							</button>
+						<?php 
+							switch($row['stats']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						<td class="text-center">
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Edit">
+									<span class="fa fa-edit text-primary"></span>
+								</button>
+							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger"></span>
@@ -279,12 +361,11 @@ function format_num($number){
 			</table>
 			<table class="table table-hover table-bordered" id="client-div">
 				<colgroup>
-					<col width="15%">
-					<col width="15%">
-					<!-- <col width="15%"> -->
-					<col width="45%">
-					<!-- <col width="15%"> -->
 					<col width="10%">
+					<col width="15%">
+					<col width="40%">
+					<col width="20%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr>
@@ -292,7 +373,7 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Client Name</th>
-                        <!-- <th>Preparer</th> -->
+                        <th>Status</th>
 						<th style="text-align:center;">Action</th>
 					</tr>
 				</thead>
@@ -302,7 +383,7 @@ function format_num($number){
 					
 					//$users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					//$user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.*, s.* FROM `vs_entries` j inner join `property_clients` s on j.supplier_id = s.client_id order by j.date_updated desc");
+					$journals = $conn->query("SELECT j.c_status as stats, j.journal_date, j.v_num, s.* FROM `vs_entries` j inner join `property_clients` s on j.supplier_id = s.client_id order by j.date_updated desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -311,7 +392,20 @@ function format_num($number){
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
                         <td class=""><?= $row['last_name'] ?>, <?= $row['first_name'] ?></td>
-
+						<td class="text-center">
+						<?php 
+							switch($row['stats']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
 						
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
@@ -328,10 +422,21 @@ function format_num($number){
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['v_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 							</div> -->
-							<button type="button" class="btn btn-flat btn-default btn-sm edit_data_client custom-badge " data-id="<?php echo $row['v_num'] ?>"
+							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+								<?php if ($qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_client custom-badge " data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
 							</button>
+							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>
@@ -423,7 +528,34 @@ $(document).ready(function() {
 		$('.delete_data').click(function(){
 			_conf("Are you sure you want to delete this voucher setup entry permanently?","delete_vs",[$(this).attr('data-id')])
 		})
+
+		$('.approved_data').click(function(){
+			_conf("Are you sure you want to approve this voucher setup?","approved_vs",[$(this).attr('data-id')])
+		})
 	})
+	function approved_vs($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=approved_vs",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+	
 	function delete_vs($id){
 		start_loader();
 		$.ajax({

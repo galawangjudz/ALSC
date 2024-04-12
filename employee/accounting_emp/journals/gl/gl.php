@@ -72,7 +72,9 @@
                 a.amount,
                 ac.code,
                 ac.name AS acName,
-                je.jv_num
+                je.jv_num,
+                vs.v_num,
+                cv.c_num
             FROM
                 tbl_gl_trans a
             JOIN tbl_gr_list b ON a.doc_no = b.doc_no
@@ -82,9 +84,10 @@
             LEFT JOIN property_clients pc ON b.supplier_id = pc.client_id
             LEFT JOIN users u ON b.supplier_id = u.user_code
             LEFT JOIN jv_entries je ON a.jv_num = je.jv_num
-            WHERE a.c_status = 1
+            LEFT JOIN vs_entries vs ON a.vs_num = vs.v_num
+            LEFT JOIN cv_entries cv ON a.cv_num = cv.c_num
+            WHERE a.c_status = 1 and a.c_status2 = 1
             ORDER BY a.journal_date DESC;
-            
                 ");
 
                 while ($row = $qry->fetch_assoc()):

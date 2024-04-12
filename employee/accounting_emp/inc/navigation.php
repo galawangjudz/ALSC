@@ -256,7 +256,7 @@ $level = $_settings->userdata('type');
                     </div> -->
                     <div style="background-color:gainsboro;" class="nav-check nav-check">
                       <li class="nav-header">
-                          <b><i>Voucher Setup Entries</i></b>
+                          <b><i>Voucher Entries</i></b>
                       </li>
                     </div>
                     <li class="nav-item">

@@ -41,7 +41,7 @@ if(isset($_SESSION['userdata'])){
             redirect('employee/ca/index.php');
         }
     }     
-    if($_SESSION['userdata']['position'] == 'CASHIER'){
+    if($_SESSION['userdata']['section'] == 'Treasury'){
         if(strpos($link, 'login.php') === false){
             redirect('employee/cashier/index.php');
         }

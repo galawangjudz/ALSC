@@ -127,9 +127,9 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="60%">
-					<!-- <col width="15%"> -->
-					<!-- <col width="10%"> -->
+					<col width="40%">
+					<col width="10%">
+					<col width="10%">
 					<col width="10%">
 				</colgroup>
 				<thead style="text-align:center;">
@@ -138,7 +138,8 @@ function format_num($number){
 						<th>CV Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
-                        <!-- <th>Claim Status</th> -->
+                        <th>Status 1</th>
+						<th>Status 2</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -176,19 +177,72 @@ function format_num($number){
 						</td> -->
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu">
-								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-money-check text-success"></span> Check Details</a>
-								<!-- <div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
-							</div>
+						<?php 
+							switch($row['c_status']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+						<?php 
+							switch($row['c_status2']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+							<?php 
+							$qry_get_pending = $conn->query("SELECT cv.c_status, cv.c_num, chk.check_num 
+															FROM cv_entries cv 
+															JOIN check_details chk ON cv.c_num = chk.c_num 
+															WHERE cv.c_num = '" . $row['c_num'] . "' 
+															AND cv.c_status = 0 
+															AND chk.check_num IS NOT NULL");
+							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
+							<?php endif; ?>
+							
+								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+									<span class="fa fa-money-check text-success"></span> Check Details
+								</a>
+							
+							
+							<?php 
+							$qry_get_check = $conn->query("SELECT * FROM check_details
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND check_num IS NOT NULL");
+							if ($qry_get_check->num_rows > 0): ?>
+							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
+								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
+							</a>        
+							<?php endif; ?>
+
+							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
+								<span class="fa fa-edit text-primary"></span> Edit
+							</a>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -200,9 +254,9 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="60%">
-					<!-- <col width="15%"> -->
-					<!-- <col width="10%"> -->
+					<col width="40%">
+					<col width="10%">
+					<col width="10%">
 					<col width="10%">
 				</colgroup>
 				<thead style="text-align:center;">
@@ -211,7 +265,8 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Agent Name</th>
-                        <!-- <th>Claim Status</th> -->
+                        <th>Status 1</th>
+						<th>Status 2</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -220,7 +275,7 @@ function format_num($number){
 					
 					// $users = $conn->query("SELECT user_code,username FROM `users` where user_code in (SELECT `user_id` FROM `vs_entries`)");
 					// $user_arr = array_column($users->fetch_all(MYSQLI_ASSOC),'username','user_code');
-					$journals = $conn->query("SELECT j.c_num, j.cv_date, s.* FROM `cv_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(cv_date) desc");
+					$journals = $conn->query("SELECT j.c_status as stats,j.c_status2, j.c_num, j.cv_date, s.* FROM `cv_entries` j inner join `t_agents` s on j.supplier_id = s.c_code order by date(cv_date) desc");
 					while($row = $journals->fetch_assoc()):
 					?>
 					<tr>
@@ -251,19 +306,72 @@ function format_num($number){
 
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu">
-								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-money-check text-success"></span> Check Details</a>
-								<!-- <div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
-							</div>
+						<?php 
+							switch($row['stats']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+						<?php 
+							switch($row['c_status2']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+							<?php 
+							$qry_get_pending = $conn->query("SELECT cv.c_status, cv.c_num, chk.check_num 
+															FROM cv_entries cv 
+															JOIN check_details chk ON cv.c_num = chk.c_num 
+															WHERE cv.c_num = '" . $row['c_num'] . "' 
+															AND cv.c_status = 0 
+															AND chk.check_num IS NOT NULL");
+							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
+							<?php endif; ?>
+							
+							
+								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+									<span class="fa fa-money-check text-success"></span> Check Details
+								</a>
+							
+							<?php 
+							$qry_get_check = $conn->query("SELECT * FROM check_details
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND check_num IS NOT NULL");
+							if ($qry_get_check->num_rows > 0): ?>
+							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
+								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
+							</a>        
+							<?php endif; ?>
+
+							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
+								<span class="fa fa-edit text-primary"></span> Edit
+							</a>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -275,9 +383,9 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="60%">
-					<!-- <col width="15%"> -->
-					<!-- <col width="10%"> -->
+					<col width="40%">
+					<col width="10%">
+					<col width="10%">
 					<col width="10%">
 				</colgroup>
 				<thead style="text-align:center;">
@@ -286,7 +394,8 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Employee Name</th>
-                        <!-- <th>Claim Status</th> -->
+                        <th>Status 1</th>
+						<th>Status 2</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -327,19 +436,72 @@ function format_num($number){
 
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu">
-							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>         
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-money-check text-success"></span> Check Details</a>
-								<!-- <div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
-							</div>
+						<?php 
+							switch($row['c_status']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+						<?php 
+							switch($row['c_status2']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+							<?php 
+							$qry_get_pending = $conn->query("SELECT cv.c_status, cv.c_num, chk.check_num 
+															FROM cv_entries cv 
+															JOIN check_details chk ON cv.c_num = chk.c_num 
+															WHERE cv.c_num = '" . $row['c_num'] . "' 
+															AND cv.c_status = 0 
+															AND chk.check_num IS NOT NULL");
+							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
+							<?php endif; ?>
+							
+						
+								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+									<span class="fa fa-money-check text-success"></span> Check Details
+								</a>
+						
+							<?php 
+							$qry_get_check = $conn->query("SELECT * FROM check_details
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND check_num IS NOT NULL");
+							if ($qry_get_check->num_rows > 0): ?>
+							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
+								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
+							</a>        
+							<?php endif; ?>
+
+							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
+								<span class="fa fa-edit text-primary"></span> Edit
+							</a>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -351,9 +513,9 @@ function format_num($number){
 					<col width="15%">
 					<col width="15%">
 					<!-- <col width="15%"> -->
-					<col width="60%">
-					<!-- <col width="15%"> -->
-					<!-- <col width="10%"> -->
+					<col width="40%">
+					<col width="10%">
+					<col width="10%">
 					<col width="10%">
 				</colgroup>
 				<thead style="text-align:center;">
@@ -362,7 +524,8 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Client Name</th>
-                        <!-- <th>Claim Status</th> -->
+                        <th>Status 1</th>
+						<th>Status 2</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -404,21 +567,72 @@ function format_num($number){
 
 						<!-- <td><?= isset($user_arr[$row['user_id']]) ? $user_arr[$row['user_id']] : "N/A" ?></td> -->
 						<td class="text-center">
-							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									Action
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
-							<div class="dropdown-menu" role="menu">
-								<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>", target="_blank" class="dropdown-item"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>              
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-								<div class="dropdown-divider"></div>
+						<?php 
+							switch($row['c_status']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+						<?php 
+							switch($row['c_status2']){
+								case 0:
+									echo '<span class="badge badge-secondary px-3 rounded-pill">Pending</span>';
+									break;
+								case 1:
+									echo '<span class="badge badge-primary px-3 rounded-pill">Approved</span>';
+									break;
+								default:
+									echo '<span class="badge badge-danger px-3 rounded-pill">Disapproved</span>';
+									break;
+							}
+						?>
+						</td>
+						<td class="text-center">
+							<?php 
+							$qry_get_pending = $conn->query("SELECT cv.c_status, cv.c_num, chk.check_num 
+															FROM cv_entries cv 
+															JOIN check_details chk ON cv.c_num = chk.c_num 
+															WHERE cv.c_num = '" . $row['c_num'] . "' 
+															AND cv.c_status = 0 
+															AND chk.check_num IS NOT NULL");
+							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
+								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Approve">
+									<span class="fa fa-thumbs-up text-success"></span>
+								</button>
+								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Disapprove">
+									<span class="fa fa-thumbs-down text-danger"></span>
+								</button>
+							<?php endif; ?>
+							
+						
 								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
 									<span class="fa fa-money-check text-success"></span> Check Details
 								</a>
-								<!-- <div class="dropdown-divider"></div>
-								<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a> -->
-							</div>
+						
+							<?php 
+							$qry_get_check = $conn->query("SELECT * FROM check_details
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND check_num IS NOT NULL");
+							if ($qry_get_check->num_rows > 0): ?>
+							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
+								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
+							</a>        
+							<?php endif; ?>
+
+							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
+								<span class="fa fa-edit text-primary"></span> Edit
+							</a>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -430,6 +644,10 @@ function format_num($number){
 
 
 <script>
+	$('.approved_data').click(function(){
+		_conf("Are you sure you want to approve this voucher setup?","approved_cv",[$(this).attr('data-id')])
+	})
+	
 $(document).ready(function() {
     $("input[type=radio][name=divChoice]").change(function() {
         var selectedValue = $(this).val();
@@ -536,6 +754,29 @@ $(document).ready(function() {
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=unclaimed_cv",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+
+	function approved_cv($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=approved_cv",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",
