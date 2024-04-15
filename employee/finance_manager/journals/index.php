@@ -540,6 +540,8 @@ $(document).ready(function() {
 		})
 	})
 
+
+	
 	function disapproved_vs($id){
 		start_loader();
 		$.ajax({
