@@ -4859,6 +4859,23 @@ Class Master extends DBConnection {
 	
 		return json_encode($resp);
 	}
+
+	function disapproved_vs(){
+		extract($_POST);
+	
+		$approved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2,c_status2 = 2 WHERE vs_num = '{$id}'");
+		$approved_entries = $this->conn->query("UPDATE `vs_entries` SET c_status = 2 WHERE v_num = '{$id}'");
+	
+		if($approved_trans && $approved_entries){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Voucher Setup Entry has been approved successfully.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+	
+		return json_encode($resp);
+	}
 	
 	function approved_cv(){
 		extract($_POST);
@@ -6642,6 +6659,9 @@ switch ($action) {
 	break;
 	case 'approved_vs':
 		echo $Master->approved_vs();
+	break;
+	case 'disapproved_vs':
+		echo $Master->disapproved_vs();
 	break;
 	case 'disapproved_jv':
 		echo $Master->disapproved_jv();

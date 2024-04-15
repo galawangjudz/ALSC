@@ -535,7 +535,34 @@ $(document).ready(function() {
 		$('.approved_data').click(function(){
 			_conf("Are you sure you want to approve this voucher setup?","approved_vs",[$(this).attr('data-id')])
 		})
+		$('.disapproved_data').click(function(){
+			_conf("Are you sure you want to disapprove this voucher setup?","disapproved_vs",[$(this).attr('data-id')])
+		})
 	})
+
+	function disapproved_vs($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=disapproved_vs",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+
 	function approved_vs($id){
 		start_loader();
 		$.ajax({

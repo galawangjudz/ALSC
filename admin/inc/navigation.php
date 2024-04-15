@@ -5,7 +5,7 @@
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 .active-button {
-        background-color: #ccc; /* Change this to the desired color */
+        background-color: #ccc; 
     }
 
 </style>
@@ -14,9 +14,7 @@ $level = $_settings->userdata('type');
 $position = $_settings->userdata('position'); 
 $department = $_settings->userdata('department'); 
 ?>
-<!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-blue elevation-4 sidebar-no-expand">
-        <!-- Brand Logo -->
         <a href="<?php echo base_url ?>" class="brand-link bg-blue text-sm">
         <img src="<?php echo base_url ?>/images/logo.jpg" alt="Store Logo" class="brand-image img-circle elevation-3" style="opacity: .8;
             width: 30px;
@@ -51,7 +49,7 @@ $department = $_settings->userdata('department');
                       </a>
                     </li> 
                     <div class="accordion" id="salesAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSales" aria-expanded="true" aria-controls="collapseSales" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseSales" aria-expanded="true" aria-controls="collapseSales" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                           <b><i><li class="nav-header" style="margin-left:-10px">Sales</li></i></b>
                       </button>
                       <div id="collapseSales" class="collapse" aria-labelledby="salesHeading" data-parent="#salesAccordion">
@@ -78,7 +76,7 @@ $department = $_settings->userdata('department');
                   </div>
 
                   <div class="accordion" id="purchasingAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapsePurchase" aria-expanded="true" aria-controls="collapsePurchase" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapsePurchase" aria-expanded="true" aria-controls="collapsePurchase" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Purchasing Order</li></b></i>
                       </button>
                       <div id="collapsePurchase" class="collapse" aria-labelledby="purchaseHeading" data-parent="#purchasingAccordion">
@@ -110,7 +108,7 @@ $department = $_settings->userdata('department');
                   </div>
                  
                   <div class="accordion" id="fileManagerAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFileManager" aria-expanded="true" aria-controls="collapseFileManager" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseFileManager" aria-expanded="true" aria-controls="collapseFileManager" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">File Manager</li></b></i>
                       </button>
                       <div id="collapseFileManager" class="collapse" aria-labelledby="fileManagerHeading" data-parent="#fileManagerAccordion">
@@ -137,7 +135,7 @@ $department = $_settings->userdata('department');
                   </div>
                  
                   <div class="accordion" id="bGAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBG" aria-expanded="true" aria-controls="collapseBG" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseBG" aria-expanded="true" aria-controls="collapseBG" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Banking And General Ledger</li></b></i>
                       </button>
                       <div id="collapseBG" class="collapse" aria-labelledby="accountsPayableHeading" data-parent="#bGAccordion">
@@ -174,7 +172,7 @@ $department = $_settings->userdata('department');
                   </div>
 
                   <div class="accordion" id="accountsPayableAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseAccountsPayable" aria-expanded="true" aria-controls="collapseAccountsPayable" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseAccountsPayable" aria-expanded="true" aria-controls="collapseAccountsPayable" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Voucher Setup Entries</li></b></i>
                       </button>
                       <div id="collapseAccountsPayable" class="collapse" aria-labelledby="accountsPayableHeading" data-parent="#accountsPayableAccordion">
@@ -201,7 +199,7 @@ $department = $_settings->userdata('department');
                   </div>
 
                   <div class="accordion" id="CreateVouchAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseCreateVouch" aria-expanded="true" aria-controls="collapseCreateVouch" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseCreateVouch" aria-expanded="true" aria-controls="collapseCreateVouch" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Create Voucher Setup</li></b></i>
                       </button>
                       <div id="collapseCreateVouch" class="collapse" aria-labelledby="CreateVouchHeading" data-parent="#CreateVouchAccordion">
@@ -255,7 +253,7 @@ $department = $_settings->userdata('department');
                   
                 
                   <div class="accordion" id="reportAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Report</li></b></i>
                       </button>
                       <div id="collapseReport" class="collapse" aria-labelledby="reportHeading" data-parent="#reportAccordion">
@@ -292,7 +290,7 @@ $department = $_settings->userdata('department');
                   </div>
                  
                   <div class="accordion" id="maintenanceAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Maintenance</li></b></i>
                       </button>
                       <div id="collapseMaintenance" class="collapse" aria-labelledby="maintenanceHeading" data-parent="#maintenanceAccordion">
