@@ -240,9 +240,15 @@ function format_num($number){
 							</a>        
 							<?php endif; ?>
 
+							<?php 
+							$qry_edit = $conn->query("SELECT * FROM cv_entries
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND (c_status = 0)");
+							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
 								<span class="fa fa-edit text-primary"></span> Edit
 							</a>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -369,9 +375,15 @@ function format_num($number){
 							</a>        
 							<?php endif; ?>
 
+							<?php 
+							$qry_edit = $conn->query("SELECT * FROM cv_entries
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND (c_status = 0)");
+							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
 								<span class="fa fa-edit text-primary"></span> Edit
 							</a>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -499,9 +511,15 @@ function format_num($number){
 							</a>        
 							<?php endif; ?>
 
+							<?php 
+							$qry_edit = $conn->query("SELECT * FROM cv_entries
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND (c_status = 0)");
+							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
 								<span class="fa fa-edit text-primary"></span> Edit
 							</a>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -630,9 +648,15 @@ function format_num($number){
 							</a>        
 							<?php endif; ?>
 
+							<?php 
+							$qry_edit = $conn->query("SELECT * FROM cv_entries
+															WHERE c_num = '" . $row['c_num'] . "' 
+															AND (c_status = 0)");
+							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
 								<span class="fa fa-edit text-primary"></span> Edit
 							</a>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -647,7 +671,9 @@ function format_num($number){
 	$('.approved_data').click(function(){
 		_conf("Are you sure you want to approve this voucher setup?","approved_cv",[$(this).attr('data-id')])
 	})
-	
+	$('.disapproved_data').click(function(){
+		_conf("Are you sure you want to disapprove this voucher setup?","disapproved_cv",[$(this).attr('data-id')])
+	})
 $(document).ready(function() {
     $("input[type=radio][name=divChoice]").change(function() {
         var selectedValue = $(this).val();
@@ -777,6 +803,28 @@ $(document).ready(function() {
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=approved_cv",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+	function disapproved_cv($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=disapproved_cv",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

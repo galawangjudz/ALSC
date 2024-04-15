@@ -4897,7 +4897,7 @@ Class Master extends DBConnection {
 	function approved_jv(){
 		extract($_POST);
 	
-		$approved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 1 WHERE jv_num = '{$id}'");
+		$approved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 1,c_status2 = 1 WHERE jv_num = '{$id}'");
 		$approved_entries = $this->conn->query("UPDATE `jv_entries` SET c_status = 1 WHERE jv_num = '{$id}'");
 	
 		if($approved_trans && $approved_entries){
@@ -4914,7 +4914,7 @@ Class Master extends DBConnection {
 	function disapproved_jv(){
 		extract($_POST);
 	
-		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2 WHERE jv_num = '{$id}'");
+		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2,c_status2 = 2 WHERE jv_num = '{$id}'");
 		$disapproved_entries = $this->conn->query("UPDATE `jv_entries` SET c_status = 2 WHERE jv_num = '{$id}'");
 	
 		if($disapproved_trans && $disapproved_entries){
@@ -4933,6 +4933,23 @@ Class Master extends DBConnection {
 	
 		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status2 = 2 WHERE cv_num = '{$id}'");
 		$disapproved_entries = $this->conn->query("UPDATE `cv_entries` SET c_status2 = 2 WHERE c_num = '{$id}'");
+	
+		if($disapproved_trans && $disapproved_entries){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Voucher Setup Entry has been disapproved successfully.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+	
+		return json_encode($resp);
+	}
+
+	function disapproved_cv(){
+		extract($_POST);
+	
+		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2 WHERE cv_num = '{$id}'");
+		$disapproved_entries = $this->conn->query("UPDATE `cv_entries` SET c_status = 2 WHERE c_num = '{$id}'");
 	
 		if($disapproved_trans && $disapproved_entries){
 			$resp['status'] = 'success';
@@ -6456,6 +6473,9 @@ switch ($action) {
 	break;
 	case 'disapproved_cv_cfo':
 		echo $Master->disapproved_cv_cfo();
+	break;
+	case 'disapproved_cv':
+		echo $Master->disapproved_cv();
 	break;
 	case 'coo_approval':
 		echo $Master->coo_approval();
