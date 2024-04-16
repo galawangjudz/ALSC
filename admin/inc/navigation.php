@@ -49,7 +49,7 @@ $department = $_settings->userdata('department');
                       </a>
                     </li> 
                     <div class="accordion" id="salesAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-target="#collapseSales" aria-expanded="true" aria-controls="collapseSales" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSales" aria-expanded="true" aria-controls="collapseSales" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                           <b><i><li class="nav-header" style="margin-left:-10px">Sales</li></i></b>
                       </button>
                       <div id="collapseSales" class="collapse" aria-labelledby="salesHeading" data-parent="#salesAccordion">
