@@ -733,7 +733,7 @@ if (empty($_GET['id'])) {
                         <div class="container-fluid approversDiv">
                             <?php
                             for ($i = 0; $i < $total_count; $i++) {
-                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
                                 echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';

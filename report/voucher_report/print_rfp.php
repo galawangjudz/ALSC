@@ -24,6 +24,7 @@
     $description = $row['description'];
     $amt = $row['amount'];
     $name = $row['name'];
+    $checkname = $row['check_name'];
     $address = $row['address'];
     $rdate= $row['release_date'];
     $prno = $row['pr_no'];
@@ -42,6 +43,7 @@
     $stats5 = $row['status5'];
     $stats6 = $row['status6'];
     $stats7 = $row['status7'];
+    $preparer = $row['preparer'];
 ?>
 <style>
 .phase {
@@ -105,6 +107,10 @@
                                 <input type="hidden" name="amount" id="amount" class="form-control rounded-0" value="<?php echo $amt; ?>" required>
                                 <td style="width:50%; padding: 4px 10px;"><div id="amountToWords" class="text-display" style="font-weight:bold;"></div></td>
                             </tr>
+                            <tr>
+                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">Check Name:</td>
+                                <td style="width:50%; padding: 4px 10px;"><?php echo $checkname; ?></td>
+                            </tr>
                         </table>
                         <table class="table table-bordered">
                             <tr>
@@ -151,6 +157,7 @@
 
                             if (!empty($statusField)) {
                                 $qry = $conn->query("SELECT * FROM users WHERE user_code = '" . $statusField . "' ");
+                                
                                 $statusRow = $qry->fetch_assoc();
                                 if ($statusRow) {
                                     $lastname = $statusRow['lastname'];
@@ -171,6 +178,15 @@
                                     ?>
                             </tr>
                         </table>
+                        <br><br>Prepared by:
+                        <?php
+                            $prep = $conn->query("SELECT * FROM users WHERE user_code = '" . $preparer . "'");
+                            while($row2 = $prep->fetch_assoc()): ?>
+                            
+                            <?php echo $row2['firstname']; ?> <?php echo $row2['lastname']; ?>
+                            <i>(<?php echo $row2['section']; ?>)</i>
+                            <?php endwhile; ?>
+                        </div>
                     </div>
                 </div>
             </th>

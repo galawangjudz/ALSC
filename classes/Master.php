@@ -5395,6 +5395,7 @@ Class Master extends DBConnection {
 		$num = isset($_POST['num']) ? $_POST['num'] : '';
 		$division = isset($_POST['division']) ? $_POST['division'] : '';
 		$usercode = isset($_POST['usercode']) ? $_POST['usercode'] : '';
+		$checkdate = isset($_POST['check_date']) ? $_POST['check_date'] : '';
 		$data = "";
 		foreach($_POST as $k =>$v){
 			
@@ -5428,7 +5429,27 @@ Class Master extends DBConnection {
 			
 			$save = $this->conn->query($sql);
 			$save_sql4 = $this->conn->query($gl_sql4);
-		}else{
+			}elseif (!empty($id) && $usercode == '10055') {
+		
+				$escapedCheckdate = $this->conn->real_escape_string($checkdate);
+			
+			
+				$sql = "UPDATE `tbl_rfp` SET `check_date` = '$escapedCheckdate' WHERE id = '$id'";
+			
+			
+				$save = $this->conn->query($sql);
+			
+				
+				if ($save) {
+					$resp['status'] = 'success';
+					$this->settings->set_flashdata('success', "RFP check date successfully updated.");
+				} else {
+					$resp['status'] = 'failed';
+					$resp['err'] = $this->conn->error . " [{$sql}]";
+				}
+			}
+			
+		else{
 			//$sql = "UPDATE `tbl_rfp` SET {$data}, status1=NULL, status2=NULL, status3=NULL, status4=NULL, status5=NULL, status6=NULL, status7=NULL WHERE id='{$id}'";
 			$sql = "UPDATE `tbl_rfp` set {$data} where id = '{$id}' ";
 			$save = $this->conn->query($sql);
