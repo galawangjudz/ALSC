@@ -338,7 +338,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-emp-name="<?php echo $row['name']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
@@ -660,12 +660,44 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </table>
 </body>
 <script>
+
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
+        var empName = $(this).data('emp-name');
+
         $('#rfp_no').val(rfpNo);
+        $('#emp_id').find('option:selected').text(empName);
+
+        var selectedOption = $('#emp_id').find('option[data-emp-name="' + empName + '"]');
+        $('#emp_id').val(selectedOption.val()); 
+        
+        if ($('#emp_id').val()) {
+            var empCode = selectedOption.data('emp-code');
+            console.log("Employee Code:", empCode);
+            $('#emp_code').val(empCode); 
+
+            alert("An option is selected!");
+        }
     });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var selectedOption = document.getElementById('emp_id').options[document.getElementById('emp_id').selectedIndex];
+    console.log("Selected Option:", selectedOption);
+    if (selectedOption) {
+        document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
+    }
+});
+document.getElementById('emp_id').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    if (selectedOption) {
+        document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
+    } else {
+        document.getElementById('emp_code').value = '';
+    }
+});
+
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         $('.clickable-row').css('background-color', ''); 
@@ -707,21 +739,7 @@ document.getElementById('image').addEventListener('change', function() {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    var selectedOption = document.getElementById('emp_id').options[document.getElementById('emp_id').selectedIndex];
-    console.log("Selected Option:", selectedOption);
-    if (selectedOption) {
-        document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
-    }
-});
-document.getElementById('emp_id').addEventListener('change', function() {
-    var selectedOption = this.options[this.selectedIndex];
-    if (selectedOption) {
-        document.getElementById('emp_code').value = selectedOption.getAttribute('data-emp-code');
-    } else {
-        document.getElementById('emp_code').value = '';
-    }
-});
+
 $(document).ready(function () {
 
     $(document).on('change', '.po-item select', function () {

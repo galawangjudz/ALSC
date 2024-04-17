@@ -241,7 +241,7 @@ if (empty($_GET['id'])) {
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="bank_name" class="control-label" style="float:left;">Bank Name:</label>
-                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>" required>
+                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -929,7 +929,7 @@ if (empty($_GET['id'])) {
                         <div class="container-fluid approversDiv">
                             <?php
                             for ($i = 0; $i < $total_count; $i++) {
-                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
                                 echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';
