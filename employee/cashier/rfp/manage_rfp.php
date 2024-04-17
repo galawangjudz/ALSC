@@ -235,7 +235,7 @@ if (empty($_GET['id'])) {
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="bank_name" class="control-label" style="float:left;">Bank Name:</label>
-                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>" required>
+                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>">
                         </div>
                     </div>
                     <div class="row">
