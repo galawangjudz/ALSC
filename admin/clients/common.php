@@ -119,10 +119,12 @@ function auto_date($last_day,$date)
               $l_result = $dt->format('Y-m-d');
 
         else:
+              
               if ($last_day <= 30):
                   $l_date1 = $date ;            
               else:
-                  $l_date1 = $year .'-'.$month . '-'. '30';         
+                  $l_date1 = $year .'-'.$month . '-'. '30';       
+                   
               endif;     
               $dt = new DateTime($l_date1);
               $dt->modify('+31 days');
@@ -132,8 +134,9 @@ function auto_date($last_day,$date)
     elseif($month == 4 or $month == 6 or $month == 9 or $month == 11):
           if ($last_day == 31):
                 $dt = new DateTime($date);
-                $dt->modify('+1 month');
+                $dt->modify('+31 days');
                 $l_result = $dt->format('Y-m-d');
+               
           else:
                 $dt = new DateTime($date);
                 $dt->modify('+30 days');

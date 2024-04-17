@@ -255,6 +255,7 @@ if(isset($_GET['id'])){
                     }
                 else:
                     //echo $day;
+                    $day = date('d', strtotime($first_dp));
                     $l_date2 = new Datetime(auto_date($day,$l_date));
                     $due_date = $l_date2->format('m/d/y');
                     $due_date_ent = $l_date2->format('m/d/y');

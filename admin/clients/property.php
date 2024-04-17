@@ -181,8 +181,9 @@ table {
             <div class="card-body">
             <div class="container-fluid">
                 <ul class="tabs">
-                <li class="tab-link current" data-tab="tab-1"><b>Family Member</b></li>
-                <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
+               
+                <li class="tab-link current" data-tab="tab-2"><b>Properties</b></li>
+                <li class="tab-link" data-tab="tab-1"><b>Family Member</b></li>
                 <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
                 <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
               <!--  <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li> -->
