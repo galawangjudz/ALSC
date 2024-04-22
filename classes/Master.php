@@ -4858,6 +4858,23 @@ Class Master extends DBConnection {
 	
 		return json_encode($resp);
 	}
+
+	function disapproved_vs(){
+		extract($_POST);
+	
+		$approved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2,c_status2 = 2 WHERE vs_num = '{$id}'");
+		$approved_entries = $this->conn->query("UPDATE `vs_entries` SET c_status = 2 WHERE v_num = '{$id}'");
+	
+		if($approved_trans && $approved_entries){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Voucher Setup Entry has been approved successfully.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+	
+		return json_encode($resp);
+	}
 	
 	function approved_cv(){
 		extract($_POST);
@@ -4896,7 +4913,7 @@ Class Master extends DBConnection {
 	function approved_jv(){
 		extract($_POST);
 	
-		$approved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 1 WHERE jv_num = '{$id}'");
+		$approved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 1,c_status2 = 1 WHERE jv_num = '{$id}'");
 		$approved_entries = $this->conn->query("UPDATE `jv_entries` SET c_status = 1 WHERE jv_num = '{$id}'");
 	
 		if($approved_trans && $approved_entries){
@@ -4913,7 +4930,7 @@ Class Master extends DBConnection {
 	function disapproved_jv(){
 		extract($_POST);
 	
-		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2 WHERE jv_num = '{$id}'");
+		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2,c_status2 = 2 WHERE jv_num = '{$id}'");
 		$disapproved_entries = $this->conn->query("UPDATE `jv_entries` SET c_status = 2 WHERE jv_num = '{$id}'");
 	
 		if($disapproved_trans && $disapproved_entries){
@@ -4932,6 +4949,23 @@ Class Master extends DBConnection {
 	
 		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status2 = 2 WHERE cv_num = '{$id}'");
 		$disapproved_entries = $this->conn->query("UPDATE `cv_entries` SET c_status2 = 2 WHERE c_num = '{$id}'");
+	
+		if($disapproved_trans && $disapproved_entries){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Voucher Setup Entry has been disapproved successfully.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+	
+		return json_encode($resp);
+	}
+
+	function disapproved_cv(){
+		extract($_POST);
+	
+		$disapproved_trans = $this->conn->query("UPDATE `tbl_gl_trans` SET c_status = 2 WHERE cv_num = '{$id}'");
+		$disapproved_entries = $this->conn->query("UPDATE `cv_entries` SET c_status = 2 WHERE c_num = '{$id}'");
 	
 		if($disapproved_trans && $disapproved_entries){
 			$resp['status'] = 'success';
@@ -5360,6 +5394,7 @@ Class Master extends DBConnection {
 		$num = isset($_POST['num']) ? $_POST['num'] : '';
 		$division = isset($_POST['division']) ? $_POST['division'] : '';
 		$usercode = isset($_POST['usercode']) ? $_POST['usercode'] : '';
+		$checkdate = isset($_POST['check_date']) ? $_POST['check_date'] : '';
 		$data = "";
 		foreach($_POST as $k =>$v){
 			
@@ -5393,7 +5428,27 @@ Class Master extends DBConnection {
 			
 			$save = $this->conn->query($sql);
 			$save_sql4 = $this->conn->query($gl_sql4);
-		}else{
+			}elseif (!empty($id) && $usercode == '10055') {
+		
+				$escapedCheckdate = $this->conn->real_escape_string($checkdate);
+			
+			
+				$sql = "UPDATE `tbl_rfp` SET `check_date` = '$escapedCheckdate' WHERE id = '$id'";
+			
+			
+				$save = $this->conn->query($sql);
+			
+				
+				if ($save) {
+					$resp['status'] = 'success';
+					$this->settings->set_flashdata('success', "RFP check date successfully updated.");
+				} else {
+					$resp['status'] = 'failed';
+					$resp['err'] = $this->conn->error . " [{$sql}]";
+				}
+			}
+			
+		else{
 			//$sql = "UPDATE `tbl_rfp` SET {$data}, status1=NULL, status2=NULL, status3=NULL, status4=NULL, status5=NULL, status6=NULL, status7=NULL WHERE id='{$id}'";
 			$sql = "UPDATE `tbl_rfp` set {$data} where id = '{$id}' ";
 			$save = $this->conn->query($sql);
@@ -6456,6 +6511,9 @@ switch ($action) {
 	case 'disapproved_cv_cfo':
 		echo $Master->disapproved_cv_cfo();
 	break;
+	case 'disapproved_cv':
+		echo $Master->disapproved_cv();
+	break;
 	case 'coo_approval':
 		echo $Master->coo_approval();
 	break;
@@ -6621,6 +6679,9 @@ switch ($action) {
 	break;
 	case 'approved_vs':
 		echo $Master->approved_vs();
+	break;
+	case 'disapproved_vs':
+		echo $Master->disapproved_vs();
 	break;
 	case 'disapproved_jv':
 		echo $Master->disapproved_jv();
