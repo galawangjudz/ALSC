@@ -492,6 +492,7 @@ Class Master extends DBConnection {
 			$others = $_POST['others'];
 			$conv_outlet = $_POST['conv_outlet'];
 			// $flr_elev = $_POST['chkOption4'];
+			$flr_elev = isset($_POST['chkOption4']) ? $_POST['chkOption4'] : '0'; //dinagdag ko pag may error alisin to.
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
