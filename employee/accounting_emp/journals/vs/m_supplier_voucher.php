@@ -259,7 +259,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
                                         <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 form-group">
                                     <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -325,7 +325,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">  
+                        <!-- <div class="col-md-6">  
                         <div class="col-md-12 form-group">
                             <label for="rfp_no">Approved RFPs:</label>
                             <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
@@ -521,7 +521,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             }
                             ?>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">

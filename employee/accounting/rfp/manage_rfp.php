@@ -66,6 +66,9 @@ if (empty($_GET['id'])) {
 }
 ?>
 <style>
+    .select2{
+        margin-top:30px;
+    }
     #status1_orig {
         display: none!important;
     }
@@ -90,14 +93,17 @@ if (empty($_GET['id'])) {
         padding-left:25px;
         text-transform: uppercase;
     }
+    .custom-select1{
+        width:100%;
+    }
+    .custom-select{
+        margin-top:-5px;
+        margin-bottom:10px;
+    }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-
-
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 <body onload=initialize()">
     <div class="card card-outline card-primary">
                <div class="card-header">
@@ -198,7 +204,7 @@ if (empty($_GET['id'])) {
                 <input type="hidden" name="division" value="<?php echo $_settings->userdata('division'); ?>">
                 <input type="hidden" name="usercode" value="<?php echo $_settings->userdata('user_code'); ?>">
                 <input type="hidden" name="preparer" value="<?php echo ($usercode); ?>">
-                <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+                <input type="hidden" name="id" id="mainId" value="<?php echo isset($id) ? $id : '' ?>">
                 <input type="hidden" class="control-label" name="rfp_no" id="rfp_no" value="<?php echo $concatenatedValue; ?>" readonly>
                 <input type="hidden" class="control-label" name="num" id="num" value="<?php echo $attachment_count; ?>" readonly>
                 <hr>
@@ -229,8 +235,8 @@ if (empty($_GET['id'])) {
                             <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label>
                             <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
                                 <option value="" disabled selected>--Select Payment--</option>
-                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
-                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
+                                                                <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
+                                <option value="0" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Cash</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -240,19 +246,20 @@ if (empty($_GET['id'])) {
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="rfp_for" class="control-label" style="float:left;">RFP For: </label>
-                            <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required>
+                            <label for="rfp_for" class="control-label" style="float:left;">RFP For:</label>
+                            <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required onchange="populatePayableToSelect()" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> >
                                 <option value="" disabled <?php echo !isset($rfp_for) ? "selected" : '' ?>>Select an Item</option>
-                                <option value="1" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "1" ?> >Agents</option>
-                                <option value="2" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "2" ?> >Employees</option>
-                                <option value="3" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "3" ?> >Clients</option>
-                                <option value="4" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "4" ?> >Suppliers</option>
-                                <option value="5" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "5" ?> >Others</option>
+                                <option value="1" <?php echo isset($rfp_for) && $rfp_for == 1 ? "selected" : '' ?>>Agents</option>
+                                <option value="2" <?php echo isset($rfp_for) && $rfp_for == 2 ? "selected" : '' ?>>Employees</option>
+                                <option value="3" <?php echo isset($rfp_for) && $rfp_for == 3 ? "selected" : '' ?>>Clients</option>
+                                <option value="4" <?php echo isset($rfp_for) && $rfp_for == 4 ? "selected" : '' ?>>Suppliers</option>
+                                <option value="5" <?php echo isset($rfp_for) && $rfp_for == 5 ? "selected" : '' ?>>Others</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="name" class="control-label" style="float:left;">Payable to:</label>
-                            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
+                            <label for="payable_to" class="control-label" style="float:left;">Payable to:</label>
+                            <select name="name" id="name" class="custom-select1 custom-select-sm rounded-0 select2" style="font-size:14px" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> required>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -528,7 +535,96 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+<script>
+    $(document).ready(function() {
+        $('#data-table').DataTable({
+            "paging": true,      
+            "lengthChange": true, 
+            "searching": true,   
+            "ordering": true,    
+            "info": true,        
+            "autoWidth": false  
+        });
+        $('.table th, .table td').addClass('px-1 py-0 align-middle');
+    });
+</script>
+<script>
+$(document).ready(function() {
+  $('#name').select2({
+    tags: true 
+  });
+});
 
+function populatePayableToSelect() {
+var rfpForSelect = document.getElementById('rfp_for');
+var payableToSelect = document.getElementById('name');
+var mainId = document.getElementById('mainId').value; 
+var rfpNo = document.getElementById('rfp_no').value; 
+var selectedValue = rfpForSelect.value;
+payableToSelect.innerHTML = '';
+
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+        console.log("XHR Status:", xhr.status);
+        if (xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+            console.log("Data received:", data);
+            if (data.alert) {
+                console.log("Alert message:", data.alert);
+            }
+            if (data.data) {
+                data.data.forEach(function(item) {
+                    var option = document.createElement('option');
+                    if (selectedValue == '1' && mainId == '') {
+                        option.value = item.c_first_name + ' ' + item.c_last_name;
+                        option.text = item.c_first_name + ' ' + item.c_last_name;
+                    } else if(selectedValue == '1' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    } else if (selectedValue == '2' && mainId == '') {
+                        option.value = item.firstname + ' ' + item.lastname;
+                        option.text = item.firstname + ' ' + item.lastname;
+                    } else if (selectedValue == '2' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    } else if (selectedValue == '3' && mainId == '') {
+                        option.value = item.first_name + ' ' + item.last_name;
+                        option.text = item.first_name + ' ' + item.last_name;
+                    } else if (selectedValue == '3' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    }else if (selectedValue == '4' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    }else if (selectedValue == '4' && mainId == '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    }else {
+                        option.value = item.name;
+                        option.text = item.name;
+                    }
+                    payableToSelect.appendChild(option);
+                });
+            }
+        } else {
+            console.error("Error fetching data:", xhr.statusText);
+        }
+    }
+};
+xhr.open('GET', 'journals/get_dropdown.php?rfp_for=' + selectedValue + '&rfp_no=' + rfpNo + '&mainId=' + mainId, true);
+xhr.send();
+}
+
+document.getElementById('rfp_for').addEventListener('change', populatePayableToSelect);
+populatePayableToSelect();
+
+</script>
 <script>
     function getUrlParameter(name) {
         name = name.replace(/[\[\]]/g, '\\$&');

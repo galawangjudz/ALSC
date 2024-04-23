@@ -588,7 +588,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    //updateHiddenOptions();
     updateTotals();
 }
 
@@ -626,7 +626,7 @@ $(document).ready(function () {
     $("#item-clone").append(clone);
 
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        //updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -636,7 +636,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        //updateHiddenOptions();
     });
 
     function updateCounter() {

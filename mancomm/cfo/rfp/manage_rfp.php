@@ -91,11 +91,9 @@ if (empty($_GET['id'])) {
         text-transform: uppercase;
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 
 
 <body onload=initialize()">
@@ -234,8 +232,8 @@ if (empty($_GET['id'])) {
                             <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label>
                             <select name="payment_form" id="payment_form" class="form-control rounded-0" disabled>
                                 <option value="" disabled selected>--Select Payment--</option>
-                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
-                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
+                                                                <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
+                                <option value="0" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Cash</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -736,11 +734,11 @@ if (empty($_GET['id'])) {
                                 $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
-                                echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';
+                                echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '" disabled>';
 
                                 while ($row = $approver_qry->fetch_assoc()) {
                                     $selected = ($user_codes_from_db[$i] == $row['user_code']) ? 'selected' : '';
-                                                                        echo '<option value="' . $row['user_code'] . '" ' . $selected . '>' . $row['firstname'] . ' ' . $row['lastname'] . '</option>';
+                                                echo '<option value="' . $row['user_code'] . '" ' . $selected . '>' . $row['firstname'] . ' ' . $row['lastname'] . '</option>';
                                 }
                                 echo '</select>';
                                 //echo '<button type="button" id="removeApproverButton' . ($i + 1) . '" class="btn btn-danger btn-sm removeApproverButton">Remove</button>';
@@ -874,6 +872,19 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+ <script>
+    $(document).ready(function() {
+        $('#data-table').DataTable({
+            "paging": true,      
+            "lengthChange": true, 
+            "searching": true,   
+            "ordering": true,    
+            "info": true,        
+            "autoWidth": false  
+        });
+        $('.table th, .table td').addClass('px-1 py-0 align-middle');
+    });
+</script>
 <script>
     function getUrlParameter(name) {
         name = name.replace(/[\[\]]/g, '\\$&');

@@ -1,0 +1,65 @@
+/* manage_po.php */
+body{
+    font-size:13px!important;
+}
+.form-control{
+    font-size:13px;
+}
+.ui-autocomplete {
+    max-height: 200px; 
+    overflow-y: auto;
+    border: 1px solid #ccc; 
+    background-color: white; 
+    position: absolute; 
+    z-index: 1000; 
+}
+
+.ui-menu-item {
+    padding: 5px; 
+    cursor: pointer; 
+    list-style-type: circle;
+}
+
+.ui-menu-item:hover {
+    background-color: #f0f0f0; 
+}
+
+span.select2-selection.select2-selection--single {
+    border-radius: 0;
+    padding: 0.25rem 0.5rem;
+    padding-top: 0.25rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    height: auto;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+input[type=number] {
+-moz-appearance: textfield;
+}
+
+.nav-cpo{
+    background-color:#007bff;
+    color:white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-cpo:hover{
+    background-color:#007bff!important;
+    color:white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
+.select2{
+    margin-top:-6px!important;
+    font-size:13px!important;
+}
+.table{
+    font-size: 13px;
+}
+input{
+    font-size: 13px!important;
+}

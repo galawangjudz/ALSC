@@ -336,9 +336,11 @@ function formatNumber(input) {
             <div class="container-fluid">
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($_GET['id']) ? $_GET['id'] :'' ?>">
+                    <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
+                    <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
                     <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 form-group">
                                     <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -409,7 +411,7 @@ function formatNumber(input) {
                             </div>
                                     <!-- <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required> -->
                         </div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                         <div class="col-md-12 form-group">
                             <label for="rfp_no">Approved RFPs:</label>
                             <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
@@ -605,7 +607,7 @@ function formatNumber(input) {
                             }
                             ?>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">

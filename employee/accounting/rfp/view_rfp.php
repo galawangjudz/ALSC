@@ -68,7 +68,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <body>
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h5 class="card-title"><b><i>View Request for Payment</b></i></h5>
+            <h5 class="card-title"><b><i>View Request for Payment (RFP #: <?php echo $concatenatedValue; ?>)</b></i></h5>
         </div>
         <div class="card-body">
         <div id="attachments-container">

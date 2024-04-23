@@ -327,16 +327,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
+                                    <?php
                                         $i = 1;
                                         $qry = $conn->query("SELECT 
-                                    tbl_rfp.id AS mainId,
+                                        tbl_rfp.id AS mainId,
+                                        t_agents.*,
                                         tbl_rfp.*,  
                                         tbl_rfp_approvals.* 
                                     FROM 
                                         tbl_rfp 
                                     JOIN 
                                         tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                    JOIN
+                                        t_agents ON CONCAT(t_agents.c_first_name, ' ', t_agents.c_last_name) = tbl_rfp.name
                                     WHERE 
                                         (tbl_rfp.rfp_for = 1 OR tbl_rfp.rfp_for = 5) 
                                     GROUP BY 
@@ -361,7 +364,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         tbl_rfp.transaction_date ASC;");
                                         while ($row = $qry->fetch_assoc()) {
                                         ?>
-                                         <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-agent-name="<?php echo $row['name']; ?>" data-agent-code="<?php echo $row['c_code']; ?>" data-agent-part="<?php echo $row['description']; ?>" data-agent-check="<?php echo $row['check_date']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                             <td class="text-center"><?php echo $i++; ?></td>
                                             <td><?php echo ($row['rfp_no']); ?></td>
                                             <td><?php echo ($row['req_dept']) ?></td>
@@ -525,7 +528,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                                     value="<?php echo $row['c_code'] ?>" 
                                                     data-agent-code="<?php echo $row['c_code'] ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['c_code'] ? 'selected' : '' ?>
-                                                ><?php echo $row['c_last_name'] ?>, <?php echo $row['c_first_name'] ?></option>
+                                                ><?php echo $row['c_first_name'] ?> <?php echo $row['c_last_name'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
 
@@ -687,7 +690,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
+        var agentName = $(this).data('agent-name');
+        var agentCode = $(this).data('agent-code');
+        var agentParticulars = $(this).data('agent-part');
+        var agentCheck = $(this).data('agent-check');
         $('#rfp_no').val(rfpNo);
+        $('#agent_id').find('option:selected').text(agentName);
+        $('#agent_code').val(agentCode);
+        $('#description').val(agentParticulars);
+        $('#due_date').val(agentCheck);
     });
 });
 $(document).ready(function() {
@@ -748,7 +759,7 @@ document.getElementById('agent_id').addEventListener('change', function() {
 });
 $(document).ready(function () {
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        //updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -758,7 +769,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        //updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -866,7 +877,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    //updateHiddenOptions();
     updateTotals();
 }
 

@@ -82,20 +82,19 @@ if (empty($_GET['id'])) {
     .approversDiv{
         margin-top:25px;
     }
-        #amountToWords{
-        background-color:gainboro;
-        border:solid 1px gainsboro;
-        font-style: italic;
-        font-weight: bold;
-        padding-left:25px;
-        text-transform: uppercase;
+    #amountToWords{
+    background-color:gainboro;
+    border:solid 1px gainsboro;
+    font-style: italic;
+    font-weight: bold;
+    padding-left:25px;
+    text-transform: uppercase;
     }
+    
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 
 
 <body onload=initialize()">
@@ -258,8 +257,8 @@ if (empty($_GET['id'])) {
                             <label for="payment_form" class="control-label">Payment Form:</label>
                             <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
                                 <option value="" disabled selected>--Select Payment--</option>
-                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
-                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
+                                                                <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
+                                <option value="0" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Cash</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -874,6 +873,19 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+ <script>
+    $(document).ready(function() {
+        $('#data-table').DataTable({
+            "paging": true,      
+            "lengthChange": true, 
+            "searching": true,   
+            "ordering": true,    
+            "info": true,        
+            "autoWidth": false  
+        });
+        $('.table th, .table td').addClass('px-1 py-0 align-middle');
+    });
+</script>
 <script>
     function getUrlParameter(name) {
         name = name.replace(/[\[\]]/g, '\\$&');
