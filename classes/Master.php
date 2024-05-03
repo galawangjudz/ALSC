@@ -5004,6 +5004,31 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+	function approved_tba(){
+		extract($_POST);
+		$app = $this->conn->query("UPDATE tbl_tba_approvals AS a
+		JOIN tbl_tba AS r ON a.tba_no = r.tba_no
+		SET
+		  a.status1 = CASE WHEN r.status1 = '{$userId}' THEN 1 ELSE a.status1 END,
+		  a.status2 = CASE WHEN r.status2 = '{$userId}' THEN 1 ELSE a.status2 END,
+		  a.status3 = CASE WHEN r.status3 = '{$userId}' THEN 1 ELSE a.status3 END,
+		  a.status4 = CASE WHEN r.status4 = '{$userId}' THEN 1 ELSE a.status4 END,
+		  a.status5 = CASE WHEN r.status5 = '{$userId}' THEN 1 ELSE a.status5 END,
+		  a.status6 = CASE WHEN r.status6 = '{$userId}' THEN 1 ELSE a.status6 END,
+		  a.status7 = CASE WHEN r.status7 = '{$userId}' THEN 1 ELSE a.status7 END
+		WHERE a.tba_no = '{$id}';
+		");
+		if($app){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success'," TBA has been approved successfully.");
+
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
 	function disapproved_rfp(){
 		extract($_POST);
 		$app = $this->conn->query("UPDATE tbl_rfp_approvals AS a
@@ -5017,6 +5042,30 @@ Class Master extends DBConnection {
 				a.status6 = CASE WHEN r.status6 = '{$userId}' THEN 2 ELSE a.status6 END,
 		  		a.status7 = CASE WHEN r.status7 = '{$userId}' THEN 2 ELSE a.status7 END
 			WHERE a.rfp_no = '{$id}';
+		");
+		if($app){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Request for payment has been disapproved successfully.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	function disapproved_tba(){
+		extract($_POST);
+		$app = $this->conn->query("UPDATE tbl_tba_approvals AS a
+			JOIN tbl_tba AS r ON a.tba_no = r.tba_no
+			SET
+				a.status1 = CASE WHEN r.status1 = '{$userId}' THEN 2 ELSE a.status1 END,
+				a.status2 = CASE WHEN r.status2 = '{$userId}' THEN 2 ELSE a.status2 END,
+				a.status3 = CASE WHEN r.status3 = '{$userId}' THEN 2 ELSE a.status3 END,
+				a.status4 = CASE WHEN r.status4 = '{$userId}' THEN 2 ELSE a.status4 END,
+				a.status5 = CASE WHEN r.status5 = '{$userId}' THEN 2 ELSE a.status5 END,
+				a.status6 = CASE WHEN r.status6 = '{$userId}' THEN 2 ELSE a.status6 END,
+		  		a.status7 = CASE WHEN r.status7 = '{$userId}' THEN 2 ELSE a.status7 END
+			WHERE a.tba_no = '{$id}';
 		");
 		if($app){
 			$resp['status'] = 'success';
@@ -5467,6 +5516,56 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	function save_tba(){
+		extract($_POST);
+		$tba_num = isset($_POST['tba_no']) ? $_POST['tba_no'] : '';
+		$num = isset($_POST['num']) ? $_POST['num'] : '';
+		$division = isset($_POST['division']) ? $_POST['division'] : '';
+		$usercode = isset($_POST['usercode']) ? $_POST['usercode'] : '';
+		$data = "";
+		foreach($_POST as $k =>$v){
+			
+			if(!in_array($k,array('id','doc_no','num','inputValue','division','usercode'))){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		
+		$gl_sql2 = "UPDATE `tbl_vs_attachments` SET `doc_no`  = '$tba_num' WHERE `num` = '$num' and `doc_type` = 'TBA' ORDER BY `date_attached` DESC
+		LIMIT 1";
+		$gl_sql3 = "DELETE FROM `tbl_vs_attachments` WHERE `doc_no` = 0 and `num` = '$num' and `doc_type` = 'TBA'";
+		
+		$save_sql2 = $this->conn->query($gl_sql2);
+		$save_sql3 = $this->conn->query($gl_sql3);
+		
+		if(empty($id)){
+			$sql = "INSERT INTO `tbl_tba` set {$data} ";
+				$gl_sql4 = "INSERT INTO `tbl_tba_approvals`(`tba_no`)VALUES('$tba_num');";
+			
+			$save = $this->conn->query($sql);
+			$save_sql4 = $this->conn->query($gl_sql4);
+			}
+		else{
+			//$sql = "UPDATE `tbl_rfp` SET {$data}, status1=NULL, status2=NULL, status3=NULL, status4=NULL, status5=NULL, status6=NULL, status7=NULL WHERE id='{$id}'";
+			$sql = "UPDATE `tbl_tba` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+
+		if($save && $save_sql2 && $save_sql3){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New TBA successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"TBA successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
 	function delete_supplier(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `supplier_list` where id = '{$id}'");
@@ -6747,6 +6846,15 @@ switch ($action) {
 	break;
 	case 'save_rfp':
 		echo $Master->save_rfp();
+	break;
+	case 'save_tba':
+		echo $Master->save_tba();
+	break;
+	case 'approved_tba':
+		echo $Master->approved_tba();
+	break;
+	case 'disapproved_tba':
+		echo $Master->disapproved_tba();
 	break;
 	case 'approved_rfp':
 		echo $Master->approved_rfp();

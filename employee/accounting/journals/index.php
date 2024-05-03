@@ -188,7 +188,9 @@ function format_num($number){
 						?>
 						</td>
 						<td class="text-center">
-							<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+							<?php 
+							$qry_get_pending = $conn->query("SELECT c_status, v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' AND c_status = 0");
+							?>
 								<?php if ($qry_get_pending->num_rows > 0): ?>
 								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Approve">
@@ -198,11 +200,22 @@ function format_num($number){
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
 									<span class="fa fa-thumbs-down text-danger"></span>
 								</button>
-								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
+								
+								<!-- <button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary"></span>
-								</button>
+								</button> -->
 								<?php endif; ?>
+
+								<?php 
+								$qry_get_edit = $conn->query("SELECT c_status, v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' AND c_status = 0 AND user_id = " . $_settings->userdata('user_code'));
+								?>
+									<?php if ($qry_get_edit->num_rows > 0): ?>
+									<button type="button" class="btn btn-flat btn-default btn-sm edit_data_supplier custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Edit">
+										<span class="fa fa-edit text-primary"></span>
+									</button>
+									<?php endif; ?>
 								<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Delete">
 									<span class="fa fa-trash text-danger"></span>
@@ -261,7 +274,9 @@ function format_num($number){
 						?>
 						</td>
 							<td class="text-center">
-								<?php $qry_get_pending = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0"); ?>
+							<?php
+								$qry_get_pending = $conn->query("SELECT c_status, v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' AND c_status = 0");
+								?>
 									<?php if ($qry_get_pending->num_rows > 0): ?>
 									<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 											data-toggle="tooltip" data-placement="top" title="Approve">
@@ -271,11 +286,21 @@ function format_num($number){
 											data-toggle="tooltip" data-placement="top" title="Disapprove">
 										<span class="fa fa-thumbs-down text-danger"></span>
 									</button>
+									<!-- <button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Edit">
+									<span class="fa fa-edit text-primary fa-small"></span>
+									</button> -->
+							<?php endif; ?>
+
+								<?php
+								$qry_get_edit = $conn->query("SELECT c_status, v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' AND c_status = 0 AND user_id = " . $_settings->userdata('user_code'));
+								?>
+									<?php if ($qry_get_edit->num_rows > 0): ?>
 									<button type="button" class="btn btn-flat btn-default btn-sm edit_data_agent custom-badge " data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary fa-small"></span>
 								</button>
-									<?php endif; ?>
+							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">
 								<span class="fa fa-trash text-danger fa-small"></span>
@@ -343,6 +368,14 @@ function format_num($number){
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
 									<span class="fa fa-thumbs-down text-danger"></span>
 								</button>
+								<!-- <button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
+										data-toggle="tooltip" data-placement="top" title="Edit">
+									<span class="fa fa-edit text-primary"></span>
+								</button> -->
+							<?php endif; ?>
+
+							<?php $qry_get_edit = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0 AND user_id = " . $_settings->userdata('user_code')); ?>
+								<?php if ($qry_get_edit->num_rows > 0): ?>
 								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_employee custom-badge" data-id="<?php echo $row['v_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Edit">
 									<span class="fa fa-edit text-primary"></span>
@@ -435,10 +468,18 @@ function format_num($number){
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
 									<span class="fa fa-thumbs-down text-danger"></span>
 								</button>
+								<!-- <button type="button" class="btn btn-flat btn-default btn-sm edit_data_client custom-badge " data-id="<?php echo $row['v_num'] ?>"
+									data-toggle="tooltip" data-placement="top" title="Edit">
+								<span class="fa fa-edit text-primary fa-small"></span>
+								</button> -->
+							<?php endif; ?>
+
+							<?php $qry_get_edit = $conn->query("SELECT c_status,v_num FROM vs_entries WHERE v_num = '" . $row['v_num'] . "' and c_status = 0 AND user_id = " . $_settings->userdata('user_code')); ?>
+								<?php if ($qry_get_edit->num_rows > 0): ?>
 								<button type="button" class="btn btn-flat btn-default btn-sm edit_data_client custom-badge " data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Edit">
 								<span class="fa fa-edit text-primary fa-small"></span>
-							</button>
+								</button>
 							<?php endif; ?>
 							<!-- <button type="button" class="btn btn-flat btn-default btn-sm delete_data custom-badge" data-id="<?php echo $row['v_num'] ?>"
 									data-toggle="tooltip" data-placement="top" title="Delete">

@@ -29,29 +29,21 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
-		<div class="card-tools">
-			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
+		<table style="float:right;">
+			<tr>
+				<td>
+					<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				</td>
+				<td>
+					<button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
-				<colgroup>
-					<col width="5%">
-					<col width="5%">
-					<col width="10%">
-					<col width="8%">
-					<col width="5%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
@@ -62,7 +54,8 @@ $columnName;
 						<!-- <th>Payment Form</th>
 						<th>Bank Name</th> -->
 						<th>Tran. Date</th>
-						<!-- <th>Release Date</th> -->
+						<th>Check Date</th>
+						<th>Amount</th>
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
@@ -78,7 +71,7 @@ $columnName;
 					$i = 1;
 					//echo $_settings->userdata('division');
 					if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-						$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
+						$qry = $conn->query("SELECT DISTINCT tbl_rfp.check_date,tbl_rfp.amount,tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
 						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp WHERE req_dept = 'Accounting' ORDER BY tbl_rfp.transaction_date DESC");
 					} else {
 						$qry = $conn->query("SELECT 
@@ -88,6 +81,7 @@ $columnName;
 						tbl_rfp.name,
 						tbl_rfp.req_dept,
 						tbl_rfp.bank_name,
+						tbl_rfp.check_date,tbl_rfp.amount,
 						tbl_rfp.release_date,
 						tbl_rfp.transaction_date,
 						tbl_rfp.payment_form, 
@@ -123,6 +117,7 @@ $columnName;
 						tbl_rfp.name,
 						tbl_rfp.req_dept,
 						tbl_rfp.bank_name,
+						tbl_rfp.check_date,tbl_rfp.amount,
 						tbl_rfp.release_date,
 						tbl_rfp.transaction_date,
 						tbl_rfp.payment_form ORDER BY tbl_rfp.transaction_date DESC;
@@ -159,22 +154,15 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $fname . ',' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 							</td>
-							<!-- <td><?php echo $row['name'] ?></td> -->
+							
 							<td><?php echo $row['req_dept']; ?></td>
-							<!-- <td>
-								<?php if ($row['payment_form'] == 0): ?>
-									Check
-								<?php else: ?>
-									Cash
-								<?php endif; ?>
-							</td> -->
-							<!-- <td><?php echo $row['bank_name']; ?></td> -->
 							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['release_date'])) ?></td> -->
+							<td><?php echo date("Y-m-d",strtotime($row['check_date'])) ?></td>
+							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -185,7 +173,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -233,7 +221,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -281,7 +269,7 @@ $columnName;
 										$lname = $app3_row['lastname'];
 										$fname = $app3_row['firstname'];
 										$pos3 = $app3_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b> ';
+										echo '<b>' . $fname . ' ' . $lname .'</b> ';
 									}
 								?>
 								
@@ -329,7 +317,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -378,7 +366,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -428,7 +416,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -479,7 +467,7 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -591,6 +579,67 @@ $columnName;
 		</div>
 	</div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.getElementById('export-csv-btn').addEventListener('click', function() {
+   
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+    
+    var table = document.querySelector('#data-table');
+    var visibleRows = table.querySelectorAll('tbody tr:not([style*="display: none"])');
+
+    var headerRow = table.querySelector('thead tr');
+    var headerCols = headerRow.querySelectorAll('th');
+    var headerData = [];
+    
+	headerCols.forEach(function(col, index) {
+		if (col && col.style && col.style.display !== 'none' && index !== headerCols.length - 1 && col.innerText.trim() !== '') {
+			headerData.push(col.innerText);
+		}
+	});
+
+	var csvContent = "Request for Payment List" + " as of " + formattedDate + "\n\n";
+
+    csvContent += headerData.join(',') + "\n";
+	visibleRows.forEach(function(row) {
+    var dataCols = row.querySelectorAll('td');
+    var dataRow = [];
+
+    for (var index = 0; index < headerCols.length; index++) {
+        var col = dataCols[index];
+        if (col && col.style && headerCols[index] && headerCols[index].style && headerCols[index].style.display !== 'none') {
+            var cellValue = col.innerText;
+			if (col.cellIndex === 6) { 
+                    cellValue = cellValue.replace(/,/g, '');
+                }
+            if (index >= 7 && index <= 13) {
+                var words = cellValue.split(' ');
+                if (words.length > 1) {
+                    words[words.length - 1] = '(' + words[words.length - 1] + ')';
+                    cellValue = words.join(' ');
+                }
+            }
+            dataRow.push(cellValue);
+        }
+    }
+    csvContent += dataRow.join(',') + "\n";
+});
+
+
+    console.log("CSV Content:", csvContent); 
+
+    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = "RFP_asof_" + formattedDate + '.csv';
+
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+</script>
 <script>
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

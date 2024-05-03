@@ -32,7 +32,9 @@ if(isset($_FILES["image"])){
         }else{
             $currentDateTime = date('Ymd_His');
             $newImageName = $currentDateTime . '_' . $fileName;
-            move_uploaded_file($tmpName, './../../attachments/' . $newImageName);
+
+            move_uploaded_file($tmpName, './../../../../employee/attachments/' . $newImageName);
+
 
            $query = "INSERT INTO tbl_vs_attachments VALUES('','$newImageName', '0', 'RFP', '$num',NOW())";
            mysqli_query($conn,$query);

@@ -100,6 +100,16 @@ if (empty($_GET['id'])) {
         margin-top:-5px;
         margin-bottom:10px;
     }
+    .asterisk{
+        color:red;
+        font-weight:bold;
+        float:left;
+        margin-left:0px;
+        font-size:20px;
+    }
+    .control-label{
+        float:left;
+    }
 </style>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
@@ -113,7 +123,7 @@ if (empty($_GET['id'])) {
         </div>
         
         <div class="card-body">
-            <label class="control-label" style="float:left;">Add Attachment:</label>
+            <label class="control-label" style="float:left;">Add Attachment:</label><div class="asterisk"> *</div>
             <div id="picform-container">
                 <form action="" method="post" enctype="multipart/form-data" id="picform">
                     <table class="table table-bordered">
@@ -214,11 +224,11 @@ if (empty($_GET['id'])) {
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="req_dept" class="control-label">Requesting Department:</label>
+                            <label for="req_dept" class="control-label">Requesting Department:</label><div class="asterisk"> *</div>
                             <input type="text" name="req_dept" id="req_dept" value="<?php echo $_settings->userdata('department'); ?>" class="form-control rounded-0" readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="transaction_date" class="control-label">Transaction Date:</label>
+                            <label for="transaction_date" class="control-label">Transaction Date:</label><div class="asterisk"> *</div>
                             <?php
                             if (!empty($transaction_date)) {
                                 $transaction_date = date('Y-m-d');
@@ -234,7 +244,7 @@ if (empty($_GET['id'])) {
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label>
+                            <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label><div class="asterisk"> *</div>
                             <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
                                 <option value="" disabled selected>--Select Payment--</option>
                                                                 <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
@@ -248,25 +258,25 @@ if (empty($_GET['id'])) {
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="rfp_for" class="control-label" style="float:left;">RFP For:</label>
+                            <label for="rfp_for" class="control-label" style="float:left;">RFP For:</label><div class="asterisk"> *</div>
                             <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required onchange="populatePayableToSelect()" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> >
                                 <option value="" disabled <?php echo !isset($rfp_for) ? "selected" : '' ?>>Select an Item</option>
                                 <option value="1" <?php echo isset($rfp_for) && $rfp_for == 1 ? "selected" : '' ?>>Agents</option>
                                 <option value="2" <?php echo isset($rfp_for) && $rfp_for == 2 ? "selected" : '' ?>>Employees</option>
                                 <option value="3" <?php echo isset($rfp_for) && $rfp_for == 3 ? "selected" : '' ?>>Clients</option>
                                 <option value="4" <?php echo isset($rfp_for) && $rfp_for == 4 ? "selected" : '' ?>>Suppliers</option>
-                                <option value="5" <?php echo isset($rfp_for) && $rfp_for == 5 ? "selected" : '' ?>>Others</option>
+                                
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="payable_to" class="control-label" style="float:left;">Payable to:</label>
+                            <label for="payable_to" class="control-label" style="float:left;">Payable to:</label><div class="asterisk"> *</div>
                             <select name="name" id="name" class="custom-select1 custom-select-sm rounded-0 select2" style="font-size:14px" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> required>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="amount" class="control-label" style="float:left;">Amount:</label>
+                            <label for="amount" class="control-label" style="float:left;">Amount:</label><div class="asterisk"> *</div>
                             <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ""; ?>" required>
                         </div>
                         <div class="col-md-6 form-group" style="padding-top:30px;">
@@ -280,7 +290,7 @@ if (empty($_GET['id'])) {
                             <textarea rows="1" name="address" id="address" class="form-control rounded-0"><?php echo isset($address) ? $address :"" ?></textarea>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="checkname" class="control-label" style="float:left;">Check Name:</label>
+                            <label for="checkname" class="control-label" style="float:left;">Check Name:</label><div class="asterisk"> *</div>
                             <input type="text" name="check_name" id="check_name" class="form-control rounded-0" value="<?php echo isset($check_name) ? $check_name : ""; ?>" required>
                         </div>
                     </div>
@@ -297,7 +307,7 @@ if (empty($_GET['id'])) {
                             <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="release_date" class="control-label" style="float:left;">Release Date:</label>
+                            <label for="release_date" class="control-label" style="float:left;">Release Date:</label><div class="asterisk"> *</div>
                             <?php
                             if (!empty($release_date)) {
                                 $releaseformattedDate = date('Y-m-d', strtotime($release_date));
@@ -331,12 +341,12 @@ if (empty($_GET['id'])) {
                     
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <label for="description" class="control-label" style="float:left;">Particulars:</label>
+                            <label for="description" class="control-label" style="float:left;">Particulars:</label><div class="asterisk"> *</div>
                             <textarea rows="10" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="remarks" class="control-label" style="float:left;">Remarks:</label>
+                        <label for="remarks" class="control-label" style="float:left;">Remarks:</label><div class="asterisk"> *</div>
                         <textarea rows="3" name="remarks" id="remarks" class="form-control rounded-0" required><?php echo isset($remarks) ? $remarks :"" ?></textarea>
                     </div>
                 </div>
@@ -374,6 +384,7 @@ if (empty($_GET['id'])) {
                         var container = document.querySelector('.approversDiv');
                         var originalSelect = document.getElementById('status1_orig');
                         var section = '<?php echo $_settings->userdata('section'); ?>'; 
+                        var division = '<?php echo $_settings->userdata('division'); ?>'; 
                         container.innerHTML = '';
 
                         var clonedSelectContainer = document.createElement('div');
@@ -559,10 +570,28 @@ if (empty($_GET['id'])) {
                                     select.value = '10055';
                                 }
                             } 
-                            if (section === 'Treasury') {
+                            if (section === 'Treasury' && division != 'MNGR' && division != 'SPVR') {
                                 if (index === (inputValue - 4)) {
                                 select.value = '10017';
                                 }
+                                if (index === (inputValue - 3)) {
+                                    select.value = '10007';
+                                }
+                                if (index === (inputValue - 2)) {
+                                select.value = '20124';
+                                }
+                                if (index === (inputValue - 1)) {
+                                    select.value = '10055';
+                                }
+                            } 
+                            if (section === 'Treasury' && code === '10007') {
+                                if (index === (inputValue - 2)) {
+                                select.value = '20124';
+                                }
+                                if (index === (inputValue - 1)) {
+                                    select.value = '10055';
+                                }
+                            } if (section === 'Treasury' && code === '10017') {
                                 if (index === (inputValue - 3)) {
                                     select.value = '10007';
                                 }
@@ -738,7 +767,7 @@ if (empty($_GET['id'])) {
                         <div class="container-fluid approversDiv">
                             <?php
                             for ($i = 0; $i < $total_count; $i++) {
-                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
                                 echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';
@@ -779,71 +808,136 @@ if (isset($_GET['id']) == ''){
     echo 'window.onload = function() {';
     echo 'var inputValue = document.getElementById("inputValue").value;'; 
     echo 'var section = "' . $_settings->userdata('section') . '";'; 
+    echo 'var code = "' . $_settings->userdata('user_code') . '";'; 
+    echo 'var division = "' . $_settings->userdata('division') . '";'; 
     
     echo 'if (section === "Accounting") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10184", "10030", "20124", "10055"];';
-    echo '} else if (section === "Billing") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["20016", "10030", "20124", "10055"];';
-    echo '} else if (section === "Const. and Impln.") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10006", "10114", "10051", "20124", "10055"];';
-    echo '} else if (section === "Documentation and Loan") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["20084", "10009", "20124", "10055"];';
-    echo '} else if (section === "IT") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["20181", "20124", "10055"];';
-    echo '} else if (section === "Legal") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["10102", "20124", "10055"];';
-    echo '} else if (section === "Audit") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["20018", "10030","20124", "10055"];';
-    echo '} else if (section === "Inventory Control") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["20017", "20003", "10009","20124", "10055"];';
-    echo '} else if (section === "General Services") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10143", "10070","20124", "10055"];';
-    echo '} else if (section === "Marketing") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10100", "10114","10051","20124", "10055"];';
-    echo '} else if (section === "Corporate Communications") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["10131","20124", "10055"];';
-    echo '} else if (section === "Personnel") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10041","10070","20124", "10055"];';
-    echo '} else if (section === "Project Admin") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["20001","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Treasury") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10017","10007","20124", "10055"];';
-    echo '} else if (section === "CALS") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10012","10030","20124", "10055"];';
-    echo '} else if (section === "Contracts and Doc.") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10026","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Design and Devt.") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10026","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Purchasing") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10015","10030","20124", "10055"];';
-    echo '} else if (section === "Technical Planning") {';
-    echo '    inputValue = 6; '; 
-    echo '    var selects = ["20186","10026","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Permits and Licenses") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["10009","20124", "10055"];';
-    echo '} else if (section === "Electrical") {';
-    echo '    inputValue = 6; '; 
-    echo '    var selects = ["10038","10026", "10114","10051","20124", "10055"];';
-    echo '}';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10184", "10030", "20124", "10055"];';
+        echo '} else if (section === "Billing") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["20016", "10030", "20124", "10055"];';
+        echo '} else if (section === "Const. and Impln." && code != "10006") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["10006", "10114", "10051", "20124", "10055"];';
+        echo '} else if (section === "Const. and Impln." && code == "10006") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10114", "10051", "20124", "10055"];';
+        echo '} else if (section === "Documentation and Loan" && code != "20084") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["20084", "10009", "20124", "10055"];';
+        echo '} else if (section === "Documentation and Loan" && code == "20084") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10009", "20124", "10055"];';
+        echo '} else if (section === "Documentation and Loan" && code == "10009") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '} else if (section === "IT" && code != "20181") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["20181", "20124", "10055"];';
+        echo '} else if (section === "IT" && code == "20181") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '} else if (section === "Legal" && code != "10102") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10102", "20124", "10055"];';
+        echo '} else if (section === "Legal" && code == "10102") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '} else if (section === "Audit" && code != "20018") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["20018", "10030","20124", "10055"];';
+        echo '} else if (section === "Audit" && code == "20018") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10030","20124", "10055"];';
+        echo '} else if (section === "Inventory Control" && (code == "20003" || code == "20017")) {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10009","20124", "10055"];';
+        echo '} else if (section === "Inventory Control" && (code != "20003" || code != "20017")) {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["20017","10009","20124", "10055"];';
+        echo '} else if (section === "General Services" && code != "10143") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10143", "10070","20124", "10055"];';
+        echo '} else if (section === "General Services" && code == "10143") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10070","20124", "10055"];';
+        echo '} else if (section === "Marketing" && code == "10100") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10114","10051","20124", "10055"];';
+        echo '} else if (section === "Marketing" && code != "10100") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["10100","10114","10051","20124", "10055"];';
+        echo '} else if (section === "Corporate Communications" && code != "10131") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10131","20124", "10055"];';
+        echo '} else if (section === "Corporate Communications" && code == "10131") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '} else if (section === "Personnel" && code != "10041") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10041","10070","20124", "10055"];';
+        echo '} else if (section === "Personnel" && code == "10041") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10070","20124", "10055"];';
+        echo '} else if (section === "Project Admin" && code != "20001") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["20001","10114","10051","20124", "10055"];';
+        echo '} else if (section === "Project Admin" && code == "20001") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10114","10051","20124", "10055"];';
+        echo '} else if (section === "Treasury" && division != "MNGR" && division != "SPVR") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10017","10007","20124", "10055"];';
+        echo '} else if (section === "Treasury" && division === "MNGR") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '} else if (section === "Treasury" && code === "10017") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10007","20124", "10055"];';
+        echo '} else if (section === "CALS" && code != "10012") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10012","10030","20124", "10055"];';
+        echo '} else if (section === "CALS" && code == "10012") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10030","20124", "10055"];';
+        echo '} else if (section === "Contracts and Doc." && code != "10026") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["10026","10114","10051","20124", "10055"];';
+        echo '} else if (section === "Contracts and Doc." && code == "10026") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10114","10051","20124", "10055"];';
+        echo '} else if (section === "Design and Devt.") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["10026","10114","10051","20124", "10055"];';
+        echo '} else if (section === "Purchasing") {';
+        echo '    inputValue = 4; '; 
+        echo '    var selects = ["10015","10030","20124", "10055"];';
+        echo '} else if (section === "Technical Planning" && code != "20186") {';
+        echo '    inputValue = 6; '; 
+        echo '    var selects = ["20186","10026","10114","10051","20124", "10055"];';
+        echo '} else if (section === "Technical Planning" && code == "20186") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["10026","10114","10051","20124", "10055"];';
+        echo '} else if (section === "Permits and Licenses") {';
+        echo '    inputValue = 3; '; 
+        echo '    var selects = ["10009","20124", "10055"];';
+        echo '} else if (section === "Electrical" && code != "10038") {';
+        echo '    inputValue = 6; '; 
+        echo '    var selects = ["10038","10026", "10114","10051","20124", "10055"];';
+        echo '} else if (section === "Electrical" && code == "10038") {';
+        echo '    inputValue = 5; '; 
+        echo '    var selects = ["10026", "10114","10051","20124", "10055"];';
+        echo '}';
+              
+        echo 'if (code === "10009") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '} else if (code === "10007") {';
+        echo '    inputValue = 2; '; 
+        echo '    var selects = ["20124", "10055"];';
+        echo '}';
+        
     
     echo 'var container = document.querySelector(".approversDiv");';
     echo 'var originalSelect = document.getElementById("status1_orig");';
@@ -1051,7 +1145,7 @@ populatePayableToSelect();
         newSelect.setAttribute('name', 'status' + totalCount);
 
         <?php
-        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
         while ($row = $approver_qry->fetch_assoc()) {
             echo 'var option = document.createElement("option");';
             echo 'option.value = "' . $row['user_code'] . '";';
@@ -1202,33 +1296,19 @@ $(function(){
     $('#rfp-form').submit(function(e){
         e.preventDefault();
         var _this = $(this);
-        $('.err-msg').remove();
+        var p_Id = document.getElementById('mainId').value;
+        $('.pop-msg').remove();
+        var el = $('<div>');
+        el.addClass("pop-msg alert");
+        el.hide();
         
-        // var requiredFields = ['name', 'short_name', 'tin', 'address', 'contact_person', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
-        // var isValid = true;
-
-        // for (var i = 0; i < requiredFields.length; i++) {
-        //     var fieldName = requiredFields[i];
-        //     var fieldValue = _this.find('[name="' + fieldName + '"]').val().trim();
-
-        //     if (fieldValue === '') {
-        //         isValid = false;
-        //         var errorMsg = 'May kulang po. Hehe.';
-        //         var existingError = _this.find('.err-msg:contains("' + errorMsg + '")');
-                
-        //         if (existingError.length === 0) {
-        //             var el = $('<div>').addClass("alert alert-danger err-msg").text(errorMsg);
-        //             _this.prepend(el);
-        //             el.show('slow');
-        //             $("html, body").animate({ scrollTop: 0 }, "fast");
-        //         }
-        //     }
-        // }
-
-        // if (!isValid) {
-        //     return false;
-        // }
-
+        if (p_Id === null || p_Id.trim() === "") {
+            if ($('#image').val() === "") {
+                alert_toast("Attached file is required.", 'warning');
+                return false;
+            }
+        }
+        
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=save_rfp",

@@ -536,7 +536,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
                                         $terms = '';
                                         ?>
-                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                             <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                             <?php while ($row = $supplier_qry->fetch_assoc()): ?>
                                                 <option
@@ -814,15 +814,19 @@ function updateDueDate() {
                         daysToAdd = parseInt(data.days_in_following_month);
                     }
 
-                    if (daysInMonth === 0) {
+                    else if (daysInMonth === 0) {
                         daysToAdd = parseInt(data.days_before_due);
                     }
 
-                    if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
+                    else if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
                         var currentDate = new Date();
                         daysToAdd = 0;
                         pterms.val(data.terms);
                         return;
+                    }
+
+                    else{
+                        daysToAdd = 0;
                     }
 
                     console.log("DAYS TO ADD", daysToAdd);

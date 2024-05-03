@@ -494,7 +494,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="client_id">Client:</label>
-                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM property_clients ORDER BY `first_name` ASC");

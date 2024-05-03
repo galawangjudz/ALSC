@@ -69,7 +69,7 @@ border-color: #007BFF;
                     <div class="container" style="margin-top:15px;">
                         <table class="table table-bordered">
                             <tr>
-                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher No:</td>
+                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">VS No:</td>
                                 <td style="width:50%; padding: 4px 10px;"><?php echo $vs_id; ?></td>
                                 <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
                                 <td style="padding: 4px 10px;"><?php echo $jdate; ?></td>
@@ -98,10 +98,11 @@ border-color: #007BFF;
                             </tr>
                         </table>
                         <hr>
-                        <h6 style="font-weight:bold;margin-left:10px;">Particulars:</h6>
                         <table class="table table-bordered">
                             <tr>
+                                <td><b>Particulars:</b></td>
                                 <td><?php echo $desc; ?></td>
+                                
                             </tr>
                         </table>
                         <?php 

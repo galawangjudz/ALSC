@@ -520,7 +520,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="agent_id">Agent:</label>
-                                            <select name="agent_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <select name="agent_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `t_agents` ORDER BY `c_last_name` ASC");
