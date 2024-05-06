@@ -6,13 +6,17 @@ $link = isset($_GET['link']) ? $_GET['link'] : '';
 $type = $_settings->userdata('type');
 $department = $_settings->userdata('department');
 if(isset($_SESSION['userdata'])){
+<<<<<<< HEAD
+    if($_SESSION['userdata']['type'] =='IT Admin'){
+=======
 
     if($_SESSION['userdata']['user_type'] =='IT Admin'){
+>>>>>>> main
         if(strpos($link, 'login.php') === false){
             redirect('admin/index.php');
         }
     } 
-    if($_SESSION['userdata']['user_type'] =='Agent'){
+    if($_SESSION['userdata']['type'] =='Agent'){
         if(strpos($link, 'login.php') === false){
             redirect('agent_user/index.php');
         }

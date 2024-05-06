@@ -31,9 +31,9 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
-		<div class="card-tools">
-			<!-- <a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a> -->
-		</div>
+		<!-- <div class="card-tools">
+			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+		</div> -->
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -78,60 +78,10 @@ $columnName;
 				<tbody>
 				<?php 
 					$i = 1;
-					//echo $_settings->userdata('division');
-					if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
+					if (($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR')) {
 						$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
-						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp WHERE req_dept = 'Const. and Impln.' or req_dept = 'Marketing' or req_dept = 'Project Admin' or req_dept = 'Contracts and Doc.' or req_dept = 'Design and Devt.' or req_dept = 'Technical Planning' or req_dept = 'Electrical' or req_dept = 'Permits and Licenses' or req_dept = 'Engineering' ORDER BY tbl_rfp.transaction_date DESC");
-					} else {
-						$qry = $conn->query("SELECT 
-						tbl_rfp.id, 
-						tbl_rfp.rfp_no, 
-						tbl_rfp.preparer,
-						tbl_rfp.name,
-						tbl_rfp.req_dept,
-						tbl_rfp.bank_name,
-						tbl_rfp.release_date,
-						tbl_rfp.transaction_date,
-						tbl_rfp.payment_form, 
-						MAX(tbl_rfp_approvals.status1) AS S1,
-						MAX(tbl_rfp_approvals.status2) AS S2,
-						MAX(tbl_rfp_approvals.status3) AS S3,
-						MAX(tbl_rfp_approvals.status4) AS S4,
-						MAX(tbl_rfp_approvals.status5) AS S5,
-						MAX(tbl_rfp_approvals.status6) AS S6,
-						MAX(tbl_rfp_approvals.status7) AS S7,
-						MAX(tbl_rfp.status1) AS U1,
-						MAX(tbl_rfp.status2) AS U2,
-						MAX(tbl_rfp.status3) AS U3,
-						MAX(tbl_rfp.status4) AS U4,
-						MAX(tbl_rfp.status5) AS U5,
-						MAX(tbl_rfp.status6) AS U6,
-						MAX(tbl_rfp.status7) AS U7
-					FROM tbl_rfp 
-					JOIN tbl_rfp_approvals ON tbl_rfp.req_dept = '" . $_settings->userdata('department') . "'
-						AND (
-							tbl_rfp.status1 = " . $_settings->userdata('user_code') . "
-							OR tbl_rfp.status2 = " . $_settings->userdata('user_code') . "
-							OR tbl_rfp.status3 = " . $_settings->userdata('user_code') . "
-							OR tbl_rfp.status4 = " . $_settings->userdata('user_code') . "
-							OR tbl_rfp.status5 = " . $_settings->userdata('user_code') . "
-							OR tbl_rfp.status6 = " . $_settings->userdata('user_code') . "
-							OR tbl_rfp.status7 = " . $_settings->userdata('user_code') . "
-						)
-					GROUP BY 
-						tbl_rfp.id, 
-						tbl_rfp.rfp_no, 
-						tbl_rfp.preparer,
-						tbl_rfp.name,
-						tbl_rfp.req_dept,
-						tbl_rfp.bank_name,
-						tbl_rfp.release_date,
-						tbl_rfp.transaction_date,
-						tbl_rfp.payment_form ORDER BY tbl_rfp.transaction_date DESC;
-					
-						");
+						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp WHERE req_dept = 'Engineering' || req_dept = 'Contracts and Doc.' || req_dept = 'Design and Devt.' || req_dept = 'Const. and Impln.' || req_dept = 'Marketing' || req_dept = 'Project Admin' || req_dept = 'Technical Planning'  || req_dept = 'Electrical' ORDER BY tbl_rfp.transaction_date DESC");
 					}
-					
 					while($row = $qry->fetch_assoc()):
 						$tblId = $row['rfp_no'];
 		
@@ -161,7 +111,7 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									}
 								?>
 							</td>
@@ -187,7 +137,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									}
 								?>
 								
@@ -235,7 +185,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									}
 								?>
 								
@@ -283,7 +233,7 @@ $columnName;
 										$lname = $app3_row['lastname'];
 										$fname = $app3_row['firstname'];
 										$pos3 = $app3_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b> ';
+										echo '<b>' . $fname . ' ' . $lname .'</b> ';
 									}
 								?>
 								
@@ -331,7 +281,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									}
 								?>
 								
@@ -380,7 +330,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									} else {
 										echo '';
 									}
@@ -430,7 +380,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									} else {
 										echo '';
 									}
@@ -481,7 +431,7 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
 									} else {
 										echo '';
 									}
@@ -554,24 +504,13 @@ $columnName;
 												<a class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
 													<span class="fa fa-thumbs-down text-danger"></span>
 												</a>
+												<!-- <div class="dropdown-divider"></div> -->
 											<?php endwhile; ?>
 
 										<?php endif; ?>
 
-										<?php 
-											if ($type > 4) {  
-												$qry_filtered = $conn->query("SELECT rfp_no, status1
-																				FROM tbl_rfp_approvals
-																				WHERE status1 = 0 AND rfp_no = '{$tblId}'");
-												if ($qry_filtered->num_rows > 0) { 
-											?>
-													<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
-														<span class="fa fa-edit text-primary"></span>
-													</a>
-											<?php 
-												}
-											} 
-											?>
+										
+
 									<?php endwhile; ?>	
 										<a class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
 											<span class="fa fa-eye text-dark"></span>

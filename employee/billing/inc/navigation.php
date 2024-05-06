@@ -292,7 +292,14 @@ $department = $_settings->userdata('department');
                         </p>
                       </a>
                     </li> 
-
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/billing/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
+                        </p>
+                      </a>
+                    </li> 
 <!-- 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
                     <li class="nav-item dropdown">

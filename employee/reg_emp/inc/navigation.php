@@ -100,7 +100,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-
+                    
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/po_status" class="nav-link nav-monitoring">
                       <i class="nav-icon fas fa-search"></i>
@@ -120,6 +120,14 @@ $level = $_settings->userdata('type');
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/reg_emp/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
                         </p>
                       </a>
                     </li> 

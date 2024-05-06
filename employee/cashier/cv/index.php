@@ -138,8 +138,8 @@ function format_num($number){
 						<th>CV Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Supplier Name</th>
-                        <th>Status 1</th>
-						<th>Status 2</th>
+                        <th>AS tatus</th>
+						<th>CFO Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -246,7 +246,7 @@ function format_num($number){
 															AND (c_status = 0)");
 							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
-								<span class="fa fa-edit text-primary"></span> Edit
+								<!-- <span class="fa fa-edit text-primary"></span> Edit -->
 							</a>
 							<?php endif; ?>
 						</td>
@@ -271,8 +271,8 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Agent Name</th>
-                        <th>Status 1</th>
-						<th>Status 2</th>
+                        <th>AS tatus</th>
+						<th>CFO Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -381,7 +381,7 @@ function format_num($number){
 															AND (c_status = 0)");
 							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
-								<span class="fa fa-edit text-primary"></span> Edit
+								<!-- <span class="fa fa-edit text-primary"></span> Edit -->
 							</a>
 							<?php endif; ?>
 						</td>
@@ -406,8 +406,8 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Employee Name</th>
-                        <th>Status 1</th>
-						<th>Status 2</th>
+                        <th>AS tatus</th>
+						<th>CFO Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -517,7 +517,7 @@ function format_num($number){
 															AND (c_status = 0)");
 							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
-								<span class="fa fa-edit text-primary"></span> Edit
+								<!-- <span class="fa fa-edit text-primary"></span> Edit -->
 							</a>
 							<?php endif; ?>
 						</td>
@@ -542,8 +542,8 @@ function format_num($number){
 						<th>Date</th>
                         <!-- <th>P.O. #</th> -->
 						<th>Client Name</th>
-                        <th>Status 1</th>
-						<th>Status 2</th>
+                        <th>AS tatus</th>
+						<th>CFO Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -654,7 +654,7 @@ function format_num($number){
 															AND (c_status = 0)");
 							if ($qry_edit->num_rows > 0): ?>
 							<a class="dropdown-item edit_data" href="javascript:void(0)" data-id ="<?php echo $row['c_num'] ?>">
-								<span class="fa fa-edit text-primary"></span> Edit
+								<!-- <span class="fa fa-edit text-primary"></span> Edit -->
 							</a>
 							<?php endif; ?>
 						</td>

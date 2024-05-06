@@ -60,15 +60,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         text-transform: uppercase;
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 <body>
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h5 class="card-title"><b><i>View Request for Payment</b></i></h5>
+            <h5 class="card-title"><b><i>View Request for Payment (RFP #: <?php echo $concatenatedValue; ?>)</b></i></h5>
         </div>
         <div class="card-body">
         <div id="attachments-container">
