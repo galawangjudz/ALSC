@@ -2,7 +2,11 @@
 require_once('../../config.php');
 $usercode = $_settings->userdata('user_code'); 
 if(isset($_GET['id']) && $_GET['id'] > 0){
+<<<<<<< HEAD
     $qry = $conn->query("SELECT * FROM `tbl_rfp` WHERE rfp_no = '{$_GET['id']}' ");
+=======
+    $qry = $conn->query("SELECT * FROM `tbl_tba` WHERE tba_no = '{$_GET['id']}' ");
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k = stripslashes($v);
@@ -18,7 +22,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     if ($autoIncrementQry) {
         $autoIncrementRow = $autoIncrementQry->fetch_assoc();
         $nextAutoIncrement = $autoIncrementRow['Auto_increment'];
+<<<<<<< HEAD
         $concatenatedValue = $rfp_no;
+=======
+        $concatenatedValue = $tba_no;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 
         //echo $concatenatedValue;
 
@@ -31,7 +39,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     if ($autoIncrementQry) {
         $autoIncrementRow = $autoIncrementQry->fetch_assoc();
         $nextAutoIncrement = $autoIncrementRow['Auto_increment'];
+<<<<<<< HEAD
         $concatenatedValue = '2021' . $nextAutoIncrement;
+=======
+        $concatenatedValue = '202100' . $nextAutoIncrement;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 
         //echo $concatenatedValue;
 
@@ -109,7 +121,11 @@ if (empty($_GET['id'])) {
 <body onload=initialize()">
     <div class="card card-outline card-primary">
                <div class="card-header">
+<<<<<<< HEAD
             <h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update Request for Payment" : "Add New Request for Payment" ?> (RFP #: <?php echo $concatenatedValue; ?>)</b></i></h5>
+=======
+            <h5 class="card-title"><b><i><?php echo isset($_GET['id']) ? "Update TBA" : "Add New TBA" ?> (TBA #: <?php echo $concatenatedValue; ?>)</b></i></h5>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
         </div>
         
         <div class="card-body">
@@ -117,7 +133,11 @@ if (empty($_GET['id'])) {
             <div id="picform-container">
                 <form action="" method="post" enctype="multipart/form-data" id="picform">
                     <table class="table table-bordered">
+<<<<<<< HEAD
                         <input type="hidden" class="control-label" name="rfp_no" id="rfp_no" value="<?php echo $concatenatedValue; ?>" readonly>
+=======
+                        <input type="hidden" class="control-label" name="tba_no" id="tba_no" value="<?php echo $concatenatedValue; ?>" readonly>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                         <input type="hidden" class="control-label" name="num" id="num" value="<?php echo $attachment_count; ?>" readonly>
                         <tr>
                             <td>
@@ -202,12 +222,20 @@ if (empty($_GET['id'])) {
             </div>
         </div>
         <div class="card-body">
+<<<<<<< HEAD
             <form action="" id="rfp-form">
+=======
+            <form action="" id="tba-form">
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                 <input type="hidden" name="division" value="<?php echo $_settings->userdata('division'); ?>">
                 <input type="hidden" name="usercode" value="<?php echo $_settings->userdata('user_code'); ?>">
                 <input type="hidden" name="preparer" value="<?php echo ($usercode); ?>">
                 <input type="hidden" name="id" id="mainId" value="<?php echo isset($id) ? $id : '' ?>">
+<<<<<<< HEAD
                 <input type="hidden" class="control-label" name="rfp_no" id="rfp_no" value="<?php echo $concatenatedValue; ?>" readonly>
+=======
+                <input type="hidden" class="control-label" name="tba_no" id="tba_no" value="<?php echo $concatenatedValue; ?>" readonly>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                 <input type="hidden" class="control-label" name="num" id="num" value="<?php echo $attachment_count; ?>" readonly>
                 <hr>
                 <br>
@@ -235,6 +263,7 @@ if (empty($_GET['id'])) {
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label>
+<<<<<<< HEAD
                             <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
                                 <option value="" disabled selected>--Select Payment--</option>
                                                                 <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
@@ -244,10 +273,26 @@ if (empty($_GET['id'])) {
                         <div class="col-md-6 form-group">
                             <label for="bank_name" class="control-label" style="float:left;">Bank Name:</label>
                             <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>">
+=======
+                            <input type="hidden" name="payment_form" id="payment_form" value="1">
+                            <input type="text" class="form-control rounded-0" value="Check" readonly>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="date_needed" class="control-label" style="float:left;">Date Needed:</label>
+                            <?php
+                            if (!empty($date_needed)) {
+                                $dneededformattedDate = date('Y-m-d', strtotime($date_needed));
+                            } else {
+                                $dneededformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" id="date_needed" name="date_needed" value="<?php echo isset($dneededformattedDate) ? $dneededformattedDate : '' ?>" required>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
+<<<<<<< HEAD
                             <label for="rfp_for" class="control-label" style="float:left;">RFP For:</label>
                             <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required onchange="populatePayableToSelect()" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> >
                                 <option value="" disabled <?php echo !isset($rfp_for) ? "selected" : '' ?>>Select an Item</option>
@@ -262,6 +307,31 @@ if (empty($_GET['id'])) {
                             <label for="payable_to" class="control-label" style="float:left;">Payable to:</label>
                             <select name="name" id="name" class="custom-select1 custom-select-sm rounded-0 select2" style="font-size:14px" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> required>
                             </select>
+=======
+                            <label for="tba_for" class="control-label" style="float:left;">TBA For:</label>
+                            <input type="text" class="form-control rounded-0" value="Employee" readonly>
+                            <select name="tba_for" id="tba_for" class="form-control rounded-0" style="display:none;" required onchange="populatePayableToSelect()" <?php echo !empty($_GET['id']) ? "disabled" : "" ?>>
+                                <option value="" disabled <?php echo !isset($tba_for) ? "selected" : '' ?>>Select an Item</option>
+                                <option value="1" <?php echo isset($tba_for) && $tba_for == 1 ? "selected" : '' ?>>Agents</option>
+                                <option value="2" <?php echo isset($tba_for) && $tba_for == 2 ? "selected" : '' ?>>Employees</option>
+                                <option value="3" <?php echo isset($tba_for) && $tba_for == 3 ? "selected" : '' ?>>Clients</option>
+                                <option value="4" <?php echo isset($tba_for) && $tba_for == 4 ? "selected" : '' ?>>Suppliers</option>
+                                <option value="5" <?php echo isset($tba_for) && $tba_for == 5 ? "selected" : '' ?>>Others</option>
+                            </select>
+
+                        </div>
+                        <div class="col-md-6 form-group">
+                            
+                        <?php 
+                        
+                        if (!isset($_GET['id']) || $_GET['id'] == "") { ?>
+                            <label for="payable_to" class="control-label" style="float:left;">Accountable Person:</label>
+                            <select name="acc_person" id="acc_person" class="custom-select1 custom-select-sm rounded-0 select2" style="font-size:14px" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> required>
+                            </select>
+                        <?php } else { ?>
+                            <input type="text" name="acc_person" class="form-control rounded-0" value="<?php echo isset($acc_person) ? $acc_person :"" ?>" style="margin-top:30px;" required readonly>
+                        <?php } ?>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                         </div>
                     </div>
                     <div class="row">
@@ -274,6 +344,7 @@ if (empty($_GET['id'])) {
                         </div>
                     </div>
                     <div class="row">
+<<<<<<< HEAD
                         <div class="col-md-6 form-group">
                             <label for="address" class="control-label">Address:</label>
                             <textarea rows="1" name="address" id="address" class="form-control rounded-0"><?php echo isset($address) ? $address :"" ?></textarea>
@@ -329,6 +400,8 @@ if (empty($_GET['id'])) {
                     </div>
                     
                     <div class="row">
+=======
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                         <div class="col-md-12 form-group">
                             <label for="description" class="control-label" style="float:left;">Particulars:</label>
                             <textarea rows="10" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
@@ -438,6 +511,7 @@ if (empty($_GET['id'])) {
                         <label for="" class="control-label"># of Approvers: </label>
                         
                         <?php 
+<<<<<<< HEAD
                         $rfp_query = $conn->prepare("SELECT status1, status2, status3, status4, status5, status6, status7 FROM tbl_rfp WHERE rfp_no = ?");
                         $rfp_query->bind_param("i", $_GET['id']);
                         $rfp_no = $_GET['id'];
@@ -447,6 +521,17 @@ if (empty($_GET['id'])) {
                         $user_codes_from_db = array();
 
                         while ($row = $rfp_result->fetch_assoc()) {
+=======
+                        $tba_query = $conn->prepare("SELECT status1, status2, status3, status4, status5, status6, status7 FROM tbl_tba WHERE tba_no = ?");
+                        $tba_query->bind_param("i", $_GET['id']);
+                        $tba_no = $_GET['id'];
+                        $tba_query->execute();
+                        $tba_result = $tba_query->get_result();
+
+                        $user_codes_from_db = array();
+
+                        while ($row = $tba_result->fetch_assoc()) {
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                             foreach ($row as $status) {
                                 if (!empty($status)) {
                                     $user_codes_from_db[] = $status;
@@ -457,12 +542,20 @@ if (empty($_GET['id'])) {
                         $total_count = count($user_codes_from_db);
                         ?>
                         
+<<<<<<< HEAD
                         <input type="number" id="inputValue" value="<?php echo $total_count; ?>" style="width:50px;background-color:yellow;border:none;text-align:center;" readonly><hr>
+=======
+                        <input type="number" id="inputValue" value="<?php echo $total_count; ?>" style="width:50px;background-color:gainsboro;border:none;text-align:center;" readonly><hr>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                         <!--                          <button type="button" id="addApproverButton" class="btn btn-primary btn-sm ml-2">Add</button> --> 
                         <div class="container-fluid approversDiv">
                             <?php
                             for ($i = 0; $i < $total_count; $i++) {
+<<<<<<< HEAD
                                 $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+=======
+                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
                                 echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';
@@ -484,10 +577,17 @@ if (empty($_GET['id'])) {
                     <table style="width:100%;">
                         <tr>
                             <td>
+<<<<<<< HEAD
                                 <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_rfp"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
                             </td>
                             <td>
                                 <a href="?page=journals/"  class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+=======
+                                <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_tba"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
+                            </td>
+                            <td>
+                                <a href="?page=tba/tba_list"  class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                             </td>
                         </tr>
                     </table>
@@ -558,17 +658,29 @@ $(document).ready(function() {
 </script>
 <script>
 $(document).ready(function() {
+<<<<<<< HEAD
   $('#name').select2({
+=======
+  $('#acc_person').select2({
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
     tags: true 
   });
 });
 
 function populatePayableToSelect() {
+<<<<<<< HEAD
 var rfpForSelect = document.getElementById('rfp_for');
 var payableToSelect = document.getElementById('name');
 var mainId = document.getElementById('mainId').value; 
 var rfpNo = document.getElementById('rfp_no').value; 
 var selectedValue = rfpForSelect.value;
+=======
+var tbaForSelect = document.getElementById('tba_for');
+var payableToSelect = document.getElementById('acc_person');
+var mainId = document.getElementById('mainId').value; 
+var tbaNo = document.getElementById('tba_no').value; 
+var selectedValue = tbaForSelect.value;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 payableToSelect.innerHTML = '';
 
 var xhr = new XMLHttpRequest();
@@ -584,6 +696,7 @@ xhr.onreadystatechange = function() {
             if (data.data) {
                 data.data.forEach(function(item) {
                     var option = document.createElement('option');
+<<<<<<< HEAD
                     if (selectedValue == '1' && mainId == '') {
                         option.value = item.c_first_name + ' ' + item.c_last_name;
                         option.text = item.c_first_name + ' ' + item.c_last_name;
@@ -592,11 +705,15 @@ xhr.onreadystatechange = function() {
                         option.text = item.name;
 
                     } else if (selectedValue == '2' && mainId == '') {
+=======
+                    if (selectedValue == '2' && mainId == '') {
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                         option.value = item.firstname + ' ' + item.lastname;
                         option.text = item.firstname + ' ' + item.lastname;
                     } else if (selectedValue == '2' && mainId != '') {
                         option.value = item.name;
                         option.text = item.name;
+<<<<<<< HEAD
 
                     } else if (selectedValue == '3' && mainId == '') {
                         option.value = item.first_name + ' ' + item.last_name;
@@ -613,6 +730,8 @@ xhr.onreadystatechange = function() {
                         option.value = item.name;
                         option.text = item.name;
 
+=======
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                     }else {
                         option.value = item.name;
                         option.text = item.name;
@@ -625,15 +744,31 @@ xhr.onreadystatechange = function() {
         }
     }
 };
+<<<<<<< HEAD
 xhr.open('GET', 'journals/get_dropdown.php?rfp_for=' + selectedValue + '&rfp_no=' + rfpNo + '&mainId=' + mainId, true);
 xhr.send();
 }
 
 document.getElementById('rfp_for').addEventListener('change', populatePayableToSelect);
+=======
+xhr.open('GET', 'tba/get_dropdown.php?tba_for=' + selectedValue + '&tba_no=' + tbaNo + '&mainId=' + mainId, true);
+xhr.send();
+}
+
+document.getElementById('tba_for').addEventListener('change', populatePayableToSelect);
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 populatePayableToSelect();
 
 </script>
 <script>
+<<<<<<< HEAD
+=======
+    document.getElementById("tba_for").value = "2";
+    populatePayableToSelect();
+</script>
+
+<script>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
     function getUrlParameter(name) {
         name = name.replace(/[\[\]]/g, '\\$&');
         var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -662,7 +797,11 @@ populatePayableToSelect();
 
             var selects = document.querySelectorAll('.approver-row select');
             for (var i = 0; i < selects.length; i++) {
+<<<<<<< HEAD
                 selects[i].setAttribute('name', 'status' + (i + 1));
+=======
+                selects[i].setAttribute('acc_person', 'status' + (i + 1));
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                 console.log('Updated select: status' + (i + 1));
             }
 
@@ -675,11 +814,19 @@ populatePayableToSelect();
             }
             
             console.log('All select values:', allSelectValues);
+<<<<<<< HEAD
             var rfp_no = getUrlParameter('id');
             console.log('RFP number: ' + rfp_no);
             
             var xhr1 = new XMLHttpRequest();
             xhr1.open('POST', 'rfp/update_approvers.php', true);
+=======
+            var tba_no = getUrlParameter('id');
+            console.log('TBA number: ' + tba_no);
+            
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open('POST', 'tba/update_approvers.php', true);
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
             xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr1.onreadystatechange = function() {
                 if (xhr1.readyState === 4 && xhr1.status === 200) {
@@ -687,7 +834,11 @@ populatePayableToSelect();
                 }
             };
         
+<<<<<<< HEAD
             var payload = 'removedSelect=' + selectName + '&rfp_no=' + rfp_no;
+=======
+            var payload = 'removedSelect=' + selectName + '&tba_no=' + tba_no;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
             for (var key in allSelectValues) {
                 payload += '&' + key + '=' + allSelectValues[key];
             }
@@ -712,10 +863,17 @@ populatePayableToSelect();
         var newSelect = document.createElement('select');
         newSelect.setAttribute('id', 'status' + totalCount);
         newSelect.setAttribute('class', 'custom-select custom-select-sm rounded-0 select2');
+<<<<<<< HEAD
         newSelect.setAttribute('name', 'status' + totalCount);
 
         <?php
         $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+=======
+        newSelect.setAttribute('acc_person', 'status' + totalCount);
+
+        <?php
+        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
         while ($row = $approver_qry->fetch_assoc()) {
             echo 'var option = document.createElement("option");';
             echo 'option.value = "' . $row['user_code'] . '";';
@@ -841,6 +999,7 @@ populatePayableToSelect();
     });
 </script>
 <script>
+<<<<<<< HEAD
 document.getElementById('image').addEventListener('change', function() {
     var formData = new FormData(document.getElementById('picform'));
 
@@ -896,6 +1055,35 @@ $(function(){
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=save_rfp",
+=======
+    document.getElementById('image').addEventListener('change', function() {
+        var formData = new FormData(document.getElementById('picform'));
+
+        fetch('tba/tba_attachments.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+        if (data.startsWith('Error:')) {
+            alert_toast(data, 'error');
+        } else if (data.startsWith('Attached na, ssob. Hihe.')) {
+            alert_toast(data, 'success');
+        } else {
+            alert_toast("Invalid file. Huwag ipilit bhe. Hindi iyan mag-save.", 'error');
+        }
+    })
+});
+
+$(function(){
+    $('#tba-form').submit(function(e){
+        e.preventDefault();
+        var _this = $(this);
+        $('.err-msg').remove();
+        start_loader();
+        $.ajax({
+            url: _base_url_ + "classes/Master.php?f=save_tba",
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
             data: new FormData($(this)[0]),
             cache: false,
             contentType: false,
@@ -903,15 +1091,26 @@ $(function(){
             method: 'POST',
             type: 'POST',
             dataType: 'json',
+<<<<<<< HEAD
             error: err => {
                 console.log(err);
                 alert_toast("An error occurred", 'error');
+=======
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                alert_toast(errorMessage, 'error');
+                console.log(errorMessage);
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                 end_loader();
             },
             success: function(resp) {
                 if (typeof resp == 'object' && resp.status == 'success') {
                     //location.reload();
+<<<<<<< HEAD
                     location.replace('./?page=rfp/rfp_list');
+=======
+                    location.replace('./?page=tba/tba_list');
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                 } else if (resp.status == 'failed' && !!resp.msg) {
                     var el = $('<div>')
                     el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -919,12 +1118,22 @@ $(function(){
                     el.show('slow')
                     $("html, body").animate({ scrollTop: 0 }, "fast");
                 } else {
+<<<<<<< HEAD
                     alert_toast("An error occurred", 'error');
                     console.log(resp);
+=======
+                    var errorMessage = 'Unknown error occurred';
+                    alert_toast(errorMessage, 'error');
+                    console.log(errorMessage);
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
                 }
                 end_loader();
             }
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
     });
 });
 

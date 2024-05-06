@@ -114,9 +114,20 @@
                         </table>
                         <table class="table table-bordered">
                             <tr>
-                                <td><b>Requesting Dept.</b></td><td><?php echo $req_dept; ?></td>
-                                <!-- <td><b>Checked by:</b></td><td></td>
-                                <td><b>Recommended by:</b></td><td></td> -->
+                                <td><b>Requesting Department:</b></td><td><?php echo $req_dept; ?></td>
+                                <tr>
+                                <td>
+                                    <b>Preparer:</b>
+                                </td>
+                                <td>
+                                    <?php
+                                    $prep = $conn->query("SELECT * FROM users WHERE user_code = '" . $preparer . "'");
+                                    while($row2 = $prep->fetch_assoc()): ?>
+                                    
+                                    <?php echo $row2['firstname']; ?> <?php echo $row2['lastname']; ?>
+                                    <?php endwhile; ?>
+                                </td>
+                            </tr>
                             </tr>
                         </table>
                         <table class="table table-bordered">
@@ -146,15 +157,14 @@
                                 <td style="width:10%;padding: 4px 10px;text-align:center;"><?php echo $remarks; ?></td>
                             </tr>
                         </table>
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" style="text-align:center;">
                         <tr>
-                            Approved by:
+                            <i>Approved by:</i>
                         </tr>
                         <tr>
                         <?php
                         for ($i = 1; $i <= 7; $i++) {
                             $statusField = $row['status' . $i];
-
                             if (!empty($statusField)) {
                                 $qry = $conn->query("SELECT * FROM users WHERE user_code = '" . $statusField . "' ");
                                 
@@ -163,6 +173,7 @@
                                     $lastname = $statusRow['lastname'];
                                     $firstname = $statusRow['firstname'];
                                     ?>
+                                                
                                                 <td><?php echo $statusRow['firstname'] . ' ' . $statusRow['lastname']; ?></td>
                                     <?php
                                             } else {
@@ -177,15 +188,40 @@
                                     }
                                     ?>
                             </tr>
-                        </table>
-                        <br><br>Prepared by:
-                        <?php
-                            $prep = $conn->query("SELECT * FROM users WHERE user_code = '" . $preparer . "'");
-                            while($row2 = $prep->fetch_assoc()): ?>
-                            
-                            <?php echo $row2['firstname']; ?> <?php echo $row2['lastname']; ?>
-                            <i>(<?php echo $row2['section']; ?>)</i>
-                            <?php endwhile; ?>
+                            <tr>
+                                <?php
+                                for ($x = 1; $x <= 7; $x++) {
+                                    $statusField1 = $row['status' . $x];
+
+                                    if (!empty($statusField1)) {
+                                        $qry = $conn->query("SELECT * FROM tbl_rfp_approvals WHERE rfp_no = '" . $rfp_no . "' ");
+                                        
+                                        $statusRow1 = $qry->fetch_assoc();
+                                        if ($statusRow1) {
+                                            $statusValue = $statusRow1['status' . $x];
+                                            $statusText = ''; 
+                                            if ($statusValue == 1) {
+                                                $statusText = '<strong>Approved</strong>';
+                                            } elseif ($statusValue == 2) {
+                                                $statusText = '<strong>Disapproved</strong>';
+                                            } else {
+                                                $statusText = '<strong>Pending</strong>';
+                                            }
+                                            ?>
+                                            <td><?php echo $statusText; ?></td>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </tr>
+                            </table>
                         </div>
                     </div>
                 </div>

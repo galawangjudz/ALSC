@@ -31,23 +31,23 @@
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 				<colgroup>
-					<col width="8%">
+					<col width="5%">
+					<col width="5%">
+					<col width="20%">
+					<col width="15%">
 					<col width="10%">
-					<col width="30%">
-					<!-- <col width="20%"> -->
-					<col width="30%">
-					<!-- <col width="6%"> -->
-					<col width="6%">
-					<col width="10%">
+					<col width="15%">
+					<col width="5%">
+					<col width="5%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
 						<th>#</th>
 						<th>Date Created</th>
 						<th>Supplier</th>
-						<!-- <th>Contact Person</th> -->
+						<th>Contact Person</th>
+						<th>TIN #</th>
 						<th>Address</th>
-						<!-- <th>Vatable</th> -->
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -60,14 +60,16 @@
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
-							<td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
+							<td><?php echo date("Y-m-d",strtotime($row['date_created'])) ?></td>
 							<td><?php echo $row['short_name'] ?></td>
-							<!-- <td>
+							<td>
 								<p class="m-0">
 									<?php echo $row['contact_person'] ?><br>
-									<?php echo $row['contact'] ?>
+									<?php echo $row['contact'] ?><br>
+									<?php echo $row['email'] ?>
 								</p>
-							</td> -->
+							</td>
+							<td><?php echo $row['tin'] ?></td>
 							<td class='truncate-3' title="<?php echo $row['address'] ?>"><?php echo $row['address'] ?></td>
 							<!-- <td>
 								<?php if($row['vatable'] == 0): ?>

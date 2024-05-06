@@ -11,7 +11,11 @@ if(isset($_FILES["image"])){
         $fileName = $_FILES["image"]["name"];
         $fileSize = $_FILES["image"]["size"];
         $tmpName = $_FILES["image"]["tmp_name"];
+<<<<<<< HEAD
         $doc_no = $_POST["rfp_no"];
+=======
+        $doc_no = $_POST["tba_no"];
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
         $num = $_POST["num"];
 
         $validImageExtension = ['jpg', 'jpeg', 'png', 'pdf', 'gif','xlsx','csv','xls','txt','docx'];
@@ -34,7 +38,11 @@ if(isset($_FILES["image"])){
             $newImageName = $currentDateTime . '_' . $fileName;
             move_uploaded_file($tmpName, './../../attachments/' . $newImageName);
 
+<<<<<<< HEAD
            $query = "INSERT INTO tbl_vs_attachments VALUES('','$newImageName', '0', 'RFP', '$num',NOW())";
+=======
+           $query = "INSERT INTO tbl_vs_attachments VALUES('','$newImageName', '0', 'TBA', '$num',NOW())";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
            mysqli_query($conn,$query);
            echo
            "Attached na, ssob. Hihe."

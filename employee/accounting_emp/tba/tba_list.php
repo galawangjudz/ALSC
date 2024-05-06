@@ -3,7 +3,11 @@ $usercode = $_settings->userdata('user_code');
 $department = $_settings->userdata('department'); 	
 $usertype = $_settings->userdata('user_code'); 
 $position = $_settings->userdata('position'); 
+<<<<<<< HEAD
 $publicRfpNo;
+=======
+$publicTbaNo;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 $columnName;
 
 
@@ -76,6 +80,7 @@ $columnName;
 					$i = 1;
 					//echo $_settings->userdata('division');
 					if ($_settings->userdata('division') != 'MNGR' && $_settings->userdata('division') != 'SPVR') {
+<<<<<<< HEAD
 						$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
 						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp WHERE req_dept = '" . $_settings->userdata('department') . "' ORDER BY tbl_rfp.transaction_date DESC");
 					} else {
@@ -124,12 +129,64 @@ $columnName;
 						tbl_rfp.release_date,
 						tbl_rfp.transaction_date,
 						tbl_rfp.payment_form ORDER BY tbl_rfp.transaction_date DESC;
+=======
+						$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
+						tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5,tbl_tba.status6 AS U6,tbl_tba.status7 AS U7 FROM tbl_tba WHERE req_dept = '" . $_settings->userdata('department') . "' ORDER BY tbl_tba.transaction_date DESC");
+					} else {
+						$qry = $conn->query("SELECT 
+						tbl_tba.id, 
+						tbl_tba.tba_no, 
+						tbl_tba.preparer,
+						tbl_tba.acc_person,
+						tbl_tba.req_dept,
+						tbl_tba.date_needed,
+						tbl_tba.transaction_date,
+						tbl_tba.payment_form, 
+						MAX(tbl_tba_approvals.status1) AS S1,
+						MAX(tbl_tba_approvals.status2) AS S2,
+						MAX(tbl_tba_approvals.status3) AS S3,
+						MAX(tbl_tba_approvals.status4) AS S4,
+						MAX(tbl_tba_approvals.status5) AS S5,
+						MAX(tbl_tba_approvals.status6) AS S6,
+						MAX(tbl_tba_approvals.status7) AS S7,
+						MAX(tbl_tba.status1) AS U1,
+						MAX(tbl_tba.status2) AS U2,
+						MAX(tbl_tba.status3) AS U3,
+						MAX(tbl_tba.status4) AS U4,
+						MAX(tbl_tba.status5) AS U5,
+						MAX(tbl_tba.status6) AS U6,
+						MAX(tbl_tba.status7) AS U7
+					FROM tbl_tba 
+					JOIN tbl_tba_approvals ON tbl_tba.req_dept = '" . $_settings->userdata('department') . "'
+						AND (
+							tbl_tba.status1 = " . $_settings->userdata('user_code') . "
+							OR tbl_tba.status2 = " . $_settings->userdata('user_code') . "
+							OR tbl_tba.status3 = " . $_settings->userdata('user_code') . "
+							OR tbl_tba.status4 = " . $_settings->userdata('user_code') . "
+							OR tbl_tba.status5 = " . $_settings->userdata('user_code') . "
+							OR tbl_tba.status6 = " . $_settings->userdata('user_code') . "
+							OR tbl_tba.status7 = " . $_settings->userdata('user_code') . "
+						)
+					GROUP BY 
+						tbl_tba.id, 
+						tbl_tba.tba_no, 
+						tbl_tba.preparer,
+						tbl_tba.acc_person,
+						tbl_tba.req_dept,
+						tbl_tba.date_needed,
+						tbl_tba.transaction_date,
+						tbl_tba.payment_form ORDER BY tbl_tba.transaction_date DESC;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 					
 						");
 					}
 					
 					while($row = $qry->fetch_assoc()):
+<<<<<<< HEAD
 						$tblId = $row['rfp_no'];
+=======
+						$tblId = $row['tba_no'];
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 		
 						for ($j = 1; $j <= 7; $j++) {
 							$columnName = 'U' . $j;
@@ -144,8 +201,13 @@ $columnName;
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php 
+<<<<<<< HEAD
 							$publicRfpNo = $row['rfp_no'];
 							echo $publicRfpNo ?></td>
+=======
+							$publicTbaNo = $row['tba_no'];
+							echo $publicTbaNo ?></td>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 							<td>
 								<?php 
 								$prep = $row['preparer'];
@@ -157,6 +219,7 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
 									}
 								?>
@@ -173,6 +236,14 @@ $columnName;
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
 							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
 							<!-- <td><?php echo date("Y-m-d",strtotime($row['release_date'])) ?></td> -->
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+									}
+								?>
+							</td>
+							<td><?php echo $row['req_dept']; ?></td>
+							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -183,15 +254,25 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									}
 								?>
 								
 								<?php 
 									$app1_qry = "SELECT a.status1 AS a1, b.status1 AS b1 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app1_result = $conn->query($app1_qry);
 
 									if($app1_result->num_rows > 0){
@@ -231,15 +312,25 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									}
 								?>
 								
 								<?php 
 									$app2_qry = "SELECT a.status2 AS a2, b.status2 AS b2 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app2_result = $conn->query($app2_qry);
 
 									if($app2_result->num_rows > 0){
@@ -279,15 +370,25 @@ $columnName;
 										$lname = $app3_row['lastname'];
 										$fname = $app3_row['firstname'];
 										$pos3 = $app3_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b> ';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b> ';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									}
 								?>
 								
 								<?php 
 									$app3_qry = "SELECT a.status3 AS a3, b.status3 AS b3 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app3_result = $conn->query($app3_qry);
 
 									if($app3_result->num_rows > 0){
@@ -327,15 +428,25 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									}
 								?>
 								
 								<?php 
 									$app4_qry = "SELECT a.status4 AS a4, b.status4 AS b4 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app4_result = $conn->query($app4_qry);
 
 									if($app4_result->num_rows > 0){
@@ -376,7 +487,11 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									} else {
 										echo '';
 									}
@@ -384,9 +499,15 @@ $columnName;
 								
 								<?php 
 									$app5_qry = "SELECT a.status5 AS a5, b.status5 AS b5 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app5_result = $conn->query($app5_qry);
 
 									if($app5_result->num_rows > 0){
@@ -426,7 +547,11 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									} else {
 										echo '';
 									}
@@ -434,9 +559,15 @@ $columnName;
 								
 								<?php 
 									$app6_qry = "SELECT a.status6 AS a6, b.status6 AS b6 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app6_result = $conn->query($app6_qry);
 
 									if($app6_result->num_rows > 0){
@@ -477,7 +608,11 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
+<<<<<<< HEAD
 										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+=======
+										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									} else {
 										echo '';
 									}
@@ -485,9 +620,15 @@ $columnName;
 								
 								<?php 
 									$app7_qry = "SELECT a.status7 AS a7, b.status7 AS b7 
+<<<<<<< HEAD
 												FROM tbl_rfp a 
 												RIGHT JOIN tbl_rfp_approvals b ON a.rfp_no = b.rfp_no 
 												WHERE a.rfp_no = '" . $publicRfpNo . "'";
+=======
+												FROM tbl_tba a 
+												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
+												WHERE a.tba_no = '" . $publicTbaNo . "'";
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 									$app7_result = $conn->query($app7_qry);
 
 									if($app7_result->num_rows > 0){
@@ -527,10 +668,17 @@ $columnName;
 										$a = $userCode; 
 
 										if ($type <= 4): 
+<<<<<<< HEAD
 											$qry_filtered = $conn->query("SELECT a.rfp_no, a.status1, a.status2, a.status3, a.status4, a.status5, a.status6, a.status7
 											FROM tbl_rfp_approvals AS a
 											JOIN tbl_rfp AS r ON a.rfp_no = r.rfp_no
 											WHERE a.rfp_no = '{$tblId}'
+=======
+											$qry_filtered = $conn->query("SELECT a.tba_no, a.status1, a.status2, a.status3, a.status4, a.status5, a.status6, a.status7
+											FROM tbl_tba_approvals AS a
+											JOIN tbl_tba AS r ON a.tba_no = r.tba_no
+											WHERE a.tba_no = '{$tblId}'
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 											AND (
 												(r.status1 = '{$userCode}' AND a.status1 = 0) OR
 												(r.status2 = '{$userCode}' AND a.status2 = 0 AND a.status1 = 1) OR
@@ -553,12 +701,22 @@ $columnName;
 											<?php endwhile; ?>
 										<?php endif; ?>
 										<?php 
+<<<<<<< HEAD
 											if ($type > 4) {  
 												$qry_filtered = $conn->query("SELECT rfp_no, status1
 																				FROM tbl_rfp_approvals
 																				WHERE status1 = 0 AND rfp_no = '{$tblId}'");
 
 												if ($qry_filtered->num_rows > 0) { 
+=======
+											if (($type > 4) || (($type == 3) && ($_settings->userdata('department') == 'Marketing') || ($_settings->userdata('department') == 'Corporate Communications') || ($_settings->userdata('department') == 'General Services') || ($_settings->userdata('department') == 'Const. and Impln.') || ($_settings->userdata('department') == 'Documentation and Loan') || ($_settings->userdata('department') == 'Inventory Control') || ($_settings->userdata('department') == 'Legal') || ($_settings->userdata('department') == 'IT') || ($_settings->userdata('department') == 'Audit') || ($_settings->userdata('department') == 'Personnel') || ($_settings->userdata('department') == 'Project Admin') || ($_settings->userdata('department') == 'Executive') || ($_settings->userdata('department') == 'Technical Planning') || ($_settings->userdata('department') == 'Permits and Licenses') || ($_settings->userdata('department') == 'Electrical'))) {  
+												$qry_filtered = $conn->query("SELECT tba_no, status1
+                              FROM tbl_tba_approvals
+                              WHERE status1 = 0 AND tba_no = '{$tblId}' AND {$prep} = '{$_settings->userdata('user_code')}';");
+
+												if ($qry_filtered->num_rows > 0) { 
+											
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 											?>
 													<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
 														<span class="fa fa-edit text-primary"></span>
@@ -572,7 +730,11 @@ $columnName;
 											<span class="fa fa-eye text-dark"></span>
 										</a>
 										<button type="button" style="border:none;background-color:transparent;" class="print_data" data-id="<?php echo $tblId ?>" 
+<<<<<<< HEAD
 												onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_rfp.php?id=<?php echo $tblId ?>', '_blank')"
+=======
+												onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_tba.php?id=<?php echo $tblId ?>', '_blank')"
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 												data-toggle="tooltip" data-placement="top" title="Print"> 
 											<span class="fas fa-print"></span>
 										</button>
@@ -591,22 +753,38 @@ $columnName;
     $('[data-toggle="tooltip"]').tooltip();
 
 	$('.approved_data').click(function(){
+<<<<<<< HEAD
         _conf("Are you sure you want to approved this request for payment?","approved_rfp",[$(this).attr('data-id'),$(this).attr('data-user')])
     })
 
 		$('.disapproved_data').click(function(){
         _conf("Are you sure you want to disapproved this request for payment?","disapproved_rfp",[$(this).attr('data-id'),$(this).attr('data-user')])
+=======
+        _conf("Are you sure you want to approved this TBA?","approved_tba",[$(this).attr('data-id'),$(this).attr('data-user')])
+    })
+
+		$('.disapproved_data').click(function(){
+        _conf("Are you sure you want to disapproved this TBA?","disapproved_tba",[$(this).attr('data-id'),$(this).attr('data-user')])
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
     })
 	
     $('.view_data').click(function() {
         var id = $(this).data('id').toString();
+<<<<<<< HEAD
 		var redirectUrl = '?page=rfp/view_rfp&id=' + id;
+=======
+		var redirectUrl = '?page=tba/view_tba&id=' + id;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 		window.location.href = redirectUrl;
     });
 
 	$('.edit_data').click(function() {
         var id = $(this).data('id').toString();
+<<<<<<< HEAD
 		var redirectUrl = '?page=rfp/manage_rfp&id=' + id;
+=======
+		var redirectUrl = '?page=tba/manage_tba&id=' + id;
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 		window.location.href = redirectUrl;
     });
 
@@ -614,10 +792,17 @@ $columnName;
     $('.table th,.table td').addClass('px-1 py-0 align-middle')
     $('.table').dataTable();
 });
+<<<<<<< HEAD
 function approved_rfp($id,$userId){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=approved_rfp",
+=======
+function approved_tba($id,$userId){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=approved_tba",
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 			method:"POST",
 			data:{id: $id, userId: $userId},
 			dataType:"json",
@@ -628,7 +813,11 @@ function approved_rfp($id,$userId){
 			},
 			success:function(resp){
 				if(typeof resp== 'object' && resp.status == 'success'){
+<<<<<<< HEAD
 					location.replace('./?page=rfp/rfp_list')
+=======
+					location.replace('./?page=tba/tba_list')
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 					//location.reload();
 				}else{
 					alert_toast("An error occured.",'error');
@@ -637,10 +826,17 @@ function approved_rfp($id,$userId){
 			}
 		})
 	}
+<<<<<<< HEAD
 function disapproved_rfp($id,$userId){
 	start_loader();
 	$.ajax({
 		url:_base_url_+"classes/Master.php?f=disapproved_rfp",
+=======
+function disapproved_tba($id,$userId){
+	start_loader();
+	$.ajax({
+		url:_base_url_+"classes/Master.php?f=disapproved_tba",
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 		method:"POST",
 		data:{id: $id, userId: $userId},
 		dataType:"json",
@@ -651,7 +847,11 @@ function disapproved_rfp($id,$userId){
 		},
 		success:function(resp){
 			if(typeof resp== 'object' && resp.status == 'success'){
+<<<<<<< HEAD
 				location.replace('./?page=rfp/rfp_list')
+=======
+				location.replace('./?page=tba/tba_list')
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 			}else{
 				alert_toast("An error occured.",'error');
 				end_loader();

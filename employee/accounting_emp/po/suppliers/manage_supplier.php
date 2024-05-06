@@ -100,11 +100,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="form-group">
             <label for="vatable" class="control-label">Tax Group:</label>
             <select name="vatable" id="vatable" class="form-control rounded-0" required>
-                <option value="" <?php echo (!isset($vatable) || $vatable === "") ? "selected" : "" ?> disabled></option>
+                <!-- <option value="" <?php echo (!isset($vatable) || $vatable === "") ? "selected" : "" ?> disabled></option> -->
                 <option value="0" <?php echo (isset($vatable) && $vatable == "0") ? "selected" : "" ?>>Non-VAT</option>
-                <option value="3" <?php echo (isset($vatable) && $vatable == "3") ? "selected" : "" ?>>Zero-rated</option>
-                <option value="1" <?php echo (isset($vatable) && $vatable == "1") ? "selected" : "" ?>>Inclusive</option>
-                <option value="2" <?php echo (isset($vatable) && $vatable == "2") ? "selected" : "" ?>>Exclusive</option>
+                <option value="1" <?php echo (isset($vatable) && $vatable == "1") ? "selected" : "" ?>>Zero-rated</option>
+                <option value="2" <?php echo (isset($vatable) && $vatable == "2") ? "selected" : "" ?>>Vatable</option>
             </select>
         </div> 
         <!-- <div class="form-group">

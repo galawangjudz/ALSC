@@ -1,6 +1,10 @@
 <?php
 $dev_data = array('id'=>'-1','firstname'=>'Developer','lastname'=>'','username'=>'dev_oretnom','password'=>'5da283a2d990e8d8512cf967df5bc0d0','last_login'=>'','date_updated'=>'','date_added'=>'');
+<<<<<<< HEAD
 if(!defined('base_url')) define('base_url','http://192.168.0.111/ALSC/');
+=======
+if(!defined('base_url')) define('base_url','http://localhost/ALSC/');
+>>>>>>> 2e894c5abd9aaca7fd605e981ee1bb306314718d
 if(!defined('base_app')) define('base_app', str_replace('\\','/',__DIR__).'/' );
 
 //if(!defined('dev_data')) define('dev_data',$dev_data);
