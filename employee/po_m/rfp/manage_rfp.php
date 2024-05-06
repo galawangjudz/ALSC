@@ -739,7 +739,7 @@ if (empty($_GET['id'])) {
                         }
                         
                         $total_count = count($user_codes_from_db);
-                        ?>
+                        ?> 
                         
                                                 <input type="number" id="inputValue" value="<?php echo $total_count; ?>" style="width:50px;background-color:yellow;border:none;text-align:center;" readonly><hr>
                                                 <!-- <button type="button" id="addApproverButton" class="btn btn-primary btn-sm ml-2">Add</button> -->

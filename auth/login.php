@@ -1,4 +1,13 @@
 <?php require_once('../config.php') ?>
+<style>
+  .image-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    height: auto; 
+    padding:none;
+}
+</style>
 <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
 
@@ -9,7 +18,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   	<title><?php echo $_settings->info('title') != false ? $_settings->info('title').' | ' : '' ?><?php echo $_settings->info('name') ?></title>
-    <link rel="icon" href="<?php echo validate_image($_settings->info('logo')) ?>" />
     <!-- Google Font: Source Sans Pro -->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"> -->
     <!-- Font Awesome -->
@@ -82,6 +90,10 @@
       <a href="./" class="h1"><b>Login</b></a>
     </div>
     <div class="card-body">
+    <div class="image-container">
+      <img src="<?php echo base_url . 'images/logo.jpg'; ?>" alt="PDF Icon" width="150" height="120">
+  </div>
+
       <p class="login-box-msg">Sign in to start your session</p>
 
       <form id="login-frm" action="" method="post">
