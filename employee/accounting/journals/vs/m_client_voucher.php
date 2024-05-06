@@ -307,12 +307,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     $i = 1;
                                     $qry = $conn->query("SELECT 
                                     tbl_rfp.id AS mainId,
+                                    property_clients.*,
                                     tbl_rfp.*,  
                                     tbl_rfp_approvals.* 
                                 FROM 
                                     tbl_rfp 
                                 JOIN 
                                     tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                JOIN
+                                    property_clients ON CONCAT(property_clients.first_name, ' ', property_clients.last_name) = tbl_rfp.name
                                 WHERE 
                                     (tbl_rfp.rfp_for = 3 OR tbl_rfp.rfp_for = 5) 
                                 GROUP BY 
@@ -337,7 +340,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-client-name="<?php echo $row['name']; ?>" data-client-code="<?php echo $row['property_id']; ?>" data-client-part="<?php echo $row['description']; ?>" data-client-check="<?php echo $row['check_date']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
@@ -491,17 +494,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="client_id">Client:</label>
-                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
-                                                $supplier_qry = $conn->query("SELECT * FROM property_clients ORDER BY `last_name` ASC");
+                                                $supplier_qry = $conn->query("SELECT * FROM property_clients ORDER BY `first_name` ASC");
                                                 while ($row = $supplier_qry->fetch_assoc()):
                                                 ?>
                                                 <option 
                                                     value="<?php echo $row['client_id'] ?>" 
                                                     data-client-code="<?php echo $row['client_id'] ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['client_id'] ? 'selected' : '' ?>
-                                                ><?php echo $row['last_name'] ?>, <?php echo $row['first_name'] ?></option>
+                                                ><?php echo $row['first_name'] ?> <?php echo $row['last_name'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </td>
@@ -661,7 +664,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
+        var clientName = $(this).data('client-name');
+        var clientCode = $(this).data('client-code');
+        var clientParticulars = $(this).data('client-part');
+        var clientCheck = $(this).data('client-check');
         $('#rfp_no').val(rfpNo);
+        $('#client_id').find('option:selected').text(clientName);
+        $('#client_code').val(clientCode);
+        $('#description').val(clientParticulars);
+        $('#due_date').val(clientCheck);
     });
 });
 $(document).ready(function() {
@@ -723,7 +734,7 @@ document.getElementById('client_id').addEventListener('change', function() {
 $(document).ready(function () {
 
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        ////updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -733,7 +744,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        ////updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -840,7 +851,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    ////updateHiddenOptions();
     updateTotals();
 }
 

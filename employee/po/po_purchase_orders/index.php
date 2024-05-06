@@ -48,7 +48,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-									<th>Supplier</th>
+																		<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>
@@ -191,7 +191,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-									<th>Supplier</th>
+																		<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>
@@ -323,7 +323,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-									<th>Supplier</th>
+																		<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>
@@ -455,7 +455,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-									<th>Supplier</th>
+																		<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>

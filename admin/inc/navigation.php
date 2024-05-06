@@ -83,7 +83,6 @@ $department = $_settings->userdata('department');
                           </div>
                       </div>
                   </div>
-
                   <div class="accordion" id="purchasingAccordion" style="margin-bottom:5px;">
                       <button class="btn btn-link" type="button" data-target="#collapsePurchase" aria-expanded="true" aria-controls="collapsePurchase" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                         <b><i><li class="nav-header" style="margin-left:-10px">Purchasing Order</li></b></i>
@@ -92,25 +91,37 @@ $department = $_settings->userdata('department');
                         <div style="margin-left:15px">
                           <ul class="nav flex-column">
                             <li class="nav-item dropdown">
-                              <a class="nav-link" href="<?php echo base_url ?>admin/?page=po/purchase_orders/" class="nav-link nav-cpo">
+                              <a href="<?php echo base_url ?>admin/?page=po/po_purchase_orders/" class="nav-link nav-cpo">
                                 <i class="nav-icon fas fa-file"></i> POs List
                               </a>
                             </li>
                             <li class="nav-item dropdown">
-                              <a class="nav-link" href="<?php echo base_url ?>admin/?page=po/suppliers" class="nav-link nav-suppliers">
+                              <a href="<?php echo base_url ?>admin/?page=po/po_suppliers" class="nav-link nav-suppliers">
                                 <i class="nav-icon fas fa-truck"></i> Suppliers List
                               </a>
                             </li>
                             <li class="nav-item dropdown">
-                              <a class="nav-link" href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="nav-link nav-items">
+                              <a href="<?php echo base_url ?>admin/?page=po/po_items" class="nav-link nav-items">
                                 <i class="nav-icon fas fa-th-list"></i> Items List
                               </a>
                             </li>
                             <li class="nav-item dropdown">
-                              <a class="nav-link" href="<?php echo base_url ?>admin/?page=po/goods_receiving/received_items_status" class="nav-link nav-gr">
-                                <i class="nav-icon fas fa-th-list"></i> Goods Receiving
+                              <a href="<?php echo base_url ?>admin/?page=po/po_goods_receiving/received_items_status" class="nav-link nav-gr">
+                              <i class="nav-icon fas fa-check-square"></i>
+                                <p>
+                                  Goods Receiving
+                                </p>
                               </a>
-                            </li>
+                            </li> 
+
+                            <li class="nav-item dropdown">
+                              <a href="<?php echo base_url ?>admin/?page=po/po_goods_receiving/po_status" class="nav-link nav-monitoring">
+                              <i class="nav-icon fas fa-search"></i>
+                                <p>
+                                  PO Monitoring
+                                </p>
+                              </a>
+                            </li> 
                           </ul>
                         </div>
                       </div>

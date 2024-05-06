@@ -31,9 +31,16 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
-		<div class="card-tools">
-			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
+		<table>
+			<tr>
+				<td style="float:right;">
+				<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				</td>
+				<td style="float:right;">
+					<button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -165,7 +172,7 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 							</td>
@@ -191,7 +198,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -239,7 +246,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -287,7 +294,7 @@ $columnName;
 										$lname = $app3_row['lastname'];
 										$fname = $app3_row['firstname'];
 										$pos3 = $app3_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b> ';
+										echo '<b>' . $fname . ' ' . $lname .'</b> ';
 									}
 								?>
 								
@@ -335,7 +342,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -384,7 +391,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -434,7 +441,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -485,7 +492,7 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -602,6 +609,64 @@ $columnName;
 		</div>
 	</div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.getElementById('export-csv-btn').addEventListener('click', function() {
+   
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+    
+    var table = document.querySelector('#data-table');
+    var visibleRows = table.querySelectorAll('tbody tr:not([style*="display: none"])');
+
+    var headerRow = table.querySelector('thead tr');
+    var headerCols = headerRow.querySelectorAll('th');
+    var headerData = [];
+    
+	headerCols.forEach(function(col, index) {
+		if (col && col.style && col.style.display !== 'none' && index !== headerCols.length - 1 && col.innerText.trim() !== '') {
+			headerData.push(col.innerText);
+		}
+	});
+
+	var csvContent = "Request for Payment List" + " as of " + formattedDate + "\n\n";
+
+    csvContent += headerData.join(',') + "\n";
+	visibleRows.forEach(function(row) {
+    var dataCols = row.querySelectorAll('td');
+    var dataRow = [];
+
+    for (var index = 0; index < headerCols.length; index++) {
+        var col = dataCols[index];
+        if (col && col.style && headerCols[index] && headerCols[index].style && headerCols[index].style.display !== 'none') {
+            var cellValue = col.innerText;
+            if (index >= 5 && index <= 11) {
+                var words = cellValue.split(' ');
+                if (words.length > 1) {
+                    words[words.length - 1] = '(' + words[words.length - 1] + ')';
+                    cellValue = words.join(' ');
+                }
+            }
+            dataRow.push(cellValue);
+        }
+    }
+    csvContent += dataRow.join(',') + "\n";
+});
+
+
+    console.log("CSV Content:", csvContent); 
+
+    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = "RFP_asof_" + formattedDate + '.csv';
+
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+</script>
 <script>
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

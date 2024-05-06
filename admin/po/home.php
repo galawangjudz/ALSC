@@ -1,81 +1,34 @@
-<h1 class="text-dark">Welcome to <?php echo $_settings->info('name') ?></h1>
-<hr class="border-dark">
-<div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-navy elevation-1"><i class="fas fa-truck-loading"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">Total Suppliers</span>
-                <span class="info-box-number">
-                  <?php 
-                    $supplier = $conn->query("SELECT * FROM supplier_list")->num_rows;
-                    echo number_format($supplier);
-                  ?>
-                  <?php ?>
-                </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-boxes"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Total Items</span>
-                <span class="info-box-number">
-                  <?php 
-                     $item = $conn->query("SELECT * FROM item_list where `status` =0 ")->num_rows;
-                     echo number_format($item);
-                  ?>
-                </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-           <!-- /.col -->
-           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-file-invoice"></i></span>
+<?php 
+$usertype = $_settings->userdata('user_type'); 
+$level = $_settings->userdata('type'); 
+$session_id = $_settings->userdata('user_code');
+?>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Approve P.O.</span>
-                <span class="info-box-number">
-                  <?php 
-                     $po_appoved = $conn->query("SELECT * FROM po_list where `status` =1 ")->num_rows;
-                     echo number_format($po_appoved);
-                  ?>
-                </span>
+<section class="content">
+    <div class="container-fluid">
+      
+      <div class="">
+        <div class="pd-ltr-20">
+          <div class="info-box pd-20 height-1400-p mb-30">
+            <div class="row align-items-center">
+              <div class="col-md-4 user-icon">
+                <img src="../vendors/images/banner-img.png" alt="">
               </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-file-invoice"></i></span>
+              <div class="col-md-8">
 
-              <div class="info-box-content">
-                <span class="info-box-text">Denied PO</span>
-                <span class="info-box-number">
-                  <?php 
-                     $po = $conn->query("SELECT * FROM po_list where `status` =2 ")->num_rows;
-                     echo number_format($po);
-                  ?>
-                </span>
+                <?php $query= mysqli_query($conn,"select * from users where user_code = '$session_id'")or die(mysqli_error());
+                    $row = mysqli_fetch_array($query);
+                ?>
+
+                <h4 class="font-20 weight-500 mb-10 text-capitalize">
+                  Welcome back <div class="weight-600 font-30 text-blue"><?php echo $row['firstname']. " " .$row['lastname']; ?>,</div>
+                </h4>
+                <p class="font-18 max-width-600"> We're delighted to see you again.</p>
               </div>
-              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box -->
           </div>
-          <!-- /.col -->
+          
         </div>
-<div class="container">
-  
-</div>
+  </div>
+</section>

@@ -127,12 +127,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         #uni_modal .modal-footer{
             display: none;
         }
-        .nav-client{
+        .nav-sup{
             background-color:#007bff;
             color:white!important;
             box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
         }
-        .nav-client:hover{
+        .nav-sup:hover{
             background-color:#007bff!important;
             color:white!important;
             box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
@@ -491,7 +491,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <tr>
                                     <td style="width:50%; padding-right: 10px;">
                                         <label for="supplier_id">Supplier:</label>
-                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px;" required>
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px;">
                                             <option value="" <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                             <?php
                                             $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
@@ -766,7 +766,7 @@ $(document).ready(function () {
     $("#item-clone").append(clone);
 
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        ////updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -776,7 +776,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        ////updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -914,7 +914,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    ////updateHiddenOptions();
     updateTotals();
 }
 

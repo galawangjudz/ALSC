@@ -308,12 +308,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     $i = 1;
                                     $qry = $conn->query("SELECT 
                                     tbl_rfp.id AS mainId,
+                                    users.*,
                                     tbl_rfp.*,  
                                     tbl_rfp_approvals.* 
                                 FROM 
                                     tbl_rfp 
                                 JOIN 
                                     tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                JOIN
+                                    users ON CONCAT(users.firstname, ' ', users.lastname) = tbl_rfp.name
                                 WHERE 
                                     (tbl_rfp.rfp_for = 2 OR tbl_rfp.rfp_for = 5) 
                                 GROUP BY 
@@ -338,7 +341,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-emp-name="<?php echo $row['name']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-emp-name="<?php echo $row['name']; ?>" data-emp-code="<?php echo $row['user_code']; ?>" data-emp-part="<?php echo $row['description']; ?>" data-emp-check="<?php echo $row['check_date']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
@@ -492,7 +495,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="emp_id">Employee:</label>
-                                            <select name="emp_id" id="emp_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <select name="emp_id" id="emp_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
@@ -660,28 +663,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </table>
 </body>
 <script>
-
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
         var empName = $(this).data('emp-name');
-
+        var empCode = $(this).data('emp-code');
+        var empParticulars = $(this).data('emp-part');
+        var empCheck = $(this).data('emp-check');
         $('#rfp_no').val(rfpNo);
         $('#emp_id').find('option:selected').text(empName);
-
-        var selectedOption = $('#emp_id').find('option[data-emp-name="' + empName + '"]');
-        $('#emp_id').val(selectedOption.val()); 
-        
-        if ($('#emp_id').val()) {
-            var empCode = selectedOption.data('emp-code');
-            console.log("Employee Code:", empCode);
-            $('#emp_code').val(empCode); 
-
-            alert("An option is selected!");
-        }
+        $('#emp_code').val(empCode);
+        $('#description').val(empParticulars);
+        $('#due_date').val(empCheck);
     });
 });
-
 document.addEventListener("DOMContentLoaded", function() {
     var selectedOption = document.getElementById('emp_id').options[document.getElementById('emp_id').selectedIndex];
     console.log("Selected Option:", selectedOption);
@@ -743,7 +738,7 @@ document.getElementById('image').addEventListener('change', function() {
 $(document).ready(function () {
 
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        ////updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -753,7 +748,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        ////updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -861,7 +856,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    ////updateHiddenOptions();
     updateTotals();
 }
 

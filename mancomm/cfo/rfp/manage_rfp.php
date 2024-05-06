@@ -82,7 +82,7 @@ if (empty($_GET['id'])) {
     .approversDiv{
         margin-top:25px;
     }
-        #amountToWords{
+    #amountToWords{
         background-color:gainboro;
         border:solid 1px gainsboro;
         font-style: italic;
@@ -91,11 +91,9 @@ if (empty($_GET['id'])) {
         text-transform: uppercase;
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 
 
 <body onload=initialize()">
@@ -212,7 +210,7 @@ if (empty($_GET['id'])) {
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="req_dept" class="control-label">Requesting Department:</label>
-                            <input type="text" name="req_dept" id="req_dept" value="<?php echo $_settings->userdata('department'); ?>" class="form-control rounded-0" readonly>
+                            <input type="text" name="req_dept" id="req_dept" value="<?php echo $req_dept; ?>" class="form-control rounded-0" readonly>
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="transaction_date" class="control-label">Transaction Date:</label>
@@ -234,8 +232,8 @@ if (empty($_GET['id'])) {
                             <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label>
                             <select name="payment_form" id="payment_form" class="form-control rounded-0" disabled>
                                 <option value="" disabled selected>--Select Payment--</option>
-                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
-                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
+                                                                <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
+                                <option value="0" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Cash</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -733,14 +731,14 @@ if (empty($_GET['id'])) {
                         <div class="container-fluid approversDiv">
                             <?php
                             for ($i = 0; $i < $total_count; $i++) {
-                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
+                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
-                                echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';
+                                echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '" disabled>';
 
                                 while ($row = $approver_qry->fetch_assoc()) {
                                     $selected = ($user_codes_from_db[$i] == $row['user_code']) ? 'selected' : '';
-                                                                        echo '<option value="' . $row['user_code'] . '" ' . $selected . '>' . $row['firstname'] . ' ' . $row['lastname'] . '</option>';
+                                                echo '<option value="' . $row['user_code'] . '" ' . $selected . '>' . $row['firstname'] . ' ' . $row['lastname'] . '</option>';
                                 }
                                 echo '</select>';
                                 //echo '<button type="button" id="removeApproverButton' . ($i + 1) . '" class="btn btn-danger btn-sm removeApproverButton">Remove</button>';
@@ -874,6 +872,19 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+ <script>
+    $(document).ready(function() {
+        $('#data-table').DataTable({
+            "paging": true,      
+            "lengthChange": true, 
+            "searching": true,   
+            "ordering": true,    
+            "info": true,        
+            "autoWidth": false  
+        });
+        $('.table th, .table td').addClass('px-1 py-0 align-middle');
+    });
+</script>
 <script>
     function getUrlParameter(name) {
         name = name.replace(/[\[\]]/g, '\\$&');
@@ -960,7 +971,7 @@ if (isset($_GET['id']) == ''){
         newSelect.setAttribute('name', 'status' + totalCount);
 
         <?php
-        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
         while ($row = $approver_qry->fetch_assoc()) {
             echo 'var option = document.createElement("option");';
             echo 'option.value = "' . $row['user_code'] . '";';
@@ -1111,32 +1122,19 @@ $(function(){
     $('#rfp-form').submit(function(e){
         e.preventDefault();
         var _this = $(this);
-        $('.err-msg').remove();
+        var p_Id = document.getElementById('mainId').value;
+        $('.pop-msg').remove();
+        var el = $('<div>');
+        el.addClass("pop-msg alert");
+        el.hide();
         
-        // var requiredFields = ['name', 'short_name', 'tin', 'address', 'contact_person', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
-        // var isValid = true;
-
-        // for (var i = 0; i < requiredFields.length; i++) {
-        //     var fieldName = requiredFields[i];
-        //     var fieldValue = _this.find('[name="' + fieldName + '"]').val().trim();
-
-        //     if (fieldValue === '') {
-        //         isValid = false;
-        //         var errorMsg = 'May kulang po. Hehe.';
-        //         var existingError = _this.find('.err-msg:contains("' + errorMsg + '")');
-                
-        //         if (existingError.length === 0) {
-        //             var el = $('<div>').addClass("alert alert-danger err-msg").text(errorMsg);
-        //             _this.prepend(el);
-        //             el.show('slow');
-        //             $("html, body").animate({ scrollTop: 0 }, "fast");
-        //         }
-        //     }
-        // }
-
-        // if (!isValid) {
-        //     return false;
-        // }
+        if (p_Id === null || p_Id.trim() === "") {
+            if ($('#image').val() === "") {
+                alert_toast("Attached file is required.", 'warning');
+                return false;
+            }
+        }
+        
 
         start_loader();
         $.ajax({

@@ -133,6 +133,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
+                        </p>
+                      </a>
+                    </li> 
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

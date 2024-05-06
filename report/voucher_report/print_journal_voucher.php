@@ -60,7 +60,7 @@ border-color: #007BFF;
                         <div class="container" style="margin-top:15px;">
                         <table class="table table-bordered">
                             <tr>
-                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher No:</td>
+                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">JV No:</td>
                                 <td style="width:50%; padding: 4px 10px;"><?php echo $jv_id; ?></td>
                                 <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
                                 <td style="padding: 4px 10px;"><?php echo $postingdate; ?></td>
@@ -197,6 +197,15 @@ border-color: #007BFF;
 
 </body>
 <script>
+function formatAmount(amount) {
+    amount = parseFloat(amount);
+    if (Math.floor(amount) === amount) {
+        return amount.toLocaleString('en-US', { style: 'decimal' }) + ".00";
+    } else {
+        return amount.toLocaleString('en-US', { style: 'decimal' });
+    }
+}
+
 function cal_tb() {
     var debit = 0;
     var credit = 0;
@@ -209,9 +218,8 @@ function cal_tb() {
             credit += parseFloat(($(this).find('.credit_amount').text().replace(/,/gi, ''))) || 0;
         }
     });
-
-    $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
-    $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
+    $('#account_list').find('.total_debit').text(formatAmount(debit));
+    $('#account_list').find('.total_credit').text(formatAmount(credit));
 }
 cal_tb();
 </script>

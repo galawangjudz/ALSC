@@ -814,15 +814,19 @@ function updateDueDate() {
                         daysToAdd = parseInt(data.days_in_following_month);
                     }
 
-                    if (daysInMonth === 0) {
+                    else if (daysInMonth === 0) {
                         daysToAdd = parseInt(data.days_before_due);
                     }
 
-                    if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
+                    else if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
                         var currentDate = new Date();
                         daysToAdd = 0;
                         pterms.val(data.terms);
                         return;
+                    }
+
+                    else{
+                        daysToAdd = 0;
                     }
 
                     console.log("DAYS TO ADD", daysToAdd);
