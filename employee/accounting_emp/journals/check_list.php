@@ -34,7 +34,7 @@
 						<label class="radioLabel"><input type="radio" name="filter_status" value="claimed"> Claimed</label>
 						<label class="radioLabel"><input type="radio" name="filter_status" value="unclaimed"> Unclaimed</label>
 					</div>
-					<button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+					<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
 				</div>
 
 				<hr>

@@ -34,7 +34,7 @@ $columnName;
 		<table style="float:right;">
 			<tr>
 				<td style="float:right;">
-					<button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+					<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
 				</td>
 			</tr>
 		</table>

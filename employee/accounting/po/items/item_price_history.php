@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 <br><br>
-<button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
 <br><br>
 <table class="table table-striped table-hover table-bordered" style="width: 100%" id="item-table">
     <thead>

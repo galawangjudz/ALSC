@@ -34,10 +34,10 @@ $columnName;
 		<table style="float:right;">
 			<tr>
 				<td>
-				<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
 				</td>
 				<td>
-					<button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+					<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
 				</td>
 			</tr>
 		</table>

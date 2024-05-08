@@ -28,7 +28,7 @@
                 <tr>
                     <td style="width:21%;"><b>GL Account:</b> <input type="text" id="searchInput" placeholder="Account Code"></td>
                     <td><div id="displayName" style="font-weight:bold;"></div></td>
-                    <td style="text-align:right;padding-right:5px"><button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button></td>
+                    <td style="text-align:right;padding-right:5px"><button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button></td>
                 </tr>
             </table>
         </div>

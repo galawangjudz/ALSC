@@ -31,9 +31,16 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>TBA List</b></i></h3>
-		<div class="card-tools">
-			<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
+		<table style="float:right;">
+			<tr>
+				<td>
+					<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				</td>
+				<!-- <td>
+					<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				</td> -->
+			</tr>
+		</table>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">

@@ -32,7 +32,7 @@ $columnName;
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
 		<!-- <div class="card-tools">
-			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
 		</div> -->
 	</div>
 	<div class="card-body">

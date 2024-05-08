@@ -269,8 +269,6 @@ $department = $_settings->userdata('department');
                         </div>
                       </div>
                   </div>
-
-                  
                 
                   <div class="accordion" id="reportAccordion" style="margin-bottom:5px;">
                       <button class="btn btn-link" type="button" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
