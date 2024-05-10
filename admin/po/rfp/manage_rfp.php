@@ -926,6 +926,14 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+<script>
+    $(document).ready(function() {
+        $('#name').change(function() {
+            var selectedOption = $(this).val();
+            $('#check_name').val(selectedOption);
+        });
+    });
+</script>
  <script>
     $(document).ready(function() {
         $('#data-table').DataTable({

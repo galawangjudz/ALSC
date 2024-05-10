@@ -10,7 +10,7 @@ if(isset($_SESSION['userdata'])){
             redirect('admin/index.php');
         }
     } 
-    if($_SESSION['userdata']['type'] =='Agent'){
+    if($_SESSION['userdata']['position'] =='Agent'){
         if(strpos($link, 'login.php') === false){
             redirect('agent_user/index.php');
         }
@@ -81,12 +81,6 @@ if(isset($_SESSION['userdata'])){
         }
     }
 
-    // if($_SESSION['userdata']['type'] =='5'){
-    //     if(strpos($link, 'login.php') === false){
-    //         redirect('employee/reg_emp/index.php');
-    //     }
-    // }  
 }
-
 ?>
 

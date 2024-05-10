@@ -1,55 +1,40 @@
 
-
-<h3 class="text-dark"><i>Welcome <?php echo $_settings->userdata('username') ?>!</i></h3>
-<hr>
+<?php 
+$usertype = $_settings->userdata('user_type'); 
+$level = $_settings->userdata('type'); 
+$session_id = $_settings->userdata('user_code');
+?>
+<style>
+  #img_cont{
+    height:auto;
+    width:400px;
+    margin-right:-40px;
+  }
+</style>
 <section class="content">
     <div class="container-fluid">
-    <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-file-invoice"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text"><b>Approved RA</b></span>
-                <span class="info-box-number">
-                  <?php echo number_format($conn->query("SELECT * FROM t_approval_csr where c_csr_status = 1")->num_rows) ?>
-                </span>
+      
+      <div class="">
+        <div class="pd-ltr-20">
+          <div class="info-box pd-20 height-1400-p mb-30">
+            <div class="row align-items-center">
+              <div class="col-md-4 user-icon" id="img_cont">
+                <img src="../images/logo.jpg" alt="">
               </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-th-list"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text"><b>Lots</b></span>
-                <span class="info-box-number"> <?php echo number_format($conn->query("SELECT * FROM t_lots")->num_rows) ?></span>
-              </div>
-            </div>
-          </div>
-          <div class="clearfix hidden-md-up"></div>
+              <div class="col-md-8">
 
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-box"></i></span>
+                <?php $query= mysqli_query($conn,"select * from users where user_code = '$session_id'")or die(mysqli_error());
+                    $row = mysqli_fetch_array($query);
+                ?>
 
-              <div class="info-box-content">
-                <span class="info-box-text"><b>Houses</b></span>
-                <span class="info-box-number"><?php echo number_format($conn->query("SELECT * FROM t_house")->num_rows) ?></span>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hands-helping"></i></span>
-
-                <h4 class="font-20 weight-500 mb-10 text-capitalize">
-                  Welcome back <div class="weight-600 font-30 text-blue"><?php echo $row['firstname']. " " .$row['lastname']; ?>,</div>
-                </h4>
+                <div style="font-family: Armata; font-size: 25px;">
+                    Welcome back, <div class="text-blue"><strong><?php echo $row['firstname'] . " " . $row['lastname']; ?>!</strong></div>
+                </div>
                 <p class="font-18 max-width-600"> We're delighted to see you again.</p>
               </div>
-
+            </div>
           </div>
-
+          
         </div>
   </div>
 </section>

@@ -27,6 +27,37 @@ $columnName;
 	body{
         font-size:12px!important;
     }
+	.view_data:hover span.badge {
+        background-color: #007bff!important;
+        color: white!important;
+        border-color: #007bff!important;
+    }
+	.print_data:hover span.badge {
+        background-color: black!important;
+        color: white!important;
+        border-color: black!important;
+    }
+    .disapproved_data:hover span.badge {
+        background-color: #ff0000!important;
+        color: white!important;
+        border-color: #ff0000!important;
+    }
+    .approved_data:hover span.badge {
+        background-color:#28a745!important;
+        color: white!important;
+        border-color: #28a745!important;
+    }
+	.edit_data:hover span.badge {
+        background-color:#6c757d!important;
+        color: white!important;
+        border-color: #6c757d!important;
+    }
+	button{
+		border: 1px solid #000; 
+		background-color: #f0f0f0; 
+		cursor: pointer;
+		width: auto;
+	}
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -41,18 +72,15 @@ $columnName;
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 				<colgroup>
 					<col width="5%">
-					<col width="5%">
+					<col width="8%">
+					<col width="9%">
 					<col width="10%">
-					<col width="8%">
-					<col width="5%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="18%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
@@ -60,18 +88,19 @@ $columnName;
 						<th>RFP No.</th>
 						<th>Preparer</th>
 						<!-- <th>Name</th> -->
-						<th>Req. Dept.</th>
+						<!-- <th>Req. Dept.</th> -->
 						<!-- <th>Payment Form</th>
 						<th>Bank Name</th> -->
-						<th>Tran. Date</th>
-						<!-- <th>Release Date</th> -->
+						<!-- <th>Tran. Date</th> -->
+						<!-- <th>Check Date</th> -->
+						<!-- <th>Amount</th> -->
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
 						<th>Approver 4</th>
 						<th>Approver 5</th>
 						<th>Approver 6</th>
-						<th>Approver 7</th>
+						<!-- <th>Approver 7</th> -->
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -116,7 +145,7 @@ $columnName;
 								?>
 							</td>
 							<!-- <td><?php echo $row['name'] ?></td> -->
-							<td><?php echo $row['req_dept']; ?></td>
+							<!-- <td><?php echo $row['req_dept']; ?></td> -->
 							<!-- <td>
 								<?php if ($row['payment_form'] == 0): ?>
 									Check
@@ -125,7 +154,7 @@ $columnName;
 								<?php endif; ?>
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
-							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
+							<!-- <td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td> -->
 							<!-- <td><?php echo date("Y-m-d",strtotime($row['release_date'])) ?></td> -->
 							<td class="">
 								<?php 
@@ -421,7 +450,7 @@ $columnName;
 								?>
 							</td>
 							
-							<td class="">
+							<!-- <td class="">
 								<?php 
 									$app7_qry = "SELECT * FROM users WHERE user_code = '" . $row['U7'] . "'";
 									$app7_result = $conn->query($app7_qry);
@@ -470,7 +499,7 @@ $columnName;
 										echo '';
 									}
 								?>
-							</td>
+							</td> -->
 							<td align="center">
 								<?php 
 									$qry_approved = $conn->query("SELECT type FROM users WHERE user_code = '" . $_settings->userdata('user_code') . "'"); 
@@ -498,12 +527,16 @@ $columnName;
 
 											while ($row_filtered = $qry_filtered->fetch_assoc()):
 											?>
-												<a class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-													<span class="fa fa-thumbs-up text-success"></span>
-												</a>
-												<a class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-													<span class="fa fa-thumbs-down text-danger"></span>
-												</a>
+												<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">	
+													<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Approved">
+														<i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+													</span>
+												</button>
+												<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">
+													<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Disapproved">
+														<i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+													</span>
+												</button>
 												<!-- <div class="dropdown-divider"></div> -->
 											<?php endwhile; ?>
 
@@ -512,13 +545,17 @@ $columnName;
 										
 
 									<?php endwhile; ?>	
-										<a class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
-											<span class="fa fa-eye text-dark"></span>
-										</a>
+										<button type="button" style="border:none;background-color:transparent;" class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+											<span class="badge rounded-circle p-2" style="margin:-5px;color:#1184ff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+											</span>
+										</button>
 										<button type="button" style="border:none;background-color:transparent;" class="print_data" data-id="<?php echo $tblId ?>" 
 												onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_rfp.php?id=<?php echo $tblId ?>', '_blank')"
 												data-toggle="tooltip" data-placement="top" title="Print"> 
-											<span class="fas fa-print"></span>
+												<span class="badge rounded-circle p-2" style="margin:-5px;background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+													<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+												</span>
 										</button>
 									</div>
 

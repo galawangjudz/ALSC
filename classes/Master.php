@@ -5440,6 +5440,7 @@ Class Master extends DBConnection {
 
 	function save_rfp(){
 		extract($_POST);
+		$id = isset($_POST['id']) ? $_POST['id'] : '';
 		$rfp_num = isset($_POST['rfp_no']) ? $_POST['rfp_no'] : '';
 		$num = isset($_POST['num']) ? $_POST['num'] : '';
 		$division = isset($_POST['division']) ? $_POST['division'] : '';
@@ -5478,7 +5479,8 @@ Class Master extends DBConnection {
 			
 			$save = $this->conn->query($sql);
 			$save_sql4 = $this->conn->query($gl_sql4);
-			}elseif (!empty($id) && $usercode == '10055') {
+			}
+			elseif (!empty($id) && $usercode == '10055') {
 		
 				$escapedCheckdate = $this->conn->real_escape_string($checkdate);
 			
