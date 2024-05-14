@@ -65,10 +65,11 @@ $columnName;
 		<table>
 			<tr>
 				<td style="float:right;">
-				<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
 				</td>
 				<td style="float:right;">
-					<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+
 				</td>
 			</tr>
 		</table>
@@ -77,7 +78,7 @@ $columnName;
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
-				<colgroup>
+				<!-- <colgroup>
 					<col width="5%">
 					<col width="8%">
 					<col width="9%">
@@ -88,19 +89,19 @@ $columnName;
 					<col width="10%">
 					<col width="10%">
 					<col width="18%">
-				</colgroup>
+				</colgroup> -->
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
 						<th>RFP No.</th>
 						<th>Preparer</th>
 						<!-- <th>Name</th> -->
-						<!-- <th>Req. Dept.</th> -->
+						<th>Req. Dept.</th>
 						<!-- <th>Payment Form</th>
 						<th>Bank Name</th> -->
-						<!-- <th>Tran. Date</th> -->
-						<!-- <th>Check Date</th> -->
-						<!-- <th>Amount</th> -->
+						<th>Tran. Date</th> 
+						 <th>Check Date</th>
+						 <th>Amount</th>
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
@@ -120,10 +121,11 @@ $columnName;
 					// 	tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5 FROM tbl_rfp WHERE req_dept = '" . $_settings->userdata('department') . "' OR req_dept = 'Purchasing' OR req_dept = 'Accounting' OR req_dept = 'CALS' OR req_dept = 'Billing' OR req_dept = 'Audit';");
 					// } else {
 						if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-							$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
+							$qry = $conn->query("SELECT DISTINCT tbl_rfp.check_date,tbl_rfp.amount,tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
 						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp WHERE req_dept = '" . $_settings->userdata('department') . "' ORDER BY tbl_rfp.transaction_date DESC");
 					} else {
 						$qry = $conn->query("SELECT 
+						tbl_rfp.check_date,tbl_rfp.amount,
 						tbl_rfp.id, 
 						tbl_rfp.rfp_no, 
 						tbl_rfp.preparer,
@@ -159,6 +161,7 @@ $columnName;
 							OR tbl_rfp.status7 = " . $_settings->userdata('user_code') . "
 						)
 					GROUP BY 
+					tbl_rfp.check_date,tbl_rfp.amount,
 						tbl_rfp.id, 
 						tbl_rfp.rfp_no, 
 						tbl_rfp.preparer,
@@ -206,7 +209,7 @@ $columnName;
 								?>
 							</td>
 							<!-- <td><?php echo $row['name'] ?></td> -->
-							<!-- <td><?php echo $row['req_dept']; ?></td> -->
+							<td><?php echo $row['req_dept']; ?></td>
 							<!-- <td>
 								<?php if ($row['payment_form'] == 0): ?>
 									Check
@@ -215,8 +218,9 @@ $columnName;
 								<?php endif; ?>
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td> -->
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['release_date'])) ?></td> -->
+							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
+							<td><?php echo date("Y-m-d",strtotime($row['check_date'])) ?></td>
+							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -650,61 +654,66 @@ $columnName;
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 <script>
-document.getElementById('export-csv-btn').addEventListener('click', function() {
-   
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("export-csv-btn").addEventListener("click", function() {
+        exportAllTableDataToCSV();
+    });
+});
+
+function exportAllTableDataToCSV() {
+    var csv = [];
     var currentDate = new Date();
     var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
-    
-    var table = document.querySelector('#data-table');
-    var visibleRows = table.querySelectorAll('tbody tr:not([style*="display: none"])');
 
-    var headerRow = table.querySelector('thead tr');
-    var headerCols = headerRow.querySelectorAll('th');
-    var headerData = [];
-    
-	headerCols.forEach(function(col, index) {
-		if (col && col.style && col.style.display !== 'none' && index !== headerCols.length - 1 && col.innerText.trim() !== '') {
-			headerData.push(col.innerText);
-		}
-	});
+    csv.push("Request for Payment List as of " + formattedDate + "\n\n");
 
-	var csvContent = "Request for Payment List" + " as of " + formattedDate + "\n\n";
-
-    csvContent += headerData.join(',') + "\n";
-	visibleRows.forEach(function(row) {
-    var dataCols = row.querySelectorAll('td');
-    var dataRow = [];
-
-    for (var index = 0; index < headerCols.length; index++) {
-        var col = dataCols[index];
-        if (col && col.style && headerCols[index] && headerCols[index].style && headerCols[index].style.display !== 'none') {
-            var cellValue = col.innerText;
-            if (index >= 5 && index <= 11) {
-                var words = cellValue.split(' ');
-                if (words.length > 1) {
-                    words[words.length - 1] = '(' + words[words.length - 1] + ')';
-                    cellValue = words.join(' ');
-                }
-            }
-            dataRow.push(cellValue);
+    var headers = [];
+    $('.table th').each(function(index) {
+        if (index < $('.table th').length - 1) { 
+            headers.push($(this).text());
         }
-    }
-    csvContent += dataRow.join(',') + "\n";
-});
+    });
+    csv.push(headers.join(","));
 
+    var table = $('.table').DataTable();
+    var data = table.rows().data();
 
-    console.log("CSV Content:", csvContent); 
+    data.each(function(rowData) {
+        var row = [];
+        rowData.forEach(function(cellData, index) {
 
-    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    var link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = "RFP_asof_" + formattedDate + '.csv';
+            var plainText = cellData.replace(/<[^>]+>/g, '').replace(/\r?\n|\r/g, '');
+            if (index === 6) { 
+                plainText = plainText.replace(/,/g, '');
+            }
+            if (index >= 7) { 
+                plainText = plainText.replace(/(\S+)\s+(\S+)$/g, '$1 ($2)'); 
+            }
+            row.push(plainText);
+        });
+        csv.push(row.join(","));
+    });
 
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
+    var filename = "RFP_asof_" + formattedDate + '.csv';
+    downloadCSV(csv.join("\n"), filename);
+}
+
+function downloadCSV(csv, filename) {
+    var csvFile = new Blob([csv], { type: "text/csv" });
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    downloadLink.style.display = "none";
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+}
+   
 </script>
 <script>
 	$(document).ready(function(){

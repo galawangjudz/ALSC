@@ -212,51 +212,65 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 <script>
-document.getElementById('export-csv-btn').addEventListener('click', function() {
-   console.log('Export clicked');
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("export-csv-btn").addEventListener("click", function() {
+        exportAllTableDataToCSV();
+    });
+});
+function exportAllTableDataToCSV() {
+    var csv = [];
     var currentDate = new Date();
     var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
-    
-    var table = document.querySelector('#data-table');
-    var visibleRows = table.querySelectorAll('tbody tr:not([style*="display: none"])');
 
-    var headerRow = table.querySelector('thead tr');
-    var headerCols = headerRow.querySelectorAll('th');
-    var headerData = [];
-    var excludeColumns = ['Action']; 
+    csv.push("Bank Checks Status as of " + formattedDate + "\n\n");
+    var headers = [];
+	$('.table th').each(function(index) {
+		if (index < $('.table th').length && index !== 8) { 
+			headers.push($(this).text());
+		}
+	});
 
-    headerCols.forEach(function(col) {
-        if (col && col.style && col.style.display !== 'none' && !excludeColumns.includes(col.innerText)) {
-            headerData.push(col.innerText);
-        }
-    });
+    csv.push(headers.join(","));
 
-    var csvContent = "Bank Checks Status as of " + formattedDate + "\n\n";
-    csvContent += headerData.join(',') + "\n";
+    var table = $('.table').DataTable();
+    var data = table.rows().data();
 
-    visibleRows.forEach(function(row) {
-        var dataCols = row.querySelectorAll('td');
-        var dataRow = [];
-        dataCols.forEach(function(col, index) {
-            if (col && col.style && headerCols[index] && headerCols[index].style && headerCols[index].style.display !== 'none' && !excludeColumns.includes(headerCols[index].innerText)) {
-                var cellValue = col.innerText;
-                if (col.cellIndex === 6) { 
-                    cellValue = cellValue.replace(/,/g, '');
-                }
-                dataRow.push(cellValue);
+    data.each(function(rowData) {
+        var row = [];
+        rowData.forEach(function(cellData, index) {
+
+            var plainText = cellData.replace(/<[^>]+>/g, '').replace(/\r?\n|\r/g, '');
+            if (index >= 6 && index < 8) { 
+                plainText = plainText.replace(/,/g, '');
+            }
+
+            if (index !== 8) { 
+                row.push(plainText);
             }
         });
-        csvContent += dataRow.join(',') + "\n";
+        csv.push(row.join(","));
     });
 
-    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    var link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = "Bank_Checks_Status" + '_asof_' + formattedDate + '.csv';
+    var filename = "Bank_Checks_Status" + '_asof_' + formattedDate + '.csv';
+    downloadCSV(csv.join("\n"), filename);
+}
 
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
+
+function downloadCSV(csv, filename) {
+    var csvFile = new Blob([csv], { type: "text/csv" });
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    downloadLink.style.display = "none";
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+}
 </script>
+
+

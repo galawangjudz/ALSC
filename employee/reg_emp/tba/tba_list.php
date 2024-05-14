@@ -62,15 +62,22 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>TBA List</b></i></h3>
-		<div class="card-tools">
-			<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
+		<table style="float:left;width:100%;">
+			<tr>
+				<td style="float:right;">
+					<button id="export-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				</td>
+				<td style="float:right;">
+					<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary btn-sm"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
-			<colgroup>
+			<!-- <colgroup>
 					<col width="5%">
 					<col width="8%">
 					<col width="9%">
@@ -81,19 +88,19 @@ $columnName;
 					<col width="10%">
 					<col width="10%">
 					<col width="18%">
-				</colgroup>
+				</colgroup> -->
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
 						<th>TBA No.</th>
 						<th>Preparer</th>
 						<!-- <th>Name</th> -->
-						<!-- <th>Req. Dept.</th> -->
+						<th>Req. Dept.</th>
 						<!-- <th>Payment Form</th>
 						<th>Bank Name</th> -->
-						<!-- <th>Tran. Date</th> -->
-						<!-- <th>Check Date</th> -->
-						<!-- <th>Amount</th> -->
+						<th>Tran. Date</th>
+						<th>Date Needed</th>
+						<th>Amount</th>
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
@@ -108,14 +115,15 @@ $columnName;
 				<?php 
 					$i = 1;
 					if (($_settings->userdata('type') > 4) || (($_settings->userdata('type') == 3) && ($_settings->userdata('department') == 'Marketing') || ($_settings->userdata('department') == 'Corporate Communications') || ($_settings->userdata('department') == 'General Services') || ($_settings->userdata('department') == 'Const. and Impln.') || ($_settings->userdata('department') == 'Documentation and Loan') || ($_settings->userdata('department') == 'Legal') || ($_settings->userdata('department') == 'IT') || ($_settings->userdata('department') == 'Audit') || ($_settings->userdata('department') == 'Personnel') || ($_settings->userdata('department') == 'Project Admin') || ($_settings->userdata('department') == 'Technical Planning') || ($_settings->userdata('department') == 'Permits and Licenses') || ($_settings->userdata('department') == 'Electrical'))) { 
-						$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
+						$qry = $conn->query("SELECT DISTINCT tbl_tba.amount,tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
 						tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5,tbl_tba.status6 AS U6,tbl_tba.status7 AS U7 FROM tbl_tba WHERE req_dept = '" . $_settings->userdata('department') . "' ORDER BY tbl_tba.transaction_date DESC");
 					} else if ( (($_settings->userdata('type') == 3) && ($_settings->userdata('department') == 'Executive'))) { 
-						$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
+						$qry = $conn->query("SELECT DISTINCT tbl_tba.amount,tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
 						tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5,tbl_tba.status6 AS U6,tbl_tba.status7 AS U7 FROM tbl_tba WHERE req_dept = 'General Services' || req_dept = 'Personnel' || req_dept = 'Executive' ORDER BY tbl_tba.transaction_date DESC");
 					} else if($_settings->userdata('user_code') == 10009) {
 						$qry = $conn->query("SELECT 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -150,6 +158,7 @@ $columnName;
 						)
 					GROUP BY 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -161,6 +170,7 @@ $columnName;
 					}else if($_settings->userdata('user_code') == 10070) {
 						$qry = $conn->query("SELECT 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -195,6 +205,7 @@ $columnName;
 						)
 					GROUP BY 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -209,6 +220,7 @@ $columnName;
 					}else {
 						$qry = $conn->query("SELECT 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -243,6 +255,7 @@ $columnName;
 						)
 					GROUP BY 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -281,12 +294,12 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 							</td>
 							<!-- <td><?php echo $row['name'] ?></td> -->
-							<!-- <td><?php echo $row['req_dept']; ?></td> -->
+							<td><?php echo $row['req_dept']; ?></td>
 							<!-- <td>
 								<?php if ($row['payment_form'] == 0): ?>
 									Check
@@ -295,8 +308,9 @@ $columnName;
 								<?php endif; ?>
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td> -->
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['date_needed'])) ?></td> -->
+							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
+							<td><?php echo date("Y-m-d",strtotime($row['date_needed'])) ?></td>
+							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -307,7 +321,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -355,7 +369,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -451,7 +465,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -500,7 +514,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -550,7 +564,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -601,7 +615,7 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -720,6 +734,68 @@ $columnName;
 		</div>
 	</div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("export-btn").addEventListener("click", function() {
+        exportAllTableDataToCSV();
+    });
+});
+
+function exportAllTableDataToCSV() {
+    var csv = [];
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
+    csv.push("TBA List as of " + formattedDate + "\n\n");
+
+    var headers = [];
+    $('.table th').each(function(index) {
+        if (index < $('.table th').length - 1) { 
+            headers.push($(this).text());
+        }
+    });
+    csv.push(headers.join(","));
+
+    var table = $('.table').DataTable();
+    var data = table.rows().data();
+
+    data.each(function(rowData) {
+        var row = [];
+        rowData.forEach(function(cellData, index) {
+
+            var plainText = cellData.replace(/<[^>]+>/g, '').replace(/\r?\n|\r/g, '');
+            if (index === 6) { 
+                plainText = plainText.replace(/,/g, '');
+            }
+            if (index >= 7) { 
+                plainText = plainText.replace(/(\S+)\s+(\S+)$/g, '$1 ($2)'); 
+            }
+            row.push(plainText);
+        });
+        csv.push(row.join(","));
+    });
+
+    var filename = "TBA_asof_" + formattedDate + '.csv';
+    downloadCSV(csv.join("\n"), filename);
+}
+
+function downloadCSV(csv, filename) {
+    var csvFile = new Blob([csv], { type: "text/csv" });
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    downloadLink.style.display = "none";
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+}
+</script>
 <script>
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

@@ -62,58 +62,37 @@ $columnName;
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>TBA List</b></i></h3>
-		<!-- <div class="card-tools">
-			<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div> -->
+		<div class="card-tools">
+		<button id="export-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+		</div>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
-			<colgroup>
-					<col width="5%">
-					<col width="8%">
-					<col width="9%">
-					<col width="10%">
-					<col width="10%">
-					<col width="10%">
-					<col width="10%">
-					<col width="10%">
-					<col width="10%">
-					<col width="18%">
-				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
 						<th>TBA No.</th>
 						<th>Preparer</th>
-						<!-- <th>Name</th> -->
-						<!-- <th>Req. Dept.</th> -->
-						<!-- <th>Payment Form</th>
-						<th>Bank Name</th> -->
-						<!-- <th>Tran. Date</th> -->
-						<!-- <th>Check Date</th> -->
-						<!-- <th>Amount</th> -->
+						<th>Req. Dept.</th>
+						<th>Tran. Date</th>
+						<th>Date Needed</th>
+						<th>Amount</th>
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
 						<th>Approver 4</th>
 						<th>Approver 5</th>
 						<th>Approver 6</th>
-						<!-- <th>Approver 7</th> -->
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php 
 					$i = 1;
-					//echo $_settings->userdata('division');
-					// if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-					// 	$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
-					// 	tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5 FROM tbl_tba WHERE req_dept = '" . $_settings->userdata('department') . "' OR req_dept = 'Purchasing' OR req_dept = 'Accounting' OR req_dept = 'CALS' OR req_dept = 'Billing' OR req_dept = 'Audit';");
-					// } else {
 						if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-							$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
+							$qry = $conn->query("SELECT DISTINCT tbl_tba.amount,tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
 						tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5,tbl_tba.status6 AS U6,tbl_tba.status7 AS U7 FROM tbl_tba ORDER BY tbl_tba.transaction_date DESC");
 					} 
 					while($row = $qry->fetch_assoc()):
@@ -124,7 +103,6 @@ $columnName;
 							if ($row[$columnName] == $_settings->userdata('user_code')) {
 								$columnNumber = preg_replace('/[^0-9]/', '', $columnName);
 								$statusColumnName = 'status' . $columnNumber;
-								//echo $statusColumnName;
 							}
 						}
 						
@@ -145,22 +123,14 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 							</td>
-							<!-- <td><?php echo $row['name'] ?></td> -->
-							<!-- <td><?php echo $row['req_dept']; ?></td> -->
-							<!-- <td>
-								<?php if ($row['payment_form'] == 0): ?>
-									Check
-								<?php else: ?>
-									Cash
-								<?php endif; ?>
-							</td> -->
-							<!-- <td><?php echo $row['bank_name']; ?></td> -->
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td> -->
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['date_needed'])) ?></td> -->
+							<td><?php echo $row['req_dept']; ?></td>
+							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
+							<td><?php echo date("Y-m-d",strtotime($row['date_needed'])) ?></td>
+							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -171,7 +141,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -219,7 +189,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -315,7 +285,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -364,7 +334,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -414,7 +384,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -454,57 +424,6 @@ $columnName;
 									}
 								?>
 							</td>
-							
-							<!-- <td class="">
-								<?php 
-									$app7_qry = "SELECT * FROM users WHERE user_code = '" . $row['U7'] . "'";
-									$app7_result = $conn->query($app7_qry);
-
-									if($app7_result->num_rows > 0){
-										$app7_row = $app7_result->fetch_assoc();
-										$lname = $app7_row['lastname'];
-										$fname = $app7_row['firstname'];
-										$pos7 = $app7_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
-									} else {
-										echo '';
-									}
-								?>
-								
-								<?php 
-									$app7_qry = "SELECT a.status7 AS a7, b.status7 AS b7 
-												FROM tbl_tba a 
-												RIGHT JOIN tbl_tba_approvals b ON a.tba_no = b.tba_no 
-												WHERE a.tba_no = '" . $publicTbaNo . "'";
-									$app7_result = $conn->query($app7_qry);
-
-									if($app7_result->num_rows > 0){
-										$app7_row = $app7_result->fetch_assoc();
-										$statsa7 = $app7_row['a7'];
-										$statsb7 = $app7_row['b7'];
-										
-										
-										if ($statsa7 == null && $statsb7 == 0) {
-											
-											echo '<span>-</span>';
-										} else {
-											switch($statsb7){
-												case 2:
-													echo '<span class="badge badge-danger bg-gradient-danger px-3 rounded-pill">Disapproved</span>';
-													break;
-												case 1:
-													echo '<span class="badge badge-primary bg-gradient-primary px-3 rounded-pill">Approved</span>';
-													break;
-												default:
-													echo '<span class="badge badge-default border px-3 rounded-pill">Pending</span>';
-													break;
-											}
-										}
-									} else {
-										echo '';
-									}
-								?>
-							</td> -->
 							<td align="center">
 								<?php 
 									$qry_approved = $conn->query("SELECT type FROM users WHERE user_code = '" . $_settings->userdata('user_code') . "'"); 
@@ -542,7 +461,7 @@ $columnName;
 														<i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
 													</span>
 												</button>
-											<?php endwhile; ?>
+										<?php endwhile; ?>
 										<?php endif; ?>
 									<?php endwhile; ?>	
 										<button type="button" style="border:none;background-color:transparent;" class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
@@ -561,12 +480,74 @@ $columnName;
 							</td>
 						</tr>
 					<?php endwhile; ?>
-					</tbody>
+				</tbody>
 			</table>
 		</div>
 		</div>
 	</div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("export-btn").addEventListener("click", function() {
+        exportAllTableDataToCSV();
+    });
+});
+
+function exportAllTableDataToCSV() {
+    var csv = [];
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
+    csv.push("TBA List as of " + formattedDate + "\n\n");
+
+    var headers = [];
+    $('.table th').each(function(index) {
+        if (index < $('.table th').length - 1) { 
+            headers.push($(this).text());
+        }
+    });
+    csv.push(headers.join(","));
+
+    var table = $('.table').DataTable();
+    var data = table.rows().data();
+
+    data.each(function(rowData) {
+        var row = [];
+        rowData.forEach(function(cellData, index) {
+
+            var plainText = cellData.replace(/<[^>]+>/g, '').replace(/\r?\n|\r/g, '');
+            if (index === 6) { 
+                plainText = plainText.replace(/,/g, '');
+            }
+            if (index >= 7) { 
+                plainText = plainText.replace(/(\S+)\s+(\S+)$/g, '$1 ($2)'); 
+            }
+            row.push(plainText);
+        });
+        csv.push(row.join(","));
+    });
+
+    var filename = "TBA_asof_" + formattedDate + '.csv';
+    downloadCSV(csv.join("\n"), filename);
+}
+
+function downloadCSV(csv, filename) {
+    var csvFile = new Blob([csv], { type: "text/csv" });
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    downloadLink.style.display = "none";
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+}
+</script>
 <script>
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

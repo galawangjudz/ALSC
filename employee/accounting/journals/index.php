@@ -255,7 +255,7 @@ function format_num($number){
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-                        <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
+                        <td class=""><?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?> <?= $row['c_last_name'] ?></td>
 						<td class="text-center">
 						<?php 
 							switch($row['stats']){
@@ -339,7 +339,7 @@ function format_num($number){
 					<tr>
                         <td class=""><?= $row['v_num'] ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
-                        <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
+                        <td class=""><?= $row['firstname'] ?> <?= $row['lastname'] ?></td>
 						<td class="text-center">
 						<?php 
 							switch($row['stats']){
@@ -425,7 +425,7 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['journal_date'])) ?></td>
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
-                        <td class=""><?= $row['last_name'] ?>, <?= $row['first_name'] ?></td>
+                        <td class=""><?= $row['first_name'] ?> <?= $row['last_name'] ?></td>
 						<td class="text-center">
 						<?php 
 							switch($row['stats']){
