@@ -391,7 +391,7 @@ $(document).ready(function() {
 								</td>
 									<td class="align-middle p-1 text-right"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
 								</td>
-									<input type="text" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
+									<input type="hidden" class="text-center w-100 border-0 item-vat" name="vat_included[]" readonly>
 								<td class="align-middle p-0 text-center">
 									<input type="checkbox" class="item-checkbox" data-rowid="<?php echo $row['id'] ?>">
 									<input type="hidden" name="item_status[]" id="item_status_<?php echo $row['id'] ?>" value="<?php echo $row['item_status'] ?>">
