@@ -636,7 +636,7 @@ $columnName;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("export-csv-btn").addEventListener("click", function() {
+    document.getElementById("export-btn").addEventListener("click", function() {
         exportAllTableDataToCSV();
     });
 });
