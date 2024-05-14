@@ -73,22 +73,28 @@
 
   </head>
 
+
 <body class="hold-transition login-page">
   <script>
     start_loader()
   </script>
+
   <h1 class="text-center"><?= $_settings->info('name') ?></h1>
+
 <div class="login-box">
   <!-- /.login-logo -->
+  
   <div class="card card-outline rounded-0 card-blue rounded-0">
+
     <!-- <div class="card-header text-center">
       <a href="./" class="h1"><b>Login</b></a>
     </div> -->
+
     <div class="card-body">
     <div class="image-container">
       <img src="<?php echo base_url . 'images/logo.jpg'; ?>" alt="PDF Icon" width="150" height="120">
   </div>
-
+<hr>
       <p class="login-box-msg">Sign in to start your session</p>
 
       <form id="login-frm" action="" method="post">
