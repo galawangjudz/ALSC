@@ -103,9 +103,9 @@ if (empty($_GET['id'])) {
         </div>
         
         <div class="card-body">
-            <label class="control-label" style="float:left;">Add Attachment:</label>
+            <label class="control-label" style="float:left;">Add Attachment:</label><br><br>
             <div id="picform-container">
-                <form action="" method="post" enctype="multipart/form-data" id="picform">
+                <form action="" method="post" enctype="multipart/form-data" id="picform" style="display:none;">
                     <table class="table table-bordered">
                         <input type="hidden" class="control-label" name="rfp_no" id="rfp_no" value="<?php echo $concatenatedValue; ?>" readonly>
                         <input type="hidden" class="control-label" name="num" id="num" value="<?php echo $attachment_count; ?>" readonly>
@@ -756,7 +756,7 @@ if (empty($_GET['id'])) {
                                 <button class="btn btn-flat btn-default bg-maroon" style="width:100%;margin-right:5px;font-size:14px;" id="save_rfp"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
                             </td>
                             <td>
-                                <a href="?page=journals/"  class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+                                <a href="?page=rfp/rfp_list"  class="btn btn-flat btn-default" id="cancel" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
                             </td>
                         </tr>
                     </table>
@@ -872,6 +872,14 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+<script>
+    $(document).ready(function() {
+        $('#name').change(function() {
+            var selectedOption = $(this).val();
+            $('#check_name').val(selectedOption);
+        });
+    });
+</script>
  <script>
     $(document).ready(function() {
         $('#data-table').DataTable({
@@ -1122,18 +1130,12 @@ $(function(){
     $('#rfp-form').submit(function(e){
         e.preventDefault();
         var _this = $(this);
-        var p_Id = document.getElementById('mainId').value;
         $('.pop-msg').remove();
         var el = $('<div>');
         el.addClass("pop-msg alert");
         el.hide();
         
-        if (p_Id === null || p_Id.trim() === "") {
-            if ($('#image').val() === "") {
-                alert_toast("Attached file is required.", 'warning');
-                return false;
-            }
-        }
+       
         
 
         start_loader();

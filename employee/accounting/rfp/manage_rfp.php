@@ -292,6 +292,7 @@ if (empty($_GET['id'])) {
                             <input type="text" name="check_name" id="check_name" class="form-control rounded-0" value="<?php echo isset($check_name) ? $check_name : ""; ?>" required>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="check_date" class="control-label">Check Date:</label>
@@ -546,6 +547,14 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+<script>
+    $(document).ready(function() {
+        $('#name').change(function() {
+            var selectedOption = $(this).val();
+            $('#check_name').val(selectedOption);
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('#data-table').DataTable({

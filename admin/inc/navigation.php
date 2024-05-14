@@ -42,14 +42,14 @@ $department = $_settings->userdata('department');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
                       </a>
                     </li> 
                     <div class="accordion" id="salesAccordion" style="margin-bottom:5px;">
-                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSales" aria-expanded="true" aria-controls="collapseSales" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
+                      <button class="btn btn-link" type="button" data-target="#collapseSales" aria-expanded="true" aria-controls="collapseSales" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">
                           <b><i><li class="nav-header" style="margin-left:-10px">Sales</li></i></b>
                       </button>
                       <div id="collapseSales" aria-labelledby="salesHeading" data-parent="#salesAccordion">
@@ -269,8 +269,6 @@ $department = $_settings->userdata('department');
                         </div>
                       </div>
                   </div>
-
-                  
                 
                   <div class="accordion" id="reportAccordion" style="margin-bottom:5px;">
                       <button class="btn btn-link" type="button" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport" style="background-color:gainsboro;width:270px;height:30px;padding-top:0; display: inline-block;text-align:left;">

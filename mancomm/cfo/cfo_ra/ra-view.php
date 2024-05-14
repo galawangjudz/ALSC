@@ -338,7 +338,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                     </td>
                                    
                                     <td>
-                                        <a href="<?php echo base_url ?>admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-flat btn-sm btn-primary" style="width:100%;font-size:14px;"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;E-mail</a>
+                                        <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-flat btn-sm btn-primary" style="width:100%;font-size:14px;"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;E-mail</a>
                                     </td>
                                 </tr>
                             </table>

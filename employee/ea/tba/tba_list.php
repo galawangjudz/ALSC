@@ -27,47 +27,87 @@ $columnName;
 	body{
         font-size:12px!important;
     }
+	.view_data:hover span.badge {
+        background-color: #007bff!important;
+        color: white!important;
+        border-color: #007bff!important;
+    }
+	.print_data:hover span.badge {
+        background-color: black!important;
+        color: white!important;
+        border-color: black!important;
+    }
+    .disapproved_data:hover span.badge {
+        background-color: #ff0000!important;
+        color: white!important;
+        border-color: #ff0000!important;
+    }
+    .approved_data:hover span.badge {
+        background-color:#28a745!important;
+        color: white!important;
+        border-color: #28a745!important;
+    }
+	.edit_data:hover span.badge {
+        background-color:#6c757d!important;
+        color: white!important;
+        border-color: #6c757d!important;
+    }
+	button{
+		border: 1px solid #000; 
+		background-color: #f0f0f0; 
+		cursor: pointer;
+		width: auto;
+	}
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>TBA List</b></i></h3>
-		<div class="card-tools">
-			<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
+		<table style="float:left;width:100%;">
+			<tr>
+				<td style="float:right;">
+					<button id="export-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				</td>
+				<td style="float:right;">
+					<a href="?page=tba/manage_tba" class="btn btn-flat btn-primary btn-sm"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
-				<colgroup>
+			<!-- <colgroup>
 					<col width="5%">
-					<col width="5%">
+					<col width="8%">
+					<col width="9%">
 					<col width="10%">
-					<col width="8%">
-					<col width="5%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-				</colgroup>
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="18%">
+				</colgroup> -->
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
 						<th>TBA No.</th>
 						<th>Preparer</th>
+						<!-- <th>Name</th> -->
 						<th>Req. Dept.</th>
+						<!-- <th>Payment Form</th>
+						<th>Bank Name</th> -->
 						<th>Tran. Date</th>
+						<th>Date Needed</th>
+						<th>Amount</th>
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
 						<th>Approver 4</th>
 						<th>Approver 5</th>
 						<th>Approver 6</th>
-						<th>Approver 7</th>
+						<!-- <th>Approver 7</th> -->
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -75,14 +115,15 @@ $columnName;
 				<?php 
 					$i = 1;
 					if ($_settings->userdata('position') == 'EXECUTIVE ASSISTANT TO THE COO') {
-						$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
+						$qry = $conn->query("SELECT DISTINCT tbl_tba.amount,tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
 						tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5,tbl_tba.status6 AS U6,tbl_tba.status7 AS U7 FROM tbl_tba WHERE req_dept = 'Const. and Impln.' or req_dept = 'Marketing' or req_dept = 'Project Admin' or req_dept = 'Contracts and Doc.' or req_dept = 'Design and Devt.' or req_dept = 'Technical Planning' or req_dept = 'Electrical' or req_dept = 'Permits and Licenses' or req_dept = 'Engineering' ORDER BY tbl_tba.transaction_date DESC");
 					}else if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-						$qry = $conn->query("SELECT DISTINCT tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
+						$qry = $conn->query("SELECT DISTINCT tbl_tba.amount,tbl_tba.id, tbl_tba.tba_no, tbl_tba.preparer,tbl_tba.acc_person,tbl_tba.req_dept,tbl_tba.date_needed,tbl_tba.transaction_date,tbl_tba.payment_form, 
 						tbl_tba.status1 AS U1,tbl_tba.status2 AS U2, tbl_tba.status3 AS U3, tbl_tba.status4 AS U4, tbl_tba.status5 AS U5,tbl_tba.status6 AS U6,tbl_tba.status7 AS U7 FROM tbl_tba ORDER BY tbl_tba.transaction_date DESC");
 					} else {
 						$qry = $conn->query("SELECT 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -117,6 +158,7 @@ $columnName;
 						)
 					GROUP BY 
 						tbl_tba.id, 
+						tbl_tba.amount,
 						tbl_tba.tba_no, 
 						tbl_tba.preparer,
 						tbl_tba.acc_person,
@@ -157,7 +199,7 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 							</td>
@@ -172,7 +214,8 @@ $columnName;
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
 							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['date_needed'])) ?></td> -->
+							<td><?php echo date("Y-m-d",strtotime($row['date_needed'])) ?></td>
+							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -183,7 +226,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -231,7 +274,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -327,7 +370,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -376,7 +419,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -426,7 +469,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -467,7 +510,7 @@ $columnName;
 								?>
 							</td>
 							
-							<td class="">
+							<!-- <td class="">
 								<?php 
 									$app7_qry = "SELECT * FROM users WHERE user_code = '" . $row['U7'] . "'";
 									$app7_result = $conn->query($app7_qry);
@@ -477,7 +520,7 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
-										echo '<b>' . $fname . ' ' . $lname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -516,7 +559,7 @@ $columnName;
 										echo '';
 									}
 								?>
-							</td>
+							</td> -->
 							<td align="center">
 								<?php 
 									$qry_approved = $conn->query("SELECT type,user_code FROM users WHERE user_code = '" . $_settings->userdata('user_code') . "'"); 
@@ -545,12 +588,16 @@ $columnName;
 
 											while ($row_filtered = $qry_filtered->fetch_assoc()):
 											?>
-												<a class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-													<span class="fa fa-thumbs-up text-success"></span>
-												</a>
-												<a class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-													<span class="fa fa-thumbs-down text-danger"></span>
-												</a>
+												<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">	
+													<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Approved">
+														<i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+													</span>
+												</button>
+												<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">
+													<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Disapproved">
+														<i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+													</span>
+												</button>
 											<?php endwhile; ?>
 
 										<?php endif; ?>
@@ -566,21 +613,27 @@ $columnName;
 
 												if ($qry_filtered->num_rows > 0) { 
 											?>
-													<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
-														<span class="fa fa-edit text-primary"></span>
+													<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+														<span class="badge rounded-circle p-2" style="color:#6c757d; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Edit">
+															<i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+														</span>
 													</a>
 											<?php 
 												}
 											//} 
 											?>
 									<?php endwhile; ?>	
-										<a class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
-											<span class="fa fa-eye text-dark"></span>
-										</a>
+									<button type="button" style="border:none;background-color:transparent;" class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+											<span class="badge rounded-circle p-2" style="margin:-5px;color:#1184ff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+											</span>
+										</button>
 										<button type="button" style="border:none;background-color:transparent;" class="print_data" data-id="<?php echo $tblId ?>" 
 												onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_tba.php?id=<?php echo $tblId ?>', '_blank')"
 												data-toggle="tooltip" data-placement="top" title="Print"> 
-											<span class="fas fa-print"></span>
+												<span class="badge rounded-circle p-2" style="margin:-5px;background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+													<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+												</span>
 										</button>
 									</div>
 
@@ -593,6 +646,68 @@ $columnName;
 		</div>
 	</div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("export-btn").addEventListener("click", function() {
+        exportAllTableDataToCSV();
+    });
+});
+
+function exportAllTableDataToCSV() {
+    var csv = [];
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
+    csv.push("TBA List as of " + formattedDate + "\n\n");
+
+    var headers = [];
+    $('.table th').each(function(index) {
+        if (index < $('.table th').length - 1) { 
+            headers.push($(this).text());
+        }
+    });
+    csv.push(headers.join(","));
+
+    var table = $('.table').DataTable();
+    var data = table.rows().data();
+
+    data.each(function(rowData) {
+        var row = [];
+        rowData.forEach(function(cellData, index) {
+
+            var plainText = cellData.replace(/<[^>]+>/g, '').replace(/\r?\n|\r/g, '');
+            if (index === 6) { 
+                plainText = plainText.replace(/,/g, '');
+            }
+            if (index >= 7) { 
+                plainText = plainText.replace(/(\S+)\s+(\S+)$/g, '$1 ($2)'); 
+            }
+            row.push(plainText);
+        });
+        csv.push(row.join(","));
+    });
+
+    var filename = "TBA_asof_" + formattedDate + '.csv';
+    downloadCSV(csv.join("\n"), filename);
+}
+
+function downloadCSV(csv, filename) {
+    var csvFile = new Blob([csv], { type: "text/csv" });
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    downloadLink.style.display = "none";
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+}
+</script>
 <script>
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

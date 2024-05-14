@@ -72,7 +72,7 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-								<a class="dropdown-item" href="<?php echo base_url ?>admin/?page=agents/dd&id=<?php echo $row['c_code'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+								<a class="dropdown-item" href="http://localhost/ALSC/admin/?page=agents/dd&id=<?php echo $row['c_code'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete-agent" data-agent-id="<?php echo $row['c_code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                 </div>

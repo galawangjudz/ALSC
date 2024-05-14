@@ -38,7 +38,7 @@ $level = $_settings->userdata('type');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
@@ -56,7 +56,7 @@ $level = $_settings->userdata('type');
                     </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/finance_manager/?page=fm_ra" class="nav-link nav-cfo_ra">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-thumbs-up"></i>
                         <p>
                            Approved
                         </p>
@@ -64,7 +64,7 @@ $level = $_settings->userdata('type');
                     </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/finance_manager/?page=fm_revision" class="nav-link nav-cfo_revision">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-redo"></i>
                         <p>
                            For Revision
                         </p>

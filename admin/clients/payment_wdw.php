@@ -12,7 +12,6 @@ if($_settings->chk_flashdata('success')): ?>
 
 if(isset($_GET['id'])){
     include('payment_reload.php');
-    
 }
 
 ?>

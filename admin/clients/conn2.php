@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli(DB_SERVER,DB_USERNAME,'',DB_NAME);
+$conn = new mysqli('localhost','root','','alscdb');
 if ($conn->connect_error) {
     die('Error : ('. $conn->connect_errno .') '. $conn->connect_error);
 }

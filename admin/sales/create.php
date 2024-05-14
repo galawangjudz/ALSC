@@ -1388,13 +1388,12 @@ input{
 						</div>
 					</div>		
 				</div>	 
-			</div>
-			<div id="Payment" class="tabcontent" style="width:1183.5px;margin-left:7px;">
+			<div id="Payment" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<div class="titles"><center>Payment Computation</center></div>
+								<div class="titles">Payment Computation</div>
 							</div>
 							<div class="panel-body form-group form-group-sm">
 								<div class="main_box">
@@ -1496,7 +1495,7 @@ input{
 					</div>
 				</div>
 			</div>
-			<div id="Agents and Commission" class="tabcontent" style="width:1183.5px;margin-left:7px;">
+			<div id="Agents and Commission" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
@@ -1629,6 +1628,7 @@ input{
 						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</form>
 	</div>	<!-- /.card-body -->

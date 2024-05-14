@@ -21,29 +21,11 @@ if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 }
 // if(!isset($_SESSION['userdata']) || $usertype !== 'IT Admin') {
    
-
 //     unset($_SESSION['userdata']);
 // 	session_destroy(); // destroy session
 // 	//create later page for access denied!!!!
 // 	redirect('auth/access_denied.php');
 
-
 // }
-
-if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'IT Admin'){
-	redirect('admin/index.php');
-	unset($_SESSION['userdata']);
-	session_destroy(); 
-	redirect('auth/access_denied.php');
-} 
-
-if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == 'Agent'){
-	redirect('agent_user/index.php');
-} 
-
-
-if(isset($_SESSION['userdata']) && strpos($link, 'login.php') && $_SESSION['userdata']['user_type'] == ''){
-	redirect('agent_user/index.php');
-} 
 
 ?>

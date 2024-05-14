@@ -3,15 +3,16 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $link = isset($_GET['link']) ? $_GET['link'] : '';
-$type = $_settings->userdata('type');
 $department = $_settings->userdata('department');
 if(isset($_SESSION['userdata'])){
-    if($_SESSION['userdata']['type'] =='IT Admin'){
+
+    if($_SESSION['userdata']['user_type'] =='IT Admin'){
+
         if(strpos($link, 'login.php') === false){
             redirect('admin/index.php');
         }
     } 
-    if($_SESSION['userdata']['type'] =='Agent'){
+    if($_SESSION['userdata']['position'] =='Agent'){
         if(strpos($link, 'login.php') === false){
             redirect('agent_user/index.php');
         }
@@ -57,7 +58,6 @@ if(isset($_SESSION['userdata'])){
         }
     }  
     if($_SESSION['userdata']['position'] =='PURCHASING OFFICER'){
-
         if(strpos($link, 'login.php') === false){
             redirect('employee/po_m/index.php');
         }
@@ -83,12 +83,6 @@ if(isset($_SESSION['userdata'])){
         }
     }
 
-    // if($_SESSION['userdata']['type'] =='5'){
-    //     if(strpos($link, 'login.php') === false){
-    //         redirect('employee/reg_emp/index.php');
-    //     }
-    // }  
 }
-
 ?>
 

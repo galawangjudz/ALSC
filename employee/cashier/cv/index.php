@@ -1,4 +1,4 @@
-<?php
+<u?php
 function format_num($number){
 	$decimals = 0;
 	$num_ex = explode('.',$number);
@@ -90,6 +90,16 @@ function format_num($number){
 	body{
 		font-size:14px;
 	}
+	.check_data:hover span.badge {
+		background-color:#28a745!important;
+        color: white!important;
+		border-color:#28a745!important;
+    }
+	.print_data:hover span.badge {
+		background-color:black!important;
+        color: white!important;
+		border-color:black!important;
+    }
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -224,20 +234,25 @@ function format_num($number){
 									<span class="fa fa-thumbs-down text-danger"></span>
 								</button>
 							<?php endif; ?>
-							
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="fa fa-money-check text-success"></span> Check Details
-								</a>
-							
+
+
+							<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+								<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+									<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
+								</span>
+							</button>
 							
 							<?php 
 							$qry_get_check = $conn->query("SELECT * FROM check_details
 															WHERE c_num = '" . $row['c_num'] . "' 
 															AND check_num IS NOT NULL");
 							if ($qry_get_check->num_rows > 0): ?>
-							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
-								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
-							</a>        
+							<a class="print_data" href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" style="border:none;background-color:transparent;margin:-5px;">
+								<span class="badge rounded-circle p-2" style="color:black; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+									<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>     
+							
 							<?php endif; ?>
 
 							<?php 
@@ -289,7 +304,7 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
-                        <td class=""><?= $row['c_last_name'] ?>, <?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?></td>
+                        <td class=""><?= $row['c_first_name'] ?> <?= $row['c_middle_initial'] ?> <?= $row['c_last_name'] ?></td>
 
 						<!-- <td class="text-center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -359,20 +374,22 @@ function format_num($number){
 									<span class="fa fa-thumbs-down text-danger"></span>
 								</button>
 							<?php endif; ?>
-							
-							
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="fa fa-money-check text-success"></span> Check Details
-								</a>
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+										<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
+									</span>
+							</button>
 							
 							<?php 
 							$qry_get_check = $conn->query("SELECT * FROM check_details
 															WHERE c_num = '" . $row['c_num'] . "' 
 															AND check_num IS NOT NULL");
 							if ($qry_get_check->num_rows > 0): ?>
-							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
-								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
-							</a>        
+							<a class="print_data" href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" style="border:none;background-color:transparent;margin:-5px;">
+								<span class="badge rounded-circle p-2" style="color:black; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+									<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>      
 							<?php endif; ?>
 
 							<?php 
@@ -425,7 +442,7 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
-                        <td class=""><?= $row['lastname'] ?>, <?= $row['firstname'] ?></td>
+                        <td class=""><?= $row['firstname'] ?> <?= $row['lastname'] ?></td>
 
 						<!-- <td class="text-center">
 							<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -497,18 +514,22 @@ function format_num($number){
 							<?php endif; ?>
 							
 						
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="fa fa-money-check text-success"></span> Check Details
-								</a>
+							<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+										<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
+									</span>
+							</button>
 						
 							<?php 
 							$qry_get_check = $conn->query("SELECT * FROM check_details
 															WHERE c_num = '" . $row['c_num'] . "' 
 															AND check_num IS NOT NULL");
 							if ($qry_get_check->num_rows > 0): ?>
-							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
-								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
-							</a>        
+							<a class="print_data" href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" style="border:none;background-color:transparent;margin:-5px;">
+								<span class="badge rounded-circle p-2" style="color:black; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+									<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>       
 							<?php endif; ?>
 
 							<?php 
@@ -561,7 +582,7 @@ function format_num($number){
 						<td class="text-center"><?= date("M d, Y", strtotime($row['cv_date'])) ?></td>
 						<!-- <td class=""><?= $row['po_no'] ?></td> -->
 						
-                        <td class=""><?= $row['last_name'] ?>, <?= $row['first_name'] ?></td>
+                        <td class=""><?= $row['first_name'] ?> <?= $row['last_name'] ?></td>
 
 						
 						<!-- <td class="text-center">
@@ -634,18 +655,22 @@ function format_num($number){
 							<?php endif; ?>
 							
 						
-								<a class="dropdown-item check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="fa fa-money-check text-success"></span> Check Details
-								</a>
+							<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
+									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+										<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
+									</span>
+							</button>
 						
 							<?php 
 							$qry_get_check = $conn->query("SELECT * FROM check_details
 															WHERE c_num = '" . $row['c_num'] . "' 
 															AND check_num IS NOT NULL");
 							if ($qry_get_check->num_rows > 0): ?>
-							<a href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" class="dropdown-item">
-								<span class="fas fa-print"></span>&nbsp;&nbsp;Print
-							</a>        
+							<a class="print_data" href="<?php echo base_url ?>/report/print_check_voucher.php?id=<?php echo $row['c_num'] ?>" target="_blank" style="border:none;background-color:transparent;margin:-5px;">
+								<span class="badge rounded-circle p-2" style="color:black; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+									<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>     
 							<?php endif; ?>
 
 							<?php 
@@ -668,6 +693,9 @@ function format_num($number){
 
 
 <script>
+	$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+		});
 	$('.approved_data').click(function(){
 		_conf("Are you sure you want to approve this voucher setup?","approved_cv",[$(this).attr('data-id')])
 	})

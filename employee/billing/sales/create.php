@@ -1389,7 +1389,7 @@ input{
 					</div>		
 				</div>	 
 			</div>
-			<div id="Payment" class="tabcontent" style="width:1183.5px;margin-left:7px;">
+			<div id="Payment" class="tabcontent">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
