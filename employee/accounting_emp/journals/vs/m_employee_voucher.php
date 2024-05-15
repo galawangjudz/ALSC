@@ -505,7 +505,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                                     value="<?php echo $row['user_id'] ?>" 
                                                     data-emp-code="<?php echo $row['user_code'] ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['user_code'] ? 'selected' : '' ?>
-                                                ><?php echo $row['lastname'] ?>, <?php echo $row['firstname'] ?></option>
+                                                ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </td>

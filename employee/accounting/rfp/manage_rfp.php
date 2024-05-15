@@ -276,7 +276,7 @@ if (empty($_GET['id'])) {
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="amount" class="control-label" style="float:left;">Amount:</label><div class="asterisk"> *</div>
-                            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ""; ?>" required>
+                            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ''; ?>" required>
                         </div>
                         <div class="col-md-6 form-group" style="padding-top:30px;">
                             <div id="amountToWords" class="form-control rounded-0 text-display" style="background-color: gainsboro; overflow: auto;"></div>
@@ -547,6 +547,17 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+ <script>
+    document.getElementById('amount').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/[^\d.]/g, '');
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        e.target.value = value;
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('#name').change(function() {

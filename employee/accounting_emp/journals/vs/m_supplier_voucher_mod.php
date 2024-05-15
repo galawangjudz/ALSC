@@ -337,7 +337,7 @@ function formatNumber(input) {
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($_GET['id']) ? $_GET['id'] :'' ?>">
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
-                    <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
+                    <input type="hidden" id="user_id" name="user_id" value="<?php echo $userid; ?>">
                     <input type="hidden" class="control-label" name="newDocNo" id="newDocNo" value="<?php echo $newDocNo; ?>" readonly>
                     <div class="row">
                         <div class="col-md-12">
