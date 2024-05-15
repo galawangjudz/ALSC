@@ -1172,6 +1172,17 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+ <script>
+    document.getElementById('amount').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/[^\d.]/g, '');
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        e.target.value = value;
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('#name').change(function() {

@@ -11,49 +11,111 @@
 
 ?>
 <style>
-    .bold-text {
-        font-weight: bold;
-    }
-    .nav-gr {
-        background-color: #007bff;
-        color: white !important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    }
-    .nav-gr:hover {
-        background-color: #007bff!important;
-        color: white!important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
-    }
-    #approved-link {
-        font-weight: bold;
-    }
-    #purchase-orders-title {
-        font-style: italic;
-        font-weight: bold;
-    }
-    .main_menu {
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        color: black!important;
-        border-right: solid 3px white;
-    }
-    .main_menu:hover {
-        border-bottom: solid 2px blue;
-        background-color: #E8E8E8;
-    }
-    #container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: transparent;
-    }
+/* gr_list.php */
+#item-list th, #item-list td{
+	padding:5px 3px!important;
+}
+.container-fluid p{
+    margin: unset
+}
+#uni_modal .modal-footer{
+    display: none;
+} 
 
-    .navbar-menu {
-        text-align: center;
-    }
+/* received_item_status.php */
+.bold-text {
+    font-weight: bold;
+}
+.nav-gr {
+    background-color: #007bff;
+    color: white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-gr:hover {
+    background-color: #007bff!important;
+    color: white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
+#approved-link {
+    font-weight: bold;
+}
+#purchase-orders-title {
+    font-style: italic;
+    font-weight: bold;
+}
+.main_menu {
+    float: left;
+    width: 227px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: black!important;
+    border-right: solid 3px white;
+}
+.main_menu:hover {
+    border-bottom: solid 2px blue;
+    background-color: #E8E8E8;
+}
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+.navbar-menu-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.navbar-menu {
+    text-align: center;
+}
+.navbar-menu a {
+    margin: 0;
+}
+
+/* received_items.php */
+.readonly-row {
+    background-color: #f0f0f0;
+}
+.select-readonly {
+    pointer-events: none;
+    background-color: #f0f0f0;
+}
+span.select2-selection.select2-selection--single {
+    border-radius: 0;
+    padding: 0.25rem 0.5rem;
+    padding-top: 0.25rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    height: auto;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+input[type=number] {
+-moz-appearance: textfield;
+}
+[name="tax_percentage"],[name="discount_percentage"]{
+    width:5vw;
+}
+.nav-gr{
+background-color:#007bff;
+color:white!important;
+box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-gr:hover{
+    background-color:#007bff!important;
+    color:white!important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
+.table{
+    font-size:12px!important;
+}
 </style>
-
 <div class="card" id="container">
     <div>
         <a href="javascript:void(0);" onclick="showOpenPOsTable()" class="main_menu" id="open-link" style="border-left:solid 3px white;"><i class="nav-icon fa fa-cart-arrow-down"></i>&nbsp;&nbsp;&nbsp;Open POs</a>

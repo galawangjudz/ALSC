@@ -3899,14 +3899,14 @@ Class Master extends DBConnection {
 			$po_no = isset($_POST['po_no']) ? $_POST['po_no'] : '';
 			$newDocNo = isset($_POST['newDocNo']) ? $_POST['newDocNo'] : '';
 
-			$prep = isset($_POST['user_id']) ? $_POST['user_id'] : '';
+			$preparer = isset($_POST['preparer']) ? $_POST['preparer'] : '';
 		}
 		extract($_POST);
 		$data = "";
 		$gl_data = "";
 		foreach ($_POST as $k => $v) {
 			if (!is_array($_POST[$k])) {
-				if ($k !== 'vs_num' && !in_array($k, array('id','gtype','newDocNo','preparer'))) {
+				if ($k !== 'vs_num' && !in_array($k, array('id','gtype','newDocNo'))) {
 					if (!is_numeric($v) && !is_null($v))
 						$v = $this->conn->real_escape_string($v);
 					if (!empty($data)) $data .= ",";

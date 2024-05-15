@@ -75,7 +75,7 @@ $columnName;
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-        <div class="container-fluid">
+        <div class="container-fluid" style="overflow-x: auto;">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 			<!-- <colgroup>
 					<col width="5%">

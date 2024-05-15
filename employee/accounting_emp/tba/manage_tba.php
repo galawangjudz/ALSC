@@ -670,6 +670,17 @@ populatePayableToSelect();
 
 </script>
 <script>
+    document.getElementById('amount').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/[^\d.]/g, '');
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        e.target.value = value;
+    });
+</script>
+<script>
     function handleAddApprover() {
         var inputValue = document.getElementById('inputValue');
         var addApproverButton = document.getElementById('addApproverButton');
