@@ -330,7 +330,7 @@ function updateAmount(input) {
 
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="container" id="sup-div">
                                 <div class="container-fluid">

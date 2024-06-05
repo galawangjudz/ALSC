@@ -110,11 +110,11 @@ $level = $_settings->userdata('type');
                       </a>
                     </li>  -->
                     <?php if($_settings->userdata('section') != 'Repair and Maintenance' && $_settings->userdata('user_code') != 10023){ ?> 
-                    <div style="background-color:gainsboro;">
+                    <!-- <div style="background-color:gainsboro;">
                       <li class="nav-header">
                         <b><i>Banking and General Ledger</i></b>
                       </li>
-                    </div>
+                    </div>-->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/reg_emp/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
@@ -123,13 +123,13 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/reg_emp/?page=tba/tba_list" class="nav-link nav-tba">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         TBA List
                         </p>
-                      </a>
+                      </a> -->
                     </li> 
                     <?php } ?>
                   </ul>

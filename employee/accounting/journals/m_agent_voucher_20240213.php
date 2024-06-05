@@ -262,7 +262,7 @@ function format_num($number){
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="row" id="agent-div">
                                 <table style="width:100%;">

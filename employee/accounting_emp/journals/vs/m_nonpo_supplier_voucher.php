@@ -252,7 +252,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
                                         <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 form-group">
                                     <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -283,10 +283,28 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Requester:</label>
+                                    <select name="requester" id="requester" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <option value="" disabled <?php echo !isset($requester) ? "selected" : '' ?>></option>
+                                        <?php 
+                                        $users_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                        while ($row = $users_qry->fetch_assoc()):
+                                        ?>
+                                        <option 
+                                            value="<?php echo $row['user_code'] ?>" 
+                                            data-emp-code="<?php echo $row['user_code'] ?>"
+                                            <?php echo isset($requester) && $requester == $row['user_code'] ? 'selected' : '' ?>
+                                        ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                         <div class="col-md-12 form-group">
-                            <label for="rfp_no">Approved RFPs:</label>
+                            <!-- <label for="rfp_no">Approved RFPs:</label>
                             <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
                                 <colgroup>
                                     <col width="10%">
@@ -348,9 +366,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     ?>
                                 </tbody>
                             </table>
-                            <hr>
-                            <label for="rfp_no">Selected RFP #:</label>
-                            <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($rfp_no) ? $rfp_no : "" ?>" readonly> 
+                            <hr class="custom-hr"> -->
+                            <!-- <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Selected RFP #:</label>
+                                    <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                                </div>
+                            </div> -->
+                            
                             <?php
                             $qry = $conn->query("SELECT * FROM tbl_rfp ORDER BY transaction_date DESC;");
                             while ($row = $qry->fetch_assoc()) {
@@ -484,7 +507,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>          
                             <div class="row" id="sup-div">
                             <table style="width:100%;">

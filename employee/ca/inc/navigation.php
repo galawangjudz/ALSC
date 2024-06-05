@@ -105,10 +105,10 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <div style="background-color:gainsboro;">
-                      <li class="nav-header">
+                      <!-- <li class="nav-header">
                         <b><i>Banking and General Ledger</i></b>
                       </li>
-                    </div>
+                    </div>-->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/ca/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
@@ -117,14 +117,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/ca/?page=tba/tba_list" class="nav-link nav-tba">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         TBA List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

@@ -185,7 +185,7 @@ function format_num($number){
 
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="rdo-btn">
                                 <label>

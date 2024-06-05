@@ -113,13 +113,18 @@ table {
   width: 100%;
 }
 #uni_modal_2{
-        width:180%;
-        height:100%;
-        margin:auto;
-		margin-left:-40%;
-		margin-right:auto;
-    } 
-
+  width:180%;
+  height:100%;
+  margin:auto;
+  margin-left:-40%;
+  margin-right:auto;
+} 
+hr.divider {
+  border-top: 5px solid gray;
+}
+.main_trans{
+  font-weight: bold;
+}
 </style>
 <?php $qry = $conn->query("SELECT * FROM property_clients where md5(property_id) = '{$_GET['id']}' ");
 	$row= $qry->fetch_assoc();
@@ -173,7 +178,7 @@ table {
         <li class="tab-link" data-tab="tab-2"><b>Properties</b></li>
         <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
         <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
-       <!--  <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li> -->
+        <li class="tab-link" data-tab="tab-5"><b>Transaction Status</b></li>
         </ul>
 
             <div id="tab-1" class="tab-content current" style="border:solid 1px gainsboro;">
@@ -191,7 +196,7 @@ table {
                   echo " No Family Member Found";
                 }
                 else if($qry2->num_rows > 0){ ?> 
-                <table class="table2 table-bordered table-stripped">
+                <table class="table2 table-bordered table-stripped" id="data-table">
                  
                     <thead style="text-align:center;"> 
                         <tr>
@@ -239,7 +244,7 @@ table {
             </div>
 
             <div id="tab-2" class="tab-content" style="border:solid 1px gainsboro;">
-                <table class="table2 table-bordered table-stripped" style="width:100%;">
+                <table class="table2 table-bordered table-stripped" style="width:100%;" id="data-table">
                     <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");
                     if($qry3->num_rows <= 0){
                         echo "No Details founds";
@@ -346,7 +351,7 @@ table {
 
                                       <br>
                                       <h5 class="card-title"><b><i>Old Account History</b></i></h5>
-                                      <table class="table2 table-bordered table-stripped" style="width:100%;">
+                                      <table class="table2 table-bordered table-stripped" style="width:100%;" id="data-table">
                                         <thead> 
                                       
                                             <tr>
@@ -471,7 +476,7 @@ table {
                   </tr>
                 </table>
               </div>  
-                    <table class="table2 table-bordered table-stripped">
+                    <table class="table2 table-bordered table-stripped" id="data-table">
                       <!-- delete due_date, pay_date order by balik nlng if may error -->
                     <?php $qry4 = $conn->query("SELECT * FROM property_payments where md5(property_id) = '{$_GET['id']}'  ORDER by payment_count ASC");
                      if($qry4->num_rows <= 0){
@@ -556,7 +561,7 @@ table {
               
                 <!-- <div class="col-md-12">
                     <div class="form-group"> -->
-                      <table class="table2 table-bordered table-stripped">
+                      <table class="table2 table-bordered table-stripped" id="data-table">
                           <tr>
                           <?php $qry_prin = "SELECT SUM(principal) AS p_principal FROM property_payments where md5(property_id) = '{$_GET['id']}' ";
 
@@ -617,12 +622,7 @@ table {
                 </div> -->
                 
             </div>   
-
-            </div>
-     
             <div id="tab-4" class="tab-content" style="border:solid 1px gainsboro;">
-              
-          
               <?php
                       
                 include 'payment_schedule_to_fpd.php'; 
@@ -638,7 +638,7 @@ table {
             
               <a href="<?php echo base_url ?>/report/print_payment_schedule.php?id=<?php echo md5($property_id); ?>", target="_blank" class="btn btn-flat btn-secondary pull-right" style="margin-bottom:10px;font-size:13px;"><span class="fas fa-print"></span>&nbsp;&nbsp;Print</a>
            
-              <table class="table2 table-bordered table-stripped">
+              <table class="table2 table-bordered table-stripped" id="data-table">
                   <thead> 
                       <tr>
                           <th class="text-center" style="font-size:13px;">DUE DATE</th>
@@ -655,7 +655,6 @@ table {
                       </tr>
                   </thead>
                 <tbody>
-              
                    <?php 
                     foreach ($over_due as $l_data): ?>
                       <tr>
@@ -700,14 +699,119 @@ table {
                 </div>
             </div>               
             </div>
-           
+            <div id="tab-5" class="tab-content" style="border:solid 1px gainsboro;">
+            <?php
+                  $dept_qry = $conn->query("SELECT DISTINCT dept FROM tbl_transaction ORDER BY dept ASC");
+                  $table_index = 1;
+                  while($dept_row = $dept_qry->fetch_assoc()):
+                      $dept = $dept_row['dept'];
+                  ?>
+                      <h5 style="background-color:#E1F5FE;padding:10px;"><i><?php echo htmlspecialchars($dept); ?></i></h5>
+                      <table id="data-table-<?php echo $table_index; ?>" class="table2 table-bordered table-stripped">
+                          <thead>
+                              <tr>
+                                  <th class="text-center" style="font-size:13px;">TRANS. ID</th>
+                                  <th class="text-center" style="font-size:13px;">NAME</th>
+                                  <th class="text-center" style="font-size:13px;">DEPARTMENT</th>
+                                  <th class="text-center" style="font-size:13px;">TRANSACTION</th>
+                                  <th class="text-center" style="font-size:13px;">DATE & TIME</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <?php 
+                              $tran_qry = $conn->query("SELECT * FROM tbl_transaction WHERE dept = '" . $conn->real_escape_string($dept) . "' ORDER BY date_time DESC");
+                              while($tran_row = $tran_qry->fetch_assoc()): 
+                              ?>
+                              <tr class="tran-list">
+                                  <td class="align-middle p-0 text-center">
+                                      <?php echo htmlspecialchars($tran_row['id']); ?>
+                                  </td>
+                                  <td class="align-middle p-0 text-center">
+                                      <?php
+                                      $tran_creator = $tran_row['tran_creator'];
+                                      $creator = $conn->query("SELECT * FROM users WHERE user_code = '" . $conn->real_escape_string($tran_creator) . "'");
+                                      if($creator->num_rows > 0):
+                                          while($creator_row = $creator->fetch_assoc()): 
+                                      ?>
+                                      <?php echo htmlspecialchars($creator_row['firstname']); ?> <?php echo htmlspecialchars($creator_row['lastname']); ?>
+                                      <?php endwhile; 
+                                      endif;
+                                      ?>
+                                  </td>
+                                  <td class="align-middle p-0 text-center">
+                                      <?php echo htmlspecialchars($tran_row['dept']); ?>
+                                  </td>
+                                  <td class="align-middle p-0 text-center">
+                                      <?php echo htmlspecialchars($tran_row['main_transaction']); ?>
+                                  </td>
+                                  <td class="align-middle p-0 text-center">
+                                      <?php echo htmlspecialchars($tran_row['date_time']); ?>
+                                  </td>
+                              </tr>
+                              <?php endwhile; ?>
+                          </tbody>
+                      </table>
+                      <hr class="divider"><br>
+                  <?php 
+                  $table_index++;
+                  endwhile; 
+                  ?>
+              <hr><br>
+              <div class="trans_cont" style="padding:25px;">
+                <form id="add_trans">
+                    <div class="main_trans">Transaction:</div>
+                    <textarea name="main_transaction" rows="4" cols="50" style="width:100%;"></textarea><br><br><hr>
+                    <label style="font-weight:bold;width:100%;"><?php echo $_settings->userdata('firstname'); ?> <?php echo $_settings->userdata('lastname'); ?> <label style="font-style:italic;">(<?php echo $_settings->userdata('user_code'); ?>)</label> <label style="font-weight:normal;">- <?php echo $_settings->userdata('department'); ?> Department</label>
+                    <input type="hidden" value="<?php echo $_settings->userdata('firstname'); ?> <?php echo $_settings->userdata('lastname'); ?>">
+                    <input type="hidden" name="tran_creator" value="<?php echo $_settings->userdata('user_code'); ?>">
+                    <input type="hidden" name="dept" value="<?php echo $_settings->userdata('department'); ?>">
+                    <input type="hidden" name="date_time" value="<?php echo date('Y-m-d H:i:s'); ?>"><br>
+                    <button type="submit" id="action_add_trans" class="btn btn-flat btn-success float-right" style="font-size:14px;">Post Transaction</button>
+                </form>
+              </div>
+            </div>
          </div>
-        </div>
     </div>
+
+
+
+    
 </div>
 </body>
+<script>
+  $(document).ready(function() {
+    $('.table2').DataTable();
+  });
+</script>
 
 <script>
+  $(document).ready(function() {
+      $('#add_trans').on('submit', function(e) {
+          e.preventDefault();
+
+          start_loader();
+
+          $.ajax({
+              url:_base_url_+"classes/Master.php?f=save_transaction",
+              method: 'POST',
+              data: $(this).serialize(),
+              dataType: 'json',
+              error: function(err) {
+                  console.log(err);
+                  alert_toast("An error occurred.", 'error');
+                  end_loader();
+              },
+              success: function(resp) {
+                  if (typeof resp === 'object' && resp.status === 'success') {
+                      location.reload(); 
+                  } else {
+                      alert_toast("An error occurred.", 'error');
+                      end_loader();
+                  }
+              }
+          });
+      });
+  });
 $(document).ready(function() {
   $('.table').dataTable(
 			{"ordering":false}
@@ -736,12 +840,12 @@ $(document).ready(function() {
 
 	})
 
-
-
-  $('#data-table').dataTable({
-
-  });
-  
+  $(document).ready(function() {
+        $('table[id^="data-table-"]').each(function() {
+            $(this).DataTable();
+        });
+        
+    });
   $('.retention_acc').click(function() {
     var propId = $(this).attr('prop-id');
     var userType = $(this).attr('user-type');

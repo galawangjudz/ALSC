@@ -161,14 +161,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting_emp/?page=tba/tba_list" class="nav-link nav-tba">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         TBA List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting_emp/?page=journals/gl/gl" class="nav-link nav-gl">
                       <i class="nav-icon fas fa-book"></i>
@@ -215,12 +215,12 @@ $level = $_settings->userdata('type');
                       </li>
                     </div>
 
-                      <li class="nav-item">
+                      <!-- <li class="nav-item">
                         <a href="<?php echo base_url ?>employee/accounting_emp/?page=journals/vs/m_agent_voucher" class="nav-link nav-agent">
                           <i class="nav-icon fas fa-id-card"></i>
                           <p>Agents</p>
                         </a>
-                      </li>
+                      </li> -->
                       <li class="nav-item">
                         <a href="<?php echo base_url ?>employee/accounting_emp/?page=journals/vs/m_employee_voucher" class="nav-link nav-emp">
                           <i class="nav-icon fas fa-id-badge"></i>
