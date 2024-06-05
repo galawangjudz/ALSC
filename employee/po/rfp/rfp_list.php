@@ -67,9 +67,9 @@ $columnName;
 				<td style="float:right;">
 				<button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
 				</td>
-				<td style="float:right;">
+				<!-- <td style="float:right;">
 				<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary btn-sm" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-				</td>
+				</td> -->
 			</tr>
 		</table>
 	</div>
@@ -309,7 +309,16 @@ $columnName;
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
 							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
-							<td><?php echo date("Y-m-d",strtotime($row['check_date'])) ?></td>
+							<td>
+								<?php
+								$check_date = strtotime($row['check_date']);
+								if ($check_date && $check_date > 0 && $check_date > time()) {
+									echo date("Y-m-d", $check_date);
+								} else {
+									echo '<span class="badge badge-danger border px-3 rounded-pill">Pending</span>';
+								}
+								?>
+							</td>
 							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 

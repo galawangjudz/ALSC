@@ -399,7 +399,7 @@ tr:hover {
                             LEFT JOIN t_agents ta ON vs.supplier_id = ta.c_code
                             LEFT JOIN users u ON vs.supplier_id = u.user_code
                             JOIN account_list ac ON vi.account_id = ac.code
-                            WHERE ac.name='Accounts Payable Trade' and vs.c_status = 1
+                            WHERE ac.name='Accounts Payable Trade' and vs.c_status = 1 and vs.c_status = 1 and cv_status = 0
                             ORDER BY vs.`date_updated` DESC;
                             ");
                                 while ($row = $qry->fetch_assoc()) {

@@ -100,6 +100,16 @@ function format_num($number){
         color: white!important;
 		border-color:black!important;
     }
+	.approved_data:hover span.badge {
+		background-color:#007bff!important;
+        color: white!important;
+		border-color:#007bff!important;
+    }
+	.disapproved_data:hover span.badge {
+		background-color:#dc3545!important;
+        color: white!important;
+		border-color:#dc3545!important;
+    }
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
@@ -225,19 +235,23 @@ function format_num($number){
 															AND cv.c_status = 0 
 															AND chk.check_num IS NOT NULL");
 							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
-								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Approve">
-									<span class="fa fa-thumbs-up text-success"></span>
+									<span class="badge rounded-circle p-2" style="color:#007bff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Approve">
+										<i class="fa fa-thumbs-up fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
-								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
-									<span class="fa fa-thumbs-down text-danger"></span>
+									<span class="badge rounded-circle p-2" style="color:#dc3545; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Disapprove">
+										<i class="fa fa-thumbs-down fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
 							<?php endif; ?>
 
 
 							<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-								<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+								<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%; margin-right:5px;"  data-toggle="tooltip" data-placement="top" title="Check Details">
 									<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
 								</span>
 							</button>
@@ -365,20 +379,24 @@ function format_num($number){
 															AND cv.c_status = 0 
 															AND chk.check_num IS NOT NULL");
 							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
-								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Approve">
-									<span class="fa fa-thumbs-up text-success"></span>
+									<span class="badge rounded-circle p-2" style="color:#007bff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Approve">
+										<i class="fa fa-thumbs-up fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
-								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
-									<span class="fa fa-thumbs-down text-danger"></span>
+									<span class="badge rounded-circle p-2" style="color:#dc3545; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Disapprove">
+										<i class="fa fa-thumbs-down fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
 							<?php endif; ?>
 								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%; margin-right:5px;"  data-toggle="tooltip" data-placement="top" title="Check Details">
 										<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
 									</span>
-							</button>
+								</button>
 							
 							<?php 
 							$qry_get_check = $conn->query("SELECT * FROM check_details
@@ -503,19 +521,23 @@ function format_num($number){
 															AND cv.c_status = 0 
 															AND chk.check_num IS NOT NULL");
 							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
-								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Approve">
-									<span class="fa fa-thumbs-up text-success"></span>
+									<span class="badge rounded-circle p-2" style="color:#007bff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Approve">
+										<i class="fa fa-thumbs-up fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
-								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
-									<span class="fa fa-thumbs-down text-danger"></span>
+									<span class="badge rounded-circle p-2" style="color:#dc3545; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Disapprove">
+										<i class="fa fa-thumbs-down fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
 							<?php endif; ?>
 							
 						
 							<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%; margin-right:5px;"  data-toggle="tooltip" data-placement="top" title="Check Details">
 										<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
 									</span>
 							</button>
@@ -644,19 +666,23 @@ function format_num($number){
 															AND cv.c_status = 0 
 															AND chk.check_num IS NOT NULL");
 							if ($_settings->userdata('user_code') == '10007' && $qry_get_pending->num_rows > 0): ?>
-								<button type="button" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm approved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Approve">
-									<span class="fa fa-thumbs-up text-success"></span>
+									<span class="badge rounded-circle p-2" style="color:#007bff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Approve">
+										<i class="fa fa-thumbs-up fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
-								<button type="button" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
+								<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="btn btn-flat btn-default btn-sm disapproved_data custom-badge" data-id="<?php echo $row['c_num'] ?>"
 										data-toggle="tooltip" data-placement="top" title="Disapprove">
-									<span class="fa fa-thumbs-down text-danger"></span>
+									<span class="badge rounded-circle p-2" style="color:#dc3545; background-color: white; border: 1px solid gainsboro; border-radius: 50%;" data-toggle="tooltip" data-placement="top" title="Disapprove">
+										<i class="fa fa-thumbs-down fa-lg aria-hidden="true"></i>
+									</span>
 								</button>
 							<?php endif; ?>
 							
 						
 							<button type="button" style="border:none;background-color:transparent;margin:-5px;" class="check_data" href="javascript:void(0)" data-id="<?php echo $row['c_num'] ?>">
-									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Check Details">
+									<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%; margin-right:5px;"  data-toggle="tooltip" data-placement="top" title="Check Details">
 										<i class="fa fa-money-check fa-lg" aria-hidden="true"></i>
 									</span>
 							</button>

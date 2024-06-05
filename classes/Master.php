@@ -3898,7 +3898,6 @@ Class Master extends DBConnection {
 			$gr_id = isset($_POST['gr_id']) ? $_POST['gr_id'] : '';
 			$po_no = isset($_POST['po_no']) ? $_POST['po_no'] : '';
 			$newDocNo = isset($_POST['newDocNo']) ? $_POST['newDocNo'] : '';
-
 			$preparer = isset($_POST['preparer']) ? $_POST['preparer'] : '';
 		}
 		extract($_POST);
@@ -4025,6 +4024,8 @@ Class Master extends DBConnection {
 			$sup_code = isset($_POST['sup_code']) ? $_POST['sup_code'] : '';
 			$newDocNo = isset($_POST['newDocNo']) ? $_POST['newDocNo'] : '';
 			$_POST['user_id'] = $this->settings->userdata('user_code');
+			$preparer = isset($_POST['preparer']) ? $_POST['preparer'] : '';
+			$requester = isset($_POST['requester']) ? $_POST['requester'] : '';
 		}
 		
 		if (!empty($supplier_id)) {
@@ -4045,7 +4046,7 @@ Class Master extends DBConnection {
 		
 		foreach ($_POST as $k => $v) {
 			if (!is_array($_POST[$k])) {
-				if ($k !== 'vs_num' && !in_array($k, array('id','gtype', 'name', 'newDocNo', 'ctr','sup_code','preparer'))) {
+				if ($k !== 'vs_num' && !in_array($k, array('id','gtype', 'name', 'newDocNo', 'ctr','sup_code'))) {
 					if (!is_numeric($v) && !is_null($v))
 						$v = $this->conn->real_escape_string($v);
 					if (!empty($data)) $data .= ",";
@@ -4060,7 +4061,7 @@ Class Master extends DBConnection {
 		if (empty($id)) {
 			//$data = preg_replace('/\b(agent_id|emp_id|client_id)\b/', 'supplier_id', $data);
 			//$sql = "INSERT INTO `vs_entries` set {$data} ";
-			$sql = "INSERT INTO `vs_entries` (`v_num`,`supplier_id`,`journal_date`,`due_date`,`description`,`ref_no`,`user_id`,`rfp_no`) VALUES ('{$v_num}','{$sup_code}','{$journal_date}','{$due_date}','{$description}','{$ref_no}','{$user_id}','{$rfp_no}')";
+			$sql = "INSERT INTO `vs_entries` (`v_num`,`supplier_id`,`journal_date`,`due_date`,`description`,`ref_no`,`user_id`,`requester`) VALUES ('{$v_num}','{$sup_code}','{$journal_date}','{$due_date}','{$description}','{$ref_no}','{$user_id}','{$requester}')";
 		} 
 		
 		$save = $this->conn->query($sql);
@@ -4519,6 +4520,7 @@ Class Master extends DBConnection {
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
 			$newDocNo = isset($_POST['newDocNo']) ? $_POST['newDocNo'] : '';
 			$_POST['user_id'] = $this->settings->userdata('user_code');
+			$preparer = isset($_POST['preparer']) ? $_POST['preparer'] : '';
 		}
 		extract($_POST);
 		$data = "";
@@ -4529,7 +4531,7 @@ Class Master extends DBConnection {
 					//echo "Value of vs_num: $v";
 				}
 		
-				if ($k !== 'vs_num' && !in_array($k, array('id','newDocNo','preparer'))) {
+				if ($k !== 'vs_num' && !in_array($k, array('id','newDocNo'))) {
 					if (!is_numeric($v) && !is_null($v))
 						$v = $this->conn->real_escape_string($v);
 					if (!empty($data)) $data .= ",";
@@ -5110,6 +5112,8 @@ Class Master extends DBConnection {
 			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
 			$newDocNo = isset($_POST['newDocNo']) ? $_POST['newDocNo'] : '';
 			$_POST['user_id'] = $this->settings->userdata('user_code');
+			$preparer = isset($_POST['preparer']) ? $_POST['preparer'] : '';
+			$requester = isset($_POST['requester']) ? $_POST['requester'] : '';
 		}
 		extract($_POST);
 		$data = "";
@@ -5126,7 +5130,7 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`= NULL ";
 			}
 		}
-		$sql = "UPDATE `vs_entries` SET `rfp_no` = '{$rfp_no}', `due_date` = '{$due_date}', `description` = '{$description}', `ref_no` = '{$ref_no}', `user_id` = '{$user_id}' WHERE `v_num` = $v_num";
+		$sql = "UPDATE `vs_entries` SET `requester`= '{$requester}',`rfp_no` = '{$rfp_no}', `due_date` = '{$due_date}', `description` = '{$description}', `ref_no` = '{$ref_no}', `user_id` = '{$user_id}' WHERE `v_num` = $v_num";
 
 		$save = $this->conn->query($sql);
 		
@@ -5404,6 +5408,58 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+	function update_m_status() {
+		extract($_POST);
+	
+		if(isset($vouchers)) {
+			$vouchers_list = implode(",", array_map('intval', $vouchers));
+			$sql = "UPDATE vs_entries SET m_status = 1 WHERE v_num IN ($vouchers_list)";
+	
+			if($this->conn->query($sql)) {
+				$resp['status'] = 'success';
+			} else {
+				$resp['status'] = 'failed';
+				$resp['error'] = $this->conn->error;
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = 'No vouchers selected.';
+		}
+		return json_encode($resp);
+	}
+	
+	function save_transaction() {
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k => $v) {
+			if ($k == 'id') continue; 
+			$v = addslashes(trim($v));
+			if (!empty($data)) $data .= ",";
+			$data .= " `{$k}`='{$v}' ";
+		}
+		
+		if (empty($id)) {
+			$sql = "INSERT INTO `tbl_transaction` set {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `tbl_transaction` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		
+		if ($save) {
+			$resp['status'] = 'success';
+			if (empty($id))
+				$this->settings->set_flashdata('success', "New transaction successfully saved.");
+			else
+				$this->settings->set_flashdata('success', "Transaction successfully updated.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		
+		return json_encode($resp);
+	}
+	
 	function save_supplier(){
 		extract($_POST);
 		$data = "";
@@ -5442,6 +5498,7 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$id = isset($_POST['id']) ? $_POST['id'] : '';
 		$rfp_num = isset($_POST['rfp_no']) ? $_POST['rfp_no'] : '';
+		$vs_no = isset($_POST['vs_no']) ? $_POST['vs_no'] : '';
 		$num = isset($_POST['num']) ? $_POST['num'] : '';
 		$division = isset($_POST['division']) ? $_POST['division'] : '';
 		$usercode = isset($_POST['usercode']) ? $_POST['usercode'] : '';
@@ -6257,6 +6314,7 @@ Class Master extends DBConnection {
 		
 		if(empty($_POST['id'])){
 			$c_num = isset($_POST['c_num']) ? $_POST['c_num'] : '';
+			$v_num = isset($_POST['v_num']) ? $_POST['v_num'] : '';
 			
 			$_POST['user_id'] = $this->settings->userdata('user_code');
 		}
@@ -6285,10 +6343,12 @@ Class Master extends DBConnection {
 			$sql = "UPDATE `cv_entries` SET {$data} WHERE c_num = '{$id}'";
 		} else {
 			$sql = "INSERT INTO `cv_entries` SET {$data}";
+			$sql1 = "UPDATE `vs_entries` SET cv_status = '1' WHERE v_num = '{$v_num}'";
 		}
 
 		$save = $this->conn->query($sql);
-		if($save){
+		$save1 = $this->conn->query($sql1);
+		if($save && $save1){
 			if (!empty($id)) {
 				$jid = $id;
 			} else {
@@ -6917,6 +6977,12 @@ switch ($action) {
 	break;
 	case 'get_price':
 		echo $Master->get_price();
+	break;
+	case 'save_transaction':
+		echo $Master->save_transaction();
+	break;
+	case 'update_m_status':
+		echo $Master->update_m_status();
 	break;
 	default:
 		break;

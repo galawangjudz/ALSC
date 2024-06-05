@@ -215,7 +215,18 @@ $columnName;
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
 							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
-							<td><?php echo date("Y-m-d",strtotime($row['check_date'])) ?></td>
+							
+							<td>
+								<?php
+								$check_date = strtotime($row['check_date']);
+								if ($check_date && $check_date > 0 && $check_date > time()) {
+									echo date("Y-m-d", $check_date);
+								} else {
+									echo '<span class="badge badge-danger border px-3 rounded-pill">Pending</span>';
+								}
+								?>
+							</td>
+
 							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
@@ -588,23 +599,23 @@ $columnName;
 									$btnqry_result = $conn->query($btnqry);
 
 									if($btnqry_result->num_rows > 0){ ?>
-											<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
-												<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Edit">
-													<i class="fa fa-edit fa-lg" aria-hidden="true"></i>
-												</span>
-											</a>
+										<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+											<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Edit">
+												<i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+											</span>
+										</a>
+										<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">
+											<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Disapproved">
+												<i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+											</span>
+										</button>
 									<?php }else{ ?>
 										<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">	
 											<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Approved">
 												<i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
 											</span>
 										</button>
-										<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">
-											<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Disapproved">
-												<i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
-											</span>
-										</button>
-									</a>
+									
 									<?php } ?>
 										
 									

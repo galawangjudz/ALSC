@@ -324,6 +324,25 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="date" class="form-control form-control-sm rounded-0" id="due_date" name="due_date" value="<?php echo isset($dueformattedDate) ? $dueformattedDate : '' ?>" required readonly>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Requester:</label>
+                                    <select name="requester" id="requester" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <option value="" disabled <?php echo !isset($requester) ? "selected" : '' ?>></option>
+                                        <?php 
+                                        $users_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                        while ($row = $users_qry->fetch_assoc()):
+                                        ?>
+                                        <option 
+                                            value="<?php echo $row['user_code'] ?>" 
+                                            data-emp-code="<?php echo $row['user_code'] ?>"
+                                            <?php echo isset($requester) && $requester == $row['user_code'] ? 'selected' : '' ?>
+                                        ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
                         </div>
                         <!-- <div class="col-md-6">  
                         <div class="col-md-12 form-group">
@@ -525,7 +544,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="container" id="sup-div">
                             <div class="container-fluid">

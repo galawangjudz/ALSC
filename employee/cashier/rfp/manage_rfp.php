@@ -115,7 +115,6 @@ if (empty($_GET['id'])) {
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
     <script src="../../libs/js/jquery.fancybox.min.js"></script>
 
-
 <body onload=initialize()">
     <div class="card card-outline card-primary">
                <div class="card-header">
@@ -150,7 +149,7 @@ if (empty($_GET['id'])) {
                 </form>
             </div>
             <div id="attachments-container">
-                <table class="table table-striped table-bordered" id="data-table" style="text-align:center;width:100%;">
+                <table class="table table-striped table-bordered" id="data-table2" style="text-align:center;width:100%;">
                     <colgroup>
                         <col width="50%">
                         <col width="50%">
@@ -222,6 +221,72 @@ if (empty($_GET['id'])) {
                 <hr>
                 <br>
                 <div class="container-fluid">
+                <div class="col-md-12 form-group">
+                    <label for="rfp_no">Approved Vouchers:</label>
+                    <br><hr>
+                    <table class="table table-bordered" id="data-table1" style="text-align:center;width:100%;">
+                        <thead>
+                            <tr class="bg-navy disabled">
+                                <th>#</th>
+                                <th>VS #</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            $i = 1;
+                            $qry = $conn->query("SELECT DISTINCT
+                            vs.v_num AS mainId,
+                            vs.supplier_id, 
+                            vs.journal_date,
+                                COALESCE(s.id, pc.client_id, ta.c_code, u.user_code) AS supId,
+                                COALESCE(s.name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
+                                        CONCAT(ta.c_last_name, ', ', ta.c_first_name, ' ', ta.c_middle_initial),
+                                        CONCAT(u.lastname, ', ', u.firstname)) AS supplier_name
+                            FROM `vs_entries` vs
+                            JOIN `vs_items` vi ON vs.v_num = vi.journal_id
+                            LEFT JOIN supplier_list s ON vs.supplier_id = s.id
+                            LEFT JOIN property_clients pc ON vs.supplier_id = pc.client_id
+                            LEFT JOIN t_agents ta ON vs.supplier_id = ta.c_code
+                            LEFT JOIN users u ON vs.supplier_id = u.user_code
+                            WHERE 
+                                vs.c_status = 1
+                            ORDER BY 
+                                vs.journal_date ASC;");
+                            while ($row = $qry->fetch_assoc()) {
+                            ?>
+                            <tr class="clickable-row" data-vs="<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td><?php echo htmlspecialchars($row['mainId']); ?></td>
+                                <td><?php echo htmlspecialchars($row['supplier_name']); ?></td>
+                            </tr>
+                            <?php
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                    <hr class="custom-hr">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="rfp_no">Selected VS #:</label>
+                            <input type="text" id="vs_no" name="vs_no" value="<?php echo isset($vs_no) ? $vs_no: ""; ?>" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                        </div>
+                    </div>
+
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        var rows = document.querySelectorAll('.clickable-row');
+                        rows.forEach(function(row) {
+                            row.addEventListener('click', function() {
+                                var vsNo = this.querySelector('td:nth-child(2)').innerText;
+                                document.getElementById('vs_no').value = vsNo;
+                            });
+                        });
+                    });
+                    </script>
+
+                </div>
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="req_dept" class="control-label">Requesting Department:</label><div class="asterisk"> *</div>
@@ -242,6 +307,7 @@ if (empty($_GET['id'])) {
                             <input type="datetime-local" class="form-control form-control-sm rounded-0" style="display:none;" id="transaction_date" name="transaction_date" value="<?php echo isset($transactionformattedDateTime) ? $transactionformattedDateTime : '' ?>" required readonly>
                         </div>
                     </div>
+                    
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label><div class="asterisk"> *</div>
@@ -969,52 +1035,19 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
- <script>
-    document.getElementById('amount').addEventListener('input', function (e) {
-        var value = e.target.value;
-        value = value.replace(/[^\d.]/g, '');
-        var parts = value.split('.');
-        if (parts.length > 2) {
-            value = parts[0] + '.' + parts.slice(1).join('');
-        }
-        e.target.value = value;
-    });
-</script>
-<script>
-$(document).ready(function() {
-    $('#name').change(function() {
-        var selectedOption = $(this).val();
-        $('#check_name').val(selectedOption);
-    });
-});
-</script>
- <script>
-    $(document).ready(function() {
-        $('#data-table').DataTable({
-            "paging": true,      
-            "lengthChange": true, 
-            "searching": true,   
-            "ordering": true,    
-            "info": true,        
-            "autoWidth": false  
-        });
-        $('.table th, .table td').addClass('px-1 py-0 align-middle');
-    });
-</script>
-<script>
-$(document).ready(function() {
-  $('#name').select2({
-    tags: true 
-  });
-});
 
-function populatePayableToSelect() {
-var rfpForSelect = document.getElementById('rfp_for');
-var payableToSelect = document.getElementById('name');
-var mainId = document.getElementById('mainId').value; 
-var rfpNo = document.getElementById('rfp_no').value; 
-var selectedValue = rfpForSelect.value;
-payableToSelect.innerHTML = '';
+<script>
+    $(document).ready(function() {
+        $('#data-table1').DataTable();
+        $('#data-table2').DataTable();
+    });
+    function populatePayableToSelect() {
+    var rfpForSelect = document.getElementById('rfp_for');
+    var payableToSelect = document.getElementById('name');
+    var mainId = document.getElementById('mainId').value; 
+    var rfpNo = document.getElementById('rfp_no').value; 
+    var selectedValue = rfpForSelect.value;
+    payableToSelect.innerHTML = '';
 
 var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
@@ -1077,6 +1110,33 @@ xhr.send();
 document.getElementById('rfp_for').addEventListener('change', populatePayableToSelect);
 populatePayableToSelect();
 
+</script>
+ <script>
+    document.getElementById('amount').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/[^\d.]/g, '');
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        e.target.value = value;
+    });
+</script>
+<script>
+$(document).ready(function() {
+    $('#name').change(function() {
+        var selectedOption = $(this).val();
+        $('#check_name').val(selectedOption);
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+  $('#name').select2({
+    tags: true 
+  });
+});
 </script>
 <script>
     function getUrlParameter(name) {
@@ -1141,9 +1201,6 @@ populatePayableToSelect();
         }
     });
 });
-
-
-
 
 </script>
 <script>

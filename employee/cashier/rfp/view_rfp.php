@@ -70,7 +70,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
         <div class="card-body">
         <div id="attachments-container">
-            <table class="table table-striped table-bordered" id="data-table" style="text-align:center;width:100%;">
+            <table class="table table-striped table-bordered" id="data-table2" style="text-align:center;width:100%;">
                 <colgroup>
                     <col width="50%">
                     <col width="50%">
@@ -140,6 +140,72 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
                 <input type="hidden" name="rfp_no" value="<?php echo isset($concatenatedValue) ? $concatenatedValue : '' ?>">
                 <hr>
+                <br>
+                <div class="container-fluid">
+                <div class="col-md-12 form-group">
+                    <label for="rfp_no">Approved Vouchers:</label>
+                    <br><hr>
+                    <table class="table table-bordered" id="data-table1" style="text-align:center;width:100%;">
+                        <thead>
+                            <tr class="bg-navy disabled">
+                                <th>#</th>
+                                <th>VS #</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            $i = 1;
+                            $qry = $conn->query("SELECT DISTINCT
+                            vs.v_num AS mainId,
+                            vs.supplier_id, 
+                            vs.journal_date,
+                                COALESCE(s.id, pc.client_id, ta.c_code, u.user_code) AS supId,
+                                COALESCE(s.name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
+                                        CONCAT(ta.c_last_name, ', ', ta.c_first_name, ' ', ta.c_middle_initial),
+                                        CONCAT(u.lastname, ', ', u.firstname)) AS supplier_name
+                            FROM `vs_entries` vs
+                            JOIN `vs_items` vi ON vs.v_num = vi.journal_id
+                            LEFT JOIN supplier_list s ON vs.supplier_id = s.id
+                            LEFT JOIN property_clients pc ON vs.supplier_id = pc.client_id
+                            LEFT JOIN t_agents ta ON vs.supplier_id = ta.c_code
+                            LEFT JOIN users u ON vs.supplier_id = u.user_code
+                            WHERE 
+                                vs.c_status = 1
+                            ORDER BY 
+                                vs.journal_date ASC;");
+                            while ($row = $qry->fetch_assoc()) {
+                            ?>
+                            <tr class="clickable-row" data-vs="<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td><?php echo htmlspecialchars($row['mainId']); ?></td>
+                                <td><?php echo htmlspecialchars($row['supplier_name']); ?></td>
+                            </tr>
+                            <?php
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                    <hr class="custom-hr">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="rfp_no">Selected VS #:</label>
+                            <input type="text" id="vs_no" name="vs_no" value="<?php echo isset($vs_no) ? $vs_no: ""; ?>" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                        </div>
+                    </div>
+
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        var rows = document.querySelectorAll('.clickable-row');
+                        rows.forEach(function(row) {
+                            row.addEventListener('click', function() {
+                                var vsNo = this.querySelector('td:nth-child(2)').innerText;
+                                document.getElementById('vs_no').value = vsNo;
+                            });
+                        });
+                    });
+                    </script>
+                </div>
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 form-group">
@@ -283,7 +349,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             <textarea rows="3" name="remarks" id="remarks" class="form-control rounded-0" required readonly><?php echo isset($remarks) ? $remarks :"" ?></textarea>
                         </div>
                     </div>
-                    <hr>
+            
+                    <br><hr><br>
                     <div class="card-body" style="border:1px solid gainsboro;">
                          <label for="" class="control-label"># of Approvers: </label>
                         <?php 
@@ -330,6 +397,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     <div>
 </body>
 <script>
+    $(document).ready(function() {
+        $('#data-table1').DataTable();
+        $('#data-table2').DataTable();
+    });
  document.addEventListener('DOMContentLoaded', function() {
         initialize();
     });

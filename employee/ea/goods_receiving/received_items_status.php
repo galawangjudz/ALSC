@@ -52,10 +52,11 @@
     }
     .navbar-menu {
         text-align: center;
+        width:100%;
     }
 </style>
 <div class="card" id="container">
-    <div class="navbar-menu">
+    <div>
         <a href="javascript:void(0);" onclick="showOpenPOsTable()" class="main_menu" id="open-link" style="border-left:solid 3px white;"><i class="nav-icon fa fa-cart-arrow-down"></i>&nbsp;&nbsp;&nbsp;Open POs</a>
         <a href="javascript:void(0);" onclick="showClosedPOsTable()" class="main_menu" id="closed-link"><i class="nav-icon fa fa-check-square"></i>&nbsp;&nbsp;&nbsp;Closed POs</a>
     </div>

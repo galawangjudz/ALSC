@@ -166,22 +166,22 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>mancomm/cfo/?page=tba/tba_list" class="nav-link nav-tba">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         TBA List
                         </p>
                       </a>
-                    </li> 
-                    <li class="nav-item dropdown">
+                    </li>  -->
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>mancomm/cfo/?page=cv/manage_check_voucher" class="nav-link nav-check">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         Create Check Voucher Setup
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>mancomm/cfo/?page=cv" class="nav-link nav-maincv">
                       <i class="nav-icon fas fa-file"></i>
@@ -190,14 +190,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>mancomm/cfo/?page=cfo_journals/check_list" class="nav-link nav-cl">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         Checks List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

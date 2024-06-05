@@ -259,7 +259,7 @@ function format_num($number){
 
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>          
                             <div class="container" id="sup-div">
                             <div class="container-fluid">
@@ -808,9 +808,9 @@ $(document).ready(function () {
             start_loader();
             var urlSuffix;
             <?php if (!empty($_GET['id'])) { ?>
-                urlSuffix = "modify_voucher";
+                urlSuffix = "modify_voucher_nonpo";
             <?php } else{ ?>
-                urlSuffix = "save_voucher";
+                urlSuffix = "save_voucher_nonpo";
           <?php }?>
             console.log('urlSuffix:', urlSuffix);
             $.ajax({

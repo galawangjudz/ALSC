@@ -279,11 +279,11 @@ $department = $_settings->userdata('department');
                         </p>
                       </a>
                     </li>
-                    <div style="background-color:gainsboro;">
+                    <!-- <div style="background-color:gainsboro;">
                       <li class="nav-header">
                         <b><i>Banking and General Ledger</i></b>
                       </li>
-                    </div>
+                    </div> -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/billing/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
@@ -292,14 +292,14 @@ $department = $_settings->userdata('department');
                         </p>
                       </a>
                     </li> 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/billing/?page=tba/tba_list" class="nav-link nav-tba">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         TBA List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
 <!-- 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
                     <li class="nav-item dropdown">
