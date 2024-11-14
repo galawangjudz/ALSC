@@ -38,7 +38,7 @@ $level = $_settings->userdata('type');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
@@ -48,14 +48,14 @@ $level = $_settings->userdata('type');
                     
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Purchasing Order</li></div></b></i>
                   
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_purchase_orders/" class="nav-link nav-cpo">
                       <i class="nav-icon fas fa-file"></i>
                         <p>
                           POs List
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=po/requisitions/manage_req" class="nav-link nav-req">
@@ -74,7 +74,7 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li>  -->
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_suppliers" class="nav-link nav-suppliers">
                       <i class="nav-icon fas fa-truck"></i>
                         <p>
@@ -90,10 +90,10 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-               
+                -->
 
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/received_items_status" class="nav-link nav-gr">
+                      <a href="<?php echo base_url ?>employee/ea/?page=goods_receiving/received_items_status" class="nav-link nav-gr">
                       <i class="nav-icon fas fa-check-square"></i>
                         <p>
                           Goods Receiving
@@ -101,19 +101,19 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
 
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/po/?page=po_goods_receiving/po_status" class="nav-link nav-monitoring">
                       <i class="nav-icon fas fa-search"></i>
                         <p>
                           Monitoring
                         </p>
                       </a>
-                    </li> 
+                    </li>  -->
                     <div style="background-color:gainsboro;">
-                      <li class="nav-header">
+                      <!-- <li class="nav-header">
                         <b><i>Banking and General Ledger</i></b>
                       </li>
-                    </div>
+                    </div>-->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/ea/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
@@ -122,6 +122,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/ea/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
+                        </p>
+                      </a>
+                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

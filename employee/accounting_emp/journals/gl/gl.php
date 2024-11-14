@@ -28,7 +28,7 @@
                 <tr>
                     <td style="width:21%;"><b>GL Account:</b> <input type="text" id="searchInput" placeholder="Account Code"></td>
                     <td><div id="displayName" style="font-weight:bold;"></div></td>
-                    <td style="text-align:right;padding-right:5px"><button id="export-csv-btn" class="btn btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button></td>
+                    <td style="text-align:right;padding-right:5px"><button id="export-csv-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button></td>
                 </tr>
             </table>
         </div>
@@ -64,7 +64,7 @@
                 $displayCode = '';
 
                 $qry = $conn->query("SELECT
-                COALESCE(je.name,s.short_name, CONCAT(t.c_last_name, ', ', t.c_first_name, ' ',t.c_middle_initial), CONCAT(pc.last_name, ', ',pc.first_name, ' ' ,pc.middle_name), CONCAT(u.lastname, ', ',u.firstname)) AS name,
+                COALESCE(je.name,s.short_name, CONCAT(t.c_first_name, ' ', t.c_middle_initial, ' ',t.c_last_name), CONCAT(pc.first_name, ' ',pc.middle_name, ' ' ,pc.last_name), CONCAT(u.firstname, ' ',u.lastname)) AS name,
                 a.doc_type,
                 a.account,
                 a.doc_no,

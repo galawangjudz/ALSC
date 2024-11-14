@@ -252,7 +252,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
                                         <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
                     <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12 form-group">
                                 <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -283,10 +283,28 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                             </div>
                         </div>
+                        <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Requester:</label>
+                                    <select name="requester" id="requester" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <option value="" disabled <?php echo !isset($requester) ? "selected" : '' ?>></option>
+                                        <?php 
+                                        $users_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                        while ($row = $users_qry->fetch_assoc()):
+                                        ?>
+                                        <option 
+                                            value="<?php echo $row['user_code'] ?>" 
+                                            data-emp-code="<?php echo $row['user_code'] ?>"
+                                            <?php echo isset($requester) && $requester == $row['user_code'] ? 'selected' : '' ?>
+                                        ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                            </div>
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12 form-group">
-                            <label for="rfp_no">Approved RFPs:</label>
+                            <!-- <label for="rfp_no">Approved RFPs:</label>
                             <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
                                 <colgroup>
                                     <col width="10%">
@@ -307,12 +325,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     $i = 1;
                                     $qry = $conn->query("SELECT 
                                     tbl_rfp.id AS mainId,
+                                    property_clients.*,
                                     tbl_rfp.*,  
                                     tbl_rfp_approvals.* 
                                 FROM 
                                     tbl_rfp 
                                 JOIN 
                                     tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                JOIN
+                                    property_clients ON CONCAT(property_clients.first_name, ' ', property_clients.last_name) = tbl_rfp.name
                                 WHERE 
                                     (tbl_rfp.rfp_for = 3 OR tbl_rfp.rfp_for = 5) 
                                 GROUP BY 
@@ -337,7 +358,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-client-name="<?php echo $row['name']; ?>" data-client-code="<?php echo $row['property_id']; ?>" data-client-part="<?php echo $row['description']; ?>" data-client-check="<?php echo $row['check_date']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
@@ -347,10 +368,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     }
                                     ?>
                                 </tbody>
-                            </table>
-                            <hr>
-                            <label for="rfp_no">Selected RFP #:</label>
-                            <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($rfp_no) ? $rfp_no : "" ?>" readonly> 
+                            </table> -->
+                            <!-- <hr class="custom-hr">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Selected RFP #:</label>
+                                    <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                                </div>
+                            </div> -->
+                            
                             <?php
                             $qry = $conn->query("SELECT * FROM tbl_rfp ORDER BY transaction_date DESC;");
                             while ($row = $qry->fetch_assoc()) {
@@ -484,14 +510,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>          
                             <div class="row" id="client-div">
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="client_id">Client:</label>
-                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <select name="client_id" id="client_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM property_clients ORDER BY `last_name` ASC");
@@ -501,7 +527,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                                     value="<?php echo $row['client_id'] ?>" 
                                                     data-client-code="<?php echo $row['client_id'] ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['client_id'] ? 'selected' : '' ?>
-                                                ><?php echo $row['last_name'] ?>, <?php echo $row['first_name'] ?></option>
+                                                ><?php echo $row['first_name'] ?> <?php echo $row['last_name'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </td>
@@ -661,7 +687,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
+        var clientName = $(this).data('client-name');
+        var clientCode = $(this).data('client-code');
+        var clientParticulars = $(this).data('client-part');
+        var clientCheck = $(this).data('client-check');
         $('#rfp_no').val(rfpNo);
+        $('#client_id').find('option:selected').text(clientName);
+        $('#client_code').val(clientCode);
+        $('#description').val(clientParticulars);
+        $('#due_date').val(clientCheck);
     });
 });
 $(document).ready(function() {
@@ -723,7 +757,7 @@ document.getElementById('client_id').addEventListener('change', function() {
 $(document).ready(function () {
 
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        ////updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -733,7 +767,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        ////updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -840,7 +874,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    ////updateHiddenOptions();
     updateTotals();
 }
 

@@ -39,7 +39,7 @@ $level = $_settings->userdata('type');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
@@ -57,7 +57,7 @@ $level = $_settings->userdata('type');
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Reservation Application</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_sales" class="nav-link nav-sm_sales">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-clock"></i>
                         <p>
                            Pendings
                         </p>
@@ -65,7 +65,7 @@ $level = $_settings->userdata('type');
                     </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_ra" class="nav-link nav-sm_ra">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-thumbs-up"></i>
                         <p>
                            Approved
                         </p>
@@ -73,7 +73,7 @@ $level = $_settings->userdata('type');
                     </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/sales_manager/?page=sm_revision" class="nav-link nav-sm_revision">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-redo"></i>
                         <p>
                            For Revision
                         </p>
@@ -106,11 +106,11 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <div style="background-color:gainsboro;">
-                      <li class="nav-header">
+                     <!-- <div style="background-color:gainsboro;">
+                     <li class="nav-header">
                         <b><i>Banking and General Ledger</i></b>
                       </li>
-                    </div>
+                    </div>-->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/sales_manager/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
@@ -119,6 +119,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/sales_manager/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
+                        </p>
+                      </a>
+                    </li>  -->
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

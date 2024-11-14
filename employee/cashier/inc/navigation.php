@@ -40,7 +40,7 @@ $level = $_settings->userdata('type');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
@@ -58,7 +58,7 @@ $level = $_settings->userdata('type');
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Reservation Application</li></div></b></i>
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/coo/?page=sm_sales" class="nav-link nav-sm_sales">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-clock"></i>
                         <p>
                            Pendings
                         </p>
@@ -66,7 +66,7 @@ $level = $_settings->userdata('type');
                     </li> 
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/coo/?page=sm_ra" class="nav-link nav-sm_ra">
-                      <i class="nav-icon fas fa-book"></i>
+                      <i class="nav-icon fas fa-thumbs-up"></i>
                         <p>
                            Approved
                         </p>
@@ -130,6 +130,14 @@ $level = $_settings->userdata('type');
                       <i class="nav-icon fas fa-book"></i>
                         <p>
                         Request for Payment List
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/cashier/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
                         </p>
                       </a>
                     </li> 

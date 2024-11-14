@@ -1,9 +1,4 @@
 <?php
-
-require_once('../initialize.php');
-require_once('../classes/DBConnection.php');
-require_once('../classes/SystemSettings.php');
-
 function is_leap_year($year) {
   return date('L', strtotime("$year-01-01"));
 }
@@ -49,7 +44,7 @@ function auto_date($last_day,$date)
     $month = $date_arr['month'];
     $day = $date_arr['day'];
     /* $change_date = 0; */
-    $conn = mysqli_connect(DB_SERVER, DB_USERNAME, '', DB_NAME);
+    $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
     if (!$conn) {
         die('Could not connect to database: ' . mysqli_connect_error());
     }

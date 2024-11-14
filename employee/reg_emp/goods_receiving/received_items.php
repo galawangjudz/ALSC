@@ -636,6 +636,7 @@ function calculateAmountInc(input) {
 
     var vatAmtField = tr.find('[name="vat_amt"]');
     var vatRate = currentType == 1 ? 0.01 : 0.02;
+	//var vatRate = 0.01;
     var vatAmount = amountAfterSubtraction * vatRate;
     vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
@@ -683,6 +684,7 @@ function calculateAmountNonVATZeroR(input) {
 
     var vatAmtField = tr.find('[name="vat_amt"]');
     var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
+	//var vatRate = 0.01;
     var vatAmount = amount * vatRate;
     vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
@@ -774,6 +776,7 @@ function calculateAmountExc(input) {
 
     var vatAmtField = tr.find('[name="vat_amt"]');
     var vatRate = tr.find('[name="type[]"]').val() == 1 ? 0.01 : 0.02;
+	//var vatRate = 0.01;
     var vatAmount = amount * vatRate;
     vatAmtField.val(vatAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 

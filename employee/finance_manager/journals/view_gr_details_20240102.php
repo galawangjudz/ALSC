@@ -412,7 +412,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
     <?php endwhile; ?>
     <?php 
-    if($globalType != 2){
+    //if($globalType != 2){
         if($vat == 1 || $vat == 2){
         $id = $gr_id;
         $query_iv = "SELECT al.*, gl.id as glId,gl.name as group_name, gl.type
@@ -526,7 +526,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         </tr>
         <?php endwhile; ?>
     <?php 
-        }
+       // }
     }; ?>
     <?php 
     $id = $gr_id;
@@ -644,7 +644,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     <?php endwhile; ?>
 
     <?php 
-    if($globalType != 2){
+    //if($globalType != 2){
         if($vat == 1 || $vat == 2){
         $id = $gr_id;
         $query = "SELECT gt.amount, gt.account, gt.item_code,al.name,al.id AS alId, gl.id AS glId,gl.type
@@ -770,7 +770,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         </tr>
         <?php endwhile; ?>
         <?php 
-            }
+            //}
     }; ?>      
 
     <?php 

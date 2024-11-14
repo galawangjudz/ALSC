@@ -53,7 +53,7 @@ $level = $_settings->userdata('type');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
@@ -161,6 +161,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/accounting/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
+                        </p>
+                      </a>
+                    </li>  -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/accounting/?page=journals/gl/gl" class="nav-link nav-gl">
                       <i class="nav-icon fas fa-book"></i>
@@ -207,12 +215,12 @@ $level = $_settings->userdata('type');
                       </li>
                     </div>
 
-                      <li class="nav-item">
+                      <!-- <li class="nav-item">
                         <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_agent_voucher" class="nav-link nav-agent">
                           <i class="nav-icon fas fa-id-card"></i>
                           <p>Agents</p>
                         </a>
-                      </li>
+                      </li> -->
                       <li class="nav-item">
                         <a href="<?php echo base_url ?>employee/accounting/?page=journals/vs/m_employee_voucher" class="nav-link nav-emp">
                           <i class="nav-icon fas fa-id-badge"></i>

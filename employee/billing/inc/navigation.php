@@ -42,7 +42,7 @@ $department = $_settings->userdata('department');
                    <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact nav-flat nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item dropdown">
                       <a href="./" class="nav-link nav-home">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                           Dashboard
                         </p>
@@ -279,11 +279,11 @@ $department = $_settings->userdata('department');
                         </p>
                       </a>
                     </li>
-                    <div style="background-color:gainsboro;">
+                    <!-- <div style="background-color:gainsboro;">
                       <li class="nav-header">
                         <b><i>Banking and General Ledger</i></b>
                       </li>
-                    </div>
+                    </div> -->
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>employee/billing/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
@@ -292,7 +292,14 @@ $department = $_settings->userdata('department');
                         </p>
                       </a>
                     </li> 
-
+                    <!-- <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>employee/billing/?page=tba/tba_list" class="nav-link nav-tba">
+                      <i class="nav-icon fas fa-book"></i>
+                        <p>
+                        TBA List
+                        </p>
+                      </a>
+                    </li>  -->
 <!-- 
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Maintenance</li></div></b></i>
                     <li class="nav-item dropdown">

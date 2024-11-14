@@ -27,10 +27,10 @@ $supp_code = $row['supplier_id'];
 $cvdate = $row['check_date'];
 $desc = $row['description'];
 $check_name = $row['check_name'];
-
+$v_num = $row['v_num'];
 $supp_name = "Not found in any source"; 
-
-
+$status1 =  $row['c_status'];
+$status2 =  $row['c_status2'];
 $qry_supp = $conn->query("SELECT * FROM supplier_list WHERE id = '$supp_code'; ");
 $row_supp = $qry_supp->fetch_assoc();
 if (!empty($row_supp)) {
@@ -89,16 +89,17 @@ border-color: #007BFF;
                         <div class="container" style="margin-top:15px;">
                         <table class="table table-bordered">
                             <tr>
-                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">Voucher No:</td>
+                                <td style="width:10%;font-weight:bold; padding: 4px 10px;">CV No:</td>
                                 <td style="width:50%; padding: 4px 10px;"><?php echo $cv_id; ?></td>
-                                <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
-                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d'); ?></td>
+                                <td style="font-weight:bold; padding: 4px 10px;">VS No:</td>
+                                <td style="padding: 4px 10px;"><?php echo $v_num; ?></td>
                             </tr>
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">PO No:</td>
                                 <td style="padding: 4px 10px;"><?php echo $po_no; ?></td>
-                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Due Date:</td>
-                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d', strtotime($cvdate)); ?></td>
+                                <td style="font-weight:bold; padding: 4px 10px;">Date:</td>
+                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d'); ?></td>
+                                
                             </tr>
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Paid To:</td>
@@ -119,6 +120,8 @@ border-color: #007BFF;
                             <tr>
                                 <td style="width:15%;font-weight:bold; padding: 4px 10px;">Check Name:</td>
                                 <td style="padding: 4px 10px;"><?php echo $check_name; ?></td>
+                                <td style="width:15%;font-weight:bold; padding: 4px 10px;">Due Date:</td>
+                                <td style="padding: 4px 10px;"><?php echo date('Y-m-d', strtotime($cvdate)); ?></td>
                                 <!-- <td style="padding: 4px 10px;font-weight:bold;">Check #:</td>
                                 <td style="padding: 4px 10px;"><?php echo $check_num; ?></td> -->
                             </tr>
@@ -241,6 +244,92 @@ border-color: #007BFF;
                             </tr>
                         </tfoot>
                     </table>
+                    <table class="table table-bordered" style="text-align:center;">
+                        <tr>
+                            <i>Approved by:</i>
+                        </tr>
+                        <tr>
+                           
+                            <?php
+                            $qry = $conn->query("SELECT * FROM users WHERE (position ='AVP-TREASURY' AND division='MNGR')");
+                            $statusRow = $qry->fetch_assoc();
+                            if ($statusRow) {
+                                $lastname = $statusRow['lastname'];
+                                $firstname = $statusRow['firstname'];
+                                ?>
+                                <td><?php echo $firstname . ' ' . $lastname; ?></td>
+                            <?php
+                            } else {
+                                ?>
+                                <td>User not found</td>
+                            <?php
+                            }
+                            ?>
+                            
+                            
+                            <?php
+                            $qry = $conn->query("SELECT * FROM users WHERE position = 'CHIEF FINANCE OFFICER'");
+                            $statusRow = $qry->fetch_assoc();
+                            if ($statusRow) {
+                                $lastname = $statusRow['lastname'];
+                                $firstname = $statusRow['firstname'];
+                                ?>
+                                <td><?php echo $firstname . ' ' . $lastname; ?></td>
+                            <?php
+                            } else {
+                                ?>
+                                <td>User not found</td>
+                            <?php
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <?php
+                                $qry = $conn->query("SELECT c_status FROM cv_entries WHERE c_num = '" . $cv_id . "' ");
+                                
+                                $statusRow1 = $qry->fetch_assoc();
+                                if ($statusRow1) {
+                                    $status1 = $statusRow1['c_status'];
+                                    $statusText = '';
+                                    if ($status1 == 1) {
+                                        $statusText = '<strong>Approved</strong>';
+                                    } elseif ($status1 == 2) {
+                                        $statusText = '<strong>Disapproved</strong>';
+                                    } else {
+                                        $statusText = '<strong>Pending</strong>';
+                                    }
+                                    ?>
+                                    <td><?php echo $statusText; ?></td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <?php
+                                }
+                                ?>
+                                <?php
+                                $qry = $conn->query("SELECT c_status2 FROM cv_entries WHERE c_num = '" . $cv_id . "' ");
+                                
+                                $statusRow1 = $qry->fetch_assoc();
+                                if ($statusRow1) {
+                                    $status2 = $statusRow1['c_status2'];
+                                    $statusText = '';
+                                    if ($status2 == 1) {
+                                        $statusText = '<strong>Approved</strong>';
+                                    } elseif ($status2 == 2) {
+                                        $statusText = '<strong>Disapproved</strong>';
+                                    } else {
+                                        $statusText = '<strong>Pending</strong>';
+                                    }
+                                    ?>
+                                    <td><?php echo $statusText; ?></td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <?php
+                                }
+                                ?>
+                            </tr>
+                        </table>
                         </div>
                     </div>
                 </th>
@@ -250,6 +339,15 @@ border-color: #007BFF;
 
 </body>
 <script>
+function formatAmount(amount) {
+    amount = parseFloat(amount);
+    if (Math.floor(amount) === amount) {
+        return amount.toLocaleString('en-US', { style: 'decimal' }) + ".00";
+    } else {
+        return amount.toLocaleString('en-US', { style: 'decimal' });
+    }
+}
+
 function cal_tb() {
     var debit = 0;
     var credit = 0;
@@ -262,9 +360,8 @@ function cal_tb() {
             credit += parseFloat(($(this).find('.credit_amount').text().replace(/,/gi, ''))) || 0;
         }
     });
-
-    $('#account_list').find('.total_debit').text(parseFloat(debit).toLocaleString('en-US', { style: 'decimal' }));
-    $('#account_list').find('.total_credit').text(parseFloat(credit).toLocaleString('en-US', { style: 'decimal' }));
+    $('#account_list').find('.total_debit').text(formatAmount(debit));
+    $('#account_list').find('.total_credit').text(formatAmount(credit));
 }
 cal_tb();
 </script>

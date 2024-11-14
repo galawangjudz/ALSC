@@ -228,7 +228,7 @@ function format_num($number){
 
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="rdo-btn">
                                 <label>
@@ -346,7 +346,7 @@ function format_num($number){
                                                     value="<?php echo $row['client_id'] ?>" 
                                                     data-client-code="<?php echo $row['client_id'] ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['client_id'] ? 'selected' : '' ?>
-                                                ><?php echo $row['last_name'] ?>, <?php echo $row['first_name'] ?></option>
+                                                ><?php echo $row['c_first_name'] ?> <?php echo $row['c_last_name'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </td>

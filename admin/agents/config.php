@@ -1,7 +1,7 @@
 <?Php
-$dbhost_name = DB_SERVER; 
-$database = DB_NAME;     
-$username = DB_USERNAME;         
+$dbhost_name = "localhost"; 
+$database = "alscdb";     
+$username = "root";         
 $password = "";         
 
 

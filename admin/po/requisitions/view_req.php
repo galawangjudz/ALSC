@@ -176,7 +176,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </table>
                 <div class="row">
                     <div class="col-md-8">
-                        <label for="notes" class="control-label">Remarks:</label>
+                        <label for="notes" class="control-label">Notes:</label>
                         <textarea id="notes" name="notes" cols="10" rows="4" class="form-control rounded-0" readonly><?php echo isset($notes) ? trim($notes) : '' ?></textarea>
                     </div>
                     <div class="col-md-4" id="hidden-status">

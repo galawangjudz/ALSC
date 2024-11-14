@@ -387,9 +387,9 @@ tr:hover {
                                 vs.due_date,
                                 vi.amount,
                                 COALESCE(s.id, pc.client_id, ta.c_code, u.user_code) AS supId,
-                                COALESCE(s.short_name, CONCAT(pc.last_name, ', ', pc.first_name, ' ', pc.middle_name), 
-                                        CONCAT(ta.c_last_name, ', ', ta.c_first_name, ' ', ta.c_middle_initial),
-                                        CONCAT(u.lastname, ', ', u.firstname)) AS supplier_name,
+                                COALESCE(s.short_name, CONCAT(pc.first_name, ' ', pc.middle_name, ' ', pc.last_name), 
+                                        CONCAT(ta.c_first_name, ' ', ta.c_middle_initial, ' ', ta.c_last_name),
+                                        CONCAT(u.firstname, ' ', u.lastname)) AS supplier_name,
                                 vs.due_date,
                                 vi.amount
                             FROM `vs_entries` vs
@@ -399,7 +399,7 @@ tr:hover {
                             LEFT JOIN t_agents ta ON vs.supplier_id = ta.c_code
                             LEFT JOIN users u ON vs.supplier_id = u.user_code
                             JOIN account_list ac ON vi.account_id = ac.code
-                            WHERE ac.name='Accounts Payable Trade' and vs.c_status = 1
+                            WHERE ac.name='Accounts Payable Trade' and vs.c_status = 1 and vs.c_status = 1 and cv_status = 0
                             ORDER BY vs.`date_updated` DESC;
                             ");
                                 while ($row = $qry->fetch_assoc()) {
@@ -867,7 +867,7 @@ $(document).ready(function() {
 <script>
 $(document).ready(function () {
     $(document).on('change', '.check-item select', function () {
-        updateHiddenOptions();
+        //updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -877,7 +877,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        //updateHiddenOptions();
     });
 });
 $('#acc_list').on('input', '.debit, .credit', function() {
@@ -978,7 +978,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    //updateHiddenOptions();
     updateTotals();
 }
 

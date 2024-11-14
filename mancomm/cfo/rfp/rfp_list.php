@@ -27,33 +27,65 @@ $columnName;
 	body{
         font-size:12px!important;
     }
+	.view_data:hover span.badge {
+        background-color: #007bff!important;
+        color: white!important;
+        border-color: #007bff!important;
+    }
+	.print_data:hover span.badge {
+        background-color: black!important;
+        color: white!important;
+        border-color: black!important;
+    }
+    .disapproved_data:hover span.badge {
+        background-color: #ff0000!important;
+        color: white!important;
+        border-color: #ff0000!important;
+    }
+    .approved_data:hover span.badge {
+        background-color:#28a745!important;
+        color: white!important;
+        border-color: #28a745!important;
+    }
+	.edit_data:hover span.badge {
+        background-color:#ff0000!important;
+        color: white!important;
+        border-color: #ff0000!important;
+    }
+	button{
+		border: 1px solid #000; 
+		background-color: #f0f0f0; 
+		cursor: pointer;
+		width: auto;
+	}
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
-		<!-- <div class="card-tools">
-			<a href="?page=rfp/manage_rfp" class="btn btn-flat btn-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div> -->
+		<table style="float:right;">
+			<tr>
+				<td style="float:right;">
+					<button id="export-btn" class="btn btn-flat btn-success btn-sm"><i class="fas fa-file-export"></i> Export</button>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
-				<colgroup>
+				<!-- <colgroup>
 					<col width="5%">
-					<col width="5%">
+					<col width="8%">
+					<col width="9%">
 					<col width="10%">
-					<col width="8%">
-					<col width="5%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-					<col width="8%">
-				</colgroup>
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="18%">
+				</colgroup> -->
 				<thead>
 					<tr class="bg-navy disabled">
                         <th>#</th>
@@ -64,14 +96,15 @@ $columnName;
 						<!-- <th>Payment Form</th>
 						<th>Bank Name</th> -->
 						<th>Tran. Date</th>
-						<!-- <th>Release Date</th> -->
+						<th>Check Date</th>
+						<th>Amount</th>
 						<th>Approver 1</th>
 						<th>Approver 2</th>
 						<th>Approver 3</th>
 						<th>Approver 4</th>
 						<th>Approver 5</th>
 						<th>Approver 6</th>
-						<th>Approver 7</th>
+						<!-- <th>Approver 7</th> -->
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -84,7 +117,7 @@ $columnName;
 					// 	tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5 FROM tbl_rfp WHERE req_dept = '" . $_settings->userdata('department') . "' OR req_dept = 'Purchasing' OR req_dept = 'Accounting' OR req_dept = 'CALS' OR req_dept = 'Billing' OR req_dept = 'Audit';");
 					// } else {
 						if ($_settings->userdata('division') == 'MNGR' || $_settings->userdata('division') == 'SPVR') {
-							$qry = $conn->query("SELECT DISTINCT tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
+							$qry = $conn->query("SELECT DISTINCT tbl_rfp.check_date,tbl_rfp.amount,tbl_rfp.id, tbl_rfp.rfp_no, tbl_rfp.preparer,tbl_rfp.name,tbl_rfp.req_dept,tbl_rfp.bank_name,tbl_rfp.release_date,tbl_rfp.transaction_date,tbl_rfp.payment_form, 
 						tbl_rfp.status1 AS U1,tbl_rfp.status2 AS U2, tbl_rfp.status3 AS U3, tbl_rfp.status4 AS U4, tbl_rfp.status5 AS U5,tbl_rfp.status6 AS U6,tbl_rfp.status7 AS U7 FROM tbl_rfp ORDER BY tbl_rfp.transaction_date DESC");
 					} else {
 						$qry = $conn->query("SELECT 
@@ -94,6 +127,7 @@ $columnName;
 						tbl_rfp.name,
 						tbl_rfp.req_dept,
 						tbl_rfp.bank_name,
+						tbl_rfp.check_date,tbl_rfp.amount,
 						tbl_rfp.release_date,
 						tbl_rfp.transaction_date,
 						tbl_rfp.payment_form, 
@@ -129,6 +163,7 @@ $columnName;
 						tbl_rfp.name,
 						tbl_rfp.req_dept,
 						tbl_rfp.bank_name,
+						tbl_rfp.check_date,tbl_rfp.amount,
 						tbl_rfp.release_date,
 						tbl_rfp.transaction_date,
 						tbl_rfp.payment_form ORDER BY tbl_rfp.transaction_date DESC;
@@ -165,7 +200,7 @@ $columnName;
 										$lname = $prep_row['lastname'];
 										$fname = $prep_row['firstname'];
 										$pos = $prep_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 							</td>
@@ -180,7 +215,19 @@ $columnName;
 							</td> -->
 							<!-- <td><?php echo $row['bank_name']; ?></td> -->
 							<td><?php echo date("Y-m-d",strtotime($row['transaction_date'])) ?></td>
-							<!-- <td><?php echo date("Y-m-d",strtotime($row['release_date'])) ?></td> -->
+							
+							<td>
+								<?php
+								$check_date = strtotime($row['check_date']);
+								if ($check_date && $check_date > 0 && $check_date > time()) {
+									echo date("Y-m-d", $check_date);
+								} else {
+									echo '<span class="badge badge-danger border px-3 rounded-pill">Pending</span>';
+								}
+								?>
+							</td>
+
+							<td><?php echo number_format(($row['amount']),2) ?></td>
 							<td class="">
 								<?php 
 									$app1_qry = "SELECT * FROM users WHERE user_code = '" . $row['U1'] . "'";
@@ -191,7 +238,7 @@ $columnName;
 										$lname = $app1_row['lastname'];
 										$fname = $app1_row['firstname'];
 										$pos = $app1_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -239,7 +286,7 @@ $columnName;
 										$lname = $app2_row['lastname'];
 										$fname = $app2_row['firstname'];
 										$pos2 = $app2_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -287,7 +334,7 @@ $columnName;
 										$lname = $app3_row['lastname'];
 										$fname = $app3_row['firstname'];
 										$pos3 = $app3_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b> ';
+										echo '<b>' . $fname . ' ' . $lname .'</b> ';
 									}
 								?>
 								
@@ -335,7 +382,7 @@ $columnName;
 										$lname = $app4_row['lastname'];
 										$fname = $app4_row['firstname'];
 										$pos4 = $app4_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									}
 								?>
 								
@@ -384,7 +431,7 @@ $columnName;
 										$lname = $app5_row['lastname'];
 										$fname = $app5_row['firstname'];
 										$pos5 = $app5_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -434,7 +481,7 @@ $columnName;
 										$lname = $app6_row['lastname'];
 										$fname = $app6_row['firstname'];
 										$pos6 = $app6_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -475,7 +522,7 @@ $columnName;
 								?>
 							</td>
 							
-							<td class="">
+							<!-- <td class="">
 								<?php 
 									$app7_qry = "SELECT * FROM users WHERE user_code = '" . $row['U7'] . "'";
 									$app7_result = $conn->query($app7_qry);
@@ -485,7 +532,7 @@ $columnName;
 										$lname = $app7_row['lastname'];
 										$fname = $app7_row['firstname'];
 										$pos7 = $app7_row['position'];
-										echo '<b>' . $lname . ',' . $fname .'</b></br>';
+										echo '<b>' . $fname . ' ' . $lname .'</b>';
 									} else {
 										echo '';
 									}
@@ -524,7 +571,7 @@ $columnName;
 										echo '';
 									}
 								?>
-							</td>
+							</td> -->
 							<td align="center">
 								<?php 
 									$qry_approved = $conn->query("SELECT type FROM users WHERE user_code = '" . $_settings->userdata('user_code') . "'"); 
@@ -552,32 +599,40 @@ $columnName;
 									$btnqry_result = $conn->query($btnqry);
 
 									if($btnqry_result->num_rows > 0){ ?>
-											<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
-												<span class="fa fa-edit text-danger"></span>
-											</a>
-									<?php }else{ ?>
 										<a class="edit_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
-										<span class="fa fa-edit text-success"></span>
-										<a class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-											<span class="fa fa-thumbs-up text-primary"></span>
+											<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Edit">
+												<i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+											</span>
 										</a>
-										<a class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>" style="padding:3px;">
-											<span class="fa fa-thumbs-down text-danger"></span>
-										</a>
-									</a>
+										<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="disapproved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">
+											<span class="badge rounded-circle p-2" style="color:#ff0000; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Disapproved">
+												<i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+											</span>
+										</button>
+									<?php }else{ ?>
+										<button style="border:none;background-color:transparent;margin:-5px;" type="button" class="approved_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" data-user="<?php echo $_settings->userdata('user_code') ?>">	
+											<span class="badge rounded-circle p-2" style="color:#28a745; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Approved">
+												<i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+											</span>
+										</button>
+									
 									<?php } ?>
 										
 									
 										<?php endwhile; ?>
 										
 									<?php endwhile; ?>	
-										<a class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>" style="padding:3px;">
-											<span class="fa fa-eye text-dark"></span>
-										</a>
+										<button type="button" style="border:none;background-color:transparent;" class="view_data" href="javascript:void(0)" data-id="<?php echo $tblId ?>">
+											<span class="badge rounded-circle p-2" style="margin:-5px;color:#1184ff; background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+											</span>
+										</button>
 										<button type="button" style="border:none;background-color:transparent;" class="print_data" data-id="<?php echo $tblId ?>" 
 												onclick="window.open('<?php echo base_url ?>/report/voucher_report/print_rfp.php?id=<?php echo $tblId ?>', '_blank')"
 												data-toggle="tooltip" data-placement="top" title="Print"> 
-											<span class="fas fa-print"></span>
+												<span class="badge rounded-circle p-2" style="margin:-5px;background-color: white; border: 1px solid gainsboro; border-radius: 50%;"  data-toggle="tooltip" data-placement="top" title="Print">
+													<i class="fa fa-print fa-lg" aria-hidden="true"></i>
+												</span>
 										</button>
 									</div>
 							</td>
@@ -589,6 +644,69 @@ $columnName;
 		</div>
 	</div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("export-btn").addEventListener("click", function() {
+        exportAllTableDataToCSV();
+    });
+});
+
+function exportAllTableDataToCSV() {
+    var csv = [];
+    var currentDate = new Date();
+    var formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
+    csv.push("Request for Payment List as of " + formattedDate + "\n\n");
+
+    var headers = [];
+    $('.table th').each(function(index) {
+        if (index < $('.table th').length - 1) { 
+            headers.push($(this).text());
+        }
+    });
+    csv.push(headers.join(","));
+
+    var table = $('.table').DataTable();
+    var data = table.rows().data();
+
+    data.each(function(rowData) {
+        var row = [];
+        rowData.forEach(function(cellData, index) {
+
+            var plainText = cellData.replace(/<[^>]+>/g, '').replace(/\r?\n|\r/g, '');
+            if (index === 6) { 
+                plainText = plainText.replace(/,/g, '');
+            }
+            if (index >= 7) { 
+                plainText = plainText.replace(/(\S+)\s+(\S+)$/g, '$1 ($2)'); 
+            }
+            row.push(plainText);
+        });
+        csv.push(row.join(","));
+    });
+
+    var filename = "RFP_asof_" + formattedDate + '.csv';
+    downloadCSV(csv.join("\n"), filename);
+}
+
+function downloadCSV(csv, filename) {
+    var csvFile = new Blob([csv], { type: "text/csv" });
+    var downloadLink = document.createElement("a");
+
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    downloadLink.style.display = "none";
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+}
+   
+</script>
 <script>
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

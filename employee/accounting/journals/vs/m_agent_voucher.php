@@ -327,21 +327,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
+                                    <?php
                                         $i = 1;
                                         $qry = $conn->query("SELECT 
-                                    tbl_rfp.id AS mainId,
+                                        tbl_rfp.id AS mainId,
+                                        t_agents.*,
                                         tbl_rfp.*,  
                                         tbl_rfp_approvals.* 
                                     FROM 
                                         tbl_rfp 
                                     JOIN 
                                         tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                    JOIN
+                                        t_agents ON CONCAT(t_agents.c_first_name, ' ', t_agents.c_last_name) = tbl_rfp.name
                                     WHERE 
                                         (tbl_rfp.rfp_for = 1 OR tbl_rfp.rfp_for = 5) 
                                     GROUP BY 
                                         tbl_rfp.rfp_no
-                                    HAVING 
+                                    HAVING  
                                         (CASE WHEN tbl_rfp.status1 <> '' THEN 1 ELSE 0 END +
                                         CASE WHEN tbl_rfp.status2 <> '' THEN 1 ELSE 0 END +
                                         CASE WHEN tbl_rfp.status3 <> '' THEN 1 ELSE 0 END +
@@ -361,7 +364,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         tbl_rfp.transaction_date ASC;");
                                         while ($row = $qry->fetch_assoc()) {
                                         ?>
-                                         <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-agent-name="<?php echo $row['name']; ?>" data-agent-code="<?php echo $row['c_code']; ?>" data-agent-part="<?php echo $row['description']; ?>" data-agent-check="<?php echo $row['check_date']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                             <td class="text-center"><?php echo $i++; ?></td>
                                             <td><?php echo ($row['rfp_no']); ?></td>
                                             <td><?php echo ($row['req_dept']) ?></td>
@@ -372,9 +375,31 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         ?>
                                     </tbody>
                                 </table>
-                                <hr>
-                                <label for="rfp_no">Selected RFP #:</label>
-                                <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                                <hr class="custom-hr">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="rfp_no">Selected RFP #:</label>
+                                        <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="rfp_no">Requester:</label>
+                                        <select name="requester" id="requester" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <option value="" disabled <?php echo !isset($requester) ? "selected" : '' ?>></option>
+                                            <?php 
+                                            $users_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                            while ($row = $users_qry->fetch_assoc()):
+                                            ?>
+                                            <option 
+                                                value="<?php echo $row['user_code'] ?>" 
+                                                data-emp-code="<?php echo $row['user_code'] ?>"
+                                                <?php echo isset($requester) && $requester == $row['user_code'] ? 'selected' : '' ?>
+                                            ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
+                                            <?php endwhile; ?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <?php
                                 $qry = $conn->query("SELECT * FROM tbl_rfp ORDER BY transaction_date DESC;");
                                 while ($row = $qry->fetch_assoc()) {
@@ -508,14 +533,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="row" id="agent-div">
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="width:50%; padding-right: 10px;">
                                             <label for="agent_id">Agent:</label>
-                                            <select name="agent_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                            <select name="agent_id" id="agent_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                                 <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                                 <?php 
                                                 $supplier_qry = $conn->query("SELECT * FROM `t_agents` ORDER BY `c_last_name` ASC");
@@ -525,7 +550,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                                     value="<?php echo $row['c_code'] ?>" 
                                                     data-agent-code="<?php echo $row['c_code'] ?>"
                                                     <?php echo isset($supplier_id) && $supplier_id == $row['c_code'] ? 'selected' : '' ?>
-                                                ><?php echo $row['c_last_name'] ?>, <?php echo $row['c_first_name'] ?></option>
+                                                ><?php echo $row['c_first_name'] ?> <?php echo $row['c_last_name'] ?></option>
                                                 <?php endwhile; ?>
                                             </select>
 
@@ -687,7 +712,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
+        var agentName = $(this).data('agent-name');
+        var agentCode = $(this).data('agent-code');
+        var agentParticulars = $(this).data('agent-part');
+        var agentCheck = $(this).data('agent-check');
         $('#rfp_no').val(rfpNo);
+        $('#agent_id').find('option:selected').text(agentName);
+        $('#agent_code').val(agentCode);
+        $('#description').val(agentParticulars);
+        $('#due_date').val(agentCheck);
     });
 });
 $(document).ready(function() {
@@ -748,7 +781,7 @@ document.getElementById('agent_id').addEventListener('change', function() {
 });
 $(document).ready(function () {
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        ////updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -758,7 +791,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        ////updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -866,7 +899,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    ////updateHiddenOptions();
     updateTotals();
 }
 

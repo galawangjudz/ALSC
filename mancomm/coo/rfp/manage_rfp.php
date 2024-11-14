@@ -66,6 +66,9 @@ if (empty($_GET['id'])) {
 }
 ?>
 <style>
+    .select2{
+        margin-top:30px;
+    }
     #status1_orig {
         display: none!important;
     }
@@ -82,7 +85,7 @@ if (empty($_GET['id'])) {
     .approversDiv{
         margin-top:25px;
     }
-        #amountToWords{
+    #amountToWords{
         background-color:gainboro;
         border:solid 1px gainsboro;
         font-style: italic;
@@ -90,12 +93,24 @@ if (empty($_GET['id'])) {
         padding-left:25px;
         text-transform: uppercase;
     }
+    .custom-select1{
+        width:100%;
+    }
+    .custom-select{
+        margin-top:-5px;
+        margin-bottom:10px;
+    }
+    .asterisk{
+        color:red;
+        font-weight:bold;
+        float:left;
+        margin-left:0px;
+        font-size:20px;
+    }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../../libs/js/lightbox.min.js"></script>
     <link rel="stylesheet" href="../../libs/js/jquery.fancybox.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="../../libs/js/jquery.fancybox.min.js"></script>
 
 
 <body onload=initialize()">
@@ -105,7 +120,7 @@ if (empty($_GET['id'])) {
         </div>
         
         <div class="card-body">
-            <label class="control-label" style="float:left;">Add Attachment:</label>
+            <label class="control-label" style="float:left;">Add Attachment:</label><div class="asterisk"> *</div>
             <div id="picform-container">
                 <form action="" method="post" enctype="multipart/form-data" id="picform">
                     <table class="table table-bordered">
@@ -194,105 +209,28 @@ if (empty($_GET['id'])) {
             </div>
         </div>
         <div class="card-body">
-                        <form action="" id="rfp-form">
+            <form action="" id="rfp-form">
                 <input type="hidden" name="division" value="<?php echo $_settings->userdata('division'); ?>">
-<input type="hidden" name="usercode" value="<?php echo $_settings->userdata('user_code'); ?>">
+                <input type="hidden" name="usercode" value="<?php echo $_settings->userdata('user_code'); ?>">
                 <?php if ($_settings->userdata('type') < 5){ ?>
                     <input type="hidden" name="status1" value="1">
                 <?php }else{ ?>
                     <input type="hidden" name="status1" value="0">
                 <?php } ?>
                 <input type="hidden" name="preparer" value="<?php echo ($usercode); ?>">
-                <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+                <input type="hidden" name="id" id="mainId" value="<?php echo isset($id) ? $id : '' ?>">
                 <input type="hidden" class="control-label" name="rfp_no" id="rfp_no" value="<?php echo $concatenatedValue; ?>" readonly>
                 <input type="hidden" class="control-label" name="num" id="num" value="<?php echo $attachment_count; ?>" readonly>
-                
-              
                 <hr>
                 <br>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="rfp_for" class="control-label">RFP For:</label>
-                            <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required>
-                                <option value="" disabled <?php echo !isset($rfp_for) ? "selected" : '' ?>>Select an Item</option>
-                                <option value="1" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "1" ?> >Agents</option>
-                                <option value="2" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "2" ?> >Employees</option>
-                                <option value="3" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "3" ?> >Clients</option>
-                                <option value="4" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "4" ?> >Suppliers</option>
-                                <option value="5" <?php echo isset($rfp_for) && $rfp_for =="" ? "selected": "5" ?> >Others</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="description" class="control-label">Particulars:</label>
-                            <textarea rows="10" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-md-12 form-group">
-                            <label for="amount" class="control-label">Amount:</label>
-                            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ""; ?>" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                           <div id="amountToWords" class="text-display" style="background-color:yellow;"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="name" class="control-label">Payable to:</label>
-                            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="address" class="control-label">Address:</label>
-                            <textarea rows="3" name="address" id="address" class="form-control rounded-0"><?php echo isset($address) ? $address :"" ?></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="payment_form" class="control-label">Payment Form:</label>
-                            <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
-                                <option value="" disabled selected>--Select Payment--</option>
-                                <option value="1" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Check</option>
-                                <option value="0" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Cash</option>
-                            </select>
+                            <label for="req_dept" class="control-label">Requesting Department:</label><div class="asterisk"> *</div>
+                            <input type="text" name="req_dept" id="req_dept" value="<?php echo $req_dept; ?>" class="form-control rounded-0" readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="bank_name" class="control-label">Bank Name:</label>
-                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                                                <div class="col-md-4 form-group">
-                            <label for="release_date" class="control-label">Release Date:</label>
-                            <?php
-                            if (!empty($release_date)) {
-                                $releaseformattedDate = date('Y-m-d', strtotime($release_date));
-                            } else {
-                                $releaseformattedDate = '';
-                            }
-                            ?>     
-                            <input type="date" class="form-control form-control-sm rounded-0" id="release_date" name="release_date" value="<?php echo isset($releaseformattedDate) ? $releaseformattedDate : '' ?>" required>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="check_date" class="control-label">Check Date:</label>
-                            <?php
-                            if (!empty($check_date)) {
-                                $checkformattedDate = date('Y-m-d', strtotime($check_date));
-                            } else {
-                                $checkformattedDate = '';
-                            }
-                            ?>     
-                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" disabled>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="transaction_date" class="control-label">Transaction Date:</label>
+                            <label for="transaction_date" class="control-label">Transaction Date:</label><div class="asterisk"> *</div>
                             <?php
                             if (!empty($transaction_date)) {
                                 $transaction_date = date('Y-m-d');
@@ -305,20 +243,88 @@ if (empty($_GET['id'])) {
                             <input type="date" class="form-control form-control-sm rounded-0" value="<?php echo isset($transaction_date) ? $transaction_date : '' ?>" readonly>
                             <input type="datetime-local" class="form-control form-control-sm rounded-0" style="display:none;" id="transaction_date" name="transaction_date" value="<?php echo isset($transactionformattedDateTime) ? $transactionformattedDateTime : '' ?>" required readonly>
                         </div>
-
                     </div>
-
                     <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="req_dept" class="control-label">Requesting Department:</label>
-                            <input type="text" name="req_dept" id="req_dept" value="<?php echo $_settings->userdata('department'); ?>" class="form-control rounded-0" readonly>
+                        <div class="col-md-6 form-group">
+                            <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label><div class="asterisk"> *</div>
+                            <select name="payment_form" id="payment_form" class="form-control rounded-0" required>
+                                <option value="" disabled selected>--Select Payment--</option>
+                                                                <option value="1" <?php echo ($payment_form === "1") ? "selected" : ""; ?>>Check</option>
+                                <option value="0" <?php echo ($payment_form === "0") ? "selected" : ""; ?>>Cash</option>
+                            </select>
                         </div>
-
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
+                            <label for="bank_name" class="control-label" style="float:left;">Bank Name:</label>
+                            <input type="text" name="bank_name" id="bank_name" class="form-control rounded-0" value="<?php echo isset($bank_name) ? $bank_name :"" ?>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="rfp_for" class="control-label" style="float:left;">RFP For:</label><div class="asterisk"> *</div>
+                            <select name="rfp_for" id="rfp_for" class="form-control rounded-0" required onchange="populatePayableToSelect()" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> >
+                                <option value="" disabled <?php echo !isset($rfp_for) ? "selected" : '' ?>>Select an Item</option>
+                                <option value="1" <?php echo isset($rfp_for) && $rfp_for == 1 ? "selected" : '' ?>>Agents</option>
+                                <option value="2" <?php echo isset($rfp_for) && $rfp_for == 2 ? "selected" : '' ?>>Employees</option>
+                                <option value="3" <?php echo isset($rfp_for) && $rfp_for == 3 ? "selected" : '' ?>>Clients</option>
+                                <option value="4" <?php echo isset($rfp_for) && $rfp_for == 4 ? "selected" : '' ?>>Suppliers</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="payable_to" class="control-label" style="float:left;">Payable to:</label><div class="asterisk"> *</div>
+                            <select name="name" id="name" class="custom-select1 custom-select-sm rounded-0 select2" style="font-size:14px" <?php echo !empty($_GET['id']) ? "disabled" : "" ?> required>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="amount" class="control-label" style="float:left;">Amount:</label><div class="asterisk"> *</div>
+                            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : ""; ?>" required>
+                        </div>
+                        <div class="col-md-6 form-group" style="padding-top:30px;">
+                            <div id="amountToWords" class="form-control rounded-0 text-display" style="background-color: gainsboro; overflow: auto;"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="address" class="control-label">Address:</label>
+                            <textarea rows="1" name="address" id="address" class="form-control rounded-0"><?php echo isset($address) ? $address :"" ?></textarea>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="checkname" class="control-label" style="float:left;">Check Name:</label><div class="asterisk"> *</div>
+                            <input type="text" name="check_name" id="check_name" class="form-control rounded-0" value="<?php echo isset($check_name) ? $check_name : ""; ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="check_date" class="control-label">Check Date:</label>
+                            <?php
+                            if (!empty($check_date)) {
+                                $checkformattedDate = date('Y-m-d', strtotime($check_date));
+                            } else {
+                                $checkformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" id="check_date" name="check_date" value="<?php echo isset($checkformattedDate) ? $checkformattedDate : '' ?>" readonly>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="release_date" class="control-label" style="float:left;">Release Date:</label><div class="asterisk"> *</div>
+                            <?php
+                            if (!empty($release_date)) {
+                                $releaseformattedDate = date('Y-m-d', strtotime($release_date));
+                            } else {
+                                $releaseformattedDate = '';
+                            }
+                            ?>     
+                            <input type="date" class="form-control form-control-sm rounded-0" id="release_date" name="release_date" value="<?php echo isset($releaseformattedDate) ? $releaseformattedDate : '' ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
                             <label for="pr_no" class="control-label">PR No:</label>
                             <input type="text" name="pr_no" id="pr_no" class="form-control rounded-0" value="<?php echo isset($pr_no) ? $pr_no :"" ?>">
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="po_no" class="control-label">PO No:</label>
                             <input type="text" name="po_no" id="po_no" class="form-control rounded-0" value="<?php echo isset($po_no) ? $po_no :"" ?>">
                         </div>
@@ -326,23 +332,29 @@ if (empty($_GET['id'])) {
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="cdv_no" class="control-label">CDV No:</label>
-                                                        <input type="text" name="cdv_no" id="cdv_no" class="form-control rounded-0" value="<?php echo isset($cdv_no) ? $cdv_no :"" ?>">
+                            <input type="text" name="cdv_no" id="cdv_no" class="form-control rounded-0" value="<?php echo isset($cdv_no) ? $cdv_no :"" ?>">
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="ofv_no" class="control-label">OFV No:</label>
-                                                        <input type="text" name="ofv_no" id="ofv_no" class="form-control rounded-0" value="<?php echo isset($ofv_no) ? $ofv_no :"" ?>">
+                            <input type="text" name="ofv_no" id="ofv_no" class="form-control rounded-0" value="<?php echo isset($ofv_no) ? $ofv_no :"" ?>">
                         </div>
                     </div>
                     
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="description" class="control-label" style="float:left;">Particulars:</label><div class="asterisk"> *</div>
+                            <textarea rows="10" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label for="remarks" class="control-label">Remarks:</label>
+                        <label for="remarks" class="control-label" style="float:left;">Remarks:</label><div class="asterisk"> *</div>
                         <textarea rows="3" name="remarks" id="remarks" class="form-control rounded-0" required><?php echo isset($remarks) ? $remarks :"" ?></textarea>
                     </div>
                 </div>
                 <br><hr><br>
                 <?php 
                 if (isset($_GET['id']) == ''){ ?>
-    <div class="container-fluid">
+                <div class="container-fluid">
                 <div class="card-body" style="border:1px solid gainsboro;">
                     <label for="remarks" class="control-label">List of Approvers </label>
                         <br><hr>
@@ -351,7 +363,7 @@ if (empty($_GET['id'])) {
                         <div class="container-fluid approversDiv"></div>
                         <select id="status1_orig" class="custom-select custom-select-sm rounded-0 select2" style="display: none">
                             <?php 
-                            $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' || division = 'MNGR' || position = 'EXECUTIVE ASSISTANT TO THE COO'");
+                            $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                             $isApproverIdZero = isset($approver_id) && $approver_id == 0;
                             ?>
                             <option value="" <?php echo $isApproverIdZero ? "selected" : '' ?>></option>
@@ -373,6 +385,7 @@ if (empty($_GET['id'])) {
                         var container = document.querySelector('.approversDiv');
                         var originalSelect = document.getElementById('status1_orig');
                         var section = '<?php echo $_settings->userdata('section'); ?>'; 
+                        var code = '<?php echo $_settings->userdata('user_code'); ?>';
                         container.innerHTML = '';
 
                         var clonedSelectContainer = document.createElement('div');
@@ -396,288 +409,7 @@ if (empty($_GET['id'])) {
                         document.querySelectorAll('.custom-select').forEach(function (select, index) {
                             select.style.display = 'block';
 
-                            if (section === 'Accounting') {
-                                if (index === (inputValue - 4)) {
-                                    select.value = '10184';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10030';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Billing') {
-                                if (index === (inputValue - 4)) {
-                                    select.value = '20016';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10030';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Documentation and Loan') {
-                                if (index === (inputValue - 4)) {
-                                    select.value = '20084';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10009';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'IT') {
-                                if (index === (inputValue - 3)) {
-                                    select.value = '20181';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Legal') {
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10102';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Audit') {
-                                if (index === (inputValue - 4)) {
-                                    select.value = '20018';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10030';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Inventory Control') {
-                                if (index === (inputValue - 4)) {
-                                    select.value = '20017';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10009';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'General Services') {
-                                if (index === (inputValue - 4)) {
-                                    select.value = '10143';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10070';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Marketing') {
-                                if (index === (inputValue - 5)) {
-                                    select.value = '10100';
-                                }
-                                if (index === (inputValue - 4)) {
-                                    select.value = '10114';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10051';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Corporate Communications') {
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10131';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Personnel') {
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10070';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Project Admin') {
-                                if (index === (inputValue - 5)) {
-                                    select.value = '20001';
-                                }
-                                if (index === (inputValue - 4)) {
-                                select.value = '10114';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10051';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Treasury') {
-                                if (index === (inputValue - 4)) {
-                                select.value = '10017';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10007';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'CALS') {
-                                if (index === (inputValue - 4)) {
-                                select.value = '10012';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10030';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            }
-                            if (section === 'Contracts and Doc.' || section === 'Design and Devt.') {
-                                if (index === (inputValue - 5)) {
-                                select.value = '10026';
-                                }
-                                if (index === (inputValue - 4)) {
-                                select.value = '10114';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10051';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Technical Planning') {
-                                if (index === (inputValue - 6)) {
-                                select.value = '20186';
-                                }
-                                if (index === (inputValue - 5)) {
-                                select.value = '10026';
-                                }
-                                if (index === (inputValue - 4)) {
-                                select.value = '10114';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10051';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Const. and Impln.') {
-                                if (index === (inputValue - 5)) {
-                                    select.value = '10006';
-                                }
-                                if (index === (inputValue - 4)) {
-                                select.value = '10114';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10051';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Permits and Licenses') {
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10009';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Electrical') {
-                                if (index === (inputValue - 6)) {
-                                    select.value = '10038';
-                                }
-                                if (index === (inputValue - 5)) {
-                                select.value = '10026';
-                                }
-                                if (index === (inputValue - 4)) {
-                                    select.value = '10114';
-                                }
-                                if (index === (inputValue - 3)) {
-                                    select.value = '10051';
-                                }
-                                if (index === (inputValue - 2)) {
-                                select.value = '20124';
-                                }
-                                if (index === (inputValue - 1)) {
-                                    select.value = '10055';
-                                }
-                            } 
-                            if (section === 'Purchasing') {
-                                if (index === (inputValue - 4)) {
-                                select.value = '10015';
-                                }
-                                if (index === (inputValue - 3)) {
-                                select.value = '10030';
-                                }
+                            if (section === 'Engineering') {
                                 if (index === (inputValue - 2)) {
                                 select.value = '20124';
                                 }
@@ -737,7 +469,7 @@ if (empty($_GET['id'])) {
                         <div class="container-fluid approversDiv">
                             <?php
                             for ($i = 0; $i < $total_count; $i++) {
-                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+                                $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
                                 echo '<div class="approver-row">';
                                 echo '<label for="status' . ($i + 1) . '">Approver ' . ($i + 1) . ':</label>';
                                 echo '<select id="status' . ($i + 1) . '" class="custom-select custom-select-sm rounded-0 select2" name="status' . ($i + 1) . '">';
@@ -778,70 +510,10 @@ if (isset($_GET['id']) == ''){
     echo 'window.onload = function() {';
     echo 'var inputValue = document.getElementById("inputValue").value;'; 
     echo 'var section = "' . $_settings->userdata('section') . '";'; 
-    
-    echo 'if (section === "Accounting") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10184", "10030", "20124", "10055"];';
-    echo '} else if (section === "Billing") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["20016", "10030", "20124", "10055"];';
-    echo '} else if (section === "Const. and Impln.") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10006", "10114", "10051", "20124", "10055"];';
-    echo '} else if (section === "Documentation and Loan") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["20084", "10009", "20124", "10055"];';
-    echo '} else if (section === "IT") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["20181", "20124", "10055"];';
-    echo '} else if (section === "Legal") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["10102", "20124", "10055"];';
-    echo '} else if (section === "Audit") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["20018", "10030","20124", "10055"];';
-    echo '} else if (section === "Inventory Control") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["20017", "20003", "10009","20124", "10055"];';
-    echo '} else if (section === "General Services") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10143", "10070","20124", "10055"];';
-    echo '} else if (section === "Marketing") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10100", "10114","10051","20124", "10055"];';
-    echo '} else if (section === "Corporate Communications") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["10131","20124", "10055"];';
-    echo '} else if (section === "Personnel") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10041","10070","20124", "10055"];';
-    echo '} else if (section === "Project Admin") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["20001","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Treasury") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10017","10007","20124", "10055"];';
-    echo '} else if (section === "CALS") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10012","10030","20124", "10055"];';
-    echo '} else if (section === "Contracts and Doc.") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10026","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Design and Devt.") {';
-    echo '    inputValue = 5; '; 
-    echo '    var selects = ["10026","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Purchasing") {';
-    echo '    inputValue = 4; '; 
-    echo '    var selects = ["10015","10030","20124", "10055"];';
-    echo '} else if (section === "Technical Planning") {';
-    echo '    inputValue = 6; '; 
-    echo '    var selects = ["20186","10026","10114","10051","20124", "10055"];';
-    echo '} else if (section === "Permits and Licenses") {';
-    echo '    inputValue = 3; '; 
-    echo '    var selects = ["10009","20124", "10055"];';
-    echo '} else if (section === "Electrical") {';
-    echo '    inputValue = 6; '; 
-    echo '    var selects = ["10038","10026", "10114","10051","20124", "10055"];';
+    echo 'var code = "' . $_settings->userdata('user_code') . '";'; 
+    echo 'if (section === "Engineering") {';
+    echo '    inputValue = 2; '; 
+    echo '    var selects = ["20124", "10055"];';
     echo '}';
     
     echo 'var container = document.querySelector(".approversDiv");';
@@ -874,6 +546,115 @@ if (isset($_GET['id']) == ''){
     echo '</script>';
 } 
 ?>
+ <script>
+    document.getElementById('amount').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/[^\d.]/g, '');
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        e.target.value = value;
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#name').change(function() {
+            var selectedOption = $(this).val();
+            $('#check_name').val(selectedOption);
+        });
+    });
+</script>
+ <script>
+    $(document).ready(function() {
+        $('#data-table').DataTable({
+            "paging": true,      
+            "lengthChange": true, 
+            "searching": true,   
+            "ordering": true,    
+            "info": true,        
+            "autoWidth": false  
+        });
+        $('.table th, .table td').addClass('px-1 py-0 align-middle');
+    });
+</script>
+<script>
+$(document).ready(function() {
+  $('#name').select2({
+    tags: true 
+  });
+});
+
+function populatePayableToSelect() {
+var rfpForSelect = document.getElementById('rfp_for');
+var payableToSelect = document.getElementById('name');
+var mainId = document.getElementById('mainId').value; 
+var rfpNo = document.getElementById('rfp_no').value; 
+var selectedValue = rfpForSelect.value;
+payableToSelect.innerHTML = '';
+
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+        console.log("XHR Status:", xhr.status);
+        if (xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+            console.log("Data received:", data);
+            if (data.alert) {
+                console.log("Alert message:", data.alert);
+            }
+            if (data.data) {
+                data.data.forEach(function(item) {
+                    var option = document.createElement('option');
+                    if (selectedValue == '1' && mainId == '') {
+                        option.value = item.c_first_name + ' ' + item.c_last_name;
+                        option.text = item.c_first_name + ' ' + item.c_last_name;
+                    } else if(selectedValue == '1' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    } else if (selectedValue == '2' && mainId == '') {
+                        option.value = item.firstname + ' ' + item.lastname;
+                        option.text = item.firstname + ' ' + item.lastname;
+                    } else if (selectedValue == '2' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    } else if (selectedValue == '3' && mainId == '') {
+                        option.value = item.first_name + ' ' + item.last_name;
+                        option.text = item.first_name + ' ' + item.last_name;
+                    } else if (selectedValue == '3' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    }else if (selectedValue == '4' && mainId != '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    }else if (selectedValue == '4' && mainId == '') {
+                        option.value = item.name;
+                        option.text = item.name;
+
+                    }else {
+                        option.value = item.name;
+                        option.text = item.name;
+                    }
+                    payableToSelect.appendChild(option);
+                });
+            }
+        } else {
+            console.error("Error fetching data:", xhr.statusText);
+        }
+    }
+};
+xhr.open('GET', 'rfp/get_dropdown.php?rfp_for=' + selectedValue + '&rfp_no=' + rfpNo + '&mainId=' + mainId, true);
+xhr.send();
+}
+
+document.getElementById('rfp_for').addEventListener('change', populatePayableToSelect);
+populatePayableToSelect();
+
+</script>
 <script>
     function getUrlParameter(name) {
         name = name.replace(/[\[\]]/g, '\\$&');
@@ -960,7 +741,7 @@ if (isset($_GET['id']) == ''){
         newSelect.setAttribute('name', 'status' + totalCount);
 
         <?php
-        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR'");
+        $approver_qry = $conn->query("SELECT * FROM `users` WHERE division = 'SPVR' OR division = 'MNGR' OR position = 'EXECUTIVE ASSISTANT TO THE COO' OR position = 'EXECUTIVE ASSISTANT TO THE COO'");
         while ($row = $approver_qry->fetch_assoc()) {
             echo 'var option = document.createElement("option");';
             echo 'option.value = "' . $row['user_code'] . '";';
@@ -1111,33 +892,19 @@ $(function(){
     $('#rfp-form').submit(function(e){
         e.preventDefault();
         var _this = $(this);
-        $('.err-msg').remove();
+        var p_Id = document.getElementById('mainId').value;
+        $('.pop-msg').remove();
+        var el = $('<div>');
+        el.addClass("pop-msg alert");
+        el.hide();
         
-        // var requiredFields = ['name', 'short_name', 'tin', 'address', 'contact_person', 'email', 'contact', 'mop', 'terms', 'vatable', 'status'];
-        // var isValid = true;
-
-        // for (var i = 0; i < requiredFields.length; i++) {
-        //     var fieldName = requiredFields[i];
-        //     var fieldValue = _this.find('[name="' + fieldName + '"]').val().trim();
-
-        //     if (fieldValue === '') {
-        //         isValid = false;
-        //         var errorMsg = 'May kulang po. Hehe.';
-        //         var existingError = _this.find('.err-msg:contains("' + errorMsg + '")');
-                
-        //         if (existingError.length === 0) {
-        //             var el = $('<div>').addClass("alert alert-danger err-msg").text(errorMsg);
-        //             _this.prepend(el);
-        //             el.show('slow');
-        //             $("html, body").animate({ scrollTop: 0 }, "fast");
-        //         }
-        //     }
-        // }
-
-        // if (!isValid) {
-        //     return false;
-        // }
-
+        if (p_Id === null || p_Id.trim() === "") {
+            if ($('#image').val() === "") {
+                alert_toast("Attached file is required.", 'warning');
+                return false;
+            }
+        }
+        
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=save_rfp",

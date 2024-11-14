@@ -9,10 +9,10 @@ $type = $_settings->userdata('user_code');
 $level = $_settings->userdata('type');
 ?>
 <style>
-    .nav-cpo{
-        background-color:#007bff;
-        color:white!important;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	.nav-cpo{
+		background-color:#007bff;
+		color:white!important;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
     }
     .nav-cpo:hover{
         background-color:#007bff!important;

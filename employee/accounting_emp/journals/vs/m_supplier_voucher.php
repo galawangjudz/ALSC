@@ -257,9 +257,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <form action="" id="journal-form">
                     <input type="hidden" name="id" value="<?= isset($id) ? $id :'' ?>">
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
-                                        <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
+                    <input type="hidden" id="user_id" name="user_id" value="<?php echo $userid; ?>">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 form-group">
                                     <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -324,8 +324,27 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="date" class="form-control form-control-sm rounded-0" id="due_date" name="due_date" value="<?php echo isset($dueformattedDate) ? $dueformattedDate : '' ?>" required readonly>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Requester:</label>
+                                    <select name="requester" id="requester" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <option value="" disabled <?php echo !isset($requester) ? "selected" : '' ?>></option>
+                                        <?php 
+                                        $users_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                        while ($row = $users_qry->fetch_assoc()):
+                                        ?>
+                                        <option 
+                                            value="<?php echo $row['user_code'] ?>" 
+                                            data-emp-code="<?php echo $row['user_code'] ?>"
+                                            <?php echo isset($requester) && $requester == $row['user_code'] ? 'selected' : '' ?>
+                                        ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
                         </div>
-                        <div class="col-md-6">  
+                        <!-- <div class="col-md-6">  
                         <div class="col-md-12 form-group">
                             <label for="rfp_no">Approved RFPs:</label>
                             <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
@@ -521,11 +540,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             }
                             ?>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>
                             <div class="container" id="sup-div">
                             <div class="container-fluid">
@@ -536,7 +555,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
                                         $terms = '';
                                         ?>
-                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px">
                                             <option value="" disabled <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                             <?php while ($row = $supplier_qry->fetch_assoc()): ?>
                                                 <option
@@ -814,15 +833,19 @@ function updateDueDate() {
                         daysToAdd = parseInt(data.days_in_following_month);
                     }
 
-                    if (daysInMonth === 0) {
+                    else if (daysInMonth === 0) {
                         daysToAdd = parseInt(data.days_before_due);
                     }
 
-                    if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
+                    else if (daysToAdd === 0 && parseInt(data.days_in_following_month) === 0) {
                         var currentDate = new Date();
                         daysToAdd = 0;
                         pterms.val(data.terms);
                         return;
+                    }
+
+                    else{
+                        daysToAdd = 0;
                     }
 
                     console.log("DAYS TO ADD", daysToAdd);

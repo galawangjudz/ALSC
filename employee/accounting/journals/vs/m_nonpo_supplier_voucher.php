@@ -127,12 +127,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         #uni_modal .modal-footer{
             display: none;
         }
-        .nav-client{
+        .nav-sup{
             background-color:#007bff;
             color:white!important;
             box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
         }
-        .nav-client:hover{
+        .nav-sup:hover{
             background-color:#007bff!important;
             color:white!important;
             box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
@@ -252,7 +252,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="hidden" id="publicId" value="<?php echo $publicId; ?>">
                     <input type="hidden" id="preparer" name="preparer" value="<?php echo $userid; ?>">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 form-group">
                                     <label for="v_num" class="control-label">Voucher Setup #:</label>
@@ -283,10 +283,28 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <input type="date" id="due_date" name="due_date" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($due_date) ? $due_date : date("Y-m-d") ?>" required>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Requester:</label>
+                                    <select name="requester" id="requester" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px" required>
+                                        <option value="" disabled <?php echo !isset($requester) ? "selected" : '' ?>></option>
+                                        <?php 
+                                        $users_qry = $conn->query("SELECT * FROM `users` ORDER BY `lastname` ASC");
+                                        while ($row = $users_qry->fetch_assoc()):
+                                        ?>
+                                        <option 
+                                            value="<?php echo $row['user_code'] ?>" 
+                                            data-emp-code="<?php echo $row['user_code'] ?>"
+                                            <?php echo isset($requester) && $requester == $row['user_code'] ? 'selected' : '' ?>
+                                        ><?php echo $row['firstname'] ?> <?php echo $row['lastname'] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                         <div class="col-md-12 form-group">
-                            <label for="rfp_no">Approved RFPs:</label>
+                            <!-- <label for="rfp_no">Approved RFPs:</label>
                             <table class="table table-bordered" id="table2" style="text-align:center;width:100%;">
                                 <colgroup>
                                     <col width="10%">
@@ -304,40 +322,43 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $i = 1;
-                                    $qry = $conn->query("SELECT 
-                                    tbl_rfp.id AS mainId,
-                                    tbl_rfp.*,  
-                                    tbl_rfp_approvals.* 
-                                FROM 
-                                    tbl_rfp 
-                                JOIN 
-                                    tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
-                                WHERE 
-                                    (tbl_rfp.rfp_for = 4 OR tbl_rfp.rfp_for = 5) 
-                                GROUP BY 
-                                    tbl_rfp.rfp_no
-                                HAVING 
-                                    (CASE WHEN tbl_rfp.status1 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp.status2 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp.status3 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp.status4 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp.status5 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp.status6 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp.status7 <> '' THEN 1 ELSE 0 END) 
-                                    = 
-                                    (CASE WHEN tbl_rfp_approvals.status1 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp_approvals.status2 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp_approvals.status3 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp_approvals.status4 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp_approvals.status5 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp_approvals.status6 <> '' THEN 1 ELSE 0 END +
-                                    CASE WHEN tbl_rfp_approvals.status7 <> '' THEN 1 ELSE 0 END)
-                                ORDER BY 
-                                    tbl_rfp.transaction_date ASC;");
+                                        $i = 1;
+                                        $qry = $conn->query("SELECT 
+                                        tbl_rfp.id AS mainId,
+                                        supplier_list.*,
+                                        tbl_rfp.*,  
+                                        tbl_rfp_approvals.* 
+                                    FROM 
+                                        tbl_rfp 
+                                    JOIN 
+                                        tbl_rfp_approvals ON tbl_rfp.rfp_no = tbl_rfp_approvals.rfp_no
+                                    JOIN
+                                        supplier_list ON supplier_list.`name` = tbl_rfp.name
+                                    WHERE 
+                                        (tbl_rfp.rfp_for = 4 OR tbl_rfp.rfp_for = 5) 
+                                    GROUP BY 
+                                        tbl_rfp.rfp_no
+                                    HAVING  
+                                        (CASE WHEN tbl_rfp.status1 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp.status2 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp.status3 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp.status4 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp.status5 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp.status6 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp.status7 <> '' THEN 1 ELSE 0 END) 
+                                        = 
+                                        (CASE WHEN tbl_rfp_approvals.status1 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp_approvals.status2 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp_approvals.status3 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp_approvals.status4 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp_approvals.status5 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp_approvals.status6 <> '' THEN 1 ELSE 0 END +
+                                        CASE WHEN tbl_rfp_approvals.status7 <> '' THEN 1 ELSE 0 END)
+                                    ORDER BY 
+                                        tbl_rfp.transaction_date ASC;");
                                     while ($row = $qry->fetch_assoc()) {
                                     ?>
-                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
+                                        <tr class="clickable-row" data-rfp="<?php echo $row['rfp_no']; ?>" data-sup-name="<?php echo $row['name']; ?>" data-sup-code="<?php echo $row['id']; ?>" data-sup-part="<?php echo $row['description']; ?>" data-sup-check="<?php echo $row['check_date']; ?>" data-toggle="modal" data-target="#rfpModal<?php echo $row['mainId']; ?>" style="cursor:pointer;">
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td><?php echo ($row['rfp_no']); ?></td>
                                         <td><?php echo ($row['req_dept']) ?></td>
@@ -348,9 +369,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     ?>
                                 </tbody>
                             </table>
-                            <hr>
-                            <label for="rfp_no">Selected RFP #:</label>
-                            <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" value="<?= isset($rfp_no) ? $rfp_no : "" ?>" readonly> 
+                            <hr class="custom-hr">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="rfp_no">Selected RFP #:</label>
+                                    <input type="text" id="rfp_no" name="rfp_no" class="form-control form-control-sm form-control-border rounded-0" readonly> 
+                                </div>
+                            </div> -->
+                            
                             <?php
                             $qry = $conn->query("SELECT * FROM tbl_rfp ORDER BY transaction_date DESC;");
                             while ($row = $qry->fetch_assoc()) {
@@ -484,14 +510,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     </div>
                     <div class="paid_to_main">
                         <div class="paid_to">
-                            <label class="control-label">Paid To:</label>
+                            <label class="control-label">Paid To:</label><br>
                             <hr>          
                             <div class="row" id="sup-div">
                             <table style="width:100%;">
                                 <tr>
                                     <td style="width:50%; padding-right: 10px;">
                                         <label for="supplier_id">Supplier:</label>
-                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px;" required>
+                                        <select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2" style="font-size:14px;">
                                             <option value="" <?php echo !isset($supplier_id) ? "selected" : '' ?>></option>
                                             <?php
                                             $supplier_qry = $conn->query("SELECT * FROM `supplier_list` WHERE status = 1 ORDER BY `name` ASC");
@@ -699,7 +725,15 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('.clickable-row').click(function() {
         var rfpNo = $(this).data('rfp');
+        var supName = $(this).data('sup-name');
+        var supCode = $(this).data('sup-code');
+        var supParticulars = $(this).data('sup-part');
+        var supCheck = $(this).data('sup-check');
         $('#rfp_no').val(rfpNo);
+        $('#supplier_id').find('option:selected').text(supName);
+        $('#sup_code').val(supCode);
+        $('#description').val(supParticulars);
+        $('#due_date').val(supCheck);
     });
 });
 $(document).ready(function() {
@@ -766,7 +800,7 @@ $(document).ready(function () {
     $("#item-clone").append(clone);
 
     $(document).on('change', '.po-item select', function () {
-        updateHiddenOptions();
+        ////updateHiddenOptions();
         updateAccCode($(this));
     });
 
@@ -776,7 +810,7 @@ $(document).ready(function () {
         newRow.find('[name="ctr"]').val(rowCount);
         $('#acc_list tbody').append(newRow);
         initializeRowEvents(newRow);
-        updateHiddenOptions();
+        ////updateHiddenOptions();
     });
 
     function updateCounter() {
@@ -914,7 +948,7 @@ function updateAmountCredit(creditInput) {
 
 function rem_item(_this) {
     _this.closest('tr').remove();
-    updateHiddenOptions();
+    ////updateHiddenOptions();
     updateTotals();
 }
 

@@ -15,18 +15,7 @@
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
 </style>
-<?php
-$usertype = $_settings->userdata('user_type');
-if (!isset($usertype)) {
-    include '404.html';
-  exit;
-}
-$user_role = $usertype;
-if ($user_role != 'SOS') {
-    include '404.html';
-  exit;
-}
-?>
+
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h5 class="card-title"><b><i>House Models List</b></i></h5>

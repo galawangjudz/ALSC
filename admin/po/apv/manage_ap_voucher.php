@@ -12,7 +12,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 ?>
 <?php
 	$subtotal = 0;
-	$usertype = $_settings->userdata('position'); 
+	$usertype = $_settings->userdata('user_type'); 
 	$type = $_settings->userdata('user_code');
 	$level = $_settings->userdata('type');
 ?>

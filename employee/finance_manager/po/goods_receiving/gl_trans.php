@@ -255,7 +255,7 @@ function format_num($number){
                                                         <?php foreach ($group as $row) : ?>
                                                             <tr>
                                                                 <td class="text-center">
-                                                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;" readonly>
+                                                                    <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;text-align:center;" readonly>
                                                                 </td>
                                                                 <td class="text-center">
                                                                     <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;" readonly>
@@ -367,7 +367,7 @@ function format_num($number){
                                                     <?php foreach ($group as $row) : ?>
                                                         <tr>
                                                             <td class="text-center">
-                                                                <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;" readonly>
+                                                                <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;text-align:center;" readonly>
                                                             </td>
                                                             <td class="text-center">
                                                                 <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;" readonly>
@@ -467,7 +467,7 @@ function format_num($number){
                                     ?>
                                     <tr>
                                         <td class="text-center">
-                                            <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;" readonly>
+                                            <input type="text" id="item_no" value="<?= $counter; ?>" style="border: none;background:transparent;text-align:center;" readonly>
                                         </td>
                                         <td class="text-center">
                                             <input type="text" id="journal_date" value="<?= date('Y-m-d', strtotime($row['journal_date'])); ?>" style="border: none;background:transparent;" readonly>

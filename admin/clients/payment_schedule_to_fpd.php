@@ -45,8 +45,7 @@
     $month = $date_arr['month'];
     $day = $date_arr['day'];
     /* $change_date = 0; */
-
-    $conn = mysqli_connect(DB_SERVER, DB_USERNAME, '', DB_NAME);
+    $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
     if (!$conn) {
         die('Could not connect to database: ' . mysqli_connect_error());
     }
@@ -166,7 +165,7 @@
 
 
     function load_data($id){
-          $conn = mysqli_connect(DB_SERVER,DB_USERNAME,'',DB_NAME);
+          $conn = mysqli_connect('localhost', 'root', '', 'alscdb');
           if (!$conn) {
               die('Could not connect to database: ' . mysqli_connect_error());
           }
