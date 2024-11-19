@@ -8,22 +8,6 @@ if($_settings->chk_flashdata('success')): ?>
 <?php 
 $getID = $_GET['id'];
 ?>
-<!-- <?php
-	function test(){
-		$fileName = "falls-06.jpg";
-		$filePath = "uploads/";
-		$myFile = $filePath.$fileName;
-		
-		if(file_exists($myFile)){
-			echo "$fileName exists!!!";
-			echo $myFile;
-		}else{
-			echo "$fileName does not exist!!!";
-			echo $myFile;
-		}
-	}
-?> -->
-
 
 <style>
 	.container-fluid p{

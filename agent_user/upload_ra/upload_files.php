@@ -25,7 +25,7 @@ $getID = $_GET['id'];
     	<body>
         <!-- Modal -->
 		<form action="" method="post" enctype="multipart/form-data" id="upload-file">
-			<input id="id" type="hidden" name="id" value= "<?php echo $getID ?>" />
+			<input type="hidden" id="id" name="id" value= "<?php echo $getID ?>" />
 			<input type="hidden" name="getFileName" id="getFileName" class="form-control required">	
 			<table>
 				<tr>
@@ -71,8 +71,8 @@ $getID = $_GET['id'];
     form_data.append('file', file_data);
                          
     $.ajax({
-        url: _base_url_+'agent_user/upload_ra/upload.php', // <-- point to server-side PHP script 
-        dataType: 'text',  // <-- what to expect back from the PHP script, if anything
+        url: _base_url_+'agent_user/upload_ra/upload.php', 
+        dataType: 'text',  
         cache: false,
         contentType: false,
         processData: false,

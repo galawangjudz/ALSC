@@ -120,7 +120,7 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                                 </button>
 								<div class="dropdown-menu" role="menu">
-								<?php if($row['c_verify'] == 0){ ?> 
+								<?php if($row['c_verify'] == 1){ ?> 
                                 	<div class="dropdown-menu" role="menu">
 									<a class="dropdown-item" href="./?page=agent_revisions/ra-view&id=<?php echo md5($row['c_csr_no']) ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 								<?php }else {?> 

@@ -303,6 +303,7 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 	<i><h3 class="card-title"><b>Reservation Application #<?php echo $ra_id; ?></b></h3></i>
+
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -1316,7 +1317,7 @@ function showReplyForm(self) {
 		$('.attachment_name').click(function(){
 			var csrno=$(this).data('id');
             $.ajax({
-                url:'upload_ra/ajax_attachments.php',
+                url:'<?php echo base_url; ?>agent_user/upload_ra/ajax_attachments.php',
 				type:'post',
 				data:{csrno:csrno},
 				success:function(response){

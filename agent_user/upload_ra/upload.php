@@ -11,7 +11,7 @@ $filename = $_FILES['file']['name'];
 /* $getID = $_POST['csr_no']; */
 /* $getID = $_POST['id']; */
 // Location
-$location = '../../uploads/'.$filename;
+$location = '../../agent_user/upload_ra/uploads/'.$filename;
 
 // file extension
 $file_extension = pathinfo($location, PATHINFO_EXTENSION);
