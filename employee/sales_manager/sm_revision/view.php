@@ -3,9 +3,7 @@
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
 </script>
 <?php endif;?>
-
 <?php 
-
 $usertype = $_settings->userdata('user_type');
 if(($_GET['id']) && ($_GET['id'] > 0)){
     $csr = $conn->query("SELECT x.*, y.ra_id, y.c_csr_status, y.c_reserve_status, 
@@ -16,7 +14,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                         where md5(y.c_csr_no) = '{$_GET['id']}'" );
     if($csr->num_rows > 0){
         while ($row = mysqli_fetch_assoc($csr)):
-
             ///ADD COST
             $floor_elevation = $row['floor_elevation'];
             // $aircon_outlets = $row['aircon_outlets'];
@@ -43,8 +40,6 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
 			$service_area_price = $row['service_area_price'];
 			$others_price = $row['others_price'];
 			$floor_elev_price = $row['floor_elev_price'];
-
-
 
             ///////////////
             $ra_id = $row['ra_id'];
