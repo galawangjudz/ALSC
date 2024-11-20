@@ -495,7 +495,7 @@ Class Master extends DBConnection {
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
-			$flr_elev_price = $_POST['flrelev_price'];
+			//$flr_elev_price = $_POST['flrelev_price'];
 			$conv_outlet_price = $_POST['conv_outlet_price'];
 			$others_price = $_POST['others_price'];
 
@@ -506,11 +506,11 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area = '$service_area' ";
 			$data2 .= ", others = '$others' ";
 			$data2 .= ", conv_outlet = '$conv_outlet' ";
-			$data2 .= ", floor_elevation = '$flrelev_text' ";
+			//$data2 .= ", floor_elevation = '$flrelev_text' ";
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
-			$data2 .= ", floor_elev_price = '$flr_elev_price' ";
+			//$data2 .= ", floor_elev_price = '$flr_elev_price' ";
 			$data2 .= ", conv_outlet_price = '$conv_outlet_price' ";
 			$data2 .= ", others_price = '$others_price' ";
 
@@ -579,7 +579,7 @@ Class Master extends DBConnection {
 				$data .= ", contact_abroad = '$contact_abroad' "; 
 				$data .= ", relationship = '$relationship' ";
 
-				$users_to_notify = array('IT Admin', 'SOS'); 
+				//$users_to_notify = array('IT Admin', 'SOS'); 
 
 
 				// foreach ($users_to_notify as $user) {
@@ -707,7 +707,7 @@ Class Master extends DBConnection {
 			$service_area_price = $_POST['service_area_price'];
 			$ac_outlet_price = $_POST['aircon_outlet_price'];
 			$ac_grill_price = $_POST['ac_grill_price'];
-			$flr_elev_price = $_POST['flrelev_price'];
+			//$flr_elev_price = $_POST['flrelev_price'];
 			$conv_outlet_price = $_POST['conv_outlet_price'];
 			$others_price = $_POST['others_price'];
 
@@ -716,7 +716,7 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area = '$service_area' ";
 			$data2 .= ", others = '$others' ";
 			$data2 .= ", conv_outlet = '$conv_outlet' ";
-			$data2 .= ", floor_elevation = '$floor_elev' ";
+			//$data2 .= ", floor_elevation = '$floor_elev' ";
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
@@ -802,19 +802,19 @@ Class Master extends DBConnection {
 				}
 
 
-				$users_to_notify = array('IT Admin', 'SOS'); 
+				// $users_to_notify = array('IT Admin', 'SOS'); 
 
-				foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-						"message = '$comm2 with CSR# $c_csr_no.'",
-						"user_to_be_notified = '$user'",
-						"seen = '0'"
-					);
+				// foreach ($users_to_notify as $user) {
+				// 	$data_notif_values = array(
+				// 		"message = '$comm2 with CSR# $c_csr_no.'",
+				// 		"user_to_be_notified = '$user'",
+				// 		"seen = '0'"
+				// 	);
 
-					$data_notif = implode(", ", $data_notif_values);
+				// 	$data_notif = implode(", ", $data_notif_values);
 
-					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-				}
+				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// }
 		}
 		
 		if($save){
@@ -953,17 +953,17 @@ Class Master extends DBConnection {
 				$this->settings->set_flashdata('success',"RA successfully verified.");
 			}else{
 
-				foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-					"message = '$usertype voided CSR #$id.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-					);
+				// foreach ($users_to_notify as $user) {
+				// 	$data_notif_values = array(
+				// 	"message = '$usertype voided CSR #$id.'",
+				// 	"user_to_be_notified = '$user'",
+				// 	"seen = '0'"
+				// 	);
 
-					$data_notif = implode(", ", $data_notif_values);
+				// 	$data_notif = implode(", ", $data_notif_values);
 
-					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-					}
+				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// 	}
 				$update = $this->conn->query("UPDATE t_approval_csr SET c_csr_status = 3 where c_csr_no = ".$id);
 				
 				$resp['status'] = 'success';
@@ -996,18 +996,18 @@ Class Master extends DBConnection {
 			$save2 = $this->conn->query("UPDATE t_csr SET coo_approval = ".$value." where c_csr_no = ".$id);
 
 			if($save && $save2){
-				$users_to_notify = array('Cashier', 'IT Admin'); 
-				foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-				"message = '$type approved CSR #$id.'",
-				"user_to_be_notified = '$user'",
-				"seen = '0'"
-				);
+				// $users_to_notify = array('Cashier', 'IT Admin'); 
+				// foreach ($users_to_notify as $user) {
+				// $data_notif_values = array(
+				// "message = '$type approved CSR #$id.'",
+				// "user_to_be_notified = '$user'",
+				// "seen = '0'"
+				// );
 
-				$data_notif = implode(", ", $data_notif_values);
+				// $data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-				}
+				// $save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// }
 
 				$resp['status'] = 'success';
 			
@@ -1171,35 +1171,35 @@ Class Master extends DBConnection {
 				return json_encode($resp);
 				exit;
 			} 
-			$users_to_notify = array('IT Admin', 'CA'); 
+			// $users_to_notify = array('IT Admin', 'CA'); 
 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm$csr_no.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm$csr_no.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 			$save = $this->conn->query("INSERT INTO t_reservation set ".$data);
 			
 		}else{
-			$users_to_notify = array('IT Admin', 'CA'); 
+			// $users_to_notify = array('IT Admin', 'CA'); 
 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm2 $csr_no.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm2 $csr_no.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 			$save = $this->conn->query("UPDATE t_reservation set ".$data." where id = ".$id);
 		}
 
@@ -1278,22 +1278,24 @@ Class Master extends DBConnection {
 	function upload_file(){
 		extract($_FILES);
 		extract($_POST);
-		$getID = $_POST['id'];
-		$title = $_POST["title"];
-		$pname = $_POST['getFileName'];
-		$save = $this->conn->query("INSERT into tbl_vs_attachments(name,image) VALUES('$title','".$pname."')");
-		
+		$getID = (int)$_POST['id']; // Cast to ensure it's an integer
+		$title = $this->conn->real_escape_string($_POST["title"]); // Escape for SQL safety
+		$pname = $this->conn->real_escape_string($_POST['getFileName']); // Escape for SQL safety
+	
+		// Corrected SQL query
+		$save = $this->conn->query("INSERT INTO tbl_attachments(c_csr_no, name, title) VALUES('$getID', '$title', '$pname')");
+	
+		$resp = [];
 		if($save){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"File successfully uploaded.");
+			$this->settings->set_flashdata('success', "File successfully uploaded.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
 		}
 		return json_encode($resp);
-
-
 	}
+	
 	function approved_upload(){
 		extract($_POST);
 		$id =  $_POST['id'];
@@ -1379,16 +1381,16 @@ Class Master extends DBConnection {
 			$save = $this->conn->query("UPDATE t_csr SET c_verify = 0, coo_approval = 0, c_revised = 1 where c_csr_no = ".$id);
 			$save = $this->conn->query("UPDATE t_approval_csr SET c_ca_status = ".$value." where ra_id = ".$ra_id);
 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$usertype has already set RA #$ra_id for revision. (CA)'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$usertype has already set RA #$ra_id for revision. (CA)'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 	
-				$data_notif = implode(", ", $data_notif_values);
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$data_notif = implode(", ", $data_notif_values);
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 		endif;
 
 		
@@ -1432,33 +1434,33 @@ Class Master extends DBConnection {
 		$data .= ", ver_doc_remarks = '$remark_ver' ";
 
 		if(empty($id)){
-			$users_to_notify = array('IT Admin'); 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm created an evaluation for CSR #$csr_no.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// $users_to_notify = array('IT Admin'); 
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm created an evaluation for CSR #$csr_no.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 
 			$save = $this->conn->query("INSERT INTO t_ca_requirement set ".$data);
 		}else{
-			$users_to_notify = array('IT Admin'); 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm updated the evaluation for CSR #$csr_no.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// $users_to_notify = array('IT Admin'); 
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm updated the evaluation for CSR #$csr_no.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 			$save = $this->conn->query("UPDATE t_ca_requirement set ".$data." WHERE id =".$id);
 		}
 		$id = !empty($id) ? $id : $this->conn->insert_id;
@@ -1754,18 +1756,18 @@ Class Master extends DBConnection {
 			endif;
 
 			endwhile;
-			$users_to_notify = array('IT Admin'); 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm booked CSR #$csr_no.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// $users_to_notify = array('IT Admin'); 
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm booked CSR #$csr_no.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 	
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 		
 		$save4 = $this->conn->query("UPDATE t_approval_csr set cfo_status = 1 where c_csr_no =".$csr_no);
 
@@ -2918,37 +2920,37 @@ Class Master extends DBConnection {
 			/* $sql = "SELECT * FROM t_buyer_info"; */
 
 
-			$users_to_notify = array('IT Admin'); 
+			// $users_to_notify = array('IT Admin'); 
 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm$client_id.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm$client_id.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 
 			$sql = "INSERT INTO family_members set ".$data;
 			$save = $this->conn->query($sql);
 		}else{
 			/* $sql = "SELECT * FROM t_buyer_info"; */
-			$users_to_notify = array('IT Admin'); 
+			// $users_to_notify = array('IT Admin'); 
 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-					"message = '$comm2$client_id.'",
-					"user_to_be_notified = '$user'",
-					"seen = '0'"
-				);
+			// foreach ($users_to_notify as $user) {
+			// 	$data_notif_values = array(
+			// 		"message = '$comm2$client_id.'",
+			// 		"user_to_be_notified = '$user'",
+			// 		"seen = '0'"
+			// 	);
 
-				$data_notif = implode(", ", $data_notif_values);
+			// 	$data_notif = implode(", ", $data_notif_values);
 
-				$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-			}
+			// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+			// }
 
 			$sql = "UPDATE family_members set ".$data." where member_id = ".$member_id;
 			$save = $this->conn->query($sql);
@@ -3194,19 +3196,19 @@ Class Master extends DBConnection {
 		$save = $this->conn->query("INSERT INTO pending_restructuring set ". $data);
 		if($save){
 			
-			$users_to_notify = array('IT Admin'); 
-			foreach ($users_to_notify as $user) {
-				$data_notif_values = array(
-				"message = '$comm'",
-				"user_to_be_notified = '$user'",
-				"seen = '0'"
-			);
+		// 	$users_to_notify = array('IT Admin'); 
+		// 	foreach ($users_to_notify as $user) {
+		// 		$data_notif_values = array(
+		// 		"message = '$comm'",
+		// 		"user_to_be_notified = '$user'",
+		// 		"seen = '0'"
+		// 	);
 
-			$data_notif = implode(", ", $data_notif_values);
+		// 	$data_notif = implode(", ", $data_notif_values);
 
-			$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+		// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
 
-		}
+		// }
 
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Restructuring successfully created.");
@@ -3416,19 +3418,19 @@ Class Master extends DBConnection {
 
 
 			if($save){
-				$users_to_notify = array('IT Admin'); 
+				// $users_to_notify = array('IT Admin'); 
 
-				foreach ($users_to_notify as $user) {
-					$data_notif_values = array(
-						"message = '$comm'",
-						"user_to_be_notified = '$user'",
-						"seen = '0'"
-					);
+				// foreach ($users_to_notify as $user) {
+				// 	$data_notif_values = array(
+				// 		"message = '$comm'",
+				// 		"user_to_be_notified = '$user'",
+				// 		"seen = '0'"
+				// 	);
 
-					$data_notif = implode(", ", $data_notif_values);
+				// 	$data_notif = implode(", ", $data_notif_values);
 
-					$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
-				}
+				// 	$save = $this->conn->query("INSERT INTO message_tbl SET ".$data_notif);
+				// }
 
 				$resp['status'] = 'success';
 				$this->settings->set_flashdata('success',"Payment successfully moved to AV!");

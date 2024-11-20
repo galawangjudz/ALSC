@@ -8,7 +8,6 @@ if($_settings->chk_flashdata('success')): ?>
 <?php
 
 $a_id = $_POST['csrno'];
- 
 $sql = "select * from tbl_attachments where id=".$a_id;
 $result = mysqli_query($conn,$sql);
 while( $row = mysqli_fetch_array($result) ){
@@ -46,13 +45,13 @@ while( $row = mysqli_fetch_array($result) ){
     if($res == ".jpg" || $res == "jpeg" || $res == ".png"){
         ?>
         <div class="container">
-            <img src="upload_ra/uploads/<?php echo $row['name']; ?>" class="main_content">
+            <img src="<?php echo base_url; ?>agent_user/upload_ra/uploads/<?php echo $row['title']; ?>" class="main_content">
         </div>
     <?php
     }else{
         ?>
         <div class="container1">
-            <embed type="application/pdf" src="upload_ra/uploads/<?php echo $row['name']; ?>" class="main_content1">
+            <embed type="application/pdf" src="<?php echo base_url; ?>agent_user/upload_ra/uploads/<?php echo $row['title']; ?>" class="main_content1">
         </div>
     <?php
     }

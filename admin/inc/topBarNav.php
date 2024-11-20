@@ -114,7 +114,6 @@
     padding: 7px;
     /* Add additional styles as needed */
 }
-/* Add this to your existing <style> section */
 .notification-list hr {
     margin: 0px;
     border: none;
