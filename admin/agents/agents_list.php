@@ -65,7 +65,7 @@
 						<?php else: ?>
 							<td class="text-center"><span class="label label-default">Inactive</span></td>
 						<?php endif; ?>
-						<?php if ($usertype == 'IT Admin'): ?>
+						
                         <td align="center">
                                 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                     Action
@@ -77,7 +77,7 @@
                                 <a class="dropdown-item delete-agent" data-agent-id="<?php echo $row['c_code'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                 </div>
                         </td>
-                        <?php endif; ?>
+                       
 					</tr>
 					<?php endwhile; ?>
 				</tbody>

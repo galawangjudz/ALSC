@@ -357,21 +357,19 @@ $(".add-pay-row").click(function(e) {
 	e.preventDefault();
 	cloned.clone().appendTo('#payment_table'); 
 });
-$(".add-buyer-row").click(function(e) {
-    e.preventDefault();
-    var clonedRow = $('#buyer_table tr:last').clone();
-    clonedRow.find('input').val('');
-    clonedRow.find('.buyer-bday').on('change', function() {
-        calculateAgeAndSetError($(this), $(this).closest('tr').find("#age"));
-    });
-
-    $('#buyer_table tbody').append(clonedRow);
-});
+// $(".add-buyer-row").click(function(e) {
+//     e.preventDefault();
+//     var clonedRow = $('#buyer_table tr:last').clone();
+//     clonedRow.find('input').val('');
+//     clonedRow.find('.buyer-bday').on('change', function() {
+//         calculateAgeAndSetError($(this), $(this).closest('tr').find("#age"));
+//     });
+//     $('#buyer_table tbody').append(clonedRow);
+// });
 $('#comm_table').on('input', '.calculate', function () {
 	//alert(this);
 	updateTotals(this);  
 });
-
 function updateTotals(elem) {
 	net_tcp = $('.total-tcp').val()
 	var tr = $(elem).closest('tr'),

@@ -224,7 +224,7 @@ if (empty($_GET['id'])) {
                 <div class="col-md-12 form-group">
                     <label for="rfp_no">Approved Vouchers:</label>
                     <br><hr>
-                    <table class="table table-bordered" id="data-table1" style="text-align:center;width:100%;">
+                    <table class="table table-bordered" class="data-table1" style="text-align:center;width:100%;">
                         <thead>
                             <tr class="bg-navy disabled">
                                 <th>#</th>
@@ -272,7 +272,6 @@ if (empty($_GET['id'])) {
                             <input type="text" id="vs_no" name="vs_no" value="<?php echo isset($vs_no) ? $vs_no: ""; ?>" class="form-control form-control-sm form-control-border rounded-0" readonly> 
                         </div>
                     </div>
-
                     <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         var rows = document.querySelectorAll('.clickable-row');
@@ -284,7 +283,6 @@ if (empty($_GET['id'])) {
                         });
                     });
                     </script>
-
                 </div>
                 <div class="container-fluid">
                     <div class="row">
@@ -307,7 +305,6 @@ if (empty($_GET['id'])) {
                             <input type="datetime-local" class="form-control form-control-sm rounded-0" style="display:none;" id="transaction_date" name="transaction_date" value="<?php echo isset($transactionformattedDateTime) ? $transactionformattedDateTime : '' ?>" required readonly>
                         </div>
                     </div>
-                    
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="payment_form" class="control-label" style="float:left;">Payment Form:</label><div class="asterisk"> *</div>
@@ -1386,37 +1383,49 @@ $(function(){
         }
         
         start_loader();
-        $.ajax({
-            url: _base_url_ + "classes/Master.php?f=save_rfp",
-            data: new FormData($(this)[0]),
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            type: 'POST',
-            dataType: 'json',
-            error: err => {
-                console.log(err);
-                alert_toast("An error occurred", 'error');
-                end_loader();
-            },
-            success: function(resp) {
-                if (typeof resp == 'object' && resp.status == 'success') {
-                    //location.reload();
-                    location.replace('./?page=rfp/rfp_list');
-                } else if (resp.status == 'failed' && !!resp.msg) {
-                    var el = $('<div>')
-                    el.addClass("alert alert-danger err-msg").text(resp.msg)
-                    _this.prepend(el)
-                    el.show('slow')
-                    $("html, body").animate({ scrollTop: 0 }, "fast");
-                } else {
-                    alert_toast("An error occurred", 'error');
-                    console.log(resp);
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=save_rfp",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err);
+                    let errorMsg = "An error occurred";
+                    if (err.responseJSON && err.responseJSON.err) {
+                        // Extract custom error from PHP response
+                        errorMsg = err.responseJSON.err;
+                    } else if (err.responseJSON && err.responseJSON.message) {
+                        errorMsg = err.responseJSON.message;
+                    } else if (err.statusText) {
+                        errorMsg = err.statusText;
+                    }
+                    alert_toast(errorMsg, 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp === 'object' && resp.status === 'success') {
+                        location.replace('./?page=rfp/rfp_list');
+                    } else if (resp.status === 'failed' && resp.err) {
+                        // Display detailed error message from PHP
+                        let errorMsg = resp.err;
+                        var el = $('<div>');
+                        el.addClass("alert alert-danger err-msg").text(errorMsg);
+                        _this.prepend(el);
+                        el.show('slow');
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    } else {
+                        alert_toast("An error occurred", 'error');
+                        console.log(resp);
+                    }
+                    end_loader();
                 }
-                end_loader();
-            }
+
         });
+
     });
 });
 

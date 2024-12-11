@@ -55,7 +55,7 @@ $department = $_settings->userdata('department');
                       <div id="collapseSales" aria-labelledby="salesHeading" data-parent="#salesAccordion">
                           <div style="margin-left:15px">
                               <ul class="nav flex-column">
-                                <li class="nav-item dropdown">
+                                  <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=sales/client" class="nav-link nav-client">
                                       <i class="nav-icon fas fa-plus"></i>
                                       <p>
@@ -64,10 +64,18 @@ $department = $_settings->userdata('department');
                                     </a>
                                   </li> 
                                   <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=sales/create" class="nav-link nav-create">
+                                      <i class="nav-icon fas fa-plus"></i>
+                                      <p>
+                                        Create New RA
+                                      </p>
+                                    </a>
+                                  </li> 
+                                  <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=ra" class="nav-link nav-ra">
                                     <i class="nav-icon fas fa-book"></i>
                                       <p>
-                                        Master List
+                                        Reservation Application
                                       </p>
                                     </a>
                                   </li> 

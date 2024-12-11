@@ -33,9 +33,9 @@
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>List of Pending RAs</b></i></h3>
-		<div class="card-tools">
+		<!-- <div class="card-tools">
 			<a href="./?page=agent_sales/create" class="btn btn-flat btn-default bg-primary border-primary" style="font-size:14px;"><span class="fas fa-plus"></span>&nbsp;&nbsp;Create New</a>
-		</div>
+		</div> -->
 	</div>
 	<div class="card-body">
         <div class="container-fluid">

@@ -42,10 +42,18 @@ $level = $_settings->userdata('type');
                       </a>
                     </li> 
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>agent_user/?page=agent_sales/create" class="nav-link nav-create">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                          Create New RA
+                        </p>
+                      </a>
+                    </li> 
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>agent_user/?page=agent_ra" class="nav-link nav-ra">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
-                          Master List
+                          Reservation Application
                         </p>
                       </a>
                     </li> 

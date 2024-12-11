@@ -18,9 +18,7 @@ if($_settings->chk_flashdata('success')): ?>
 
 <?php endif;?>
 <?php 
-
 $username = $_settings->userdata('username'); 
-
 /* $type = isset($_GET['type']) ? $_GET['type'] : 1 ; */
 if(isset($_GET['id']) && $_GET['id'] > 0){
 	$csr = $conn->query("SELECT x.*, y.* FROM t_csr x inner join t_additional_cost y on x.c_csr_no = y.c_csr_no where md5(x.c_csr_no) = '{$_GET['id']}' ");
@@ -100,7 +98,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			}
 		endwhile;
 	}
-
 	$qry = $conn->query("SELECT x.*, y.c_acronym FROM t_lots x LEFT join t_projects y on x.c_site = y.c_code WHERE c_lid ='" . $conn->real_escape_string($lot_id) ."'");
 	while($rows = $qry->fetch_assoc()):
 		$phase = $rows['c_acronym'];
@@ -108,7 +105,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		$lot = $rows['c_lot'];
 	endwhile;
 }
-
 ?>
 <style>
 .lot_box_res {
@@ -134,12 +130,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 #id20{
 	margin-left:0px !important;
 }
-.nav-ra{
+.nav-create{
 	background-color:#007bff;
 	color:white!important;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
-.nav-ra:hover{
+.nav-create:hover{
 	background-color:#007bff!important;
 	color:white!important;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
@@ -291,20 +287,21 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<thead>
 										<tr>
 											<th>
-											<div class="panel-heading">
-												<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
-												<div class="titles"><center> Buyer's Information Details</center></div>
-												<div class="clear"></div>
-											</div>
+												<div class="panel-heading">
+													<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;">
+														<span class="fa fa-plus" aria-hidden="true"></span>
+													</a>
+													<div class="titles">Buyer's Information Details</div>
+													<div class="clear"></div>
+												</div>
 											</th>
 										</tr>
 									</thead>
+									
 									<tbody>
 										<?php 
 											if(isset($_GET['id']) && $_GET['id'] > 0){
-	
 											$qry = $conn->query("SELECT * FROM t_csr_buyers where md5(c_csr_no) = '{$_GET['id']}' ");
-											
 											if($qry->num_rows > 0){	
 												while($row = $qry->fetch_assoc()):
 													$buyer_count = $row['c_buyer_count']; // customer buyers no
@@ -336,7 +333,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 													<div class="card-tools">
 													<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 													</div>
-													<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
+													<p class="select-customer"><a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 												</div>
 												<div class="main_box">
 													<div class="row">
@@ -400,7 +397,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 																</select>
 															</div>
 														</div>
-
 														<div class="col-md-2">
 															<div class="form-group">
 																<label class="control-label">Birthdate: </label>
@@ -431,7 +427,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 															</div>
 														</div>
 													</div>
-
 													<div class="row">
 														<div class="col-md-3">
 															<div class="form-group">
@@ -510,11 +505,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 														<div class="card-tools" style="margin-top:5px;">
 														<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 														</div>
-														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
-											
+														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 													</div>
 													<div class="main_box">
-													
+													<div id="buyer-info"></div>
 													<div class="row">
 														<div class="col-md-3">		
 															<div class="form-group">
@@ -1164,7 +1158,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					</div>
 				</div>		
 			</div>
-			
 		</div>
 		<div id="Payment" class="tabcontent">
 			<div class="row">
@@ -1236,13 +1229,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<input type="text" class="form-control margin-bottom monthly-down" name="monthly_down" id="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" readonly>
 										<label class="control-label" id = "first_dp">First DP: </label>
 										<input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : ''; ?>">
-											
-									
 										<label class="control-label">Full Down: </label>
-										
 										<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : ''; ?>">
-											
-										
 									</div>
 								</div>
 							</div>		
@@ -1294,10 +1282,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<th width="90">
 											<label class="control-label">&nbsp;Code</label>
 										</th>
-										<th width="150">
+										<th width="150" style="display:none;">
 											<label class="control-label">&nbsp;Rate</label>
 										</th>
-										<th width="200">
+										<th width="200" style="display:none;">
 											<label class="control-label">&nbsp;Amount</label>
 										</th>
 									</tr>
@@ -1329,10 +1317,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<td style="padding-top:10px;">
 												<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
 										</td>
-										<td style="padding-top:10px;">
+										<td style="padding-top:10px;display:none;">
 												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
 										</td>
-										<td style="padding-top:10px;">
+										<td style="padding-top:10px;display:none;">
 												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" >
 										</td>
 									</tr>
@@ -1360,14 +1348,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 												<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" required readonly>
 											</div>
 										</td>
-										<td>
+										<td style="display:none;">
 											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-												<input type="text" class="form-control calculate agent-rate requiredRes" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" required>
+												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
 											</div>
 										</td>
-										<td>
+										<td style="display:none;">
 											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-												<input type="text" class="form-control comm-amt requiredRes" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1" required>
+												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
 											</div>
 										</td>
 									</tr>
@@ -1413,7 +1401,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Select An Existing Customer</h5>
+				<h5 class="modal-title">Select Client Details</h5>
 			</div>
 			<div class="modal-body">
 				<table class="table2 table-bordered table-stripped" style="width:100%;font-size:16px;">

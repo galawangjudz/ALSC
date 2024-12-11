@@ -109,7 +109,8 @@ $level = $_settings->userdata('type');
                         <b><i>Banking and General Ledger</i></b>
                       </li>
                     </div>-->
-                    <li class="nav-item dropdown">
+                    <b><i><div style="background-color:gainsboro;"><li class="nav-header">Others</li></div></b></i>
+                    <li class="nav-item dropdown" style="background-color:white;">
                       <a href="<?php echo base_url ?>employee/ca/?page=rfp/rfp_list" class="nav-link nav-rfp">
                       <i class="nav-icon fas fa-book"></i>
                         <p>
@@ -117,14 +118,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
-                    <!-- <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>employee/ca/?page=tba/tba_list" class="nav-link nav-tba">
-                      <i class="nav-icon fas fa-book"></i>
+                    <li class="nav-item dropdown" style="background-color:white;">
+                      <a href="<?php echo base_url ?>employee/ca/?page=loan-calcu" class="nav-link nav-loan-calcu">
+                        <i class="nav-icon fas fa-calculator"></i>
                         <p>
-                        TBA List
+                          Loan Calculator
                         </p>
                       </a>
-                    </li>  -->
+                    </li>
                   </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
