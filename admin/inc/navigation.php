@@ -63,14 +63,13 @@ $department = $_settings->userdata('department');
                                       </p>
                                     </a>
                                   </li> 
-                                  <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=sales/create" class="nav-link nav-create">
-                                      <i class="nav-icon fas fa-plus"></i>
-                                      <p>
-                                        Create New RA
-                                      </p>
-                                    </a>
-                                  </li> 
+                                  <li class="nav-item">
+                                      <a href="<?php echo base_url ?>admin/?page=sales/create" class="nav-link nav-create">
+                                          <i class="nav-icon fas fa-plus"></i>
+                                          <p>Create New RA</p>
+                                      </a>
+                                      
+                                  </li>
                                   <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=ra" class="nav-link nav-ra">
                                     <i class="nav-icon fas fa-book"></i>

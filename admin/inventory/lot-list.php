@@ -11,7 +11,7 @@
 		line-height:40px;
 		text-align:center;
 		color:black!important;
-		border-right:solid 3px white;
+		border-left:solid 3px white;
 	}
 	.main_menu:hover{
 		border-bottom: solid 2px blue;
@@ -49,6 +49,7 @@
 
 <div class="card" id="container">
     <div class="navbar-menu">
+        <a href="<?php echo base_url ?>admin/?page=inventory/search-lot-list" class="main_menu" id="search-lot-link"><i class="nav-icon fas fa-search"></i>&nbsp;&nbsp;&nbsp;Search Lot</a>
 		<a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" style="border-left:solid 3px white;"><i class="nav-icon fas fa-square"></i>&nbsp;&nbsp;&nbsp;Lot Inventory</a>
 		<a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="main_menu" id="model-link"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;House Model List</a>
 		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="project-link"><i class="nav-icon fas fa-map"></i>&nbsp;&nbsp;&nbsp;Project List</a>
@@ -83,14 +84,17 @@
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT c_lid, c_acronym, c_block, c_lot, c_lot_area, c_price_sqm, i.c_status
-                            FROM t_lots i 
-                            JOIN t_projects c 
-                            ON i.c_site = c.c_code
-                            WHERE i.c_site = c.c_code  
-                            ORDER BY c.c_acronym, i.c_block, i.c_lot");
-                            while($row = $qry->fetch_assoc()):
-                                
+                        $qry = odbc_exec($conn2, "
+                                SELECT c_lid, c_acronym, c_block, c_lot, c_lot_area, c_price_sqm, i.c_status
+                                FROM t_lots i 
+                                JOIN t_projects c 
+                                ON i.c_site = c.c_code
+                                WHERE i.c_site = c.c_code  
+                                ORDER BY c.c_acronym, i.c_block, i.c_lot LIMIT 5
+                            ");
+                            
+                            while ($row = odbc_fetch_array($qry)):
+                          
                         ?>
                         <tr>
                         <td><?php echo $row["c_lid"] ?></td>
@@ -126,7 +130,10 @@
                         </td>
                         <?php endif; ?>
                         </tr>
-                    <?php endwhile; ?>
+                        <?php       
+                        endwhile;
+                        
+                        odbc_close($conn2); ?>
                     </tbody></table>
 	            </div>                
             </div>
