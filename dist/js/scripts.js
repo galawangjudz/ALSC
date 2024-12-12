@@ -377,9 +377,13 @@ $('#comm_table').on('input', '.calculate', function () {
 });
 
 function number_format(amount) {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function updateFormattedValue(inputId, number) {
+    let formattedValue = number_format(number);
+    $(inputId).val(formattedValue);
+}
 
 function updateTotals(elem) {
 	net_tcp = $('.total-tcp').val()
@@ -583,7 +587,16 @@ function updateTotals(elem) {
 	$(document).on('keyup', ".house-disc", function(e) {
 		e.preventDefault();
 		//compute_lot();
-		compute_house();
+		// /compute_house();
+		compute_house_v2();
+		
+	});
+
+	$(document).on('keyup', ".floor-area", function(e) {
+		e.preventDefault();
+		//compute_lot();
+		// /compute_house();
+		compute_house_v2();
 		
 	});
 
@@ -615,7 +628,29 @@ function updateTotals(elem) {
 		
 	// });
 
-	$(document).on('keyup', ".reservation-fee", function(e) {
+	$('#reservation_display').on('change', function() {
+		
+		let value = parseFloat($(this).val().replace(/,/g, '')) || 0;
+		$('#reservation').val(value.toFixed(2));
+		updateFormattedValue('#reservation_display', value);
+		compute_net_dp();
+		compute_no_payment();
+		compute_monthly_payments();
+	});
+
+	$('#hcp_display').on('change', function() {
+		
+		let value = parseFloat($(this).val().replace(/,/g, '')) || 0;
+		$('#hcp').val(value.toFixed(2));
+		updateFormattedValue('#hcp_display', value);
+		compute_house_v2();
+	
+	});
+
+
+
+
+	$(document).on('change', ".reservation-fee", function(e) {
 		e.preventDefault();
 		compute_net_dp();
 		compute_no_payment();
@@ -664,6 +699,9 @@ function updateTotals(elem) {
 	$(document).on('change', ".payment-type2", function(e) {
 		e.preventDefault();
 		payment_type2_changed();
+		//bago ung sa baba nito icomment if may problema
+		compute_rate();
+		compute_monthly_payments();
 	});
 	$(document).on('keyup', ".prod-lot-price", function(e) {
 		e.preventDefault();
@@ -959,6 +997,28 @@ function updateTotals(elem) {
 
 	}
 
+	function compute_house_v2(){
+
+		var l_hcp= parseFloat($('.house-hcp').val());
+		var l_f_area = parseFloat($('.floor-area').val());
+
+		var l_h_disc_percent = $('.house-disc').val();
+		var l_h_price_sqm = (l_f_area === 0) ? 0 : parseFloat(l_hcp / l_f_area);
+		
+		let l_h_discount_amt = l_hcp*(l_h_disc_percent*0.01);      
+		let l_final_hcp = parseFloat(l_hcp)-parseFloat(l_h_discount_amt);
+
+		$('#house_disc_amt').val(l_h_discount_amt.toFixed(2));
+		$('#house_disc_amt_display').val(number_format(l_h_discount_amt.toFixed(2)));
+		$('#h_price_per_sqm').val(l_h_price_sqm.toFixed(2));
+		$('#h_price_per_sqm_display').val(number_format(l_h_price_sqm));
+		$('#hcp').val(l_final_hcp);
+		$('#hcp_display').val(number_format(l_final_hcp));
+		
+		compute_lot();
+
+	}
+
 	
 	
 	function compute_net_tcp(){
@@ -972,10 +1032,12 @@ function updateTotals(elem) {
 	
 		var tcp_disc_amt = parseFloat(tcp_sum) * (parseFloat(tcp_discount) * 0.01) ;
 		$('#tcp_disc_amt').val(tcp_disc_amt.toFixed(2));
+		$('#tcp_disc_amt_display').val(number_format(tcp_disc_amt.toFixed(2)));
 	
 		var tcp_total = tcp_sum - tcp_disc_amt;
 
 		$('#total_tcp').val(tcp_total.toFixed(2));
+		$('#total_tcp_display').val(number_format(tcp_total.toFixed(2)));
 		var vat_tcp = $('#total_tcp').val();
 	
 		l_vat_amt = $('.vat-percent').val();
@@ -984,14 +1046,17 @@ function updateTotals(elem) {
 
 		//document.getElementById('vat_amt_computed').value = vat_total.toFixed(2);
 		$('#vat_amt_computed').val(vat_total.toFixed(2));
+		$('#vat_amt_computed_display').val(number_format(vat_total.toFixed(2)));
 		//$('#vat_amt').val(l_vat_amt.toFixed(2));
 		l_total_ntcp = parseFloat(vat_net_tcp);
 		
 		//l_total_ntcp = parseFloat(tcp_total) + parseFloat(l_vat_amt);
 		$('#net_tcp').val(l_total_ntcp.toFixed(2));
+		$('#net_tcp_display').val(number_format(l_total_ntcp.toFixed(2)));
 		$('#net_tcp1').val(l_total_ntcp.toFixed(2));
+		$('#net_tcp1_display').val(number_format(l_total_ntcp.toFixed(2)));
 		$('#amt_to_be_financed').val(l_total_ntcp.toFixed(2));
-
+		$('#amt_to_be_financed_display').val(number_format(l_total_ntcp.toFixed(2)));
 		compute_net_dp();
 	
 	}
@@ -1008,6 +1073,8 @@ function updateTotals(elem) {
 			$('#no_payment').val(l_no_payment); */
 			var l_amt_2b_finance = parseFloat(l_net_tcp) - parseFloat(l_reservation);
 			$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));
+			$('#amt_to_be_financed_display').val(number_format(l_amt_2b_finance.toFixed(2)));
+
 
 		}else{
 			//alert(l_down_per);
@@ -1015,15 +1082,18 @@ function updateTotals(elem) {
 			
 			var l_net_dp = (parseFloat(l_net_tcp) * parseFloat(l_down)) - parseFloat(l_reservation);
 			$('#net_dp').val(l_net_dp.toFixed(2));
+			$('#net_dp_display').val(number_format(l_net_dp.toFixed(2)));
 			//alert(l_net_dp);
 			if (l_net_dp < 0)
 				{
 				l_net_dp = 0;
 				$('#net_dp').val(l_net_dp.toFixed(2));
+				$('#net_dp_display').val(number_format(l_net_dp.toFixed(2)));
 				var l_net_dp = $('.net-dp').val();
 				}
 			var l_amt_2b_finance = parseFloat(l_net_tcp) - parseFloat(l_net_dp) - parseFloat(l_reservation);
 			$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));
+			$('#amt_to_be_financed_display').val(number_format(l_amt_2b_finance.toFixed(2)));
 
 		}
 		
@@ -1036,7 +1106,8 @@ function updateTotals(elem) {
 		var l_mo_down = parseFloat(l_net_dp) / parseFloat(l_no_pay);
 		l_mo_down = isFinite(l_mo_down) ? l_mo_down : 0.0;
 		//alert(l_mo_down);
-		$("#monthly_down").val(l_mo_down.toFixed(2));		
+		$("#monthly_down").val(l_mo_down.toFixed(2));	
+		$("#monthly_down_display").val(number_format(l_mo_down.toFixed(2)));			
 		auto_terms();
 	}
 
@@ -1118,7 +1189,7 @@ function updateTotals(elem) {
 		} else {
 			var l_rate_value = parseFloat(l_rate) / parseFloat(l_x);
 			if (isNaN(l_rate_value)) {
-			l_rate_value = 0;
+				l_rate_value = 0;
 			}
 		}
 		
@@ -1133,6 +1204,7 @@ function updateTotals(elem) {
 			$("#fixed_factor").val(0);
 			$("#monthly_amortization").val(0);
 			$('#amt_to_be_financed').val(l_amt_2b_finance.toFixed(2));
+			$('#amt_to_be_financed_display').val(number_format(l_amt_2b_finance.toFixed(2)));
 		} else if (l_payment_type2 == "Deferred Cash Payment") {
 			var l_loan_amt = $('.amt-to-be-financed').val();
 			var l_terms = $('.terms-count').val();
@@ -1141,6 +1213,7 @@ function updateTotals(elem) {
 		
 			$("#fixed_factor").val(isNaN(l_rate_value) ? 0 : l_rate_value.toFixed(8));
 			$("#monthly_amortization").val(l_amt_2b_finance.toFixed(2));
+			$("#monthly_amortization_display").val(number_format(l_amt_2b_finance.toFixed(2)));
 		} else if (l_payment_type2 == "Monthly Amortization") {
 			compute_no_payment();
 			compute_net_dp();
@@ -1159,6 +1232,7 @@ function updateTotals(elem) {
 
 			//$("#fixed_factor").val(isNaN(l_factor) ? 0 : l_factor.toFixed(8));
 			$("#monthly_amortization").val(monthly_ma.toFixed(2));
+			$("#monthly_amortization_display").val(number_format(monthly_ma.toFixed(2)));
 		}
 	}
 	  

@@ -1003,7 +1003,7 @@ input{
 											<div class="form-group">
 												<label class="control-label">Amount: </label>
 												<input type="text" class="form-control margin-bottom" name="amount_display" id="amount_display" readonly value="<?php echo isset($amount) ? number_format($amount,2) : '0.00'; ?>">
-												<input type="text" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
+												<input type="hidden" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
 											</div>
 										</div>
 									</div>
@@ -1018,7 +1018,7 @@ input{
 											<div class="form-group">
 												<label class="control-label">Discount Amount: </label>
 												<input type="text" class="form-control margin-bottom " name="lot_disc_amt_display" id="lot_disc_amt_display" readonly value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt,2) : ''; ?>">
-												<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
+												<input type="hidden" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
 											</div>
 										</div>
 									</div>	
@@ -1027,7 +1027,7 @@ input{
 											<div class="form-group">
 												<label class="control-label">Lot Contract Price: </label>
 												<input type="text" class="form-control margin-bottom " name="lcp_display" id="lcp_display" readonly value="<?php echo isset($lcp) ? number_format($lcp,2) : ''; ?>">
-												<input type="text" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : ''; ?>">
+												<input type="hidden" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : ''; ?>">
 												
 											</div>
 										</div>
@@ -1076,7 +1076,8 @@ input{
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">House Price/SQM: </label>
-												<input type="text" class="form-control margin-bottom h-price-sqm"  name="h_price_per_sqm" id="h_price_per_sqm" value="<?php echo isset($house_price_sqm) ? $house_price_sqm : 0; ?>">
+												<input type="text" class="form-control margin-bottom "  name="h_price_per_sqm_display" id="h_price_per_sqm_display" readonly value="<?php echo isset($house_price_sqm) ? number_format($house_price_sqm,2) : 0.00; ?>">
+												<input type="hidden" class="form-control margin-bottom h-price-sqm requiredHouse"  name="h_price_per_sqm" id="h_price_per_sqm" oninput="numbersAndDecimal()" value="<?php echo isset($house_price_sqm) ? $house_price_sqm : 0; ?>" maxlength="25" tabindex="32" readOnly>
 											</div>
 										</div>
 									</div>
@@ -1084,13 +1085,13 @@ input{
 										<div class="col-md-5">
 											<div class="form-group">
 												<label class="control-label">House Discount(%): </label>
-												<input type="text" class="form-control margin-bottom house-disc" name="house_disc" id="house_disc" value="<?php echo isset($house_discount) ? $house_discount : 0; ?>">
+												<input type="text" class="form-control margin-bottom house-disc" name="house_disc" id="house_disc" value="<?php echo isset($house_discount) ? $house_discount : 0.00; ?>">
 											</div>
 										</div>
 										<div class="col-md-7">
 											<div class="form-group">
 												<label class="control-label">House Discount Amount: </label>
-												<input type="text" class="form-control margin-bottom h-disc-amt" name="house_disc_amt" id="house_disc_amt" value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>">
+												<input type="text" class="form-control margin-bottom h-disc-amt" name="house_disc_amt" id="house_disc_amt" readonly value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>">
 											</div>
 										</div>
 									</div>
@@ -1098,7 +1099,8 @@ input{
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">House Contract Price: </label>
-												<input type="text" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
+												<input type="text" class="form-control margin-bottom " name="hcp_display" id="hcp_display" value="<?php echo isset($hcp) ? number_format($hcp,2) : 0.00; ?>">
+												<input type="hidden" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
 											</div>
 										</div>	
 									</div>		
@@ -1351,7 +1353,8 @@ input{
 										</div>
 										<div class="col-md-3" >
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" readonly value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
+												<input type="text" class="form-control margin-bottom " name="tcp_disc_amt_display" id="tcp_disc_amt_display" readonly value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" readonly value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
 											</div>
 										</div>
 									</div>
@@ -1363,7 +1366,9 @@ input{
 										</div>
 										<div class="col-md-9">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
+												<input type="text" class="form-control margin-bottom " name="total_tcp_display" id="total_tcp_display" readonly value="<?php echo isset($tcp) ? number_format($tcp,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
+
 												<input type="hidden" name="invoice_discount" id="invoice_discount">
 											</div>
 										</div>
@@ -1386,7 +1391,8 @@ input{
 										</div>
 										<div class="col-md-4" >
 											<div class="form-group">
-											<input type="text" class="form-control margin-bottom vat-amt-computed" readonly value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
+											<input type="text" class="form-control margin-bottom " readonly value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex = '39'>
+											<input type="hidden" class="form-control margin-bottom vat-amt-computed" readonly value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
 											</div> 
 										</div> 
 									</div>
@@ -1397,7 +1403,8 @@ input{
 											</div>
 										</div>
 										<div class="col-md-9">
-										<input type="text" class="form-control margin-bottom net-tcp"  value="<?php echo isset($net_tcp) ? $net_tcp : 0; ?>" name="net_tcp" readonly id="net_tcp" >
+											<input type="text" class="form-control margin-bottom "  value="<?php echo isset($net_tcp) ? number_format($net_tcp,2) : 0; ?>" name="net_tcp_display" readonly id="net_tcp_display" >
+											<input type="hidden" class="form-control margin-bottom net-tcp"  value="<?php echo isset($net_tcp) ? $net_tcp : 0; ?>" name="net_tcp" readonly id="net_tcp" >
 											<input type="hidden" name="total_net_tcp" id="total_net_tcp">
 										</div>
 									</div>
@@ -1419,13 +1426,15 @@ input{
 										<div class="col-md-6">
 											<div class="form-group">
 												<label class="control-label">Total Selling Price:</label>
-												<input type="text" class="form-control margin-bottom required net-tcp-1" name="net_tcp1" id="net_tcp1" value="<?php echo isset($net_tcp1) ? $net_tcp1 : 0; ?>" tabindex = "1" >
+												<input type="text" class="form-control margin-bottom required " name="net_tcp1_display" id="net_tcp1_display" value="<?php echo isset($net_tcp1) ? number_format($net_tcp1,2) : 0; ?>" tabindex = "1" >
+												<input type="hidden" class="form-control margin-bottom required net-tcp-1" name="net_tcp1" id="net_tcp1" value="<?php echo isset($net_tcp1) ? $net_tcp1 : 0; ?>" tabindex = "1" >
 											</div>
 										</div>
 										<div class="col-md-6">	
 											<div class="form-group">
-												<label class="control-label">Reservation: </label>
-												<input type="text" class="form-control margin-bottom required reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" required>
+												<label class="control-label">Reservation:<div class="asterisk">*</div></label>
+												<input type="text" class="form-control margin-bottom requiredRes required" name="reservation_display" id="reservation_display" value="<?php echo isset($reservation) ? number_format($reservation,2) : 0; ?>" tabindex ="1" required>
+												<input type="hidden" class="form-control margin-bottom reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" required>
 											</div>
 										</div>
 									</div>
@@ -1469,18 +1478,22 @@ input{
 											<label class="control-label">Down %: </label>
 											<input type="text" class="form-control margin-bottom required down-percent" name="down_percent" id="down_percent" value="<?php echo isset($down_percent) ? $down_percent : 0; ?>">
 											<label class="control-label">Net DP: </label>
-											<input type="text" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>">
+											<input type="text" class="form-control margin-bottom required " name="net_dp_display" id="net_dp_display" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
+											
+											<input type="hidden" class="form-control margin-bottom required net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>">
 											<label class="control-label" id= "no_pay_text"># Payments : </label>
 											<input type="text" class="form-control margin-bottom required no-payment" name="no_payment" id="no_payment" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2">
 											<label class="control-label" id = "mo_down_text">Monthly Down: </label>
-											<input type="text" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
+											<input type="text" class="form-control margin-bottom required" name="monthly_down_display" id="monthly_down_display" value="<?php echo isset($monthly_down) ? number_format($monthly_down,2) : 0; ?>"  >
+											
+											<input type="hidden" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
 											<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
-											<input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : ''; ?>">
+											<input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : date('Y-m-d'); ?>">
 												
 										
 											<label class="control-label">Full Down: </label>
 											
-											<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : ''; ?>">
+											<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : date('Y-m-d'); ?>">
 												
 											
 										</div>
@@ -1489,16 +1502,19 @@ input{
 								<div class="payment_box2" id="p2">	
 									<div class="col-md-12">
 										<label class="control-label" id='loan_text'>Amount to be Financed:</label>
-										<input type="text" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_financed) ? $amt_financed : 0; ?>">
+										<input type="text" class="form-control margin-bottom required " name="amt_to_be_financed_display" id="amt_to_be_financed_display" readonly value="<?php echo isset($amt_financed) ? number_format($amt_financed,2) : 0; ?>">
+										<input type="hidden" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_financed) ? $amt_financed : 0; ?>">
+									
 										<div class="form-group monthly-frm" id = "monthly_frm">
 											<label class="control-label">Terms: </label>
 											<input type="text" class="form-control margin-bottom required terms-count" name="terms" id="terms" value="<?php echo isset($terms) ? $terms : 1; ?>">
 											<label class="control-label" id='rate_text'>Interest Rate: </label>
-											<input type="text" class="form-control margin-bottom required interest-rate" name="interest_rate" id="interest_rate" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>">
+											<input type="text" class="form-control margin-bottom required interest-rate" name="interest_rate" id="interest_rate" readonly value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>">
 											<label class="control-label" id='factor_text' >Fixed Factor: </label>
-											<input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>">
+											<input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" readonly value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>">
 											<label class="control-label">Monthly Payment: </label>
-											<input type="text" class="form-control margin-bottom required monthly-amor" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?>">	
+											<input type="text" class="form-control margin-bottom required " name="monthly_amortization_display" id="monthly_amortization_display" readonly value="<?php echo isset($monthly_payment) ? number_format($monthly_payment,2) : 0; ?>">	
+											<input type="hidden" class="form-control margin-bottom required monthly-amor requiredMonthly" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?>">	
 										</div>
 										<label class="control-label" id= "start_text">Start Date: </label>	
 									
