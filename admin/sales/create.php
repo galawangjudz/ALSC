@@ -1128,7 +1128,7 @@ input{
 												<input id="id40" type="radio" name="chkOption4" value="2" <?php echo isset($floor_elev)&&$floor_elev == 2 ? 'checked' : ''; ?>/>0.40 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<input id="id60" type="radio" name="chkOption4" value="3" <?php echo isset($floor_elev)&&$floor_elev ==  3 ? 'checked' : ''; ?>/>0.60 meter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											</div>
-												<input type="text" name="flrelev_text" id="flrelev_text" value="<?php echo isset($floor_elev) ? $floor_elev : 0; ?>" onchange="getFlrElev(this);"/>
+												<input type="hidden" name="flrelev_text" id="flrelev_text" value="<?php echo isset($floor_elev) ? $floor_elev : 0; ?>" onchange="getFlrElev(this);"/>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
@@ -1514,6 +1514,7 @@ input{
 									<div class="clear"></div>
 								</div>
 							<div class="panel-body form-group form-group-sm">
+								
 								<table class="table3 table-bordered table-hover table-striped" id="comm_table" style="width:100%;">
 									<thead>
 										<tr>
@@ -1529,10 +1530,10 @@ input{
 											<th width="90">
 												<label class="control-label">&nbsp;Code</label>
 											</th>
-											<th width="150">
+											<th width="150" display: none;>
 												<label class="control-label">&nbsp;Rate</label>
 											</th>
-											<th width="200">
+											<th width="200" display: none;>
 												<label class="control-label">&nbsp;Amount</label>
 											</th>
 										</tr>
@@ -1567,11 +1568,11 @@ input{
 											<td style="padding-top:10px;">
 													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
 											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
+											<td style="padding-top:10px;" >
+													<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
 											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" >
+											<td style="padding-top:10px;" >
+													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" readonly>
 											</td>
 										</tr>
 										<?php endwhile; 
@@ -1591,7 +1592,7 @@ input{
 											</td>
 											<td>
 												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
+													<input type="text" class="form-control agent-pos" name="agent_position[]" value="" readonly>
 												</div>
 											</td>
 											<td>
@@ -1602,12 +1603,12 @@ input{
 											</td>
 											<td>
 												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="number" class="form-control calculate agent-rate required" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
+													<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
 												</div>
 											</td>
 											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
+												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;" >
+													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1" readonly>
 												</div>
 											</td>
 										</tr>
@@ -1776,7 +1777,7 @@ input{
 							while($row = $qry->fetch_assoc()):
 							$i++;
 						?>
-						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> "><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> </option>
+						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> - <?php echo $row["c_rate"] ?>"><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> -- <?php echo  $row["c_rate"] ?> </option>
 						<?php endwhile; ?>
 					</select>
 				</div>

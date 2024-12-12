@@ -242,59 +242,7 @@ hr.divider {
                 </table>
 
             </div>
-<<<<<<< HEAD
-            <div class="card-header">
-                <h5 class="card-title"><b><i>Client Information</i></b></h5>
-            </div>
-            <div class="card-body">
-                <div class="container-fluid">
-                    <table style="width: 100%;">
-                      <tr><th style="padding-left:5px;">Client ID: </th><td><b><?php echo $row['client_id'];?></b></td></tr>
-                      <tr><th style="padding-left:5px;">Property ID: </th><td><?php echo $row['property_id'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Last Name: </th><td><?php echo $row['last_name'];?></td></tr>
-                      <tr><th style="padding-left:5px;">First Name: </th><td><?php echo $row['first_name'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Middle Name: </th><td><?php echo $row['middle_name'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Suffix Name: </th><td><?php echo $row['suffix_name'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Physical Address: </th><td><?php echo $row['address'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Zip Code: </th><td><?php echo $row['zip_code'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Address Abroad: </th><td><?php echo $row['address_abroad'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Birthdate: </th><td><?php echo $row['birthdate'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Age: </th><td><?php echo $row['age'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Viber: </th><td><?php echo $row['viber'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Gender: </th><td><?php echo $row['gender'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Civil Status: </th><td><?php echo $row['civil_status'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Citizenship: </th><td><?php echo $row['citizenship'];?></td></tr>
-                      <tr><th style="padding-left:5px;">ID Presented: </th><td><?php echo $row['id_presented'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Tin No: </th><td><?php echo $row['tin_no'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Contact No: </th><td><?php echo $row['contact_no'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Contact Abroad: </th><td><?php echo $row['contact_abroad'];?></td></tr>
-                      <tr><th style="padding-left:5px;">Email Address: </th><td><?php echo $row['email'];?></td></tr>
-                      <!-- <input type="hidden" value="<?php echo $row['c_reopen'];?>" id="txt_reopen"/> -->
-                      </table>
-                      <hr>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="card card-outline rounded-0 card-maroon" style="margin-bottom: 20px;">
-            <div class="card-header"></div>
-            <div class="card-header">
-                <h5 class="card-title"><b><i>Property Details</i></b></h5>
-            </div>
-            <div class="card-body">
-            <div class="container-fluid">
-                <ul class="tabs">
-               
-                <li class="tab-link current" data-tab="tab-2"><b>Properties</b></li>
-                <li class="tab-link" data-tab="tab-1"><b>Family Member</b></li>
-                <li class="tab-link" data-tab="tab-3"><b>Payment Record</b></li>
-                <li class="tab-link" data-tab="tab-4"><b>Payment Schedule</b></li>
-              <!--  <li class="tab-link" data-tab="tab-6"><b>Payment Window</b></li> -->
-                </ul>
-=======
->>>>>>> 28ce74042d9574383c384f23abc462dcc86f1863
-
+           
             <div id="tab-2" class="tab-content" style="border:solid 1px gainsboro;">
                 <table class="table2 table-bordered table-stripped" style="width:100%;" id="data-table">
                     <?php $qry3 = $conn->query("SELECT p.*, r.c_acronym, l.c_block, l.c_lot FROM properties p LEFT JOIN t_lots l on l.c_lid = p.c_lot_lid LEFT JOIN t_projects r ON l.c_site = r.c_code where md5(property_id) = '{$_GET['id']}' ");

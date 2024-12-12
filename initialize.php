@@ -1,5 +1,5 @@
 <?php
-if(!defined('base_url')) define('base_url','http://192.168.0.111/ALSC/');
+if(!defined('base_url')) define('base_url','http://localhost/ALSC/');
 
 if(!defined('base_app')) define('base_app', str_replace('\\','/',__DIR__).'/' );
 
