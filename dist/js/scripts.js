@@ -87,15 +87,17 @@ $(document).ready(function() {
 		 
 		var code = data[0];
 		var pos = data[1];
+		var rate = data[2];
 
 
 		 $(agent).closest('tr').find('.agent-name').val(itemText);
 		 $(agent).closest('tr').find('.agent-code').val(code);
 		 $(agent).closest('tr').find('.agent-pos').val(pos);
+		 $(agent).closest('tr').find('.agent-rate').val(rate);
 
 
 
-		 //updateTotals('.calculate');
+		 updateTotals('.calculate');
 		 //calculateTotal();
 
 		});
