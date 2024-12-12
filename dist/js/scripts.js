@@ -254,11 +254,14 @@ $(document).ready(function() {
 		$('#price_per_sqm').val(prod_price_sqm);
 		subtotal = parseInt(prod_lot_area) * parseFloat(prod_price_sqm);
 		$('#amount').val(subtotal.toFixed(2))
+		$('#amount_display').val(subtotal.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 		var lot_discount = 0
 		var lot_disc_amount = 0
 		$('#lot_disc').val(lot_discount.toFixed(2));
 		$('#lot_disc_amt').val(lot_disc_amount.toFixed(2));
+		$('#lot_disc_amt_display').val(lot_disc_amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		$('#lcp').val(subtotal.toFixed(2));
+		$('#lcp_display').val(subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
 		
 		if(prod_floor_area == "" & prod_h_price_sqm == ""){
@@ -372,6 +375,12 @@ $('#comm_table').on('input', '.calculate', function () {
 	//alert(this);
 	updateTotals(this);  
 });
+
+function number_format(amount) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 function updateTotals(elem) {
 	net_tcp = $('.total-tcp').val()
 	var tr = $(elem).closest('tr'),
@@ -919,12 +928,14 @@ function updateTotals(elem) {
 		var l_discount_percentage = $('.lot-disc').val();
 		var l_total_amt = l_sqm*l_area;
 		$('#amount').val(l_total_amt.toFixed(2));
-	 
+		$('#amount_display').val(number_format(l_total_amt.toFixed(2)));
 		var l_discount_amt = l_total_amt*(l_discount_percentage*0.01);      
 		var l_lcp = l_total_amt-l_discount_amt;
 
 		$('#lot_disc_amt').val(l_discount_amt.toFixed(2));
+		$('#lot_disc_amt_display').val(number_format(l_discount_amt.toFixed(2)));
 		$('#lcp').val(l_lcp.toFixed(2));
+		$('#lcp_display').val(number_format(l_lcp.toFixed(2)));
 		
 		compute_net_tcp();
 
@@ -947,6 +958,8 @@ function updateTotals(elem) {
 		compute_lot();
 
 	}
+
+	
 	
 	function compute_net_tcp(){
 		//var vat_percentage = document.getElementById('vat_amt').value;

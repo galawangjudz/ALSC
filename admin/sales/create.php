@@ -337,6 +337,10 @@ input{
 	color:white!important;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 }
+
+.required {
+    background-color: #ffffe0;
+}
 </style>
 <script type="text/javascript">
 	function opentab(evt, tabName) {
@@ -998,6 +1002,7 @@ input{
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">Amount: </label>
+												<input type="text" class="form-control margin-bottom" name="amount_display" id="amount_display" readonly value="<?php echo isset($amount) ? number_format($amount,2) : '0.00'; ?>">
 												<input type="text" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
 											</div>
 										</div>
@@ -1012,6 +1017,7 @@ input{
 										<div class="col-md-8">
 											<div class="form-group">
 												<label class="control-label">Discount Amount: </label>
+												<input type="text" class="form-control margin-bottom " name="lot_disc_amt_display" id="lot_disc_amt_display" readonly value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt,2) : ''; ?>">
 												<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
 											</div>
 										</div>
@@ -1020,7 +1026,9 @@ input{
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">Lot Contract Price: </label>
-												<input type="text" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" value="<?php echo isset($lcp) ? $lcp : ''; ?>">
+												<input type="text" class="form-control margin-bottom " name="lcp_display" id="lcp_display" readonly value="<?php echo isset($lcp) ? number_format($lcp,2) : ''; ?>">
+												<input type="text" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : ''; ?>">
+												
 											</div>
 										</div>
 									</div>
@@ -1343,7 +1351,7 @@ input{
 										</div>
 										<div class="col-md-3" >
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
+												<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" readonly value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
 											</div>
 										</div>
 									</div>
@@ -1355,7 +1363,7 @@ input{
 										</div>
 										<div class="col-md-9">
 											<div class="form-group">
-												<input type="text" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" value="<?php echo isset($tcp) ? $tcp : 0; ?>">
+												<input type="text" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
 												<input type="hidden" name="invoice_discount" id="invoice_discount">
 											</div>
 										</div>
@@ -1378,7 +1386,7 @@ input{
 										</div>
 										<div class="col-md-4" >
 											<div class="form-group">
-											<input type="text" class="form-control margin-bottom vat-amt-computed" value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
+											<input type="text" class="form-control margin-bottom vat-amt-computed" readonly value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
 											</div> 
 										</div> 
 									</div>
@@ -1466,7 +1474,7 @@ input{
 											<input type="text" class="form-control margin-bottom required no-payment" name="no_payment" id="no_payment" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "2">
 											<label class="control-label" id = "mo_down_text">Monthly Down: </label>
 											<input type="text" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
-											<label class="control-label">First DP: </label>
+											<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
 											<input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : ''; ?>">
 												
 										
@@ -1777,7 +1785,7 @@ input{
 							while($row = $qry->fetch_assoc()):
 							$i++;
 						?>
-						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> - <?php echo $row["c_rate"] ?>"><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> -- <?php echo  $row["c_rate"] ?> </option>
+						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> - <?php echo $row["c_rate"] ?>"><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> </option>
 						<?php endwhile; ?>
 					</select>
 				</div>
