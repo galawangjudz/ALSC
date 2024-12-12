@@ -521,7 +521,7 @@ input{
 													<div class="card-tools">
 													<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 													</div>
-													<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
+													<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 												</div>
 												<div class="main_box">
 													<div class="row">
@@ -695,7 +695,7 @@ input{
 														<div class="card-tools" style="margin-top:5px;">
 														<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 														</div>
-														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
+														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 											
 													</div>
 													<div class="main_box">
@@ -1650,7 +1650,7 @@ input{
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Select An Existing Customer</h5>
+				<h5 class="modal-title">Select Client Details</h5>
 			</div>
 			<div class="modal-body">
 				<table class="table2 table-bordered table-stripped" style="width:100%;font-size:16px;">

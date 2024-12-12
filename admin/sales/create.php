@@ -327,6 +327,16 @@ input{
 .type-title{
 	float:left;
 }
+.nav-create{
+	background-color:#007bff;
+	color:white!important;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.nav-create:hover{
+	background-color:#007bff!important;
+	color:white!important;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
+}
 </style>
 <script type="text/javascript">
 	function opentab(evt, tabName) {
@@ -478,7 +488,7 @@ input{
 											<th>
 											<div class="panel-heading">
 												<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
-												<div class="titles"><center> Buyer's Information Details</center></div>
+												<div class="titles">Buyer's Information Details</div>
 												<div class="clear"></div>
 											</div>
 											</th>
@@ -521,7 +531,7 @@ input{
 													<div class="card-tools">
 													<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 													</div>
-													<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
+													<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 												</div>
 												<div class="main_box">
 													<div class="row">
@@ -695,7 +705,7 @@ input{
 														<div class="card-tools" style="margin-top:5px;">
 														<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 														</div>
-														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Client</a></p>
+														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 											
 													</div>
 													<div class="main_box">
@@ -1650,13 +1660,12 @@ input{
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Select An Existing Customer</h5>
+				<h5 class="modal-title">Select Client Details</h5>
 			</div>
 			<div class="modal-body">
 				<table class="table2 table-bordered table-stripped" style="width:100%;font-size:16px;">
 					<thead>
 						<tr>
-
 						<th style="text-align:center;">Last Name</th>
 						<th style="text-align:center;">First Name</th>
 						<th style="text-align:center;">Middle Name</th>

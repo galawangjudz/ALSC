@@ -39,6 +39,7 @@
 
 <div class="card" id="container">
     <div class="navbar-menu">
+        <a href="<?php echo base_url ?>admin/?page=inventory/search-lot-list" class="main_menu" id="search-lot-link"><i class="nav-icon fas fa-search"></i>&nbsp;&nbsp;&nbsp;Search Lot</a>
         <a href="<?php echo base_url ?>admin/?page=inventory/lot-list" class="main_menu" id="lot-link" style="border-left:solid 3px white;"><i class="nav-icon fas fa-square"></i>&nbsp;&nbsp;&nbsp;Lot Inventory</a>
 		<a href="<?php echo base_url ?>admin/?page=inventory/model-list" class="main_menu" id="model-link"><i class="nav-icon fas fa-home"></i>&nbsp;&nbsp;&nbsp;House Model List</a>
 		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="project-link"><i class="nav-icon fas fa-map"></i>&nbsp;&nbsp;&nbsp;Project List</a>
@@ -86,9 +87,14 @@ if ($user_role != 'IT Admin') {
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT * FROM t_model_house ORDER BY c_code ASC");
-                            while($row = $qry->fetch_assoc()):
-                                
+                        $qry = odbc_exec($conn2, "SELECT * FROM t_model_house ORDER BY c_code ASC");
+
+                        if (!$qry) {
+                            echo "Query execution failed.";
+                            exit;
+                        }
+                        
+                        while ($row = odbc_fetch_array($qry)):
                         ?>
                         <tr>
                         <td><?php echo $i++ ?></td>
@@ -109,7 +115,8 @@ if ($user_role != 'IT Admin') {
                         </td>
                         <?php endif; ?>
                         </tr>
-                    <?php endwhile; ?>
+                    <?php endwhile;
+                        odbc_close($conn2); ?>
                     </tbody></table>
            
 	        </div>                

@@ -720,7 +720,7 @@ Class Master extends DBConnection {
 			$data2 .= ", service_area_price = '$service_area_price' ";
 			$data2 .= ", aircon_outlet_price = '$ac_outlet_price' ";
 			$data2 .= ", aircon_grill_price = '$ac_grill_price' ";
-			$data2 .= ", floor_elev_price = '$flr_elev_price' ";
+			//$data2 .= ", floor_elev_price = '$flr_elev_price' ";
 			$data2 .= ", conv_outlet_price = '$conv_outlet_price' ";
 			$data2 .= ", others_price = '$others_price' ";
 
@@ -5496,87 +5496,72 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
-	function save_rfp(){
+	function save_rfp() {
+		$resp = ['status' => 'failed', 'err' => 'Initialization error'];
 		extract($_POST);
-		$id = isset($_POST['id']) ? $_POST['id'] : '';
-		$rfp_num = isset($_POST['rfp_no']) ? $_POST['rfp_no'] : '';
-		$vs_no = isset($_POST['vs_no']) ? $_POST['vs_no'] : '';
-		$num = isset($_POST['num']) ? $_POST['num'] : '';
-		$division = isset($_POST['division']) ? $_POST['division'] : '';
-		$usercode = isset($_POST['usercode']) ? $_POST['usercode'] : '';
-		$checkdate = isset($_POST['check_date']) ? $_POST['check_date'] : '';
+	
+		$id = $_POST['id'] ?? '';
+		$rfp_num = $_POST['rfp_no'] ?? '';
+		$num = $_POST['num'] ?? '';
+		$usercode = $_POST['usercode'] ?? '';
+		$checkdate = $_POST['check_date'] ?? '';
 		$data = "";
-		foreach($_POST as $k =>$v){
-			
-			if(!in_array($k,array('id','doc_no','num','inputValue','division','usercode'))){
-				$v = addslashes(trim($v));
-				if(!empty($data)) $data .=",";
-				$data .= " `{$k}`='{$v}' ";
+	
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, ['id', 'doc_no', 'num', 'inputValue', 'division', 'usercode'])) {
+				$v = $this->conn->real_escape_string(trim($v)); // Escape properly
+				$data .= (!empty($data) ? "," : "") . "`{$k}`='{$v}'";
 			}
 		}
-		
-		$gl_sql2 = "UPDATE `tbl_vs_attachments` SET `doc_no`  = '$rfp_num' WHERE `num` = '$num' and `doc_type` = 'RFP' ORDER BY `date_attached` DESC
-		LIMIT 1";
-		$gl_sql3 = "DELETE FROM `tbl_vs_attachments` WHERE `doc_no` = 0 and `num` = '$num' and `doc_type` = 'RFP'";
-		
-		$save_sql2 = $this->conn->query($gl_sql2);
-		$save_sql3 = $this->conn->query($gl_sql3);
-		
-		if(empty($id)){
-			$sql = "INSERT INTO `tbl_rfp` set {$data} ";
-			// if(($division == "MNGR" || $division == "SPVR") && ($usercode == '20016' || $usercode == '10006' || $usercode == '10006' || $usercode == '20084' || $usercode == '10184'
-			// || $usercode == '10009' || $usercode == '10030' || $usercode == '20124' || $usercode == '10051' || $usercode == '20181' || $usercode == '10102'
-			// || $usercode == '20018' || $usercode == '20017' || $usercode == '20003' || $usercode == '10143' || $usercode == '10070'|| $usercode == '10100' || $usercode == '10131'
-			// || $usercode == '10041' || $usercode == '20001' || $usercode == '10131' || $usercode == '10017' || $usercode == '10007' || $usercode == '10012' || $usercode == '10026'
-			// || $usercode == '10015' || $usercode == '20186' || $usercode == '10038')){
-			// 	$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
-			// }else if($usercode == '10114'){
-			// 	$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`status1`,`rfp_no`)VALUES('1','$rfp_num');";
-			// }else{
-				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals`(`rfp_no`)VALUES('$rfp_num');";
-			//}
-			
-			$save = $this->conn->query($sql);
-			$save_sql4 = $this->conn->query($gl_sql4);
+	
+		// Execute queries and validate individually
+		try {
+			$this->conn->autocommit(false);
+	
+			$gl_sql2 = "UPDATE `tbl_vs_attachments` SET `doc_no` = '$rfp_num' WHERE `num` = '$num' AND `doc_type` = 'RFP' ORDER BY `date_attached` DESC LIMIT 1";
+			if (!$this->conn->query($gl_sql2)) {
+				throw new Exception("Error updating attachments: " . $this->conn->error);
 			}
-			elseif (!empty($id) && $usercode == '10055') {
-		
+	
+			$gl_sql3 = "DELETE FROM `tbl_vs_attachments` WHERE `doc_no` = 0 AND `num` = '$num' AND `doc_type` = 'RFP'";
+			if (!$this->conn->query($gl_sql3)) {
+				throw new Exception("Error deleting attachments: " . $this->conn->error);
+			}
+	
+			if (empty($id)) {
+				$sql = "INSERT INTO `tbl_rfp` SET {$data}";
+				if (!$this->conn->query($sql)) {
+					throw new Exception("Error inserting RFP: " . $this->conn->error);
+				}
+	
+				$gl_sql4 = "INSERT INTO `tbl_rfp_approvals` (`rfp_no`) VALUES ('$rfp_num')";
+				if (!$this->conn->query($gl_sql4)) {
+					throw new Exception("Error inserting RFP approval: " . $this->conn->error);
+				}
+			} elseif (!empty($id) && $usercode == '10055') {
 				$escapedCheckdate = $this->conn->real_escape_string($checkdate);
-			
-			
 				$sql = "UPDATE `tbl_rfp` SET `check_date` = '$escapedCheckdate' WHERE id = '$id'";
-			
-			
-				$save = $this->conn->query($sql);
-			
-				
-				if ($save) {
-					$resp['status'] = 'success';
-					$this->settings->set_flashdata('success', "RFP check date successfully updated.");
-				} else {
-					$resp['status'] = 'failed';
-					$resp['err'] = $this->conn->error . " [{$sql}]";
+				if (!$this->conn->query($sql)) {
+					throw new Exception("Error updating RFP check date: " . $this->conn->error);
+				}
+			} else {
+				$sql = "UPDATE `tbl_rfp` SET {$data} WHERE id = '{$id}'";
+				if (!$this->conn->query($sql)) {
+					throw new Exception("Error updating RFP: " . $this->conn->error);
 				}
 			}
-			
-		else{
-			//$sql = "UPDATE `tbl_rfp` SET {$data}, status1=NULL, status2=NULL, status3=NULL, status4=NULL, status5=NULL, status6=NULL, status7=NULL WHERE id='{$id}'";
-			$sql = "UPDATE `tbl_rfp` set {$data} where id = '{$id}' ";
-			$save = $this->conn->query($sql);
-		}
-
-		if($save && $save_sql2 && $save_sql3){
+	
+			$this->conn->commit();
 			$resp['status'] = 'success';
-			if(empty($id))
-				$this->settings->set_flashdata('success',"New RFP successfully saved.");
-			else
-				$this->settings->set_flashdata('success',"RFP successfully updated.");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
+			$resp['msg'] = empty($id) ? "New RFP successfully saved." : "RFP successfully updated.";
+		} catch (Exception $e) {
+			$this->conn->rollback();
+			$resp['err'] = $e->getMessage();
 		}
+	
 		return json_encode($resp);
 	}
+	
 
 	function save_tba(){
 		extract($_POST);

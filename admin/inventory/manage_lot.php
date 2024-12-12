@@ -29,10 +29,24 @@ if ($user_role != 'IT Admin') {
 
 
 if(isset($_GET['id'])){
-    $user = $conn->query("SELECT * FROM t_lots where c_lid =".$_GET['id']);
-    foreach($user->fetch_array() as $k =>$v){
-        $meta[$k] = $v;
+    $id = intval($_GET['id']);
+    $query = "SELECT * FROM t_lots WHERE c_lid = $id";
+    $result = odbc_exec($conn2, $query);
+    
+    if (!$result) {
+        die("Query failed: " . odbc_errormsg($conn2));
     }
+    
+    // Fetch the results into an associative array
+    $meta = array();
+    while ($row = odbc_fetch_array($result)) {
+        foreach ($row as $k => $v) {
+            $meta[$k] = $v;
+        }
+    }
+    
+    // Close the connection
+    odbc_close($conn2);
 }
 
 ?>

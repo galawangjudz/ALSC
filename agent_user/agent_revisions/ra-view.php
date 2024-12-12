@@ -325,6 +325,11 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                 <!-- Navbar Right Menu -->
                             <table style="width:100%;">
                                 <tr>
+                                    <?php if ($verify == 0) { ?>
+                                        <td style="width:<?php echo ($verify == 0) ? '25%' : '0'; ?>">
+                                            <a href="?page=agent_revisions/create&id=<?php echo md5($getID); ?>" class="btn btn-flat btn-primary" style="font-size:14px;width:100%;margin-top:5px;"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit</a>
+                                        </td>
+                                    <?php } ?>
                                     <td>
                                     <button type="button" style="width:100%;" class="btn btn-flat btn-sm btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="width:50%;font-size:14px;">
                                     <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print

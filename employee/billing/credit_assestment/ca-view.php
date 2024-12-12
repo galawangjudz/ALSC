@@ -86,7 +86,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <div class="col-md-11">
                             <ul>
                                 <input type="checkbox" name="doc_req1" value="1" <?php echo isset($doc_req1)&&$doc_req1 == 1 ? "checked='checked'" : ''; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MANDATORY REQUIREMENTS<br />
-                                <input type="checkbox" name="doc_req2" value="1" <?php echo isset($doc_req2)&&$doc_req2 == 1 ? "checked='checked'" : ''; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INCOME/EMPLOYEMENT REQUIREMENTS<br />
+                                <input type="checkbox" name="doc_req2" value="1" <?php echo isset($doc_req2)&&$doc_req2 == 1 ? "checked='checked'" : ''; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INCOME/EMPLOYMENT REQUIREMENTS<br />
                                 <input type="checkbox" name="doc_req3" value="1" <?php echo isset($doc_req3)&&$doc_req3 == 1 ? "checked='checked'" : ''; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ADDITIONAL REQUIREMENTS<br />
                                 <div class="form-group">
                                     <label for="buyer_name" class="control-label">Remarks if fail:</label>
