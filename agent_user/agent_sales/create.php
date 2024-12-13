@@ -1247,16 +1247,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<label class="control-label" id= "no_pay_text"># Payments : </label>
 										<input type="text" class="form-control margin-bottom no-payment requiredPDandDC" name="no_payment" id="no_payment" oninput="numbersAndDecimal()" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "3">
 										<label class="control-label" id = "mo_down_text">Monthly Down: </label>
-										<input type="text" class="form-control margin-bottom required" name="monthly_down_display" id="monthly_down_display" value="<?php echo isset($monthly_down) ? number_format($monthly_down,2) : 0; ?>"  >
+										<input type="text" class="form-control margin-bottom required" name="monthly_down_display" id="monthly_down_display" readonly value="<?php echo isset($monthly_down) ? number_format($monthly_down,2) : 0; ?>"  >
 											
 										<input type="hidden" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
 											<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
-											<input type="date" class="form-control first-dp-date" name="first_dp_date" id = "first_dp_date" value="<?php echo isset($first_dp) ? $first_dp : date('Y-m-d'); ?>">
-												
-										
-										<label class="control-label">Full Down: </label>
-											
-											<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo isset($full_down) ? $full_down : date('Y-m-d'); ?>">
+											<?php
+											$first_dp_date = isset($first_dp) && strtotime($first_dp) ? date('Y-m-d', strtotime($first_dp)) : date('Y-m-d');
+											$full_down_date = isset($full_down) && strtotime($full_down) ? date('Y-m-d', strtotime($full_down)) : date('Y-m-d');
+											?>
+											<input type="date" class="form-control first-dp-date" name="first_dp_date" id="first_dp_date" value="<?php echo htmlspecialchars($first_dp_date); ?>">	
+											<label class="control-label">Full Down: </label>
+											<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo htmlspecialchars($full_down_date) ; ?>">
 												
 											
 									</div>
@@ -1281,7 +1282,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									</div>
 									<label class="control-label" id= "start_text">Start Date: </label>	
 								
-									<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : ''; ?>">
+									<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : date('Y-m-d'); ?>">
 								</div>
 							</div>
 						</div>
@@ -1607,9 +1608,9 @@ $(document).ready(function(){
 	const myDateInput = document.getElementById("first_dp_date");
 	const myDateInput2 = document.getElementById("full_down_date");
 	const myDateInput3 = document.getElementById("start_date");
-	myDateInput.value = today.toISOString().substr(0, 10);
-	myDateInput2.value = today.toISOString().substr(0, 10);
-	myDateInput3.value = today.toISOString().substr(0, 10);
+	//myDateInput.value = today.toISOString().substr(0, 10);
+	//myDateInput2.value = today.toISOString().substr(0, 10);
+	//myDateInput3.value = today.toISOString().substr(0, 10);
 })
 function redirectToMail() {
 	window.location.href = "./mail.php";

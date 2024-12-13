@@ -136,6 +136,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	color:white!important;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 }
+
+.required {
+    background-color: #ffffe0;
+}
 </style>
 
 

@@ -779,7 +779,9 @@ function updateTotals(elem) {
   }
 
 	function payment_type1_changed(){
-
+			var today = new Date();
+			var formattedDate = today.toISOString().split('T')[0];
+			$("#first_dp_date").val(formattedDate);
 			var l_payment_type1 = $('.payment-type1').val();
 			$('#payment_type2').removeAttr('disabled');
 			$('#loan_text').text("Amount to be financed :");
@@ -791,6 +793,7 @@ function updateTotals(elem) {
 			$('#no_payment').show();
 			$('#mo_down_text').show();
 			$('#monthly_down').show();
+			$('#monthly_down_display').show();
 			$('#down_text').show();
 			$('#factor_text').show();
 			$('#fixed_factor').show();
@@ -830,8 +833,9 @@ function updateTotals(elem) {
 				$('#mo_down_text').hide();
 				$('#first_dp').hide();
 				$('#first_dp_date').hide();
-				$('#monthly_down').val(0);
-				$('#monthly_down').hide();
+				//$('#monthly_down').val(0);
+				//$('#monthly_down').hide();
+				$('#monthly_down_display').hide();
 				$('#p1').show();
 				document.getElementById('p2').style.width='49%';
 				document.getElementById('p2').style.marginLeft='2%';
@@ -1093,6 +1097,11 @@ function updateTotals(elem) {
 			
 			var l_net_dp = (parseFloat(l_net_tcp) * parseFloat(l_down)) - parseFloat(l_reservation);
 			$('#net_dp').val(l_net_dp.toFixed(2));
+			//try
+			$('#no_payment').val(1);
+			$('#monthly_down').val(l_net_dp.toFixed(2));
+			$('#monthly_down_display').val(number_format(l_net_dp.toFixed(2)));
+			//
 			$('#net_dp_display').val(number_format(l_net_dp.toFixed(2)));
 			//alert(l_net_dp);
 			if (l_net_dp < 0)
