@@ -576,7 +576,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     radioButtons.forEach(function (radio) {
         radio.addEventListener("change", function () {
-            console.log("Radio button changed");
+            //console.log("Radio button changed");
             typeText.value = this.value;
 
             if (this.value === "1") {

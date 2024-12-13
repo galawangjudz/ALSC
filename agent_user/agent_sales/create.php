@@ -1225,7 +1225,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							</div>
 							<div class="payment_box2">
 								<div class="col-md-12 " id= "pay_type2">
-									<label class="control-label">Payment Type 2: <?php echo $payment_type2 ?></label>
+									<label class="control-label">Payment Type 2:</label>
 									<div class="form-group">
 										<style>
 											select:invalid { color: gray; }
@@ -1255,17 +1255,18 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<input type="text" class="form-control margin-bottom required" name="monthly_down_display" id="monthly_down_display" readonly value="<?php echo isset($monthly_down) ? number_format($monthly_down,2) : 0; ?>"  >
 											
 										<input type="hidden" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
-											<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
-											<?php
-											$first_dp_date = isset($first_dp) && strtotime($first_dp) ? date('Y-m-d', strtotime($first_dp)) : date('Y-m-d');
-											$full_down_date = isset($full_down) && strtotime($full_down) ? date('Y-m-d', strtotime($full_down)) : date('Y-m-d');
+										<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
+										<?php
+										
+										$first_dp_date = isset($first_dp) && strtotime($first_dp) ? date('Y-m-d', strtotime($first_dp)) : date('Y-m-d');
+										$full_down_date = isset($full_down) && strtotime($full_down) ? date('Y-m-d', strtotime($full_down)) : date('Y-m-d');
+										
+										?>
+										<input type="date" class="form-control first-dp-date" name="first_dp_date" id="first_dp_date" value="<?php echo htmlspecialchars($first_dp_date); ?>">	
+										<label class="control-label">Full Down: </label>
+										<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo htmlspecialchars($full_down_date) ; ?>">
 											
-											?>
-											<input type="date" class="form-control first-dp-date" name="first_dp_date" id="first_dp_date" value="<?php echo htmlspecialchars($first_dp_date); ?>">	
-											<label class="control-label">Full Down: </label>
-											<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo htmlspecialchars($full_down_date) ; ?>">
-												
-											
+										
 									</div>
 								</div>
 							</div>		

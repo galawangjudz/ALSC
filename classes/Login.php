@@ -41,8 +41,8 @@ class Login extends DBConnection {
 	public function logout() {
 
 		if ($this->settings->sess_des()) {
-			session_set_cookie_params(0);
 			session_destroy();
+			session_set_cookie_params(0);
 			redirect('auth/login.php');
 	}}
 	
