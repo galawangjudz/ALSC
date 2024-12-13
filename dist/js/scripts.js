@@ -834,7 +834,7 @@ function updateTotals(elem) {
 				$('#first_dp').hide();
 				$('#first_dp_date').hide();
 				//$('#monthly_down').val(0);
-				//$('#monthly_down').hide();
+				$('#monthly_down').hide();
 				$('#monthly_down_display').hide();
 				$('#p1').show();
 				document.getElementById('p2').style.width='49%';
@@ -857,7 +857,7 @@ function updateTotals(elem) {
 				document.getElementById('p2').style.width='100%';
 				document.getElementById('p2').style.marginLeft='0%';
 				
-				$('#start_date').val(l_sdate);
+				//$('#start_date').val(l_sdate);
 
 				var l_c = parseFloat(l_a) - parseFloat(l_b);
 				$('#amt_to_be_financed').val(l_c.toFixed(2))

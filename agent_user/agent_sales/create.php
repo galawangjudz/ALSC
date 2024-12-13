@@ -196,8 +196,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				$('#no_payment').val(0);
 				$('#no_payment').hide();
 				$('#mo_down_text').hide();
-				$('#monthly_down').val(0);
+				$('#first_dp').hide();
+				$('#first_dp_date').hide();
+				//$('#monthly_down').val(0);
 				$('#monthly_down').hide();
+				$('#monthly_down_display').hide();
 				$('#p1').show();
 				document.getElementById('p2').style.width='49%';
 				document.getElementById('p2').style.marginLeft='2%';
@@ -219,7 +222,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				document.getElementById('p2').style.width='100%';
 				document.getElementById('p2').style.marginLeft='0%';
 				
-				$('#start_date').val(l_sdate);
+				//$('#start_date').val(l_sdate);
 	
 				var l_c = parseFloat(l_a) - parseFloat(l_b);
 				$('#amt_to_be_financed').val(l_c.toFixed(2))
@@ -1222,15 +1225,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							</div>
 							<div class="payment_box2">
 								<div class="col-md-12 " id= "pay_type2">
-									<label class="control-label">Payment Type 2: </label>
+									<label class="control-label">Payment Type 2: <?php echo $payment_type2 ?></label>
 									<div class="form-group">
 										<style>
 											select:invalid { color: gray; }
 										</style>
 										<select name="payment_type2" id="payment_type2" class="form-control required payment-type2" tabindex = "64" disabled>
-											<option name="payment_type2" value="None" <?php echo isset($payment_type2) && $payment_type2 == "None" ? 'selected' : '' ?>>None</option>
-											<option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && $payment_type2 == "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-											<option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && $payment_type2 == "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
+											
+											<option name="payment_type2" value="None" <?php echo isset($payment_type2) && trim($payment_type2) === "None" ? 'selected' : '' ?>>None</option>
+											<option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && trim($payment_type2) === "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
+											<option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && trim($payment_type2) === "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
+											
 										</select>	
 									</div>
 								</div>
@@ -1254,6 +1259,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 											<?php
 											$first_dp_date = isset($first_dp) && strtotime($first_dp) ? date('Y-m-d', strtotime($first_dp)) : date('Y-m-d');
 											$full_down_date = isset($full_down) && strtotime($full_down) ? date('Y-m-d', strtotime($full_down)) : date('Y-m-d');
+											
 											?>
 											<input type="date" class="form-control first-dp-date" name="first_dp_date" id="first_dp_date" value="<?php echo htmlspecialchars($first_dp_date); ?>">	
 											<label class="control-label">Full Down: </label>
@@ -1281,8 +1287,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 											<input type="hidden" class="form-control margin-bottom required monthly-amor requiredMonthly" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?>">	
 									</div>
 									<label class="control-label" id= "start_text">Start Date: </label>	
-								
-									<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo isset($start_date) ? $start_date : date('Y-m-d'); ?>">
+									<?php $start_date = isset($start_date) && strtotime($start_date) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d');
+									?>
+									<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo htmlspecialchars($start_date); ?>">
 								</div>
 							</div>
 						</div>
@@ -1587,7 +1594,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	var selectedPaymentType1 = paymentType1Select.value;
 	var selectedPaymentType2 = paymentType2Select.value;
 	if (selectedPaymentType1 === 'Partial DownPayment' || selectedPaymentType1 === 'Full DownPayment' || selectedPaymentType1 === 'No DownPayment') {
-		paymentType2Select.value = 'Monthly Amortization';
+		//paymentType2Select.value = 'Monthly Amortization'; bkit meron ganito ??? hahahaha
 		paymentType2Select.style.backgroundColor = "white";
 		paymentType2Select.disabled = false;
 	} else {
