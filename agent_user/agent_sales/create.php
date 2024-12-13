@@ -765,6 +765,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="control-label">Price/SQM: </label>
+											<!-- <input type="text" class="form-control margin-bottom " name="price_per_sqm_display" id="price_per_sqm_display" readonly value="<?php echo isset($price_sqm) ? number_format($price_sqm,2) : ''; ?>" tabindex="25"> -->
 											<input type="text" class="form-control margin-bottom price-sqm" name="price_per_sqm" id="price_per_sqm" readonly value="<?php echo isset($price_sqm) ? $price_sqm : ''; ?>" tabindex="25">
 										</div>
 									</div>

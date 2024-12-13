@@ -252,6 +252,7 @@ $(document).ready(function() {
 
 		$('#lot_area').val(prod_lot_area);
 		$('#price_per_sqm').val(prod_price_sqm);
+		
 		subtotal = parseInt(prod_lot_area) * parseFloat(prod_price_sqm);
 		$('#amount').val(subtotal.toFixed(2))
 		$('#amount_display').val(subtotal.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
