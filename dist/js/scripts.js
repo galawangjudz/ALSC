@@ -95,9 +95,9 @@ $(document).ready(function() {
 		 $(agent).closest('tr').find('.agent-pos').val(pos);
 		 $(agent).closest('tr').find('.agent-rate').val(rate);
 
+		 var tr = $(agent).closest('tr');
 
-
-		 updateTotals('.calculate');
+		 updateTotals(agent);
 		 //calculateTotal();
 
 		});
@@ -373,7 +373,7 @@ $(".add-pay-row").click(function(e) {
 //     $('#buyer_table tbody').append(clonedRow);
 // });
 $('#comm_table').on('input', '.calculate', function () {
-	//alert(this);
+	
 	updateTotals(this);  
 });
 
@@ -393,9 +393,19 @@ function updateTotals(elem) {
 		pos = $('[name="agent_position[]"]', tr).val(),
 		code = $('[name="agent_code[]"]', tr).val(),
 		rate= $('[name="agent_rate[]"]', tr).val(),
-		subtotal = (parseFloat(rate) / 100) * parseFloat(net_tcp);
+		comm_amount = $(tr).find('.comm-amt'); // Target the commission field in the same row
 
-	$('.comm-amt', tr).val(subtotal.toFixed(2));
+
+		// Parse and calculate subtotal
+		var subtotal = (parseFloat(rate) / 100) * parseFloat(net_tcp);
+
+		// Check for NaN and default to 0 if calculation fails
+		subtotal = isNaN(subtotal) ? 0 : subtotal;
+
+		// Update the commission amount field
+		comm_amount.val(subtotal.toFixed(2));
+		
+		//$('[name="comm_amt[]"]', tr).val(subtotal.toFixed(2));
 	
 }
 

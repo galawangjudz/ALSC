@@ -1348,11 +1348,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<td style="padding-top:10px;">
 												<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
 										</td>
-										<td style="padding-top:10px;display:none;">
-												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
+										<td style="padding-top:10px;display:none;"><!-- display:none; -->
+												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
 										</td>
-										<td style="padding-top:10px;display:none;">
-												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" >
+										<td style="padding-top:10px;display:none;"><!-- display:none; -->
+												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" readonly>
 										</td>
 									</tr>
 									<?php endwhile; 
@@ -1381,12 +1381,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										</td>
 										<td style="display:none;">
 											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>">
+												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
 											</div>
 										</td>
 										<td style="display:none;">
 											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1">
+												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1" readonly>
 											</div>
 										</td>
 									</tr>
@@ -1539,7 +1539,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							while($row = $qry->fetch_assoc()):
 							$i++;
 						?>
-						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> "><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> </option>
+						<option value="<?php echo $row['c_code'] ?> - <?php echo $row["c_position"] ?> - <?php echo $row["c_rate"] ?>"><?php echo $row["c_last_name"] ?> , <?php echo $row["c_first_name"] ?> - <?php echo $row["c_position"] ?></option>
 						<?php endwhile; ?>
 					</select>
 				</div>
@@ -1637,7 +1637,8 @@ var tr = $(elem).closest('tr'),
 	code = $('[name="agent_code[]"]', tr).val(),
 	rate= $('[name="agent_rate[]"]', tr).val(),
 	subtotal = (parseFloat(rate) / 100) * parseFloat(net_tcp);
-$('.comm-amt', tr).val(subtotal.toFixed(2));
+	//$('[name="comm_rate[]"]', tr).val(subtotal);
+//$('.comm-amt', tr).val(subtotal.toFixed(2));
 }
 $(document).on('click', ".select-customer", function(e) {
 	e.preventDefault;

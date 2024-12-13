@@ -368,7 +368,7 @@ function radioButtonCtrl(){
         houseModelSelect.value = "";
         houseModelSelect.style.backgroundColor = "white";
 
-        lotDisc.readOnly = false;
+        lotDisc.readOnly = true;
 
         // floorArea.value = 0;
         // houseSqm.value = 0;
