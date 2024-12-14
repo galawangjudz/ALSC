@@ -325,11 +325,17 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                 <!-- Navbar Right Menu -->
                             <table style="width:100%;">
                                 <tr>
-                                    <?php if ($verify == 0) { ?>
+                                    <?php  $qry0 = $conn->query("SELECT * FROM tbl_attachments WHERE c_csr_no = '" . $getID . "' order by date_uploaded DESC limit 1");
+                                    if ($qry0->num_rows > 0)  { 
+                                        $row = $qry0->fetch_assoc(); // Fetch the result as an associative array
+                                        $approval_status = $row['approval_status']; // Access the approval_status column
+                                        //echo $approval_status;
+                                        if ($approval_status == '1'){ ?>
                                         <td style="width:<?php echo ($verify == 0) ? '25%' : '0'; ?>">
                                             <a href="?page=agent_revisions/create&id=<?php echo md5($getID); ?>" class="btn btn-flat btn-primary" style="font-size:14px;width:100%;margin-top:5px;"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit</a>
                                         </td>
-                                    <?php } ?>
+                                    <?php }} ?>
+                                    
                                     <td>
                                     <button type="button" style="width:100%;" class="btn btn-flat btn-sm btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="width:50%;font-size:14px;">
                                     <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
@@ -353,10 +359,11 @@ if(($_GET['id']) && ($_GET['id'] > 0)){
                                             $disabled = '';
                                         }
                                         ?>
-
+                                        
                                         <button attachment-id="<?php echo $getID; ?>" class="btn btn-flat btn-sm btn-success" data-toggle="modal" id="upload_file" style="width:100%; margin-right:5px; font-size:14px;" <?php echo $disabled; ?>><i class="fas fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;For Revision</button>
 
                                     </td>
+                                   
                                     <td>
                                         <a href="http://localhost/ALSC/admin/?page=mail/mail&id=<?php echo $getID; ?>" data-csr-id="'.$row['c_csr_no'].'" data-email="'.$row['c_email'].'" data-invoice-type="'.$row['c_employment_status'].'" data-custom-email="'.$row['c_email'].'" class="btn btn-flat btn-sm btn-primary" style="width:100%;font-size:14px;"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;E-mail</a>
                                     </td>

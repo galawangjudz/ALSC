@@ -123,7 +123,7 @@
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
 
-											and y.c_buyer_count = 1 and x.c_revised = 0 and x.coo_approval=0 order by c_date_updated DESC"); ///////REMOVED c_revised
+											and y.c_buyer_count = 1 and x.c_revised = 0 and x.coo_approval !=1 order by c_date_updated DESC"); ///////REMOVED c_revised
 
 						}else{
 							$qry = $conn->query("select q.c_acronym, z.c_block, z.c_lot, y.last_name, y.first_name, y.middle_name, y.suffix_name , x.* from t_csr x , t_csr_buyers y ,
@@ -132,7 +132,7 @@
 											and x.c_lot_lid = z.c_lid 
 											and z.c_site = q.c_code 
 
-											and y.c_buyer_count = 1 and ".$where." and x.c_revised = 0 and x.coo_approval=0 order by c_date_updated DESC");  ///////REMOVED c_revised
+											and y.c_buyer_count = 1 and ".$where." and x.c_revised = 0 and x.coo_approval !=1 order by c_date_updated DESC");  ///////REMOVED c_revised
 
 						}
 						while($row = $qry->fetch_assoc()):

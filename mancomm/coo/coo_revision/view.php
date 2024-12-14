@@ -159,7 +159,7 @@
 </style>
 <?php 
 
-$usertype = $_settings->userdata('user_type');
+$usertype = $_settings->userdata('position');
 $type = $_settings->userdata('user_code');
 
 
@@ -270,7 +270,8 @@ if($csr->num_rows > 0){
                 <input type="hidden" value="<?php echo $p2; ?>" id="p2">
                 <table style="width:100%;">
                     <tr>
-                        <td style="width: <?php echo ($verify == 1 && $coo_approval == 0 && $usertype == 'COO') ? '33.33%' : '100%'; ?>">
+                        
+                        <td style="width: <?php echo ($verify == 1 && $coo_approval == 0 && $usertype == 'CHIEF OF OPERATION') ? '33.33%' : '100%'; ?>">
                             <button type="button" class="btn btn-flat btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" style="margin-top:5px; font-size:14px;width:100%;">
                                 <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
                                 <span class="sr-only">Toggle Dropdown</span>
