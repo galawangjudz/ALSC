@@ -711,8 +711,8 @@ function updateTotals(elem) {
 		e.preventDefault();
 		payment_type2_changed();
 		//bago ung sa baba nito icomment if may problema
-		compute_rate();
-		compute_monthly_payments();
+		//compute_rate();
+		//compute_monthly_payments();
 	});
 	$(document).on('keyup', ".prod-lot-price", function(e) {
 		e.preventDefault();
@@ -828,7 +828,7 @@ function updateTotals(elem) {
 			} else if(l_payment_type1 == "Full DownPayment"){
 				
 				$('#no_pay_text').hide();
-				$('#no_payment').val(0);
+				$('#no_payment').val(1);
 				$('#no_payment').hide();
 				$('#mo_down_text').hide();
 				$('#first_dp').hide();
@@ -1098,7 +1098,7 @@ function updateTotals(elem) {
 			var l_net_dp = (parseFloat(l_net_tcp) * parseFloat(l_down)) - parseFloat(l_reservation);
 			$('#net_dp').val(l_net_dp.toFixed(2));
 			//try
-			$('#no_payment').val(1);
+			//$('#no_payment').val(1);
 			$('#monthly_down').val(l_net_dp.toFixed(2));
 			$('#monthly_down_display').val(number_format(l_net_dp.toFixed(2)));
 			//
@@ -1139,7 +1139,7 @@ function updateTotals(elem) {
 		if(l_no_pay == 0 || l_no_pay == 1){
 			l_no_pay = 1
 		}
-	
+		//console.log(l_no_pay);
 		fd_dte.setMonth(fd_dte.getMonth()+ parseFloat(l_no_pay - 1));
 		
 		var fd_dte = fd_dte.toISOString().slice(0, 10);
