@@ -853,6 +853,7 @@ if($csr->num_rows > 0){
                                                 <th><b>Code</b></th>
                                                 <th><b>Name</b></th>
                                                 <th><b>Rate</b></th>
+                                                <th><b>Amount</b></th>
                                             </thead>
                                         </tr>
                                         <tr>
@@ -871,6 +872,7 @@ if($csr->num_rows > 0){
                                             <td><?php echo $code ?></td>
                                             <td><?php echo $agent ?></td>
                                             <td><?php echo $rate ?></td>
+                                            <td><?php echo number_format($amount,2) ?></td>
                                             <?php 
                                         }} 
                                         ?>
