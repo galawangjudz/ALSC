@@ -1,0 +1,16 @@
+CREATE TABLE t_commission (
+    c_code INT,                     -- Integer for code
+    c_position SMALLINT,            -- Small integer for position
+    c_date_of_sale DATE,            -- Date of sale
+    c_amount DOUBLE,      -- Amount as double precision
+    c_account_no BIGINT,            -- Big integer for account number
+    c_sale SMALLINT,                -- Small integer for sale
+    c_rate DOUBLE,        -- Double precision for rate
+    c_net_tcp DOUBLE,     -- Double precision for net TCP
+    c_network TEXT,                 -- Text for network
+    c_division TEXT,                -- Text for division
+    c_account_mode BIT(1),          -- Single-bit field for account mode
+    c_last_name TEXT,               -- Text for last name
+    c_first_name TEXT,              -- Text for first name
+    c_middle_initial TEXT           -- Text for middle initial
+);

@@ -13,7 +13,7 @@ $db2 = new DBConnection2;
 $conn = $db->conn;
 $conn2 = $db2->conn2;
 ##### JUDZ CONNECTION ######
-/* $dbhost = 'localhost';
+$dbhost = 'localhost';
 $dbport = '5432'; // default PostgreSQL port
 $dbname = 'CAR_TESTDB';
 $dbuser = 'glicelo';
@@ -22,7 +22,7 @@ $dbpass = 'admin12345';
 $cnx  = pg_connect("host=$dbhost port=$dbport dbname=$dbname user=$dbuser password=$dbpass");
 if (!$cnx) {
     die("Error connecting to PostgreSQL database: " . pg_last_error());
-} */
+}
 
 
 

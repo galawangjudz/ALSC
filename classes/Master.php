@@ -1630,6 +1630,40 @@ Class Master extends DBConnection {
  */
 		$update = $this->conn->query("UPDATE t_lots set c_status = 'Sold' where c_lid =".$lot_lid);
 		$save99 = $this->conn->query("INSERT INTO properties set ".$data);
+
+		$get_comm =  $this->conn->query("SELECT * FROM t_csr_commission where c_csr_no =".$csr_no);
+		while($comm_row = $get_comm->fetch_array()):
+			$code = $comm_row['c_code'];
+			$pos =  $comm_row['c_position'];
+			$comm_amount =  $comm_row['c_amount'];
+			$commission_rate =  $comm_row['c_rate'];
+			
+			$data_comm = " c_code = '$code' "; 
+			$data_comm .= ", c_position = '$pos' "; 
+			$data_comm .= ", c_date_of_sale = '$due_date' ";
+			$data_comm .= ", c_amount = '$or_no' "; 
+			$data_comm .= ", c_account_no = '$or_no' "; 
+			$data_comm .= ", c_sale = '$or_no' "; 
+			$data_comm .= ", c_rate = '$or_no' "; 
+			$data_comm .= ", c_net_tcp = '$or_no' "; 
+			$data_comm .= ", c_network = '$or_no' "; 
+			$data_comm .= ", c_division = '$or_no' "; 
+			$data_comm .= ", c_account_mode = 1 "; 
+			$data_comm .= ", c_last_name = '$or_no' "; 
+			$data_comm .= ", c_first_name = '$or_no' "; 
+			$data_comm .= ", c_middle_initial = '$or_no' "; 
+			
+			$save_comm = $this->conn->query("INSERT INTO t_commission set ".$data_comm);
+
+		$save_comm = $this->conn->query("INSERT INTO t_commission (
+			c_code, c_position, c_date_of_sale, c_amount, c_account_no, 
+			c_sale, c_rate, c_net_tcp, c_network, c_division, 
+			c_account_mode, c_last_name, c_first_name, c_middle_initial
+		) VALUES (
+			101, 3, '2024-12-15', 50000.00, 123456789, 
+			1, 0.05, 47500.00, 'East', 'Sales', 
+			B'1', 'Doe', 'John', 'A'
+		)");
 		
 		$find =  $this->conn->query("SELECT property_id FROM properties where c_csr_no =".$csr_no);
 		$row3 = $find->fetch_assoc();

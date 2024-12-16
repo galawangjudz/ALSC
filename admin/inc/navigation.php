@@ -94,6 +94,14 @@ $department = $_settings->userdata('department');
                                         Inventory
                                       </p>
                                     </a>
+                                  </li>
+                                  <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=clients/commission_voucher" class="nav-link nav-inventory">
+                                    <i class="nav-icon fas fa-cube"></i>
+                                      <p>
+                                        New Commission Process
+                                      </p>
+                                    </a>
                                   </li> 
                               </ul>
                           </div>
