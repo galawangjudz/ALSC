@@ -828,7 +828,8 @@ $(document).ready(function() {
 
   $('.restructured_data').click(function(){
 		/* uni_modal('CA Approval','manage_ca.php?id='+$(this).attr('data-id')) */
-	  uni_modal("<i class='fa fa-info'></i> Restructuring",'clients/property_restructuring.php?id='+$(this).attr('data-id'),"mid-large")
+	  //uni_modal("<i class='fa fa-info'></i> Restructuring",'clients/property_restructuring.php?id='+$(this).attr('data-id'),"mid-large")
+    uni_modal("<i class='fa fa-info'></i> Restructuring",'clients/restructuring_new.php?id='+$(this).attr('data-id'),"mid-large")
 
 	})
 

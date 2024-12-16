@@ -3396,6 +3396,68 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
+
+	function create_restructured_new(){
+		extract($_POST);
+			
+		// Sanitize and convert inputs
+		$net_dp = (float)str_replace(',', '', $net_dp);
+		$less_paymt_dte = (float)str_replace(',', '', $less_paymt_dte);
+		$acc_surcharge1 = (float)str_replace(',', '', $acc_surcharge1);
+		$rem_dp = (int)str_replace(',', '', $rem_dp);
+		$monthly_down = (float)str_replace(',', '', $monthly_down);
+		$amt_2be_financed = (float)str_replace(',', '', $amt_2be_financed);
+		$acc_surcharge2 = (float)str_replace(',', '', $acc_surcharge2);
+		$acc_interest = (float)str_replace(',', '', $acc_interest);
+		$adj_prin_bal = (float)str_replace(',', '', $adj_prin_bal);
+		$ma_terms = (int)str_replace(',', '', $ma_terms);
+		$int_rate = (float)str_replace(',', '', $int_rate);
+		$fxd_factor = (float)str_replace(',', '', $fxd_factor);
+		$mo_amort = (float)str_replace(',', '', $mo_amort);
+
+		// Prepare the SQL query
+		$sql = "INSERT INTO pending_restructuring (
+				property_id,
+				c_account_status,
+				c_payment_type1,
+				c_payment_type2,
+				c_net_dp,
+				less_dp,
+				acc_surcharge1,
+				c_no_payments,
+				c_monthly_down,
+				c_first_dp,
+				c_full_down,
+				c_amt_financed,
+				acc_surcharge2,
+				acc_interest,
+				c_adj_prin_bal,
+				c_terms,
+				c_interest_rate,
+				c_fixed_factor,
+				c_monthly_payment,
+				c_start_date
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+		// Use prepared statement
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bind_param("iisddidddssdddffss", $prop_id, $acc_stat, $payment_type1, $payment_type2, $net_dp, $less_paymt_dte, $acc_surcharge1, $rem_dp, $monthly_down, $first_down_date, $fd_date, $amt_2be_financed, $acc_surcharge2, $acc_interest, $adj_prin_bal, $ma_terms, $int_rate, $fxd_factor, $mo_amort, $start_date);
+
+		// Execute the query
+		if ($stmt->execute()) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Restructuring successfully created.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+
+		// Close statement
+		$stmt->close();
+
+		return json_encode($resp);
+	}
+
 	function save_av(){
 		extract($_POST);
 		$data = " c_av_no = 'AV".$av_no."' ";
@@ -6813,6 +6875,10 @@ switch ($action) {
 	break;
 	case 'create_restructured':
 		echo $Master->create_restructured();
+	break;
+
+	case 'create_restructured_new':
+		echo $Master->create_restructured_new();
 	break;
 
 	case 'set_retention':
