@@ -1718,7 +1718,7 @@ $(document).ready(function(){
 			},
 			success:function(resp){
 				if(typeof resp =='object' && resp.status == 'success'){
-					window.location.href = "?page=agent_sales";
+					window.location.href = "?page=sm_sales";
 				}else if(resp.status == 'failed' && !!resp.msg){
 					var el = $('<div>')
 						el.addClass("alert alert-danger err-msg").text(resp.msg)
