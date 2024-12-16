@@ -16,13 +16,13 @@
 	}
 </style>
 <?php
-$usertype = $_settings->userdata('user_type');
+$usertype = $_settings->userdata('position');
 if (!isset($usertype)) {
     include '404.html';
   exit;
 }
 $user_role = $usertype;
-if ($user_role != 'COO') {
+if ($user_role != 'CHIEF OF OPERATION') {
     include '404.html';
   exit;
 }

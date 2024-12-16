@@ -73,6 +73,7 @@ $level = $_settings->userdata('type');
                     <b><i><div style="background-color:gainsboro;"><li class="nav-header">Inventory</li></div></b></i>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>mancomm/coo/?page=coo_inventory/lots_list" class="nav-link nav-lot">
+                     
                       <i class="nav-icon fas fa-cube"></i>
                         <p>
                           Lot Inventory 
