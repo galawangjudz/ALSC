@@ -4,6 +4,7 @@
 	color:black!important;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
+
 .active-button {
         background-color: #ccc; 
     }
@@ -75,6 +76,14 @@ $department = $_settings->userdata('department');
                                     <i class="nav-icon fas fa-book"></i>
                                       <p>
                                         Reservation Application
+                                      </p>
+                                    </a>
+                                  </li> 
+                                  <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=clients/property_list" class="nav-link nav-prop-list">
+                                    <i class="nav-icon fas fa-book"></i>
+                                      <p>
+                                        Property Accounts
                                       </p>
                                     </a>
                                   </li> 

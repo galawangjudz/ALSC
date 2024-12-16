@@ -80,6 +80,7 @@ if (isset($_GET['id'])) {
                                 <select class="form-control required" name="av_type" id="av_type">
                                     <option value="1">1-Relocation</option>
                                     <option value="2">2-Transfer of Location</option>
+                                    <option value="2">2.1-Transfer of Payment</option>
                                     <option value="3">3-Change of Model House</option>
                                     <option value="4">4-Downgrade</option>
                                 </select>
