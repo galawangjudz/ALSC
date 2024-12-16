@@ -117,6 +117,8 @@
 					<tr>
                     <th> No. </th>
                     <th>RA No.</th>
+					<th>Buyer's Name</th>
+					<th>Location</th>
                     <th> Reservation Date </th>
                     <th> OR No. </th>
                     <th> Reservation Fee</th>
@@ -126,12 +128,35 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * FROM t_reservation ORDER BY id");
+						$qry = $conn->query("SELECT 
+									r.*,  -- All columns from t_reservation
+									c.last_name AS LastName,  -- Add last name from t_csr
+									c.first_name AS FirstName,  -- Add last name from t_csr
+									p.c_acronym as Phase  -- Add location from t_projects
+								FROM 
+									t_reservation r
+								LEFT JOIN 
+									t_csr_buyers c ON r.c_csr_no = c.c_csr_no
+								LEFT JOIN 
+									t_projects p ON LEFT(r.c_lot_id, 3) = p.c_code
+								ORDER BY id");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
                             <td><?php echo $i++ ?></td>
                             <td><?php echo $row["ra_no"] ?></td>
+							<td><?php echo $row["LastName"] ?>, <?php echo $row["FirstName"] ?></td>
+							<td>
+							<?php 
+							if (!empty($row["c_lot_id"])) {
+								echo $row["Phase"] . " " . 
+									substr($row["c_lot_id"], 3, 3) . " " . 
+									substr($row["c_lot_id"], 6, 2); 
+							} else {
+								echo $row["Phase"] . " (No Lot ID)";
+							}
+							?>
+							</td>
                             <td><?php echo $row["c_reserve_date"] ?></td>
                             <td><?php echo $row["c_or_no"] ?></td>
                             <td><?php echo number_format($row["c_amount_paid"],2) ?></td>
