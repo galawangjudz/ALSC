@@ -95,40 +95,48 @@ $agent_name = $_GET['agent_name'];
 
 
 // SQL query to fetch commission details
-$sql = "SELECT c_commission_amount, c_net_commission,c_due_comm, c_prev_comm, c_prev_comm_amt, c_buyers_name, c_rate, c_account_no, c_print_date
+$sql = "SELECT c_commission_amount, c_net_commission, c_due_comm, c_prev_comm, c_prev_comm_amt, c_buyers_name, c_rate, c_account_no, c_print_date
         FROM t_new_commission_log
-        WHERE c_code = $1 AND c_print_date = $2
+        WHERE c_code = ? AND c_print_date = ?
         ORDER BY c_print_date DESC;";
 
 // Execute the query with the parameters
-$result = pg_query_params($cnx, $sql, array($c_code, $print_date));
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $c_code, $print_date);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Initialize an array to store commission details
 $commissionDetails = [];
 
-if ($result && pg_num_rows($result) > 0) {
-    while ($row = pg_fetch_assoc($result)) {
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         // Store each row of commission details in an array
         $commissionDetails[] = $row;
     }
 }
+
+
 // SQL query to fetch agent details
 $sql_agent = "SELECT c_withholding_tax, c_network, c_division, c_position
               FROM t_agents
-              WHERE c_code = $1;";
+              WHERE c_code = ?";
 
 // Execute the query with the parameters
-$result_agent = pg_query_params($cnx, $sql_agent, array($c_code));
+$stmt = $conn->prepare($sql_agent);
+$stmt->bind_param("s", $c_code);
+$stmt->execute();
+$result_agent = $stmt->get_result();
 
 // Initialize an array to store agent details
 $agentDetails = [];
 
-if ($result_agent && pg_num_rows($result_agent) > 0) {
-    $agentDetails = pg_fetch_assoc($result_agent);
+if ($result_agent && $result_agent->num_rows > 0) {
+    $agentDetails = $result_agent->fetch_assoc();
 }
 
 // Close connection
-pg_close($cnx);
+$stmt->close();
 }
 
 
@@ -181,7 +189,7 @@ pg_close($cnx);
                     <th style="text-align: center;">#</th>
                     <th style="text-align: center;">Account No</th>
                     <th style="text-align: center;">Buyers Name</th>
-                    <th style="text-align: center;">Net TCP</th>
+                    <th style="text-align: center;">NET TCP (exclude VAT)</th>
                     <th style="text-align: center;">Commission Rate</th>
                     <th style="text-align: center;">Prev. Commission</th>
                     <th style="text-align: center;">Due Commission</th>

@@ -1079,6 +1079,7 @@ function updateTotals(elem) {
 		var l_net_tcp = $('.net-tcp-1').val();
 		var l_down_per = $('.down-percent').val();
 		var l_reservation = $('.reservation-fee').val();
+		var l_no_payment = $('.no-payment').val();
 		//alert(l_down_per);		
 		if (l_down_per == 0){
 			
@@ -1099,8 +1100,9 @@ function updateTotals(elem) {
 			$('#net_dp').val(l_net_dp.toFixed(2));
 			//try
 			//$('#no_payment').val(1);
-			$('#monthly_down').val(l_net_dp.toFixed(2));
-			$('#monthly_down_display').val(number_format(l_net_dp.toFixed(2)));
+			var l_mo_down =(l_net_dp / l_no_payment);
+			$('#monthly_down').val(l_mo_down.toFixed(2));
+			$('#monthly_down_display').val(number_format(l_mo_down.toFixed(2)));
 			//
 			$('#net_dp_display').val(number_format(l_net_dp.toFixed(2)));
 			//alert(l_net_dp);

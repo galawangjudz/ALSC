@@ -14,3 +14,18 @@ CREATE TABLE t_commission (
     c_first_name TEXT,              -- Text for first name
     c_middle_initial TEXT           -- Text for middle initial
 );
+
+CREATE TABLE t_new_commission_log (
+    c_code              INT NOT NULL,
+    c_account_no        BIGINT NOT NULL,
+    c_buyers_name       TEXT NOT NULL,
+    c_commission_amount DOUBLE NOT NULL,
+    c_rate              DOUBLE NOT NULL,
+    c_net_commission    DOUBLE NOT NULL,
+    c_prev_comm         DOUBLE NOT NULL,
+    c_due_comm          DOUBLE NOT NULL,
+    c_prev_comm_amt     DOUBLE NOT NULL,
+    c_commission_count  INT NOT NULL,
+    c_print_date        DATE NOT NULL,
+    PRIMARY KEY (c_code, c_account_no)  -- Composite primary key
+);
