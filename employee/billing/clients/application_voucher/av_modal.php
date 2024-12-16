@@ -81,7 +81,7 @@ if(isset($_GET['id'])){
                     <th>Payment Amt</th>
                     <th>Pay Date</th>
                     <th>Due Date</th>
-                    <th>OR No</th>
+                    <th>SI NO</th>
                     <th >Amt Due</th>
                     <th>Interest</th>
                     <th>Rebate</th>

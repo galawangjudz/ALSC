@@ -265,7 +265,7 @@ class Login extends DBConnection
                                     <th>#</th>
                                     <th>Property ID</th>
 
-                                    <th>OR No.</th>
+                                    <th>Sales Invoice No.</th>
                                     <th>Pay Date</th>
                                     <th>Amt Paid</th>
                                     <th>Preparer</th>

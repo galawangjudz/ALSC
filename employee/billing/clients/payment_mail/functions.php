@@ -965,7 +965,7 @@ function getReservations() {
 				<th> No. </th>
 				<th>RA No.</th>
 				<th> Reserved Date </th>
-				<th> OR No. </th>
+				<th> SI NO. </th>
 				<th> Reservation Fee</th>
 				<th class="actions">Actions</th>
 

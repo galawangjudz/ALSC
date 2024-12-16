@@ -105,7 +105,7 @@ $pay_date = isset($_POST['pay_date_input']) ? date("Y-m-d", strtotime($_POST['pa
                         <tr>
                             <th class="text-center" style="font-size:13px;">DUE DATE</th>
                             <th class="text-center" style="font-size:13px;">PAY DATE</th>
-                            <th class="text-center" style="font-size:13px;">OR NO</th>
+                            <th class="text-center" style="font-size:13px;">SI NO</th>
                             <th class="text-center" style="font-size:13px;">AMT PAID</th> 
                             <th class="text-center" style="font-size:13px;">AMT DUE</th>
                             <th class="text-center" style="font-size:13px;">SURCHARGE</th>

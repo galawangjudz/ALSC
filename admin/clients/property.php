@@ -488,7 +488,7 @@ hr.divider {
                             <!--   <th style="text-align:center;font-size:13px;">PROPERTY ID</th> -->
                               <th style="text-align:center;font-size:13px;">DUE DATE</th>
                               <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                              <th style="text-align:center;font-size:13px;">OR NO</th>
+                              <th style="text-align:center;font-size:13px;">SI NO</th>
                               <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
                               <th style="text-align:center;font-size:13px;">SURCHARGE</th>
                               <th style="text-align:center;font-size:13px;">INTEREST</th>
@@ -643,7 +643,7 @@ hr.divider {
                       <tr>
                           <th class="text-center" style="font-size:13px;">DUE DATE</th>
                           <th class="text-center" style="font-size:13px;">PAY DATE</th>
-                          <th class="text-center" style="font-size:13px;">OR NO</th>
+                          <th class="text-center" style="font-size:13px;">SI NO</th>
                           <th class="text-center" style="font-size:13px;">AMOUNT PAID</th> 
                           <th class="text-center" style="font-size:13px;">AMOUNT DUE</th>
                           <th class="text-center" style="font-size:13px;">SURCHARGE</th>

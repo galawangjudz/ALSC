@@ -227,7 +227,7 @@ body{
                         </tr>
                         <tr>
                         <td style="width:25%;font-size:13px;"><label for="trans_date_ent">Transaction Date: </label></td>
-                            <td style="width:25%;font-size:13px;"><label for="or_date_ent">OR Date:</label></td> 
+                            <td style="width:25%;font-size:13px;"><label for="or_date_ent">Sales Invoice Date:</label></td> 
                            
                         </tr>
                         <tr>
@@ -322,7 +322,7 @@ body{
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><label for="amount_paid">Amount Paid:</label></td>
-                            <td style="width:25%;font-size:13px;padding-left:10px;"><label for="or_no_ent">OR #:</label></td>
+                            <td style="width:25%;font-size:13px;padding-left:10px;"><label for="or_no_ent">Sales Invoice #:</label></td>
                         </tr>
                         <tr>
                             <td style="width:25%;font-size:13px;"><input type="text" class="form-control-sm margin-bottom amt-paid"  id="amount_paid" name="amount_paid" value="<?php echo $amount_paid_ent; ?>" style="width:100%;" required></td>
@@ -418,7 +418,7 @@ body{
                                 <th style="text-align:center;font-size:11px;width:5%;">ACTION</th>
                                 <th style="text-align:center;font-size:11px;">DUE DATE</th>
                                 <th style="text-align:center;font-size:11px;">PAY DATE</th>
-                                <th style="text-align:center;font-size:11px;">OR NO</th>
+                                <th style="text-align:center;font-size:11px;">SI NO</th>
                                 <th style="text-align:center;font-size:11px;">AMT PAID</th>
                                 <th style="text-align:center;font-size:11px;">AMT DUE</th>
                                 <th style="text-align:center;font-size:11px;">SURCHARGE</th>
@@ -671,7 +671,7 @@ body{
                         <tr>
                             <th style="text-align:center;font-size:11px;width:8%">#</th>
                             <!-- <th>Property ID</th> -->
-                            <th style="text-align:center;font-size:11px;width:8%">OR NO</th>
+                            <th style="text-align:center;font-size:11px;width:8%">SI NO</th>
                             <th style="text-align:center;font-size:11px;width:8%">PAY DATE</th>
                             <th style="text-align:center;font-size:11px;width:8%">AMOUT PAID</th>
                             <!-- <th>Amt Due</th>
