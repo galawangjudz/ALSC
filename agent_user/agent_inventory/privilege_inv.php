@@ -39,8 +39,6 @@ if(isset($_GET['id'])){
 	<div class="card-body">
 		<div class="container-fluid">
             <form action="" id="manage-lot">
-                <input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new lot ">
-                <input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated lot ">
                 <input type="hidden" name="prod_lid" id="prod_lid" value="<?php echo isset($meta['c_lid']) ? $meta['c_lid']: '' ?>">
                 <div class="form-group">
                     <label class="control-label">Phase: </label>
@@ -65,26 +63,38 @@ if(isset($_GET['id'])){
                     <label for="name">Lot</label>
                     <input type="number" class="form-control required" name="prod_lot" id="prod_lot" value="<?php echo isset($meta['c_lot']) ? $meta['c_lot']: '' ?>">
                 </div>
+                                <!-- Button to Display Data -->
+                <div class="form-group">
+                    <button type="button" id="displayData" class="btn btn-primary">Check</button>
+                </div>
+                <!-- Table to Show Data -->
+                <div id="dataTableContainer" style="margin-top: 20px;">
+                    <!-- The table data will load here dynamically -->
+                </div>
                 <div class="form-group">
                     <label for="agent_assigned">Agent Assigned:</label>
                     <select class="form-control" id="agent_assigned" name="agent_assigned" required>
                         <option value="">Select Agent</option>
                         <?php 
                         $sql = "SELECT c_code, c_last_name, c_first_name, c_position FROM t_agents ORDER BY c_last_name ASC";
-                        $agents = odbc_exec($conn2, $sql);
-                            
 
-                        if (!$agents) {
-                            die("Error executing query: " . odbc_errormsg($conn2));
-                        }
-
+                        // Execute the query
+                        $result = $conn->query($sql);
                         
-                        while($row = odbc_fetch_array($agents)): ?>
+                        if (!$result) {
+                            die("Error executing query: " . $conn->error);
+                        }
+                        
+                        // Fetch and display results
+                        while ($row = $result->fetch_assoc()): ?>
                             <option value="<?= $row['c_code'] ?>" <?= isset($agent_assigned) && $agent_assigned == $row['c_code'] ? 'selected' : '' ?>>
                                 <?= $row['c_last_name'] . ", " . $row['c_first_name'] ." - " . $row['c_position'] ?>
                             </option>
-                        <?php endwhile; 
-                        odbc_close($conn2);?>
+                        <?php endwhile;
+                        
+                        // Close the connection
+                       
+                        ?>
                     </select>
                 </div>
                 
@@ -97,7 +107,7 @@ if(isset($_GET['id'])){
 				        <button class="btn btn-flat btn-default bg-maroon" form="manage-lot" style="width:100%;margin-right:5px;font-size:14px;"><i class='fa fa-save'></i>&nbsp;&nbsp;Save</button>
                     </td>
                     <td>
-				        <a class="btn btn-flat btn-default" href="./?page=inventory/lot-list" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
+				        <a class="btn btn-flat btn-default" href="./?page=agent_inventory/additional_inv" style="width:100%;margin-left:5px;font-size:14px;"><i class='fa fa-times-circle'></i>&nbsp;&nbsp;Cancel</a>
                     </td>
                 </tr>
             </table>
@@ -106,7 +116,36 @@ if(isset($_GET['id'])){
 </div>
 </body>
 <script>
-   
+    $(document).ready(function () {
+        $('#displayData').on('click', function () {
+            // Get the selected values
+            var prodCode = $('#prod_code').val();
+            var prodBlock = $('#prod_block').val();
+            var prodLot = $('#prod_lot').val();
+
+        
+            // Make an AJAX call to fetch the data
+            $.ajax({
+                url:_base_url_+'agent_user/agent_inventory/fetch_data.php', // File to handle the data fetch
+                method: 'POST',
+                data: { 
+                    prod_code: prodCode,
+                    prod_block: prodBlock,
+                    prod_lot: prodLot 
+                },
+                success: function (response) {
+                    // Display the response in the table container
+                    console.log("test");
+                    $('#dataTableContainer').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error: ' + error);
+                }
+            });
+        });
+    });
+
+
 
 	function validateForm() {
 	    // error handling
@@ -142,7 +181,7 @@ if(isset($_GET['id'])){
         }    
         start_loader();
         $.ajax({
-				url:_base_url_+"classes/Master.php?f=save_lot",
+				url:_base_url_+"classes/Master.php?f=save_additional_inv",
 				data: new FormData($(this)[0]),
 				cache: false,
 				contentType: false,
