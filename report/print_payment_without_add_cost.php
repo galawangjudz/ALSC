@@ -218,9 +218,9 @@
         </tr>
     </table>
 </div>
-<div class="card-body" id="payment_details">
+<div class="card-body" id="payment_details" style="height:325px;">
     <div class="row">
-    <div class="dp_sched">
+    <div class="dp_sched" style="height:325px;">
             <div class="titles" style="margin-top:0px;">DOWN PAYMENT SCHEDULE</div>
             <div class="dp_container">
                 <div class="row">
@@ -319,7 +319,7 @@
                 </div>
             </div>
         </div>
-        <div class="ma">
+        <div class="ma" style="height:325px;">
         <div class="titles2">MONTHLY AMORTIZATION</div>
         <div class="ma_sub"> *Based on In-House Financing pending Bank approval of Housing Loan</div>
             <div class="dp_container2">
@@ -416,7 +416,7 @@
                 </div>
             </div>
         </div>
-        <div class="sales" style="font-weight:normal;">
+        <div class="sales" style="font-weight:normal;border:solid 1px black;">
         <div class="titles3">SALES</div>
                 <div class="first_table">
                 <?php
@@ -506,7 +506,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="margin-top:125px;">
 <table class="rem">
         <tr>
             <td width="50%"><div style="background-color:black;color:white;text-align:left;font-weight:bold;margin-top:0px;padding-left:8px;font-size:12px;height:auto;margin-right:-25px;">REMARKS</div></td>
