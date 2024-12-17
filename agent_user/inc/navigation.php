@@ -65,6 +65,14 @@ $level = $_settings->userdata('type');
                         </p>
                       </a>
                     </li> 
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>agent_user/?page=agent_inventory/additional_inv" class="nav-link nav-add-inv">
+                      <i class="nav-icon fas fa-cube"></i>
+                        <p>
+                          Privilege List
+                        </p>
+                      </a>
+                    </li> 
                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>agent_user/?page=agent_loan_calcu" class="nav-link nav-loan">

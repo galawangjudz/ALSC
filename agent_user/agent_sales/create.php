@@ -731,32 +731,40 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 								<div class="titles">Lot</div>
 								<hr>
 								<div class="row">
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<input type="hidden" class="form-control margin-bottom copy-input" name="l_lid" id="l_lid" value="<?php echo isset($lot_id) ? $lot_id : '';  ?>" tabindex="20">
 										<div class="form-group">
 											<label class="control-label">Phase: </label>
 											<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_site" id="l_site" readonly  value="<?php echo isset($phase) ? $phase : ''; ?>" tabindex="21">
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="form-group">
 											<label class="control-label">Block: </label>
 											<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_block" id="l_block" readonly value="<?php echo isset($block) ? $block : ''; ?>" tabindex="22">
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="form-group">
 											<label class="control-label">Lot: </label>
 											<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_lot" id="l_lot" readonly value="<?php echo isset($lot) ? $lot : ''; ?>" tabindex="23">
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="form-group">
-											<button type="submit" class="btn btn-flat btn-success float-right select-lot" data-loading-text="Finding..." id="btnfind" disabled>
+											<button type="submit" class="btn btn-flat btn-success float-left select-lot" data-loading-text="Finding..." id="btnfind" disabled>
 												<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Find Lot
 											</button>
 										</div>
 									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<button type="submit" class="btn btn-flat btn-success float-right select-house" data-loading-text="Finding..." id="btnfind">
+												<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;House
+											</button>
+										</div>
+									</div>
+									
 								</div>
 								<div class="row">
 									<div class="col-md-6">
