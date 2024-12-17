@@ -54,7 +54,7 @@
 
         ?>          
 <body onload="getRelation()">
-<div class="card-body">
+<div class="card-body" style="margin-top:0px;">
     <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>
     <div class="container-fluid">
         <div class="row">
