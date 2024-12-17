@@ -7,35 +7,41 @@
         float:right;
         font-size:10px;
     }
+    .m-bottom{
+        margin-top:-3px;
+    }
+    text{
+        margin-bottom: -5px;
+    }
 </style>
 <body onload="loadAll()">
 <div class="ref_no"><b>Reference No. : </b><?php echo $ref_no; ?></div>
-<div class="card-body" style="margin-top:3px;">
+<div class="card-body" style="margin-top:0px;">
     <div class="doc_title">Name and Contact details of Purchaser's Spouse or Co-Owner - Details must be consistent will all documents</div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Last Name:</label>
-                    <input type="text" value="<?php echo $c_b1_last_name; ?>" class="form-control form-control-sm">
+                    <input type="text" value="<?php echo $c_b1_last_name; ?>" class="form-control form-control-sm m-bottom">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label">Suffix Name:</label>
-                    <input type="text" value="<?php echo $c_suffix; ?>" class="form-control form-control-sm">
+                    <input type="text" value="<?php echo $c_suffix; ?>" class="form-control form-control-sm m-bottom">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">First Name:</label>
-                    <input type="text" value="<?php echo $c_b1_first_name; ?>" class="form-control form-control-sm">
+                    <input type="text" value="<?php echo $c_b1_first_name; ?>" class="form-control form-control-sm m-bottom">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Middle Name:</label>
-                    <input type="text" value="<?php echo $c_b1_middle_name; ?>" class="form-control form-control-sm">
+                    <input type="text" value="<?php echo $c_b1_middle_name; ?>" class="form-control form-control-sm m-bottom">
                 </div>
             </div>
         </div>
@@ -43,7 +49,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Citizenship:</label>
-                    <input type="text" value="<?php echo $c_citizenship; ?>"  class="form-control form-control-sm">
+                    <input type="text" value="<?php echo $c_citizenship; ?>"  class="form-control form-control-sm m-bottom">
                 </div>
             </div>
             <div class="col-md-5">
@@ -101,7 +107,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label">Age:</label>
-                    <input type="text" value="<?php echo $c_age; ?>"  class="form-control form-control-sm">
+                    <input type="text" value="<?php echo $c_age; ?>"  class="form-control form-control-sm m-bottom">
                 </div>
             </div>
         </div>
@@ -603,11 +609,11 @@
         </tr>
     </table>
 </div>
-<div class="card-body" id="payment_details">
+<div class="card-body" id="payment_details" style="height:325px;">
     <div class="row">
-        <div class="dp_sched">
+        <div class="dp_sched" style="height:325px;">
             <div class="titles" style="margin-top:0px;">DOWN PAYMENT SCHEDULE</div>
-            <div class="dp_container">
+            <div class="dp_container" style="">
                 <div class="row">
                     <input type="hidden" value="<?php echo $down_percent; ?>" id="down_percent">
                     <div style="float:left;margin-right:2px;margin-top:2px;">
@@ -696,7 +702,7 @@
                         <input type="text" value="<?php echo number_format($c_monthly_payment,2) ?>" class="form-control form-control-sm" style="margin-bottom:-18px;">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="height:125px;">
                     <div class="col-md-12">
                         <label class="control-label2" id="lbl_dp" style="margin-bottom:5px;">Commencing Date:</label>
                         <input type="text" value="" class="form-control form-control-sm">
@@ -704,7 +710,7 @@
                 </div>
             </div>
         </div>
-        <div class="ma">
+        <div class="ma" style="height:325px;">
         <div class="titles2">MONTHLY AMORTIZATION</div>
         <div class="ma_sub"> *Based on In-House Financing pending Bank approval of Housing Loan</div>
             <div class="dp_container2">
@@ -762,7 +768,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:15px;margin-bottom:5px;">Monthly Amortization:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:10px;margin-bottom:5px;">Monthly Amortization:</label>
                         <input type="text" value="" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -789,7 +795,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label2" id="lbl_dp" style="margin-top:14px;margin-bottom:5px;">Total Monthly Amortization:</label>
+                        <label class="control-label2" id="lbl_dp" style="margin-top:13px;margin-bottom:5px;">Total Monthly Amortization:</label>
                         <input type="text" value="" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -801,7 +807,7 @@
                 </div>
             </div>
         </div>
-        <div class="sales" style="font-weight:normal;">
+        <div class="sales" style="font-weight:normal;border:solid 1px black;">
                 <div class="titles3">SALES</div>
                 <div class="first_table">
                 <?php
@@ -891,7 +897,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="margin-top:125px;">
     <table class="rem">
         <tr>
             <td width="50%"><div style="background-color:black;color:white;text-align:left;font-weight:bold;margin-top:0px;padding-left:8px;font-size:12px;height:auto;margin-right:-25px;">REMARKS</div></td>
