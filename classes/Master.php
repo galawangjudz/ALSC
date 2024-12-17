@@ -3292,7 +3292,6 @@ Class Master extends DBConnection {
 		$restructured_date = $_POST['restructured_date'];
 		$amount_due = $acc_interest + $total_sur;
 		
-	
 		$data = "c_payment_type2 = '$payment_type2' ";
 		if ($acc_status == "Partial DownPayment" || $acc_status == 'Full DownPayment' || $acc_status == 'No DownPayment'){
 				
@@ -3401,11 +3400,18 @@ Class Master extends DBConnection {
 		extract($_POST);
 			
 		// Sanitize and convert inputs
+		$prop_id = $_POST['prop_id'];
+		$balance =  (float)str_replace(',', '', $_POST['balance']);
+		$acc_stat = $_POST['acc_stat'];
+		$payment_type1 = $_POST['payment_type1'];
+		$payment_type2 = $_POST['payment_type2'];
 		$net_dp = (float)str_replace(',', '', $net_dp);
 		$less_paymt_dte = (float)str_replace(',', '', $less_paymt_dte);
 		$acc_surcharge1 = (float)str_replace(',', '', $acc_surcharge1);
 		$rem_dp = (int)str_replace(',', '', $rem_dp);
 		$monthly_down = (float)str_replace(',', '', $monthly_down);
+		$first_down_date = $_POST['first_down_date'];
+		$fd_date = $_POST['fd_date'];
 		$amt_2be_financed = (float)str_replace(',', '', $amt_2be_financed);
 		$acc_surcharge2 = (float)str_replace(',', '', $acc_surcharge2);
 		$acc_interest = (float)str_replace(',', '', $acc_interest);
@@ -3414,48 +3420,80 @@ Class Master extends DBConnection {
 		$int_rate = (float)str_replace(',', '', $int_rate);
 		$fxd_factor = (float)str_replace(',', '', $fxd_factor);
 		$mo_amort = (float)str_replace(',', '', $mo_amort);
+		$start_date = $_POST['start_date'];
+		$pending_status = 1; // Set as '1'
+		$restructured_date =  $_POST['restructured_date'];
+
+		
 
 		// Prepare the SQL query
 		$sql = "INSERT INTO pending_restructuring (
-				property_id,
-				c_account_status,
-				c_payment_type1,
-				c_payment_type2,
-				c_net_dp,
-				less_dp,
-				acc_surcharge1,
-				c_no_payments,
-				c_monthly_down,
-				c_first_dp,
-				c_full_down,
-				c_amt_financed,
-				acc_surcharge2,
-				acc_interest,
-				c_adj_prin_bal,
-				c_terms,
-				c_interest_rate,
-				c_fixed_factor,
-				c_monthly_payment,
-				c_start_date
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+			property_id,
+			c_balance,
+			c_account_status,
+			c_payment_type1,
+			c_payment_type2,
+			c_net_dp,
+			less_dp,
+			acc_surcharge1,
+			c_no_payments,
+			c_monthly_down,
+			c_first_dp,
+			c_full_down,
+			c_amt_financed,
+			acc_surcharge2,
+			acc_interest,
+			c_adj_prin_bal,
+			c_terms,
+			c_interest_rate,
+			c_fixed_factor,
+			c_monthly_payment,
+			c_start_date,
+			pending_status,
+			c_restructured_date
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+ 		
 		// Use prepared statement
 		$stmt = $this->conn->prepare($sql);
-		$stmt->bind_param("iisddidddssdddffss", $prop_id, $acc_stat, $payment_type1, $payment_type2, $net_dp, $less_paymt_dte, $acc_surcharge1, $rem_dp, $monthly_down, $first_down_date, $fd_date, $amt_2be_financed, $acc_surcharge2, $acc_interest, $adj_prin_bal, $ma_terms, $int_rate, $fxd_factor, $mo_amort, $start_date);
+
+		// Bind the parameters with the corrected types
+		$stmt->bind_param("sdssssddidssssddidddsss", 
+			$prop_id, 
+			$balance, 
+			$acc_stat, 
+			$payment_type1, 
+			$payment_type2, 
+			$net_dp, 
+			$less_paymt_dte, 
+			$acc_surcharge1, 
+			$rem_dp, 
+			$monthly_down, 
+			$first_down_date, 
+			$fd_date, 
+			$amt_2be_financed, 
+			$acc_surcharge2, 
+			$acc_interest, 
+			$adj_prin_bal, 
+			$ma_terms, 
+			$int_rate, 
+			$fxd_factor, 
+			$mo_amort, 
+			$start_date, 
+			$pending_status,
+			$restructured_date
+		);
 
 		// Execute the query
 		if ($stmt->execute()) {
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Restructuring successfully created.");
+			$this->settings->set_flashdata('success', "Restructuring successfully created.");
 		} else {
 			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
+			$resp['err'] = $this->conn->error . "[{$sql}]";
 		}
 
-		// Close statement
-		$stmt->close();
-
 		return json_encode($resp);
+
 	}
 
 	function save_av(){
