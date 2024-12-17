@@ -32,15 +32,25 @@ if(isset($_GET['id'])){
 
     }
 
+
+ 
     $get_ma_count = $conn->query("SELECT status_count FROM property_payments where md5(property_id) = '{$_GET['id']}' order by payment_count DESC limit 1 ");    
     while($row=$get_ma_count->fetch_assoc()){
         $status_count = $row['status_count'];
 
+        if ($account_status == 'Monthly Amortization' || $account_status == 'Deferred Cash Payment'){
+            $remain_terms = $terms - $status_count; 
+        }
+        if  ($account_status == 'Partial DownPayment' ){
+            $remain_no_pay = $no_payments - $status_count; 
+
+        
+        }
+
     }
 
-    $remain_terms = $terms - $status_count
+   
 
-  
 ?>
 <?php
 $username = $_settings->userdata('username'); 
@@ -261,9 +271,9 @@ $type = $_settings->userdata('user_code');
                     <!--  <label for= "rem_dp" class="control-label">Rem. DP Term/s : </label> -->
                 
                     <?php if ($account_status == 'Partial DownPayment' )  : ?>
-                    <label class="control-label">Rem. DP Term/s : </label> <i> Remaining: <?php echo $no_payments = $remain_no_pay;  ?> </i>
+                    <label class="control-label "name="rem_text" id="rem_text">Rem. DP Term/s : <i> Remaining: <?php echo $no_payments = $remain_no_pay;  ?> </i> </label>
                     <?php else:?>
-                    <label class="control-label">Rem. DP Term/s : <?php echo $no_payments ?></label>
+                    <label class="control-label" name="rem_text"  id="rem_text">Rem. DP Term/s : <?php echo $no_payments ?></label>
                     <?php endif; ?>
 
                     <?php
@@ -378,6 +388,11 @@ $(document).on('change', ".rem-dp, .first-down-date", function () {
     auto_no_terms();
 });
 
+$(document).on('change', ".rem-dp, .first-down-date", function () {
+    mo_downpayment();
+    auto_no_terms();
+});
+
 $(document).on('change', ".pay-type2", payment_type2_changed);
 $(document).on('change', ".pay-type1", payment_type1_changed);
 
@@ -478,7 +493,8 @@ function compute_ma(){
 // Payment type 1 change handler
 function payment_type1_changed() {
     var type = $('.pay-type1').val();
-
+    $('#rem_dp').show();
+    $('#rem_text').show();
     if (type === "Full DownPayment" || type === "No DownPayment") {
         adjust_for_down_payment(type);
     } else {
@@ -523,16 +539,29 @@ function payment_type2_changed() {
 
 function adjust_for_down_payment(type) {
     $('.acc-status').val("Reservation");
+    $('#down_frm').show();
 
     if (type === "Full DownPayment") {
+       
         $('#net_dp, #less_paymt_dte, #dp_bal, #monthly_down, #fd_date').show();
+        $('#rem_dp').val(1);
+        $('#rem_dp').hide();
+        $('#rem_text').hide();
+        mo_downpayment();
+        auto_no_terms();
+    }else if (type === "Partial DownPayment"){
+        $('#net_dp, #less_paymt_dte, #dp_bal, #monthly_down, #fd_date').show();
+        $('#rem_dp').show();
+        $('#rem_text').show();
     } else {
         $('#down_frm').hide();
     }
 }
 
 function reset_payment_form() {
-    $('#net_dp, #less_paymt_dte, #dp_bal, #monthly_down, #first_down_date, #fd_date').show();
+    $('#down_frm').show();
+    $('#rem_dp').show();
+    $('#rem_text').show();
 }
 
 // Form validation and submission

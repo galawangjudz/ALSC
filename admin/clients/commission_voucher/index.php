@@ -50,8 +50,8 @@
         if (isset($_POST['gen_comm'])) {
              // Command to run the Python script
 
-            //$l_print_date = date('Y-m-d');
-            $l_print_date = '2024-12-18';
+            $l_print_date = date('Y-m-d');
+            //$l_print_date = '2024-12-18';
             $sql = "SELECT 
                     t_commission.c_code, 
                     t_commission.c_amount, 
