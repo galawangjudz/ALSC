@@ -55,9 +55,13 @@
 		<a href="<?php echo base_url ?>admin/?page=inventory/project-list" class="main_menu" id="project-link"><i class="nav-icon fas fa-map"></i>&nbsp;&nbsp;&nbsp;Project List</a>
 	</div>
 </div>
+
 <div class="card card-outline rounded-0 card-maroon">
 		<div class="card-header">
-			<h5 class="card-title"><b><i>Lots List</b></i></h5>
+			<h5 class="card-title"><b><i>Lot List</b></i></h5>
+			<div class="card-tools">
+				<a class="btn btn-primary btn-flat border-primary new_lot" href="javascript:void(0)" style="font-size:14px;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</a>
+			</div>
 		</div>
 		<div class="card-body">
             <div class="container-fluid">
@@ -72,19 +76,25 @@
                         <th>Lot Area</th>
                         <th>Price SQM</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <?php if ($usertype == 'IT Admin'): ?>
+				        <th>Actions</th>
+                        <?php endif?>
                         </tr>
                     </thead>
                     <tbody>
                     <?php 
                         $i = 1;
-                            $qry = $conn->query("SELECT c_lid, c_acronym, c_block, c_lot, c_lot_area, c_price_sqm, i.c_status
-                            FROM t_lots i 
-                            JOIN t_projects c 
-                            ON i.c_site = c.c_code
-                            WHERE i.c_site = c.c_code  
-                            ORDER BY c.c_acronym, i.c_block, i.c_lot");
-                            while($row = $qry->fetch_assoc()):   
+                        $qry = odbc_exec($conn2, "
+                                SELECT c_lid, c_acronym, c_block, c_lot, c_lot_area, c_price_sqm, i.c_status
+                                FROM t_lots i 
+                                JOIN t_projects c 
+                                ON i.c_site = c.c_code
+                                WHERE i.c_site = c.c_code  
+                                ORDER BY c.c_acronym, i.c_block, i.c_lot LIMIT 5
+                            ");
+                            
+                            while ($row = odbc_fetch_array($qry)):
+                          
                         ?>
                         <tr>
                         <td><?php echo $row["c_lid"] ?></td>
@@ -120,7 +130,10 @@
                         </td>
                         <?php endif; ?>
                         </tr>
-                    <?php endwhile; ?>
+                        <?php       
+                        endwhile;
+                        
+                        odbc_close($conn2); ?>
                     </tbody></table>
 	            </div>                
             </div>

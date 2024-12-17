@@ -139,6 +139,9 @@
 									t_csr_buyers c ON r.c_csr_no = c.c_csr_no
 								LEFT JOIN 
 									t_projects p ON LEFT(r.c_lot_id, 3) = p.c_code
+									
+								WHERE c.c_buyer_count = 1
+								
 								ORDER BY id");
 						while($row = $qry->fetch_assoc()):
 					?>

@@ -425,8 +425,6 @@ Class Master extends DBConnection {
 			//$rev = $_POST['rev_status'];//////////////////ADDED
 
 
-
-
 			$data = " c_lot_lid = '$lot_lid' ";
 			$data .= ", c_type = '$type' ";
 			$data .= ", c_lot_area = '$lot_area' ";

@@ -1578,6 +1578,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </div>
 </body>
 <script>
+$(".add-buyer-row").click(function(e) {
+    e.preventDefault();
+     var clonedRow = $('#buyer_table tr:last').clone();
+     clonedRow.find('input').val('');
+     clonedRow.find('.buyer-bday').on('change', function() {
+    calculateAgeAndSetError($(this), $(this).closest('tr').find("#age"));
+    });
+    $('#buyer_table tbody').append(clonedRow);
+ });
+</script>
+<script>
     var radioButtons = document.querySelectorAll('.radio_add_cost');
     var floorElevTextbox = document.getElementById('floor_elev');
 
