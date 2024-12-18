@@ -1,5 +1,5 @@
 <?php 
-// include "../classes/new_functions.php";
+include "../classes/new_functions.php";
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -1438,7 +1438,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<button class="btn btn-flat btn-default bg-maroon" form="save_csr" style="width:100%;margin-right:5px;font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" href="./?page=agent_sales" style="width:100%;margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" href="./?page=sales" style="width:100%;margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>

@@ -107,7 +107,11 @@ $newId = substr($originalId, 2);
 							<label class="control-label">Reason: </label>
 						</td>
 						<td>
-                            <label class="not-bold-label"><?php echo $cm_reason ?></label>
+							<select class="form-control" name="cm_reason">
+								<option value="bills_payment" <?php if($cm_reason == 'bills_payment') echo 'selected'; ?>>Bills Payment</option>
+								<option value="deletion" <?php if($cm_reason == 'deletion') echo 'selected'; ?>>Deletion</option>
+								<option value="overpayment" <?php if($cm_reason == 'overpayment') echo 'selected'; ?>>Overpayment</option>
+							</select>
 						</td>
 					</tr>
 					

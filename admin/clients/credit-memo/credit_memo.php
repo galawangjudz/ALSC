@@ -87,7 +87,7 @@ if($_settings->chk_flashdata('success')): ?>
 							<label>Date:</label>
 						</td>
 						<td>
-							<input type="date" class="form-control required" name="cm_date" id="cm_date">
+							<input type="date" class="form-control required" name="cm_date" id="cm_date" value ="<?php echo date('Y-m-d') ?>" readonly>
 						</td>
 					</tr>
 					<tr>
@@ -100,10 +100,15 @@ if($_settings->chk_flashdata('success')): ?>
 					</tr>
 					<tr>
 						<td>
-							<label>Reason: </label>
+							<label class="control-label">Reason: </label>
 						</td>
 						<td>
-							<input type="text" class="form-control required" name="cm_reason"  id="cm_reason" placeholder="Reason">
+							<select class="form-control" name="cm_reason">
+								<option value="bills_payment">Bills Payment</option>
+								<option value="deletion">Deletion</option>
+								<option value="overpayment" >Overpayment</option>
+								<option value="overpayment" >Others</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
