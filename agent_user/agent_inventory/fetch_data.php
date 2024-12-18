@@ -18,15 +18,20 @@ $formatted_block = sprintf('%03d', $prod_block);
 $formatted_lot = sprintf('%02d', $prod_lot);
 
 // Combine into c_lot_id
-$c_lot_id = $prod_code_prefix . $formatted_block . $formatted_lot;
+$c_lot_lid = $prod_code_prefix . $formatted_block . $formatted_lot;
 
 
 // Fetch data based on the provided inputs
-$sql = "SELECT * FROM properties JOIN property_client WHERE c_lot_lid = '$c_lot_lid'";
-$result = $conn->query($sql);
 
-// Generate the HTML table
-if ($result->num_rows > 0) {
+$stmt = $conn->prepare("SELECT * FROM properties 
+                        JOIN property_clients 
+                        ON properties.property_id= property_clients.property_id
+                        WHERE c_lot_lid = ?");
+$stmt->bind_param("s", $c_lot_lid); // Replace 's' with the appropriate type if needed
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result && $result->num_rows > 0) {
     echo '<table class="table table-bordered">';
     echo '<thead>
             <tr>
@@ -41,7 +46,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '<tr>
                 <td>' . $row['c_site'] . '</td>
-                <td>' . $prod_code. '</td>
+                <td>' . $prod_code . '</td>
                 <td>' . $row['c_block'] . '</td>
                 <td>' . $row['c_lot'] . '</td>
                 <td>' . $row['c_status'] . '</td>
