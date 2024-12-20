@@ -28,7 +28,7 @@ class DBConnection{
         $this->conn->close();
     }
 }
-class DBConnection2 {
+/* class DBConnection2 {
 
     public $conn2;
 
@@ -45,6 +45,6 @@ class DBConnection2 {
             }   
         }
     }
-}
+} */
 ?>
 
