@@ -9,9 +9,9 @@ require_once('classes/DBConnection.php');
 require_once('classes/SystemSettings.php');
 
 $db = new DBConnection;
-$db2 = new DBConnection2;
+/* $db2 = new DBConnection2; */
 $conn = $db->conn;
-$conn2 = $db2->conn2;
+/* $conn2 = $db2->conn2; */
 ##### JUDZ CONNECTION ######
 /* $dbhost = 'localhost';
 $dbport = '5432'; // default PostgreSQL port
@@ -19,11 +19,11 @@ $dbname = 'CAR_TESTDB';
 $dbuser = 'glicelo';
 $dbpass = 'admin12345'; */
 
-$cnx  = pg_connect("host=$dbhost port=$dbport dbname=$dbname user=$dbuser password=$dbpass");
+/* $cnx  = pg_connect("host=$dbhost port=$dbport dbname=$dbname user=$dbuser password=$dbpass");
 if (!$cnx) {
     die("Error connecting to PostgreSQL database: " . pg_last_error());
 }
-
+ */
 
 
 function redirect($url=''){
