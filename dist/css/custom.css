@@ -1,4 +1,11 @@
 
+@media (max-width: 768px) {
+    .example-class {
+        font-size: 12px;
+    }
+}
+
+
 .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
