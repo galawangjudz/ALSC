@@ -1,5 +1,5 @@
 <?php 
-// include "../classes/new_functions.php";
+include "../classes/new_functions.php";
 if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -274,8 +274,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	<div class="card-body">
 	<div class="container-fluid">
 		<div class="tab">
-			<button class="tablinks" onclick="opentab(event, 'Investment')" id="onlink2" onkeyup="tabclicked2()"><b><i>Investment Value</b></i></button>
 			<button class="tablinks" onclick="opentab(event, 'Buyer')" id="onlink1" onkeyup="tabclicked1()"><b><i>Buyer's Profile</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Investment')" id="onlink2" onkeyup="tabclicked2()"><b><i>Investment Value</b></i></button>
 			<button class="tablinks" onclick="opentab(event, 'Payment')" id="onlink3" onkeyup="tabclicked3()"><b><i>Payment Computation</b></i></button>
 			<button class="tablinks" onclick="opentab(event, 'Agents and Commission')" id="onlink4" onkeyup="tabclicked4()"><b><i>Agents and Commission</b></i></button>
 		</div>
@@ -757,7 +757,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 											</button>
 										</div>
 									</div>
-									
+									<div class="col-md-2">
+										<div class="form-group">
+											<button type="submit" class="btn btn-flat btn-success float-right select-house" data-loading-text="Finding..." id="btnfind">
+												<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;House
+											</button>
+										</div>
+									</div>
 									
 								</div>
 								<div class="row">
@@ -795,7 +801,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<div class="form-group">
 											<label class="control-label">Discount Amount: </label>
 												<input type="text" class="form-control margin-bottom " name="lot_disc_amt_display" id="lot_disc_amt_display" readonly value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt,2) : ''; ?>">
-												<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
+												<input type="hidden" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
 										</div>
 									</div>
 								</div>	
@@ -814,36 +820,30 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 								<div class="titles">House</div>
 								<hr>
 								<div class="row">
-								
 									<input type="hidden" class="form-control margin-bottom copy-input" name="l_house_lid" id="l_house_lid">
-									<div class="col-md-8">		
+									<div class="col-md-12">		
 										<div class="form-group">
 
 											<label class="control-label">House Model:</label>
+											<select name="house_model" class="form-control" hidden>
 											
-											<select id="house_model" name="house_model" class="form-control" disabled <?php echo $initialDisabled ? 'disabled' : ''; ?>>
-												<option value="" disabled <?php echo !isset($house_model) ? "selected" : '' ?>></option>
-												<?php 
-												$qry = $conn->query("SELECT * FROM t_model_house ORDER BY c_acronym ASC");
-												while ($row = $qry->fetch_assoc()):
-												?>
-												<option 
-													value="<?php echo $row['c_model'] ?>" 
-													<?php echo isset($house_model) && $house_model == $row['c_model'] ? 'selected' : '' ?> <?php echo $row['c_model'] == 0? 'disabled' : '' ?>
-												><?php echo $row['c_model'] ?></option>
-												<?php endwhile; ?>
 											</select>
-										</div>
-									</div>
-								
-									<div class="col-md-4">
-										<div class="form-group">
-											<button type="submit" class="btn btn-flat btn-success float-right select-house" data-loading-text="Finding..." id="btnfind">
-												<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;House
-											</button>
+											<select id="house_model" name="house_model" class="form-control">
+											<option value="" disabled <?php echo !isset($house_model) ? "selected" : '' ?>></option>
+											<?php 
+											$qry = $conn->query("SELECT * FROM t_model_house ORDER BY c_acronym ASC");
+											while ($row = $qry->fetch_assoc()):
+											?>
+											<option 
+												value="<?php echo $row['c_model'] ?>" 
+												<?php echo isset($house_model) && $house_model == $row['c_model'] ? 'selected' : '' ?> <?php echo $row['c_model'] == 0? 'disabled' : '' ?>
+											><?php echo $row['c_model'] ?></option>
+											<?php endwhile; ?>
+										</select>
 										</div>
 									</div>
 								</div>
+										
 								<div class="row">
 									<div class="col-md-12">
 										<div class="form-group">
@@ -872,7 +872,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<div class="form-group">
 											<label class="control-label">House Discount Amount: </label>
 											<input type="text" class="form-control margin-bottom " name="house_disc_amt_display" id="house_disc_amt_display" value="<?php echo isset($house_discount_amt) ? number_format($house_discount_amt,2) : 0; ?>" tabindex="34" readOnly>
-											<input type="text" class="form-control margin-bottom " name="house_disc_amt" id="house_disc_amt" value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>" tabindex="34" readOnly>
+											<input type="hidden" class="form-control margin-bottom " name="house_disc_amt" id="house_disc_amt" value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>" tabindex="34" readOnly>
 									
 										</div>
 									</div>
@@ -881,7 +881,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<div class="col-md-12">
 										<div class="form-group">
 											<label class="control-label">House Contract Price: </label>
-												<input type="text" class="form-control margin-bottom " name="hcp_display" id="hcp_display" readonly value="<?php echo isset($hcp) ? number_format($hcp,2) : 0.00; ?>">
+												<input type="text" class="form-control margin-bottom " name="hcp_display" id="hcp_display" value="<?php echo isset($hcp) ? number_format($hcp,2) : 0.00; ?>">
 												<input type="hidden" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
 										</div>
 									</div>	
@@ -1128,8 +1128,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									</div>
 									<div class="col-md-3" >
 										<div class="form-group">
-												<input type="text" class="form-control margin-bottom " name="tcp_disc_amt_display" id="tcp_disc_amt_display"  value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
-												<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt"  value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
+												<input type="text" class="form-control margin-bottom " name="tcp_disc_amt_display" id="tcp_disc_amt_display" readonly value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" readonly value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
 										</div>
 									</div>
 								</div>
@@ -1166,8 +1166,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									</div>
 									<div class="col-md-4" >
 										<div class="form-group">
-											<input type="text" class="form-control margin-bottom " value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex = '39'>
-											<input type="text" class="form-control margin-bottom vat-amt-computed" value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
+											<input type="text" class="form-control margin-bottom " readonly value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex = '39'>
+											<input type="hidden" class="form-control margin-bottom vat-amt-computed" readonly value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
 										</div> 
 									</div> 
 								</div>
@@ -1438,7 +1438,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<button class="btn btn-flat btn-default bg-maroon" form="save_csr" style="width:100%;margin-right:5px;font-size:14px;"><i class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
 				</td>
 				<td>
-					<a class="btn btn-flat btn-default" href="./?page=agent_sales" style="width:100%;margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+					<a class="btn btn-flat btn-default" href="./?page=sales" style="width:100%;margin-left:5px;font-size:14px;"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
 				</td>
 			</tr>
 		</table>
@@ -1629,7 +1629,6 @@ $(".add-buyer-row").click(function(e) {
 
 });
 $(document).ready(function(){
-	
 	$('.table').dataTable();
 	$('.table2').dataTable();
 	const today = new Date();

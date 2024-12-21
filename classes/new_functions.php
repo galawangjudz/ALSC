@@ -164,11 +164,14 @@ function radioButtonCtrl(){
     var houseDiscAmt =document.getElementById("house_disc_amt");
     var houseModelSelect = document.querySelector('select[name="house_model"]');
 
+ 
+
     ///Lot
     var lotPhase = document.getElementById("l_site");
     var lotBlock = document.getElementById("l_block");
     var lotLot = document.getElementById("l_lot");
     var lotDisc = document.getElementById("lot_disc");
+ 
     var lotArea = document.getElementById("lot_area");
     var lotPrice = document.getElementById("price_per_sqm");
     var lotAmt = document.getElementById("amount");
@@ -211,11 +214,15 @@ function radioButtonCtrl(){
     if (typeText.value === "1") {
                 
         lotDisc.readOnly = false;
-
+     
         floorArea.readOnly = true;
         houseSqm.readOnly = true;
         houseDisc.readOnly = true;
-        houseModelSelect.disabled = true;
+        
+        //houseModelSelect.disabled = true;
+           // Example condition to enable
+        var condition = true; // Change this based on logic
+        houseModelSelect.disabled = !condition;
         // houseModelSelect.value = "";
         // houseModelSelect.classList.add("readonly-select");
 
@@ -536,7 +543,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var lotArea = document.getElementById("lot_area");
     var lotPrice = document.getElementById("price_per_sqm");
     var lotAmt = document.getElementById("amount");
-    var lotDiscAmt = document.getElementById("lot_disc_amt");
+    //var lotDiscAmt = document.getElementById("lot_disc_amt");
+    var lotDiscAmt = document.getElementById("lot_disc_amt_display");
     var lotLCP = document.getElementById("lcp");
     var findButton = document.getElementById("btnfind");
 
@@ -582,6 +590,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (this.value === "1") {
                 
                 lotDisc.readOnly = false;
+                lotDiscAmt.readOnly = false;
 
                 floorArea.readOnly = true;
                 houseSqm.readOnly = true;
@@ -664,6 +673,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 floorArea.readOnly = false;
                 houseSqm.readOnly = false;
                 houseDisc.readOnly = false;
+                houseDiscAmt_display.readOnly = false;
                 houseModelSelect.disabled = false;
                 houseModelSelect.value = "";
                 houseModelSelect.style.backgroundColor = "white";
@@ -739,12 +749,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 floorArea.readOnly = false;
                 houseSqm.readOnly = false;
                 houseDisc.readOnly = false;
+                houseDiscAmt_display.readOnly = false;
                 hcp_display.readOnly = false;
                 houseModelSelect.disabled = false;
                 houseModelSelect.value = "";
                 houseModelSelect.style.backgroundColor = "white";
 
                 lotDisc.readOnly = false;
+                lotDiscAmt.readOnly = false;
+
 
                 floorArea.value = 0;
                 houseSqm.value = 0;

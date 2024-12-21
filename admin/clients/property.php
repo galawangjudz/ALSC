@@ -599,7 +599,7 @@ hr.divider {
                               if (mysqli_num_rows($result) > 0) {
                                   $row = mysqli_fetch_assoc($result);
                                   $total_amt_due = $row["p_amt_due"];
-                                  $main_total = $total_amt_due + $total_interest + $total_surcharge + $total_prin;
+                                  $main_total =  $total_interest + $total_surcharge + $total_prin;
                               } else {
                                   echo "No results found.";
                               }

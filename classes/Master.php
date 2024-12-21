@@ -3824,6 +3824,39 @@ Class Master extends DBConnection {
 			
 	}
 
+	function save_additional_inv() {
+		extract($_POST);
+	
+		// Use prepared statements to avoid SQL injection
+		$stmt = $this->conn->prepare("INSERT INTO t_additional_inventory (c_lot_lid, c_agent_code) VALUES (?, ?)");
+	
+		// Check if the statement prepared successfully
+		if (!$stmt) {
+			$resp['status'] = 'failed';
+			$resp['error'] = "Statement preparation failed: " . $this->conn->error;
+			return json_encode($resp);
+		}
+	
+		// Bind the parameters
+		$stmt->bind_param("ss", $lot_lid, $agent_assigned);
+	
+		// Execute the query
+		if ($stmt->execute()) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Lot can now add house/fence/add cost.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $stmt->error; // Log the error message for debugging
+		}
+	
+		// Close the statement
+		$stmt->close();
+	
+		// Return the response as JSON
+		return json_encode($resp);
+	}
+
+
 	function backout_acc(){
 		extract($_POST);
 		$backout = $this->conn->query("UPDATE properties set c_reopen = '0', c_active = '0', c_backout_date = DATE(CURRENT_TIMESTAMP()) where property_id = ".$prop_id);
@@ -7120,6 +7153,10 @@ switch ($action) {
 	break;
 	case 'update_m_status':
 		echo $Master->update_m_status();
+	break;
+
+	case 'save_additional_inv':
+		echo $Master->save_additional_inv();
 	break;
 	default:
 		break;

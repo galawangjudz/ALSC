@@ -38,67 +38,56 @@ if(isset($_GET['id'])){
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-            <form action="" id="manage-lot">
-                <input type="hidden" name="prod_lid" id="prod_lid" value="<?php echo isset($meta['c_lid']) ? $meta['c_lid']: '' ?>">
-                <div class="form-group">
-                    <label class="control-label">Phase: </label>
-                        <select name="prod_code" id= "prod_code" class="form-control">
-                            <?php 
-                            $cat = $conn->query("SELECT * FROM t_projects order by c_acronym asc ");
-                            while($row= $cat->fetch_assoc()):
-                                $cat_name[$row['c_code']] = $row['c_acronym'];
-                                $code = $row['c_code'];
-                                ?>
-                                <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected': '' ?>><?php echo $row['c_acronym'] ?></option>
-                            <?php
-                            endwhile;
-                            ?>
-                        </select>
-                </div> 
-                <div class="form-group">
-                    <label for="name">Block</label>
-                    <input type="number" class="form-control required" name="prod_block" id="prod_block" value="<?php echo isset($meta['c_block']) ? $meta['c_block']: '' ?>">
-                </div>
-                <div class="form-group">
-                    <label for="name">Lot</label>
-                    <input type="number" class="form-control required" name="prod_lot" id="prod_lot" value="<?php echo isset($meta['c_lot']) ? $meta['c_lot']: '' ?>">
-                </div>
-                                <!-- Button to Display Data -->
-                <div class="form-group">
-                    <button type="button" id="displayData" class="btn btn-primary">Check</button>
-                </div>
-                <!-- Table to Show Data -->
-                <div id="dataTableContainer" style="margin-top: 20px;">
-                    <!-- The table data will load here dynamically -->
-                </div>
-                <div class="form-group">
-                    <label for="agent_assigned">Agent Assigned:</label>
-                    <select class="form-control" id="agent_assigned" name="agent_assigned" required>
-                        <option value="">Select Agent</option>
-                        <?php 
-                        $sql = "SELECT c_code, c_last_name, c_first_name, c_position FROM t_agents ORDER BY c_last_name ASC";
-
-                        // Execute the query
-                        $result = $conn->query($sql);
-                        
-                        if (!$result) {
-                            die("Error executing query: " . $conn->error);
-                        }
-                        
-                        // Fetch and display results
-                        while ($row = $result->fetch_assoc()): ?>
-                            <option value="<?= $row['c_code'] ?>" <?= isset($agent_assigned) && $agent_assigned == $row['c_code'] ? 'selected' : '' ?>>
-                                <?= $row['c_last_name'] . ", " . $row['c_first_name'] ." - " . $row['c_position'] ?>
-                            </option>
-                        <?php endwhile;
-                        
-                        // Close the connection
-                       
+        <form action="" id="manage-lot">
+            <input type="hidden" name="prod_lid" id="prod_lid" value="<?php echo isset($meta['c_lid']) ? $meta['c_lid'] : '' ?>">
+            <div class="form-group">
+                <label class="control-label">Phase:</label>
+                <select name="prod_code" id="prod_code" class="form-control">
+                    <?php 
+                    $cat = $conn->query("SELECT * FROM t_projects ORDER BY c_acronym ASC");
+                    while ($row = $cat->fetch_assoc()):
+                        $cat_name[$row['c_code']] = $row['c_acronym'];
+                        $code = $row['c_code'];
                         ?>
-                    </select>
-                </div>
-                
-            </form>
+                        <option value="<?php echo $row['c_code'] ?>" <?php echo isset($meta['c_site']) && $meta['c_site'] == "$code" ? 'selected' : '' ?>>
+                            <?php echo $row['c_acronym'] ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prod_block">Block</label>
+                <input type="number" class="form-control required" name="prod_block" id="prod_block" value="<?php echo isset($meta['c_block']) ? $meta['c_block'] : '' ?>">
+            </div>
+            <div class="form-group">
+                <label for="prod_lot">Lot</label>
+                <input type="number" class="form-control required" name="prod_lot" id="prod_lot" value="<?php echo isset($meta['c_lot']) ? $meta['c_lot'] : '' ?>">
+            </div>
+            <div class="form-group">
+                <button type="button" id="displayData" class="btn btn-primary">Check</button>
+            </div>
+            <div id="dataTableContainer" style="margin-top: 20px;">
+                <!-- Dynamic table data will load here -->
+            </div>
+            <div class="form-group">
+                <label for="lot_lid">Lot LID:</label>
+                <input type="text" class="form-control required" name="lot_lid" id="lot_lid" readonly>
+            </div>
+            <div class="form-group">
+                <label for="agent_assigned">Agent Assigned:</label>
+                <select class="form-control" id="agent_assigned" name="agent_assigned" required>
+                    <option value="">Select Agent</option>
+                    <?php 
+                    $sql = "SELECT c_code, c_last_name, c_first_name, c_position FROM t_agents ORDER BY c_last_name ASC";
+                    $result = $conn->query($sql);
+                    while ($row = $result->fetch_assoc()): ?>
+                        <option value="<?= $row['c_code'] ?>" <?= isset($agent_assigned) && $agent_assigned == $row['c_code'] ? 'selected' : '' ?>>
+                            <?= $row['c_last_name'] . ", " . $row['c_first_name'] . " - " . $row['c_position'] ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+        </form>
 		</div>
 		<div class="card-footer">
             <table style="width:100%;">
@@ -116,34 +105,38 @@ if(isset($_GET['id'])){
 </div>
 </body>
 <script>
-    $(document).ready(function () {
-        $('#displayData').on('click', function () {
-            // Get the selected values
-            var prodCode = $('#prod_code').val();
-            var prodBlock = $('#prod_block').val();
-            var prodLot = $('#prod_lot').val();
+   $(document).ready(function () {
+    $('#displayData').on('click', function () {
+        // Get the input values
+        var prodCode = $('#prod_code').val();
+        var prodBlock = $('#prod_block').val();
+        var prodLot = $('#prod_lot').val();
 
-        
-            // Make an AJAX call to fetch the data
-            $.ajax({
-                url:_base_url_+'agent_user/agent_inventory/fetch_data.php', // File to handle the data fetch
-                method: 'POST',
-                data: { 
-                    prod_code: prodCode,
-                    prod_block: prodBlock,
-                    prod_lot: prodLot 
-                },
-                success: function (response) {
-                    // Display the response in the table container
-                    console.log("test");
-                    $('#dataTableContainer').html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error: ' + error);
-                }
-            });
+        // Make an AJAX call to fetch the data
+        $.ajax({
+            url: _base_url_ + 'agent_user/agent_inventory/fetch_data.php', // File to handle the data fetch
+            method: 'POST',
+            data: {
+                prod_code: prodCode,
+                prod_block: prodBlock,
+                prod_lot: prodLot
+            },
+            success: function (response) {
+                const data = JSON.parse(response);
+
+                // Populate the lot_lid field
+                $('#lot_lid').val(data.c_lot_lid);
+
+                // Populate the table container
+                $('#dataTableContainer').html(data.html);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error: ' + error);
+            }
         });
     });
+});
+
 
 
 
