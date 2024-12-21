@@ -11374,7 +11374,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   margin-left: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (prefers-reduced-motion: reduce){
   body:not(.sidebar-mini-md) .content-wrapper,
   body:not(.sidebar-mini-md) .main-footer,
   body:not(.sidebar-mini-md) .main-header {
@@ -11392,7 +11392,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (prefers-reduced-motion: reduce){
   .sidebar-collapse body:not(.sidebar-mini-md) .content-wrapper, .sidebar-collapse
   body:not(.sidebar-mini-md) .main-footer, .sidebar-collapse
   body:not(.sidebar-mini-md) .main-header {
@@ -11410,7 +11410,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (prefers-reduced-motion: reduce){
   .sidebar-mini-md .content-wrapper,
   .sidebar-mini-md .main-footer,
   .sidebar-mini-md .main-header {
@@ -11427,7 +11427,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (prefers-reduced-motion: reduce){
   .sidebar-collapse .sidebar-mini-md .content-wrapper, .sidebar-collapse
   .sidebar-mini-md .main-footer, .sidebar-collapse
   .sidebar-mini-md .main-header {
