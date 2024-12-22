@@ -2,7 +2,6 @@
  <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
 <?php require_once('inc/header.php') ?>
-<?php require_once('inc/topBarNav.php') ?>
 
 
 <link rel="stylesheet" href="<?php echo base_url ?>dist/css/index.css">
