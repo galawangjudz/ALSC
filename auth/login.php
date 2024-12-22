@@ -75,7 +75,7 @@
 <style>
 /* General Styles */
 body.hold-transition.login-page, body.hold-transition.register-page {
-    background: url('<?php echo base_url . 'images/logo.jpg'; ?>') no-repeat center center fixed;
+    background: url('<?php echo base_url . 'images/login-bg.jpg'; ?>') no-repeat center center fixed;
     background-size: cover;
     position: relative;
     display: flex;
@@ -101,10 +101,10 @@ body.hold-transition.login-page::before, body.hold-transition.register-page::bef
 .login-box, .register-box {
     position: relative;
     z-index: 2; /* Ensure it is above the overlay */
-    background-color: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+    background-color: rgba(255, 255, 255, 0); /* Fully transparent */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     border: none; /* Remove the border */
 }
 
