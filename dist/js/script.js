@@ -39,7 +39,8 @@ $(document).ready(function(){
 				if(resp){
 					resp = JSON.parse(resp)
 					if(resp.status == 'success'){
-						alert_toast('Login Complete!!');
+						//alert_toast('Login Complete!!');
+						alert_toast("<?php echo $_settings->flashdata('success') ?>",'success');
 						location.reload();
 					}else if(resp.status == 'incorrect'){
 						var _frm = $('#login-frm')
