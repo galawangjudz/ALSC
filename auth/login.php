@@ -281,7 +281,7 @@ a.text-primary:hover {
           <input type="password" class="form-control" name="password" placeholder="*********">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-padlock1"></span>
+              <span class="fas fa-plock"></span>
             </div>
           </div>
         </div>
