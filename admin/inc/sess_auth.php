@@ -19,6 +19,25 @@ $session_id = $_settings->userdata('user_code');
 if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 	redirect('auth/login.php');
 }
+
+// Check if the session has expired
+$lastActivity = $_SESSION['last_activity'];
+$sessionExpiration = 60 * 1; // Session expires after 5 minutes of inactivity
+
+if (time() - $lastActivity > $sessionExpiration) {
+    // Session has expired, destroy the session and redirect to the login page
+    session_unset();
+    session_destroy();
+    
+    echo "<script>alert('Your session has expired. Please log in again.');</script>";
+
+    // Redirect to the login page
+    redirect('auth/login.php');
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['last_activity'] = time();
 // if(!isset($_SESSION['userdata']) || $usertype !== 'IT Admin') {
    
 //     unset($_SESSION['userdata']);
