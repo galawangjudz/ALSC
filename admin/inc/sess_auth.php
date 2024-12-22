@@ -19,6 +19,10 @@ $session_id = $_settings->userdata('user_code');
 if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 	redirect('auth/login.php');
 }
+// Initialize last activity if not already set
+if (!isset($_SESSION['last_activity'])) {
+    $_SESSION['last_activity'] = time();
+}
 
 // Check if the session has expired
 $lastActivity = $_SESSION['last_activity'];
