@@ -40,6 +40,7 @@ $(document).ready(function(){
 					resp = JSON.parse(resp)
 					if(resp.status == 'success'){
 						//Login Success
+						console.log("sucess");
 						alert("galing!!!");
 						location.reload();
 					}else if(resp.status == 'incorrect'){
