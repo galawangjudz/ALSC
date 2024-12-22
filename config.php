@@ -3,7 +3,7 @@ ob_start();
 ini_set('date.timezone','Asia/Manila');
 date_default_timezone_set('Asia/Manila');
 session_start();
-
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 require_once('initialize.php');
 require_once('classes/DBConnection.php');
 require_once('classes/SystemSettings.php');

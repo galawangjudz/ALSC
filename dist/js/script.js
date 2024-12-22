@@ -30,13 +30,13 @@ $(document).ready(function(){
 			url:_base_url_+'classes/Login.php?f=login',
 			method:'POST',
 			data:$(this).serialize(),
+			dataType: 'json',
 			error:err=>{
 				console.log(err)
 			},
 			success:function(resp){
-				//if(resp){
-				resp = JSON.parse(resp);
-				if(typeof resp =='object' && resp.status == 'success'){
+				console.log(resp.status);
+				if(typeof resp =='object'){
 					if(resp.status == 'success'){
 						location.reload();
 					}else if(resp.status == 'incorrect'){
@@ -45,9 +45,9 @@ $(document).ready(function(){
 						_frm.prepend(_msg)
 						_frm.find('input').addClass('is-invalid')
 						$('[name="username"]').focus()
+						end_loader();
 					}
 					
-					end_loader();
 				}
 			}
 		})
