@@ -22,7 +22,7 @@ if(!isset($_SESSION['userdata']) && !strpos($link, 'login.php')){
 
 // Check if the session has expired
 $lastActivity = $_SESSION['last_activity'];
-$sessionExpiration = 60 * 1; // Session expires after 5 minutes of inactivity
+$sessionExpiration = 60 * 5; // Session expires after 5 minutes of inactivity
 
 if (time() - $lastActivity > $sessionExpiration) {
     // Session has expired, destroy the session and redirect to the login page
