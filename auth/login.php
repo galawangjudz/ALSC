@@ -72,7 +72,177 @@
     <link rel="stylesheet" href="<?php echo base_url ?>dist/css/TimeCircles.css">
 
   </head>
+<style>
+/* General Styles */
+body.hold-transition.login-page, body.hold-transition.register-page {
+    background: url('<?php echo base_url . 'images/logo.jpg'; ?>') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
 
+body.hold-transition.login-page::before, body.hold-transition.register-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: 1;
+}
+
+/* Login/Registration Box */
+.login-box, .register-box {
+    width: 360px;
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 576px) {
+    .login-box, .register-box {
+        width: 90%;
+        margin-top: 0.5rem;
+    }
+}
+
+/* Card Styling */
+.login-card-body, .register-card-body {
+    background-color: transparent;
+    border-top: 0;
+    color: #666;
+    padding: 20px;
+}
+
+.login-card-body .input-group .form-control, .register-card-body .input-group .form-control {
+    border-right: 0;
+}
+
+.login-card-body .input-group .form-control:focus, .register-card-body .input-group .form-control:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+}
+
+.login-card-body .input-group .form-control.is-valid:focus, 
+.register-card-body .input-group .form-control.is-valid:focus {
+    box-shadow: none;
+}
+
+.login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
+    background-color: transparent;
+    color: #777;
+    border-left: 0;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Responsive Alignment */
+.login-logo, .register-logo {
+    font-size: 2.1rem;
+    font-weight: 300;
+    margin-bottom: 0.9rem;
+    text-align: center;
+}
+
+.login-logo a, .register-logo a {
+    color: #495057;
+}
+
+.login-box-msg, .register-box-msg {
+    margin: 0;
+    padding: 0 20px 20px;
+    text-align: center;
+}
+
+/* Input Fields */
+.input-group .form-control {
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+}
+
+.input-group .form-control:focus {
+    box-shadow: none;
+    border-color: #17a2b8;
+}
+
+.input-group .input-group-text {
+    padding: 0.375rem 0.75rem;
+}
+
+/* Buttons */
+button {
+    transition: all 0.3s ease;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Remember Me and Forgot Password */
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+a.text-primary {
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+a.text-primary:hover {
+    text-decoration: underline;
+}
+
+/* Image Container */
+.image-container {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.image-container img {
+    width: 150px;
+    height: 120px;
+}
+
+/* Button Alignment */
+.row.justify-content-center {
+    margin-top: 1rem;
+}
+
+.row.justify-content-center .btn {
+    width: 100%;
+}
+
+/* Additional Styling for Mobile */
+@media (max-width: 576px) {
+    .btn {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+}
+</style>
 
 <body class="hold-transition login-page">
   <script>
