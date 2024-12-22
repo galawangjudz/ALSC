@@ -25,14 +25,10 @@ if (!isset($_SESSION['last_activity'])) {
 }
 
 // Check if the session has expired
-$lastActivity = $_SESSION['last_activity'];
+$lastActivity = $_SESSION['last_activity'] ;
 $sessionExpiration = 60 * 5; // Session expires after 5 minutes of inactivity
 
-
-
-echo $lastActivity;
-echo $sessionExpiration;
-/* if (time() - $lastActivity > $sessionExpiration) {
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $sessionExpiration)) {
     // Session has expired, destroy the session and redirect to the login page
     session_unset();
     session_destroy();
@@ -43,7 +39,7 @@ echo $sessionExpiration;
     redirect('auth/login.php');
     exit;
 }
- */
+
 // Update the last activity time
 $_SESSION['last_activity'] = time();
 // if(!isset($_SESSION['userdata']) || $usertype !== 'IT Admin') {
