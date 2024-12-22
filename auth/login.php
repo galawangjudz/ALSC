@@ -75,7 +75,7 @@
 <style>
 /* General Styles */
 body.hold-transition.login-page, body.hold-transition.register-page {
-    background: url('<?php echo base_url . 'images/login-bg.jpg'; ?>') no-repeat center center fixed;
+    background: url('<?php echo base_url . 'images/logo.jpg'; ?>') no-repeat center center fixed;
     background-size: cover;
     position: relative;
     display: flex;
@@ -85,6 +85,7 @@ body.hold-transition.login-page, body.hold-transition.register-page {
     margin: 0;
 }
 
+/* Overlay for Better Readability */
 body.hold-transition.login-page::before, body.hold-transition.register-page::before {
     content: '';
     position: absolute;
@@ -92,19 +93,19 @@ body.hold-transition.login-page::before, body.hold-transition.register-page::bef
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
     z-index: 1;
 }
 
-/* Login/Registration Box */
+/* Content Box Positioning */
 .login-box, .register-box {
-    width: 360px;
-    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    position: relative;
+    z-index: 2; /* Ensure it is above the overlay */
+    background-color: rgba(255, 255, 255, 0.9); /* White with slight transparency */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-    z-index: 2;
+    border: none; /* Remove the border */
 }
 
 @media (max-width: 576px) {
