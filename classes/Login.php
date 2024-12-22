@@ -18,20 +18,46 @@ class Login extends DBConnection {
 	public function login(){
 		extract($_POST);
 
-		$qry = $this->conn->query("SELECT * from users where username = '$username' and password = md5('$password') ");
-		if($qry->num_rows > 0){
-			foreach($qry->fetch_array() as $k => $v){
-				if(!is_numeric($k) && $k != 'password'){
-					$this->settings->set_userdata($k,$v);
-					
-				}
-			}
-			$resp['status'] = 'success';
-		} else {
-			$resp['status'] = 'incorrect';
+		 // Check if the required fields are set
+		 if (empty($_POST['username']) || empty($_POST['password'])) {
+			return json_encode(['status' => 'error', 'message' => 'Username and password are required.']);
 		}
-		return json_encode($resp);
 	
+		// Sanitize user inputs to prevent SQL injection
+		$username = trim($_POST['username']);
+		$password = $_POST['password'];
+	
+		// Prepare a parameterized query
+		$stmt = $this->conn->prepare("SELECT username, password FROM users WHERE username = ?");
+		if (!$stmt) {
+			return json_encode(['status' => 'error', 'message' => 'Database query error.']);
+		}
+	
+		$stmt->bind_param("s", $username);
+		$stmt->execute();
+		$result = $stmt->get_result();
+	
+		if ($result->num_rows > 0) {
+			$user = $result->fetch_assoc();
+	
+			// Verify the password using password_verify
+			if (password_verify($password, $user['password'])) {
+				// Set user data in session (excluding sensitive information like password)
+				foreach ($user as $key => $value) {
+					if (!is_numeric($key) && $key != 'password') {
+						$this->settings->set_userdata($key, $value);
+					}
+				}
+	
+				return json_encode(['status' => 'success']);
+			} else {
+				// Incorrect password
+				return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password.']);
+			}
+		} else {
+			// User not found
+			return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password.']);
+		}
 	}
 
 	public function logout() {

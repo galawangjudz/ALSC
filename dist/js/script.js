@@ -35,13 +35,21 @@ $(document).ready(function(){
 				console.log(err)
 			},
 			success:function(resp){
-				console.log(resp.status);
 				if(typeof resp =='object'){
 					if(resp.status == 'success'){
 						location.reload();
 					}else if(resp.status == 'incorrect'){
 						var _frm = $('#login-frm')
-						var _msg = "<div class='alert alert-danger text-white err_msg'><i class='fa fa-exclamation-triangle'></i> Incorrect user id or password</div>"
+						var _msg = "<div class='alert alert-danger text-white err_msg'>" +
+						"<i class='fa fa-exclamation-triangle'></i> " + resp.message + "</div>";
+						_frm.prepend(_msg)
+						_frm.find('input').addClass('is-invalid')
+						$('[name="username"]').focus()
+						end_loader();
+					}else if (resp.status == 'error'){
+						var _frm = $('#login-frm')
+						var _msg = "<div class='alert alert-danger text-white err_msg'>" +
+						"<i class='fa fa-exclamation-triangle'></i> " + resp.message + "</div>";
 						_frm.prepend(_msg)
 						_frm.find('input').addClass('is-invalid')
 						$('[name="username"]').focus()
