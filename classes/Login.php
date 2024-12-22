@@ -29,7 +29,7 @@ class Login extends DBConnection {
 			$resp['status'] = 'success';
 			//return json_encode(array('status'=>'success'));
 		}else{
-			$resp['status'] = 'failed';
+			$resp['status'] = 'incorrect';
 			$resp['err'] = $this->conn->error . "[{$sql}]";
 			//return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from users where username = '$username' and password = md5('$password') "));
 		}

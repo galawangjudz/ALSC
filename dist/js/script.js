@@ -35,7 +35,7 @@ $(document).ready(function(){
 			},
 			success:function(resp){
 				//if(resp){
-				//	resp = JSON.parse(resp)
+				resp = JSON.parse(resp);
 				if(typeof resp =='object' && resp.status == 'success'){
 					if(resp.status == 'success'){
 						location.reload();
@@ -46,7 +46,8 @@ $(document).ready(function(){
 						_frm.find('input').addClass('is-invalid')
 						$('[name="username"]').focus()
 					}
-						end_loader();
+					
+					end_loader();
 				}
 			}
 		})
