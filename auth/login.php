@@ -270,7 +270,7 @@ a.text-primary:hover {
 
       <form id="login-frm" action="" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="username" placeholder="Username">
+          <input type="text" class="form-control" name="username" placeholder="User ID">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -286,13 +286,7 @@ a.text-primary:hover {
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <!-- Remember Me -->
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="remember-me">
-            <label class="form-check-label" for="remember-me">
-              Remember me
-            </label>
-          </div>
+          
           <!-- Forgot Password -->
           <div>
             <a href="auth-reset-password.htm" class="text-primary">Forgot Password?</a>
