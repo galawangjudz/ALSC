@@ -27,17 +27,12 @@ class Login extends DBConnection {
 				}
 			}
 
-		return json_encode(array('status'=>'success'));
+			return json_encode(array('status'=>'success'));
 		}else{
-		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from users where username = '$username' and password = md5('$password') "));
+			return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from users where username = '$username' and password = md5('$password') "));
 		}
 	}
 
-	// public function logout(){
-	// 	if($this->settings->sess_des()){
-	// 		redirect('auth/login.php');
-	// 	}
-	// }
 	public function logout() {
 
 		if ($this->settings->sess_des()) {
