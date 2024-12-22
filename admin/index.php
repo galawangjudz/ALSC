@@ -117,7 +117,7 @@
     </div>
   </div>
   </div>
-      <script src="../../../dist/js/table.js"></script>
+
       <?php require_once('inc/footer.php') ?>
   </body>
 </html>
