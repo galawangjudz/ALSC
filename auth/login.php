@@ -79,7 +79,7 @@
     start_loader()
   </script>
 
-  <h1 class="text-center"><?= $_settings->info('name') ?></h1>
+ <!--  <h1 class="text-center"><?= $_settings->info('name') ?></h1> -->
 
 <div class="login-box">
   <!-- /.login-logo -->
@@ -114,16 +114,17 @@
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <div class="checkbox-fade fade-in-primary d-">
-              <label>
-                  <input type="checkbox" value="">
-                  <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
-                  <span class="text-inverse">Remember me</span>
-              </label>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <!-- Remember Me -->
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="remember-me">
+            <label class="form-check-label" for="remember-me">
+              Remember me
+            </label>
           </div>
-          <div class="forgot-phone text-right f-right">
-              <a href="auth-reset-password.htm" class="text-right f-w-600"> Forgot Password?</a>
+          <!-- Forgot Password -->
+          <div>
+            <a href="auth-reset-password.htm" class="text-primary">Forgot Password?</a>
           </div>
         </div>
         <div class="row justify-content-center">
