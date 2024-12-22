@@ -270,23 +270,27 @@ a.text-primary:hover {
 
       <form id="login-frm" action="" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="username" placeholder="User ID">
-          <div class="input-group-append">
+          <div class="input-group-prepend">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
+          <input type="text" class="form-control" name="username" placeholder="User ID">
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="*********">
-          <div class="input-group-append">
+          <div class="input-group-prepend">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
+          <input type="password" class="form-control" name="password" placeholder="*********" id="password-input">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-eye toggle-password" id="toggle-password" style="cursor: pointer;"></span>
+            </div>
+          </div>
         </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
-          
           <!-- Forgot Password -->
           <div>
             <a href="auth-reset-password.htm" class="text-primary">Forgot Password?</a>
@@ -295,7 +299,9 @@ a.text-primary:hover {
         <div class="row justify-content-center">
           <!-- /.col -->
           <div class="col-6">
-            <button type="submit" class="btn btn-flat btn-default bg-blue btn-block"><i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;Login</button>
+            <button type="submit" class="btn btn-flat btn-default bg-blue btn-block">
+              <i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;Login
+            </button>
           </div>
           <!-- /.col -->
         </div>
@@ -321,6 +327,21 @@ a.text-primary:hover {
 <!-- <script src="dist/js/adminlte.min.js"></script> -->
 
 <script>
+   document.getElementById('toggle-password').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password-input');
+    const eyeIcon = document.getElementById('toggle-password');
+
+    // Toggle password visibility
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      eyeIcon.classList.remove('fa-eye');
+      eyeIcon.classList.add('fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      eyeIcon.classList.remove('fa-eye-slash');
+      eyeIcon.classList.add('fa-eye');
+    }
+  });
   $(document).ready(function(){
     end_loader();
   })
