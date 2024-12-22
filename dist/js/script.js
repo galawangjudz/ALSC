@@ -39,7 +39,7 @@ $(document).ready(function(){
 				if(resp){
 					resp = JSON.parse(resp)
 					if(resp.status == 'success'){
-						alert_toast('Login Sucesssful!!!');
+						alert_toast('Login Complete!!');
 						location.reload();
 					}else if(resp.status == 'incorrect'){
 						var _frm = $('#login-frm')
