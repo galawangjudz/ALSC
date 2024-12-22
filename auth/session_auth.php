@@ -5,6 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $link = isset($_GET['link']) ? $_GET['link'] : '';
 $department = $_settings->userdata('department');
 $user_type = $_settings->userdata('user_type');
+
 if(isset($_SESSION['userdata'])){
     if($user_type =='IT Admin'){
         if(strpos($link, 'login.php') === false){
