@@ -130,7 +130,7 @@
         <div class="row justify-content-center">
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-flat btn-default bg-blue btn-block"><i class="fa fa-lock" aria-hidden="true"></i>&nbsp;&nbsp;Login</button>
+            <button type="submit" class="btn btn-flat btn-default bg-blue btn-block"><i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;Login</button>
           </div>
           <!-- /.col -->
         </div>
