@@ -271,7 +271,7 @@ a.text-primary:hover {
       <img src="<?php echo base_url . 'images/logo.jpg'; ?>" alt="PDF Icon" width="150" height="120">
   </div>
 <hr>
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Sign in to start your sessions</p>
 
       <form id="login-frm" action="" method="post">
         <div class="input-group mb-3">
