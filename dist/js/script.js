@@ -21,7 +21,6 @@ window.alert_toast= function($msg = 'TEST',$bg = 'success' ,$pos=''){
 	  }
 
 $(document).ready(function(){
-	// Login
 	$('#login-frm').submit(function(e){
 		e.preventDefault()
 		start_loader()
@@ -33,13 +32,12 @@ $(document).ready(function(){
 			data:$(this).serialize(),
 			error:err=>{
 				console.log(err)
-
 			},
 			success:function(resp){
-				if(resp){
-					resp = JSON.parse(resp)
+				//if(resp){
+				//	resp = JSON.parse(resp)
+				if(typeof resp =='object' && resp.status == 'success'){
 					if(resp.status == 'success'){
-						//Login Success
 						location.reload();
 					}else if(resp.status == 'incorrect'){
 						var _frm = $('#login-frm')
@@ -48,7 +46,7 @@ $(document).ready(function(){
 						_frm.find('input').addClass('is-invalid')
 						$('[name="username"]').focus()
 					}
-						end_loader()
+						end_loader();
 				}
 			}
 		})
