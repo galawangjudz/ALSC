@@ -75,7 +75,7 @@
 <style>
 /* General Styles */
 body.hold-transition.login-page, body.hold-transition.register-page {
-    background: url('<?php echo base_url . 'images/logo.jpg'; ?>') no-repeat center center fixed;
+    background: url('<?php echo base_url . 'images/login-page.jpg'; ?>') no-repeat center center fixed;
     background-size: cover;
     position: relative;
     display: flex;
