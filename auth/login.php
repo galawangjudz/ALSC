@@ -103,7 +103,7 @@ body.hold-transition.login-page::before, body.hold-transition.register-page::bef
     z-index: 2; /* Ensure it is above the overlay */
     background-color: rgba(255, 255, 255, 0); /* Fully transparent */
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 4px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     border: none; /* Remove the border */
 }
