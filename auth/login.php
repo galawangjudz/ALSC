@@ -300,7 +300,7 @@ a.text-primary:hover {
         </div>
         <div class="row justify-content-center">
           <!-- /.col -->
-          <div class="col-4">
+          <div class="col-6">
             <button type="submit" class="btn btn-flat btn-default bg-blue btn-block"><i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;Login</button>
           </div>
           <!-- /.col -->
