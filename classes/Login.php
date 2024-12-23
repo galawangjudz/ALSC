@@ -36,7 +36,7 @@ class Login extends DBConnection {
 
 		 // Check if the required fields are set
 		 if (empty($_POST['username']) || empty($_POST['password'])) {
-			return json_encode(['status' => 'error', 'message' => 'Username and password are required.']);
+			return json_encode(['status' => 'incorrect', 'message' => 'Username and password are required.']);
 		}
 	
 		// Sanitize user inputs to prevent SQL injection
@@ -72,7 +72,6 @@ class Login extends DBConnection {
 				$newHashedPassword = password_hash($password, PASSWORD_BCRYPT);
 	
 				//echo $newHashedPassword;
-				echo $user['user_id'];
 				// Update the database with the new hash
 				$updateStmt = $this->conn->prepare("UPDATE users SET password = ? WHERE user_id = ?");
 				$updateStmt->bind_param("si", $newHashedPassword, $user['user_id']);
