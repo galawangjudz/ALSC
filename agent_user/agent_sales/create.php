@@ -336,165 +336,156 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										?>
 										<tr>
 											<td>
-												<div class="form-group form-group-sm  no-margin-bottom">
-													<div class="card-tools">
-													<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
+												<div class="form-group form-group-sm no-margin-bottom">
+													<div class="d-flex justify-content-between align-items-center mb-2">
+														<a href="#" class="btn btn-flat btn-danger delete-buyer-row" style="font-size:14px;">
+															<span class="fa fa-times" aria-hidden="true"></span>
+														</a>
+														<p class="select-customer">
+															<a href="#" class="btn btn-flat bg-maroon" style="font-size:14px;">
+																<span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details
+															</a>
+														</p>
 													</div>
-													<p class="select-customer"><a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
 												</div>
 												<div class="main_box">
 													<div class="row">
-														<div class="col-md-3">		
+														<div class="col-md-3 col-sm-6">
 															<div class="form-group">
-															<label class="control-label">Last Name:<div class="asterisk">*</div></label>
-																<input type="text" class="form-control margin-bottom buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
+																<label class="control-label">Last Name:<span class="asterisk">*</span></label>
+																<input type="text" class="form-control buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
 															</div>
 														</div>
-														<div class="col-md-3">
+														<div class="col-md-3 col-sm-6">
 															<div class="form-group">
-																<label class="control-label">First Name: </label>
-																<input type="text" class="form-control margin-bottom buyer-first required" name="first_name[]" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>">
-															</div>
-															
-														</div>
-														<div class="col-md-3">
-															<div class="form-group">
-																<label class="control-label">Middle Name: </label>
-																<input type="text" class="form-control margin-bottom buyer-middle" name="middle_name[]" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>">
+																<label class="control-label">First Name:</label>
+																<input type="text" class="form-control buyer-first required" name="first_name[]" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-3">		
+														<div class="col-md-3 col-sm-6">
 															<div class="form-group">
-															<label class="control-label">Suffix Name: </label>
-																<input type="text" class="form-control margin-bottom buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
+																<label class="control-label">Middle Name:</label>
+																<input type="text" class="form-control buyer-middle" name="middle_name[]" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>">
+															</div>
+														</div>
+														<div class="col-md-3 col-sm-6">
+															<div class="form-group">
+																<label class="control-label">Suffix Name:</label>
+																<input type="text" class="form-control buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
 															</div>
 														</div>
 													</div>
 													<hr>
 													<div class="row">
-														<div class="col-md-2">
+														<div class="col-md-2 col-sm-6">
 															<div class="form-group">
-																<label class="control-label">Citizenship: </label>
-																<input type="text" class="form-control margin-bottom buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
+																<label class="control-label">Citizenship:</label>
+																<input type="text" class="form-control buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-2">
-															<label class="control-label">Civil Status: </label>
-															<style>
-																select:invalid { color: gray; }
-															</style>
+														<div class="col-md-2 col-sm-6">
+															<label class="control-label">Civil Status:</label>
 															<select name="civil_status[]" id="civil_status" class="form-control buyer-civil required">
-															
-																<option name="civil_status" value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
-																<option name="civil_status" value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
-																<option name="civil_status" value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
-																<option name="civil_status" value="Widowed" <?php echo isset($civil_status) && $civil_status == "Widowed" ? 'selected' : '' ?>>Widowed</option>
+																<option value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
+																<option value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
+																<option value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
+																<option value="Widowed" <?php echo isset($civil_status) && $civil_status == "Widowed" ? 'selected' : '' ?>>Widowed</option>
 															</select>
 														</div>
-														<div class="col-md-2">
+														<div class="col-md-2 col-sm-6">
 															<div class="form-group">
-																<style>
-																	select:invalid { color: gray; }
-																</style>
-																<label class="control-label">Gender: </label>
+																<label class="control-label">Gender:</label>
 																<select name="gender[]" id="customer_gender" class="form-control buyer-gender required">
-																	
-																		<option name="customer_gender" value="M" <?php echo isset($customer_gender) && $customer_gender == "M" ? 'selected' : '' ?>>Male</option>
-																		<option name="customer_gender" value="F" <?php echo isset($customer_gender) && $customer_gender == "F" ? 'selected' : '' ?>>Female</option>
+																	<option value="M" <?php echo isset($customer_gender) && $customer_gender == "M" ? 'selected' : '' ?>>Male</option>
+																	<option value="F" <?php echo isset($customer_gender) && $customer_gender == "F" ? 'selected' : '' ?>>Female</option>
 																</select>
 															</div>
 														</div>
-														<div class="col-md-2">
+														<div class="col-md-2 col-sm-6">
 															<div class="form-group">
-																<label class="control-label">Birthdate: </label>
-																	<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
-
-																	<!-- <input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
-														 -->	</div>
-														</div>
-														<div class="col-md-1">
-															<div class="form-group">
-																<label class="control-label">Age: </label>
-																<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?> "readonly>
+																<label class="control-label">Birthdate:</label>
+																<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
 															</div>
-														</div>	
-														<div class="col-md-3">
+														</div>
+														<div class="col-md-1 col-sm-6">
 															<div class="form-group">
-																<style>
-																	select:invalid { color: gray; }
-																</style>
-																<label class="control-label">Relationship: </label>
+																<label class="control-label">Age:</label>
+																<input type="text" class="form-control buyer-age required" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?>" readonly>
+															</div>
+														</div>
+														<div class="col-md-3 col-sm-6">
+															<div class="form-group">
+																<label class="control-label">Relationship:</label>
 																<select name="relationship[]" id="relationship" class="form-control required">
-																		<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
-																		<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
-																		<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
-																		<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
-																		<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
+																	<option value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
+																	<option value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
+																	<option value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
+																	<option value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
+																	<option value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
 																</select>
 															</div>
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-md-3">
+														<div class="col-md-3 col-sm-6">
 															<div class="form-group">
 																<label class="control-label">Type of Valid ID Presented: </label>
 																<input type="text" class="form-control margin-bottom" name="id_presented[]" value="<?php echo isset($id_presented) ? $id_presented : ''; ?>">
-															</div>	
+															</div>
 														</div>
-														<div class="col-md-2">
+														<div class="col-md-2 col-sm-6">
 															<div class="form-group">
 																<label class="control-label">Tin #: </label>
 																<input type="text" class="form-control margin-bottom" name="tin_no[]" value="<?php echo isset($tin_no) ? $tin_no : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-2">
+														<div class="col-md-2 col-sm-6">
 															<div class="form-group">
 																<label class="control-label">Contact Number: </label>
 																<input type="text" class="form-control margin-bottom buyer-contact required" name="contact_no[]" value="<?php echo isset($contact_no) ? $contact_no: ''; ?>">
-															</div>	
+															</div>
 														</div>
-														<div class="col-md-2">
+														<div class="col-md-2 col-sm-6">
 															<div class="form-group">
 																<label class="control-label">Viber Account: </label>
 																<input type="text" class="form-control margin-bottom buyer-viber" name="viber[]" value="<?php echo isset($customer_viber) ? $customer_viber : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-3">
+														<div class="col-md-3 col-sm-12">
 															<div class="form-group">
 																<label class="control-label">Email Address: </label>
-															
 																<input type="email" class="form-control margin-bottom buyer-email required" name="email[]" value="<?php echo isset($customer_email) ? $customer_email : ''; ?>">
-																
 															</div>
 														</div>
 													</div>
-
 													<div class="row">
-														<div class="col-md-9">
+														<div class="col-md-9 col-sm-12">
 															<div class="form-group">
 																<label class="control-label">Residential/Billing Address: </label>
 																<input type="text" class="form-control margin-bottom buyer-address required" name="address[]" value="<?php echo isset($customer_address_1) ? $customer_address_1 : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-3">
+														<div class="col-md-3 col-sm-6">
 															<div class="form-group">
 																<label class="control-label">Area Code : </label>
 																<input type="text" class="form-control margin-bottom buyer-zipcode required" name="zip_code[]" value="<?php echo isset($customer_zip_code) ? $customer_zip_code : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-9">
+													</div>
+													<div class="row">
+														<div class="col-md-9 col-sm-12">
 															<div class="form-group">
 																<label class="control-label">Address Abroad (if any): </label>
 																<input type="text" class="form-control margin-bottom buyer-add-abroad" name="address_abroad[]" value="<?php echo isset($customer_address_abroad) ? $customer_address_abroad : ''; ?>">
 															</div>
 														</div>
-														<div class="col-md-3">
+														<div class="col-md-3 col-sm-6">
 															<div class="form-group">
 																<label class="control-label">Contact Number Abroad : </label>
 																<input type="text" class="form-control margin-bottom" name="contact_abroad[]" value="<?php echo isset($contact_abroad) ? $contact_abroad : ''; ?>">
 															</div>
 														</div>
-													</div>  
+													</div>
 												</div>
 											</td>	
 										</tr>
