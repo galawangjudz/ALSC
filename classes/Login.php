@@ -48,6 +48,7 @@ class Login extends DBConnection {
 		$stmt = $this->conn->prepare("SELECT * FROM users WHERE username = ?");
 		if (!$stmt) {
 			return json_encode(['status' => 'error', 'message' => 'Database query error.']);
+			exit;
 		}
 	
 		$stmt->bind_param("s", $username);
@@ -93,7 +94,6 @@ class Login extends DBConnection {
 				return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password.']);
 			}
 		} else {
-			// User not found
 			return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password.']);
 		}
 	}
