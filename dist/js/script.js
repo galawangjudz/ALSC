@@ -37,7 +37,9 @@ $(document).ready(function(){
 			success:function(resp){
 				if(typeof resp =='object'){
 					if(resp.status == 'success'){
+						alert_toast('Login Completed');
 						location.reload();
+					
 					}else if(resp.status == 'incorrect'){
 						var _frm = $('#login-frm')
 						var _msg = "<div class='alert alert-danger text-white err_msg'>" +
