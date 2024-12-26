@@ -36,7 +36,7 @@ class Login extends DBConnection {
 
 		 // Check if the required fields are set
 		 if (empty($_POST['username']) || empty($_POST['password'])) {
-			return json_encode(['status' => 'incorrect', 'message' => 'Username and password are required1.']);
+			return json_encode(['status' => 'incorrect', 'message' => 'Username and password are required.']);
 			exit;
 		}
 	
@@ -91,10 +91,10 @@ class Login extends DBConnection {
 				return json_encode(['status' => 'success']);
 			} else {
 				// Incorrect password
-				return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password2.']);
+				return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password.']);
 			}
 		} else {
-			return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password3.']);
+			return json_encode(['status' => 'incorrect', 'message' => 'Invalid username or password.']);
 		}
 	}
 

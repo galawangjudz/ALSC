@@ -37,7 +37,7 @@ $(document).ready(function(){
 			success:function(resp){
 				if(typeof resp =='object'){
 					if(resp.status == 'success'){
-						alert_toast('Login Completed');
+						//alert_toast('Login Completed');
 						location.reload();
 					
 					}else if(resp.status == 'incorrect'){
