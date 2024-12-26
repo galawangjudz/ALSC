@@ -152,12 +152,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
-    padding: 0.75rem 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 0.25rem 0.25rem 0 0;
-}
+
 
 .card-title {
     font-size: 1.25rem;
@@ -188,6 +183,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 @media (min-width: 768px) {
     .tab .tablinks {
         width: auto; /* Reset to original size for larger screens */
+    }
+}
+
+/* Media Query for Extra Small Devices (Mobile) */
+@media (max-width: 767px) {
+    .titles {
+        font-size: 16px;
+    }
+    .form-group {
+        margin-bottom: 10px;
+    }
+    .lot_box, .house_box {
+        padding: 15px;
+    }
+}
+
+/* Media Query for Large Devices */
+@media (min-width: 1200px) {
+    .panel-body {
+        padding: 30px;
     }
 }
 </style>
@@ -681,7 +696,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 																	<input type="text" class="form-control margin-bottom buyer-viber" name="viber[]" id="viber" oninput="limitContactNumberLengthRes()" value="<?php echo isset($customer_viber) ? $customer_viber : ''; ?>" autocomplete="nope" tabindex="14">
 																</div>
 															</div>
-															<div class="col-md-3 col-sm-6">
+															<div class="col-md-3 col-sm-12">
 																<div class="form-group">
 																	<label class="control-label">Email Address:<div class="asterisk">*</div></label>
 																	<input type="email" class="form-control margin-bottom buyer-email required" name="email[]" value="<?php echo isset($customer_email) ? $customer_email : ''; ?>" autocomplete="nope" maxlength="100" tabindex="15">
@@ -689,7 +704,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-md-9 col-sm-6">
+															<div class="col-md-9 col-sm-12">
 																<div class="form-group">
 																	<label class="control-label">Residential/Billing Address:<div class="asterisk">*</div></label>
 																	<input type="text" class="form-control margin-bottom buyer-address required" name="address[]" value="<?php echo isset($customer_address_1) ? $customer_address_1 : ''; ?>" tabindex="16">
@@ -701,7 +716,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 																	<input type="number" class="form-control margin-bottom buyer-zipcode required" name="zip_code[]" value="<?php echo isset($customer_zip_code) ? $customer_zip_code : ''; ?>" maxlength="10" tabindex="17">
 																</div>
 															</div>
-															<div class="col-md-9 col-sm-6">
+															<div class="col-md-9 col-sm-12">
 																<div class="form-group">
 																	<label class="control-label">Address Abroad (if any): </label>
 																	<input type="text" class="form-control margin-bottom buyer-add-abroad" name="address_abroad[]" value="<?php echo isset($customer_address_abroad) ? $customer_address_abroad : ''; ?>" tabindex="18">
@@ -729,74 +744,75 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			</div>
 			<div id="Investment" class="tabcontent">
 				<div class="row">
-				<div class="col-md-12">
+					<div class="col-md-12">
 						<div class="panel panel-default">
-								<div class="panel-heading">
-									<div class="titles"></a><center>Investment Value</center></div>
-									<div class="lot_box_res">
-										<div class="type-title"><b>Type: </b></div>
-										<div class="radio-container">
-											<label>
-												<input type="radio" name="chkOption3" value="1" <?php echo (isset($csr_type) && $csr_type == 1) ? 'checked="checked"' : ''; ?>>
-											</label>
-											<div>
-												<label class="light" style="font-weight:normal;">Lot Only</label>
-											</div>
+							<div class="panel-heading">
+								<div class="titles"><center>Investment Value</center></div>
+								<div class="lot_box_res">
+									<div class="type-title"><b>Type: </b></div>
+									<div class="radio-container">
+										<label>
+											<input type="radio" name="chkOption3" value="1" <?php echo (isset($csr_type) && $csr_type == 1) ? 'checked="checked"' : ''; ?>>
+										</label>
+										<div>
+											<label class="light" style="font-weight:normal;">Lot Only</label>
 										</div>
-										<div class="radio-container">
-											<label>
-												<input type="radio" name="chkOption3" value="2" <?php echo isset($csr_type)&&$csr_type == 2 ? 'checked' : ''; ?> disabled>
-											</label>
-											<div>
-												<label class="light" style="font-weight:normal;">House Only</label>
-											</div>
-										</div>
-										<div class="radio-container">
-											<label>
-												<input type="radio" name="chkOption3" value="3" <?php echo isset($csr_type)&&$csr_type == 3 ? 'checked' : ''; ?>>
-											</label>
-											<div>
-												<label class="light" style="font-weight:normal;">Packaged</label>
-											</div>
-										</div>
-										<div class="radio-container">
-											<label>
-												<input type="radio" name="chkOption3" value="4" <?php echo isset($csr_type)&&$csr_type == 4 ? 'checked' : ''; ?> disabled>
-											</label>
-											<div>
-												<label class="light" style="font-weight:normal;">Fence</label>
-											</div>
-										</div>
-										<div class="radio-container">
-											<label>
-												<input type="radio" name="chkOption3" value="5" <?php echo isset($csr_type)&&$csr_type == 5 ? 'checked' : ''; ?> disabled>
-											</label>
-											<div>
-												<label class="light" style="font-weight:normal;">Additional Cost</label>
-											</div>
-										</div>
-										<input type="hidden" id="type_text" name="type_text" value="<?php echo isset($csr_type) ? $csr_type : '0'; ?>">
 									</div>
+									<div class="radio-container">
+										<label>
+											<input type="radio" name="chkOption3" value="2" <?php echo isset($csr_type)&&$csr_type == 2 ? 'checked' : ''; ?> disabled>
+										</label>
+										<div>
+											<label class="light" style="font-weight:normal;">House Only</label>
+										</div>
+									</div>
+									<div class="radio-container">
+										<label>
+											<input type="radio" name="chkOption3" value="3" <?php echo isset($csr_type)&&$csr_type == 3 ? 'checked' : ''; ?>>
+										</label>
+										<div>
+											<label class="light" style="font-weight:normal;">Packaged</label>
+										</div>
+									</div>
+									<div class="radio-container">
+										<label>
+											<input type="radio" name="chkOption3" value="4" <?php echo isset($csr_type)&&$csr_type == 4 ? 'checked' : ''; ?> disabled>
+										</label>
+										<div>
+											<label class="light" style="font-weight:normal;">Fence</label>
+										</div>
+									</div>
+									<div class="radio-container">
+										<label>
+											<input type="radio" name="chkOption3" value="5" <?php echo isset($csr_type)&&$csr_type == 5 ? 'checked' : ''; ?> disabled>
+										</label>
+										<div>
+											<label class="light" style="font-weight:normal;">Additional Cost</label>
+										</div>
+									</div>
+									<input type="hidden" id="type_text" name="type_text" value="<?php echo isset($csr_type) ? $csr_type : '0'; ?>">
 								</div>
+							</div>
 							<div class="panel-body form-group form-group-sm">
+								<!-- Lot Box -->
 								<div class="lot_box">
 									<div class="titles">Lot</div>
 									<hr>
 									<div class="row">
-										<div class="col-md-4">
-											<input type="hidden" class="form-control margin-bottom copy-input" name="l_lid" id="l_lid" value="<?php echo isset($lot_id) ? $lot_id : '';  ?>" tabindex="20">
+										<div class="col-sm-6 col-md-4">
+											<input type="hidden" class="form-control margin-bottom copy-input" name="l_lid" id="l_lid" value="<?php echo isset($lot_id) ? $lot_id : ''; ?>" tabindex="20">
 											<div class="form-group">
 												<label class="control-label">Phase: </label>
-												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_site" id="l_site" readonly  value="<?php echo isset($phase) ? $phase : ''; ?>" tabindex="21">
+												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_site" id="l_site" readonly value="<?php echo isset($phase) ? $phase : ''; ?>" tabindex="21">
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-sm-6 col-md-2">
 											<div class="form-group">
 												<label class="control-label">Block: </label>
 												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_block" id="l_block" readonly value="<?php echo isset($block) ? $block : ''; ?>" tabindex="22">
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-sm-6 col-md-2">
 											<div class="form-group">
 												<label class="control-label">Lot: </label>
 												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_lot" id="l_lot" readonly value="<?php echo isset($lot) ? $lot : ''; ?>" tabindex="23">
@@ -809,20 +825,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 												</button>
 											</div>
 										</div>
-										
-										
 									</div>
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-sm-6 col-md-6">
 											<div class="form-group">
 												<label class="control-label">Lot Area: </label>
 												<input type="text" class="form-control margin-bottom lot-area" name="lot_area" id="lot_area" readonly value="<?php echo isset($lot_area) ? $lot_area : ''; ?>" tabindex="24">
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-sm-6 col-md-6">
 											<div class="form-group">
 												<label class="control-label">Price/SQM: </label>
-												<!-- <input type="text" class="form-control margin-bottom " name="price_per_sqm_display" id="price_per_sqm_display" readonly value="<?php echo isset($price_sqm) ? number_format($price_sqm,2) : ''; ?>" tabindex="25"> -->
 												<input type="text" class="form-control margin-bottom price-sqm" name="price_per_sqm" id="price_per_sqm" readonly value="<?php echo isset($price_sqm) ? $price_sqm : ''; ?>" tabindex="25">
 											</div>
 										</div>
@@ -831,33 +844,34 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">Amount: </label>
-													<input type="text" class="form-control margin-bottom" name="amount_display" id="amount_display" readonly value="<?php echo isset($amount) ? number_format($amount,2) : '0.00'; ?>">
-													<input type="hidden" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
+												<input type="text" class="form-control margin-bottom" name="amount_display" id="amount_display" readonly value="<?php echo isset($amount) ? number_format($amount, 2) : '0.00'; ?>">
+												<input type="hidden" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
 											</div>
 										</div>
 									</div>
+									<!-- Lot Discount -->
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-sm-6 col-md-4">
 											<div class="form-group">
 												<label class="control-label">Discount (%): </label>
-												<input type="text" class="form-control margin-bottom lot-disc" name="lot_disc" id="lot_disc" value="<?php echo isset($lot_discount) ? $lot_discount : ''; ?>" maxlength="3" oninput="numbersAndDecimal()"  tabindex="27" readOnly>
+												<input type="text" class="form-control margin-bottom lot-disc" name="lot_disc" id="lot_disc" value="<?php echo isset($lot_discount) ? $lot_discount : ''; ?>" maxlength="3" oninput="numbersAndDecimal()" tabindex="27" readOnly>
 											</div>
 										</div>
-										<div class="col-md-8">
+										<div class="col-sm-6 col-md-8">
 											<div class="form-group">
 												<label class="control-label">Discount Amount: </label>
-													<input type="text" class="form-control margin-bottom " name="lot_disc_amt_display" id="lot_disc_amt_display" readonly value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt,2) : ''; ?>">
-													<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
+												<input type="text" class="form-control margin-bottom" name="lot_disc_amt_display" id="lot_disc_amt_display" readonly value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt, 2) : ''; ?>">
+												<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
 											</div>
 										</div>
-									</div>	
+									</div>
+									<!-- Lot Contract Price -->
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">Lot Contract Price: </label>
-													<input type="text" class="form-control margin-bottom " name="lcp_display" id="lcp_display" readonly value="<?php echo isset($lcp) ? number_format($lcp,2) : ''; ?>">
-													<input type="hidden" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : ''; ?>">
-													
+												<input type="text" class="form-control margin-bottom" name="lcp_display" id="lcp_display" readonly value="<?php echo isset($lcp) ? number_format($lcp, 2) : ''; ?>">
+												<input type="hidden" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : ''; ?>">
 											</div>
 										</div>
 									</div>
@@ -866,13 +880,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<div class="titles">House</div>
 									<hr>
 									<div class="row">
-									
 										<input type="hidden" class="form-control margin-bottom copy-input" name="l_house_lid" id="l_house_lid">
-										<div class="col-md-8">		
+										<div class="col-sm-8 col-md-8">
 											<div class="form-group">
-
 												<label class="control-label">House Model:</label>
-												
 												<select id="house_model" name="house_model" class="form-control" disabled <?php echo $initialDisabled ? 'disabled' : ''; ?>>
 													<option value="" disabled <?php echo !isset($house_model) ? "selected" : '' ?>></option>
 													<?php 
@@ -887,8 +898,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 												</select>
 											</div>
 										</div>
-									
-										<div class="col-md-4">
+										<div class="col-sm-4 col-md-4">
 											<div class="form-group">
 												<button type="submit" class="btn btn-flat btn-success float-right select-house" data-loading-text="Finding..." id="btnfind">
 													<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;House
@@ -905,27 +915,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-12">
+										<div class="col-sm-6 col-md-6">
 											<div class="form-group">
 												<label class="control-label">House Price/SQM: </label>
-													<input type="text" class="form-control margin-bottom requiredHouse"  name="h_price_per_sqm_display" id="h_price_per_sqm_display" readonly value="<?php echo isset($house_price_sqm) ? number_format($house_price_sqm,2) : 0.00; ?>">
-													<input type="hidden" class="form-control margin-bottom h-price-sqm"  name="h_price_per_sqm" id="h_price_per_sqm" oninput="numbersAndDecimal()" value="<?php echo isset($house_price_sqm) ? $house_price_sqm : 0; ?>" maxlength="25" tabindex="32" readOnly>
+												<input type="text" class="form-control margin-bottom requiredHouse"  name="h_price_per_sqm_display" id="h_price_per_sqm_display" readonly value="<?php echo isset($house_price_sqm) ? number_format($house_price_sqm, 2) : 0.00; ?>">
+												<input type="hidden" class="form-control margin-bottom h-price-sqm"  name="h_price_per_sqm" id="h_price_per_sqm" oninput="numbersAndDecimal()" value="<?php echo isset($house_price_sqm) ? $house_price_sqm : 0; ?>" maxlength="25" tabindex="32" readOnly>
 											</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-5">
+										<div class="col-sm-6 col-md-5">
 											<div class="form-group">
 												<label class="control-label">House Discount(%): </label>
 												<input type="text" class="form-control margin-bottom house-disc" name="house_disc" id="house_disc" oninput="numbersAndDecimal()" value="<?php echo isset($house_discount) ? $house_discount : 0; ?>" maxlength="3" tabindex="33" readOnly>
 											</div>
 										</div>
-										<div class="col-md-7">
+										<div class="col-sm-6 col-md-7">
 											<div class="form-group">
 												<label class="control-label">House Discount Amount: </label>
-												<input type="text" class="form-control margin-bottom " name="house_disc_amt_display" id="house_disc_amt_display" value="<?php echo isset($house_discount_amt) ? number_format($house_discount_amt,2) : 0; ?>" tabindex="34" readOnly>
+												<input type="text" class="form-control margin-bottom " name="house_disc_amt_display" id="house_disc_amt_display" value="<?php echo isset($house_discount_amt) ? number_format($house_discount_amt, 2) : 0; ?>" tabindex="34" readOnly>
 												<input type="text" class="form-control margin-bottom " name="house_disc_amt" id="house_disc_amt" value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>" tabindex="34" readOnly>
-										
 											</div>
 										</div>
 									</div>
@@ -933,309 +942,276 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="control-label">House Contract Price: </label>
-													<input type="text" class="form-control margin-bottom " name="hcp_display" id="hcp_display" readonly value="<?php echo isset($hcp) ? number_format($hcp,2) : 0.00; ?>">
-													<input type="hidden" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
+												<input type="text" class="form-control margin-bottom" name="hcp_display" id="hcp_display" readonly value="<?php echo isset($hcp) ? number_format($hcp, 2) : 0.00; ?>">
+												<input type="hidden" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
 											</div>
-										</div>	
-									</div>		
+										</div>
+									</div>        
 								</div>
 								<div class="space"></div>
-								<div class="main_box">
+							<div class="main_box">
 								<div class="titles">Add Cost</div>
-									<hr>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">Floor Elevation: </label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"></label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"></label>
-											</div>
-										</div>
-										<div class="col-md-4 text-center">
-											<div class="form-group">
-												<input id="id20" class="radio_add_cost" type="radio" name="chkOption4" value="1" <?php echo (isset($floor_elev)&&$floor_elev == 1) ? 'checked' : ''; ?> disabled/>0.20 meter
-												<input id="id40" class="radio_add_cost" type="radio" name="chkOption4" value="2" <?php echo (isset($floor_elev)&&$floor_elev == 2) ? 'checked' : ''; ?> disabled/>0.40 meter
-												<input id="id60" class="radio_add_cost" type="radio" name="chkOption4" value="3" <?php echo (isset($floor_elev)&&$floor_elev == 3) ? 'checked' : ''; ?> disabled/>0.60 meter
-											</div>
-											<input type="hidden" id="floor_elev" name="floor_elev" value="<?php echo isset($floor_elev) ? $floor_elev : '0'; ?>">
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom flrelev-price" id="flrelev_price" name="flrelev_price" oninput="numbersAndDecimal()" value="<?php echo isset($floor_elev_price) ? $floor_elev_price : 0; ?>" tabindex="36" readOnly>
-											</div>
-										</div>
-										
-									</div>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">Aircon Outlets: </label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"><input type="number" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" maxlength="2" tabindex="37" readOnly></label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label">Unit/s</label>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom aircon-outlet-price" id="aircon_outlet_price" name="aircon_outlet_price" oninput="numbersAndDecimal()" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>" tabindex="38" maxlength="25" readOnly>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom ac-outlet-subtotal" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="<?php echo isset($ac_outlet_subtotal) ? $ac_outlet_subtotal : 0; ?>" tabindex="39" readonly>
-											</div>
+								<hr>
+								<!-- Floor Elevation Section -->
+								<div class="row">
+									<div class="col-md-2 col-sm-3">
+										<div class="form-group">
+											<label class="control-label">Floor Elevation:</label>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">Aircon Grill: </label>
-												<label class="control-label"><i>(for window-type):</i></label>
-											</div>
+									<div class="col-md-4 col-sm-6 text-center">
+										<div class="form-group">
+											<input id="id20" class="radio_add_cost" type="radio" name="chkOption4" value="1" <?php echo (isset($floor_elev)&&$floor_elev == 1) ? 'checked' : ''; ?> disabled/> 0.20 meter
+											<input id="id40" class="radio_add_cost" type="radio" name="chkOption4" value="2" <?php echo (isset($floor_elev)&&$floor_elev == 2) ? 'checked' : ''; ?> disabled/> 0.40 meter
+											<input id="id60" class="radio_add_cost" type="radio" name="chkOption4" value="3" <?php echo (isset($floor_elev)&&$floor_elev == 3) ? 'checked' : ''; ?> disabled/> 0.60 meter
 										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"><input type="number" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>"  maxlength="2" tabindex="40" readOnly></label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label">Unit/s</label>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom ac-grill-price" id="ac_grill_price" name="ac_grill_price" oninput="numbersAndDecimal()" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" tabindex="41" maxlength="25" readOnly>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom ac-grill-subtotal" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="<?php echo isset($ac_grill_subtotal) ? $ac_grill_subtotal : 0; ?>" tabindex="42" readonly>
-											</div>
+										<input type="hidden" id="floor_elev" name="floor_elev" value="<?php echo isset($floor_elev) ? $floor_elev : '0'; ?>">
+									</div>
+									<div class="col-md-4 col-sm-6">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom flrelev-price" id="flrelev_price" name="flrelev_price" oninput="numbersAndDecimal()" value="<?php echo isset($floor_elev_price) ? $floor_elev_price : 0; ?>" tabindex="36" readOnly>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">Convenience Outlet: </label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"><input type="number" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>"  maxlength="2" tabindex="43" readOnly></label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label">Unit/s</label>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom conv-outlet-price" id="conv_outlet_price" name="conv_outlet_price" oninput="numbersAndDecimal()" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" tabindex="44" maxlength="25" readOnly>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom conv-outlet-subtotal" id="conv_outlet_subtotal" name="conv_outlet_subtotal" value="<?php echo isset($conv_outlet_subtotal) ? $conv_outlet_subtotal : 0; ?>" tabindex="45" readonly>
-											</div>
+								</div>
+
+								<!-- Aircon Outlets Section -->
+								<div class="row">
+									<div class="col-md-2 col-sm-3">
+										<div class="form-group">
+											<label class="control-label">Aircon Outlets:</label>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">Service Area: </label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"><input type="number" class="form-control margin-bottom service-area" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>" maxlength="2" tabindex="46" readOnly></label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label">Unit/s</label>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom service-area-price" id="service_area_price" name="service_area_price" oninput="numbersAndDecimal()" value="<?php echo isset($service_area_price) ? $service_area_price : 0; ?>" tabindex="47" maxlength="25" readOnly>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom service-subtotal" id="service_subtotal" name="service_subtotal" value="<?php echo isset($service_subtotal) ? $service_subtotal : 0; ?>" tabindex="48" readonly>
-											</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<input type="number" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" maxlength="2" tabindex="37" readOnly>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">Other(specify): </label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"><input type="number" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" maxlength="2" tabindex="49" readOnly></label>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label">Unit/s</label>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom others-price" id="others_price" name="others_price" oninput="numbersAndDecimal()" value="<?php echo isset($others_price) ? $others_price : 0; ?>" tabindex="50" maxlength="25" readOnly>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom others-subtotal" id="others_subtotal" name="others_subtotal"  value="<?php echo isset($others_subtotal) ? $others_subtotal : 0; ?>" tabindex="51" readonly>
-											</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<label class="control-label">Unit/s</label>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label"></label>
-											</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom aircon-outlet-price" id="aircon_outlet_price" name="aircon_outlet_price" oninput="numbersAndDecimal()" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>" tabindex="38" maxlength="25" readOnly>
 										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"></label>
-											</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom ac-outlet-subtotal" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="<?php echo isset($ac_outlet_subtotal) ? $ac_outlet_subtotal : 0; ?>" tabindex="39" readonly>
 										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<label class="control-label"></label>
-											</div>
+									</div>
+								</div>
+
+								<!-- Aircon Grill Section -->
+								<div class="row">
+									<div class="col-md-2 col-sm-3">
+										<div class="form-group">
+											<label class="control-label">Aircon Grill:</label>
+											<label class="control-label"><i>(for window-type):</i></label>
 										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<label class="control-label" style="align-items:right;">Additional Cost/s: </label>
-											</div>
+									</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<input type="number" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>" maxlength="2" tabindex="40" readOnly>
 										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom add-cost-total" id="add_cost_total" name="add_cost_total" value="<?php echo isset($add_cost) ? $add_cost : 0; ?>" tabindex="52" readonly>
-											</div>
+									</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<label class="control-label">Unit/s</label>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom ac-grill-price" id="ac_grill_price" name="ac_grill_price" oninput="numbersAndDecimal()" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" tabindex="41" maxlength="25" readOnly>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom ac-grill-subtotal" id="ac_grill_subtotal" name="ac_grill_subtotal" value="<?php echo isset($ac_grill_subtotal) ? $ac_grill_subtotal : 0; ?>" tabindex="42" readonly>
+										</div>
+									</div>
+								</div>
+
+								<!-- Convenience Outlet Section -->
+								<div class="row">
+									<div class="col-md-2 col-sm-3">
+										<div class="form-group">
+											<label class="control-label">Convenience Outlet:</label>
+										</div>
+									</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<input type="number" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>" maxlength="2" tabindex="43" readOnly>
+										</div>
+									</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<label class="control-label">Unit/s</label>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom conv-outlet-price" id="conv_outlet_price" name="conv_outlet_price" oninput="numbersAndDecimal()" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" tabindex="44" maxlength="25" readOnly>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom conv-outlet-subtotal" id="conv_outlet_subtotal" name="conv_outlet_subtotal" value="<?php echo isset($conv_outlet_subtotal) ? $conv_outlet_subtotal : 0; ?>" tabindex="45" readonly>
+										</div>
+									</div>
+								</div>
+
+								<!-- Other sections (Service Area, Other, Add Cost Total, etc.) should follow the same responsive pattern -->
+								<div class="row">
+									<div class="col-md-2 col-sm-3">
+										<div class="form-group">
+											<label class="control-label">Other(specify):</label>
+										</div>
+									</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<input type="number" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" maxlength="2" tabindex="49" readOnly>
+										</div>
+									</div>
+									<div class="col-md-1 col-sm-2">
+										<div class="form-group">
+											<label class="control-label">Unit/s</label>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom others-price" id="others_price" name="others_price" oninput="numbersAndDecimal()" value="<?php echo isset($others_price) ? $others_price : 0; ?>" tabindex="50" maxlength="25" readOnly>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom others-subtotal" id="others_subtotal" name="others_subtotal" value="<?php echo isset($others_subtotal) ? $others_subtotal : 0; ?>" tabindex="51" readonly>
+										</div>
+									</div>
+								</div>
+
+								<!-- Add Cost Total Section -->
+								<div class="row">
+									<div class="col-md-7">
+										<div class="form-group">
+											<label class="control-label">Total Add Cost:</label>
+										</div>
+									</div>
+									<div class="col-md-5">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom total-add-cost" id="total_add_cost" name="total_add_cost" value="<?php echo isset($total_add_cost) ? $total_add_cost : 0; ?>" tabindex="52" readonly>
 										</div>
 									</div>
 								</div>
 							</div>
-
 							<div class="space"></div>
 							<div class="main_box">
-									<div class="row">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">Processing Fee:</label>
-											</div>
-										</div>
-										<div class="col-md-3" >
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom process-fee" name="process_fee" id="process_fee" oninput="numbersAndDecimal()" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>" maxlength="25" tabindex="53">
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">PF/Month:</label>
-											</div>
-										</div>
-										<div class="col-md-3" >
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom pf-month"  name="pf_month" id="pf_month" oninput="numbersAndDecimal()" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>" maxlength="25" tabindex="54">
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">TCP Discount</label>
-											</div>
-										</div>
-										<div class="col-md-3" >
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom tcp-disc" name="tcp_disc" id="tcp_disc" oninput="numbersAndDecimal()" value="<?php echo isset($tcp_discount) ? $tcp_discount : 0; ?>" maxlength="25" tabindex="55">
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">TCP Disc. Amount:</label>
-											</div>
-										</div>
-										<div class="col-md-3" >
-											<div class="form-group">
-													<input type="text" class="form-control margin-bottom " name="tcp_disc_amt_display" id="tcp_disc_amt_display"  value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
-													<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt"  value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
-											</div>
+								<!-- Processing Fee Section -->
+								<div class="row">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">Processing Fee:</label>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">Total Contract Price:</label>
-											</div>
-										</div>
-										<div class="col-md-9">
-											<div class="form-group">
-													<input type="text" class="form-control margin-bottom " name="total_tcp_display" id="total_tcp_display" readonly value="<?php echo isset($tcp) ? number_format($tcp,2) : 0; ?>">
-													<input type="hidden" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
-
-												<input type="hidden" name="invoice_discount" id="invoice_discount">
-											</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom process-fee" name="process_fee" id="process_fee" oninput="numbersAndDecimal()" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>" maxlength="25" tabindex="53">
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">VAT:</label>
-											</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">PF/Month:</label>
 										</div>
-										<div class="col-md-3" >
-											<div class="form-group">
-											<input type="text" class="form-control margin-bottom vat-percent" value="<?php echo isset($vat_percent) ? $vat_percent : 0; ?>" name="vat_percent" id="vat_percent" oninput="numbersAndDecimal()" tabindex="58" maxlength="3">
-											</div> 
-										</div> 
-										<div class="col-md-2">
-											<div class="form-group">
-												<label class="control-label">VAT Amount:</label>
-											</div>
-										</div>
-										<div class="col-md-4" >
-											<div class="form-group">
-												<input type="text" class="form-control margin-bottom " value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex = '39'>
-												<input type="text" class="form-control margin-bottom vat-amt-computed" value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
-											</div> 
-										</div> 
 									</div>
-									<div class="row">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label class="control-label">NET Total Contract Price:</label>
-											</div>
-										</div>
-										<div class="col-md-9">
-												<input type="text" class="form-control margin-bottom "  value="<?php echo isset($net_tcp) ? number_format($net_tcp,2) : 0; ?>" name="net_tcp_display" readonly id="net_tcp_display" >
-												<input type="hidden" class="form-control margin-bottom net-tcp"  value="<?php echo isset($net_tcp) ? $net_tcp : 0; ?>" name="net_tcp" readonly id="net_tcp" >
-											<input type="hidden" name="total_net_tcp" id="total_net_tcp">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom pf-month" name="pf_month" id="pf_month" oninput="numbersAndDecimal()" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>" maxlength="25" tabindex="54">
 										</div>
 									</div>
 								</div>
+
+								<!-- TCP Discount Section -->
+								<div class="row">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">TCP Discount</label>
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom tcp-disc" name="tcp_disc" id="tcp_disc" oninput="numbersAndDecimal()" value="<?php echo isset($tcp_discount) ? $tcp_discount : 0; ?>" maxlength="25" tabindex="55">
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">TCP Disc. Amount:</label>
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom " name="tcp_disc_amt_display" id="tcp_disc_amt_display" value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
+											<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
+										</div>
+									</div>
+								</div>
+
+								<!-- Total Contract Price Section -->
+								<div class="row">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">Total Contract Price:</label>
+										</div>
+									</div>
+									<div class="col-md-9 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom" name="total_tcp_display" id="total_tcp_display" readonly value="<?php echo isset($tcp) ? number_format($tcp,2) : 0; ?>">
+											<input type="hidden" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
+											<input type="hidden" name="invoice_discount" id="invoice_discount">
+										</div>
+									</div>
+								</div>
+
+								<!-- VAT Section -->
+								<div class="row">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">VAT:</label>
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom vat-percent" value="<?php echo isset($vat_percent) ? $vat_percent : 0; ?>" name="vat_percent" id="vat_percent" oninput="numbersAndDecimal()" tabindex="58" maxlength="3">
+										</div>
+									</div>
+									<div class="col-md-2 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">VAT Amount:</label>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom " value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex="39">
+											<input type="text" class="form-control margin-bottom vat-amt-computed" value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex="39">
+										</div>
+									</div>
+								</div>
+
+								<!-- Net Total Contract Price Section -->
+								<div class="row">
+									<div class="col-md-3 col-sm-6 col-xs-12">
+										<div class="form-group">
+											<label class="control-label">NET Total Contract Price:</label>
+										</div>
+									</div>
+									<div class="col-md-9 col-sm-6 col-xs-12">
+										<input type="text" class="form-control margin-bottom" value="<?php echo isset($net_tcp) ? number_format($net_tcp,2) : 0; ?>" name="net_tcp_display" readonly id="net_tcp_display">
+										<input type="hidden" class="form-control margin-bottom net-tcp" value="<?php echo isset($net_tcp) ? $net_tcp : 0; ?>" name="net_tcp" readonly id="net_tcp">
+										<input type="hidden" name="total_net_tcp" id="total_net_tcp">
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>		
 				</div>
