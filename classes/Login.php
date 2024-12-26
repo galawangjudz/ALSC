@@ -37,6 +37,7 @@ class Login extends DBConnection {
 		 // Check if the required fields are set
 		 if (empty($_POST['username']) || empty($_POST['password'])) {
 			return json_encode(['status' => 'incorrect', 'message' => 'Username and password are required.']);
+			exit;
 		}
 	
 		// Sanitize user inputs to prevent SQL injection
