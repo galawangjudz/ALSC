@@ -298,7 +298,7 @@ a.text-primary:hover {
         <div class="d-flex justify-content-between align-items-center mb-3">
           <!-- Forgot Password -->
           <div>
-            <a href="forgot-password.html" class="text-primary">Forgot Password?</a>
+              <a href="forgot-password.php" class="text-primary">Forgot Password?</a>
           </div>
         </div>
         <div class="row justify-content-center">
