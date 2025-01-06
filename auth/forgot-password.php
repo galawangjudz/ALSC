@@ -1,9 +1,11 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
+require_once('../config.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
-
-    // Database connection
-    $conn = new mysqli('hostname', 'username', 'password', 'database');
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -19,23 +21,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Email the password to the user
-        $to = $email;
-        $subject = "Your Password Recovery";
-        $message = "Hello, your password is: " . $user['password'];
-        $headers = "From: noreply@yourdomain.com";
+        // Email configuration
+        $emailFrom = "francisdiaz@asianland.ph";
+        $password = "Symtd8Qh6KXJzCGk"; // Replace with your SMTP password or API key
+        $recipientEmail = $email; // Replace with the recipient's email
+        $subject = "Reset Password";
+        $htmlContent = "<pYour Password reset successfully.</p>";
 
-        if (mail($to, $subject, $message, $headers)) {
-            echo "Password has been sent to your email.";
-        } else {
-            echo "Failed to send the email.";
+        $mail = new PHPMailer(true);
+
+        try {
+            // SMTP Configuration
+            $mail->isSMTP();
+            $mail->Host = 'smtp-relay.brevo.com'; // Replace with your SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = $emailFrom;
+            $mail->Password = $password;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Email Settings
+            $mail->setFrom($emailFrom, 'Asian Land'); // Sender
+            $mail->addAddress($recipientEmail);      // Recipient
+            $mail->Subject = $subject;
+            $mail->isHTML(true);                     // Set email format to HTML
+            $mail->Body = $htmlContent;
+
+            // Send Email
+            $mail->send();
+            echo "Email sent successfully.";
+        } catch (Exception $e) {
+            echo "Failed to send email. Error: {$mail->ErrorInfo}";
         }
+       
     } else {
         echo "Email not registered.";
     }
 
     $stmt->close();
-    $conn->close();
 }
 ?>
 

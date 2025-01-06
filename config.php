@@ -1,6 +1,6 @@
 <?php
 ob_start();
-opcache_reset();
+//opcache_reset();
 ini_set('date.timezone','Asia/Manila');
 date_default_timezone_set('Asia/Manila');
 session_start();

@@ -144,67 +144,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 .required {
     background-color: #ffffe0;
 }
-
-.card {
-    margin: 1rem auto;
-    padding: 1rem;
-    max-width: 100%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-
-
-.card-title {
-    font-size: 1.25rem;
-}
-
-.tab {
-    margin-top: 1rem;
-}
-
-.tab .tablinks {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 0.25rem;
-    transition: all 0.3s;
-    text-align: center;
-    width: 100%; /* For stacking on smaller screens */
-}
-
-.tab .tablinks:hover {
-    background-color: #0056b3;
-    color: #fff;
-}
-
-.tab .tablinks:focus {
-    outline: 2px solid #0056b3;
-}
-
-@media (min-width: 768px) {
-    .tab .tablinks {
-        width: auto; /* Reset to original size for larger screens */
-    }
-}
-
-/* Media Query for Extra Small Devices (Mobile) */
-@media (max-width: 767px) {
-    .titles {
-        font-size: 16px;
-    }
-    .form-group {
-        margin-bottom: 10px;
-    }
-    .lot_box, .house_box {
-        padding: 15px;
-    }
-}
-
-/* Media Query for Large Devices */
-@media (min-width: 1200px) {
-    .panel-body {
-        padding: 30px;
-    }
-}
 </style>
 
 <script type="text/javascript">
@@ -329,425 +268,419 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </script>
 <body onload="showTab()">
 <div class="card card-outline rounded-0 card-blue">
-    <div class="card-header">
-        <h3 class="card-title text-center text-md-start">
-            <b><i>New Reservation Application</i></b>
-        </h3>
-    </div>
-    <div class="card-body">
-        <div class="container-fluid">
-            <!-- Tab Navigation -->
-            <div class="tab d-flex flex-wrap justify-content-center justify-content-md-start">
-                <button class="tablinks btn btn-outline-primary mx-1 my-1" 
-                        onclick="opentab(event, 'Investment')" id="onlink2" onkeyup="tabclicked2()">
-                    <b><i>Investment Value</i></b>
-                </button>
-                <button class="tablinks btn btn-outline-primary mx-1 my-1" 
-                        onclick="opentab(event, 'Buyer')" id="onlink1" onkeyup="tabclicked1()">
-                    <b><i>Buyer's Profile</i></b>
-                </button>
-                <button class="tablinks btn btn-outline-primary mx-1 my-1" 
-                        onclick="opentab(event, 'Payment')" id="onlink3" onkeyup="tabclicked3()">
-                    <b><i>Payment Computation</i></b>
-                </button>
-                <button class="tablinks btn btn-outline-primary mx-1 my-1" 
-                        onclick="opentab(event, 'Agents and Commission')" id="onlink4" onkeyup="tabclicked4()">
-                    <b><i>Agents and Commission</i></b>
-                </button>
-            </div>
-			<form method="" id="save_csr">
-				<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
-				<input type="hidden" name="c_csr_no" value="<?php echo isset($c_csr_no) ? $c_csr_no : '';  ?>">
-				<input type="hidden" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
-				<input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new RA with reference #">
-				<input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated RA with reference #">
-				<div id="Buyer" class="tabcontent">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="panel panel-default">	
-								<div class="panel-body form-group form-group-sm">
-									<table class="table3 table-bordered table-stripped" id="buyer_table" style="width:100%;">
-										<thead>
-											<tr>
-												<th>
-													<div class="panel-heading">
-														<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;">
-															<span class="fa fa-plus" aria-hidden="true"></span>
-														</a>
-														<div class="titles">Buyer's Information Details</div>
-														<div class="clear"></div>
-													</div>
-												</th>
-											</tr>
-										</thead>
-										
-										<tbody>
-											<?php 
-												if(isset($_GET['id']) && $_GET['id'] > 0){
-												$qry = $conn->query("SELECT * FROM t_csr_buyers where md5(c_csr_no) = '{$_GET['id']}' ");
-												if($qry->num_rows > 0){	
-													while($row = $qry->fetch_assoc()):
-														$buyer_count = $row['c_buyer_count']; // customer buyers no
-														$customer_last_name_1 = $row['last_name']; // customer last name
-														$customer_suffix_name_1 = $row['suffix_name']; // customer suffix name
-														$customer_first_name_1 = $row['first_name']; // customer first name
-														$customer_middle_name_1 = $row['middle_name']; // customer middle name
-														$customer_address_1 = $row['address']; // customer address
-														$customer_zip_code = $row['zip_code']; // customer zip_code
-														$customer_address_abroad = $row['address_abroad']; // customer address abroad
-														$citizenship = $row['citizenship'];
-														$id_presented = $row['id_presented'];
-														$tin_no = $row['tin_no'];
-														$birth_date = $row['birthdate']; // customer birthday
-														$customer_age = $row['age']; // customer age
-														$contact_no = $row['contact_no']; // customer phone 
-														$contact_abroad = $row['contact_abroad']; // customer phone number
-														$customer_email = $row['email']; // customer civil status
-														$customer_viber= $row['viber']; // customer viber
-														$customer_gender = $row['gender']; // customer phone number
-														$civil_status = $row['civil_status']; // customer civil status
+	<div class="card-header">
+		<h3 class="card-title"><b><i>New Reservation Application</b></i></h3>
+	</div>
+	<div class="card-body">
+	<div class="container-fluid">
+		<div class="tab">
+			<button class="tablinks" onclick="opentab(event, 'Buyer')" id="onlink1" onkeyup="tabclicked1()"><b><i>Buyer's Profile</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Investment')" id="onlink2" onkeyup="tabclicked2()"><b><i>Investment Value</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Payment')" id="onlink3" onkeyup="tabclicked3()"><b><i>Payment Computation</b></i></button>
+			<button class="tablinks" onclick="opentab(event, 'Agents and Commission')" id="onlink4" onkeyup="tabclicked4()"><b><i>Agents and Commission</b></i></button>
+		</div>
+		<form method="" id="save_csr">
+			<input type="hidden" name="username" value="<?php echo $_settings->userdata('username'); ?>">
+			<input type="hidden" name="c_csr_no" value="<?php echo isset($c_csr_no) ? $c_csr_no : '';  ?>">
+			<input type="hidden" name="prop_id" id="prop_id" value="<?php echo isset($prop_id) ? $prop_id : '';  ?>">
+			<input type="hidden" name="comm" id="comm" value="<?php echo $username ?> added a new RA with reference #">
+			<input type="hidden" name="comm2" id="comm2" value="<?php echo $username ?> updated RA with reference #">
+			<div id="Buyer" class="tabcontent">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default">	
+							<div class="panel-body form-group form-group-sm">
+								<table class="table3 table-bordered table-stripped" id="buyer_table" style="width:100%;">
+									<thead>
+										<tr>
+											<th>
+												<div class="panel-heading">
+													<a href="#" class="btn btn-flat btn-primary float-left btn-md add-buyer-row" style="font-size:14px;">
+														<span class="fa fa-plus" aria-hidden="true"></span>
+													</a>
+													<div class="titles">Buyer's Information Details</div>
+													<div class="clear"></div>
+												</div>
+											</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										<?php 
+											if(isset($_GET['id']) && $_GET['id'] > 0){
+											$qry = $conn->query("SELECT * FROM t_csr_buyers where md5(c_csr_no) = '{$_GET['id']}' ");
+											if($qry->num_rows > 0){	
+												while($row = $qry->fetch_assoc()):
+													$buyer_count = $row['c_buyer_count']; // customer buyers no
+													$customer_last_name_1 = $row['last_name']; // customer last name
+													$customer_suffix_name_1 = $row['suffix_name']; // customer suffix name
+													$customer_first_name_1 = $row['first_name']; // customer first name
+													$customer_middle_name_1 = $row['middle_name']; // customer middle name
+													$customer_address_1 = $row['address']; // customer address
+													$customer_zip_code = $row['zip_code']; // customer zip_code
+													$customer_address_abroad = $row['address_abroad']; // customer address abroad
+													$citizenship = $row['citizenship'];
+													$id_presented = $row['id_presented'];
+													$tin_no = $row['tin_no'];
+													$birth_date = $row['birthdate']; // customer birthday
+													$customer_age = $row['age']; // customer age
+													$contact_no = $row['contact_no']; // customer phone 
+													$contact_abroad = $row['contact_abroad']; // customer phone number
+													$customer_email = $row['email']; // customer civil status
+													$customer_viber= $row['viber']; // customer viber
+													$customer_gender = $row['gender']; // customer phone number
+													$civil_status = $row['civil_status']; // customer civil status
 
-														$civil_status = $row['civil_status']; // customer civil status
-														$relationship = $row['relationship'];		
-											?>
-											<tr>
-												<td>
-													<div class="form-group form-group-sm no-margin-bottom">
-														<div class="d-flex justify-content-between align-items-center mb-2">
-															<a href="#" class="btn btn-flat btn-danger delete-buyer-row" style="font-size:14px;">
-																<span class="fa fa-times" aria-hidden="true"></span>
-															</a>
-															<p class="select-customer">
-																<a href="#" class="btn btn-flat float-left bg-maroon" style="font-size:14px;">
-																	<span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details
-																</a>
-															</p>
-														</div>
+													$civil_status = $row['civil_status']; // customer civil status
+													$relationship = $row['relationship'];		
+										?>
+										<tr>
+											<td>
+												<div class="form-group form-group-sm  no-margin-bottom">
+													<div class="card-tools">
+													<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
 													</div>
-													<div class="main_box">
-														<div class="row">
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Last Name:<span class="asterisk">*</span></label>
-																	<input type="text" class="form-control buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">First Name:</label>
-																	<input type="text" class="form-control buyer-first required" name="first_name[]" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Middle Name:</label>
-																	<input type="text" class="form-control buyer-middle" name="middle_name[]" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Suffix Name:</label>
-																	<input type="text" class="form-control buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
-																</div>
+													<p class="select-customer"><a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
+												</div>
+												<div class="main_box">
+													<div class="row">
+														<div class="col-md-3">		
+															<div class="form-group">
+															<label class="control-label">Last Name:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
 															</div>
 														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Citizenship:</label>
-																	<input type="text" class="form-control buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
-																</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">First Name: </label>
+																<input type="text" class="form-control margin-bottom buyer-first required" name="first_name[]" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>">
 															</div>
-															<div class="col-md-2 col-sm-6">
-																<label class="control-label">Civil Status:</label>
-																<select name="civil_status[]" id="civil_status" class="form-control buyer-civil required">
-																	<option value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
-																	<option value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
-																	<option value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
-																	<option value="Widowed" <?php echo isset($civil_status) && $civil_status == "Widowed" ? 'selected' : '' ?>>Widowed</option>
-																</select>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Gender:</label>
-																	<select name="gender[]" id="customer_gender" class="form-control buyer-gender required">
-																		<option value="M" <?php echo isset($customer_gender) && $customer_gender == "M" ? 'selected' : '' ?>>Male</option>
-																		<option value="F" <?php echo isset($customer_gender) && $customer_gender == "F" ? 'selected' : '' ?>>Female</option>
-																	</select>
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Birthdate:</label>
-																	<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-1 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Age:</label>
-																	<input type="text" class="form-control buyer-age required" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?>" readonly>
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Relationship:</label>
-																	<select name="relationship[]" id="relationship" class="form-control required">
-																		<option value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
-																		<option value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
-																		<option value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
-																		<option value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
-																		<option value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
-																	</select>
-																</div>
+															
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Middle Name: </label>
+																<input type="text" class="form-control margin-bottom buyer-middle" name="middle_name[]" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>">
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Type of Valid ID Presented: </label>
-																	<input type="text" class="form-control margin-bottom" name="id_presented[]" value="<?php echo isset($id_presented) ? $id_presented : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Tin #: </label>
-																	<input type="text" class="form-control margin-bottom" name="tin_no[]" value="<?php echo isset($tin_no) ? $tin_no : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Contact Number: </label>
-																	<input type="text" class="form-control margin-bottom buyer-contact required" name="contact_no[]" value="<?php echo isset($contact_no) ? $contact_no: ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Viber Account: </label>
-																	<input type="text" class="form-control margin-bottom buyer-viber" name="viber[]" value="<?php echo isset($customer_viber) ? $customer_viber : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-12">
-																<div class="form-group">
-																	<label class="control-label">Email Address: </label>
-																	<input type="email" class="form-control margin-bottom buyer-email required" name="email[]" value="<?php echo isset($customer_email) ? $customer_email : ''; ?>">
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-md-9 col-sm-12">
-																<div class="form-group">
-																	<label class="control-label">Residential/Billing Address: </label>
-																	<input type="text" class="form-control margin-bottom buyer-address required" name="address[]" value="<?php echo isset($customer_address_1) ? $customer_address_1 : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Area Code : </label>
-																	<input type="text" class="form-control margin-bottom buyer-zipcode required" name="zip_code[]" value="<?php echo isset($customer_zip_code) ? $customer_zip_code : ''; ?>">
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-md-9 col-sm-12">
-																<div class="form-group">
-																	<label class="control-label">Address Abroad (if any): </label>
-																	<input type="text" class="form-control margin-bottom buyer-add-abroad" name="address_abroad[]" value="<?php echo isset($customer_address_abroad) ? $customer_address_abroad : ''; ?>">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Contact Number Abroad : </label>
-																	<input type="text" class="form-control margin-bottom" name="contact_abroad[]" value="<?php echo isset($contact_abroad) ? $contact_abroad : ''; ?>">
-																</div>
+														<div class="col-md-3">		
+															<div class="form-group">
+															<label class="control-label">Suffix Name: </label>
+																<input type="text" class="form-control margin-bottom buyer-suffix" name="suffix_name[]" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>">
 															</div>
 														</div>
 													</div>
-												</td>	
-											</tr>
-												<?php 
-
-													endwhile;
-												}	
-												}
-												else{
-													?>
-													<tr>
-												
-													<td>
-														<div class="form-group form-group-sm  no-margin-bottom">
-															<div class="card-tools" style="margin-top:5px;">
-															<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
-															</div>
-															<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
-														</div>
-														<div class="main_box">
-														<div id="buyer-info"></div>
-														<div class="row">
-															<div class="col-md-3 col-sm-6">		
-																<div class="form-group">
-																<label class="control-label">Last Name:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control margin-bottom buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">First Name:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control margin-bottom buyer-first required" id="first_name" name="first_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>" maxlength="50" tabindex="2">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Middle Name: </label>
-																	<input type="text" class="form-control margin-bottom buyer-middle" id="middle_name" name="middle_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>" maxlength="50" tabindex="3">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">		
-																<div class="form-group">
-																<label class="control-label">Suffix Name: </label>
-																	<input type="text" class="form-control margin-bottom buyer-suffix" id="suffix_name" name="suffix_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>" maxlength="10" tabindex="4">
-																</div>
+													<hr>
+													<div class="row">
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Citizenship: </label>
+																<input type="text" class="form-control margin-bottom buyer-ctzn required" name="citizenship[]" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>">
 															</div>
 														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Citizenship:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control margin-bottom buyer-ctzn required" id="citizenship" name="citizenship[]" oninput="onlyLettersforRes()" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>" maxlength="50" tabindex="5">
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<label class="control-label">Civil Status:<div class="asterisk">*</div></label>
+														<div class="col-md-2">
+															<label class="control-label">Civil Status: </label>
+															<style>
+																select:invalid { color: gray; }
+															</style>
+															<select name="civil_status[]" id="civil_status" class="form-control buyer-civil required">
+															
+																<option name="civil_status" value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
+																<option name="civil_status" value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
+																<option name="civil_status" value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
+																<option name="civil_status" value="Widowed" <?php echo isset($civil_status) && $civil_status == "Widowed" ? 'selected' : '' ?>>Widowed</option>
+															</select>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
 																<style>
 																	select:invalid { color: gray; }
 																</style>
-																<select required id="civil_status" name="civil_status[]" class="form-control buyer-civil required">
-																	<option value="" disabled selected>Select Civil Status</option>
-																	<option name="civil_status" value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
-																	<option name="civil_status" value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
-																	<option name="civil_status" value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
-																	<option name="civil_status" value="Widowed" <?php echo isset($civil_status) && $civil_status == "Widowed" ? 'selected' : '' ?>>Widowed</option>
-																</select>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<style>
-																		select:invalid { color: gray; }
-																	</style>
-																	<label class="control-label">Gender:<div class="asterisk">*</div></label>
-																	<select required id="customer_gender" name="gender[]" class="form-control buyer-gender required" tabindex="7">
-																		<option value="" disabled selected>Select Gender</option>
+																<label class="control-label">Gender: </label>
+																<select name="gender[]" id="customer_gender" class="form-control buyer-gender required">
+																	
 																		<option name="customer_gender" value="M" <?php echo isset($customer_gender) && $customer_gender == "M" ? 'selected' : '' ?>>Male</option>
 																		<option name="customer_gender" value="F" <?php echo isset($customer_gender) && $customer_gender == "F" ? 'selected' : '' ?>>Female</option>
-																	</select>
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Birthdate:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control required buyer-bday datepicker" id="birth_day" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>" oninput="numbersAndHypens()" maxlength="10" tabindex="8">
-																</div>
-															</div>
-															<div class="col-md-1 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Age: </label>
-																	<input type="text" class="form-control margin-bottom buyer-age" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?> " tabindex="9" readonly>
-																</div>
-															</div>	
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<style>
-																		select:invalid { color: gray; }
-																	</style>
-																	<label class="control-label">Relationship:<div class="asterisk">*</div></label>
-																	<select required id="relationship" name="relationship[]" class="form-control required" tabindex="10">
-																			<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
-																			<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
-																			<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
-																			<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
-																			<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
-																	</select>
-																</div>
+																</select>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Type of Valid ID Presented:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control margin-bottom required" name="id_presented[]" value="<?php echo isset($id_presented) ? $id_presented : ''; ?>" maxlength="50" tabindex="11">
-																</div>	
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Birthdate: </label>
+																	<input type="text" class="form-control buyer-bday required datepicker" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">
+
+																	<!-- <input type="date" class="form-control buyer-bday required" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>">		
+														 -->	</div>
+														</div>
+														<div class="col-md-1">
+															<div class="form-group">
+																<label class="control-label">Age: </label>
+																<input type="text" class="form-control margin-bottom buyer-age required" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?> "readonly>
 															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Tin #: </label>
-																	<input type="text" class="form-control margin-bottom" name="tin_no[]" value="<?php echo isset($tin_no) ? $tin_no : ''; ?>" tabindex="12">
-																</div>
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Contact Number:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control margin-bottom buyer-contact required" name="contact_no[]" id="contact_no" oninput="limitContactNumberLength()" value="<?php echo isset($contact_no) ? $contact_no: ''; ?>" autocomplete="nope" tabindex="13">
-																</div>	
-															</div>
-															<div class="col-md-2 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Viber Account: </label>
-																	<input type="text" class="form-control margin-bottom buyer-viber" name="viber[]" id="viber" oninput="limitContactNumberLengthRes()" value="<?php echo isset($customer_viber) ? $customer_viber : ''; ?>" autocomplete="nope" tabindex="14">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-12">
-																<div class="form-group">
-																	<label class="control-label">Email Address:<div class="asterisk">*</div></label>
-																	<input type="email" class="form-control margin-bottom buyer-email required" name="email[]" value="<?php echo isset($customer_email) ? $customer_email : ''; ?>" autocomplete="nope" maxlength="100" tabindex="15">
-																</div>
+														</div>	
+														<div class="col-md-3">
+															<div class="form-group">
+																<style>
+																	select:invalid { color: gray; }
+																</style>
+																<label class="control-label">Relationship: </label>
+																<select name="relationship[]" id="relationship" class="form-control required">
+																		<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
+																		<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
+																		<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
+																		<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
+																		<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
+																</select>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-md-9 col-sm-12">
-																<div class="form-group">
-																	<label class="control-label">Residential/Billing Address:<div class="asterisk">*</div></label>
-																	<input type="text" class="form-control margin-bottom buyer-address required" name="address[]" value="<?php echo isset($customer_address_1) ? $customer_address_1 : ''; ?>" tabindex="16">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Area Code:<div class="asterisk">*</div></label>
-																	<input type="number" class="form-control margin-bottom buyer-zipcode required" name="zip_code[]" value="<?php echo isset($customer_zip_code) ? $customer_zip_code : ''; ?>" maxlength="10" tabindex="17">
-																</div>
-															</div>
-															<div class="col-md-9 col-sm-12">
-																<div class="form-group">
-																	<label class="control-label">Address Abroad (if any): </label>
-																	<input type="text" class="form-control margin-bottom buyer-add-abroad" name="address_abroad[]" value="<?php echo isset($customer_address_abroad) ? $customer_address_abroad : ''; ?>" tabindex="18">
-																</div>
-															</div>
-															<div class="col-md-3 col-sm-6">
-																<div class="form-group">
-																	<label class="control-label">Contact Number Abroad: </label>
-																	<input type="text" class="form-control margin-bottom" name="contact_abroad[]" value="<?php echo isset($contact_abroad) ? $contact_abroad : ''; ?>" maxlength="25" tabindex="19">
-																</div>
-															</div>
-														</div>  
 													</div>
-												</td>	
-											</tr>
-											<?php
+													<div class="row">
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Type of Valid ID Presented: </label>
+																<input type="text" class="form-control margin-bottom" name="id_presented[]" value="<?php echo isset($id_presented) ? $id_presented : ''; ?>">
+															</div>	
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Tin #: </label>
+																<input type="text" class="form-control margin-bottom" name="tin_no[]" value="<?php echo isset($tin_no) ? $tin_no : ''; ?>">
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Contact Number: </label>
+																<input type="text" class="form-control margin-bottom buyer-contact required" name="contact_no[]" value="<?php echo isset($contact_no) ? $contact_no: ''; ?>">
+															</div>	
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Viber Account: </label>
+																<input type="text" class="form-control margin-bottom buyer-viber" name="viber[]" value="<?php echo isset($customer_viber) ? $customer_viber : ''; ?>">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Email Address: </label>
+															
+																<input type="email" class="form-control margin-bottom buyer-email required" name="email[]" value="<?php echo isset($customer_email) ? $customer_email : ''; ?>">
+																
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-9">
+															<div class="form-group">
+																<label class="control-label">Residential/Billing Address: </label>
+																<input type="text" class="form-control margin-bottom buyer-address required" name="address[]" value="<?php echo isset($customer_address_1) ? $customer_address_1 : ''; ?>">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Area Code : </label>
+																<input type="text" class="form-control margin-bottom buyer-zipcode required" name="zip_code[]" value="<?php echo isset($customer_zip_code) ? $customer_zip_code : ''; ?>">
+															</div>
+														</div>
+														<div class="col-md-9">
+															<div class="form-group">
+																<label class="control-label">Address Abroad (if any): </label>
+																<input type="text" class="form-control margin-bottom buyer-add-abroad" name="address_abroad[]" value="<?php echo isset($customer_address_abroad) ? $customer_address_abroad : ''; ?>">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Contact Number Abroad : </label>
+																<input type="text" class="form-control margin-bottom" name="contact_abroad[]" value="<?php echo isset($contact_abroad) ? $contact_abroad : ''; ?>">
+															</div>
+														</div>
+													</div>  
+												</div>
+											</td>	
+										</tr>
+											<?php 
+
+												endwhile;
+											}	
 											}
-											?>
-									</tbody>
-								</table>
-							</div>
+											else{
+												?>
+												<tr>
+											
+												<td>
+													<div class="form-group form-group-sm  no-margin-bottom">
+														<div class="card-tools" style="margin-top:5px;">
+														<a href="#" class="btn btn-flat btn-danger float-right delete-buyer-row" style="font-size:14px;"><span class="fa fa-times" aria-hidden="true"></span></a>
+														</div>
+														<p class="select-customer"> <a href="#"  class="btn btn-flat bg-maroon" style="font-size:14px;"><span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Client Details</a></p>
+													</div>
+													<div class="main_box">
+													<div id="buyer-info"></div>
+													<div class="row">
+														<div class="col-md-3">		
+															<div class="form-group">
+															<label class="control-label">Last Name:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-last required" id="last_name" name="last_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_last_name_1) ? $customer_last_name_1 : ''; ?>" maxlength="50" tabindex="1">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">First Name:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-first required" id="first_name" name="first_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_first_name_1) ? $customer_first_name_1 : ''; ?>" maxlength="50" tabindex="2">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Middle Name: </label>
+																<input type="text" class="form-control margin-bottom buyer-middle" id="middle_name" name="middle_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_middle_name_1) ? $customer_middle_name_1 : ''; ?>" maxlength="50" tabindex="3">
+															</div>
+														</div>
+														<div class="col-md-3">		
+															<div class="form-group">
+															<label class="control-label">Suffix Name: </label>
+																<input type="text" class="form-control margin-bottom buyer-suffix" id="suffix_name" name="suffix_name[]" oninput="onlyLettersforRes()" value="<?php echo isset($customer_suffix_name_1) ? $customer_suffix_name_1 : ''; ?>" maxlength="10" tabindex="4">
+															</div>
+														</div>
+													</div>
+													<hr>
+													<div class="row">
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Citizenship:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-ctzn required" id="citizenship" name="citizenship[]" oninput="onlyLettersforRes()" value="<?php echo isset($citizenship) ? $citizenship : ''; ?>" maxlength="50" tabindex="5">
+															</div>
+														</div>
+														<div class="col-md-2">
+															<label class="control-label">Civil Status:<div class="asterisk">*</div></label>
+															<style>
+																select:invalid { color: gray; }
+															</style>
+															<select required id="civil_status" name="civil_status[]" class="form-control buyer-civil required">
+																<option value="" disabled selected>Select Civil Status</option>
+																<option name="civil_status" value="Single" <?php echo isset($civil_status) && $civil_status == "Single" ? 'selected' : '' ?>>Single</option>
+																<option name="civil_status" value="Married" <?php echo isset($civil_status) && $civil_status == "Married" ? 'selected' : '' ?>>Married</option>
+																<option name="civil_status" value="Divorced" <?php echo isset($civil_status) && $civil_status == "Divorced" ? 'selected' : '' ?>>Divorced</option>
+																<option name="civil_status" value="Widowed" <?php echo isset($civil_status) && $civil_status == "Widowed" ? 'selected' : '' ?>>Widowed</option>
+															</select>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<style>
+																	select:invalid { color: gray; }
+																</style>
+																<label class="control-label">Gender:<div class="asterisk">*</div></label>
+																<select required id="customer_gender" name="gender[]" class="form-control buyer-gender required" tabindex="7">
+																	<option value="" disabled selected>Select Gender</option>
+																	<option name="customer_gender" value="M" <?php echo isset($customer_gender) && $customer_gender == "M" ? 'selected' : '' ?>>Male</option>
+																	<option name="customer_gender" value="F" <?php echo isset($customer_gender) && $customer_gender == "F" ? 'selected' : '' ?>>Female</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Birthdate:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control required buyer-bday datepicker" id="birth_day" name="birth_day[]" placeholder="YYYY-MM-DD" value="<?php echo isset($birth_date) ? $birth_date : ''; ?>" oninput="numbersAndHypens()" maxlength="10" tabindex="8">
+															</div>
+														</div>
+														<div class="col-md-1">
+															<div class="form-group">
+																<label class="control-label">Age: </label>
+																<input type="text" class="form-control margin-bottom buyer-age" name="age[]" id="age" value="<?php echo isset($customer_age) ? $customer_age : ''; ?> " tabindex="9" readonly>
+															</div>
+														</div>	
+														<div class="col-md-3">
+															<div class="form-group">
+																<style>
+																	select:invalid { color: gray; }
+																</style>
+																<label class="control-label">Relationship:<div class="asterisk">*</div></label>
+																<select required id="relationship" name="relationship[]" class="form-control required" tabindex="10">
+																		<option name="customer_relation" value="0" <?php echo isset($relationship) && $relationship == 0 ? 'selected' : '' ?>>None</option>
+																		<option name="customer_relation" value="1" <?php echo isset($relationship) && $relationship == 1 ? 'selected' : '' ?>>And</option>
+																		<option name="customer_relation" value="2" <?php echo isset($relationship) && $relationship == 2 ? 'selected' : '' ?>>Spouses</option>
+																		<option name="customer_relation" value="3" <?php echo isset($relationship) && $relationship == 3 ? 'selected' : '' ?>>Married To</option>
+																		<option name="customer_relation" value="4" <?php echo isset($relationship) && $relationship == 4 ? 'selected' : '' ?>>Minor/Represented by Legal Guardian</option>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Type of Valid ID Presented:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom required" name="id_presented[]" value="<?php echo isset($id_presented) ? $id_presented : ''; ?>" maxlength="50" tabindex="11">
+															</div>	
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Tin #: </label>
+																<input type="text" class="form-control margin-bottom" name="tin_no[]" value="<?php echo isset($tin_no) ? $tin_no : ''; ?>" tabindex="12">
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Contact Number:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-contact required" name="contact_no[]" id="contact_no" oninput="limitContactNumberLength()" value="<?php echo isset($contact_no) ? $contact_no: ''; ?>" autocomplete="nope" tabindex="13">
+															</div>	
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Viber Account: </label>
+																<input type="text" class="form-control margin-bottom buyer-viber" name="viber[]" id="viber" oninput="limitContactNumberLengthRes()" value="<?php echo isset($customer_viber) ? $customer_viber : ''; ?>" autocomplete="nope" tabindex="14">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Email Address:<div class="asterisk">*</div></label>
+																<input type="email" class="form-control margin-bottom buyer-email required" name="email[]" value="<?php echo isset($customer_email) ? $customer_email : ''; ?>" autocomplete="nope" maxlength="100" tabindex="15">
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-9">
+															<div class="form-group">
+																<label class="control-label">Residential/Billing Address:<div class="asterisk">*</div></label>
+																<input type="text" class="form-control margin-bottom buyer-address required" name="address[]" value="<?php echo isset($customer_address_1) ? $customer_address_1 : ''; ?>" tabindex="16">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Area Code:<div class="asterisk">*</div></label>
+																<input type="number" class="form-control margin-bottom buyer-zipcode required" name="zip_code[]" value="<?php echo isset($customer_zip_code) ? $customer_zip_code : ''; ?>" maxlength="10" tabindex="17">
+															</div>
+														</div>
+														<div class="col-md-9">
+															<div class="form-group">
+																<label class="control-label">Address Abroad (if any): </label>
+																<input type="text" class="form-control margin-bottom buyer-add-abroad" name="address_abroad[]" value="<?php echo isset($customer_address_abroad) ? $customer_address_abroad : ''; ?>" tabindex="18">
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<label class="control-label">Contact Number Abroad: </label>
+																<input type="text" class="form-control margin-bottom" name="contact_abroad[]" value="<?php echo isset($contact_abroad) ? $contact_abroad : ''; ?>" maxlength="25" tabindex="19">
+															</div>
+														</div>
+													</div>  
+												</div>
+											</td>	
+										</tr>
+										<?php
+										}
+										?>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="Investment" class="tabcontent">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="panel panel-default">
+		</div>
+		<div id="Investment" class="tabcontent">
+			<div class="row">
+			<div class="col-md-12">
+					<div class="panel panel-default">
 							<div class="panel-heading">
-								<div class="titles"><center>Investment Value</center></div>
+								<div class="titles"></a><center>Investment Value</center></div>
 								<div class="lot_box_res">
 									<div class="type-title"><b>Type: </b></div>
 									<div class="radio-container">
@@ -793,662 +726,700 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<input type="hidden" id="type_text" name="type_text" value="<?php echo isset($csr_type) ? $csr_type : '0'; ?>">
 								</div>
 							</div>
-							<div class="panel-body form-group form-group-sm">
-								<!-- Lot Box -->
-								<div class="lot_box">
-									<div class="titles">Lot</div>
-									<hr>
-									<div class="row">
-										<div class="col-sm-6 col-md-4">
-											<input type="hidden" class="form-control margin-bottom copy-input" name="l_lid" id="l_lid" value="<?php echo isset($lot_id) ? $lot_id : ''; ?>" tabindex="20">
-											<div class="form-group">
-												<label class="control-label">Phase: </label>
-												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_site" id="l_site" readonly value="<?php echo isset($phase) ? $phase : ''; ?>" tabindex="21">
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-2">
-											<div class="form-group">
-												<label class="control-label">Block: </label>
-												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_block" id="l_block" readonly value="<?php echo isset($block) ? $block : ''; ?>" tabindex="22">
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-2">
-											<div class="form-group">
-												<label class="control-label">Lot: </label>
-												<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_lot" id="l_lot" readonly value="<?php echo isset($lot) ? $lot : ''; ?>" tabindex="23">
-											</div>
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<button type="submit" class="btn btn-flat btn-success float-left select-lot" data-loading-text="Finding..." id="btnfind" disabled>
-													<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Find Lot
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-6 col-md-6">
-											<div class="form-group">
-												<label class="control-label">Lot Area: </label>
-												<input type="text" class="form-control margin-bottom lot-area" name="lot_area" id="lot_area" readonly value="<?php echo isset($lot_area) ? $lot_area : ''; ?>" tabindex="24">
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-6">
-											<div class="form-group">
-												<label class="control-label">Price/SQM: </label>
-												<input type="text" class="form-control margin-bottom price-sqm" name="price_per_sqm" id="price_per_sqm" readonly value="<?php echo isset($price_sqm) ? $price_sqm : ''; ?>" tabindex="25">
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label class="control-label">Amount: </label>
-												<input type="text" class="form-control margin-bottom" name="amount_display" id="amount_display" readonly value="<?php echo isset($amount) ? number_format($amount, 2) : '0.00'; ?>">
-												<input type="hidden" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
-											</div>
-										</div>
-									</div>
-									<!-- Lot Discount -->
-									<div class="row">
-										<div class="col-sm-6 col-md-4">
-											<div class="form-group">
-												<label class="control-label">Discount (%): </label>
-												<input type="text" class="form-control margin-bottom lot-disc" name="lot_disc" id="lot_disc" value="<?php echo isset($lot_discount) ? $lot_discount : ''; ?>" maxlength="3" oninput="numbersAndDecimal()" tabindex="27" readOnly>
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-8">
-											<div class="form-group">
-												<label class="control-label">Discount Amount: </label>
-												<input type="text" class="form-control margin-bottom" name="lot_disc_amt_display" id="lot_disc_amt_display" readonly value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt, 2) : ''; ?>">
-												<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : ''; ?>">
-											</div>
-										</div>
-									</div>
-									<!-- Lot Contract Price -->
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label class="control-label">Lot Contract Price: </label>
-												<input type="text" class="form-control margin-bottom" name="lcp_display" id="lcp_display" readonly value="<?php echo isset($lcp) ? number_format($lcp, 2) : ''; ?>">
-												<input type="hidden" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : ''; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="house_box">
-									<div class="titles">House</div>
-									<hr>
-									<div class="row">
-										<input type="hidden" class="form-control margin-bottom copy-input" name="l_house_lid" id="l_house_lid">
-										<div class="col-sm-8 col-md-8">
-											<div class="form-group">
-												<label class="control-label">House Model:</label>
-												<select id="house_model" name="house_model" class="form-control" disabled <?php echo $initialDisabled ? 'disabled' : ''; ?>>
-													<option value="" disabled <?php echo !isset($house_model) ? "selected" : '' ?>></option>
-													<?php 
-													$qry = $conn->query("SELECT * FROM t_model_house ORDER BY c_acronym ASC");
-													while ($row = $qry->fetch_assoc()):
-													?>
-													<option 
-														value="<?php echo $row['c_model'] ?>" 
-														<?php echo isset($house_model) && $house_model == $row['c_model'] ? 'selected' : '' ?> <?php echo $row['c_model'] == 0? 'disabled' : '' ?>
-													><?php echo $row['c_model'] ?></option>
-													<?php endwhile; ?>
-												</select>
-											</div>
-										</div>
-										<div class="col-sm-4 col-md-4">
-											<div class="form-group">
-												<button type="submit" class="btn btn-flat btn-success float-right select-house" data-loading-text="Finding..." id="btnfind">
-													<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;House
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label class="control-label">Floor area: </label>
-												<input type="text" class="form-control margin-bottom floor-area requiredHouse" name="floor_area" id="floor_area" oninput="numbersAndDecimal()" value="<?php echo isset($floor_area) ? $floor_area : 0; ?>" maxlength="25" tabindex="31" readOnly>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-6 col-md-6">
-											<div class="form-group">
-												<label class="control-label">House Price/SQM: </label>
-												<input type="text" class="form-control margin-bottom requiredHouse"  name="h_price_per_sqm_display" id="h_price_per_sqm_display" readonly value="<?php echo isset($house_price_sqm) ? number_format($house_price_sqm, 2) : 0.00; ?>">
-												<input type="hidden" class="form-control margin-bottom h-price-sqm"  name="h_price_per_sqm" id="h_price_per_sqm" oninput="numbersAndDecimal()" value="<?php echo isset($house_price_sqm) ? $house_price_sqm : 0; ?>" maxlength="25" tabindex="32" readOnly>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-6 col-md-5">
-											<div class="form-group">
-												<label class="control-label">House Discount(%): </label>
-												<input type="text" class="form-control margin-bottom house-disc" name="house_disc" id="house_disc" oninput="numbersAndDecimal()" value="<?php echo isset($house_discount) ? $house_discount : 0; ?>" maxlength="3" tabindex="33" readOnly>
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-7">
-											<div class="form-group">
-												<label class="control-label">House Discount Amount: </label>
-												<input type="text" class="form-control margin-bottom " name="house_disc_amt_display" id="house_disc_amt_display" value="<?php echo isset($house_discount_amt) ? number_format($house_discount_amt, 2) : 0; ?>" tabindex="34" readOnly>
-												<input type="text" class="form-control margin-bottom " name="house_disc_amt" id="house_disc_amt" value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>" tabindex="34" readOnly>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label class="control-label">House Contract Price: </label>
-												<input type="text" class="form-control margin-bottom" name="hcp_display" id="hcp_display" readonly value="<?php echo isset($hcp) ? number_format($hcp, 2) : 0.00; ?>">
-												<input type="hidden" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
-											</div>
-										</div>
-									</div>        
-								</div>
-								<div class="space"></div>
-							<div class="main_box">
-								<div class="titles">Add Cost</div>
+						<div class="panel-body form-group form-group-sm">
+							<div class="lot_box">
+								<div class="titles">Lot</div>
 								<hr>
-								<!-- Floor Elevation Section -->
 								<div class="row">
-									<div class="col-md-2 col-sm-3">
+									<div class="col-md-4">
+										<input type="hidden" class="form-control margin-bottom copy-input" name="l_lid" id="l_lid" value="<?php echo isset($lot_id) ? $lot_id : '';  ?>" tabindex="20">
 										<div class="form-group">
-											<label class="control-label">Floor Elevation:</label>
+											<label class="control-label">Phase: </label>
+											<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_site" id="l_site" readonly  value="<?php echo isset($phase) ? $phase : ''; ?>" tabindex="21">
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-6 text-center">
+									<div class="col-md-2">
 										<div class="form-group">
-											<input id="id20" class="radio_add_cost" type="radio" name="chkOption4" value="1" <?php echo (isset($floor_elev)&&$floor_elev == 1) ? 'checked' : ''; ?> disabled/> 0.20 meter
-											<input id="id40" class="radio_add_cost" type="radio" name="chkOption4" value="2" <?php echo (isset($floor_elev)&&$floor_elev == 2) ? 'checked' : ''; ?> disabled/> 0.40 meter
-											<input id="id60" class="radio_add_cost" type="radio" name="chkOption4" value="3" <?php echo (isset($floor_elev)&&$floor_elev == 3) ? 'checked' : ''; ?> disabled/> 0.60 meter
+											<label class="control-label">Block: </label>
+											<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_block" id="l_block" readonly value="<?php echo isset($block) ? $block : ''; ?>" tabindex="22">
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label class="control-label">Lot: </label>
+											<input type="text" class="form-control margin-bottom copy-input requiredRes" name="l_lot" id="l_lot" readonly value="<?php echo isset($lot) ? $lot : ''; ?>" tabindex="23">
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<button type="submit" class="btn btn-flat btn-success float-left select-lot" data-loading-text="Finding..." id="btnfind" disabled>
+												<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;Find Lot
+											</button>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<button type="submit" class="btn btn-flat btn-success float-right select-house" data-loading-text="Finding..." id="btnfind">
+												<i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;House
+											</button>
+										</div>
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label">Lot Area: </label>
+											<input type="text" class="form-control margin-bottom lot-area" name="lot_area" id="lot_area" readonly value="<?php echo isset($lot_area) ? $lot_area : ''; ?>" tabindex="24">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label">Price/SQM: </label>
+											<!-- <input type="text" class="form-control margin-bottom " name="price_per_sqm_display" id="price_per_sqm_display" readonly value="<?php echo isset($price_sqm) ? number_format($price_sqm,2) : ''; ?>" tabindex="25"> -->
+											<input type="text" class="form-control margin-bottom price-sqm" name="price_per_sqm" id="price_per_sqm" readonly value="<?php echo isset($price_sqm) ? $price_sqm : ''; ?>" tabindex="25">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label">Amount: </label>
+												<input type="text" class="form-control margin-bottom" name="amount_display" id="amount_display" readonly value="<?php echo isset($amount) ? number_format($amount,2) : '0.00'; ?>">
+												<input type="hidden" class="form-control margin-bottom l-amount" name="amount" id="amount" readonly value="<?php echo isset($amount) ? $amount : ''; ?>">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="control-label">Discount (%): </label>
+											<input type="text" class="form-control margin-bottom lot-disc" name="lot_disc" id="lot_disc" value="<?php echo isset($lot_discount) ? $lot_discount : 0; ?>" maxlength="3" oninput="numbersAndDecimal()"  tabindex="27" >
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class="form-group">
+											<label class="control-label">Discount Amount: </label>
+												<input type="text" class="form-control margin-bottom lot-disc-amt" name="lot_disc_amt_display" id="lot_disc_amt_display"  value="<?php echo isset($lot_discount_amt) ? number_format($lot_discount_amt,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom " name="lot_disc_amt" id="lot_disc_amt" readonly value="<?php echo isset($lot_discount_amt) ? $lot_discount_amt : 0; ?>">
+										</div>
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label">Lot Contract Price: </label>
+												<input type="text" class="form-control margin-bottom " name="lcp_display" id="lcp_display" readonly value="<?php echo isset($lcp) ? number_format($lcp,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom l-lcp required" name="lcp" id="lcp" readonly value="<?php echo isset($lcp) ? $lcp : 0; ?>">
+												
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="house_box">
+								<div class="titles">House</div>
+								<hr>
+								<div class="row">
+									<input type="hidden" class="form-control margin-bottom copy-input" name="l_house_lid" id="l_house_lid">
+									<div class="col-md-12">		
+										<div class="form-group">
+
+											<label class="control-label">House Model:</label>
+											<select name="house_model" class="form-control" hidden>
+											
+											</select>
+											<select id="house_model" name="house_model" class="form-control">
+											<option value="" disabled <?php echo !isset($house_model) ? "selected" : '' ?>></option>
+											<?php 
+											$qry = $conn->query("SELECT * FROM t_model_house ORDER BY c_acronym ASC");
+											while ($row = $qry->fetch_assoc()):
+											?>
+											<option 
+												value="<?php echo $row['c_model'] ?>" 
+												<?php echo isset($house_model) && $house_model == $row['c_model'] ? 'selected' : '' ?> <?php echo $row['c_model'] == 0? 'disabled' : '' ?>
+											><?php echo $row['c_model'] ?></option>
+											<?php endwhile; ?>
+										</select>
+										</div>
+									</div>
+								</div>
+										
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label">Floor area: </label>
+											<input type="text" class="form-control margin-bottom floor-area requiredHouse" name="floor_area" id="floor_area" oninput="numbersAndDecimal()" value="<?php echo isset($floor_area) ? $floor_area : 0; ?>" maxlength="25" tabindex="31" readOnly>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label">House Price/SQM: </label>
+												<input type="text" class="form-control margin-bottom requiredHouse"  name="h_price_per_sqm_display" id="h_price_per_sqm_display" readonly value="<?php echo isset($house_price_sqm) ? number_format($house_price_sqm,2) : 0.00; ?>">
+												<input type="hidden" class="form-control margin-bottom h-price-sqm"  name="h_price_per_sqm" id="h_price_per_sqm" oninput="numbersAndDecimal()" value="<?php echo isset($house_price_sqm) ? $house_price_sqm : 0; ?>" maxlength="25" tabindex="32" readOnly>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-5">
+										<div class="form-group">
+											<label class="control-label">House Discount(%): </label>
+											<input type="text" class="form-control margin-bottom house-disc" name="house_disc" id="house_disc" oninput="numbersAndDecimal()" value="<?php echo isset($house_discount) ? $house_discount : 0; ?>" maxlength="3" tabindex="33" >
+										</div>
+									</div>
+									<div class="col-md-7">
+										<div class="form-group">
+											<label class="control-label">House Discount Amount: </label>
+											<input type="text" class="form-control margin-bottom house-disc-amt" name="house_disc_amt_display" id="house_disc_amt_display" value="<?php echo isset($house_discount_amt) ? number_format($house_discount_amt,2) : 0; ?>" tabindex="34" >
+											<input type="hidden" class="form-control margin-bottom " name="house_disc_amt" id="house_disc_amt" value="<?php echo isset($house_discount_amt) ? $house_discount_amt : 0; ?>" tabindex="34" readOnly>
+									
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label">House Contract Price: </label>
+												<input type="text" class="form-control margin-bottom " name="hcp_display" id="hcp_display" value="<?php echo isset($hcp) ? number_format($hcp,2) : 0.00; ?>">
+												<input type="hidden" class="form-control margin-bottom house-hcp" name="hcp" id="hcp" value="<?php echo isset($hcp) ? $hcp : 0; ?>">
+										</div>
+									</div>	
+								</div>		
+							</div>
+							<div class="space"></div>
+							<div class="main_box">
+							<div class="titles">Add Cost</div>
+								<hr>
+								<div class="row">
+									<div class="col-md-2">
+										<div class="form-group">
+											<label class="control-label">Floor Elevation: </label>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="form-group">
+											<label class="control-label"></label>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="form-group">
+											<label class="control-label"></label>
+										</div>
+									</div>
+									<div class="col-md-4 text-center">
+										<div class="form-group">
+											<input id="id20" class="radio_add_cost" type="radio" name="chkOption4" value="1" <?php echo (isset($floor_elev)&&$floor_elev == 1) ? 'checked' : ''; ?> disabled/>0.20 meter
+											<input id="id40" class="radio_add_cost" type="radio" name="chkOption4" value="2" <?php echo (isset($floor_elev)&&$floor_elev == 2) ? 'checked' : ''; ?> disabled/>0.40 meter
+											<input id="id60" class="radio_add_cost" type="radio" name="chkOption4" value="3" <?php echo (isset($floor_elev)&&$floor_elev == 3) ? 'checked' : ''; ?> disabled/>0.60 meter
 										</div>
 										<input type="hidden" id="floor_elev" name="floor_elev" value="<?php echo isset($floor_elev) ? $floor_elev : '0'; ?>">
 									</div>
-									<div class="col-md-4 col-sm-6">
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom flrelev-price" id="flrelev_price" name="flrelev_price" oninput="numbersAndDecimal()" value="<?php echo isset($floor_elev_price) ? $floor_elev_price : 0; ?>" tabindex="36" readOnly>
 										</div>
 									</div>
+									
 								</div>
-
-								<!-- Aircon Outlets Section -->
 								<div class="row">
-									<div class="col-md-2 col-sm-3">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label class="control-label">Aircon Outlets:</label>
+											<label class="control-label">Aircon Outlets: </label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
-											<input type="number" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" maxlength="2" tabindex="37" readOnly>
+											<label class="control-label"><input type="number" class="form-control margin-bottom aircon-outlets" id="aircon_outlets" name="aircon_outlets" value="<?php echo isset($aircon_outlets) ? $aircon_outlets : 0; ?>" maxlength="2" tabindex="37" readOnly></label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
 											<label class="control-label">Unit/s</label>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom aircon-outlet-price" id="aircon_outlet_price" name="aircon_outlet_price" oninput="numbersAndDecimal()" value="<?php echo isset($aircon_outlet_price) ? $aircon_outlet_price : 0; ?>" tabindex="38" maxlength="25" readOnly>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom ac-outlet-subtotal" id="ac_outlet_subtotal" name="ac_outlet_subtotal" value="<?php echo isset($ac_outlet_subtotal) ? $ac_outlet_subtotal : 0; ?>" tabindex="39" readonly>
 										</div>
 									</div>
 								</div>
-
-								<!-- Aircon Grill Section -->
 								<div class="row">
-									<div class="col-md-2 col-sm-3">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label class="control-label">Aircon Grill:</label>
+											<label class="control-label">Aircon Grill: </label>
 											<label class="control-label"><i>(for window-type):</i></label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
-											<input type="number" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>" maxlength="2" tabindex="40" readOnly>
+											<label class="control-label"><input type="number" class="form-control margin-bottom ac-grill" id="ac_grill" name="ac_grill" value="<?php echo isset($aircon_grill) ? $aircon_grill : 0; ?>"  maxlength="2" tabindex="40" readOnly></label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
 											<label class="control-label">Unit/s</label>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom ac-grill-price" id="ac_grill_price" name="ac_grill_price" oninput="numbersAndDecimal()" value="<?php echo isset($aircon_grill_price) ? $aircon_grill_price : 0; ?>" tabindex="41" maxlength="25" readOnly>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
-											<input type="text" class="form-control margin-bottom ac-grill-subtotal" id="ac_grill_subtotal" name="ac_grill_subtotal" value="<?php echo isset($ac_grill_subtotal) ? $ac_grill_subtotal : 0; ?>" tabindex="42" readonly>
+											<input type="text" class="form-control margin-bottom ac-grill-subtotal" id="ac_grill_subtotal" name="ac_grill_subtotal"  value="<?php echo isset($ac_grill_subtotal) ? $ac_grill_subtotal : 0; ?>" tabindex="42" readonly>
 										</div>
 									</div>
 								</div>
-
-								<!-- Convenience Outlet Section -->
 								<div class="row">
-									<div class="col-md-2 col-sm-3">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label class="control-label">Convenience Outlet:</label>
+											<label class="control-label">Convenience Outlet: </label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
-											<input type="number" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>" maxlength="2" tabindex="43" readOnly>
+											<label class="control-label"><input type="number" class="form-control margin-bottom conv-outlet" id="conv_outlet" name="conv_outlet" value="<?php echo isset($conv_outlet) ? $conv_outlet : 0; ?>"  maxlength="2" tabindex="43" readOnly></label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
 											<label class="control-label">Unit/s</label>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom conv-outlet-price" id="conv_outlet_price" name="conv_outlet_price" oninput="numbersAndDecimal()" value="<?php echo isset($conv_outlet_price) ? $conv_outlet_price : 0; ?>" tabindex="44" maxlength="25" readOnly>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom conv-outlet-subtotal" id="conv_outlet_subtotal" name="conv_outlet_subtotal" value="<?php echo isset($conv_outlet_subtotal) ? $conv_outlet_subtotal : 0; ?>" tabindex="45" readonly>
 										</div>
 									</div>
 								</div>
-
-								<!-- Other sections (Service Area, Other, Add Cost Total, etc.) should follow the same responsive pattern -->
 								<div class="row">
-									<div class="col-md-2 col-sm-3">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label class="control-label">Other(specify):</label>
+											<label class="control-label">Service Area: </label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
-											<input type="number" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" maxlength="2" tabindex="49" readOnly>
+											<label class="control-label"><input type="number" class="form-control margin-bottom service-area" id="service_area" name="service_area" value="<?php echo isset($service_area) ? $service_area : 0; ?>" maxlength="2" tabindex="46" readOnly></label>
 										</div>
 									</div>
-									<div class="col-md-1 col-sm-2">
+									<div class="col-md-1">
 										<div class="form-group">
 											<label class="control-label">Unit/s</label>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom service-area-price" id="service_area_price" name="service_area_price" oninput="numbersAndDecimal()" value="<?php echo isset($service_area_price) ? $service_area_price : 0; ?>" tabindex="47" maxlength="25" readOnly>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom service-subtotal" id="service_subtotal" name="service_subtotal" value="<?php echo isset($service_subtotal) ? $service_subtotal : 0; ?>" tabindex="48" readonly>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-2">
+										<div class="form-group">
+											<label class="control-label">Other(specify): </label>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="form-group">
+											<label class="control-label"><input type="number" class="form-control margin-bottom others" id="others" name="others" value="<?php echo isset($others) ? $others : 0; ?>" maxlength="2" tabindex="49" readOnly></label>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="form-group">
+											<label class="control-label">Unit/s</label>
+										</div>
+									</div>
+									<div class="col-md-4">
 										<div class="form-group">
 											<input type="text" class="form-control margin-bottom others-price" id="others_price" name="others_price" oninput="numbersAndDecimal()" value="<?php echo isset($others_price) ? $others_price : 0; ?>" tabindex="50" maxlength="25" readOnly>
 										</div>
 									</div>
-									<div class="col-md-4 col-sm-5">
+									<div class="col-md-4">
 										<div class="form-group">
-											<input type="text" class="form-control margin-bottom others-subtotal" id="others_subtotal" name="others_subtotal" value="<?php echo isset($others_subtotal) ? $others_subtotal : 0; ?>" tabindex="51" readonly>
+											<input type="text" class="form-control margin-bottom others-subtotal" id="others_subtotal" name="others_subtotal"  value="<?php echo isset($others_subtotal) ? $others_subtotal : 0; ?>" tabindex="51" readonly>
 										</div>
 									</div>
 								</div>
-
-								<!-- Add Cost Total Section -->
 								<div class="row">
-									<div class="col-md-7">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label class="control-label">Total Add Cost:</label>
+											<label class="control-label"></label>
 										</div>
 									</div>
-									<div class="col-md-5">
+									<div class="col-md-1">
 										<div class="form-group">
-											<input type="text" class="form-control margin-bottom total-add-cost" id="total_add_cost" name="total_add_cost" value="<?php echo isset($total_add_cost) ? $total_add_cost : 0; ?>" tabindex="52" readonly>
+											<label class="control-label"></label>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="form-group">
+											<label class="control-label"></label>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="control-label" style="align-items:right;">Additional Cost/s: </label>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom add-cost-total" id="add_cost_total" name="add_cost_total" value="<?php echo isset($add_cost) ? $add_cost : 0; ?>" tabindex="52" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="space"></div>
+						<div class="main_box">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">Processing Fee:</label>
+										</div>
+									</div>
+									<div class="col-md-3" >
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom process-fee" name="process_fee" id="process_fee" oninput="numbersAndDecimal()" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>" maxlength="25" tabindex="53">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">PF/Month:</label>
+										</div>
+									</div>
+									<div class="col-md-3" >
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom pf-month"  name="pf_month" id="pf_month" oninput="numbersAndDecimal()" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>" maxlength="25" tabindex="54">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">TCP Discount (%):</label>
+										</div>
+									</div>
+									<div class="col-md-3" >
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom tcp-disc" name="tcp_disc" id="tcp_disc" oninput="numbersAndDecimal()" value="<?php echo isset($tcp_discount) ? $tcp_discount : 0; ?>" maxlength="25" tabindex="55">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">TCP Disc. Amount:</label>
+										</div>
+									</div>
+									<div class="col-md-3" >
+										<div class="form-group">
+												<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt_display" id="tcp_disc_amt_display"  value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom " name="tcp_disc_amt" id="tcp_disc_amt" readonly value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">Total Contract Price:</label>
+										</div>
+									</div>
+									<div class="col-md-9">
+										<div class="form-group">
+												<input type="text" class="form-control margin-bottom " name="total_tcp_display" id="total_tcp_display" readonly value="<?php echo isset($tcp) ? number_format($tcp,2) : 0; ?>">
+												<input type="hidden" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
+
+											<input type="hidden" name="invoice_discount" id="invoice_discount">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">VAT (%):</label>
+										</div>
+									</div>
+									<div class="col-md-3" >
+										<div class="form-group">
+										<input type="text" class="form-control margin-bottom vat-percent" value="<?php echo isset($vat_percent) ? $vat_percent : 0; ?>" name="vat_percent" id="vat_percent" oninput="numbersAndDecimal()" tabindex="58" maxlength="3">
+										</div> 
+									</div> 
+									<div class="col-md-2">
+										<div class="form-group">
+											<label class="control-label">VAT Amount:</label>
+										</div>
+									</div>
+									<div class="col-md-4" >
+										<div class="form-group">
+											<input type="text" class="form-control margin-bottom vat-amt-computed"  value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex = '39'>
+											<input type="hidden" class="form-control margin-bottom " readonly value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex = '39'>
+										</div> 
+									</div> 
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">NET Total Contract Price:</label>
+										</div>
+									</div>
+									<div class="col-md-9">
+											<input type="text" class="form-control margin-bottom "  value="<?php echo isset($net_tcp) ? number_format($net_tcp,2) : 0; ?>" name="net_tcp_display" readonly id="net_tcp_display" >
+											<input type="hidden" class="form-control margin-bottom net-tcp"  value="<?php echo isset($net_tcp) ? $net_tcp : 0; ?>" name="net_tcp" readonly id="net_tcp" >
+										<input type="hidden" name="total_net_tcp" id="total_net_tcp">
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>		
+			</div>
+		</div>
+		<div id="Payment" class="tabcontent">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="titles"><center>Payment Computation</center></div>
+						</div>
+						<div class="panel-body form-group form-group-sm">
+							<div class="main_box">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label">Total Selling Price:</label>
+												<input type="text" class="form-control margin-bottom required " name="net_tcp1_display" id="net_tcp1_display" value="<?php echo isset($net_tcp1) ? number_format($net_tcp1,2) : 0; ?>" tabindex = "1" >
+												<input type="hidden" class="form-control margin-bottom required net-tcp-1" name="net_tcp1" id="net_tcp1" value="<?php echo isset($net_tcp1) ? $net_tcp1 : 0; ?>" tabindex = "1" >
+										</div>
+									</div>
+									<div class="col-md-6">	
+										<div class="form-group">
+											<label class="control-label">Reservation:<div class="asterisk">*</div></label>
+												<input type="text" class="form-control margin-bottom requiredRes required" name="reservation_display" id="reservation_display" value="<?php echo isset($reservation) ? number_format($reservation,2) : 0; ?>" tabindex ="1" required>
+												<input type="hidden" class="form-control margin-bottom reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" required>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="space"></div>
-							<div class="main_box">
-								<!-- Processing Fee Section -->
-								<div class="row">
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">Processing Fee:</label>
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom process-fee" name="process_fee" id="process_fee" oninput="numbersAndDecimal()" value="<?php echo isset($process_fee) ? $process_fee : 0; ?>" maxlength="25" tabindex="53">
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">PF/Month:</label>
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom pf-month" name="pf_month" id="pf_month" oninput="numbersAndDecimal()" value="<?php echo isset($pf_month) ? $pf_month : 0; ?>" maxlength="25" tabindex="54">
-										</div>
-									</div>
-								</div>
-
-								<!-- TCP Discount Section -->
-								<div class="row">
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">TCP Discount</label>
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom tcp-disc" name="tcp_disc" id="tcp_disc" oninput="numbersAndDecimal()" value="<?php echo isset($tcp_discount) ? $tcp_discount : 0; ?>" maxlength="25" tabindex="55">
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">TCP Disc. Amount:</label>
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom " name="tcp_disc_amt_display" id="tcp_disc_amt_display" value="<?php echo isset($tcp_discount_amt) ? number_format($tcp_discount_amt,2) : 0; ?>">
-											<input type="text" class="form-control margin-bottom tcp-disc-amt" name="tcp_disc_amt" id="tcp_disc_amt" value="<?php echo isset($tcp_discount_amt) ? $tcp_discount_amt : 0; ?>">
-										</div>
-									</div>
-								</div>
-
-								<!-- Total Contract Price Section -->
-								<div class="row">
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">Total Contract Price:</label>
-										</div>
-									</div>
-									<div class="col-md-9 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom" name="total_tcp_display" id="total_tcp_display" readonly value="<?php echo isset($tcp) ? number_format($tcp,2) : 0; ?>">
-											<input type="hidden" class="form-control margin-bottom total-tcp" name="total_tcp" id="total_tcp" readonly value="<?php echo isset($tcp) ? $tcp : 0; ?>">
-											<input type="hidden" name="invoice_discount" id="invoice_discount">
-										</div>
-									</div>
-								</div>
-
-								<!-- VAT Section -->
-								<div class="row">
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">VAT:</label>
-										</div>
-									</div>
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom vat-percent" value="<?php echo isset($vat_percent) ? $vat_percent : 0; ?>" name="vat_percent" id="vat_percent" oninput="numbersAndDecimal()" tabindex="58" maxlength="3">
-										</div>
-									</div>
-									<div class="col-md-2 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">VAT Amount:</label>
-										</div>
-									</div>
-									<div class="col-md-4 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<input type="text" class="form-control margin-bottom " value="<?php echo isset($vat_amt_computed) ? number_format($vat_amt_computed,2) : 0; ?>" name="vat_amt_computed_display" id="vat_amt_computed_display" tabindex="39">
-											<input type="text" class="form-control margin-bottom vat-amt-computed" value="<?php echo isset($vat_amt_computed) ? $vat_amt_computed : 0; ?>" name="vat_amt_computed" id="vat_amt_computed" tabindex="39">
-										</div>
-									</div>
-								</div>
-
-								<!-- Net Total Contract Price Section -->
-								<div class="row">
-									<div class="col-md-3 col-sm-6 col-xs-12">
-										<div class="form-group">
-											<label class="control-label">NET Total Contract Price:</label>
-										</div>
-									</div>
-									<div class="col-md-9 col-sm-6 col-xs-12">
-										<input type="text" class="form-control margin-bottom" value="<?php echo isset($net_tcp) ? number_format($net_tcp,2) : 0; ?>" name="net_tcp_display" readonly id="net_tcp_display">
-										<input type="hidden" class="form-control margin-bottom net-tcp" value="<?php echo isset($net_tcp) ? $net_tcp : 0; ?>" name="net_tcp" readonly id="net_tcp">
-										<input type="hidden" name="total_net_tcp" id="total_net_tcp">
-									</div>
-								</div>
+							<div class="payment_box">
+								<div class="col-md-12"  id = "pay_type1">	
+									<label class="control-label">Payment Type 1: </label>
+									<div class="form-group">
+									<style>
+										select:invalid { color: gray; }
+									</style>
+									<select name="payment_type1" id="payment_type1" class="form-control required payment-type1" tabindex = "63">
+										<option name="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?>>Partial DownPayment</option>
+										<option name="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?>>Full DownPayment</option>
+										<option name="payment_type1" value="No DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "No DownPayment" ? 'selected' : '' ?>>No DownPayment</option>
+										<option name="payment_type1" value="Spot Cash" <?php echo isset($payment_type1) && $payment_type1 == "Spot Cash" ? 'selected' : '' ?>>Spot Cash</option>
+									</select>	
+								</div>	
 							</div>
-
-						</div>
-					</div>		
-				</div>
-			</div>
-			<div id="Payment" class="tabcontent">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="titles"><center>Payment Computation</center></div>
 							</div>
-							<div class="panel-body form-group form-group-sm">
-								<div class="main_box">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="control-label">Total Selling Price:</label>
-													<input type="text" class="form-control margin-bottom required " name="net_tcp1_display" id="net_tcp1_display" value="<?php echo isset($net_tcp1) ? number_format($net_tcp1,2) : 0; ?>" tabindex = "1" >
-													<input type="hidden" class="form-control margin-bottom required net-tcp-1" name="net_tcp1" id="net_tcp1" value="<?php echo isset($net_tcp1) ? $net_tcp1 : 0; ?>" tabindex = "1" >
-											</div>
-										</div>
-										<div class="col-md-6">	
-											<div class="form-group">
-												<label class="control-label">Reservation:<div class="asterisk">*</div></label>
-													<input type="text" class="form-control margin-bottom requiredRes required" name="reservation_display" id="reservation_display" value="<?php echo isset($reservation) ? number_format($reservation,2) : 0; ?>" tabindex ="1" required>
-													<input type="hidden" class="form-control margin-bottom reservation-fee" name="reservation" id="reservation" value="<?php echo isset($reservation) ? $reservation : 0; ?>" tabindex ="1" required>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="space"></div>
-								<div class="payment_box">
-									<div class="col-md-12"  id = "pay_type1">	
-										<label class="control-label">Payment Type 1: </label>
-										<div class="form-group">
+							<div class="payment_box2">
+								<div class="col-md-12 " id= "pay_type2">
+									<label class="control-label">Payment Type 2:</label>
+									<div class="form-group">
 										<style>
 											select:invalid { color: gray; }
 										</style>
-										<select name="payment_type1" id="payment_type1" class="form-control required payment-type1" tabindex = "63">
-											<option name="payment_type1" value="Partial DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Partial DownPayment" ? 'selected' : '' ?>>Partial DownPayment</option>
-											<option name="payment_type1" value="Full DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "Full DownPayment" ? 'selected' : '' ?>>Full DownPayment</option>
-											<option name="payment_type1" value="No DownPayment" <?php echo isset($payment_type1) && $payment_type1 == "No DownPayment" ? 'selected' : '' ?>>No DownPayment</option>
-											<option name="payment_type1" value="Spot Cash" <?php echo isset($payment_type1) && $payment_type1 == "Spot Cash" ? 'selected' : '' ?>>Spot Cash</option>
+										<select name="payment_type2" id="payment_type2" class="form-control required payment-type2" tabindex = "64" disabled>
+											
+											<option name="payment_type2" value="None" <?php echo isset($payment_type2) && trim($payment_type2) === "None" ? 'selected' : '' ?>>None</option>
+											<option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && trim($payment_type2) === "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
+											<option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && trim($payment_type2) === "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
+											
 										</select>	
-									</div>	
-								</div>
-								</div>
-								<div class="payment_box2">
-									<div class="col-md-12 " id= "pay_type2">
-										<label class="control-label">Payment Type 2:</label>
-										<div class="form-group">
-											<style>
-												select:invalid { color: gray; }
-											</style>
-											<select name="payment_type2" id="payment_type2" class="form-control required payment-type2" tabindex = "64" disabled>
-												
-												<option name="payment_type2" value="None" <?php echo isset($payment_type2) && trim($payment_type2) === "None" ? 'selected' : '' ?>>None</option>
-												<option name="payment_type2" value="Deferred Cash Payment" <?php echo isset($payment_type2) && trim($payment_type2) === "Deferred Cash Payment" ? 'selected' : '' ?>>Deferred Cash Payment</option>
-												<option name="payment_type2" value="Monthly Amortization" <?php echo isset($payment_type2) && trim($payment_type2) === "Monthly Amortization" ? 'selected' : '' ?>>Monthly Amortization</option>
-												
-											</select>	
-										</div>
-									</div>
-								</div>
-								<div class="space"></div>
-								<div class="payment_box" id="p1">
-									<div class="col-md-12">
-										<div class="form-group down-frm" id= "down_frm" >
-											<label class="control-label">Down %: </label>
-											<input type="text" class="form-control margin-bottom down-percent requiredPayment" name="down_percent" id="down_percent" oninput="numbersAndDecimal()" value="<?php echo isset($down_percent) ? $down_percent : 0; ?>" maxlength="3">
-											<label class="control-label">Net DP: </label>
-											<input type="text" class="form-control margin-bottom " name="net_dp_display" id="net_dp_display" value="<?php echo isset($net_dp) ? number_format($net_dp,2) : 0; ?>" readonly>
-											<input type="hidden" class="form-control margin-bottom net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
-											<label class="control-label" id= "no_pay_text"># Payments : </label>
-											<input type="text" class="form-control margin-bottom no-payment requiredPDandDC" name="no_payment" id="no_payment" oninput="numbersAndDecimal()" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "3">
-											<label class="control-label" id = "mo_down_text">Monthly Down: </label>
-											<input type="text" class="form-control margin-bottom required" name="monthly_down_display" id="monthly_down_display" readonly value="<?php echo isset($monthly_down) ? number_format($monthly_down,2) : 0; ?>"  >
-												
-											<input type="hidden" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
-											<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
-											<?php
-											
-											$first_dp_date = isset($first_dp) && strtotime($first_dp) ? date('Y-m-d', strtotime($first_dp)) : date('Y-m-d');
-											$full_down_date = isset($full_down) && strtotime($full_down) ? date('Y-m-d', strtotime($full_down)) : date('Y-m-d');
-											
-											?>
-											<input type="date" class="form-control first-dp-date" name="first_dp_date" id="first_dp_date" value="<?php echo htmlspecialchars($first_dp_date); ?>">	
-											<label class="control-label">Full Down: </label>
-											<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo htmlspecialchars($full_down_date) ; ?>">
-												
-											
-										</div>
-									</div>
-								</div>		
-								<div class="payment_box2" id="p2">	
-									<div class="col-md-12">
-										<label class="control-label" id='loan_text'>Amount to be Financed:</label>
-											<input type="text" class="form-control margin-bottom required " name="amt_to_be_financed_display" id="amt_to_be_financed_display" readonly value="<?php echo isset($amt_financed) ? number_format($amt_financed,2) : 0; ?>">
-											<input type="hidden" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_financed) ? $amt_financed : 0; ?>">
-										
-										<div class="form-group monthly-frm" id = "monthly_frm">
-											<label class="control-label">Terms: </label>
-											<input type="text" class="form-control margin-bottom required terms-count requiredPayment" name="terms" id="terms" oninput="numbersAndDecimal()" value="<?php echo isset($terms) ? $terms : 1; ?>" maxlength="3">
-											<label class="control-label" id='rate_text'>Interest Rate: </label>
-											<input type="text" class="form-control margin-bottom required interest-rate requiredNoDP" name="interest_rate" id="interest_rate" oninput="numbersAndDecimal()" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>" maxlength="3">
-											<label class="control-label" id='factor_text' >Fixed Factor: </label>
-											<input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>" readOnly>
-											<label class="control-label">Monthly Payment: </label>
-												<input type="text" class="form-control margin-bottom required " name="monthly_amortization_display" id="monthly_amortization_display" readonly value="<?php echo isset($monthly_payment) ? number_format($monthly_payment,2) : 0; ?>">	
-												<input type="hidden" class="form-control margin-bottom required monthly-amor requiredMonthly" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?>">	
-										</div>
-										<label class="control-label" id= "start_text">Start Date: </label>	
-										<?php $start_date = isset($start_date) && strtotime($start_date) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d');
-										?>
-										<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo htmlspecialchars($start_date); ?>">
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="Agents and Commission" class="tabcontent">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="panel panel-default">
-								<div class="panel-heading">
-								<div class="titles"><center>Agent and Commission</center></div>
-									<div class="clear"></div>
-								</div>
-							<div class="panel-body form-group form-group-sm">
-								<table class="table3 table-bordered table-hover table-striped responsive-table" id="comm_table" style="width:100%;">
-									<thead>
-										<tr>
-											<th width="50">
-												<a href="#" class="btn btn-flat btn-primary btn-md add-row" style="font-size:14px;margin-left:5px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
-											</th>
-											<th width="500">
-												<label class="control-label">&nbsp;Agents</label>
-											</th>
-											<th  width="90">
-											<label class="control-label">&nbsp;Position</label>
-											</th>
-											<th width="90">
-												<label class="control-label">&nbsp;Code</label>
-											</th>
-											<th width="150" style="display:none;">
-												<label class="control-label">&nbsp;Rate</label>
-											</th>
-											<th width="200" style="display:none;">
-												<label class="control-label">&nbsp;Amount</label>
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php 
-										if(isset($_GET['id']) && $_GET['id'] > 0){
-										$qry = $conn->query("SELECT * FROM t_csr_commission WHERE md5(c_csr_no) ='{$_GET['id']}'");
-										while($rows = $qry->fetch_assoc()):
-											$agent_name = $rows['c_agent'];
-											$position = $rows['c_position'];
-											$code = $rows['c_code'];
-											$rate = $rows['c_rate'];
-											$comm_amt = $rows['c_amount'];
-										?>
-										<tr>
-											<td>
-												<a href="#" class="btn btn-danger delete-row" style="font-size:14px;"><span class="fa fa-times" ></span></a>
-											</td>
-											<td style="padding-top:10px;">
-												<div class="form-group form-group-sm">
-													<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
-													<p class="item-select"><a href="#" class="btn btn-flat btn-md bg-maroon" style="font-size:14px;"><span class="fa fa-search" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Agent</a></p>
-												</div>
-											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
-											</td>
-											<td style="padding-top:10px;">
-													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
-											</td>
-											<td style="padding-top:10px;display:none;"><!-- display:none; -->
-													<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
-											</td>
-											<td style="padding-top:10px;display:none;"><!-- display:none; -->
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" readonly>
-											</td>
-										</tr>
-										<?php endwhile; 
+							<div class="space"></div>
+							<div class="payment_box" id="p1">
+								<div class="col-md-12">
+									<div class="form-group down-frm" id= "down_frm" >
+										<label class="control-label">Down %: </label>
+										<input type="text" class="form-control margin-bottom down-percent requiredPayment" name="down_percent" id="down_percent" oninput="numbersAndDecimal()" value="<?php echo isset($down_percent) ? $down_percent : 0; ?>" maxlength="3">
+										<label class="control-label">Net DP: </label>
+										<input type="text" class="form-control margin-bottom " name="net_dp_display" id="net_dp_display" value="<?php echo isset($net_dp) ? number_format($net_dp,2) : 0; ?>" readonly>
+										<input type="hidden" class="form-control margin-bottom net-dp" name="net_dp" id="net_dp" value="<?php echo isset($net_dp) ? $net_dp : 0; ?>" readonly>
+										<label class="control-label" id= "no_pay_text"># Payments : </label>
+										<input type="text" class="form-control margin-bottom no-payment requiredPDandDC" name="no_payment" id="no_payment" oninput="numbersAndDecimal()" value="<?php echo isset($no_payments) ? $no_payments : 0; ?>" maxlength= "3">
+										<label class="control-label" id = "mo_down_text">Monthly Down: </label>
+										<input type="text" class="form-control margin-bottom required" name="monthly_down_display" id="monthly_down_display" readonly value="<?php echo isset($monthly_down) ? number_format($monthly_down,2) : 0; ?>"  >
+											
+										<input type="hidden" class="form-control margin-bottom required monthly-down" name="monthly_down" value="<?php echo isset($monthly_down) ? $monthly_down : 0; ?>" id="monthly_down" >
+										<label class="control-label" name = "first_dp" id ="first_dp">First DP: </label>
+										<?php
 										
-										}else{ ?>
-											<tr><td>
-												<a href="#" class="btn btn-flat btn-danger delete-row" style="font-size:14px;margin-left:5px;"><span class="fa fa-times" ></span></a>
-											</td>
-											<td style="padding-top:10px;">
-												<div class="form-group form-group-sm no-margin-bottom">
-													<input type="text" style="width:60%" class="form-control form-group-sm item-input requiredRes agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
-													<p class="item-select" style="margin-top:5px;"> <a href="#"  class="btn btn-flat btn-md bg-maroon" style="font-size:14px;"><span class="fa fa-search" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Agent</a></p>
+										$first_dp_date = isset($first_dp) && strtotime($first_dp) ? date('Y-m-d', strtotime($first_dp)) : date('Y-m-d');
+										$full_down_date = isset($full_down) && strtotime($full_down) ? date('Y-m-d', strtotime($full_down)) : date('Y-m-d');
+										
+										?>
+										<input type="date" class="form-control first-dp-date" name="first_dp_date" id="first_dp_date" value="<?php echo htmlspecialchars($first_dp_date); ?>">	
+										<label class="control-label">Full Down: </label>
+										<input type="date" class="form-control full-down-date" name="full_down_date" id = "full_down_date" value="<?php echo htmlspecialchars($full_down_date) ; ?>">
+											
+										
+									</div>
+								</div>
+							</div>		
+							<div class="payment_box2" id="p2">	
+								<div class="col-md-12">
+									<label class="control-label" id='loan_text'>Amount to be Financed:</label>
+										<input type="text" class="form-control margin-bottom required " name="amt_to_be_financed_display" id="amt_to_be_financed_display" readonly value="<?php echo isset($amt_financed) ? number_format($amt_financed,2) : 0; ?>">
+										<input type="hidden" class="form-control margin-bottom required amt-to-be-financed" name="amt_to_be_financed" id="amt_to_be_financed" value="<?php echo isset($amt_financed) ? $amt_financed : 0; ?>">
 									
-												</div>
-											</td>
-											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" required readonly>
-												</div>
-											</td>
-											<td>
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													
-													<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" required readonly>
-												</div>
-											</td>
-											<td style="display:none;">
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
-												</div>
-											</td>
-											<td style="display:none;">
-												<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
-													<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1" readonly>
-												</div>
-											</td>
-										</tr>
-										<?php }
-										?>
-									</tbody>
-								</table>
-								<hr>
-								<div class="space"></div>
-									<div class="main_box">
-										<div class="row">
-											<div class="col-md-12">
-												<label class="control-label">Additional Notes: </label>
-												<div class="input-group form-group-sm textarea no-margin-bottom">
-													<textarea class="form-control" name="invoice_notes" id="invoice_notes"></textarea>
-												</div>	
+									<div class="form-group monthly-frm" id = "monthly_frm">
+										<label class="control-label">Terms: </label>
+										<input type="text" class="form-control margin-bottom required terms-count requiredPayment" name="terms" id="terms" oninput="numbersAndDecimal()" value="<?php echo isset($terms) ? $terms : 1; ?>" maxlength="3">
+										<label class="control-label" id='rate_text'>Interest Rate: </label>
+										<input type="text" class="form-control margin-bottom required interest-rate requiredNoDP" name="interest_rate" id="interest_rate" oninput="numbersAndDecimal()" value="<?php echo isset($interest_rate) ? $interest_rate : 0; ?>" maxlength="3">
+										<label class="control-label" id='factor_text' >Fixed Factor: </label>
+										<input type="text" class="form-control margin-bottom required fixed-factor" name="fixed_factor" id="fixed_factor" value="<?php echo isset($fixed_factor) ? $fixed_factor : 0; ?>" readOnly>
+										<label class="control-label">Monthly Payment: </label>
+											<input type="text" class="form-control margin-bottom required " name="monthly_amortization_display" id="monthly_amortization_display" readonly value="<?php echo isset($monthly_payment) ? number_format($monthly_payment,2) : 0; ?>">	
+											<input type="hidden" class="form-control margin-bottom required monthly-amor requiredMonthly" name="monthly_amortization" id="monthly_amortization" value="<?php echo isset($monthly_payment) ? $monthly_payment : 0; ?>">	
+									</div>
+									<label class="control-label" id= "start_text">Start Date: </label>	
+									<?php $start_date = isset($start_date) && strtotime($start_date) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d');
+									?>
+									<input type="date" class="form-control required mo-start-date" name="start_date" id = "start_date" value="<?php echo htmlspecialchars($start_date); ?>">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="Agents and Commission" class="tabcontent">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+							<div class="panel-heading">
+							<div class="titles"><center>Agent and Commission</center></div>
+								<div class="clear"></div>
+							</div>
+						<div class="panel-body form-group form-group-sm">
+							<table class="table3 table-bordered table-hover table-striped responsive-table" id="comm_table" style="width:100%;">
+								<thead>
+									<tr>
+										<th width="50">
+											<a href="#" class="btn btn-flat btn-primary btn-md add-row" style="font-size:14px;margin-left:5px;"><span class="fa fa-plus" aria-hidden="true"></span></a>
+										</th>
+										<th width="500">
+											<label class="control-label">&nbsp;Agents</label>
+										</th>
+										<th  width="90">
+										<label class="control-label">&nbsp;Position</label>
+										</th>
+										<th width="90">
+											<label class="control-label">&nbsp;Code</label>
+										</th>
+										<th width="150" style="display:none;">
+											<label class="control-label">&nbsp;Rate</label>
+										</th>
+										<th width="200" style="display:none;">
+											<label class="control-label">&nbsp;Amount</label>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php 
+									if(isset($_GET['id']) && $_GET['id'] > 0){
+									$qry = $conn->query("SELECT * FROM t_csr_commission WHERE md5(c_csr_no) ='{$_GET['id']}'");
+									while($rows = $qry->fetch_assoc()):
+										$agent_name = $rows['c_agent'];
+										$position = $rows['c_position'];
+										$code = $rows['c_code'];
+										$rate = $rows['c_rate'];
+										$comm_amt = $rows['c_amount'];
+									?>
+									<tr>
+										<td>
+											<a href="#" class="btn btn-danger delete-row" style="font-size:14px;"><span class="fa fa-times" ></span></a>
+										</td>
+										<td style="padding-top:10px;">
+											<div class="form-group form-group-sm">
+												<input type="text" style="width:60%" class="form-control form-group-sm item-input agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
+												<p class="item-select"><a href="#" class="btn btn-flat btn-md bg-maroon" style="font-size:14px;"><span class="fa fa-search" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Agent</a></p>
 											</div>
+										</td>
+										<td style="padding-top:10px;">
+												<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" readonly>
+										</td>
+										<td style="padding-top:10px;">
+												<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" readonly>
+										</td>
+										<td style="padding-top:10px;display:none;"><!-- display:none; -->
+												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
+										</td>
+										<td style="padding-top:10px;display:none;"><!-- display:none; -->
+												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" readonly>
+										</td>
+									</tr>
+									<?php endwhile; 
+									
+									}else{ ?>
+										<tr><td>
+											<a href="#" class="btn btn-flat btn-danger delete-row" style="font-size:14px;margin-left:5px;"><span class="fa fa-times" ></span></a>
+										</td>
+										<td style="padding-top:10px;">
+											<div class="form-group form-group-sm no-margin-bottom">
+												<input type="text" style="width:60%" class="form-control form-group-sm item-input requiredRes agent-name" name="agent_name[]" value="<?php echo isset($agent_name) ? $agent_name : ''; ?>">
+												<p class="item-select" style="margin-top:5px;"> <a href="#"  class="btn btn-flat btn-md bg-maroon" style="font-size:14px;"><span class="fa fa-search" aria-hidden="true"></span>&nbsp;&nbsp;Select Existing Agent</a></p>
+								
+											</div>
+										</td>
+										<td>
+											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
+												<input type="text" class="form-control agent-pos" name="agent_position[]" value="<?php echo isset($position) ? $position : ''; ?>" required readonly>
+											</div>
+										</td>
+										<td>
+											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
+												
+												<input type="text" class="form-control agent-code" name="agent_code[]" value="<?php echo isset($code) ? $code : ''; ?>" aria-describedby="sizing-addon1" required readonly>
+											</div>
+										</td>
+										<td style="display:none;">
+											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
+												<input type="text" class="form-control calculate agent-rate" name="agent_rate[]" value="<?php echo isset($rate) ? $rate : 0; ?>" readonly>
+											</div>
+										</td>
+										<td style="display:none;">
+											<div class="form-group form-group-sm" style="padding-top:10px;margin-top:-35px;">
+												<input type="text" class="form-control comm-amt" name="comm_amt[]" value="<?php echo isset($comm_amt) ? $comm_amt : 0; ?>" aria-describedby="sizing-addon1" readonly>
+											</div>
+										</td>
+									</tr>
+									<?php }
+									?>
+								</tbody>
+							</table>
+							<hr>
+							<div class="space"></div>
+								<div class="main_box">
+									<div class="row">
+										<div class="col-md-12">
+											<label class="control-label">Additional Notes: </label>
+											<div class="input-group form-group-sm textarea no-margin-bottom">
+												<textarea class="form-control" name="invoice_notes" id="invoice_notes"></textarea>
+											</div>	
 										</div>
 									</div>
 								</div>
@@ -1457,7 +1428,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					</div>
 				</div>
 			</div>
-		</form>
+		</div>
+	</form>
 	</div>	<!-- /.card-body -->
 	<div class="card-footer">
 		<table style="width:100%;">
@@ -1605,7 +1577,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	</div>
 </div>
 </body>
-
+<script>
+$(".add-buyer-row").click(function(e) {
+    e.preventDefault();
+     var clonedRow = $('#buyer_table tr:last').clone();
+     clonedRow.find('input').val('');
+     clonedRow.find('.buyer-bday').on('change', function() {
+    calculateAgeAndSetError($(this), $(this).closest('tr').find("#age"));
+    });
+    $('#buyer_table tbody').append(clonedRow);
+ });
+</script>
 <script>
     var radioButtons = document.querySelectorAll('.radio_add_cost');
     var floorElevTextbox = document.getElementById('floor_elev');
@@ -1647,7 +1629,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 });
 $(document).ready(function(){
-	
 	$('.table').dataTable();
 	$('.table2').dataTable();
 	const today = new Date();

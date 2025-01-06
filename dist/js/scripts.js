@@ -579,6 +579,63 @@ function updateTotals(elem) {
 		
 	});
 
+	$(document).on('change', ".lot-disc-amt", function(e) {
+		e.preventDefault();
+		var l_sqm = $('.price-sqm').val();
+		var l_area = $('.lot-area').val();
+		var l_total_amt = l_sqm*l_area;
+		let l_lot_disc_amt = parseFloat($('.lot-disc-amt').val().replace(/,/g, '')) || 0;
+		var l_per_disc = parseFloat((l_lot_disc_amt / l_total_amt) * 100);
+		$('#lot_disc').val(l_per_disc);
+
+		compute_lot();
+		
+		
+	});
+
+	$(document).on('change', ".house-disc-amt", function(e) {
+		e.preventDefault();
+		var l_hcp= parseFloat($('.house-hcp').val());
+		let l_house_disc_amt= parseFloat($('.house-disc-amt').val().replace(/,/g, '')) || 0;
+		var l_h_disc_perc = (l_hcp === 0) ? 0 : parseFloat((l_house_disc_amt / l_hcp ) * 100);
+		
+
+		$('#house_disc').val(l_h_disc_perc);
+	
+		compute_house_v2();
+		
+		
+	});
+
+	$(document).on('change', ".tcp-disc-amt", function(e) {
+		e.preventDefault();
+		var tcp_l_lcp = $('.l-lcp').val();		
+		var tcp_h_hcp = $('.house-hcp').val();
+		let tcp_disc_amt = parseFloat($('.tcp-disc-amt').val().replace(/,/g, '')) || 0;;
+		var tcp_sum = parseFloat(tcp_l_lcp) + parseFloat(tcp_h_hcp);
+	
+		var tcp_disc = parseFloat((tcp_disc_amt / tcp_sum) * 100) ;
+		$('#tcp_disc').val(tcp_disc);
+
+		compute_net_tcp();
+		//compute_house();
+		
+	});
+
+	$(document).on('change', ".vat-amt-computed", function(e) {
+		e.preventDefault();
+		let vat_amt = parseFloat($('.vat-amt-computed').val().replace(/,/g, '')) || 0;;
+		var total_tcp = $('.total-tcp').val();		
+		var vat_perc = parseFloat((vat_amt / total_tcp) * 100);
+
+		$('#vat_percent').val(vat_perc);
+		compute_net_tcp();
+
+		
+	});
+
+
+
     $(document).on('change', ".l-lcp", function(e) {
 		e.preventDefault();
 		compute_net_tcp();
@@ -602,6 +659,8 @@ function updateTotals(elem) {
 		compute_house_v2();
 		
 	});
+
+	
 
 	$(document).on('keyup', ".floor-area", function(e) {
 		e.preventDefault();
@@ -1020,7 +1079,7 @@ function updateTotals(elem) {
 		var l_h_disc_percent = $('.house-disc').val();
 		var l_h_price_sqm = (l_f_area === 0) ? 0 : parseFloat(l_hcp / l_f_area);
 		
-		let l_h_discount_amt = l_hcp*(l_h_disc_percent*0.01);      
+		let l_h_discount_amt = l_hcp*(l_h_disc_percent*0.01);
 		let l_final_hcp = parseFloat(l_hcp)-parseFloat(l_h_discount_amt);
 
 		$('#house_disc_amt').val(l_h_discount_amt.toFixed(2));
