@@ -104,6 +104,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 	.table{
 		font-size: 12px!important;
 	}
+	.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap; 
+	}
+	#data-table {
+		min-width: 1200px; 
+		width: auto; 
+	}
 </style>
 
 <script>
@@ -227,7 +236,7 @@ $(document).ready(function() {
 	$level = 3;
 ?>
 <body onload="calculate()">
-<div class="card card-outline card-info">
+<div class="card-outline card-info">
 	<div class="card-header">
 		<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order": "New Purchase Order" ?></b></i></h5>
 	</div>
@@ -332,8 +341,9 @@ $(document).ready(function() {
 			
 			<div class="row">
 				<div class="col-md-12">
+				<div class="table-responsive" style="overflow-x: auto;">
 				
-					<table class="table table-striped table-bordered" id="item-list">
+					<table class="table table-striped table-bordered" id="item-list" style="text-align: center; width: 100%; min-width: 1000px;">
 						<colgroup>
 							<col width="5%">
 							<col width="10%">
@@ -425,19 +435,19 @@ $(document).ready(function() {
 								<div class="caption" style="font-size:12px;font-weight:bold;font-style:italic;height:auto;">The checkbox is for viewing the computation in case an item was removed. Changes won't be saved. For item updates, use the Note Area/Remarks and set the status to 'For Review' for the Purchasing Officer's action.</div>
 									<table class="table-bordered">
 										<tr style="padding-left:150px;align-items: center;text-align: center;">
-											<td>
+											<td style="position:relative;">
 												<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()"/>
 												<label for="nonVatRadio">Non-VAT</label>
 											</td>
-											<td>
+											<td style="position:relative;">
 												<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()"/>
 												<label for="zeroRatedRadio">Zero-Rated</label>
 											</td>
-											<td>
+											<td style="position:relative;">
 												<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()"/>
 												<label for="inclusiveRadio">Inclusive</label>
 											</td>
-											<td>
+											<td style="position:relative;">
 												<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()"/>
 												<label for="exclusiveRadio">Exclusive</label>
 											</td>
@@ -450,6 +460,7 @@ $(document).ready(function() {
 							</tr>
 						</tfoot>
 					</table>
+					</div>
 					<br>
 					<input type="hidden" name="usertype" id="usertype" value="<?php echo $usertype; ?>">
 					<div class="row">

@@ -16,6 +16,30 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     body{
         font-size:14px;
     }
+    @media (min-width: 768px) {
+        #uni_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 140px;
+        }
+    }
+    @media (min-width: 820px) {
+        #uni_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 160px;
+        }
+    }
+    @media (min-width: 1024px) {
+        #uni_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+        }
+    }
 </style>
 <div class="container fluid">
     <callout class="callout-primary">

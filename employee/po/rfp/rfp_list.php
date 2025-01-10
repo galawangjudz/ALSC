@@ -59,7 +59,7 @@ $columnName;
 		width: auto;
 	}
 </style>
-<div class="card card-outline card-primary">
+<div class="card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>Request for Payment List</b></i></h3>
 		<table>
@@ -75,8 +75,8 @@ $columnName;
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-        <div class="container-fluid">
-			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+        <div class="table-responsive" style="overflow-x: auto;">
+			<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 				<!-- <colgroup>
 					<col width="5%">
 					<col width="8%">
