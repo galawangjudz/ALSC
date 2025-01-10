@@ -55,4 +55,5 @@
     <script src="<?php echo base_url ?>dist/js/common.js"></script>
     <script src="<?php echo base_url ?>dist/js/TimeCircles.js"></script>
     <link rel="stylesheet" href="<?php echo base_url ?>dist/css/TimeCircles.css">
+    <link rel="stylesheet" href="<?php echo base_url ?>dist/css/bootstrap.min.css">
   </head>

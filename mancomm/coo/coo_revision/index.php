@@ -73,13 +73,17 @@
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
-	.table-container {
+	/* .table-container {
   		overflow-x: auto;
   		max-width: 100%;
 	}
 	table {
 		table-layout: fixed;
 		width: 100%;
+	} */
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_info {
+		text-align: left !important;
 	}
 </style>
 
@@ -91,9 +95,11 @@
 		</div> -->
 	</div>
 	<div class="card-body">
-		<div class="container-fluid">
+		<!-- <div class="container-fluid">
         <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="text-align:center;width:100%;">
+			<table class="table table-bordered table-stripped" style="text-align:center;width:100%;"> -->
+		<div class="table-container">
+			<table class="table table-bordered table-striped" id="data-table">
 			<!-- 	<colgroup>
 					<col width="5%">
 					<col width="15%">
@@ -210,9 +216,9 @@
 		$('.delete_data').click(function(){
 			_conf("Are you sure you want to delete this RA permanently?","delete_csr",[$(this).attr('data-id')])
 		})
-		$('.table').dataTable(
+		/* $('.table').dataTable(
 			{"ordering":false}
-		);
+		); */
 		$('#uni_modal').on('shown.bs.modal', function() {
 			$('.select2').select2({width:'resolve'})
 			$('.summernote').summernote({
