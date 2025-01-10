@@ -257,6 +257,20 @@ if($csr->num_rows > 0){
     #btnprint:hover{
         background-color:blue;
     }
+    .card.details {
+        border: 1px solid rgb(177, 176, 176);
+    }
+    .card-header {
+        color:black;
+        font-weight:bold;
+        text-align:center;
+        font-size:16px;
+    }
+    .card-header.titles {
+        font-weight: bold;
+        text-align: center;
+        font-size: 20px;
+    }
 </style>
 <body onload="loadAll()">
 
@@ -293,7 +307,7 @@ if($csr->num_rows > 0){
                         <?php } ?>
                     </tr>
                 </table>
-                        <div class="titles"> Buyer's Profile</div>
+                        <!-- <div class="titles"> Buyer's Profile</div> -->
                         <br>
                         <?php $query2 = "SELECT * FROM t_csr_buyers WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
                         $result2 = mysqli_query($conn, $query2);
@@ -319,139 +333,159 @@ if($csr->num_rows > 0){
                                 $civil_status = $row['civil_status']; // customer civil status
 
                         ?>
-                        <div class="view_box">
-                            <div class="float-left col-md-12">
-                                <table class="table table-striped">
-                                    <tr>
-                                        <td style="width:40%;"><b>Buyer No: </b></td>
-                                        <td><?php echo $buyer_count ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Buyer's Full Name:</b></td>
-                                        <td><?php echo $cust_fullname1 ?></td>
-                                    </tr>
-                                
-                                    <tr>
-                                        <td><b>Address 1:</b></td>
-                                        <td><?php echo $customer_address_1 ?></td>
-                                    </tr>
-                                
-                                    <tr>
-                                        <td><b>Zipcode : </b></td>
-                                        <td><?php echo $customer_zip_code?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Address 2 (Abroad):</b></td>
-                                        <td><?php echo $customer_address_2 ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Birthdate:</b></td>
-                                        <td><?php echo $birth_date ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Age:</b></td>
-                                        <td><?php echo $customer_age ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Contact Number:</b></td>
-                                        <td><?php echo $customer_phone ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Email Address:</b></td>
-                                        <td><?php echo $customer_email ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Viber Account:</b></td>
-                                        <td><?php echo $customer_viber ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Gender:</b></td>
-                                        <td><?php echo $customer_gender ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Civil Status:</b></td>
-                                        <td><?php echo $civil_status ?></td>
-                                    </tr>
-                                </table> 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card details">
+                                    <div class="card-header titles">Buyer Profile </div>
+                                    <div class="card-body pb-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <td style="width:40%;"><b>Buyer No: </b></td>
+                                                    <td><?php echo $buyer_count ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Buyer's Full Name:</b></td>
+                                                    <td><?php echo $cust_fullname1 ?></td>
+                                                </tr>
+                                            
+                                                <tr>
+                                                    <td><b>Address 1:</b></td>
+                                                    <td><?php echo $customer_address_1 ?></td>
+                                                </tr>
+                                            
+                                                <tr>
+                                                    <td><b>Zipcode : </b></td>
+                                                    <td><?php echo $customer_zip_code?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Address 2 (Abroad):</b></td>
+                                                    <td><?php echo $customer_address_2 ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Birthdate:</b></td>
+                                                    <td><?php echo $birth_date ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Age:</b></td>
+                                                    <td><?php echo $customer_age ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Contact Number:</b></td>
+                                                    <td><?php echo $customer_phone ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Email Address:</b></td>
+                                                    <td><?php echo $customer_email ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Viber Account:</b></td>
+                                                    <td><?php echo $customer_viber ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Gender:</b></td>
+                                                    <td><?php echo $customer_gender ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Civil Status:</b></td>
+                                                    <td><?php echo $civil_status ?></td>
+                                                </tr>
+                                            </table> 
+                                        </div>
+                                    </div>
+                                </div>
                             </div>       
                         </div>
                         <br>
-                        <div class="space"></div>
+                        <!-- <div class="space"></div> -->
                         <?php 
                             }} 
                             ?>
-                        <div class="space"></div>
-                        <div class="space"></div>
-                        <div class="titles">Investment Value</div>
-                        <div class="space"></div>
-                            <div class="view_lot">
-                            <div class="titles">Lot</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Lot ID:</b></td>
-                                            <td><?php echo $lot_id ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Lot Area:</b></td>
-                                            <td><?php echo $lot_area ?> SQM</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Price/SQM:</b></td>
-                                            <td><?php echo number_format($price_sqm,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Discount (%):</b></td>
-                                            <td><?php echo $lot_disc ?> %</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Discount Amount:</b></td>
-                                            <td><?php echo number_format($lot_disc_amt,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Lot Contract Price:</b></td>
-                                            <td><?php echo number_format($lcp,2) ?></td>
-                                        </tr>
-                                    </table>
+
+                        <!-- <div class="space"></div>
+                        <div class="space"></div> -->
+                        <!-- <div class="titles">Investment Value</div> -->
+                        <!-- <div class="space"></div> -->
+
+                        <div class="card details">
+                            <div class="card-header titles">Investment Value</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Lot Details -->
+                                    <div class="col-md-6">
+                                        <h5 class="card-header">Lot</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <td style="width:40%;"><b>Lot ID:</b></td>
+                                                    <td><?php echo $lot_id ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Lot Area:</b></td>
+                                                    <td><?php echo $lot_area ?> SQM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Price/SQM:</b></td>
+                                                    <td><?php echo number_format($price_sqm,2) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Discount (%):</b></td>
+                                                    <td><?php echo $lot_disc ?> %</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Discount Amount:</b></td>
+                                                    <td><?php echo number_format($lot_disc_amt,2) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Lot Contract Price:</b></td>
+                                                    <td><?php echo number_format($lcp,2) ?></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- House Details -->
+                                    <div class="col-md-6">
+                                        <h5 class="card-header">House</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <td style="width:40%;"><b>House Model:</b></td>
+                                                    <td><?php echo $house_model ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Floor Area:</b></td>
+                                                    <td><?php echo $floor_area ?> SQM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>House Price/SQM:</b></td>
+                                                    <td><?php echo number_format($house_price_sqm,2) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Discount (%):</b></td>
+                                                    <td><?php echo $house_disc ?>  %</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Discount Amount:</b></td>
+                                                    <td><?php echo number_format($house_disc_amt,2) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>House Contract Price:</b></td>
+                                                    <td><?php echo number_format($hcp,2) ?></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="view_house">
-                            <div class="titles">House</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>House Model:</b></td>
-                                            <td><?php echo $house_model ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Floor Area:</b></td>
-                                            <td><?php echo $floor_area ?> SQM</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>House Price/SQM:</b></td>
-                                            <td><?php echo number_format($house_price_sqm,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Discount (%):</b></td>
-                                            <td><?php echo $house_disc ?>  %</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Discount Amount:</b></td>
-                                            <td><?php echo number_format($house_disc_amt,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>House Contract Price:</b></td>
-                                            <td><?php echo number_format($hcp,2) ?></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="space"></div>
-                                    <div class="space"></div>
-                                    <div class="titles">Add Cost</div>
-                                        <div class="view_box" style="padding:10px;">
-                                        <div class="row">
-									
+                        </div>
+
+                        <div class="space"></div>
+                        <div class="space"></div>
+
+                        <div class="card details" style="padding:10px;">
+                            <div class="card-header titles mb-4">Add Cost</div>
+                                <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="control-label">Floor Elevation: </label>
@@ -672,218 +706,303 @@ if($csr->num_rows > 0){
                                 </div>
                             </div>
                         </div>
+
                             <div class="space"></div>
                             <div class="space"></div>
-                            <div class="titles">Payment Computation</div>
-                            <div class="view_box">
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>TCP Discount: </b></td>
-                                            <td><?php echo $tcp_discount ?>  %</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>TCP Discount Amount: </b></td>
-                                            <td><?php echo number_format($tcp_discount_amt,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Total Contract Price: </b></td>
-                                            <td><?php echo number_format($tcp,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>VAT: </b></td>
-                                            <td><?php echo number_format($vat,2) ?></td>
-                                        </tr>
-                                        <!---<tr>
-                                            <td><b>VAT Amount: </b></td>
-                                            <td><?php echo number_format($vat_amt,2) ?></td>
-                                        </tr>!-->
-                                        <tr>
-                                            <td><b>Net TCP: </b></td>
-                                            <td><?php echo number_format($net_tcp,2) ?></td>
-                                        </tr>
-                                    </table>
+                            <!-- <div class="titles">Payment Computation</div> -->
+                            <!-- <div class="view_box">
+                                <div class="float-left col-md-12"> -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card details">
+                                        <div class="card-header titles">Payment Computation</div>
+                                        <div class="card-body pb-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <tr>
+                                                        <td style="width:40%;"><b>TCP Discount: </b></td>
+                                                        <td><?php echo $tcp_discount ?>  %</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>TCP Discount Amount: </b></td>
+                                                        <td><?php echo number_format($tcp_discount_amt,2) ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Total Contract Price: </b></td>
+                                                        <td><?php echo number_format($tcp,2) ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>VAT: </b></td>
+                                                        <td><?php echo number_format($vat,2) ?></td>
+                                                    </tr>
+                                                    <!---<tr>
+                                                        <td><b>VAT Amount: </b></td>
+                                                        <td><?php echo number_format($vat_amt,2) ?></td>
+                                                    </tr>!-->
+                                                    <tr>
+                                                        <td><b>Net TCP: </b></td>
+                                                        <td><?php echo number_format($net_tcp,2) ?></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="space"></div>
-                            <div class="space"></div>
+                            <!-- <div class="space"></div>
                             <div class="view_box">
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Reservation: </b></td>
-                                            <td><?php echo number_format($reservation,2) ?></td>
-                                        </tr>
-                                    </table>
+                                <div class="float-left col-md-12"> -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card details">
+                                        <div class="card-body pb-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <tr>
+                                                        <td style="width:40%;"><b>Reservation: </b></td>
+                                                        <td><?php echo number_format($reservation,2) ?></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="space"></div>
+                            <!-- <div class="space"></div>
                             <div id="space1" class="space"></div>
                             <div id="pd" class="pd">
                                 <div class="titles">Partial DownPayment</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Down %:</b></td>
-                                            <td><?php echo $down_percent ?>  %</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Net DP:</b></td>
-                                            <td><?php echo number_format($net_dp,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b># of Payments:</b></td>
-                                            <td><?php echo $no_payments ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Monthly Down:</b></td>
-                                            <td><?php echo number_format($monthly_down,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>First DP:</b></td>
-                                            <td><?php echo $first_dp ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Full Down:</b></td>
-                                            <td><?php echo $full_down ?></td>
-                                        </tr>
-                                    </table>
+                                <div class="float-left col-md-12"> -->
+                            <div id="pd">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card details">
+                                            <div class="card-header titles">Partial DownPayment</div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width:40%;"><b>Down %:</b></td>
+                                                            <td><?php echo $down_percent ?>  %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Net DP:</b></td>
+                                                            <td><?php echo number_format($net_dp,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b># of Payments:</b></td>
+                                                            <td><?php echo $no_payments ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Monthly Down:</b></td>
+                                                            <td><?php echo number_format($monthly_down,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>First DP:</b></td>
+                                                            <td><?php echo $first_dp ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Full Down:</b></td>
+                                                            <td><?php echo $full_down ?></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="fdp" class="fdp" >
+                            <!-- <div id="fdp" class="fdp" >
                                 <div class="titles">Full Down Payment</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Down %:</b></td>
-                                            <td><?php echo $down_percent ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Net DP:</b></td>
-                                            <td><?php echo number_format($net_dp,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Full Down:</b></td>
-                                            <td><?php echo $full_down ?></td>
-                                        </tr>
-                                    </table>
+                                <div class="float-left col-md-12"> -->
+                            <div id="fdp">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card details">
+                                            <div class="card-header titles">Full Down Payment</div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width:40%;"><b>Down %:</b></td>
+                                                            <td><?php echo $down_percent ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Net DP:</b></td>
+                                                            <td><?php echo number_format($net_dp,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Full Down:</b></td>
+                                                            <td><?php echo $full_down ?></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="space1" class="space"></div>
+                            <!-- <div id="space1" class="space"></div>
                             <div id="ma" class="ma">
                                 <div class="titles">Monthly Amortization</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Amount to be Financed:</b></td>
-                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Terms:</b></td>
-                                            <td><?php echo $terms ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Interest Rate:</b></td>
-                                            <td><?php echo $interest_rate ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Fixed Factor:</b></td>
-                                            <td><?php echo $fixed_factor ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Monthly Payment:</b></td>
-                                            <td><?php echo number_format($monthly_payment,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Start Date:</b></td>
-                                            <td><?php echo $start_date ?></td>
-                                        </tr>
-                                    </table>
+                                <div class="float-left col-md-12"> -->
+                            <div id="ma">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card details">
+                                            <div class="card-header titles">Monthly Amortization</div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width:40%;"><b>Amount to be Financed:</b></td>
+                                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Terms:</b></td>
+                                                            <td><?php echo $terms ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Interest Rate:</b></td>
+                                                            <td><?php echo $interest_rate ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Fixed Factor:</b></td>
+                                                            <td><?php echo $fixed_factor ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Monthly Payment:</b></td>
+                                                            <td><?php echo number_format($monthly_payment,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Start Date:</b></td>
+                                                            <td><?php echo $start_date ?></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="space1" class="space"></div>
+                            <!-- <div id="space1" class="space"></div>
                             <div id="dfc" class="dfc">
                                 <div class="titles">Deferred Cash Payment</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Deferred Amount:</b></td>
-                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Terms:</b></td>
-                                            <td><?php echo $terms ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Monthly Payment:</b></td>
-                                            <td><?php echo number_format($monthly_payment,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Start Date:</b></td>
-                                            <td><?php echo $start_date ?></td>
-                                        </tr>
-                                    </table>
+                                <div class="float-left col-md-12"> -->
+                            <div id="dfc">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card details">
+                                            <div class="card-header titles">Deferred Cash Payment</div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width:40%;"><b>Deferred Amount:</b></td>
+                                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Terms:</b></td>
+                                                            <td><?php echo $terms ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Monthly Payment:</b></td>
+                                                            <td><?php echo number_format($monthly_payment,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Start Date:</b></td>
+                                                            <td><?php echo $start_date ?></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="sc" class="sc">
+                            <!-- <div id="sc" class="sc">
                                 <div class="titles">Spot Cash</div>
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td style="width:40%;"><b>Amount:</b></td>
-                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Pay Date:</b></td>
-                                            <td><?php echo $start_date ?></td>
-                                        </tr>
-                                    </table>
+                                <div class="float-left col-md-12"> -->
+                            <div id="sc">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card details">
+                                            <div class="card-header titles">Spot Cash Details</div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width:40%;"><b>Amount:</b></td>
+                                                            <td><?php echo number_format($amt_fnanced,2) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Pay Date:</b></td>
+                                                            <td><?php echo $start_date ?></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="space"></div>
-                            <div class="space"></div>
-                            <div class="titles">Commission</div>
+                            <!-- <div class="space"></div>
+                            <div class="titles">Commission</div> -->
                            
-                            <div class="view_box">
-                                <div class="float-left col-md-12">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <thead>
-                                                <th><b>Position</b></th>
-                                                <th><b>Code</b></th>
-                                                <th><b>Name</b></th>
-                                                <th><b>Rate</b></th>
-                                            </thead>
-                                        </tr>
-                                        <tr>
-                                        <?php $query3 = "SELECT * FROM t_csr_commission WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
-                                        $result3 = mysqli_query($conn, $query3);
-                                        if($result3) {
-                                            while ($row = mysqli_fetch_assoc($result3)) { 
-                                                $code = $row['c_code'];
-                                                $position = $row['c_position'];
-                                                $agent = $row['c_agent'];
-                                                $rate = $row['c_rate'];
-                                                $amount = $row['c_amount'];
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $position ?></td>
-                                            <td><?php echo $code ?></td>
-                                            <td><?php echo $agent ?></td>
-                                            <td><?php echo $rate ?></td>
-                                            <?php 
-                                        }} 
-                                        ?>
-                                        </tr>
-                                    </table>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card details">
+                                        <div class="card-header titles">Commission Details</div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <tr>
+                                                        <thead>
+                                                            <th><b>Position</b></th>
+                                                            <th><b>Code</b></th>
+                                                            <th><b>Name</b></th>
+                                                            <th><b>Rate</b></th>
+                                                        </thead>
+                                                    </tr>
+                                                    <tr>
+                                                    <?php $query3 = "SELECT * FROM t_csr_commission WHERE md5(c_csr_no) = '{$_GET['id']}'" ;
+                                                    $result3 = mysqli_query($conn, $query3);
+                                                    if($result3) {
+                                                        while ($row = mysqli_fetch_assoc($result3)) { 
+                                                            $code = $row['c_code'];
+                                                            $position = $row['c_position'];
+                                                            $agent = $row['c_agent'];
+                                                            $rate = $row['c_rate'];
+                                                            $amount = $row['c_amount'];
+                                                    ?>
+                                                    <tr>
+                                                        <td><?php echo $position ?></td>
+                                                        <td><?php echo $code ?></td>
+                                                        <td><?php echo $agent ?></td>
+                                                        <td><?php echo $rate ?></td>
+                                                        <?php 
+                                                    }} 
+                                                    ?>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="space"></div>
-                            <div class="space"></div>
-                            <div class="titles">Remarks</div>
-                            <div class="view_box">
-                                <div class="float-left col-md-12">
-                                    <div style="padding:5px"><?php echo $notes ?></div>
+                            <!-- <div class="space"></div> -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card details">
+                                        <div class="card-header titles">Remarks</div>
+                                            <div class="float-left col-md-12">
+                                                <div style="padding:5px"><?php echo $notes ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="commentDiv">

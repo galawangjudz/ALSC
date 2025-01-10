@@ -62,7 +62,7 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
-	.card {
+	/* .card {
 		display: flex;
 		justify-content: center;
 	}
@@ -77,14 +77,18 @@
 		flex-direction: column;
 		align-items: center;
 		}
-	}
-	.table-container {
+	} */
+	/* .table-container {
   		overflow-x: auto;
   		max-width: 100%;
 	}
 	table {
 		table-layout: fixed;
 		width: 100%;
+	} */
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_info {
+		text-align: left !important;
 	}
 
 </style>
@@ -109,8 +113,10 @@
 	</div>
 	<div class="card-body">
 	
-        <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+        <!-- <div class="container-fluid">
+			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;"> -->
+		<div class="table-container">
+			<table class="table table-bordered table-striped" id="data-table">
 			<!-- 	<colgroup>
 					<col width="5%">
 					<col width="15%">
@@ -325,11 +331,11 @@
 
 <script>
 	$(document).ready(function(){
-	$('.table').dataTable(
+	/* $('.table').dataTable(
 		{
 			"ordering": false
 		}
-	);	
+	);	 */
 
 
 	$('.delete_data').click(function(){

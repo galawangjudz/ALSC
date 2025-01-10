@@ -73,13 +73,9 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
-	.table-container {
-  		overflow-x: auto;
-  		max-width: 100%;
-	}
-	table {
-		table-layout: fixed;
-		width: 100%;
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_info {
+		text-align: left !important;
 	}
 </style>
 
@@ -89,10 +85,8 @@
 		
 	</div>
 	<div class="card-body">
-		<div class="container-fluid">
-        <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
-	 
+		<div class="table-container">
+			<table class="table table-bordered table-striped" id="data-table">
 				<thead>
 					<tr>
                     <th>RA No.</th>
@@ -158,22 +152,12 @@
 	</div>
 </div>
 <script>
-
-
 	$(document).ready(function(){
-		
-		$('.table').dataTable(
-			{"ordering":false}
-		);
-		
-	})
-
-		$(document).ready(function(){
-			$('.booked_data').click(function(){
-				uni_modal_right("<i class='fa fa-check'></i> Final Approval",'fa-view.php?id='+$(this).attr('csr_no')+"&csr="+$(this).attr('ra_id')+"&lid="+$(this).attr('data-lot-id'),"mid-large")
-				//uni_modal("<i class='fa fa-paint-brush'></i> Edit Lot",'inventory/manage_lot.php?id='+$(this).attr('data-lot-id'),"mid-large")
-			})
+		$('.booked_data').click(function(){
+			uni_modal_right("<i class='fa fa-check'></i> Final Approval",'fa-view.php?id='+$(this).attr('csr_no')+"&csr="+$(this).attr('ra_id')+"&lid="+$(this).attr('data-lot-id'),"mid-large")
+			//uni_modal("<i class='fa fa-paint-brush'></i> Edit Lot",'inventory/manage_lot.php?id='+$(this).attr('data-lot-id'),"mid-large")
 		})
+	})
 	// function cfo_approval($ra_id,$csr_no,$lid){
 	// 	start_loader();
 	// 	$.ajax({
@@ -196,6 +180,4 @@
 	// 		}
 	// 	})
 	// }
-
-
 </script>

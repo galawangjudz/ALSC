@@ -14,6 +14,10 @@
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
+    .dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_info {
+		text-align: left !important;
+	}
 </style>
 <?php
 // $usertype = $_settings->userdata('user_type');
@@ -32,9 +36,12 @@
 			<h5 class="card-title"><b><i>Lots List</b></i></h5>
 		</div>
 		<div class="card-body">
+            <!-- <div class="container-fluid">
             <div class="container-fluid">
-            <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;"> -->
+            
+            <div class="table-container">
+                <table class="table table-bordered table-striped" id="data-table">
                     <thead>
                         <tr>
                         <th>Lot ID</th>
@@ -83,8 +90,8 @@
 	            </div>                
             </div>
 	</div>
-<script>
+<!-- <script>
     $(document).ready(function(){
 		$('.table').dataTable();
 	})
-</script>
+</script> -->

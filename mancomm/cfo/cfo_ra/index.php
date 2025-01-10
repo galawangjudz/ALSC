@@ -64,26 +64,20 @@
 		text-decoration: none;
 		pointer-events: none;
 	}
-	.table-container {
-  		overflow-x: auto;
-  		max-width: 100%;
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_info {
+		text-align: left !important;
 	}
-	table {
-		table-layout: fixed;
-		width: 100%;
-	}
+
 </style>
 
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>CFO Approval List</b></i></h3>
-		
 	</div>
 	<div class="card-body">
-		<div class="container-fluid">
-        <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
-	 
+		<div class="table-container">
+			<table class="table table-bordered table-striped" id="data-table">
 				<thead>
 					<tr>
                     <th>RA No.</th>
@@ -145,13 +139,13 @@
 <script>
 
 
-	$(document).ready(function(){
+	/* $(document).ready(function(){
 		
 		$('.table').dataTable(
 			{"ordering":false}
 		);
 		
-	})
+	}) */
 
 		$(document).ready(function(){
 			$('.booked_data').click(function(){
@@ -181,6 +175,4 @@
 	// 		}
 	// 	})
 	// }
-
-
 </script>
