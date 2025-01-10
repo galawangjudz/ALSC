@@ -14,16 +14,24 @@
 		color:white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
+    .table-responsive {
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap; 
+    }
+    #data-table {
+        min-width: 1200px; 
+        width: auto; 
+    }
 </style>
-
-<div class="card card-outline rounded-0 card-maroon">
+<div class="card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h5 class="card-title"><b><i>Project List</b></i></h5>
 		</div>
 		<div class="card-body">
             <div class="container-fluid">
-            <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+            <div class="table-responsive" style="overflow-x: auto;">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
                     <thead>
                         <tr>
                         <th>No.</th>

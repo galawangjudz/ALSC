@@ -16,14 +16,14 @@
 	}
 </style>
 
-<div class="card card-outline rounded-0 card-maroon">
+<div class="card-outline rounded-0 card-maroon">
 		<div class="card-header">
 			<h5 class="card-title"><b><i>Lots List</b></i></h5>
 		</div>
 		<div class="card-body">
             <div class="container-fluid">
-            <div class="container-fluid">
-                <table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
+            <div class="table-responsive" style="overflow-x: auto;">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
                     <thead>
                         <tr>
                         <th>Lot ID</th>

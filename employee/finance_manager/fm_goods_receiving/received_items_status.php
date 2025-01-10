@@ -8,7 +8,6 @@
     $type = $_settings->userdata('user_code');
     $level = $_settings->userdata('type');
     $department = $_settings->userdata('department');
-
 ?>
 <style>
     .bold-text {
@@ -38,7 +37,7 @@
         text-align: center;
         color: black!important;
         border-right: solid 3px white;
-        margin-right: 0; /* Remove right margin */
+        margin-right: 0;
     }
     .main_menu:hover {
         border-bottom: solid 2px blue;
@@ -58,7 +57,7 @@
         text-align: center;
     }
     .navbar-menu a {
-        margin: 0; /* Reset margin for all buttons */
+        margin: 0; 
     }
 </style>
 <div class="card" id="container">
@@ -69,16 +68,16 @@
         </div>
     </div>
 </div>
-<div class="card card-outline card-primary">
+<div class="card-outline card-primary">
 	<div class="card-header">
         <input type="hidden" value="<?php echo $type; ?>">
         <h5 class="card-title" id="purchase-orders-title">List of Open Purchase Orders</h5>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-        <div class="container-fluid">
+        <div class="table-responsive" style="overflow-x: auto;">
             <div id="open-purchase-orders-table" style="display: none;">
-                <table class="table table-hover table-striped" style="text-align:center;">
+                <table class="table table-hover table-striped" style="text-align: center; width: 100%; min-width: 1000px;">
                         <colgroup>
                         <col width="5%">
                         <col width="15%">
@@ -156,7 +155,7 @@
                 </table>
             </div>
             <div id="closed-purchase-orders-table" style="display: none;">
-                <table class="table table-hover table-striped" style="text-align:center;">
+                <table class="table table-bordered table-stripped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">		
                         <colgroup>
                         <col width="5%">
                         <col width="15%">

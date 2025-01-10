@@ -14,6 +14,16 @@
         color:white!important;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
     }
+	.modal.fade {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		height: 100%; 
+	}
+	.modal-dialog {
+		margin: 0 !important; 
+	}
+
 </style>
 <div class="card card-outline card-primary">
 	<div class="card-header">

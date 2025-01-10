@@ -1,3 +1,10 @@
+<style>
+  @media (max-width: 768px) {
+  .main-footer{
+    text-align: center;
+		}
+	}
+</style>
 <script>
   $(document).ready(function(){
      window.viewer_modal = function($src = ''){

@@ -16,6 +16,30 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     body{
         font-size:12px;
     }
+    @media (min-width: 768px) {
+        #uni_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 140px;
+        }
+    }
+    @media (min-width: 820px) {
+        #uni_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 160px;
+        }
+    }
+    @media (min-width: 1024px) {
+        #uni_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+        }
+    }
 </style>
 <div class="container fluid">
     <callout class="callout-primary">
@@ -79,7 +103,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         $terms_qry->bind_param("i", $terms);
                         $terms_qry->execute();
                         $result = $terms_qry->get_result();
-
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $recValue = $row['terms'];

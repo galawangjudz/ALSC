@@ -74,16 +74,15 @@
 	}
 </style>
 
-<div class="card card-outline rounded-0 card-maroon">
+<div class="card-outline rounded-0 card-maroon">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>CFO Approval List</b></i></h3>
 		
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-        <div class="container-fluid">
-			<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
-	 
+		<div class="table-responsive" style="overflow-x: auto;">
+			<table class="table table-bordered table-stripped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 				<thead>
 					<tr>
                     <th>RA No.</th>

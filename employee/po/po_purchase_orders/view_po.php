@@ -73,6 +73,33 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         color:white!important;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
     }
+    @media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        align-items: center;
+    }
+    .table-container {
+        overflow-x: auto;
+        max-width: 100%;
+    }
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    body {
+        font-size: 11px;
+    }
+    #imglogo {
+        width: 100px;
+        height: auto;
+    }
+    #h2-resize{
+        font-size:17px;
+    }
+    .ftsmall{
+        font-size:12px!important;
+    }
+}
 </style>
 <?php
     $usertype = $_settings->userdata('user_type'); 
@@ -80,7 +107,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     $level = $_settings->userdata('type');
 ?>
 <body>
-<div class="card card-outline card-info">
+<div class="card-outline card-info">
 	<div class="card-header">
     <form action="" id="view-po-form">
         <h5 class="card-title"><b><i>View Purchase Order Details</b></i></h5>
@@ -95,14 +122,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="row">
             <div class="col-6 d-flex align-items-center">
                 <div>
-                    <h2><label style="backround-color:red;">PURCHASE ORDER</h2>
+                    <h2 id="h2-resize"><label style="backround-color:red;">PURCHASE ORDER</h2>
                     <p class="m-0"><b><?php echo $_settings->info('company_name') ?></b></p>
                     <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
                 </div>
             </div>
             <div class="col-6">
-                <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px" style="float:right;">
+                <img src="<?php echo validate_image($_settings->info('logo')) ?>" id="imglogo" alt="" height="200px" style="float:right;">
             </div>
         </div>
         <div class="row mb-2">
@@ -124,19 +151,18 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <div class="col-6 row">
                 <div class="col-6">
                     <p  class="m-0"><b>P.O. #:</b></p>
-                    <p><input type="text" value="<?php echo $po_no ?>" id="po_no" name="po_no" style="border:none;color:black;"></p>
-
-                    <p  class="m-0"><b>Requesting Department:</b></p>
-                    <p><input type="text" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" style="border:none;color:black;"></p>
+                    <p><input class="ftsmall" type="text" value="<?php echo $po_no ?>" id="po_no" name="po_no" style="border:none;color:black;"></p>
+                    <p  class="m-0 lblrdept"><b>Requesting Department:</b></p>
+                    <p><input class="ftsmall lblrdept2" type="text" value="<?php echo isset($department) ? $department : '' ?>" id="department" name="department" style="border:none;color:black;"></p>
                     <input type="hidden" id="po_id" name="po_id" value="<?php echo $id; ?>">
                     <input type="hidden" id="usertype" name="usertype" value="<?php echo $usertype; ?>">
                 </div>
                 <div class="col-6">
                     <p  class="m-0"><b>Date Created:</b></p>
-                    <p><input type="text" value="<?php echo date("F j, Y",strtotime($date_created)) ?>" style="border:none;color:black;"></p>
+                    <p><input class="ftsmall" type="text" value="<?php echo date("F j, Y",strtotime($date_created)) ?>" style="border:none;color:black;"></p>
 
                     <p  class="m-0"><b>Requested Delivery Date:</b></p>
-                    <p><input type="text" value="<?php echo date("F j, Y",strtotime($delivery_date)) ?>" style="border:none;color:black;"></p>
+                    <p><input class="ftsmall" type="text" value="<?php echo date("F j, Y",strtotime($delivery_date)) ?>" style="border:none;color:black;"></p>
                 </div>
             </div>
         </div>
@@ -176,7 +202,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-striped table-bordered" id="item-list">
+            <div class="table-responsive" style="overflow-x: auto;">
+                <table class="table table-bordered table-striped" id="item-list" style="text-align: center; width: auto; min-width: 1000px;width:100%">
                     <colgroup>
                         <col width="5%">
                         <col width="10%">
@@ -205,20 +232,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         ?>
                         <tr class="po-item" data-id="">
                             <td class="align-middle p-0 text-center">
-                                <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" readonly/>
+                                <input type="number" class="text-center w-100 border-0 ftsmall" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" readonly/>
                             </td>
                             <td class="align-middle p-1">
-                                <input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['default_unit'] ?>" readonly/>
+                                <input type="text" class="text-center w-100 border-0 ftsmall" name="unit[]" value="<?php echo $row['default_unit'] ?>" readonly/>
                             </td>
                             <td class="align-middle p-1">
                                 <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>" readonly>
-                                <input type="text" class="w-100 border-0 item_id" value="<?php echo $row['name'] ?>"  readonly/>
+                                <input type="text" class="w-100 border-0 item_id ftsmall" value="<?php echo $row['name'] ?>"  readonly/>
                             </td>
                             <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
                             <td class="align-middle p-1">
-                                <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>" readonly/>
+                                <input type="number" step="any" class="text-right w-100 border-0 ftsmall" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>" readonly/>
                             </td>
-                            <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
+                            <td class="align-middle p-1 text-right total-price ftsmall"><?php echo number_format($row['quantity'] * $row['unit_price'], 2) ?></td>
                         </tr>
                         <?php endwhile;endif; ?>
                     </tbody>
@@ -249,18 +276,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         </tr>
                     </tfoot>
                 </table>
-                <div class="row">
-                    <div class="col-12">
-                        <label for="notes" class="control-label">Remarks:</label>
-                        <textarea id="notes" name="notes" cols="10" rows="4" class="form-control rounded-0" readonly><?php echo isset($notes) ? trim($notes) : '' ?></textarea>
-                    </div>
-                </div><br>
+                </div>
+                <div style="overflow-x: auto;">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="notes" class="control-label">Remarks:</label>
+                            <textarea id="notes" name="notes" cols="10" rows="4" class="form-control rounded-0 ftsmall" readonly><?php echo isset($notes) ? trim($notes) : '' ?></textarea>
+                        </div>
+                    </div><br>
+                </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-
 <script>
 	$(function(){
         $('#print').click(function(e){

@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
 <b>Date Received: </b><i><?php echo $formatted_date = date('F j, Y', strtotime($date_purchased)); ?></i>
 <br>
 <div class="table-container">
-    <table class="table table-striped table-hover table-bordered" style="width: 100%">
+    <table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
         <thead>
             <tr>
                 <th style="width:25%">Item Name</th>

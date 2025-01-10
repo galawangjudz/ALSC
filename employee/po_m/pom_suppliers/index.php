@@ -4,12 +4,46 @@
 </script>
 <?php endif;?>
 <style>
-	.table{
+.table{
     font-size: 12px;
+}
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap; 
+}
+
+#data-table {
+    min-width: 1200px; 
+    width: auto; 
+}
+@media (min-width: 768px) {
+	#uni_modal, #confirm_modal {
+		display: none; 
+		align-items: center;
+		justify-content: center;
+		margin: 0 140px;
+	}
+}
+@media (min-width: 820px) {
+	#uni_modal, #confirm_modal {
+		display: none; 
+		align-items: center;
+		justify-content: center;
+		margin: 0 160px;
+	}
+}
+@media (min-width: 1024px) {
+	#uni_modal, #confirm_modal {
+		display: none; 
+		align-items: center;
+		justify-content: center;
+		margin: 0 20px;
+	}
 }
 </style>
 <link rel="stylesheet" href="css/supplier.css">
-<div class="card card-outline card-primary">
+<div class="card-outline card-primary">
 	<div class="card-header">
 		<h3 class="card-title"><b><i>List of Suppliers</b></i></h3>
 		<div class="card-tools">
@@ -18,7 +52,7 @@
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-        <div class="container-fluid">
+			<div class="table-responsive" style="overflow-x: auto;">
 			<table class="table table-bordered table-stripped" id="data-table" style="text-align:center;width:100%;">
 			<colgroup>
 					<col width="5%">

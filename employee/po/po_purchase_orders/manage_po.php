@@ -41,8 +41,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </script>
 
 <link rel="stylesheet" href="css/manage_po.css">
+<style>
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap; 
+}
+
+#data-table {
+    min-width: 1200px; 
+    width: auto; 
+}
+</style>
 <body onload="calculate()">
-	<div class="card card-outline card-info">
+	<div class="card-outline card-info">
 		<div class="card-header">
 			<h5 class="card-title"><b><i><?php echo isset($id) ? "Update Purchase Order": "New Purchase Order" ?></b></i></h5>
 		</div>
@@ -179,7 +191,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered" id="item-list">
+						<div class="table-responsive" style="overflow-x: auto;">
+							<table class="table table-striped table-bordered" id="item-list" style="text-align: center; width: 100%; min-width: 1000px;">
 								<colgroup>
 									<col width="3%">
 									<col width="7%">
@@ -256,21 +269,21 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 											<th class="p-1 text-right" id="total">0</th>
 										</tr>
 										<tr>
-										<table class="table-bordered">
+										<table class="table-bordered" style="width:100%;">
 											<tr style="padding-left:150px;align-items: center;text-align: center;">
-												<td>
+												<td style="position:relative;">
 													<input type="radio" class="form-check-input" id="nonVatRadio" name="vatType" value="nonvat" onchange="updateValue()" required />
 													<label for="nonVatRadio">Non-VAT</label>
 												</td>
-												<td>
+												<td style="position:relative;">
 													<input type="radio" class="form-check-input" id="zeroRatedRadio" name="vatType" value="zerorated" onchange="updateValue()" required />
 													<label for="zeroRatedRadio">Zero-Rated</label>
 												</td>
-												<td>
+												<td style="position:relative;">
 													<input type="radio" class="form-check-input" id="inclusiveRadio" name="vatType" value="inclusive" onchange="updateValue()" required />
 													<label for="inclusiveRadio">Inclusive</label>
 												</td>
-												<td>
+												<td style="position:relative;">
 													<input type="radio" class="form-check-input" id="exclusiveRadio" name="vatType" value="exclusive" onchange="updateValue()" required />
 													<label for="exclusiveRadio">Exclusive</label>
 												</td>
@@ -281,6 +294,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 									</tr>
 								</tfoot>
 							</table>
+							</div>
 							<br>
 							<div class="row">
 								<div class="col-md-12">
