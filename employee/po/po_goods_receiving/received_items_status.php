@@ -11,6 +11,17 @@
 ?>
 <script src="js/gr_scripts.js"></script>
 <link rel="stylesheet" href="css/gr.css">
+<style>
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap; 
+}
+#data-table {
+    min-width: 1200px; 
+    width: auto; 
+}
+</style>
 <body onload="showOpenPOsTable();">
     <div class="card" id="container">
         <div class="navbar-menu-wrapper">
@@ -27,10 +38,10 @@
             <h5 class="card-title" id="purchase-orders-title">List of Open Purchase Orders</h5>
         </div>
         <div class="card-body">
-            <div class="container-fluid">
-            <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="table-responsive" style="overflow-x: auto;">
                 <div id="open-purchase-orders-table" style="display: none;">
-                    <table class="table table-hover table-striped" style="text-align:center;">
+                    <table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
                             <colgroup>
                             <col width="5%">
                             <col width="15%">
@@ -102,8 +113,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="closed-purchase-orders-table" style="display: none;">
-                    <table class="table table-hover table-striped" style="text-align:center;">
+                <div class="table-responsive" id="closed-purchase-orders-table" style="display: none;overflow-x: auto;">
+                    <table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
                             <colgroup>
                             <col width="5%">
                             <col width="15%">

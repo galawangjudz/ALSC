@@ -5,10 +5,55 @@ $level = $_settings->userdata('type');
 $session_id = $_settings->userdata('user_code');
 ?>
 <style>
-  #img_cont{
-    height:auto;
-    width:400px;
-    margin-right:-20px;
+  #img_cont {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  #img_cont img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+  .note {
+    text-align: center;
+    font-family: Armata, sans-serif;
+    font-size: 1.5rem;
+  }
+  .text-blue {
+    color: #007BFF;
+  }
+  .content {
+    padding: 20px;
+  }
+  .info-box {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .align-items-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .col-md-4,
+  .col-md-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .col-md-4 {
+      flex: 0 0 33.333%;
+      max-width: 33.333%;
+    }
+    .col-md-8 {
+      flex: 0 0 66.666%;
+      max-width: 66.666%;
+      text-align: left;
+    }
   }
 </style>
 <section class="content">
@@ -27,10 +72,10 @@ $session_id = $_settings->userdata('user_code');
                     $row = mysqli_fetch_array($query);
                 ?>
 
-                <div style="font-family: Armata; font-size: 25px;">
+                <div style="font-family: Armata; font-size: 25px;" class="note">
                     Welcome back, <div class="text-blue"><strong><?php echo $row['firstname'] . " " . $row['lastname']; ?>!</strong></div>
                 </div>
-                <p class="font-18 max-width-600"> We're delighted to see you again.</p>
+                <p class="font-18 max-width-600 note"> We're delighted to see you again.</p>
               </div>
             </div>
           </div>

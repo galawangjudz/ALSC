@@ -30,6 +30,30 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     .form-control{
         font-size:12px;
     }
+    @media (min-width: 768px) {
+        #uni_modal, #confirm_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 140px;
+        }
+    }
+    @media (min-width: 820px) {
+        #uni_modal, #confirm_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 160px;
+        }
+    }
+    @media (min-width: 1024px) {
+        #uni_modal, #confirm_modal {
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+        }
+    }
 </style>
 <form action="" id="supplier-form">
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">

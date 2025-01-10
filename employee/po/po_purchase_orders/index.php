@@ -8,16 +8,79 @@ if($_settings->chk_flashdata('success')):?>
 
 <script src="js/po_scripts.js"></script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+ .main_menu i {
+  margin-right: 8px;
+}
+.card {
+  background-color: #333;
+}
+#container {
+  overflow: hidden;
+  box-sizing: border-box; 
+}
+.navbar-menu {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+  max-width: 100%; 
+}
+.main_menu {
+	padding: 10px 15px;
+	text-decoration: none;
+	color: white;
+	display: flex;
+	align-items: center;
+}
+@media screen and (max-width: 768px) {
+  .navbar-menu {
+    flex-direction: column;
+  }
+  .main_menu i {
+	margin-right: 0px;
+	}
+  .main_menu {
+	width:100%;
+  }
+}
+.main_menu.active {
+  background-color: #007BFF; 
+  border-left: solid 3px #007BFF;
+  padding: 0px !important;
+  width:100%;
+}
+</style>
+<script>
+function setActiveLink(linkId) {
+  document.querySelectorAll('.main_menu').forEach(link => {
+    link.classList.remove('active');
+  });
+  document.getElementById(linkId).classList.add('active');
+}
+document.getElementById("pending-link").addEventListener("click", function() {
+  setActiveLink("pending-link");
+});
+document.getElementById("approved-link").addEventListener("click", function() {
+  setActiveLink("approved-link");
+});
+document.getElementById("declined-link").addEventListener("click", function() {
+  setActiveLink("declined-link");
+});
+document.getElementById("review-link").addEventListener("click", function() {
+  setActiveLink("review-link");
+});
+
+</script>
 <body onload="showPendingPOsTable();">
 	<div class="card" id="container">
 		<div class="navbar-menu">
-			<a href="javascript:void(0);" onclick="showPendingPOsTable()" class="main_menu" id="pending-link" style="border-left:solid 3px white;"><i class="nav-icon fa fa-check-square"></i>&nbsp;&nbsp;&nbsp;Pending POs</a>
-			<a href="javascript:void(0);" onclick="showApprovedPOsTable()" class="main_menu" id="approved-link"><i class="nav-icon fa fa-cart-arrow-down"></i>&nbsp;&nbsp;&nbsp;Approved POs</a>
-			<a href="javascript:void(0);" onclick="showDeclinedPOsTable()" class="main_menu" id="declined-link"><i class="nav-icon fa fa-check-square"></i>&nbsp;&nbsp;&nbsp;Declined POs</a>
-			<a href="javascript:void(0);" onclick="showForReviewPOsTable()" class="main_menu" id="review-link"><i class="nav-icon fa fa-check-square"></i>&nbsp;&nbsp;&nbsp;For Review POs</a>
+			<a href="javascript:void(0);" onclick="showPendingPOsTable()" class="main_menu" id="pending-link" style="border-left:solid 3px white;">Pending POs</a>
+			<a href="javascript:void(0);" onclick="showApprovedPOsTable()" class="main_menu" id="approved-link">Approved POs</a>
+			<a href="javascript:void(0);" onclick="showDeclinedPOsTable()" class="main_menu" id="declined-link">Declined POs</a>
+			<a href="javascript:void(0);" onclick="showForReviewPOsTable()" class="main_menu" id="review-link">For Review POs</a>
 		</div>
 	</div>
-	<div class="card card-outline card-primary">
+	<div class="card-outline card-primary">
 		<div class="card-header">
 			<b><i><h5 class="card-title" id="main-title">List of Pending Purchase Orders</b></i></h5>
 			<?php if ($_settings->userdata('position') == "PURCHASING ASSISTANT"){ ?>
@@ -28,9 +91,9 @@ if($_settings->chk_flashdata('success')):?>
 		</div>
 		<div class="card-body">
 			<div class="container-fluid">
-				<div class="container-fluid">
+				<div class="table-responsive" style="overflow-x: auto;">
 					<div id="pending-table" style="display: none;">
-						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+						<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 							<colgroup>
 								<col width="3%">
 								<col width="10%">
@@ -48,7 +111,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-																		<th>Supplier</th>
+									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>
@@ -173,7 +236,7 @@ if($_settings->chk_flashdata('success')):?>
 						</table>
 					</div>
 					<div id="approved-table" style="display: none;">
-						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+						<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 							<colgroup>
 								<col width="3%">
 								<col width="10%">
@@ -191,7 +254,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-																		<th>Supplier</th>
+									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>
@@ -305,7 +368,7 @@ if($_settings->chk_flashdata('success')):?>
 						</table>
 					</div>
 					<div id="declined-table" style="display: none;">
-						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+						<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 							<colgroup>
 								<col width="3%">
 								<col width="10%">
@@ -323,7 +386,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-																		<th>Supplier</th>
+									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>
@@ -437,7 +500,7 @@ if($_settings->chk_flashdata('success')):?>
 						</table>
 					</div>
 					<div id="review-table" style="display: none;">
-						<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+						<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 							<colgroup>
 								<col width="3%">
 								<col width="10%">
@@ -455,7 +518,7 @@ if($_settings->chk_flashdata('success')):?>
 									<th>#</th>
 									<th>Date Created</th>
 									<th>PO #</th>
-																		<th>Supplier</th>
+									<th>Supplier</th>
 									<th>Requesting Dept.</th>
 									<th>Total Amount</th>
 									<th>PM Status</th>

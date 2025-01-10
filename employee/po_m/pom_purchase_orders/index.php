@@ -8,6 +8,7 @@ $usertype = $_settings->userdata('user_type');
 $type = $_settings->userdata('user_code');
 $level = $_settings->userdata('type');
 ?>
+<link rel="stylesheet" href="css/style.css">
 <style>
 	.nav-cpo {
 		background-color: #007bff;
@@ -19,40 +20,65 @@ $level = $_settings->userdata('type');
 		color: white!important;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.1)!important;
 	}
-	.main_menu {
-		float: left;
-		width: 227px;
-		height: 40px;
-		line-height: 40px;
-		text-align: center;
-		color: black!important;
-		border-right: solid 3px white;
-	}
-	#main-title {
-		font-style: italic;
-		font-weight: bold;
-	}
-	.main_menu:hover {
-		border-bottom: solid 2px blue;
-		background-color: #E8E8E8;
-	}
-	#container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: transparent;
-	}
-	.navbar-menu {
-		width: 908px; 
-		margin: auto; 
-		display: flex;
-		flex-direction: row;
-		align-items: center; 
-		justify-content: space-around;
-	}
-	.table{
-		font-size:13px;
-	}
+	/* .navbar-menu {
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between;
+}
+
+.main_menu {
+  padding: 10px 15px;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+ */
+
+ .main_menu i {
+  margin-right: 8px;
+}
+
+.card {
+  background-color: #333;
+}
+#container {
+
+  overflow: hidden;
+  box-sizing: border-box; 
+}
+
+.navbar-menu {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+  max-width: 100%; 
+}
+
+.main_menu {
+	padding: 10px 15px;
+	text-decoration: none;
+	color: white;
+	display: flex;
+	align-items: center;
+}
+@media screen and (max-width: 768px) {
+  .navbar-menu {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main_menu {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+  }
+}
+
+.main_menu.active {
+  background-color: #007BFF; 
+  border-left: solid 3px #007BFF;
+}
 </style>
 <div class="card" id="container">
 	<div class="navbar-menu">
@@ -62,16 +88,15 @@ $level = $_settings->userdata('type');
 		<a href="javascript:void(0);" onclick="showForReviewPOsTable()" class="main_menu" id="review-link"><i class="nav-icon fa fa-check-square"></i>&nbsp;&nbsp;&nbsp;For Review POs</a>
 	</div>
 </div>
-<div class="card card-outline card-primary">
+<div class="card-outline card-primary">
 	<div class="card-header">
 		<b><i><h5 class="card-title" id="main-title">List of Pending Purchase Orders</b></i></h5>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
-        <div class="container-fluid">
-			
+		<div class="table-responsive" style="overflow-x: auto;">
 			<div id="pending-table" style="display: none;">
-				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+				<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 					<colgroup>
 						<col width="3%">
 						<col width="10%">
@@ -203,7 +228,7 @@ $level = $_settings->userdata('type');
 			</div>
 			
 			<div id="approved-table" style="display: none;">
-				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+				<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 					<colgroup>
 						<col width="3%">
 						<col width="10%">
@@ -334,7 +359,7 @@ $level = $_settings->userdata('type');
 			</div>
 
 			<div id="declined-table" style="display: none;">
-				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+			<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 					<colgroup>
 						<col width="3%">
 						<col width="10%">
@@ -464,7 +489,7 @@ $level = $_settings->userdata('type');
 			</div>
 
 			<div id="review-table" style="display: none;">
-				<table class="table table-bordered table-stripped" style="width:100%;text-align:center;">
+				<table class="table table-bordered table-striped" id="data-table" style="text-align: center; width: 100%; min-width: 1000px;">
 					<colgroup>
 						<col width="3%">
 						<col width="10%">

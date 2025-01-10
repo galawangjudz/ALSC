@@ -36,6 +36,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 ?>
 <script src="js/po_scripts.js"></script>
 <link rel="stylesheet" href="css/manage_po.css">
+<style>
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap; 
+}
+#data-table {
+	min-width: 1200px; 
+	width: auto; 
+}
+</style>
 <script>
 
 document.addEventListener('change', function(event) {

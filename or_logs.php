@@ -69,7 +69,7 @@ class Login extends DBConnection
 
 <?php require_once('admin/inc/header.php') ?>
 
-<body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed sidebar-mini-md sidebar-mini-xs"
+<body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed sidebar-mini-xs"
     data-new-gr-c-s-check-loaded="14.991.0" data-gr-ext-installed="" style="height: auto;" onload="hideDiv()">
     <div class="wrapper">
         <?php require_once('admin/inc/topBarNav.php') ?>
